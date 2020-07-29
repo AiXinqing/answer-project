@@ -187,7 +187,7 @@ export default {
   }
   .precautions_content {
     padding-left: 10px;
-    height: 127px;
+    min-height: 127px;
     border-bottom: 1px solid @font-333;
     font-size: 14px;
     margin-top: 15px;
@@ -221,7 +221,7 @@ export default {
   cursor: pointer;
 }
 .precautions_content p {
-  margin-top: -4px;
+  line-height: 16px;
 }
 .precautions_edit {
   position: absolute;
@@ -243,7 +243,7 @@ export default {
   color: @font-666;
 }
 table tr td div:last-child {
-  margin-bottom: 7px;
+  margin-bottom: 6px;
 }
 
 .table_box th {
@@ -275,5 +275,13 @@ table tr td div:last-child {
 .table_box td:first-child,
 .table_box th:first-child {
   border-left: none;
+}
+.el-input--medium {
+  font-size: 23px !important;
+}
+.el-textarea__inner {
+  padding: 0 0 !important;
+  border-style: dashed !important;
+  border-color: @font-888 !important;
 }
 </style>
