@@ -51,10 +51,11 @@ export default {
 <style>
 .el-dialog__header {
   text-align: center;
-  padding-bottom: 0;
+  padding: 10px 0;
+  background-color: #f8f8f8;
 }
 .el-dialog__headerbtn {
-  top: 12px;
+  top: 10px;
   right: 12px;
 }
 .el-dialog__title {

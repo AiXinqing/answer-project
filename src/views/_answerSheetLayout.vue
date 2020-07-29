@@ -15,11 +15,20 @@
         <div>线上阅卷</div>
       </div>
     </div>
+    <set-dialog ref="editorLayout" />
   </div>
 </template>
 
 <script>
-export default {}
+import setDialog from './dialog/_setDialog'
+export default {
+  components: {
+    setDialog,
+  },
+  mounted() {
+    this.$refs.editorLayout.openRForm()
+  },
+}
 </script>
 
 <style lang="less">
