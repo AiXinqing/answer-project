@@ -1,18 +1,20 @@
 <template>
-  <div class="Guide_bar">
-    <div class="allscore">
-      当前总分：
-      <span>0</span> 分
-    </div>
-    <div class="layout-box">
-      <div class="layout-top">
-        <span>布局</span>
-        <span class="layout-edit">修改</span>
+  <div>
+    <div class="Guide_bar">
+      <div class="allscore">
+        当前总分：
+        <span>0</span> 分
       </div>
-      <div class="layout-bottom">
-        <div>A3/B4/8K纸</div>
-        <div>两栏</div>
-        <div>线上阅卷</div>
+      <div class="layout-box">
+        <div class="layout-top">
+          <span>布局</span>
+          <span class="layout-edit">修改</span>
+        </div>
+        <div class="layout-bottom">
+          <div>A3/B4/8K纸</div>
+          <div>两栏</div>
+          <div>线上阅卷</div>
+        </div>
       </div>
     </div>
     <set-dialog ref="editorLayout" />

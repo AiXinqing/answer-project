@@ -65,7 +65,9 @@ export default {
 }
 /* 确定按钮 */
 .el-button--confirm {
-  padding: 6px 18px;
+  padding: 0 0;
+  height: 30px;
+  width: 60px;
   border: 1px solid #1ab394;
   color: white;
   background-color: #1ab394;
