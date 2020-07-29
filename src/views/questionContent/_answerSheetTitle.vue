@@ -135,10 +135,11 @@ export default {
 <style lang="less">
 @import '~@/assets/css/variables.less';
 .title-item {
-  height: 38px;
+  height: 40px;
   line-height: 50px;
   min-width: 148px;
   position: relative;
+  top: 8px;
   span {
     display: inline-block;
     font-size: 18px;
@@ -165,9 +166,7 @@ export default {
     background-color: @main;
   }
 }
-.TestTitle {
-  margin-top: 15px;
-}
+
 .precautions_box {
   margin-top: 15px;
   .precautions_title {
@@ -283,5 +282,6 @@ table tr td div:last-child {
   padding: 0 0 !important;
   border-style: dashed !important;
   border-color: @font-888 !important;
+  height: 65px;
 }
 </style>
