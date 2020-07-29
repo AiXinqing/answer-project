@@ -49,7 +49,6 @@ export default {
   font-weight: 700;
   padding: 0 30px;
   border-bottom: 1px solid @bs-e3;
-  margin-top: 50px;
 }
 .basis_checkbox {
   padding: 20px 0;

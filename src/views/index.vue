@@ -3,6 +3,7 @@
     <answer-sheet-layout />
     <div class="main-info">
       <answer-sheet-set />
+      <answer-sheet-content />
     </div>
   </div>
 </template>
@@ -10,10 +11,12 @@
 <script>
 import answerSheetLayout from './_answerSheetLayout'
 import answerSheetSet from './_answerSheetSet'
+import answerSheetContent from './_answerSheetContent'
 export default {
   components: {
     answerSheetLayout,
     answerSheetSet,
+    answerSheetContent,
   },
 }
 </script>
@@ -21,12 +24,12 @@ export default {
 .page-content {
   padding-top: 50px;
   position: relative;
-  height: calc(100% - 50px);
+  height: calc(100% - 60px);
 }
 .main-info {
-  height: 100%;
+  height: calc(100% - 50px);
   position: absolute;
-  top: 0;
+  top: 50px;
   width: 100%;
 }
 </style>
