@@ -22,7 +22,7 @@
 export default {}
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 @import '~@/assets/css/variables.less';
 .Guide_bar {
   position: fixed;

@@ -9,6 +9,9 @@
 
 <style lang="less">
 @import '~@/assets/css/variables.less';
+#app {
+  height: 100%;
+}
 .group_heads {
   height: 50px;
   line-height: 50px;
