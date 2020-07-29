@@ -21,11 +21,11 @@
       <el-col :span="12" class="precautions_left" :style="{ width: '519px' }">
         <div class="precautions_title">注 意 事 项</div>
         <div class="precautions_content">
-          <p>1.答题前请将姓名、班级、考场、座号和准考证号填写清楚。</p>
-          <p>2.客观题答题,必须使用2B铅笔填涂,修改时用橡皮擦干净。</p>
-          <p>3.主观题必须使用黑色签字笔书写。</p>
-          <p>4.必须在题号对应的答题区域内作答,超出答题区域书写无效。</p>
-          <p>5.保持答卷清洁完整。</p>
+          <p>1. 答题前请将姓名、班级、考场、座号和准考证号填写清楚。</p>
+          <p>2. 客观题答题,必须使用2B铅笔填涂,修改时用橡皮擦干净。</p>
+          <p>3. 主观题必须使用黑色签字笔书写。</p>
+          <p>4. 必须在题号对应的答题区域内作答,超出答题区域书写无效。</p>
+          <p>5. 保持答卷清洁完整。</p>
         </div>
         <div v-if="!svg" class="precautions_mark">
           <svg
@@ -92,11 +92,11 @@
         <table class="table_box" cellspacing="0" cellpadding="0">
           <tbody>
             <tr>
-              <th v-for="item in 8" :key="item" />
+              <th v-for="item in thTd" :key="item" />
             </tr>
             <tr>
-              <td v-for="item in 8" :key="item">
-                <div v-for="row in 9" :key="row">
+              <td v-for="item in thTd" :key="item">
+                <div v-for="row in trDiv" :key="row">
                   [<span>{{ row }} </span>]
                 </div>
               </td>
@@ -122,6 +122,8 @@ export default {
     return {
       svg: false,
       textarea: '',
+      thTd: 8,
+      trDiv: 9,
     }
   },
   computed: {
