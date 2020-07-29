@@ -21,11 +21,11 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import AnswerSheetTitle from './questionContent/_answerSheetTitle' // 答题卡标题
-// import ObjectiveQuestion from './_ObjectiveQuestion' // 客观题
+import ObjectiveQuestion from './_ObjectiveQuestion' // 客观题
 export default {
   components: {
     AnswerSheetTitle,
-    // ObjectiveQuestion,
+    ObjectiveQuestion,
   },
   computed: {
     ...mapState('answerSheet', ['GroupDataArr', 'PageLayout']),
