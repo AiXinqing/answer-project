@@ -32,11 +32,17 @@ const mutations = {
   setPrecautionsText(state, val) {
     state.precautions.textarea = val
   },
+  setStudentInfo(state, Arr) {
+    state.studentInfo = Arr
+  }
 }
 
 const actions = {
   PrecautionsTextFunc: (context, layoutVal) => {
     context.commit('setPrecautionsText', layoutVal)
+  },
+  setStudentInfoFunc: (context, Arr) => {
+    context.commit('setStudentInfo', Arr)
   },
 }
 

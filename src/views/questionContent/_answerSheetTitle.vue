@@ -1,24 +1,7 @@
 <template>
   <div>
-    <!-- <el-input
-      type="textarea"
-      :rows="2"
-      placeholder="请输入答题卡标题"
-      v-model="precautions.textarea"
-      @change="editPrecautionsTitile()"
-      resize="none"
-    /> -->
     <hj-textarea :textarea-data="precautions.textarea" />
-    <el-row class="TestTitle">
-      <el-col :span="4" class="title-item">
-        <span>考号</span>
-        <span />
-      </el-col>
-      <el-col :span="4" class="title-item">
-        <span>考号</span>
-        <span><span class="titke-edit">编辑</span></span>
-      </el-col>
-    </el-row>
+    <student-info :student-data="precautions.studentInfo" />
     <el-row class="precautions_box">
       <el-col :span="12" class="precautions_left" :style="{ width: '519px' }">
         <div class="precautions_title">注 意 事 项</div>
@@ -113,9 +96,11 @@
 <script>
 import { mapState } from 'vuex'
 import hjTextarea from './Precautions/_textarea'
+import studentInfo from './Precautions/_studentInfo'
 export default {
   components: {
     hjTextarea,
+    studentInfo,
   },
   props: {
     contentData: {
