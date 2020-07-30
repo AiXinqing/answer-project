@@ -6,13 +6,13 @@ const state = {
     pageSize: 'A3', // 纸张
     column: 2, // 布局
   },
-  precautions: {
-    textarea: '',
-    studentInfo: [{
-      name: '考号',
-      checked: true
-    }]
-  }
+  // precautions: {
+  //   textarea: '',
+  //   studentInfo: [{
+  //     name: '考号',
+  //     checked: true
+  //   }]
+  // }
 }
 
 const mutations = {

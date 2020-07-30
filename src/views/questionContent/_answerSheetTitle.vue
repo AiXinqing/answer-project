@@ -3,7 +3,11 @@
     <hj-textarea :textarea-data="precautions.textarea" />
     <student-info @hanldeStudent="hanldeStudent" />
     <el-row class="precautions_box">
-      <el-col :span="12" class="precautions_left" :style="{ width: '519px' }">
+      <el-col
+        :span="12"
+        class="precautions_left"
+        :style="{ width: titleWidthLeft + 'px' }"
+      >
         <div class="precautions_title">注 意 事 项</div>
         <div class="precautions_content">
           <div>1. 答题前请将姓名、班级、考场、座号和准考证号填写清楚。</div>
@@ -69,19 +73,31 @@
           </svg>
         </div>
       </el-col>
-      <el-col :span="12" class="precautions_right" :style="{ width: '224px' }">
+      <el-col
+        :span="12"
+        class="precautions_right"
+        :style="{ width: titleWidthRight + 'px' }"
+      >
         <div class="ticket_number">
           准考证号
-          <span class="precautions_edit layui-btn layui-btn-xs">编辑</span>
+          <span
+            class="precautions_edit layui-btn layui-btn-xs"
+            @click="editAdmissionNumber"
+            >编辑</span
+          >
         </div>
         <table class="table_box" cellspacing="0" cellpadding="0">
           <tbody>
             <tr>
-              <th v-for="item in precautions.AdmissionTicket" :key="item" />
+              <th v-for="(item, i) in trTh" :key="i" />
             </tr>
             <tr>
-              <td v-for="item in precautions.AdmissionTicket" :key="item">
-                <div v-for="row in trDiv" :key="row">
+              <td v-for="(item, i) in trTh" :key="i">
+                <div
+                  v-for="row in trDiv"
+                  :key="row"
+                  :style="{ minWidth: divWidth + 'px' }"
+                >
                   [<span>{{ row }} </span>]
                 </div>
               </td>
@@ -118,14 +134,43 @@ export default {
   },
   computed: {
     ...mapState('answerSheetTitle', ['precautions']),
+    ...mapState('answerSheet', ['pageLayout']),
     cardData() {
       return this.contentData[0]
+    },
+    trTh() {
+      return this.precautions.AdmissionTicket
+    },
+    pageWidth() {
+      return this.pageLayout.column === 3 && this.pageLayout.pageSize == 'A3'
+        ? 485
+        : 745
+    },
+    titleWidthLeft() {
+      if (this.trTh * 28 < 224) {
+        return this.pageWidth - 224
+      } else {
+        return this.pageWidth - this.trTh * 28
+      }
+    },
+    titleWidthRight() {
+      if (this.trTh * 28 < 224) {
+        return 224
+      } else {
+        return this.pageWidth - this.titleWidthLeft
+      }
+    },
+    divWidth() {
+      return this.titleWidthRight == 224 ? 224 / this.trTh - 1 : 27
     },
   },
   mounted() {},
   methods: {
     hanldeStudent(Arr) {
       this.$emit('hanldeStudent', Arr)
+    },
+    editAdmissionNumber() {
+      this.$emit('edit-admission-number')
     },
   },
 }

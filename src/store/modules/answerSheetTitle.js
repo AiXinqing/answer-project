@@ -34,7 +34,10 @@ const mutations = {
   },
   setStudentInfo(state, Arr) {
     state.studentInfo = Arr
-  }
+  },
+  setAdmissionTicket(state, val) {
+    state.precautions.AdmissionTicket = val
+  },
 }
 
 const actions = {
@@ -44,6 +47,9 @@ const actions = {
   setStudentInfoFunc: (context, Arr) => {
     context.commit('setStudentInfo', Arr)
   },
+  setAdmissionTicketFunc: (context, val) => {
+    context.commit('setAdmissionTicket', val)
+  }
 }
 
 export default {

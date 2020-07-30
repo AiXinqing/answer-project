@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     editStudentInfoColumn() {
-      this.$emit('hanldeStudent', this.dataInfo)
+      this.$emit('hanldeStudent', this.precautions.studentInfo)
     },
   },
 }

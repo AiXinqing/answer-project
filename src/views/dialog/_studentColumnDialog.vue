@@ -40,6 +40,7 @@ export default {
       this.openedFrame = false
     },
     openedFrameFunc(Arr) {
+      window.console.log(Arr)
       this.studentInfo = Arr
       this.openedFrame = true
     },

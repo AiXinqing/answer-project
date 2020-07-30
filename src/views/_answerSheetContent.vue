@@ -16,13 +16,14 @@
           :is="row.questionType"
           :content-data="row.content"
           @hanldeStudent="hanldeStudent"
+          @edit-admission-number="editAdmissionNumber"
         />
       </div>
     </div>
     <!-- 学生标题 -->
     <column-dialog ref="studentDialog" />
-
-    <hj-dialog title="编辑试卷标题" :visible.sync="openedFrame" />
+    <!-- 准考证号 -->
+    <admission-number-dialog ref="admissionDialog" />
   </div>
 </template>
 
@@ -31,25 +32,28 @@ import { mapState, mapActions } from 'vuex'
 import AnswerSheetTitle from './questionContent/_answerSheetTitle' // 答题卡标题
 import ObjectiveQuestion from './questionContent/_ObjectiveQuestion' // 客观题
 import columnDialog from './dialog/_studentColumnDialog'
+import AdmissionNumberDialog from './dialog/_AdmissionNumberDialog'
 export default {
   components: {
     AnswerSheetTitle,
     ObjectiveQuestion,
     columnDialog,
+    AdmissionNumberDialog,
   },
   computed: {
     ...mapState('answerSheet', ['GroupDataArr', 'pageLayout']),
   },
   data() {
-    return {
-      openedFrame: false,
-    }
+    return {}
   },
   mounted() {},
   methods: {
     ...mapActions('answerSheet', ['editGroupData', 'groupPage', 'editLayout']),
     hanldeStudent(Arr) {
       this.$refs.studentDialog.openedFrameFunc(Arr)
+    },
+    editAdmissionNumber() {
+      this.$refs.admissionDialog.openedFrameFunc()
     },
   },
 }
