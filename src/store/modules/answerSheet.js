@@ -6,7 +6,13 @@ const state = {
     pageSize: 'A3', // 纸张
     column: 2, // 布局
   },
-  pageSize: 'A3',
+  precautions: {
+    textarea: '',
+    studentInfo: [{
+      name: '考号',
+      checked: true
+    }]
+  }
 }
 
 const mutations = {
@@ -39,12 +45,10 @@ const mutations = {
         // 判断当前rect高度能分几页
         let height = rect.height - avalibleHeight
         while (height > state.page_size) {
-          results.push([
-            {
-              ...rect,
-              castHeight: state.page_size,
-            },
-          ])
+          results.push([{
+            ...rect,
+            castHeight: state.page_size,
+          }, ])
           height -= state.page_size
         }
         currentPage.height = height
