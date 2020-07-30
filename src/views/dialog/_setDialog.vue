@@ -45,10 +45,7 @@
     </div>
     <div class="dialog-footer" v-else>
       <hj-button type="cancel" @click="closeRoom">取 消</hj-button>
-      <hj-button
-        type="confirm"
-        :disabled="isdisabledFn"
-        @click="preCreateEditRomm"
+      <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateTitle"
         >确 定</hj-button
       >
     </div>
@@ -86,7 +83,12 @@ export default {
 
   methods: {
     ...mapActions('answerSheet', ['editGroupData', 'groupPage', 'editLayout']),
-    openRForm() {
+    openRForm(type) {
+      if (type === 1) {
+        this.createLayout = true
+      } else {
+        this.createLayout = false
+      }
       this.openedRoom = true
     },
     closeRoom() {

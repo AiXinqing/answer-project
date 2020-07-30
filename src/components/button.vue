@@ -106,7 +106,9 @@ export default {
 }
 /* 取消按钮 */
 .el-button--cancel {
-  padding: 6px 18px;
+  padding: 0 0;
+  height: 30px;
+  width: 60px;
   border: 1px solid transparent;
   color: #333;
   background-color: #f1f1f1;
