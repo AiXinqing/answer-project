@@ -1,6 +1,6 @@
 <template>
   <div class="hj-dialog">
-    <el-dialog
+    <!-- <el-dialog
       v-if="dialogDrag"
       v-bind="$attrs"
       v-on="$listeners"
@@ -9,9 +9,8 @@
       v-dialog-drag
     >
       <slot></slot>
-    </el-dialog>
+    </el-dialog> -->
     <el-dialog
-      v-else
       v-bind="$attrs"
       v-on="$listeners"
       :title="title"
