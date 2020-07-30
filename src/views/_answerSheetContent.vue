@@ -19,7 +19,10 @@
         />
       </div>
     </div>
+    <!-- 学生标题 -->
     <column-dialog ref="studentDialog" />
+
+    <hj-dialog title="编辑试卷标题" :visible.sync="openedFrame" />
   </div>
 </template>
 
@@ -36,6 +39,11 @@ export default {
   },
   computed: {
     ...mapState('answerSheet', ['GroupDataArr', 'pageLayout']),
+  },
+  data() {
+    return {
+      openedFrame: false,
+    }
   },
   mounted() {},
   methods: {

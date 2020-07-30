@@ -6,11 +6,11 @@
       <el-col :span="12" class="precautions_left" :style="{ width: '519px' }">
         <div class="precautions_title">注 意 事 项</div>
         <div class="precautions_content">
-          <p>1. 答题前请将姓名、班级、考场、座号和准考证号填写清楚。</p>
-          <p>2. 客观题答题,必须使用2B铅笔填涂,修改时用橡皮擦干净。</p>
-          <p>3. 主观题必须使用黑色签字笔书写。</p>
-          <p>4. 必须在题号对应的答题区域内作答,超出答题区域书写无效。</p>
-          <p>5. 保持答卷清洁完整。</p>
+          <div>1. 答题前请将姓名、班级、考场、座号和准考证号填写清楚。</div>
+          <div>2. 客观题答题,必须使用2B铅笔填涂,修改时用橡皮擦干净。</div>
+          <div>3. 主观题必须使用黑色签字笔书写。</div>
+          <div>4. 必须在题号对应的答题区域内作答,超出答题区域书写无效。</div>
+          <div>5. 保持答卷清洁完整。</div>
         </div>
         <div v-if="!svg" class="precautions_mark">
           <svg
@@ -113,7 +113,6 @@ export default {
   data() {
     return {
       svg: false,
-      thTd: 8,
       trDiv: 9,
     }
   },
@@ -178,18 +177,19 @@ export default {
   }
   .precautions_left {
     border: 1px solid @font-888;
+    height: 258px;
   }
   .precautions_right {
     border: 1px solid @font-888;
     min-width: 223px;
     border-left: none;
+    height: 258px;
   }
   .precautions_content {
     padding-left: 10px;
     min-height: 127px;
     border-bottom: 1px solid @font-333;
     font-size: 14px;
-    margin-top: 15px;
   }
 }
 .precautions_left.columns .precautions_content {
@@ -219,8 +219,9 @@ export default {
   border-radius: 2px;
   cursor: pointer;
 }
-.precautions_content p {
-  line-height: 16px;
+.precautions_content div {
+  padding: 7px 0;
+  margin: 0 0;
 }
 .precautions_edit {
   position: absolute;
@@ -254,6 +255,7 @@ table tr td div:last-child {
   text-align: center;
   padding-top: 4px;
   min-width: 27px;
+  height: 16px;
 }
 
 .table_box div span {
@@ -283,5 +285,8 @@ table tr td div:last-child {
   border-style: dashed !important;
   border-color: @font-888 !important;
   height: 65px;
+}
+.table_box td:first-child {
+  height: 186px;
 }
 </style>
