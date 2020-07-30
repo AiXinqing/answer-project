@@ -11,19 +11,31 @@
       <el-row>
         <el-col :span="6">纸张大小</el-col>
         <el-col :span="18">
-          <div class="paper">
-            <span class="paper-size">A3</span>
-            <span>A3/B4/8K纸</span>
-          </div>
-          <div class="paper">
-            <span class="paper-size">A4</span>
-            <span>A4/B5纸</span>
+          <div
+            v-for="item in sizeArr"
+            :key="item.id"
+            :class="['paper',{active: item.id === size}]"
+            @click="hanldeTab(item.id)"
+          >
+            <span class="paper-size">{{ item.id }}</span>
+            <div class="title">{{ item.content }} </div>
           </div>
         </el-col>
       </el-row>
-      <el-row>
+      <el-row class="el_row_layout">
         <el-col :span="6">答题卡布局</el-col>
-        <el-col :span="18"></el-col>
+        <el-col :span="18">
+          <div
+            v-for="row in layoutArr"
+            :key="row.id"
+            :class="['paper',{active: row.id == layout }]"
+            v-show="row.pid === size"
+            @click="hanldeColumns(row)"
+          >
+            <span class="paper-size"></span>
+            <div class="title">{{ row.content }}</div>
+          </div>
+        </el-col>
       </el-row>
     </div>
     <div class="dialog-footer createLayout" v-if="createLayout">
@@ -47,6 +59,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -54,9 +67,24 @@ export default {
       title: '创建答题卡',
       isdisabledFn: false,
       createLayout: true,
+      sizeArr:[
+        {id:'A3',content:'A3/B4/8K纸'},
+        {id:'A4',content:'A4/B5纸'}
+        ],
+      layoutArr:[
+        {id:1,content:'一栏',pid:'A4'},
+        {id:2,content:'两栏',pid:'A3'},
+        {id:3,content:'三栏',pid:'A3'},
+      ],
+      size:'A3',
+      layout:2,
     }
   },
+  computed: {
+    ...mapState('answerSheet', ['GroupDataArr', 'PageLayout']),
+  },
   methods: {
+    ...mapActions('answerSheet', ['editGroupData', 'groupPage', 'editLayout']),
     openRForm() {
       this.openedRoom = true
     },
@@ -64,20 +92,45 @@ export default {
       this.openedRoom = false
     },
     preCreateEditRomm() {
+      const TestData = [
+      {
+        id: 1,
+        height: 380,
+        questionType: 'AnswerSheetTitle',
+        content: [{ title: '' }],
+      },
+      { id: 2, height: 120, questionType: 'ObjectiveQuestion', content: [] },
+    ]
+    this.groupPage(TestData)
       this.openedRoom = false
     },
+    hanldeTab(item){
+      this.size = item
+      this.layout = this.size === 'A3' ? 2 : 1
+    },
+    hanldeColumns(item){
+      this.layout = item.id
+    }
   },
 }
 </script>
 
 <style lang="less" scoped>
+@import '~@/assets/css/variables.less';
 .createLayout {
   text-align: center;
 }
 .paper {
   display: inline-block;
-  width: 80px;
+  width: 90px;
   text-align: center;
+  cursor: pointer;
+  .title{
+    margin-top: 5px
+  }
+  &.active{
+    color: @main
+  }
 }
 .paper-size {
   display: inline-block;
@@ -86,5 +139,9 @@ export default {
   border: 2px solid;
   border-radius: 3px;
   line-height: 50px;
+  cursor: pointer;
+}
+.el_row_layout{
+  margin-top: 20px
 }
 </style>

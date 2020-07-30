@@ -31,16 +31,6 @@ export default {
     ...mapState('answerSheet', ['GroupDataArr', 'PageLayout']),
   },
   mounted() {
-    const TestData = [
-      {
-        id: 1,
-        height: 380,
-        questionType: 'AnswerSheetTitle',
-        content: [{ title: '' }],
-      },
-      { id: 2, height: 120, questionType: 'ObjectiveQuestion', content: [] },
-    ]
-    this.groupPage(TestData)
   },
   methods: {
     ...mapActions('answerSheet', ['editGroupData', 'groupPage', 'editLayout']),
