@@ -2,9 +2,9 @@
   <hj-dialog
     class="newAdd-content"
     :title="title"
-    :visible.sync="openedRoom"
+    :visible.sync="openedFrame"
     :width="'500px'"
-    :before-close="closeRoom"
+    :before-close="closeFrame"
     :show-close="false"
   >
     <div class>
@@ -44,7 +44,7 @@
       >
     </div>
     <div class="dialog-footer" v-else>
-      <hj-button type="cancel" @click="closeRoom">取 消</hj-button>
+      <hj-button type="cancel" @click="closeFrame">取 消</hj-button>
       <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateTitle"
         >确 定</hj-button
       >
@@ -63,7 +63,7 @@ export default {
   },
   data() {
     return {
-      openedRoom: false,
+      openedFrame: false,
       title: '创建答题卡',
       isdisabledFn: false,
       createLayout: true,
@@ -89,13 +89,13 @@ export default {
       } else {
         this.createLayout = false
       }
-      this.openedRoom = true
+      this.openedFrame = true
     },
-    closeRoom() {
-      this.openedRoom = false
+    closeFrame() {
+      this.openedFrame = false
     },
     preCreateTitle() {
-      const pageWidth = this.size == 'A3' && this.layout == 3 ? 480 : 785
+      const pageWidth = this.size == 'A3' && this.layout == 3 ? 520 : 785
       const obj = {
         pageWidth: pageWidth,
         pageSize: this.size,
@@ -113,7 +113,7 @@ export default {
         { id: 2, height: 120, questionType: 'ObjectiveQuestion', content: [] },
       ]
       this.groupPage(TestData)
-      this.openedRoom = false
+      this.openedFrame = false
     },
     hanldeTab(item) {
       this.size = item
