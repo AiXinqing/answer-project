@@ -12,9 +12,14 @@
         class="footer"
         :style="{ minHeight: row.castHeight + 'px' }"
       >
-        <component :is="row.questionType" :content-data="row.content" />
+        <component
+          :is="row.questionType"
+          :content-data="row.content"
+          @hanldeStudent="hanldeStudent"
+        />
       </div>
     </div>
+    <column-dialog ref="studentDialog" />
   </div>
 </template>
 
@@ -22,10 +27,12 @@
 import { mapState, mapActions } from 'vuex'
 import AnswerSheetTitle from './questionContent/_answerSheetTitle' // 答题卡标题
 import ObjectiveQuestion from './questionContent/_ObjectiveQuestion' // 客观题
+import columnDialog from './dialog/_studentColumnDialog'
 export default {
   components: {
     AnswerSheetTitle,
     ObjectiveQuestion,
+    columnDialog,
   },
   computed: {
     ...mapState('answerSheet', ['GroupDataArr', 'pageLayout']),
@@ -33,6 +40,9 @@ export default {
   mounted() {},
   methods: {
     ...mapActions('answerSheet', ['editGroupData', 'groupPage', 'editLayout']),
+    hanldeStudent(Arr) {
+      this.$refs.studentDialog.openedFrameFunc(Arr)
+    },
   },
 }
 </script>

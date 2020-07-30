@@ -148,4 +148,7 @@ export default {
   border-color: #d65555;
   background-color: #d65555;
 }
+.el-checkbox__inner:hover {
+  border-color: #1ab394;
+}
 </style>

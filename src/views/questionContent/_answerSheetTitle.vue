@@ -1,7 +1,7 @@
 <template>
   <div>
     <hj-textarea :textarea-data="precautions.textarea" />
-    <student-info :student-data="precautions.studentInfo" />
+    <student-info @hanldeStudent="hanldeStudent" />
     <el-row class="precautions_box">
       <el-col :span="12" class="precautions_left" :style="{ width: '519px' }">
         <div class="precautions_title">注 意 事 项</div>
@@ -123,7 +123,12 @@ export default {
       return this.contentData[0]
     },
   },
-  methods: {},
+  mounted() {},
+  methods: {
+    hanldeStudent(Arr) {
+      this.$emit('hanldeStudent', Arr)
+    },
+  },
 }
 </script>
 

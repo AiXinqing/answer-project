@@ -1,12 +1,20 @@
 <template>
   <hj-dialog
     class="newAdd-content"
-    :title="title"
+    title="编辑试卷标题"
     :visible.sync="openedFrame"
     :width="'500px'"
     :before-close="closeFrame"
     :show-close="false"
   >
+    <div class="item-style">
+      <el-checkbox
+        v-for="(item, i) in studentInfo"
+        :key="i"
+        v-model="item.checked"
+        >{{ item.name }}</el-checkbox
+      >
+    </div>
     <div class="dialog-footer">
       <hj-button type="cancel" @click="closeFrame">取 消</hj-button>
       <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateTitle"
@@ -17,20 +25,33 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   data() {
     return {
       openedFrame: false,
       isdisabledFn: false,
+      studentInfo: [],
     }
   },
   methods: {
+    ...mapActions('answerSheetTitle', ['setStudentInfoFunc']),
     closeFrame() {
       this.openedFrame = false
     },
-    preCreateTitle() {},
+    openedFrameFunc(Arr) {
+      this.studentInfo = Arr
+      this.openedFrame = true
+    },
+    preCreateTitle() {
+      this.setStudentInfoFunc(this.studentInfo)
+    },
   },
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="less" scoped>
+.item-style {
+  padding: 10px 0;
+}
+</style>

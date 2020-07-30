@@ -14,29 +14,37 @@
       >
       <span v-else />
     </el-col>
-    <column-dialog />
   </el-row>
 </template>
 
 <script>
-import columnDialog from '../../dialog/_studentColumnDialog'
+import { mapState } from 'vuex'
 export default {
-  components: {
-    columnDialog,
-  },
-  props: {
-    studentData: {
-      type: Array,
-      default: () => [],
-    },
+  components: {},
+  // props: {
+  //   studentData: {
+  //     type: Array,
+  //     default: () => [],
+  //   },
+  // },
+  data() {
+    return {
+      dataInfo: this.studentData,
+    }
   },
   computed: {
+    ...mapState('answerSheetTitle', ['precautions']),
     checkedInfo() {
-      return this.studentData.filter((item) => item.checked)
+      return this.precautions.studentInfo.filter((item) => item.checked)
+    },
+    studentData() {
+      return this.precautions.studentInfo
     },
   },
   methods: {
-    editStudentInfoColumn() {},
+    editStudentInfoColumn() {
+      this.$emit('hanldeStudent', this.dataInfo)
+    },
   },
 }
 </script>
