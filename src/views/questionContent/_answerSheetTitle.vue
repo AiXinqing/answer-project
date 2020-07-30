@@ -1,12 +1,14 @@
 <template>
   <div>
-    <el-input
+    <!-- <el-input
       type="textarea"
       :rows="2"
       placeholder="请输入答题卡标题"
-      v-model="textarea"
+      v-model="precautions.textarea"
+      @change="editPrecautionsTitile()"
       resize="none"
-    />
+    /> -->
+    <hj-textarea :textarea-data="precautions.textarea" />
     <el-row class="TestTitle">
       <el-col :span="4" class="title-item">
         <span>考号</span>
@@ -92,10 +94,10 @@
         <table class="table_box" cellspacing="0" cellpadding="0">
           <tbody>
             <tr>
-              <th v-for="item in thTd" :key="item" />
+              <th v-for="item in precautions.AdmissionTicket" :key="item" />
             </tr>
             <tr>
-              <td v-for="item in thTd" :key="item">
+              <td v-for="item in precautions.AdmissionTicket" :key="item">
                 <div v-for="row in trDiv" :key="row">
                   [<span>{{ row }} </span>]
                 </div>
@@ -109,7 +111,12 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import hjTextarea from './Precautions/_textarea'
 export default {
+  components: {
+    hjTextarea,
+  },
   props: {
     contentData: {
       type: Array,
@@ -121,16 +128,17 @@ export default {
   data() {
     return {
       svg: false,
-      textarea: '',
       thTd: 8,
       trDiv: 9,
     }
   },
   computed: {
+    ...mapState('answerSheetTitle', ['precautions']),
     cardData() {
       return this.contentData[0]
     },
   },
+  methods: {},
 }
 </script>
 
