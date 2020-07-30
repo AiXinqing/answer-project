@@ -4,7 +4,7 @@
       v-for="(item, i) in GroupDataArr"
       :key="i"
       class="page-contents"
-      :style="{ width: PageLayout.pageWidth + 'px' }"
+      :style="{ width: pageLayout.pageWidth + 'px' }"
     >
       <div
         v-for="(row, a) in item"
@@ -28,10 +28,9 @@ export default {
     ObjectiveQuestion,
   },
   computed: {
-    ...mapState('answerSheet', ['GroupDataArr', 'PageLayout']),
+    ...mapState('answerSheet', ['GroupDataArr', 'pageLayout']),
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     ...mapActions('answerSheet', ['editGroupData', 'groupPage', 'editLayout']),
   },

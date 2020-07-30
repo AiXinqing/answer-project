@@ -7,18 +7,18 @@
     :before-close="closeRoom"
     :show-close="false"
   >
-    <div class="">
+    <div class>
       <el-row>
         <el-col :span="6">纸张大小</el-col>
         <el-col :span="18">
           <div
             v-for="item in sizeArr"
             :key="item.id"
-            :class="['paper',{active: item.id === size}]"
+            :class="['paper', { active: item.id === size }]"
             @click="hanldeTab(item.id)"
           >
             <span class="paper-size">{{ item.id }}</span>
-            <div class="title">{{ item.content }} </div>
+            <div class="title">{{ item.content }}</div>
           </div>
         </el-col>
       </el-row>
@@ -28,7 +28,7 @@
           <div
             v-for="row in layoutArr"
             :key="row.id"
-            :class="['paper',{active: row.id == layout }]"
+            :class="['paper', { active: row.id == layout }]"
             v-show="row.pid === size"
             @click="hanldeColumns(row)"
           >
@@ -39,10 +39,7 @@
       </el-row>
     </div>
     <div class="dialog-footer createLayout" v-if="createLayout">
-      <hj-button
-        type="confirm"
-        :disabled="isdisabledFn"
-        @click="preCreateEditRomm"
+      <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateTitle"
         >创建</hj-button
       >
     </div>
@@ -59,30 +56,34 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 export default {
+  props: {
+    propLayout: {
+      type: Object,
+      default: () => {},
+    },
+  },
   data() {
     return {
       openedRoom: false,
       title: '创建答题卡',
       isdisabledFn: false,
       createLayout: true,
-      sizeArr:[
-        {id:'A3',content:'A3/B4/8K纸'},
-        {id:'A4',content:'A4/B5纸'}
-        ],
-      layoutArr:[
-        {id:1,content:'一栏',pid:'A4'},
-        {id:2,content:'两栏',pid:'A3'},
-        {id:3,content:'三栏',pid:'A3'},
+      sizeArr: [
+        { id: 'A3', content: 'A3/B4/8K纸' },
+        { id: 'A4', content: 'A4/B5纸' },
       ],
-      size:'A3',
-      layout:2,
+      layoutArr: [
+        { id: 1, content: '一栏', pid: 'A4' },
+        { id: 2, content: '两栏', pid: 'A3' },
+        { id: 3, content: '三栏', pid: 'A3' },
+      ],
+      size: this.propLayout.pageSize,
+      layout: this.propLayout.column,
     }
   },
-  computed: {
-    ...mapState('answerSheet', ['GroupDataArr', 'PageLayout']),
-  },
+
   methods: {
     ...mapActions('answerSheet', ['editGroupData', 'groupPage', 'editLayout']),
     openRForm() {
@@ -91,26 +92,35 @@ export default {
     closeRoom() {
       this.openedRoom = false
     },
-    preCreateEditRomm() {
+    preCreateTitle() {
+      const pageWidth = this.size == 'A3' && this.layout == 3 ? 480 : 785
+      const obj = {
+        pageWidth: pageWidth,
+        pageSize: this.size,
+        column: this.layout,
+      }
+      this.editLayout(obj)
+
       const TestData = [
-      {
-        id: 1,
-        height: 380,
-        questionType: 'AnswerSheetTitle',
-        content: [{ title: '' }],
-      },
-      { id: 2, height: 120, questionType: 'ObjectiveQuestion', content: [] },
-    ]
-    this.groupPage(TestData)
+        {
+          id: 1,
+          height: 380,
+          questionType: 'AnswerSheetTitle',
+          content: [{ title: '' }],
+        },
+        { id: 2, height: 120, questionType: 'ObjectiveQuestion', content: [] },
+      ]
+      this.groupPage(TestData)
       this.openedRoom = false
     },
-    hanldeTab(item){
+    hanldeTab(item) {
       this.size = item
-      this.layout = this.size === 'A3' ? 2 : 1
+      this.layout =
+        this.size === 'A4' ? 1 : this.size === 'A3' ? 2 : this.layout
     },
-    hanldeColumns(item){
+    hanldeColumns(item) {
       this.layout = item.id
-    }
+    },
   },
 }
 </script>
@@ -125,11 +135,11 @@ export default {
   width: 90px;
   text-align: center;
   cursor: pointer;
-  .title{
-    margin-top: 5px
+  .title {
+    margin-top: 5px;
   }
-  &.active{
-    color: @main
+  &.active {
+    color: @main;
   }
 }
 .paper-size {
@@ -141,7 +151,7 @@ export default {
   line-height: 50px;
   cursor: pointer;
 }
-.el_row_layout{
-  margin-top: 20px
+.el_row_layout {
+  margin-top: 20px;
 }
 </style>

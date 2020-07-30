@@ -1,11 +1,12 @@
 const state = {
   GroupDataArr: [],
   page_size: 1160,
-  PageLayout: {
+  pageLayout: {
     pageWidth: 785, // 780 - padding 0 20 A3-3栏 480
     pageSize: 'A3', // 纸张
-    column: 2 // 布局
-  }
+    column: 2, // 布局
+  },
+  pageSize: 'A3',
 }
 
 const mutations = {
@@ -18,20 +19,20 @@ const mutations = {
     // currentPage.height 总高度
     var currentPage = {
       height: 0,
-      rects: []
+      rects: [],
     }
     // 重置高度
     function resetCurrentPage() {
       currentPage.height = 0
       currentPage.rects = []
     }
-    rects.forEach(rect => {
+    rects.forEach((rect) => {
       const avalibleHeight = state.page_size - currentPage.height
       if (rect.height > avalibleHeight) {
         // 分页-剩余高度新建rect
         currentPage.rects.push({
           ...rect,
-          castHeight: avalibleHeight
+          castHeight: avalibleHeight,
         })
         results.push(currentPage.rects) // 增加一页
         resetCurrentPage()
@@ -41,21 +42,21 @@ const mutations = {
           results.push([
             {
               ...rect,
-              castHeight: state.page_size
-            }
+              castHeight: state.page_size,
+            },
           ])
           height -= state.page_size
         }
         currentPage.height = height
         currentPage.rects.push({
           ...rect,
-          castHeight: height
+          castHeight: height,
         })
       } else {
         currentPage.height += rect.height
         currentPage.rects.push({
           ...rect,
-          castHeight: rect.height
+          castHeight: rect.height,
         })
       }
     })
@@ -67,16 +68,14 @@ const mutations = {
     // return results
   },
   REMOVERECT: (state, rectId) => {
-    const index = state.GroupDataArr.findIndex(rect => rect.id === rectId)
+    const index = state.GroupDataArr.findIndex((rect) => rect.id === rectId)
     if (index > -1) {
       state.GroupDataArr.splice(index, 1)
     }
   },
   SET_LAYOUT: (state, layoutVal) => {
-    state.PageLayout = {
-      ...layoutVal
-    }
-  }
+    state.pageLayout = layoutVal
+  },
 }
 
 const actions = {
@@ -94,12 +93,12 @@ const actions = {
   },
   editLayout: (context, layoutVal) => {
     context.commit('SET_LAYOUT', layoutVal)
-  }
+  },
 }
 
 export default {
   namespaced: true,
   state,
   mutations,
-  actions
+  actions,
 }

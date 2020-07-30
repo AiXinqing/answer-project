@@ -17,15 +17,24 @@
         </div>
       </div>
     </div>
-    <set-dialog ref="editorLayout" />
+    <set-dialog ref="editorLayout" :prop-layout="pageLayout" />
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import setDialog from './dialog/_setDialog'
 export default {
   components: {
     setDialog,
+  },
+  data() {
+    return {
+      a: 'A3',
+    }
+  },
+  computed: {
+    ...mapState('answerSheet', ['GroupDataArr', 'pageLayout']),
   },
   mounted() {
     this.$refs.editorLayout.openRForm()
