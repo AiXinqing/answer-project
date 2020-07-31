@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import setDialog from './dialog/_setDialog'
 export default {
   components: {
@@ -44,7 +44,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('answerSheet', ['GroupDataArr', 'pageLayout']),
+    ...mapState('answerSheet', ['GroupDataArr']),
+    ...mapGetters('answerSheet', ['pageLayout']),
   },
   mounted() {
     this.$refs.editorLayout.openRForm(1)

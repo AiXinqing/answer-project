@@ -1,7 +1,7 @@
 <template>
   <div class="container-card">
     <div
-      v-for="(item, i) in GroupDataArr"
+      v-for="(item, i) in contentData"
       :key="i"
       class="page-contents"
       :style="{ width: pageLayout.pageWidth + 'px' }"
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import AnswerSheetTitle from './questionContent/_answerSheetTitle' // 答题卡标题
 import ObjectiveQuestion from './questionContent/_ObjectiveQuestion' // 客观题
 import columnDialog from './dialog/_studentColumnDialog'
@@ -41,14 +41,15 @@ export default {
     AdmissionNumberDialog,
   },
   computed: {
-    ...mapState('answerSheet', ['GroupDataArr', 'pageLayout']),
+    ...mapState('answerSheet', ['GroupDataArr', 'contentData']),
+    ...mapGetters('answerSheet', ['contentData', 'pageLayout']),
   },
   data() {
     return {}
   },
   mounted() {},
   methods: {
-    ...mapActions('answerSheet', ['editGroupData', 'groupPage', 'editLayout']),
+    ...mapActions('answerSheet', ['editGroupData']),
     hanldeStudent(Arr) {
       this.$refs.studentDialog.openedFrameFunc(Arr)
     },

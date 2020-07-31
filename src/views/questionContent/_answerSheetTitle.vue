@@ -110,7 +110,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import hjTextarea from './Precautions/_textarea'
 import studentInfo from './Precautions/_studentInfo'
 export default {
@@ -134,7 +134,8 @@ export default {
   },
   computed: {
     ...mapState('answerSheetTitle', ['precautions']),
-    ...mapState('answerSheet', ['pageLayout']),
+    ...mapGetters('answerSheet', ['pageLayout']),
+
     cardData() {
       return this.contentData[0]
     },

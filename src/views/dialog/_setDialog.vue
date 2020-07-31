@@ -45,7 +45,10 @@
     </div>
     <div class="dialog-footer" v-else>
       <hj-button type="cancel" @click="closeFrame">取 消</hj-button>
-      <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateTitle"
+      <hj-button
+        type="confirm"
+        :disabled="isdisabledFn"
+        @click="preCreateTitle(1)"
         >确 定</hj-button
       >
     </div>
@@ -82,7 +85,12 @@ export default {
   },
 
   methods: {
-    ...mapActions('answerSheet', ['editGroupData', 'groupPage', 'editLayout']),
+    ...mapActions('answerSheet', [
+      'editGroupData',
+      'amendgroupPageFunc',
+      'editLayout',
+      'AddRect',
+    ]),
     openRForm(type) {
       if (type === 1) {
         this.createLayout = true
@@ -94,7 +102,7 @@ export default {
     closeFrame() {
       this.openedFrame = false
     },
-    preCreateTitle() {
+    preCreateTitle(change) {
       const pageWidth = this.size == 'A3' && this.layout == 3 ? 520 : 785
       const obj = {
         pageWidth: pageWidth,
@@ -103,16 +111,19 @@ export default {
       }
       this.editLayout(obj)
 
-      const TestData = [
-        {
-          id: 1,
-          height: 380,
-          questionType: 'AnswerSheetTitle',
-          content: [{ title: '' }],
-        },
-        { id: 2, height: 120, questionType: 'ObjectiveQuestion', content: [] },
-      ]
-      this.groupPage(TestData)
+      const TestData = {
+        id: 1,
+        height: 380,
+        questionType: 'AnswerSheetTitle',
+        content: [obj],
+      }
+      //
+      if (change == 1) {
+        this.amendgroupPageFunc(TestData)
+      } else {
+        // 新增值
+        this.AddRect(TestData)
+      }
       this.openedFrame = false
     },
     hanldeTab(item) {

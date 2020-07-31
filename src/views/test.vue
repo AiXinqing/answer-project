@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
   name: 'app',
   components: {},
@@ -11,7 +11,8 @@ export default {
     return {}
   },
   computed: {
-    ...mapState('answerSheet', ['GroupDataArr', 'PageLayout']),
+    ...mapState('answerSheet', ['GroupDataArr']),
+    ...mapGetters('answerSheet', ['pageLayout']),
   },
   mounted() {
     const TestData = [

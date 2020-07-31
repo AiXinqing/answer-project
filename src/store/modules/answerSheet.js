@@ -1,26 +1,48 @@
 const state = {
   GroupDataArr: [],
   page_size: 1160,
-  pageLayout: {
-    pageWidth: 785, // 780 - padding 0 20 A3-3栏 480
-    pageSize: 'A3', // 纸张
-    column: 2, // 布局
-  },
-  // precautions: {
-  //   textarea: '',
-  //   studentInfo: [{
-  //     name: '考号',
-  //     checked: true
-  //   }]
-  // }
 }
 
 const mutations = {
   SET_GROUPDATA: (state, list) => {
     state.GroupDataArr.push(list)
   },
-  SET_GROUPPAGE: (state, rects = []) => {
-    // 结果
+  REMOVERECT: (state, rectId) => {
+    const index = state.GroupDataArr.findIndex((rect) => rect.id === rectId)
+    if (index > -1) {
+      state.GroupDataArr.splice(index, 1)
+    }
+  },
+  SET_LAYOUT: (state, layoutVal) => {
+    state.pageLayout = layoutVal
+  },
+  amendGroupPage: (state, newRect) => {
+    const index = state.GroupDataArr.findIndex((itme) => itme.id === newRect.id)
+    state.GroupDataArr[index] = newRect
+  },
+}
+
+const actions = {
+  AddRect: (context, rect) => {
+    // 新增
+    context.commit('SET_GROUPDATA', rect)
+  },
+  amendgroupPageFunc: (context, newRect) => {
+    // 编辑
+    context.commit('amendGroupPage', newRect)
+  },
+  delRectt: (context, rectId) => {
+    // 删除
+    context.commit('REMOVERECT', rectId)
+  },
+  editLayout: (context, layoutVal) => {
+    context.commit('SET_LAYOUT', layoutVal)
+  }
+}
+
+const getters = {
+  contentData: (state) => {
+    const rects = state.GroupDataArr
     const results = []
     // currentPage.height 总高度
     var currentPage = {
@@ -67,37 +89,20 @@ const mutations = {
     if (currentPage.height) {
       results.push(currentPage.rects)
     }
-    state.GroupDataArr = results
-    window.console.log(results)
-    // return results
+    return results
   },
-  REMOVERECT: (state, rectId) => {
-    const index = state.GroupDataArr.findIndex((rect) => rect.id === rectId)
-    if (index > -1) {
-      state.GroupDataArr.splice(index, 1)
+  pageLayout: (state) => {
+    if (state.GroupDataArr.length <= 0) {
+      return {
+        pageWidth: 785, // 780 - padding 0 20 A3-3栏 480
+        pageSize: 'A3', // 纸张
+        column: 2, // 布局
+      }
+    } else {
+      const items = state.GroupDataArr.filter(itme => itme.questionType === 'AnswerSheetTitle')
+      return items[0].content[0]
     }
-  },
-  SET_LAYOUT: (state, layoutVal) => {
-    state.pageLayout = layoutVal
-  },
-}
-
-const actions = {
-  AddRect: (context, rect) => {
-    // 新增
-    context.commit('SET_GROUPDATA', rect)
-  },
-  groupPage: (context, rects) => {
-    // 编辑
-    context.commit('SET_GROUPPAGE', rects)
-  },
-  delRectt: (context, rectId) => {
-    // 删除
-    context.commit('REMOVERECT', rectId)
-  },
-  editLayout: (context, layoutVal) => {
-    context.commit('SET_LAYOUT', layoutVal)
-  },
+  }
 }
 
 export default {
@@ -105,4 +110,5 @@ export default {
   state,
   mutations,
   actions,
+  getters
 }

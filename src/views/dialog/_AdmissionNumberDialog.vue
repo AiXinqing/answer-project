@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
   data() {
     return {
@@ -43,7 +43,8 @@ export default {
   },
   computed: {
     ...mapState('answerSheetTitle', ['GroupDataArr', 'precautions']),
-    ...mapState('answerSheet', ['pageLayout']),
+    ...mapGetters('answerSheet', ['pageLayout']),
+
     maxAdmission() {
       // 最大数
       return this.pageLayout.column === 3 && this.pageLayout.pageSize == 'A3'
