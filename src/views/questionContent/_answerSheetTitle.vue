@@ -9,7 +9,7 @@
         :style="{ width: titleWidthLeft + 'px' }"
       >
         <div class="precautions_title">注 意 事 项</div>
-        <div class="precautions_content">
+        <div :class="['precautions_content', { active: pageWidth == 480 }]">
           <div>1. 答题前请将姓名、班级、考场、座号和准考证号填写清楚。</div>
           <div>2. 客观题答题,必须使用2B铅笔填涂,修改时用橡皮擦干净。</div>
           <div>3. 主观题必须使用黑色签字笔书写。</div>
@@ -128,7 +128,7 @@ export default {
   },
   data() {
     return {
-      svg: false,
+      // svg: false,
       trDiv: 9,
     }
   },
@@ -143,25 +143,31 @@ export default {
     },
     pageWidth() {
       return this.pageLayout.column === 3 && this.pageLayout.pageSize == 'A3'
-        ? 485
+        ? 480
         : 745
     },
+    Rows() {
+      return this.trTh == 9 && this.pageWidth == 480 ? 27 : 28
+    },
+    svg() {
+      return this.pageWidth == 480 ? true : false
+    },
     titleWidthLeft() {
-      if (this.trTh * 28 < 224) {
+      if (this.trTh * this.Rows < 224) {
         return this.pageWidth - 224
       } else {
-        return this.pageWidth - this.trTh * 28
+        return this.pageWidth - this.trTh * this.Rows
       }
     },
     titleWidthRight() {
-      if (this.trTh * 28 < 224) {
+      if (this.trTh * this.Rows < 224) {
         return 224
       } else {
         return this.pageWidth - this.titleWidthLeft
       }
     },
     divWidth() {
-      return this.titleWidthRight == 224 ? 224 / this.trTh - 1 : 27
+      return this.titleWidthRight == 224 ? 224 / this.trTh - 1 : this.Rows - 1
     },
   },
   mounted() {},
@@ -235,6 +241,11 @@ export default {
     min-height: 127px;
     border-bottom: 1px solid @font-333;
     font-size: 14px;
+    &.active {
+      div {
+        padding: 1px 0;
+      }
+    }
   }
 }
 .precautions_left.columns .precautions_content {

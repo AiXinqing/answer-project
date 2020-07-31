@@ -9,7 +9,7 @@
   >
     <div class="item-style">
       <el-checkbox
-        v-for="(item, i) in studentInfo"
+        v-for="(item, i) in studentInfoArr"
         :key="i"
         v-model="item.checked"
         >{{ item.name }}</el-checkbox
@@ -25,27 +25,30 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   data() {
     return {
       openedFrame: false,
       isdisabledFn: false,
-      studentInfo: [],
+      //studentInfo: this.studentInfoArr,
     }
+  },
+  computed: {
+    ...mapGetters('answerSheetTitle', ['studentInfoArr']),
   },
   methods: {
     ...mapActions('answerSheetTitle', ['setStudentInfoFunc']),
+
     closeFrame() {
       this.openedFrame = false
     },
-    openedFrameFunc(Arr) {
-      window.console.log(Arr)
-      this.studentInfo = Arr
+    openedFrameFunc() {
       this.openedFrame = true
     },
     preCreateTitle() {
       this.setStudentInfoFunc(this.studentInfo)
+      this.closeFrame()
     },
   },
 }

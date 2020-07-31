@@ -52,9 +52,17 @@ const actions = {
   }
 }
 
+const getters = {
+  studentInfoArr: (state) => {
+    // window.console.log(state.precautions.studentInfo)
+    return state.precautions.studentInfo
+  }
+}
+
 export default {
   namespaced: true,
   state,
   mutations,
   actions,
+  getters
 }

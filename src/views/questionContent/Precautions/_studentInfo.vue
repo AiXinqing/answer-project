@@ -1,24 +1,17 @@
 <template>
   <el-row class="TestTitle">
-    <el-col
-      v-for="(item, i) in checkedInfo"
-      :key="i"
-      :span="4"
-      class="title-item"
-    >
+    <el-col v-for="(item, i) in checkedInfo" :key="i" :span="4" class="title-item">
       <span>{{ item.name }}</span>
-      <span v-if="i == checkedInfo.length - 1"
-        ><span class="titke-edit" @click="editStudentInfoColumn"
-          >编辑</span
-        ></span
-      >
+      <span v-if="i == checkedInfo.length - 1">
+        <span class="titke-edit" @click="editStudentInfoColumn">编辑</span>
+      </span>
       <span v-else />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 export default {
   components: {},
   // props: {
@@ -27,23 +20,24 @@ export default {
   //     default: () => [],
   //   },
   // },
-  data() {
+  data () {
     return {
-      dataInfo: this.studentData,
+      // dataInfo: this.studentInfoArr,
     }
   },
   computed: {
     ...mapState('answerSheetTitle', ['precautions']),
-    checkedInfo() {
+    ...mapGetters('answerSheetTitle', ['studentInfoArr']),
+    checkedInfo () {
       return this.precautions.studentInfo.filter((item) => item.checked)
     },
-    studentData() {
-      return this.precautions.studentInfo
-    },
+    // studentData () {
+    //   return this.precautions.studentInfo
+    // },
   },
   methods: {
-    editStudentInfoColumn() {
-      this.$emit('hanldeStudent', this.precautions.studentInfo)
+    editStudentInfoColumn () {
+      this.$emit('hanldeStudent', this.studentInfoArr)
     },
   },
 }
