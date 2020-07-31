@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 export default {
   props: {
     propLayout: {
@@ -85,12 +85,8 @@ export default {
   },
 
   methods: {
-    ...mapActions('answerSheet', [
-      'editGroupData',
-      'amendgroupPageFunc',
-      'editLayout',
-      'AddRect',
-    ]),
+    ...mapActions('answerSheet', ['editGroupData', 'editLayout']),
+    ...mapMutations('answerSheet', ['SET_GROUPDATA', 'amendGroupPage']),
     openRForm(type) {
       if (type === 1) {
         this.createLayout = true
@@ -119,10 +115,10 @@ export default {
       }
       //
       if (change == 1) {
-        this.amendgroupPageFunc(TestData)
+        this.amendGroupPage(TestData)
       } else {
         // 新增值
-        this.AddRect(TestData)
+        this.SET_GROUPDATA(TestData)
       }
       this.openedFrame = false
     },

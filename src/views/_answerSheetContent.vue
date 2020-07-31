@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
 import AnswerSheetTitle from './questionContent/_answerSheetTitle' // 答题卡标题
 import ObjectiveQuestion from './questionContent/_ObjectiveQuestion' // 客观题
 import columnDialog from './dialog/_studentColumnDialog'
@@ -41,7 +41,7 @@ export default {
     AdmissionNumberDialog,
   },
   computed: {
-    ...mapState('answerSheet', ['GroupDataArr', 'contentData']),
+    ...mapState('answerSheet', ['GroupDataArr']),
     ...mapGetters('answerSheet', ['contentData', 'pageLayout']),
   },
   data() {
@@ -50,6 +50,11 @@ export default {
   mounted() {},
   methods: {
     ...mapActions('answerSheet', ['editGroupData']),
+    ...mapMutations('answerSheet', [
+      'SET_GROUPDATA',
+      'amendGroupPage',
+      'SET_LAYOUT',
+    ]),
     hanldeStudent(Arr) {
       this.$refs.studentDialog.openedFrameFunc(Arr)
     },
