@@ -83,19 +83,19 @@ const getters = {
     }
     return results
   },
-  pageLayout: (state) => {
-    let obj = {
-      pageWidth: 785, // 780 - padding 0 20 A3-3栏 480
-      pageSize: 'A3', // 纸张
-      column: 2, // 布局
-    }
-    const rects = state.GroupDataArr
-    if (rects.length > 0) {
-      const items = rects.filter(itme => itme.questionType === 'AnswerSheetTitle')
-      obj = items[0].content[0]
-    }
-    return obj
-  }
+  // pageLayout: (state) => {
+  //   let obj = {
+  //     pageWidth: 785, // 780 - padding 0 20 A3-3栏 480
+  //     pageSize: 'A3', // 纸张
+  //     column: 2, // 布局
+  //   }
+  //   const rects = state.GroupDataArr
+  //   if (rects.length > 0) {
+  //     const items = rects.filter(itme => itme.questionType === 'AnswerSheetTitle')
+  //     obj = items[0].content[0]
+  //   }
+  //   return obj
+  // }
 }
 
 export default {

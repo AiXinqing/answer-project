@@ -9,9 +9,10 @@
   >
     <div class="item-style">
       <el-checkbox
-        v-for="(item, i) in studentInfoArr"
+        v-for="(item, i) in studentTitle"
         :key="i"
         v-model="item.checked"
+        @change="changeCheckFunc"
         >{{ item.name }}</el-checkbox
       >
     </div>
@@ -25,29 +26,32 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapMutations } from 'vuex'
 export default {
   data() {
     return {
       openedFrame: false,
       isdisabledFn: false,
-      //studentInfo: this.studentInfoArr,
+      studentTitle:[]
     }
   },
   computed: {
-    ...mapGetters('answerSheetTitle', ['studentInfoArr']),
+
   },
   methods: {
-    ...mapActions('answerSheetTitle', ['setStudentInfoFunc']),
-
+    ...mapMutations('titleSet', ['editTitleInfo']),
     closeFrame() {
       this.openedFrame = false
     },
-    openedFrameFunc() {
+    openedFrameFunc(obj) {
+      this.studentTitle = obj
       this.openedFrame = true
     },
+    changeCheckFunc(){
+
+    },
     preCreateTitle() {
-      this.setStudentInfoFunc(this.studentInfo)
+      this.editTitleInfo(this.studentTitle)
       this.closeFrame()
     },
   },

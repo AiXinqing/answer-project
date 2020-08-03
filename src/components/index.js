@@ -5,6 +5,8 @@ import {
 } from 'element-ui'
 import HjDialog from './dialog'
 import HjButton from './button'
+import HjSelect from './select'
+
 
 export default {
   install: (Vue) => {
@@ -17,6 +19,7 @@ export default {
     // Vue.prototype.$notify = Notification;    //IE兼容
     Vue.component('hj-dialog', HjDialog)
     Vue.component('hj-button', HjButton)
+    Vue.component('hj-select', HjSelect)
 
   }
 }

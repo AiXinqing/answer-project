@@ -1,8 +1,8 @@
 <template>
   <el-row class="TestTitle">
-    <el-col v-for="(item, i) in checkedInfo" :key="i" :span="4" class="title-item">
+    <el-col v-for="(item, i) in studentInfoArr" :key="i" :span="4" class="title-item" >
       <span>{{ item.name }}</span>
-      <span v-if="i == checkedInfo.length - 1">
+      <span v-if="i == studentInfoArr.length - 1">
         <span class="titke-edit" @click="editStudentInfoColumn">编辑</span>
       </span>
       <span v-else />
@@ -11,33 +11,38 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   components: {},
-  // props: {
-  //   studentData: {
-  //     type: Array,
-  //     default: () => [],
-  //   },
-  // },
   data () {
     return {
-      // dataInfo: this.studentInfoArr,
+      // studentInfoArr:[],
+      studentInfoList:[]
     }
   },
   computed: {
-    ...mapState('answerSheetTitle', ['precautions']),
-    ...mapGetters('answerSheetTitle', ['studentInfoArr']),
-    checkedInfo () {
-      return this.precautions.studentInfo.filter((item) => item.checked)
-    },
-    // studentData () {
-    //   return this.precautions.studentInfo
+    ...mapState('titleSet', ['titleInfo']),
+    studentInfoArr(){
+
+      return this.titleInfo.filter(item => item.checked == true)
+    }
+    // ...mapGetters('titleSet', ['studentInfoArr']),
+    // checkedInfo () {
+    //   return this.studentInfoArr.filter((item) => item.checked)
     // },
+  },
+  watch: {
+    titleInfo(val) {
+      this.studentInfoList = JSON.parse(JSON.stringify(val))
+      window.console.log(val)
+    },
+  },
+  mounted () {
+     this.studentInfoList =  JSON.parse(JSON.stringify(this.titleInfo))
   },
   methods: {
     editStudentInfoColumn () {
-      this.$emit('hanldeStudent', this.studentInfoArr)
+      this.$emit('hanldeStudent', this.studentInfoList)
     },
   },
 }

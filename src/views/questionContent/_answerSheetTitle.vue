@@ -1,15 +1,15 @@
 <template>
   <div>
-    <hj-textarea :textarea-data="precautions.textarea" />
+    <hj-textarea :textarea-data="textVal" />
     <student-info @hanldeStudent="hanldeStudent" />
-    <el-row class="precautions_box">
+    <el-row class="precautions_box"  >
       <el-col
         :span="12"
         class="precautions_left"
         :style="{ width: titleWidthLeft + 'px' }"
       >
         <div class="precautions_title">注 意 事 项</div>
-        <div :class="['precautions_content', { active: pageWidth == 480 }]">
+        <div :class="['precautions_content', { active: rectWidth == 480 }]">
           <div>1. 答题前请将姓名、班级、考场、座号和准考证号填写清楚。</div>
           <div>2. 客观题答题,必须使用2B铅笔填涂,修改时用橡皮擦干净。</div>
           <div>3. 主观题必须使用黑色签字笔书写。</div>
@@ -23,20 +23,20 @@
             height="100%"
             version="1.1"
           >
-            <text x="10" y="32" style="font-size: 18px;">正确填涂</text>
+            <text x="10" y="30" style="font-size: 18px;">正确填涂</text>
             <rect
               x="110"
-              y="21"
+              y="19"
               width="17"
               height="10"
               stroke="#000000"
               fill="#000000"
               style="fill-opacity: 1"
             />
-            <text x="175" y="32" style="font-size: 18px;">缺考标记</text>
+            <text x="175" y="30" style="font-size: 18px;">缺考标记</text>
             <rect
               x="278"
-              y="21"
+              y="19"
               width="17"
               height="10"
               stroke="#000000"
@@ -51,20 +51,20 @@
             height="100%"
             version="1.1"
           >
-            <text x="10" y="32" style="font-size: 16px;">正确填涂</text>
+            <text x="10" y="30" style="font-size: 16px;">正确填涂</text>
             <rect
               x="80"
-              y="22"
+              y="19"
               width="17"
               height="10"
               stroke="#000000"
               fill="#000000"
               style="fill-opacity: 1"
             />
-            <text x="120" y="32" style="font-size: 16px;">缺考标记</text>
+            <text x="120" y="30" style="font-size: 16px;">缺考标记</text>
             <rect
               x="190"
-              y="22"
+              y="19"
               width="17"
               height="10"
               stroke="#000000"
@@ -89,10 +89,10 @@
         <table class="table_box" cellspacing="0" cellpadding="0">
           <tbody>
             <tr>
-              <th v-for="(item, i) in trTh" :key="i" />
+              <th v-for="(item, i) in titleRows" :key="i" />
             </tr>
             <tr>
-              <td v-for="(item, i) in trTh" :key="i">
+              <td v-for="(item, i) in titleRows" :key="i">
                 <div
                   v-for="row in trDiv"
                   :key="row"
@@ -110,7 +110,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState ,mapGetters} from 'vuex'
 import hjTextarea from './Precautions/_textarea'
 import studentInfo from './Precautions/_studentInfo'
 export default {
@@ -120,7 +120,7 @@ export default {
   },
   props: {
     contentData: {
-      type: Array,
+      type: Object,
       default() {
         return []
       },
@@ -128,50 +128,48 @@ export default {
   },
   data() {
     return {
-      // svg: false,
       trDiv: 9,
+      studentInfoList:[],
     }
   },
   computed: {
-    ...mapState('answerSheetTitle', ['precautions']),
-    ...mapGetters('answerSheet', ['pageLayout']),
+    ...mapState('titleSet', ['textVal','titleInfo','titleRows']),
+    ...mapGetters('pageContent', ['dataLayout']),
 
     cardData() {
       return this.contentData[0]
     },
-    trTh() {
-      return this.precautions.AdmissionTicket
-    },
-    pageWidth() {
-      return this.pageLayout.column === 3 && this.pageLayout.pageSize == 'A3'
+    rectWidth() {
+      return this.dataLayout.column === 3 && this.dataLayout.size == 'A3'
         ? 480
         : 745
     },
     Rows() {
-      return this.trTh == 9 && this.pageWidth == 480 ? 27 : 28
+      return this.titleRows == 9 && this.rectWidth == 480 ? 26 : 28
     },
     svg() {
-      return this.pageWidth == 480 ? true : false
+      return this.rectWidth == 480 ? true : false
     },
     titleWidthLeft() {
-      if (this.trTh * this.Rows < 224) {
-        return this.pageWidth - 224
+      if (this.titleRows * this.Rows < 224) {
+        return this.rectWidth - 224
       } else {
-        return this.pageWidth - this.trTh * this.Rows
+        return this.rectWidth - this.titleRows * this.Rows
       }
     },
     titleWidthRight() {
-      if (this.trTh * this.Rows < 224) {
+      if (this.titleRows * this.Rows < 224) {
         return 224
       } else {
-        return this.pageWidth - this.titleWidthLeft
+        return this.rectWidth - this.titleWidthLeft
       }
     },
     divWidth() {
-      return this.titleWidthRight == 224 ? 224 / this.trTh - 1 : this.Rows - 1
+      return this.titleWidthRight == 224 ? 224 / this.titleRows - 1 : this.Rows - 1
     },
   },
-  mounted() {},
+  mounted() {
+  },
   methods: {
     hanldeStudent(Arr) {
       this.$emit('hanldeStudent', Arr)

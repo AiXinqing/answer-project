@@ -9,9 +9,9 @@
 </template>
 
 <script>
-import answerSheetLayout from './_answerSheetLayout'
-import answerSheetSet from './_answerSheetSet'
-import answerSheetContent from './_answerSheetContent'
+import answerSheetLayout from './_pageLayout'
+import answerSheetSet from './_basicSet'
+import answerSheetContent from './_pageContent'
 export default {
   components: {
     answerSheetLayout,

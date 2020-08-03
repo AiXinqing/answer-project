@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapMutations } from 'vuex'
 export default {
   props: {
     textareaData: {
@@ -24,9 +24,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions('answerSheetTitle', ['PrecautionsTextFunc']),
+    ...mapMutations('titleSet', ['editTextarea']),
     editPrecautionsTitile(e) {
-      this.PrecautionsTextFunc(e)
+      this.editTextarea(e)
     },
   },
 }

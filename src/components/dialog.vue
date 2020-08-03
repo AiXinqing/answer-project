@@ -1,15 +1,5 @@
 <template>
   <div class="hj-dialog">
-    <!-- <el-dialog
-      v-if="dialogDrag"
-      v-bind="$attrs"
-      v-on="$listeners"
-      :title="title"
-      :close-on-click-modal="closeOnClickModal"
-      v-dialog-drag
-    >
-      <slot></slot>
-    </el-dialog> -->
     <el-dialog
       v-bind="$attrs"
       v-on="$listeners"

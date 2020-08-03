@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
   props: {
     propLayout: {
@@ -79,14 +79,15 @@ export default {
         { id: 2, content: '两栏', pid: 'A3' },
         { id: 3, content: '三栏', pid: 'A3' },
       ],
-      size: this.propLayout.pageSize,
-      layout: this.propLayout.column,
+      size: this.propLayout.size || 'A3',
+      layout: this.propLayout.column || 2,
     }
   },
-
+  computed: {
+     ...mapState('titleSet', ['textVal', 'titleInfo','titleRows']),
+  },
   methods: {
-    ...mapActions('answerSheet', ['editGroupData', 'editLayout']),
-    ...mapMutations('answerSheet', ['SET_GROUPDATA', 'amendGroupPage']),
+    ...mapMutations('pageContent', ['initPageLayout', 'initPageData','amendPageData']),
     openRForm(type) {
       if (type === 1) {
         this.createLayout = true
@@ -99,26 +100,28 @@ export default {
       this.openedFrame = false
     },
     preCreateTitle(change) {
-      const pageWidth = this.size == 'A3' && this.layout == 3 ? 520 : 785
       const obj = {
-        pageWidth: pageWidth,
-        pageSize: this.size,
+        size: this.size,
         column: this.layout,
       }
-      this.editLayout(obj)
+      this.initPageLayout(obj)
 
       const TestData = {
         id: 1,
         height: 380,
         questionType: 'AnswerSheetTitle',
-        content: [obj],
+        content: {
+          textVal:this.textVal,
+          titleInfo:this.titleInfo,
+          titleRows:this.titleRows
+        },
       }
       //
       if (change == 1) {
-        this.amendGroupPage(TestData)
+        this.amendPageData(TestData)
       } else {
         // 新增值
-        this.SET_GROUPDATA(TestData)
+        this.initPageData(TestData)
       }
       this.openedFrame = false
     },
