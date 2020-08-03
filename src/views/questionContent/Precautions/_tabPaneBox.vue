@@ -1,35 +1,81 @@
 <template>
-  <el-tabs v-model="activeName" type="border-card" @tab-click="hanldeClick" class="card_top">
-    <el-tab-pane v-for="(item,i) in tabPaneData" :key="i" :label="item.label" :name="item.name">
+  <el-tabs
+    v-model="activeName"
+    type="border-card"
+    @tab-click="hanldeClick"
+    class="card_top"
+  >
+    <el-tab-pane
+      v-for="(item, i) in tabPaneData"
+      :key="i"
+      :label="item.label"
+      :name="item.name"
+    >
       <div class="big-question-box">
-        <tab-item
-          v-for="row in groupData.singleBox"
-          :key="row.id"
-          :item-data="row"
-          :active-name-item="activeName"
-          v-if="activeName == 'singleBox'"
-          @hanlde-del="handldeDel"
-        />
-        <tab-item
-          v-for="row in groupData.checkbox"
-          :key="row.id"
-          :item-data="row"
-          :active-name-item="activeName"
-          v-if="activeName == 'checkbox'"
-          @hanlde-del="handldeDel"
-        />
-        <tab-item
-          v-for="row in groupData.judgment"
-          :key="row.id"
-          :item-data="row"
-          :active-name-item="activeName"
-          v-if="activeName == 'judgment'"
-          @hanlde-del="handldeDel"
-        />
+        <template v-if="activeName == 'singleBox'">
+          <tab-item
+            v-for="row in groupData.singleBox"
+            :key="row.id"
+            :item-data="row"
+            :active-name-item="activeName"
+            @hanlde-del="handldeDel"
+          />
+        </template>
+        <template v-if="activeName == 'checkbox'">
+          <tab-item
+            v-for="row in groupData.checkbox"
+            :key="row.id"
+            :item-data="row"
+            :active-name-item="activeName"
+            @hanlde-del="handldeDel"
+          />
+        </template>
+        <template v-if="activeName == 'judgment'">
+          <tab-item
+            v-for="row in groupData.judgment"
+            :key="row.id"
+            :item-data="row"
+            :active-name-item="activeName"
+            @hanlde-del="handldeDel"
+          />
+        </template>
       </div>
-      <div class="add_question">+ 分段添加小题</div>
+      <div class="add_question" @click="hanldeAddSubtopic(activeName)">
+        + 分段添加小题
+      </div>
       <div class="question-group">
-        <el-row class="group_item">
+        <template v-if="activeName == 'singleBox'">
+          <template v-for="row in groupData.singleBox">
+            <i :key="row.id"></i>
+            <group-item
+              v-for="item in row.childGroup"
+              :key="item.id"
+              :child-group-data="item"
+            />
+          </template>
+        </template>
+        <template v-if="activeName == 'checkbox'">
+          <template v-for="row in groupData.checkbox">
+            <i :key="row.id"></i>
+            <group-item
+              v-for="item in row.checkbox"
+              :key="item.id"
+              :child-group-data="item"
+            />
+          </template>
+        </template>
+        <template v-if="activeName == 'judgment'">
+          <template v-for="row in groupData.judgment">
+            <i :key="row.id"></i>
+            <group-item
+              v-for="item in row.judgment"
+              :key="item.id"
+              :child-group-data="item"
+            />
+          </template>
+        </template>
+
+        <!-- <el-row class="group_item">
           <el-col :span="4" class="question_tabtitle">1</el-col>
           <el-col :span="20" class="group_item_right">
             <div v-if="activeName == 'singleBox'">
@@ -55,7 +101,7 @@
               <span>个选项</span>
             </div>
           </el-col>
-        </el-row>
+        </el-row> -->
       </div>
     </el-tab-pane>
   </el-tabs>
@@ -63,40 +109,44 @@
 
 <script>
 import tabItem from './tabPane/_tabItem.vue'
+import groupItem from './tabPane/_groupItem.vue'
 export default {
   components: {
     tabItem,
+    groupItem,
   },
   props: {
     tabPaneData: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     groupData: {
       type: Object,
-      default: () => { }
-    }
+      default: () => {},
+    },
   },
-  data () {
+  data() {
     return {
       activeName: 'singleBox',
-      input: ''
+      input: '',
     }
   },
   methods: {
-    hanldeClick () {
-
-    },
-    handldeDel (obj) {
+    hanldeClick() {},
+    handldeDel(obj) {
       this.$emit('hanlde-dels', obj)
-    }
+    },
+    hanldeAddSubtopic(type) {
+      window.console.log(type)
+      this.$emit('hanlde-add-subtopic', type)
+    },
   },
 }
 </script>
 
 <style lang="less">
 .add_question {
-  @import "~@/assets/css/variables.less";
+  @import '~@/assets/css/variables.less';
   color: @main;
   cursor: pointer;
 }
