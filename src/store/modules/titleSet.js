@@ -26,13 +26,13 @@ const state = {
 }
 
 const mutations = {
-  editTitleInfo:(state,obj)=>{
+  editTitleInfo: (state, obj) => {
     state.titleInfo = obj
   },
-  editTitleRows:(state,val)=>{
+  editTitleRows: (state, val) => {
     state.titleRows = val
   },
-  editTextarea:(state,val) => {
+  editTextarea: (state, val) => {
     state.textVal = val
   }
 }

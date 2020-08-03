@@ -30,6 +30,7 @@
         :tab-pane-data="tabData"
         :group-data="quesctionObj.group"
         @hanlde-dels="hanldeDel"
+        @hanlde-add-subtopic="hanldeAddSubtopic"
       />
     </div>
     <div class="dialog-footer">
@@ -41,6 +42,7 @@
 
 <script>
 import tabPaneBox from '../questionContent/Precautions/_tabPaneBox'
+import { mapState, mapGetters } from 'vuex'
 export default {
   components: {
     tabPaneBox,
@@ -50,96 +52,6 @@ export default {
       openedFrame: false,
       isdisabledFn: false,
       title: '新增客观题',
-      options: [
-        {
-          value: 1,
-          label: '一',
-        },
-        {
-          value: 2,
-          label: '二',
-        },
-        {
-          value: 3,
-          label: '三',
-        },
-        {
-          value: 4,
-          label: '四',
-        },
-        {
-          value: 5,
-          label: '五',
-        },
-        {
-          value: 6,
-          label: '六',
-        },
-        {
-          value: 7,
-          label: '七',
-        },
-        {
-          value: 8,
-          label: '八',
-        },
-        {
-          value: 9,
-          label: '九',
-        },
-        {
-          value: 10,
-          label: '十',
-        },
-        {
-          value: 11,
-          label: '十一',
-        },
-        {
-          value: 12,
-          label: '十二',
-        },
-        {
-          value: 13,
-          label: '十三',
-        },
-        {
-          value: 14,
-          label: '十四',
-        },
-        {
-          value: 15,
-          label: '十五',
-        },
-        {
-          value: 16,
-          label: '十六',
-        },
-        {
-          value: 17,
-          label: '十七',
-        },
-        {
-          value: 18,
-          label: '十八',
-        },
-        {
-          value: 19,
-          label: '十九',
-        },
-        {
-          value: 20,
-          label: '二十',
-        },
-        {
-          value: 21,
-          label: '二十一',
-        },
-        {
-          value: 22,
-          label: '二十二',
-        },
-      ],
       quesctionObj: {
         number: 1,
         topic: '选择题',
@@ -151,7 +63,7 @@ export default {
               end: null,
               score: null,
               select: 4,
-              id: 'singleBox' + 1,
+              id: 'singleBox0',
               child: [],
             },
           ],
@@ -162,7 +74,7 @@ export default {
               score: null,
               lessScore: null,
               select: 4,
-              id: 'checkbox' + 1,
+              id: 'checkbox0',
               child: [],
             },
           ],
@@ -172,7 +84,7 @@ export default {
               end: null,
               score: null,
               select: 2,
-              id: 'judgment' + 1,
+              id: 'judgment0',
               child: [],
             },
           ],
@@ -185,6 +97,13 @@ export default {
       ],
     }
   },
+  computed: {
+    ...mapState('questionType', ['options']),
+    ...mapGetters('questionType', ['currentQuestion']),
+    // currentQuestion () {// 分段题组
+    //   return this.endQuestion == null ? this.startQuestion : 1
+    // }
+  },
   methods: {
     closeFrame () {
       this.openedFrame = false
@@ -194,10 +113,11 @@ export default {
     },
     preCreateQuestion () { },
     hanldeSelect (e) {
+      // 选择答题号
       window.console.log(e)
     },
     hanldeDel (obj) {
-      console.log(obj)
+      // 删除分段-小题组
       const group = this.quesctionObj.group
       const groupItem =
         obj.type == 'singleBox'
@@ -209,6 +129,27 @@ export default {
       if (index > -1) {
         groupItem.splice(index, 1)
       }
+    },
+    hanldeAddSubtopic (type) {
+      // 新增小题组-分段添加小题
+      const group = this.quesctionObj.group
+      const groupItem =
+        type == 'singleBox'
+          ? group.singleBox
+          : type == 'checkbox'
+            ? group.checkbox
+            : group.judgment
+      const long = +new Date() // 时间戳
+      const itemObj = {
+        start: this.currentQuestion,
+        end: null,
+        score: null,
+        select: 4,
+        id: type + long,
+        child: [],
+      }
+      groupItem.push(itemObj)
+      console.log(groupItem)
     },
   },
 }

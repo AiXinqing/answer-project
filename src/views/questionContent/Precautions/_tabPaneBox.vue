@@ -1,16 +1,6 @@
 <template>
-  <el-tabs
-    v-model="activeName"
-    type="border-card"
-    @tab-click="hanldeClick"
-    class="card_top"
-  >
-    <el-tab-pane
-      v-for="(item, i) in tabPaneData"
-      :key="i"
-      :label="item.label"
-      :name="item.name"
-    >
+  <el-tabs v-model="activeName" type="border-card" @tab-click="hanldeClick" class="card_top">
+    <el-tab-pane v-for="(item, i) in tabPaneData" :key="i" :label="item.label" :name="item.name">
       <div class="big-question-box">
         <template v-if="activeName == 'singleBox'">
           <tab-item
@@ -40,68 +30,26 @@
           />
         </template>
       </div>
-      <div class="add_question" @click="hanldeAddSubtopic(activeName)">
-        + 分段添加小题
-      </div>
+      <div class="add_question" @click="hanldeAddSubtopic(activeName)">+ 分段添加小题</div>
       <div class="question-group">
         <template v-if="activeName == 'singleBox'">
           <template v-for="row in groupData.singleBox">
             <i :key="row.id"></i>
-            <group-item
-              v-for="item in row.childGroup"
-              :key="item.id"
-              :child-group-data="item"
-            />
+            <group-item v-for="item in row.childGroup" :key="item.id" :child-group-data="item" />
           </template>
         </template>
         <template v-if="activeName == 'checkbox'">
           <template v-for="row in groupData.checkbox">
             <i :key="row.id"></i>
-            <group-item
-              v-for="item in row.checkbox"
-              :key="item.id"
-              :child-group-data="item"
-            />
+            <group-item v-for="item in row.checkbox" :key="item.id" :child-group-data="item" />
           </template>
         </template>
         <template v-if="activeName == 'judgment'">
           <template v-for="row in groupData.judgment">
             <i :key="row.id"></i>
-            <group-item
-              v-for="item in row.judgment"
-              :key="item.id"
-              :child-group-data="item"
-            />
+            <group-item v-for="item in row.judgment" :key="item.id" :child-group-data="item" />
           </template>
         </template>
-
-        <!-- <el-row class="group_item">
-          <el-col :span="4" class="question_tabtitle">1</el-col>
-          <el-col :span="20" class="group_item_right">
-            <div v-if="activeName == 'singleBox'">
-              <el-input v-model="input" size="mini" />
-              <span>分</span>
-              <el-input v-model="input" size="mini" />
-              <span>个选项</span>
-            </div>
-            <div v-if="activeName == 'checkbox'">
-              <el-input v-model="input" size="mini" />
-              <span>分</span>
-              <el-input v-model="input" size="mini" />
-              <span>分,少选得</span>
-              <el-input v-model="input" size="mini" />
-              <span>分</span>
-              <el-input v-model="input" size="mini" />
-              <span>个选项</span>
-            </div>
-            <div v-if="activeName == 'judgment'">
-              <el-input v-model="input" size="mini" />
-              <span>分</span>
-              <el-input v-model="input" disabled size="mini" />
-              <span>个选项</span>
-            </div>
-          </el-col>
-        </el-row> -->
       </div>
     </el-tab-pane>
   </el-tabs>
@@ -122,22 +70,21 @@ export default {
     },
     groupData: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
   },
-  data() {
+  data () {
     return {
       activeName: 'singleBox',
       input: '',
     }
   },
   methods: {
-    hanldeClick() {},
-    handldeDel(obj) {
+    hanldeClick () { },
+    handldeDel (obj) {
       this.$emit('hanlde-dels', obj)
     },
-    hanldeAddSubtopic(type) {
-      window.console.log(type)
+    hanldeAddSubtopic (type) {
       this.$emit('hanlde-add-subtopic', type)
     },
   },
@@ -145,10 +92,11 @@ export default {
 </script>
 
 <style lang="less">
+@import "~@/assets/css/variables.less";
 .add_question {
-  @import '~@/assets/css/variables.less';
   color: @main;
   cursor: pointer;
+  width: 100px;
 }
 .big-question-box {
   margin-bottom: 20px;
