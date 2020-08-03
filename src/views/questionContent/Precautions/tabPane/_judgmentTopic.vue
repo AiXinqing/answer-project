@@ -5,23 +5,9 @@
       <div>
         <el-input v-model="score" size="mini" />
         <span>分</span>
-        <el-input v-model="select" size="mini" />
-        <span>个选项</span>
-      </div>
-      <!-- <template v-if="activeNameItem == 'checkbox'">
-        <el-input v-model="score" size="mini" />
-        <span>分,少选得</span>
-        <el-input v-model="lessScore" size="mini" />
-        <span>分</span>
-        <el-input v-model="select" size="mini" />
-        <span>个选项</span>
-      </template>
-      <template v-if="activeNameItem == 'judgment'">
-        <el-input v-model="score" size="mini" />
-        <span>分</span>
         <el-input v-model="select" disabled size="mini" />
         <span>个选项</span>
-      </template> -->
+      </div>
     </el-col>
   </el-row>
 </template>
