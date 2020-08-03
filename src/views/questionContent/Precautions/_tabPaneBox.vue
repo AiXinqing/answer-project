@@ -9,7 +9,7 @@
     >
       <div class="big-question-box">
         <template v-if="activeName == 'singleBox'">
-          <tab-item
+          <tab-single-item
             v-for="row in groupData.singleBox"
             :key="row.id"
             :item-data="row"
@@ -62,11 +62,11 @@
 </template>
 
 <script>
-import tabItem from './tabPane/_tabItem.vue'
+import tabSingleItem from './tabPane/_tabSingleItem'
 import groupItem from './tabPane/_groupItem.vue'
 export default {
   components: {
-    tabItem,
+    tabSingleItem,
     groupItem,
   },
   props: {
