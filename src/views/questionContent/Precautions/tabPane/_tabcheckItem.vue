@@ -66,10 +66,38 @@ export default {
     },
     singleBoxHanlde () {
       // 新增题组-小题详情
-      if (this.tabStatus) {
-        console.log(this.tabStatusVal)
-      } else {
-        console.log(this.tabStatusVal)
+      const StatusObj = {
+        val: this.tabStatusVal,
+        status: this.tabStatus
+      }
+      this.$emit('hanlde-status', StatusObj)
+      if (!this.tabStatus) {
+        let subtopicArr = []
+        let lessScore = this.itemLessScore == '' || this.itemLessScore == null ? '' : parseFloat(this.itemLessScore)
+        for (let index = this.itemStart; index <= this.itemEnd; index++) {
+          let subtopic = {
+            pid: this.itemData.id,
+            id: 'check_' + index,
+            score: parseFloat(this.itemScore),
+            lessScore: lessScore,
+            select: parseInt(this.itemSelect),
+            topic: index
+          }
+          subtopicArr.push(subtopic)
+        }
+        let itemObj = {
+          type: 'checkbox',
+          data: {
+            start: parseInt(this.itemStart),
+            end: parseInt(this.itemEnd),
+            score: parseFloat(this.itemScore),
+            lessScore: lessScore,
+            select: parseInt(this.itemSelect),
+            id: this.itemData.id,
+            childGroup: subtopicArr
+          }
+        }
+        this.$emit('hanlde-add-group-question', itemObj)
       }
     }
   },

@@ -26,6 +26,8 @@
             :item-data="row"
             :active-name-item="activeName"
             @hanlde-del="handldeDel"
+            @hanlde-status="hanldeStatus"
+            @hanlde-add-group-question="hanldeAddGroupQuestion"
           />
         </template>
         <template v-if="activeName == 'judgment'">
@@ -35,6 +37,8 @@
             :item-data="row"
             :active-name-item="activeName"
             @hanlde-del="handldeDel"
+            @hanlde-status="hanldeStatus"
+            @hanlde-add-group-question="hanldeAddGroupQuestion"
           />
         </template>
       </div>
@@ -50,14 +54,14 @@
         <template v-if="activeName == 'checkbox'">
           <template v-for="row in groupData.checkbox">
             <div :key="row.id" class="group_item">
-              <check-topic v-for="item in row.checkbox" :key="item.id" :child-group-data="item" />
+              <check-topic v-for="item in row.childGroup" :key="item.id" :child-item="item" />
             </div>
           </template>
         </template>
         <template v-if="activeName == 'judgment'">
           <template v-for="row in groupData.judgment">
             <div :key="row.id" class="group_item">
-              <judgment-topic v-for="item in row.judgment" :key="item.id" :child-group-data="item" />
+              <judgment-topic v-for="item in row.childGroup" :key="item.id" :child-item="item" />
             </div>
           </template>
         </template>
