@@ -33,6 +33,7 @@
         @hanlde-add-subtopic="hanldeAddSubtopic"
       />
     </div>
+    <div class="error-message" v-if="errorMessage">ces</div>
     <div class="dialog-footer">
       <hj-button type="cancel" @click="closeFrame">取 消</hj-button>
       <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateQuestion">确 定</hj-button>
@@ -95,6 +96,7 @@ export default {
         { label: '多选框', name: 'checkbox' },
         { label: '判断题', name: 'judgment' },
       ],
+      errorMessage: false
     }
   },
   computed: {
@@ -149,7 +151,6 @@ export default {
         child: [],
       }
       groupItem.push(itemObj)
-      console.log(groupItem)
     },
   },
 }
@@ -180,6 +181,11 @@ export default {
 .el-tabs--border-card {
   box-shadow: none !important;
   border: none;
+}
+.error-message {
+  color: red;
+  font-size: 14px;
+  text-indent: 1em;
 }
 </style>
 

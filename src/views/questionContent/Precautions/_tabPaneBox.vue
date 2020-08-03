@@ -1,6 +1,12 @@
 <template>
   <el-tabs v-model="activeName" type="border-card" @tab-click="hanldeClick" class="card_top">
-    <el-tab-pane v-for="(item, i) in tabPaneData" :key="i" :label="item.label" :name="item.name">
+    <el-tab-pane
+      v-for="(item, i) in tabPaneData"
+      :key="i"
+      :label="item.label"
+      :name="item.name"
+      :disabled="isdisabled"
+    >
       <div class="big-question-box">
         <template v-if="activeName == 'singleBox'">
           <tab-item
@@ -77,6 +83,7 @@ export default {
     return {
       activeName: 'singleBox',
       input: '',
+      isdisabled: false
     }
   },
   methods: {
