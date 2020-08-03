@@ -42,7 +42,7 @@ export default {
       return itemStart == 0 ? '开始题号必须大于0' :
         itemEnd == 0 ? '结束题号必须大于0' :
           itemStart == 0 && itemEnd != 0 ? '开始题号不能大于结束题号' :
-            itemStart > itemEnd ? '开始题号不能大于结束题号' :
+            itemStart > itemEnd && itemEnd != 0 ? '开始题号不能大于结束题号' :
               itemStart != 0 && itemEnd != 0 && itemScore == 0 ? '分数不能为空' : ''
     },
     tabStatus () {
@@ -50,7 +50,7 @@ export default {
       let itemEnd = this.itemEnd || 0
       let itemScore = this.itemScore || 0
       return itemStart == 0 && itemEnd != 0 ? true :
-        itemEnd < itemStart ? true :
+        itemEnd < itemStart && itemEnd != 0 ? true :
           itemEnd != 0 && itemScore == 0 ? true :
             itemStart != 0 && itemEnd != 0 && itemScore == 0 ? true : false;
     }
@@ -63,10 +63,35 @@ export default {
     },
     singleBoxHanlde () {
       // 新增题组-小题详情
-      if (this.tabStatus) {
-        console.log(this.tabStatusVal)
-      } else {
-        console.log(this.tabStatusVal)
+      const StatusObj = {
+        val: this.tabStatusVal,
+        status: this.tabStatus
+      }
+      this.$emit('hanlde-status', StatusObj)
+      if (!this.tabStatus) {
+        let subtopicArr = []
+        for (let index = this.itemStart; index <= this.itemEnd; index++) {
+          let subtopic = {
+            pid: this.itemData.id,
+            id: 'single_' + index,
+            score: parseFloat(this.itemScore),
+            select: parseInt(this.itemSelect),
+            topic: index
+          }
+          subtopicArr.push(subtopic)
+        }
+        let itemObj = {
+          type: 'singleBox',
+          data: {
+            start: parseInt(this.itemStart),
+            end: parseInt(this.itemEnd),
+            score: parseFloat(this.itemScore),
+            select: parseInt(this.itemSelect),
+            id: this.itemData.id,
+            child: subtopicArr
+          }
+        }
+        this.$emit('hanlde-add-group-question', itemObj)
       }
     }
   },

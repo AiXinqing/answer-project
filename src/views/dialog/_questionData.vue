@@ -31,9 +31,11 @@
         :group-data="quesctionObj.group"
         @hanlde-dels="hanldeDel"
         @hanlde-add-subtopic="hanldeAddSubtopic"
+        @hanlde-status="hanldeStatus"
+        @hanlde-add-group-question="hanldeAddGroupQuestion"
       />
     </div>
-    <div class="error-message" v-if="errorMessage">ces</div>
+    <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
     <div class="dialog-footer">
       <hj-button type="cancel" @click="closeFrame">取 消</hj-button>
       <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateQuestion">确 定</hj-button>
@@ -96,12 +98,15 @@ export default {
         { label: '多选框', name: 'checkbox' },
         { label: '判断题', name: 'judgment' },
       ],
-      errorMessage: false
+      errorVal: ''
     }
   },
   computed: {
     ...mapState('questionType', ['options']),
     ...mapGetters('questionType', ['currentQuestion']),
+    errorMessage () {
+      return this.errorVal != '' ? true : false
+    }
     // currentQuestion () {// 分段题组
     //   return this.endQuestion == null ? this.startQuestion : 1
     // }
@@ -152,12 +157,31 @@ export default {
       }
       groupItem.push(itemObj)
     },
+    hanldeStatus (statusObj) {
+      this.errorVal = statusObj.val
+      // 分段题组增加小题详情状态
+    },
+    hanldeAddGroupQuestion (itemObj) {
+      //题组详情
+      const group = this.quesctionObj.group
+      const groupItem =
+        itemObj.type == 'singleBox'
+          ? group.singleBox
+          : itemObj.type == 'checkbox'
+            ? group.checkbox
+            : group.judgment
+      const index = groupItem.findIndex(item => item.id === itemObj.data.id)
+      if (index > -1) {
+        groupItem[index] = itemObj.data
+      }
+      console.log(this.quesctionObj)
+    }
   },
 }
 </script>
 
 <style lang="less" scoped>
-@import "~@/assets/css/variables.less";
+@import '~@/assets/css/variables.less';
 .select-item {
   display: flex;
   .label {

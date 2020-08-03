@@ -15,6 +15,8 @@
             :item-data="row"
             :active-name-item="activeName"
             @hanlde-del="handldeDel"
+            @hanlde-status="hanldeStatus"
+            @hanlde-add-group-question="hanldeAddGroupQuestion"
           />
         </template>
         <template v-if="activeName == 'checkbox'">
@@ -98,12 +100,21 @@ export default {
     hanldeAddSubtopic (type) {
       this.$emit('hanlde-add-subtopic', type)
     },
+    hanldeStatus (statusObj) {
+      // 判断当前tab切换状态
+      this.isdisabled = statusObj.status
+      this.$emit('hanlde-status', statusObj)
+    },
+    hanldeAddGroupQuestion (itemObj) {
+      //题组详情
+      this.$emit('hanlde-add-group-question', itemObj)
+    }
   },
 }
 </script>
 
 <style lang="less">
-@import "~@/assets/css/variables.less";
+@import '~@/assets/css/variables.less';
 .add_question {
   color: @main;
   cursor: pointer;
@@ -170,7 +181,7 @@ export default {
 .big-item:nth-child(n + 2) {
   margin-top: 10px;
 }
-.el-input--mini .el-input__inner{
-  text-align:center
+.el-input--mini .el-input__inner {
+  text-align: center;
 }
 </style>
