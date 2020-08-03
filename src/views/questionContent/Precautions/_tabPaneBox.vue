@@ -18,7 +18,7 @@
           />
         </template>
         <template v-if="activeName == 'checkbox'">
-          <tab-item
+          <tab-check-item
             v-for="row in groupData.checkbox"
             :key="row.id"
             :item-data="row"
@@ -27,7 +27,7 @@
           />
         </template>
         <template v-if="activeName == 'judgment'">
-          <tab-item
+          <tab-judgment
             v-for="row in groupData.judgment"
             :key="row.id"
             :item-data="row"
@@ -62,11 +62,15 @@
 </template>
 
 <script>
-import tabSingleItem from './tabPane/_tabSingleItem'
+import tabSingleItem from './tabPane/tabSingleItem'
+import tabCheckItem from './tabPane/_tabCheckItem'
+import tabJudgment from './tabPane/_tabJudgment'
 import groupItem from './tabPane/_groupItem.vue'
 export default {
   components: {
     tabSingleItem,
+    tabCheckItem,
+    tabJudgment,
     groupItem,
   },
   props: {
@@ -165,5 +169,8 @@ export default {
 }
 .big-item:nth-child(n + 2) {
   margin-top: 10px;
+}
+.el-input--mini .el-input__inner{
+  text-align:center
 }
 </style>

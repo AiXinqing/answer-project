@@ -1,44 +1,15 @@
 <template>
   <div class="big-item">
-    <template v-if="activeNameItem == 'singleBox'">
-      <span>从</span>
-      <el-input v-model="itemStart" size="mini" @blur="singleBoxHanlde" />
-      <span>题到</span>
-      <el-input v-model="itemEnd" size="mini" @blur="singleBoxHanlde" />
-      <span>题,每题</span>
-      <el-input v-model="itemScore" size="mini" @blur="singleBoxHanlde" />
-      <span>分,每题</span>
-      <el-input v-model="itemSelect" size="mini" />
-      <span>个选项</span>
-      <i class="el-icon-delete" @click="hanldeDel(itemData.id,activeNameItem)"></i>
-    </template>
-    <template v-if="activeNameItem == 'checkbox'">
-      <span>从</span>
-      <el-input v-model="itemStart" size="mini" />
-      <span>题到</span>
-      <el-input v-model="itemEnd" size="mini" />
-      <span>题,每题</span>
-      <el-input v-model="itemScore" size="mini" />
-      <span>分,少选</span>
-      <el-input v-model="itemLessScore" size="mini" />
-      <span>得分,每题</span>
-      <el-input v-model="itemSelect" size="mini" />
-      <span>个选项</span>
-      <i class="el-icon-delete"></i>
-      <i class="el-icon-delete" @click="hanldeDel(itemData.id,activeNameItem)"></i>
-    </template>
-    <template v-if="activeNameItem == 'judgment'">
-      <span>从</span>
-      <el-input v-model="itemStart" size="mini" />
-      <span>题到</span>
-      <el-input v-model="itemEnd" size="mini" />
-      <span>题,每题</span>
-      <el-input v-model="itemScore" size="mini" />
-      <span>分,每题</span>
-      <el-input v-model="itemSelect" disabled size="mini" />
-      <span>个选项</span>
-      <i class="el-icon-delete" @click="hanldeDel(itemData.id,activeNameItem)"></i>
-    </template>
+    <span>从</span>
+    <el-input v-model="itemStart" size="mini" @blur="singleBoxHanlde" />
+    <span>题到</span>
+    <el-input v-model="itemEnd" size="mini" @blur="singleBoxHanlde" />
+    <span>题,每题</span>
+    <el-input v-model="itemScore" size="mini" @blur="singleBoxHanlde" />
+    <span>分,每题</span>
+    <el-input v-model="itemSelect" size="mini" />
+    <span>个选项</span>
+    <i class="el-icon-delete" @click="hanldeDel(itemData.id,activeNameItem)"></i>
   </div>
 </template>
 
