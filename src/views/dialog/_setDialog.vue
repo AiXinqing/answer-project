@@ -39,18 +39,11 @@
       </el-row>
     </div>
     <div class="dialog-footer createLayout" v-if="createLayout">
-      <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateTitle"
-        >创建</hj-button
-      >
+      <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateTitle">创建</hj-button>
     </div>
     <div class="dialog-footer" v-else>
       <hj-button type="cancel" @click="closeFrame">取 消</hj-button>
-      <hj-button
-        type="confirm"
-        :disabled="isdisabledFn"
-        @click="preCreateTitle(1)"
-        >确 定</hj-button
-      >
+      <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateTitle(1)">确 定</hj-button>
     </div>
   </hj-dialog>
 </template>
@@ -61,10 +54,10 @@ export default {
   props: {
     propLayout: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
   },
-  data() {
+  data () {
     return {
       openedFrame: false,
       title: '创建答题卡',
@@ -84,11 +77,11 @@ export default {
     }
   },
   computed: {
-     ...mapState('titleSet', ['textVal', 'titleInfo','titleRows']),
+    ...mapState('titleSet', ['textVal', 'titleInfo', 'titleRows']),
   },
   methods: {
-    ...mapMutations('pageContent', ['initPageLayout', 'initPageData','amendPageData']),
-    openRForm(type) {
+    ...mapMutations('pageContent', ['initPageLayout', 'initPageData', 'amendPageData']),
+    openRForm (type) {
       if (type === 1) {
         this.createLayout = true
       } else {
@@ -96,10 +89,10 @@ export default {
       }
       this.openedFrame = true
     },
-    closeFrame() {
+    closeFrame () {
       this.openedFrame = false
     },
-    preCreateTitle(change) {
+    preCreateTitle (change) {
       const obj = {
         size: this.size,
         column: this.layout,
@@ -111,9 +104,9 @@ export default {
         height: 380,
         questionType: 'AnswerSheetTitle',
         content: {
-          textVal:this.textVal,
-          titleInfo:this.titleInfo,
-          titleRows:this.titleRows
+          textVal: this.textVal,
+          titleInfo: this.titleInfo,
+          titleRows: this.titleRows
         },
       }
       //
@@ -125,12 +118,12 @@ export default {
       }
       this.openedFrame = false
     },
-    hanldeTab(item) {
+    hanldeTab (item) {
       this.size = item
       this.layout =
         this.size === 'A4' ? 1 : this.size === 'A3' ? 2 : this.layout
     },
-    hanldeColumns(item) {
+    hanldeColumns (item) {
       this.layout = item.id
     },
   },
@@ -138,7 +131,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import '~@/assets/css/variables.less';
+@import "~@/assets/css/variables.less";
 .createLayout {
   text-align: center;
 }

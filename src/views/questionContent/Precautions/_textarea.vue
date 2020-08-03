@@ -18,14 +18,14 @@ export default {
       default: '',
     },
   },
-  data() {
+  data () {
     return {
       textareaVal: this.textareaData,
     }
   },
   methods: {
     ...mapMutations('titleSet', ['editTextarea']),
-    editPrecautionsTitile(e) {
+    editPrecautionsTitile (e) {
       this.editTextarea(e)
     },
   },

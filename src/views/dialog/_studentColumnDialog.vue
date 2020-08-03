@@ -13,14 +13,11 @@
         :key="i"
         v-model="item.checked"
         @change="changeCheckFunc"
-        >{{ item.name }}</el-checkbox
-      >
+      >{{ item.name }}</el-checkbox>
     </div>
     <div class="dialog-footer">
       <hj-button type="cancel" @click="closeFrame">取 消</hj-button>
-      <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateTitle"
-        >确 定</hj-button
-      >
+      <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateTitle">确 定</hj-button>
     </div>
   </hj-dialog>
 </template>
@@ -28,11 +25,11 @@
 <script>
 import { mapMutations } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
       openedFrame: false,
       isdisabledFn: false,
-      studentTitle:[]
+      studentTitle: []
     }
   },
   computed: {
@@ -40,17 +37,17 @@ export default {
   },
   methods: {
     ...mapMutations('titleSet', ['editTitleInfo']),
-    closeFrame() {
+    closeFrame () {
       this.openedFrame = false
     },
-    openedFrameFunc(obj) {
+    openedFrameFunc (obj) {
       this.studentTitle = obj
       this.openedFrame = true
     },
-    changeCheckFunc(){
+    changeCheckFunc () {
 
     },
-    preCreateTitle() {
+    preCreateTitle () {
       this.editTitleInfo(this.studentTitle)
       this.closeFrame()
     },

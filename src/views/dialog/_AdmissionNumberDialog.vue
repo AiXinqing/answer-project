@@ -7,9 +7,9 @@
     :before-close="closeFrame"
     :show-close="false"
   >
-    <div class="item-style ">
+    <div class="item-style">
       <div class="demo-input-suffix">
-        <label for="">考号位数</label>
+        <label for>考号位数</label>
         <el-input
           type="number"
           v-model="AdmissionTicket"
@@ -23,9 +23,7 @@
     </div>
     <div class="dialog-footer">
       <hj-button type="cancel" @click="closeFrame">取 消</hj-button>
-      <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateTitle"
-        >确 定</hj-button
-      >
+      <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateTitle">确 定</hj-button>
     </div>
   </hj-dialog>
 </template>
@@ -33,7 +31,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
       openedFrame: false,
       isdisabledFn: false,
@@ -46,34 +44,34 @@ export default {
     ...mapState('titleSet', ['titleRows']),
     ...mapState('pageContent', ['pageLayout']),
 
-    maxAdmission() {
+    maxAdmission () {
       // 最大数
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 9
         : 12
     },
   },
-  watch:{
-    titleRows(val){
+  watch: {
+    titleRows (val) {
       this.AdmissionTicket = parseInt(val)
     }
   },
-  mounted(){
+  mounted () {
     this.AdmissionTicket = parseInt(this.titleRows)
   },
   methods: {
     ...mapMutations('titleSet', ['editTitleRows']),
-    closeFrame() {
+    closeFrame () {
       this.openedFrame = false
     },
-    openedFrameFunc() {
+    openedFrameFunc () {
       this.openedFrame = true
     },
-    preCreateTitle() {
+    preCreateTitle () {
       this.editTitleRows(parseInt(this.AdmissionTicket))
       this.closeFrame()
     },
-    changeValueFunc(e) {
+    changeValueFunc (e) {
       const val = parseInt(e)
       if (val < this.minAdmission || val > this.maxAdmission) {
         this.labelWarning = '请输入4~' + this.maxAdmission + '之间的整数'

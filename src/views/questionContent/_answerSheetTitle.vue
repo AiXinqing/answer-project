@@ -2,12 +2,8 @@
   <div>
     <hj-textarea :textarea-data="textVal" />
     <student-info @hanldeStudent="hanldeStudent" />
-    <el-row class="precautions_box"  >
-      <el-col
-        :span="12"
-        class="precautions_left"
-        :style="{ width: titleWidthLeft + 'px' }"
-      >
+    <el-row class="precautions_box">
+      <el-col :span="12" class="precautions_left" :style="{ width: titleWidthLeft + 'px' }">
         <div class="precautions_title">注 意 事 项</div>
         <div :class="['precautions_content', { active: rectWidth == 480 }]">
           <div>1. 答题前请将姓名、班级、考场、座号和准考证号填写清楚。</div>
@@ -17,12 +13,7 @@
           <div>5. 保持答卷清洁完整。</div>
         </div>
         <div v-if="!svg" class="precautions_mark">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="100%"
-            height="100%"
-            version="1.1"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" version="1.1">
             <text x="10" y="30" style="font-size: 18px;">正确填涂</text>
             <rect
               x="110"
@@ -34,23 +25,11 @@
               style="fill-opacity: 1"
             />
             <text x="175" y="30" style="font-size: 18px;">缺考标记</text>
-            <rect
-              x="278"
-              y="19"
-              width="17"
-              height="10"
-              stroke="#000000"
-              style="fill-opacity: 0"
-            />
+            <rect x="278" y="19" width="17" height="10" stroke="#000000" style="fill-opacity: 0" />
           </svg>
         </div>
         <div v-else class="precautions_mark">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="100%"
-            height="100%"
-            version="1.1"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" version="1.1">
             <text x="10" y="30" style="font-size: 16px;">正确填涂</text>
             <rect
               x="80"
@@ -62,29 +41,14 @@
               style="fill-opacity: 1"
             />
             <text x="120" y="30" style="font-size: 16px;">缺考标记</text>
-            <rect
-              x="190"
-              y="19"
-              width="17"
-              height="10"
-              stroke="#000000"
-              style="fill-opacity: 0"
-            />
+            <rect x="190" y="19" width="17" height="10" stroke="#000000" style="fill-opacity: 0" />
           </svg>
         </div>
       </el-col>
-      <el-col
-        :span="12"
-        class="precautions_right"
-        :style="{ width: titleWidthRight + 'px' }"
-      >
+      <el-col :span="12" class="precautions_right" :style="{ width: titleWidthRight + 'px' }">
         <div class="ticket_number">
           准考证号
-          <span
-            class="precautions_edit layui-btn layui-btn-xs"
-            @click="editAdmissionNumber"
-            >编辑</span
-          >
+          <span class="precautions_edit layui-btn layui-btn-xs" @click="editAdmissionNumber">编辑</span>
         </div>
         <table class="table_box" cellspacing="0" cellpadding="0">
           <tbody>
@@ -93,12 +57,9 @@
             </tr>
             <tr>
               <td v-for="(item, i) in titleRows" :key="i">
-                <div
-                  v-for="row in trDiv"
-                  :key="row"
-                  :style="{ minWidth: divWidth + 'px' }"
-                >
-                  [<span>{{ row }} </span>]
+                <div v-for="row in trDiv" :key="row" :style="{ minWidth: divWidth + 'px' }">
+                  [
+                  <span>{{ row }}</span>]
                 </div>
               </td>
             </tr>
@@ -110,7 +71,7 @@
 </template>
 
 <script>
-import { mapState ,mapGetters} from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import hjTextarea from './Precautions/_textarea'
 import studentInfo from './Precautions/_studentInfo'
 export default {
@@ -121,60 +82,60 @@ export default {
   props: {
     contentData: {
       type: Object,
-      default() {
+      default () {
         return []
       },
     },
   },
-  data() {
+  data () {
     return {
       trDiv: 9,
-      studentInfoList:[],
+      studentInfoList: [],
     }
   },
   computed: {
-    ...mapState('titleSet', ['textVal','titleInfo','titleRows']),
+    ...mapState('titleSet', ['textVal', 'titleInfo', 'titleRows']),
     ...mapGetters('pageContent', ['dataLayout']),
 
-    cardData() {
+    cardData () {
       return this.contentData[0]
     },
-    rectWidth() {
+    rectWidth () {
       return this.dataLayout.column === 3 && this.dataLayout.size == 'A3'
         ? 480
         : 745
     },
-    Rows() {
+    Rows () {
       return this.titleRows == 9 && this.rectWidth == 480 ? 26 : 28
     },
-    svg() {
+    svg () {
       return this.rectWidth == 480 ? true : false
     },
-    titleWidthLeft() {
+    titleWidthLeft () {
       if (this.titleRows * this.Rows < 224) {
         return this.rectWidth - 224
       } else {
         return this.rectWidth - this.titleRows * this.Rows
       }
     },
-    titleWidthRight() {
+    titleWidthRight () {
       if (this.titleRows * this.Rows < 224) {
         return 224
       } else {
         return this.rectWidth - this.titleWidthLeft
       }
     },
-    divWidth() {
+    divWidth () {
       return this.titleWidthRight == 224 ? 224 / this.titleRows - 1 : this.Rows - 1
     },
   },
-  mounted() {
+  mounted () {
   },
   methods: {
-    hanldeStudent(Arr) {
+    hanldeStudent (Arr) {
       this.$emit('hanldeStudent', Arr)
     },
-    editAdmissionNumber() {
+    editAdmissionNumber () {
       this.$emit('edit-admission-number')
     },
   },
@@ -182,7 +143,7 @@ export default {
 </script>
 
 <style lang="less">
-@import '~@/assets/css/variables.less';
+@import "~@/assets/css/variables.less";
 .title-item {
   height: 40px;
   line-height: 50px;
