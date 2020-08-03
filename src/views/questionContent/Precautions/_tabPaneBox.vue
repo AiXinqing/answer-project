@@ -54,12 +54,13 @@
             </div>
           </template>
         </template>
-        <!-- <template v-if="activeName == 'judgment'">
+        <template v-if="activeName == 'judgment'">
           <template v-for="row in groupData.judgment">
-            <i :key="row.id"></i>
-            <group-item v-for="item in row.judgment" :key="item.id" :child-group-data="item" />
+            <div :key="row.id" class="group_item">
+              <judgment-topic v-for="item in row.judgment" :key="item.id" :child-group-data="item" />
+            </div>
           </template>
-        </template> -->
+        </template>
       </div>
     </el-tab-pane>
   </el-tabs>
@@ -71,13 +72,15 @@ import tabCheckItem from './tabPane/_tabCheckItem'
 import tabJudgment from './tabPane/_tabJudgment'
 import singleTopic from './tabPane/_singleTopic'
 import checkTopic from './tabPane/_checkTopic'
+import judgmentTopic from './tabPane/_judgmentTopic'
 export default {
   components: {
     tabSingleItem,
     tabCheckItem,
     tabJudgment,
     singleTopic,
-    checkTopic
+    checkTopic,
+    judgmentTopic
   },
   props: {
     tabPaneData: {
