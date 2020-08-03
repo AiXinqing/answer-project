@@ -88,7 +88,7 @@ export default {
             score: parseFloat(this.itemScore),
             select: parseInt(this.itemSelect),
             id: this.itemData.id,
-            child: subtopicArr
+            childGroup: subtopicArr
           }
         }
         this.$emit('hanlde-add-group-question', itemObj)

@@ -42,11 +42,12 @@
       <div class="question-group">
         <template v-if="activeName == 'singleBox'">
           <template v-for="row in groupData.singleBox">
-            <i :key="row.id"></i>
-            <group-item v-for="item in row.childGroup" :key="item.id" :child-group-data="item" />
+            <div :key="row.id" class="group_item">
+              <single-topic v-for="item in row.childGroup" :key="item.id" :child-item="item" />
+            </div>
           </template>
         </template>
-        <template v-if="activeName == 'checkbox'">
+        <!-- <template v-if="activeName == 'checkbox'">
           <template v-for="row in groupData.checkbox">
             <i :key="row.id"></i>
             <group-item v-for="item in row.checkbox" :key="item.id" :child-group-data="item" />
@@ -57,7 +58,7 @@
             <i :key="row.id"></i>
             <group-item v-for="item in row.judgment" :key="item.id" :child-group-data="item" />
           </template>
-        </template>
+        </template> -->
       </div>
     </el-tab-pane>
   </el-tabs>
@@ -67,13 +68,13 @@
 import tabSingleItem from './tabPane/tabSingleItem'
 import tabCheckItem from './tabPane/_tabCheckItem'
 import tabJudgment from './tabPane/_tabJudgment'
-import groupItem from './tabPane/_groupItem.vue'
+import singleTopic from './tabPane/_singleTopic'
 export default {
   components: {
     tabSingleItem,
     tabCheckItem,
     tabJudgment,
-    groupItem,
+    singleTopic,
   },
   props: {
     tabPaneData: {
@@ -181,7 +182,9 @@ export default {
 .big-item:nth-child(n + 2) {
   margin-top: 10px;
 }
-.el-input--mini .el-input__inner {
-  text-align: center;
+.el-tabs__header.is-top {
+  .el-input--mini .el-input__inner {
+    text-align: center;
+  }
 }
 </style>

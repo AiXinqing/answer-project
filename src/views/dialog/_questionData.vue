@@ -67,7 +67,7 @@ export default {
               score: null,
               select: 4,
               id: 'singleBox0',
-              child: [],
+              childGroup: [],
             },
           ],
           checkbox: [
@@ -78,7 +78,7 @@ export default {
               lessScore: null,
               select: 4,
               id: 'checkbox0',
-              child: [],
+              childGroup: [],
             },
           ],
           judgment: [
@@ -88,7 +88,7 @@ export default {
               score: null,
               select: 2,
               id: 'judgment0',
-              child: [],
+              childGroup: [],
             },
           ],
         },
