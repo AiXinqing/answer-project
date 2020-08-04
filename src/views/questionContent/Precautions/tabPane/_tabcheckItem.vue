@@ -40,22 +40,22 @@ export default {
   computed: {
     tabStatusVal () {
       let itemStart = this.itemStart || 0
-      let itemEnd = this.itemEnd || 0
+      let itemEnd = this.itemEnd || null
       let itemScore = this.itemScore || 0
       return itemStart == 0 ? '开始题号必须大于0' :
-        itemEnd == 0 ? '结束题号必须大于0' :
-          itemStart == 0 && itemEnd != 0 ? '开始题号不能大于结束题号' :
-            itemStart > itemEnd ? '开始题号不能大于结束题号' :
-              itemStart != 0 && itemEnd != 0 && itemScore == 0 ? '分数不能为空' : ''
+        itemEnd == 0 && itemEnd != null ? '结束题号必须大于0' :
+          itemStart == 0 && itemEnd != null ? '开始题号不能大于结束题号' :
+            itemStart > itemEnd && itemEnd != null ? '开始题号不能大于结束题号' :
+              itemStart != 0 && itemEnd != null && itemScore == 0 ? '分数不能为空' : ''
     },
     tabStatus () {
       let itemStart = this.itemStart || 0
-      let itemEnd = this.itemEnd || 0
+      let itemEnd = this.itemEnd || null
       let itemScore = this.itemScore || 0
-      return itemStart == 0 && itemEnd != 0 ? true :
-        itemEnd < itemStart ? true :
-          itemEnd != 0 && itemScore == 0 ? true :
-            itemStart != 0 && itemEnd != 0 && itemScore == 0 ? true : false;
+      return itemStart == 0 && itemEnd != null ? true :
+        itemEnd < itemStart && itemEnd != null ? true :
+          itemEnd != null && itemScore == 0 ? true :
+            itemStart != 0 && itemEnd != null && itemScore == 0 ? true : false;
     }
   },
   methods: {
@@ -73,7 +73,10 @@ export default {
       this.$emit('hanlde-status', StatusObj)
       if (!this.tabStatus) {
         let subtopicArr = []
+        let itemEnd = this.itemEnd == null ? '' : parseInt(this.itemEnd)
+        let itemScore = this.itemScore == null ? '' : parseFloat(this.itemScore)
         let lessScore = this.itemLessScore == '' || this.itemLessScore == null ? '' : parseFloat(this.itemLessScore)
+        //
         for (let index = this.itemStart; index <= this.itemEnd; index++) {
           let subtopic = {
             pid: this.itemData.id,
@@ -89,8 +92,8 @@ export default {
           type: 'checkbox',
           data: {
             start: parseInt(this.itemStart),
-            end: parseInt(this.itemEnd),
-            score: parseFloat(this.itemScore),
+            end: itemEnd,
+            score: itemScore,
             lessScore: lessScore,
             select: parseInt(this.itemSelect),
             id: this.itemData.id,
