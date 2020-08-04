@@ -58,6 +58,19 @@ export default {
             itemStart != 0 && itemEnd != null && itemScore == 0 ? true : false;
     }
   },
+  watch: {
+    // currentQuestion: {
+    //   handler (newValue) {
+    //     console.log(newValue)
+    //   },
+    //   immediate: true,
+    //   deep: true
+    // }
+  },
+  // mounted () {
+  //   // 初始化题组值
+  //   console.log(this.currentQuestion)
+  // },
   methods: {
     hanldeDel (id, type) {
       // 删除分段题组

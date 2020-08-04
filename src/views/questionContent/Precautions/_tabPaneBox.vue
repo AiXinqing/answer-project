@@ -166,12 +166,16 @@ export default {
   }
 }
 .group_item {
+  width: 100%;
   height: 39px;
   line-height: 39px;
   border-bottom: 1px solid #888;
+  display: contents;
 }
 .group_item:last-child {
-  border-bottom: none;
+  .el-row:last-child {
+    border-bottom: none;
+  }
 }
 
 .group_item_right {

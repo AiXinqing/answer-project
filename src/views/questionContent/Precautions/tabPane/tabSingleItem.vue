@@ -1,5 +1,6 @@
 <template>
   <div class="big-item">
+    <!-- {{ questions_inp }} -->
     <span>从</span>
     <el-input v-model="itemStart" size="mini" @blur="singleBoxHanlde" />
     <span>题到</span>
@@ -14,6 +15,7 @@
 </template>
 
 <script>
+import { mapMutations, mapState } from 'vuex'
 export default {
   props: {
     itemData: {
@@ -35,6 +37,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('questionType', ['endQuestion', 'questions_inp']),
     tabStatusVal () {
       let itemStart = this.itemStart || 0
       let itemEnd = this.itemEnd || null
@@ -53,9 +56,10 @@ export default {
         itemEnd < itemStart && itemEnd != null ? true :
           itemEnd != null && itemScore == 0 ? true :
             itemStart != 0 && itemEnd != null && itemScore == 0 ? true : false;
-    }
+    },
   },
   methods: {
+    ...mapMutations('questionType', ['set_endQuestion']),
     hanldeDel (id, type) {
       // 删除分段题组
       const obj = { id: id, type: type }
@@ -72,6 +76,10 @@ export default {
         let subtopicArr = []
         let itemEnd = this.itemEnd == null ? '' : parseInt(this.itemEnd)
         let itemScore = this.itemScore == null ? '' : parseFloat(this.itemScore)
+        if (itemEnd != null) {
+          // 判断结束题是否有值
+          this.set_endQuestion(itemEnd)
+        }
         //
         for (let index = this.itemStart; index <= this.itemEnd; index++) {
           let subtopic = {

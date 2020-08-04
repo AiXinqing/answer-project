@@ -55,6 +55,13 @@ export default {
             itemStart != 0 && itemEnd != null && itemScore == 0 ? true : false;
     }
   },
+  // mounted () {
+  //   // 初始化题组值
+  //   if (this.itemEnd == '') {
+  //     console.log(this.currentQuestion)
+  //     this.itemStart = this.currentQuestion
+  //   }
+  // },
   methods: {
     hanldeDel (id, type) {
       // 删除分段题组

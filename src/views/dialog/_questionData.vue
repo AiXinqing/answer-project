@@ -45,7 +45,7 @@
 
 <script>
 import tabPaneBox from '../questionContent/Precautions/_tabPaneBox'
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
   components: {
     tabPaneBox,
@@ -102,16 +102,37 @@ export default {
     }
   },
   computed: {
-    ...mapState('questionType', ['options']),
-    ...mapGetters('questionType', ['currentQuestion']),
+    ...mapState('questionType', [
+      'options',
+      'startQuestion',
+      'endQuestion',
+      // 'minTopic',
+      'SubtitleNumber',
+      'delTopics'
+    ]),
+    currentQuestion () { // 分段题组
+      let end = this.endQuestion
+      let delTopics = this.delTopics
+      let minTopic = ''
+      if (delTopics.length > 0) {
+        minTopic = Math.min(...delTopics)
+      }
+      return end != null && minTopic == '' ? end + 1 :
+        minTopic != '' ? minTopic : 1
+    },
     errorMessage () {
       return this.errorVal != '' ? true : false
     }
-    // currentQuestion () {// 分段题组
-    //   return this.endQuestion == null ? this.startQuestion : 1
-    // }
   },
   methods: {
+    ...mapMutations('questionType', [
+      'set_startQuestion',
+      'set_endQuestion',
+      'set_minTopic',
+      'set_SubtitleNumber',
+      'delete_SubtitleNumber',
+      'set_delTopics',
+    ]),
     closeFrame () {
       this.openedFrame = false
     },
@@ -134,7 +155,17 @@ export default {
             : group.judgment
       const index = groupItem.findIndex((item) => item.id == obj.id)
       if (index > -1) {
+        let itemTopic = groupItem[index]
+        // 更改题型状态值
+        if (this.minTopic <= itemTopic.end) {
+          this.set_minTopic(itemTopic.end)
+        }
+        this.set_endQuestion(itemTopic.end)
+        this.set_startQuestion(itemTopic.start)
+
         groupItem.splice(index, 1)
+        this.delete_SubtitleNumber(obj.id)
+        this.set_delTopics({ start: itemTopic.start, end: itemTopic.end })
       }
     },
     hanldeAddSubtopic (type) {
@@ -147,13 +178,19 @@ export default {
             ? group.checkbox
             : group.judgment
       const long = +new Date() // 时间戳
-      const itemObj = {
+      let itemObj = {
         start: this.currentQuestion,
         end: null,
         score: null,
         select: 4,
         id: type + long,
-        child: [],
+        childGroup: [],
+      }
+      if (type == 'checkbox') {
+        itemObj = {
+          ...itemObj,
+          lessScore: null
+        }
       }
       groupItem.push(itemObj)
     },
@@ -171,10 +208,16 @@ export default {
             ? group.checkbox
             : group.judgment
       const index = groupItem.findIndex(item => item.id === itemObj.data.id)
+
       if (index > -1) {
-        groupItem[index] = itemObj.data
+
+        let itemTopic = itemObj.data // 当前新增
+
+        groupItem.splice(index, 1, itemObj.data) // 替换
+        // 追曾小题号至数组
+        let obj = { start: itemTopic.start, end: itemTopic.end, id: itemTopic.id }
+        this.set_SubtitleNumber(obj)
       }
-      console.log(this.quesctionObj)
     }
   },
 }

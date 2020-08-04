@@ -91,7 +91,9 @@ const state = {
   startQuestion: 1, // 分段题组开始题号
   endQuestion: null, // 分段题组结束题号
   delStartQuestion: null, // 分段题组开始题号-已删除
-  endStartQuestion: null, // 分段题组结束题号-已删除
+  minTopic: 1, // 删除最小值
+  SubtitleNumber: [], // 已有的题号数组
+  delTopics: [], // 删除的题组
 }
 
 const mutations = {
@@ -103,21 +105,53 @@ const mutations = {
     // 结束题号
     state.endQuestion = val
   },
+  set_minTopic: (state, val) => {
+    state.minTopic = val
+  },
+  set_SubtitleNumber: (state, {
+    start,
+    end,
+    id
+  }) => {
+    let index = state.SubtitleNumber.findIndex(item => item.id === id)
+    let Arr = []
+    for (let i = start; i <= end; i++) {
+      Arr.push(i)
+    }
+
+    let obj = {
+      id: id,
+      data: Arr
+    }
+    if (index > -1) {
+      state.SubtitleNumber.splice(index, 1, obj)
+    } else {
+      state.SubtitleNumber.push(obj)
+    }
+  },
+  delete_SubtitleNumber: (state, id) => {
+    // 追加生成的题号
+    let index = state.SubtitleNumber.findIndex(item => item.id === id)
+    if (index > -1) {
+      state.SubtitleNumber.splice(index, 1)
+    }
+  },
+  set_delTopics: (state, {
+    start,
+    end,
+  }) => {
+    for (let i = start; i <= end; i++) {
+      let index = state.delTopics.findIndex(item => item === i)
+      if (index <= -1) {
+        state.delTopics.push(i)
+      }
+    }
+  }
 }
 
 const actions = {}
 
-const getters = {
-  currentQuestion(state) { // 分段题组
-    let start = state.startQuestion
-    let end = state.endQuestion
-    let delStart = state.delStartQuestion
-    return end == null ? start :
-      delStart != null && delStart > start ? start :
-      delStart != null && delStart < start ? delStart : 1
-
-  }
-}
+const getters = {}
 
 export default {
   namespaced: true,
