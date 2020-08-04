@@ -106,7 +106,6 @@ export default {
       'options',
       'startQuestion',
       'endQuestion',
-      // 'minTopic',
       'SubtitleNumber',
       'delTopics'
     ]),

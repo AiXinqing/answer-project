@@ -1,6 +1,5 @@
 <template>
   <div class="big-item">
-    <!-- {{ questions_inp }} -->
     <span>从</span>
     <el-input v-model="itemStart" size="mini" @blur="singleBoxHanlde" />
     <span>题到</span>
@@ -37,7 +36,10 @@ export default {
     }
   },
   computed: {
-    ...mapState('questionType', ['endQuestion', 'questions_inp']),
+    ...mapState('questionType', [
+      'endQuestion',
+      'delTopics',
+    ]),
     tabStatusVal () {
       let itemStart = this.itemStart || 0
       let itemEnd = this.itemEnd || null
@@ -57,6 +59,19 @@ export default {
           itemEnd != null && itemScore == 0 ? true :
             itemStart != 0 && itemEnd != null && itemScore == 0 ? true : false;
     },
+    currentQuestion () { // 分段题组
+      let end = this.endQuestion
+      let delTopics = this.delTopics
+      let minTopic = ''
+      if (delTopics.length > 0) {
+        minTopic = Math.min(...delTopics)
+      }
+      return end != null && minTopic == '' ? end + 1 :
+        minTopic != '' ? minTopic : 1
+    },
+  },
+  mounted () {
+    window.console.log(1)
   },
   methods: {
     ...mapMutations('questionType', ['set_endQuestion']),

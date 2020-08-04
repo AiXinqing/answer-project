@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   props: {
     itemData: {
@@ -38,6 +39,10 @@ export default {
     }
   },
   computed: {
+    ...mapState('questionType', [
+      'endQuestion',
+      'delTopics',
+    ]),
     tabStatusVal () {
       let itemStart = this.itemStart || 0
       let itemEnd = this.itemEnd || null
@@ -56,21 +61,28 @@ export default {
         itemEnd < itemStart && itemEnd != null ? true :
           itemEnd != null && itemScore == 0 ? true :
             itemStart != 0 && itemEnd != null && itemScore == 0 ? true : false;
-    }
+    },
+    currentQuestion: { // 分段题组
+      get: () => {
+        let end = this.endQuestion
+        let delTopics = this.delTopics
+        let minTopic = ''
+        if (delTopics.length > 0) {
+          minTopic = Math.min(...delTopics)
+        }
+        let minVal = end != null && minTopic == '' ? end + 1 :
+          minTopic != '' ? minTopic : 1
+        if (this.itemEnd != '') {
+          return minVal
+        } else {
+          return this.itemData.start
+        }
+      },
+      set: function (val) {
+        this.itemStart = val
+      }
+    },
   },
-  watch: {
-    // currentQuestion: {
-    //   handler (newValue) {
-    //     console.log(newValue)
-    //   },
-    //   immediate: true,
-    //   deep: true
-    // }
-  },
-  // mounted () {
-  //   // 初始化题组值
-  //   console.log(this.currentQuestion)
-  // },
   methods: {
     hanldeDel (id, type) {
       // 删除分段题组
