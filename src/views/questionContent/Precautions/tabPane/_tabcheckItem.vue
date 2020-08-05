@@ -1,15 +1,15 @@
 <template>
   <div class="big-item">
     <span>从</span>
-    <el-input v-model="data.start" size="mini" @blur="singleBoxHanlde" />
+    <el-input v-model.number="data.start" size="mini" @blur="singleBoxHanlde" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
     <span>题到</span>
-    <el-input v-model="data.end" size="mini" @blur="singleBoxHanlde"/>
+    <el-input v-model.number="data.end" size="mini" @blur="singleBoxHanlde" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
     <span>题,每题</span>
-    <el-input v-model="data.score" size="mini" @blur="singleBoxHanlde"/>
+    <el-input v-model.number="data.score" size="mini" @blur="singleBoxHanlde" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
     <span>分,少选</span>
-    <el-input v-model="data.lessScore" size="mini" />
+    <el-input v-model.number="data.lessScore" size="mini" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
     <span>得分,每题</span>
-    <el-input v-model="data.select" size="mini" />
+    <el-input v-model.number="data.select" size="mini" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
     <span>个选项</span>
     <i class="el-icon-delete"></i>
     <i class="el-icon-delete" @click="hanldeDel(itemData.id,activeNameItem)"></i>
@@ -94,10 +94,10 @@ export default {
 
       if (!this.tabStatus) {
         let subtopicArr = []
-        let itemEnd = this.data.end == null ? '' : parseInt(this.data.end)
-        let itemScore = this.data.score == null ? '' : parseFloat(this.data.score)
-        let lessScore = this.data.lessScore == '' || this.data.lessScore == null ? '' : parseFloat(this.data.lessScore)
-        let itemSelect = this.data.select == null ? '' : parseFloat(this.data.select)
+        let itemEnd = this.data.end
+        let itemScore = this.data.score
+        let itemSelect = this.data.select
+        let lessScore = this.data.lessScore
         if (itemEnd != null) {
           // 判断结束题是否有值
           this.set_endQuestion(itemEnd)
@@ -129,7 +129,15 @@ export default {
         this.$emit('hanlde-add-group-question', itemObj)
         this.set_currentQuestion()
       }
-    }
+    },
+    // isVerifi (e) {
+    //   let val = e.target.value
+    //   val = val.replace(/[^\d.]/g, '');  //清除“数字”和“.”以外的字符
+    //   val = val.replace(/^\./g, '');  //验证第一个字符是数字而不是.
+    //   val = val.replace(/\.{2,}/g, '.'); //只保留第一个. 清除多余的.
+    //   val = val.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.');
+    //   e.target.value = val
+    // }
   },
 }
 </script>

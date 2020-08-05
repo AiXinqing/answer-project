@@ -1,13 +1,13 @@
 <template>
   <div class="big-item">
     <span>从</span>
-    <el-input v-model="data.start" size="mini" @blur="singleBoxHanlde"/>
+    <el-input v-model.number="data.start"  size="mini" @blur="singleBoxHanlde" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
     <span>题到</span>
-    <el-input v-model="data.end" size="mini" @blur="singleBoxHanlde"/>
+    <el-input v-model.number="data.end" size="mini" @blur="singleBoxHanlde" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
     <span>题,每题</span>
-    <el-input v-model="data.score" size="mini" @blur="singleBoxHanlde"/>
+    <el-input v-model.number="data.score" size="mini" @blur="singleBoxHanlde" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
     <span>分,每题</span>
-    <el-input v-model="data.select" disabled size="mini" />
+    <el-input v-model.number="data.select" disabled size="mini"  />
     <span>个选项</span>
     <i class="el-icon-delete" @click="hanldeDel(itemData.id,activeNameItem)"></i>
   </div>
@@ -89,14 +89,14 @@ export default {
       this.$emit('hanlde-status', StatusObj)
       if (!this.tabStatus) {
         let subtopicArr = []
-        let itemEnd = this.data.end == null ? '' : parseInt(this.data.end)
-        let itemScore = this.data.score == null ? '' : parseFloat(this.data.score)
-        let itemSelect = this.data.select == null ? '' : parseFloat(this.data.select)
+        let itemEnd = this.data.end
+        let itemScore = this.data.score
+        let itemSelect = this.data.select
         if (itemEnd != null) {
           // 判断结束题是否有值
           this.set_endQuestion(itemEnd)
         }
-        for (let index = this.itemStart; index <= this.itemEnd; index++) {
+        for (let index = this.data.start; index <= this.data.end; index++) {
           let subtopic = {
             pid: this.data.id,
             id: 'judgment_' + index,
@@ -120,10 +120,10 @@ export default {
         this.$emit('hanlde-add-group-question', itemObj)
         this.set_currentQuestion()
       }
-    }
+    },
   },
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" >
 </style>
