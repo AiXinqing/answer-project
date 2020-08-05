@@ -118,7 +118,7 @@ export default {
           }
         }
         this.$emit('hanlde-add-group-question', itemObj)
-        this.set_currentQuestion({ end: this.endQuestion, delTopics: this.delTopics })
+        this.set_currentQuestion()
       }
     }
   },

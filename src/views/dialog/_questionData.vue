@@ -107,18 +107,9 @@ export default {
       'startQuestion',
       'endQuestion',
       'SubtitleNumber',
-      'delTopics'
+      'delTopics',
+      'currentQuestion'
     ]),
-    currentQuestion () { // 分段题组
-      let end = this.endQuestion
-      let delTopics = this.delTopics
-      let minTopic = ''
-      if (delTopics.length > 0) {
-        minTopic = Math.min(...delTopics)
-      }
-      return end != null && minTopic == '' ? end + 1 :
-        minTopic != '' ? minTopic : 1
-    },
     errorMessage () {
       return this.errorVal != '' ? true : false
     }
@@ -131,6 +122,7 @@ export default {
       'set_SubtitleNumber',
       'delete_SubtitleNumber',
       'set_delTopics',
+      'set_currentQuestion',
     ]),
     closeFrame () {
       this.openedFrame = false
@@ -165,6 +157,9 @@ export default {
         groupItem.splice(index, 1)
         this.delete_SubtitleNumber(obj.id)
         this.set_delTopics({ start: itemTopic.start, end: itemTopic.end })
+        this.$nextTick(() => {
+          this.set_currentQuestion()
+        })
       }
     },
     hanldeAddSubtopic (type) {

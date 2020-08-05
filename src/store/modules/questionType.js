@@ -148,10 +148,9 @@ const mutations = {
       }
     }
   },
-  set_currentQuestion: (state, {
-    end,
-    delTopics
-  }) => {
+  set_currentQuestion: (state) => {
+    let end = state.endQuestion
+    let delTopics = state.delTopics
     let minTopic = ''
     if (delTopics.length > 0) {
       minTopic = Math.min(...delTopics)
