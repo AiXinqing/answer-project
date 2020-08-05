@@ -94,6 +94,7 @@ const state = {
   minTopic: 1, // 删除最小值
   SubtitleNumber: [], // 已有的题号数组
   delTopics: [], // 删除的题组
+  currentQuestion: 1
 }
 
 const mutations = {
@@ -146,6 +147,17 @@ const mutations = {
         state.delTopics.push(i)
       }
     }
+  },
+  set_currentQuestion: (state, {
+    end,
+    delTopics
+  }) => {
+    let minTopic = ''
+    if (delTopics.length > 0) {
+      minTopic = Math.min(...delTopics)
+    }
+    state.currentQuestion = end != null && minTopic == '' ? end + 1 :
+      minTopic != '' ? minTopic : 1
   }
 }
 
