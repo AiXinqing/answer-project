@@ -1,11 +1,11 @@
 <template>
   <el-row >
-    <el-col :span="4" class="question_tabtitle">{{childItem.topic}}</el-col>
+    <el-col :span="4" class="question_tabtitle" >{{childItem.topic}}</el-col>
     <el-col :span="20" class="group_item_right">
       <div>
-        <el-input v-model="score" size="mini" />
+        <el-input v-model.number="data.score" size="mini" @blur="editHanldeVal" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
         <span>分</span>
-        <el-input v-model="select" size="mini" />
+        <el-input v-model.number="data.select" size="mini" @blur="editHanldeVal" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
         <span>个选项</span>
       </div>
     </el-col>
@@ -22,10 +22,34 @@ export default {
   },
   data () {
     return {
-      score: this.childItem.score,
-      lessScore: this.childItem.lessScore,
-      select: this.childItem.select,
+      data: {}
     }
+  },
+  watch: {
+    childItem: {
+      immediate: true,
+      handler () {
+        this.data = {
+          ...this.childItem
+        }
+      }
+    }
+  },
+  methods: {
+    editHanldeVal () {
+      let status = false
+      if (this.data.score == '') {
+        this.data.score = this.childItem.score
+        status = true
+      } else { status = false }
+      if (this.data.select == '') {
+        this.data.select = this.childItem.select
+        status = true
+      } else { status = false }
+      if (!status) {
+        this.$emit('edit-topic-func', this.data, 'singleBox')
+      }
+    },
   },
 }
 </script>

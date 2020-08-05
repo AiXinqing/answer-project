@@ -33,6 +33,7 @@
         @hanlde-add-subtopic="hanldeAddSubtopic"
         @hanlde-status="hanldeStatus"
         @hanlde-add-group-question="hanldeAddGroupQuestion"
+        @edit-topic-func="editTopicFunc"
       />
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
@@ -211,6 +212,25 @@ export default {
         // 追曾小题号至数组
         let obj = { start: itemTopic.start, end: itemTopic.end, id: itemTopic.id }
         this.set_SubtitleNumber(obj)
+      }
+    },
+    editTopicFunc (dataItem, type) {
+      // 编辑小题详情
+      const group = this.quesctionObj.group
+      const groupItem =
+        type == 'singleBox'
+          ? group.singleBox
+          : type == 'checkbox'
+            ? group.checkbox
+            : group.judgment
+      const index = groupItem.findIndex(item => item.id === dataItem.pid)
+      if (index > -1) {
+        let currentGroup = groupItem[index]
+        let currentIndex = currentGroup.childGroup.findIndex(item => item.id === dataItem.id)
+        if (currentIndex > -1) {
+          currentGroup.childGroup.splice(currentIndex, 1, dataItem) // 替换
+          console.log(groupItem)
+        }
       }
     }
   },

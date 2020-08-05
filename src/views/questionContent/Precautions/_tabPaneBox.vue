@@ -47,21 +47,33 @@
         <template v-if="activeName == 'singleBox'">
           <template v-for="row in groupData.singleBox">
             <div :key="row.id" class="group_item">
-              <single-topic v-for="item in row.childGroup" :key="item.id" :child-item="item" />
+              <single-topic
+                v-for="item in row.childGroup"
+                :key="item.id" :child-item="item"
+                @edit-topic-func="editTopicFunc"
+              />
             </div>
           </template>
         </template>
         <template v-if="activeName == 'checkbox'">
           <template v-for="row in groupData.checkbox">
             <div :key="row.id" class="group_item">
-              <check-topic v-for="item in row.childGroup" :key="item.id" :child-item="item" />
+              <check-topic
+                v-for="item in row.childGroup"
+                :key="item.id" :child-item="item"
+                @edit-topic-func="editTopicFunc"
+              />
             </div>
           </template>
         </template>
         <template v-if="activeName == 'judgment'">
           <template v-for="row in groupData.judgment">
             <div :key="row.id" class="group_item">
-              <judgment-topic v-for="item in row.childGroup" :key="item.id" :child-item="item" />
+              <judgment-topic
+                v-for="item in row.childGroup"
+                :key="item.id"
+                :child-item="item"
+              />
             </div>
           </template>
         </template>
@@ -119,6 +131,9 @@ export default {
     hanldeAddGroupQuestion (itemObj) {
       //题组详情
       this.$emit('hanlde-add-group-question', itemObj)
+    },
+    editTopicFunc (data, type) {
+      this.$emit('edit-topic-func', data, type)
     }
   },
 }
