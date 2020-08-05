@@ -10,7 +10,7 @@
       <div class="big-question-box">
         <template v-if="activeName == 'singleBox'">
           <tab-single-item
-            v-for="row in groupData.singleBox"
+            v-for="row in data.singleBox"
             :key="row.id"
             :item-data="row"
             :active-name-item="activeName"
@@ -21,7 +21,7 @@
         </template>
         <template v-if="activeName == 'checkbox'">
           <tab-check-item
-            v-for="row in groupData.checkbox"
+            v-for="row in data.checkbox"
             :key="row.id"
             :item-data="row"
             :active-name-item="activeName"
@@ -32,7 +32,7 @@
         </template>
         <template v-if="activeName == 'judgment'">
           <tab-judgment
-            v-for="row in groupData.judgment"
+            v-for="row in data.judgment"
             :key="row.id"
             :item-data="row"
             :active-name-item="activeName"
@@ -45,7 +45,7 @@
       <div class="add_question" @click="hanldeAddSubtopic(activeName)">+ 分段添加小题</div>
       <div class="question-group">
         <template v-if="activeName == 'singleBox'">
-          <template v-for="row in groupData.singleBox">
+          <template v-for="row in data.singleBox">
             <div :key="row.id" class="group_item">
               <single-topic
                 v-for="item in row.childGroup"
@@ -56,7 +56,7 @@
           </template>
         </template>
         <template v-if="activeName == 'checkbox'">
-          <template v-for="row in groupData.checkbox">
+          <template v-for="row in data.checkbox">
             <div :key="row.id" class="group_item">
               <check-topic
                 v-for="item in row.childGroup"
@@ -67,7 +67,7 @@
           </template>
         </template>
         <template v-if="activeName == 'judgment'">
-          <template v-for="row in groupData.judgment">
+          <template v-for="row in data.judgment">
             <div :key="row.id" class="group_item">
               <judgment-topic
                 v-for="item in row.childGroup"
@@ -112,7 +112,18 @@ export default {
     return {
       activeName: 'singleBox',
       input: '',
-      isdisabled: false
+      isdisabled: false,
+      data: {}
+    }
+  },
+  watch: {
+    groupData: {
+      immediate: true,
+      handler () {
+        this.data = {
+          ...this.groupData
+        }
+      }
     }
   },
   methods: {

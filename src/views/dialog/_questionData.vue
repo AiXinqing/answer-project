@@ -13,22 +13,22 @@
           <hj-select
             :items="options"
             size="mini"
-            :value="quesctionObj.number"
+            :value="objectiveData.number"
             @change="hanldeSelect"
           ></hj-select>
         </el-col>
         <el-col :span="12" class="select-item">
           <div class="label">题目:</div>
-          <el-input v-model="quesctionObj.topic" size="mini" placeholder="请输入内容"></el-input>
+          <el-input v-model="objectiveData.topic" size="mini" placeholder="请输入内容"></el-input>
         </el-col>
         <el-col :span="24" class="select-item">
           <div class="label">每组题数:</div>
-          <el-input v-model="quesctionObj.rows" size="mini" placeholder="请输入内容"></el-input>
+          <el-input v-model="objectiveData.rows" size="mini" placeholder="请输入内容"></el-input>
         </el-col>
       </el-row>
       <tab-pane-box
         :tab-pane-data="tabData"
-        :group-data="quesctionObj.group"
+        :group-data="objectiveData.group"
         @hanlde-dels="hanldeDel"
         @hanlde-add-subtopic="hanldeAddSubtopic"
         @hanlde-status="hanldeStatus"
@@ -60,6 +60,7 @@ export default {
         number: 1,
         topic: '选择题',
         rows: 5,
+        startQuestion: 1,
         group: {
           singleBox: [
             {
@@ -99,7 +100,9 @@ export default {
         { label: '多选框', name: 'checkbox' },
         { label: '判断题', name: 'judgment' },
       ],
-      errorVal: ''
+      closeData: {},
+      errorVal: '',
+      objectiveData: {}
     }
   },
   computed: {
@@ -115,6 +118,19 @@ export default {
       return this.errorVal != '' ? true : false
     }
   },
+  watch: {
+    quesctionObj: {
+      immediate: true,
+      handler () {
+        this.objectiveData = {
+          ...this.quesctionObj
+        }
+      }
+    }
+  },
+  mounted () {
+    this.closeData = JSON.parse(JSON.stringify(this.quesctionObj))
+  },
   methods: {
     ...mapMutations('questionType', [
       'set_startQuestion',
@@ -124,8 +140,11 @@ export default {
       'delete_SubtitleNumber',
       'set_delTopics',
       'set_currentQuestion',
+      'set_closeFrame',
     ]),
     closeFrame () {
+      this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
+      this.set_closeFrame(this.quesctionObj.startQuestion)
       this.openedFrame = false
     },
     opened () {
