@@ -115,6 +115,15 @@ export default {
       } else {
         // 新增值
         this.initPageData(TestData)
+        // 临时测试题-----------------------------
+        let text = {
+          id: 2,
+          height: 380,
+          questionType: 'ObjectiveQuestion',
+          content: '',
+        }
+        this.initPageData(text)
+        // 临时测试题------------------------------
       }
       this.openedFrame = false
     },
@@ -131,7 +140,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "~@/assets/css/variables.less";
+@import '~@/assets/css/variables.less';
 .createLayout {
   text-align: center;
 }

@@ -64,7 +64,6 @@ export default {
   },
   methods: {
     ...mapActions('pageContent', ['getPageData']),
-    // ...mapMutations('pageContent', ['pageContentFunc']),
     hanldeStudent (Arr) {
       this.$refs.studentDialog.openedFrameFunc(Arr)
     },
@@ -126,7 +125,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "~@/assets/css/variables.less";
+@import '~@/assets/css/variables.less';
 .container-card {
   position: relative;
   padding-top: 30px;

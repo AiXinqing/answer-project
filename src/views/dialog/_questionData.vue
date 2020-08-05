@@ -150,7 +150,9 @@ export default {
     opened () {
       this.openedFrame = true
     },
-    preCreateQuestion () { },
+    preCreateQuestion () {
+      window.console.log(this.objectiveData)
+    },
     hanldeSelect (e) {
       // 选择答题号
       window.console.log(e)
