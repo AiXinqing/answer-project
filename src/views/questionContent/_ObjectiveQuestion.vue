@@ -110,7 +110,7 @@ export default {}
 .question_array {
   display: flex;
   .question-groups {
-    margin-right: 10px;
+    margin-right: 15px;
   }
   .group_item {
     display: table-header-group;
@@ -120,6 +120,7 @@ export default {}
       font-style: 12px;
     }
     span.sketch {
+      margin-left: 3px;
       i {
         font-style: normal;
         padding: 0 1px;
