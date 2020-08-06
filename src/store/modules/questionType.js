@@ -94,7 +94,8 @@ const state = {
   minTopic: 1, // 删除最小值
   SubtitleNumber: [], // 已有的题号数组
   delTopics: [], // 删除的题组
-  currentQuestion: 1
+  currentQuestion: 1,
+  letterArr: ['A', 'B', 'C', 'D', 'E', 'G', 'H', 'I', 'J', 'K']
 }
 
 const mutations = {

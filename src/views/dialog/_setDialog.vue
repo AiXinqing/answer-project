@@ -116,13 +116,13 @@ export default {
         // 新增值
         this.initPageData(TestData)
         // 临时测试题-----------------------------
-        let text = {
-          id: 2,
-          height: 380,
-          questionType: 'ObjectiveQuestion',
-          content: '',
-        }
-        this.initPageData(text)
+        // let text = {
+        //   id: 2,
+        //   height: 380,
+        //   questionType: 'ObjectiveQuestion',
+        //   content: '',
+        // }
+        // this.initPageData(text)
         // 临时测试题------------------------------
       }
       this.openedFrame = false

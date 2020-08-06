@@ -17,9 +17,12 @@ const mutations = {
     const index = state.pageData.findIndex((itme) => itme.id === ArrItem.id)
     state.pageData[index] = ArrItem
   },
-  // pageContentFunc: (state, ArrItem) => {
-
-  // }
+  delPageData: (state, ArrItem) => {
+    const index = state.pageData.findIndex((itme) => itme.id === ArrItem)
+    if (index > -1) {
+      state.pageData.splice(index, 1)
+    }
+  },
 }
 
 const actions = {

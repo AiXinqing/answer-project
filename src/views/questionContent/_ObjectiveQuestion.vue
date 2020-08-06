@@ -1,102 +1,121 @@
 <template>
   <div class="question-info">
     <div class="question-title">
-      <span>一.</span>
-      <span>选择题</span>
-      <span>(3分)</span>
+      <span>{{numberTitle}}.</span>
+      <span>{{data.topic}}</span>
+      <span>({{data.totalScore}}分)</span>
     </div>
     <div class="question_array">
-      <div class="question-groups">
-        <div class="group_item">
-          <span>1</span>
-          <span class="sketch">
-            <span>[<i>A</i>]</span>
-            <span>[<i>B</i>]</span>
-            <span>[<i>C</i>]</span>
-            <span>[<i>D</i>]</span>
-          </span>
-        </div>
-        <div class="group_item">
-          <span>2</span>
-          <span class="sketch">
-            <span>[<i>A</i>]</span>
-            <span>[<i>B</i>]</span>
-            <span>[<i>C</i>]</span>
-            <span>[<i>D</i>]</span>
-          </span>
-        </div>
-        <div class="group_item">
-          <span>3</span>
-          <span class="sketch">
-            <span>[<i>A</i>]</span>
-            <span>[<i>B</i>]</span>
-            <span>[<i>C</i>]</span>
-            <span>[<i>D</i>]</span>
-          </span>
-        </div>
-        <div class="group_item">
-          <span>4</span>
-          <span class="sketch">
-            <span>[<i>A</i>]</span>
-            <span>[<i>B</i>]</span>
-            <span>[<i>C</i>]</span>
-            <span>[<i>D</i>]</span>
-          </span>
-        </div>
-        <div class="group_item">
-          <span>5</span>
-          <span class="sketch">
-            <span>[<i>A</i>]</span>
-            <span>[<i>B</i>]</span>
-            <span>[<i>C</i>]</span>
-            <span>[<i>D</i>]</span>
+      <div class="question_editOrDel">
+        <span class="layui-btn layui-btn-xs">编辑</span>
+        <span class="layui-btn layui-btn-xs" @click="delHanlde(questionData.id)">删除</span>
+      </div>
+      <div class="question-groups"
+        v-for="(item,i) in groupData"
+        :key="i"
+      >
+        <div
+          v-for="row in item"
+          :key="row.id"
+          class="group_item"
+        >
+          <span>{{row.topic}}</span>
+          <span
+            v-for="(list,index) in row.selectBox"
+            :key="index"
+            class="sketch"
+          >
+            <span>[<i>{{list}}</i>]</span>
           </span>
         </div>
       </div>
-      <div class="question-groups">
-        <div class="group_item">
-          <span>6</span>
-          <span class="sketch">
-            <span>[<i>A</i>]</span>
-            <span>[<i>B</i>]</span>
-            <span>[<i>C</i>]</span>
-            <span>[<i>D</i>]</span>
-          </span>
-        </div>
-        <div class="group_item">
-          <span>7</span>
-          <span class="sketch">
-            <span>[<i>A</i>]</span>
-            <span>[<i>B</i>]</span>
-            <span>[<i>C</i>]</span>
-            <span>[<i>D</i>]</span>
-          </span>
-        </div>
-        <div class="group_item">
-          <span>8</span>
-          <span class="sketch">
-            <span>[<i>A</i>]</span>
-            <span>[<i>B</i>]</span>
-            <span>[<i>C</i>]</span>
-            <span>[<i>D</i>]</span>
-          </span>
-        </div>
-        <div class="group_item">
-          <span>9</span>
-          <span class="sketch">
-            <span>[<i>A</i>]</span>
-            <span>[<i>B</i>]</span>
-            <span>[<i>C</i>]</span>
-            <span>[<i>D</i>]</span>
-          </span>
-        </div>
-      </div>
+
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+import { mapState, mapMutations } from 'vuex'
+export default {
+  props: {
+    contentData: {
+      type: Object,
+      default: () => { }
+    },
+    questionData: {
+      type: Object,
+      default: () => { }
+    }
+  },
+  data () {
+    return {
+      data: {}
+    }
+  },
+  computed: {
+    ...mapState('questionType', ['options', 'letterArr']),
+    ...mapState('pageContent', ['pageData']),
+    numberTitle () {
+      let item = this.options.filter(item => item.value === this.data.number)
+      return item[0].label
+    },
+    groupData () {
+      let group = this.data.group
+      const singleBox = group.singleBox
+      const singleArr = this.traverse(singleBox, this.letterArr)
+      const checkbox = group.checkbox
+      const checkArr = this.traverse(checkbox, this.letterArr)
+      const judgment = group.judgment
+      const judgmentArr = this.traverse(judgment, this.letterArr)
+      let topicList = [...singleArr, ...checkArr, ...judgmentArr]
+      let result = [];
+      for (var i = 0; i < topicList.length; i += this.data.rows) {
+        result.push(topicList.slice(i, i + this.data.rows));
+      }
+      return result
+    }
+  },
+  watch: {
+    contentData: {
+      immediate: true,
+      handler () {
+        this.data = {
+          ...this.contentData
+        }
+      }
+    }
+  },
+  methods: {
+    ...mapMutations('pageContent', ['delPageData']),
+    traverse (Arr, letterArr) {
+      if (Arr.length > 0) {
+        let data = []
+        Arr.map(item => {
+          if (item.childGroup.length > 0) {
+            let childGroup = item.childGroup.map(row => {
+              let select = item.select
+              let selectBox = []
+              if (select == 2) {
+                selectBox = ['T', 'F']
+              } else {
+                selectBox = letterArr.slice(0, select)
+              }
+              return { ...row, selectBox: selectBox }
+            })
+            data = [...data, ...childGroup]
+          }
+        })
+        return data
+      } else {
+        return []
+      }
+    },
+    delHanlde (id) {
+      console.log(id)
+      this.delPageData(id)
+    }
+  },
+}
 </script>
 
 <style lang="less">
@@ -108,9 +127,10 @@ export default {}
   }
 }
 .question_array {
+  position: relative;
   display: flex;
   .question-groups {
-    margin-right: 15px;
+    margin-right: 25px;
   }
   .group_item {
     display: table-header-group;
@@ -131,6 +151,20 @@ export default {}
         font-size: 12px;
         margin-left: 5px;
       }
+    }
+  }
+  .question_editOrDel {
+    position: absolute;
+    right: 0;
+    top: -10px;
+    display: none;
+    span {
+      margin-left: 10px;
+    }
+  }
+  &:hover {
+    .question_editOrDel {
+      display: block;
     }
   }
 }

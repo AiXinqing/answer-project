@@ -102,7 +102,8 @@ export default {
       ],
       closeData: {},
       errorVal: '',
-      objectiveData: {}
+      objectiveData: {},
+      topicList: []
     }
   },
   computed: {
@@ -142,6 +143,7 @@ export default {
       'set_currentQuestion',
       'set_closeFrame',
     ]),
+    ...mapMutations('pageContent', ['initPageData']),
     closeFrame () {
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
       this.set_closeFrame(this.quesctionObj.startQuestion)
@@ -150,8 +152,43 @@ export default {
     opened () {
       this.openedFrame = true
     },
-    preCreateQuestion () {
-      window.console.log(this.objectiveData)
+    preCreateQuestion () { // 数据编辑完成添加至全局数组中---------------
+      let group = this.objectiveData.group
+      const singleBox = group.singleBox
+      const singleArr = this.traverse(singleBox)
+      const checkbox = group.checkbox
+      const checkArr = this.traverse(checkbox)
+      const judgment = group.judgment
+      const judgmentArr = this.traverse(judgment)
+      this.topicList = [...singleArr, ...checkArr, ...judgmentArr]
+      let long = this.topicList.length
+
+      window.console.log(this.topicList)
+      let row = this.objectiveData.rows
+      let hang = Math.ceil(long / row)
+      let lie = Math.ceil(hang / 4)
+      let heights = lie * (row * 21) + 21
+      let totalScore = 0;
+
+      this.topicList.map(item => {
+        totalScore += item.score
+      })
+      this.objectiveData = {
+        ...this.objectiveData,
+        totalScore: totalScore
+      }
+      var obj = {
+        id: 'objective' + +new Date(),
+        height: heights,
+        questionType: 'ObjectiveQuestion',
+        content: this.objectiveData,
+      }
+      this.initPageData(obj)
+
+      // guan bi - 清楚数据
+      this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
+      this.set_closeFrame(this.quesctionObj.startQuestion)
+      this.openedFrame = false
     },
     hanldeSelect (e) {
       // 选择答题号
@@ -252,6 +289,19 @@ export default {
           currentGroup.childGroup.splice(currentIndex, 1, dataItem) // 替换
           console.log(groupItem)
         }
+      }
+    },
+    traverse (Arr) {
+      if (Arr.length > 0) {
+        let data = []
+        Arr.map(item => {
+          if (item.childGroup.length > 0) {
+            data = [...data, ...item.childGroup]
+          }
+        })
+        return data
+      } else {
+        return []
       }
     }
   },

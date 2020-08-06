@@ -15,6 +15,7 @@
         <component
           :is="row.questionType"
           :content-data="row.content"
+          :question-data="row"
           @hanldeStudent="hanldeStudent"
           @edit-admission-number="editAdmissionNumber"
         />
@@ -40,6 +41,11 @@ export default {
     columnDialog,
     AdmissionNumberDialog,
   },
+  data () {
+    return {
+      contentData: [],
+    }
+  },
   computed: {
     ...mapState('pageContent', ['pageLayout', 'pageData', 'page_size']),
     pageWidth () {
@@ -49,14 +55,11 @@ export default {
     }
   },
   watch: {
-    pageData (newValue) {
-      const Arr = newValue.filter(item => item.id != undefined)
-      this.pageContentFunc(Arr)
-    }
-  },
-  data () {
-    return {
-      contentData: [],
+    pageData: {
+      immediate: true,
+      handler () {
+        this.contentData = this.pageContentFunc(this.pageData)
+      }
     }
   },
   mounted () {
@@ -118,7 +121,7 @@ export default {
       if (currentPage.height) {
         results.push(currentPage.rects)
       }
-      this.contentData = results
+      return results
     }
   },
 }
