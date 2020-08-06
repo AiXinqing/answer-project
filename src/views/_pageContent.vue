@@ -18,6 +18,7 @@
           :question-data="row"
           @hanldeStudent="hanldeStudent"
           @edit-admission-number="editAdmissionNumber"
+          @current-question-hanlde-edit="currentQuestionHanldeEdit"
         />
       </div>
     </div>
@@ -25,6 +26,7 @@
     <column-dialog ref="studentDialog" />
     <!-- 准考证号 -->
     <admission-number-dialog ref="admissionDialog" />
+    <question-dialog ref="questionDialogs" />
   </div>
 </template>
 
@@ -34,12 +36,15 @@ import AnswerSheetTitle from './questionContent/_answerSheetTitle' // 答题卡�
 import ObjectiveQuestion from './questionContent/_ObjectiveQuestion' // 客观题
 import columnDialog from './dialog/_studentColumnDialog'
 import AdmissionNumberDialog from './dialog/_AdmissionNumberDialog'
+import questionDialog from './dialog/_questionData'
+
 export default {
   components: {
     AnswerSheetTitle,
     ObjectiveQuestion,
     columnDialog,
     AdmissionNumberDialog,
+    questionDialog
   },
   data () {
     return {
@@ -122,6 +127,9 @@ export default {
         results.push(currentPage.rects)
       }
       return results
+    },
+    currentQuestionHanldeEdit (id) {
+      this.$refs.questionDialogs.openedEdit(id)
     }
   },
 }

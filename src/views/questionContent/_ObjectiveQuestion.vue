@@ -7,7 +7,7 @@
     </div>
     <div class="question_array">
       <div class="question_editOrDel">
-        <span class="layui-btn layui-btn-xs">编辑</span>
+        <span class="layui-btn layui-btn-xs" @click="currentQuestionHanldeEdit(questionData.id)">编辑</span>
         <span class="layui-btn layui-btn-xs" @click="delHanlde(questionData.id)">删除</span>
       </div>
       <div class="question-groups"
@@ -19,7 +19,7 @@
           :key="row.id"
           class="group_item"
         >
-          <span>{{row.topic}}</span>
+          <span class="topic-num">{{row.topic}}</span>
           <span
             v-for="(list,index) in row.selectBox"
             :key="index"
@@ -29,7 +29,6 @@
           </span>
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -37,6 +36,9 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 export default {
+  components: {
+    // questionDialog,
+  },
   props: {
     contentData: {
       type: Object,
@@ -73,7 +75,7 @@ export default {
         result.push(topicList.slice(i, i + this.data.rows));
       }
       return result
-    }
+    },
   },
   watch: {
     contentData: {
@@ -111,8 +113,10 @@ export default {
       }
     },
     delHanlde (id) {
-      console.log(id)
       this.delPageData(id)
+    },
+    currentQuestionHanldeEdit (id) {
+      this.$emit('current-question-hanlde-edit', id)
     }
   },
 }
@@ -129,15 +133,19 @@ export default {
 .question_array {
   position: relative;
   display: flex;
+  flex-wrap: wrap;
   .question-groups {
-    margin-right: 25px;
+    margin-bottom: 10px;
   }
   .group_item {
     display: table-header-group;
     height: 20px;
     line-height: 20px;
-    span {
-      font-style: 12px;
+    span.topic-num {
+      font-size: 12px;
+      width: 40px;
+      text-align: right;
+      display: inline-block;
     }
     span.sketch {
       margin-left: 3px;
@@ -147,7 +155,7 @@ export default {
       }
       span {
         position: relative;
-        top: -2px;
+        top: -1px;
         font-size: 12px;
         margin-left: 5px;
       }

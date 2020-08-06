@@ -103,7 +103,8 @@ export default {
       closeData: {},
       errorVal: '',
       objectiveData: {},
-      topicList: []
+      topicList: [],
+      editQuestionId: null
     }
   },
   computed: {
@@ -115,6 +116,7 @@ export default {
       'delTopics',
       'currentQuestion'
     ]),
+    ...mapState('pageContent', ['pageData']),
     errorMessage () {
       return this.errorVal != '' ? true : false
     }
@@ -126,6 +128,7 @@ export default {
         this.objectiveData = {
           ...this.quesctionObj
         }
+
       }
     }
   },
@@ -143,13 +146,19 @@ export default {
       'set_currentQuestion',
       'set_closeFrame',
     ]),
-    ...mapMutations('pageContent', ['initPageData']),
+    ...mapMutations('pageContent', ['initPageData', 'amendPageData']),
     closeFrame () {
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
       this.set_closeFrame(this.quesctionObj.startQuestion)
       this.openedFrame = false
     },
     opened () {
+      this.openedFrame = true
+    },
+    openedEdit (id) {
+      let current = this.pageData.filter(item => item.id === id)
+      this.quesctionObj = JSON.parse(JSON.stringify(current[0].content))
+      this.editQuestionId = id
       this.openedFrame = true
     },
     preCreateQuestion () { // 数据编辑完成添加至全局数组中---------------
@@ -183,8 +192,13 @@ export default {
         questionType: 'ObjectiveQuestion',
         content: this.objectiveData,
       }
-      this.initPageData(obj)
 
+      if (this.editQuestionId == null) {
+        this.initPageData(obj)
+      } else {
+        obj.id = this.editQuestionId
+        this.amendPageData(obj)
+      }
       // guan bi - 清楚数据
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
       this.set_closeFrame(this.quesctionObj.startQuestion)
