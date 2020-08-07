@@ -1,22 +1,25 @@
 <template>
   <div class="page-content">
-    <answer-sheet-layout />
-    <div class="main-info">
+    <!-- <answer-sheet-layout /> -->
+    <!-- <div class="main-info">
       <answer-sheet-set />
       <answer-sheet-content />
-    </div>
+    </div> -->
+    <quill-editor></quill-editor>
   </div>
 </template>
 
 <script>
-import answerSheetLayout from './_pageLayout'
-import answerSheetSet from './_basicSet'
-import answerSheetContent from './_pageContent'
+import quillEditor from '../components/quillEditor'
+// import answerSheetLayout from './_pageLayout'
+// import answerSheetSet from './_basicSet'
+// import answerSheetContent from './_pageContent'
 export default {
   components: {
-    answerSheetLayout,
-    answerSheetSet,
-    answerSheetContent,
+    quillEditor,
+    // answerSheetLayout,
+    // answerSheetSet,
+    // answerSheetContent,
   },
 }
 </script>
