@@ -1,10 +1,16 @@
 <template>
   <div class="question-info">
-    <div class="question-title">
-      <span>{{numberTitle}}.</span>
+    <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
+      <!-- <span>{{numberTitle}}.</span>
       <span>{{data.topic}}</span>
-      <span>({{data.totalScore}}分)</span>
+      <span>({{data.totalScore}}分)</span> -->
+      <div v-html="cotent"></div>
     </div>
+    <quill-editor
+      v-show="isEditor"
+      :topic-content="TopicContent"
+      @hanlde-close-esitor="hanldeCloseEsitor"
+    />
     <div class="question_array">
       <div class="question_editOrDel">
         <span class="layui-btn layui-btn-xs" @click="currentQuestionHanldeEdit(questionData.id)">编辑</span>
@@ -35,8 +41,10 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
+import quillEditor from '../../components/quillEditor'
 export default {
   components: {
+    quillEditor,
     // questionDialog,
   },
   props: {
@@ -51,7 +59,10 @@ export default {
   },
   data () {
     return {
-      data: {}
+      data: {},
+      //TopicContent:'',
+      isEditor:false,
+      cotent:''
     }
   },
   computed: {
@@ -76,6 +87,9 @@ export default {
       }
       return result
     },
+    TopicContent () {
+      return `<span>${this.numberTitle}.</span><span>${this.data.topic}</span><span>(${this.data.totalScore})分</span>`
+    }
   },
   watch: {
     contentData: {
@@ -84,6 +98,12 @@ export default {
         this.data = {
           ...this.contentData
         }
+      }
+    },
+    TopicContent:{
+      immediate: true,
+      handler () {
+        this.cotent = this.TopicContent
       }
     }
   },
@@ -117,6 +137,14 @@ export default {
     },
     currentQuestionHanldeEdit (id) {
       this.$emit('current-question-hanlde-edit', id)
+    },
+    hanldeEditor(){
+      this.isEditor = true
+    },
+    hanldeCloseEsitor(content){
+      this.isEditor = false
+      this.cotent = content
+      //console.log(content)
     }
   },
 }
@@ -174,6 +202,9 @@ export default {
     .question_editOrDel {
       display: block;
     }
+  }
+  .question-title img {
+    max-width: 100%;
   }
 }
 </style>
