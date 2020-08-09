@@ -84,7 +84,7 @@
 
 <script>
 import tabSingleItem from './tabPane/tabSingleItem'
-import tabCheckItem from './tabPane/_tabCheckItem'
+import tabCheckItem from './tabPane/_tabcheckItem'
 import tabJudgment from './tabPane/_tabJudgment'
 import singleTopic from './tabPane/_singleTopic'
 import checkTopic from './tabPane/_checkTopic'

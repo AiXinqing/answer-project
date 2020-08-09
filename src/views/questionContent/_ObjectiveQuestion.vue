@@ -112,21 +112,17 @@ export default {
     traverse (Arr, letterArr) {
       if (Arr.length > 0) {
         let data = []
-        Arr.map(item => {
-          if (item.childGroup.length > 0) {
-            let childGroup = item.childGroup.map(row => {
-              let select = item.select
-              let selectBox = []
-              if (select == 2) {
-                selectBox = ['T', 'F']
-              } else {
-                selectBox = letterArr.slice(0, select)
-              }
-              return { ...row, selectBox: selectBox }
-            })
-            data = [...data, ...childGroup]
-          }
+        Arr.forEach(item => {
+          console.log(item)
+          item.childGroup.forEach(row =>{
+            let obj = {
+              ...row,
+              selectBox:row.select == 2 && row.id.indexOf('judgment') != -1 ? ['T', 'F'] : letterArr.slice(0, row.select)
+            }
+            data.push(obj)
+          })
         })
+
         return data
       } else {
         return []
@@ -144,7 +140,6 @@ export default {
     hanldeCloseEsitor(content){
       this.isEditor = false
       this.cotent = content
-      //console.log(content)
     }
   },
 }
@@ -194,6 +189,7 @@ export default {
     right: 0;
     top: -10px;
     display: none;
+    z-index: 99;
     span {
       margin-left: 10px;
     }
