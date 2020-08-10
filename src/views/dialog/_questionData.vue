@@ -112,7 +112,7 @@ export default {
       'options',
       'startQuestion',
       'endQuestion',
-      'SubtitleNumber',
+      'AlreadyTopics',
       'delTopics',
       'currentQuestion',
       'letterArr'
@@ -146,6 +146,8 @@ export default {
       'set_delTopics',
       'set_currentQuestion',
       'set_closeFrame',
+      'Add_AlreadyTopics', // 小题数组
+      'del_AlreadyTopics', // 删除题组-小题
     ]),
     ...mapMutations('pageContent', ['initPageData', 'amendPageData']),
     closeFrame () {
@@ -183,11 +185,11 @@ export default {
         result.push(this.topicList.slice(i, i + this.objectiveData.rows));
       }
 
-      const maxWidth = result.filter(item => {
-        console.log(item)
-      })
+      // const maxWidth = result.filter(item => {
+      //   // console.log(item)
+      // })
 
-      window.console.log(maxWidth)
+      // window.console.log(maxWidth)
 
       let row = this.objectiveData.rows // 排列行数
       let hang = Math.ceil(long / row)
@@ -218,7 +220,10 @@ export default {
       // guan bi - 清楚数据
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
       this.set_closeFrame(this.quesctionObj.startQuestion)
-      this.openedFrame = false
+      // 小题数组追加数据
+      this.Add_AlreadyTopics(this.topicList)
+      //------------------------------------
+      this.openedFrame = false // 关闭弹窗
     },
     hanldeSelect (e) {
       // 选择答题号
@@ -243,6 +248,7 @@ export default {
         this.set_endQuestion(itemTopic.end)
         this.set_startQuestion(itemTopic.start)
 
+        this.del_AlreadyTopics(itemTopic.childGroup) // 删除弹框内临时数组
         groupItem.splice(index, 1)
         this.delete_SubtitleNumber(obj.id)
         this.set_delTopics({ start: itemTopic.start, end: itemTopic.end })

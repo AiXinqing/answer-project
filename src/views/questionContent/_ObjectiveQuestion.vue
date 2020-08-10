@@ -83,11 +83,6 @@ export default {
       const judgmentArr = this.traverse(judgment, this.letterArr)
       let topicList = [...singleArr, ...checkArr, ...judgmentArr]
       //--------------------------------------------------------
-
-      // let result = [];
-      // for (var i = 0; i < topicList.length; i += this.data.rows) {
-      //   result.push(topicList.slice(i, i + this.data.rows));
-      // }
       return topicList
     },
     groupData(){
@@ -119,12 +114,15 @@ export default {
   },
   methods: {
     ...mapMutations('pageContent', ['delPageData']),
-    ...mapMutations('questionType', ['set_delTopicsArr']),
+    ...mapMutations('questionType', [
+      'set_delTopicsArr',
+      'del_AlreadyTopics',
+      ]),
     traverse (Arr, letterArr) {
       if (Arr.length > 0) {
         let data = []
         Arr.forEach(item => {
-          console.log(item)
+
           item.childGroup.forEach(row =>{
             let obj = {
               ...row,
@@ -140,12 +138,13 @@ export default {
         return []
       }
     },
-    delHanlde (id) {
+    delHanlde (id) { // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === id)
       if(index  > -1){
       const topicBox = this.topicBox.map(item => item.topic)
 
         this.set_delTopicsArr(topicBox)
+        this.del_AlreadyTopics(this.topicBox)
         this.delPageData(index)
       }
     },
