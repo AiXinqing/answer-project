@@ -160,11 +160,11 @@ const mutations = {
       minTopic != '' ? minTopic : 1
   },
   set_closeFrame: (state, val) => { // 弹窗关闭置空
-    state.endQuestion = null
+    // state.endQuestion = null
     state.delStartQuestion = null
     state.SubtitleNumber = []
-    state.delTopics = []
-    state.currentQuestion = val
+    //state.delTopics = []
+    // state.currentQuestion = val
     state.startQuestion = val
   }
 }

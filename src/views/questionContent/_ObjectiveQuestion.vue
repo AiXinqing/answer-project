@@ -75,12 +75,14 @@ export default {
     groupData () {
       let group = this.data.group
       const singleBox = group.singleBox
+      //---------------------------------小题计算
       const singleArr = this.traverse(singleBox, this.letterArr)
       const checkbox = group.checkbox
       const checkArr = this.traverse(checkbox, this.letterArr)
       const judgment = group.judgment
       const judgmentArr = this.traverse(judgment, this.letterArr)
       let topicList = [...singleArr, ...checkArr, ...judgmentArr]
+      //--------------------------------------------------------
       let result = [];
       for (var i = 0; i < topicList.length; i += this.data.rows) {
         result.push(topicList.slice(i, i + this.data.rows));
@@ -117,7 +119,8 @@ export default {
           item.childGroup.forEach(row =>{
             let obj = {
               ...row,
-              selectBox:row.select == 2 && row.id.indexOf('judgment') != -1 ? ['T', 'F'] : letterArr.slice(0, row.select)
+              selectBox:row.select == 2 && row.id.indexOf('judgment') != -1 ? ['T', 'F'] : letterArr.slice(0, row.select),
+              width:row.select * 26 + 42
             }
             data.push(obj)
           })
@@ -201,6 +204,14 @@ export default {
   }
   .question-title img {
     max-width: 100%;
+  }
+  .question-title>div {
+    padding: 10px 0 10px 10px;
+    border: 1px solid #fff;
+    p{margin: 0 0}
+}
+  .question-title:hover{
+     div{border-color: @main}
   }
 }
 </style>

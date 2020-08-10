@@ -154,21 +154,26 @@ export default {
     },
     opened () {
       this.openedFrame = true
+      this.set_currentQuestion()
     },
     openedEdit (id) {
       let current = this.pageData.filter(item => item.id === id)
       this.quesctionObj = JSON.parse(JSON.stringify(current[0].content))
       this.editQuestionId = id
       this.openedFrame = true
+      this.title='编辑客观题'
+      this.set_currentQuestion()
     },
     preCreateQuestion () { // 数据编辑完成添加至全局数组中---------------
       let group = this.objectiveData.group
       const singleBox = group.singleBox
+      //------------------------------------小题计算
       const singleArr = this.traverse(singleBox)
       const checkbox = group.checkbox
       const checkArr = this.traverse(checkbox)
       const judgment = group.judgment
       const judgmentArr = this.traverse(judgment)
+      //-------------------------------------------
       this.topicList = [...singleArr, ...checkArr, ...judgmentArr]
       let long = this.topicList.length
 
