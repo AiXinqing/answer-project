@@ -7,9 +7,9 @@
     <span>题,每题</span>
     <el-input v-model.number="data.score" size="mini" @blur="singleBoxHanlde" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
     <span>分,少选</span>
-    <el-input v-model.number="data.lessScore" size="mini" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
+    <el-input v-model.number="data.lessScore" size="mini" @blur="singleBoxHanlde" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
     <span>得分,每题</span>
-    <el-input v-model.number="data.select" size="mini" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
+    <el-input v-model.number="data.select" size="mini" @blur="singleBoxHanlde" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
     <span>个选项</span>
     <i class="el-icon-delete"></i>
     <i class="el-icon-delete" @click="hanldeDel(itemData.id,activeNameItem)"></i>

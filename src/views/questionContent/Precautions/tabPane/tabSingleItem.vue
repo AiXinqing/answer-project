@@ -8,7 +8,7 @@
     <span>题,每题</span>
     <el-input v-model.number="data.score" size="mini" @blur="singleBoxHanlde" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
     <span>分,每题</span>
-    <el-input v-model.number="data.select" size="mini" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
+    <el-input v-model.number="data.select" size="mini" @blur="singleBoxHanlde"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
     <span>个选项</span>
     <i class="el-icon-delete" @click="hanldeDel(data.id,activeNameItem)" ></i>
   </div>
