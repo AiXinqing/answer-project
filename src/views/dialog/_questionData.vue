@@ -110,10 +110,7 @@ export default {
   computed: {
     ...mapState('questionType', [
       'options',
-      'startQuestion',
-      'endQuestion',
       'AlreadyTopics',
-      'delTopics',
       'currentQuestion',
       'letterArr'
     ]),
@@ -138,12 +135,8 @@ export default {
   },
   methods: {
     ...mapMutations('questionType', [
-      'set_startQuestion',
-      'set_endQuestion',
-      'set_minTopic',
       'set_SubtitleNumber',
       'delete_SubtitleNumber',
-      'set_delTopics',
       'set_currentQuestion',
       'set_closeFrame',
       'Add_AlreadyTopics', // 小题数组
@@ -242,16 +235,12 @@ export default {
       if (index > -1) {
         let itemTopic = groupItem[index]
         // 更改题型状态值
-        if (this.minTopic <= itemTopic.end) {
-          this.set_minTopic(itemTopic.end)
-        }
-        this.set_endQuestion(itemTopic.end)
-        this.set_startQuestion(itemTopic.start)
+
 
         this.del_AlreadyTopics(itemTopic.childGroup) // 删除弹框内临时数组
         groupItem.splice(index, 1)
         this.delete_SubtitleNumber(obj.id)
-        this.set_delTopics({ start: itemTopic.start, end: itemTopic.end })
+
         this.$nextTick(() => {
           this.set_currentQuestion()
         })

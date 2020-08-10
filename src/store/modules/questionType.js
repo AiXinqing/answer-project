@@ -88,12 +88,7 @@ const state = {
       label: '二十二',
     },
   ],
-  startQuestion: 1, // 分段题组开始题号
-  endQuestion: null, // 分段题组结束题号
-  delStartQuestion: null, // 分段题组开始题号-已删除
-  minTopic: 1, // 删除最小值
   SubtitleNumber: [], // 已有的题号数组
-  delTopics: [], // 删除的题组
   AlreadyTopics: [], // 已有的题组
   currentQuestion: 1,
   letterArr: ['A', 'B', 'C', 'D', 'E', 'G', 'H', 'I', 'J', 'K'],
@@ -101,17 +96,7 @@ const state = {
 }
 
 const mutations = {
-  set_startQuestion: (state, val) => {
-    // 开始题号
-    state.startQuestion = val
-  },
-  set_endQuestion: (state, val) => {
-    // 结束题号
-    state.endQuestion = val
-  },
-  set_minTopic: (state, val) => {
-    state.minTopic = val
-  },
+
   set_SubtitleNumber: (state, { //题组数
     start,
     end,
@@ -139,25 +124,6 @@ const mutations = {
     if (index > -1) {
       state.SubtitleNumber.splice(index, 1)
     }
-  },
-  set_delTopics: (state, {
-    start,
-    end,
-  }) => {
-    for (let i = start; i <= end; i++) {
-      let index = state.delTopics.findIndex(item => item === i)
-      if (index <= -1) {
-        state.delTopics.push(i)
-      }
-    }
-  },
-  set_delTopicsArr(state, Arr) {
-    Arr.forEach(item => {
-      let index = state.delTopics.findIndex(row => row === item)
-      if (index <= -1) {
-        state.delTopics.push(item)
-      }
-    })
   },
   del_AlreadyTopics(state, Arr) { // 删除已有小题数组
 
@@ -193,15 +159,13 @@ const mutations = {
     }
 
   },
-  set_closeFrame: (state, val) => { // 弹窗关闭置空
-    state.delStartQuestion = null
+  set_closeFrame: (state) => { // 弹窗关闭置空
     state.SubtitleNumber = []
     state.AlreadyTopics.forEach((item, i) => {
       if (item.subtopic != null || item.subtopic != undefined) {
         state.AlreadyTopics.splice(i, 1)
       }
     })
-    state.startQuestion = val
   }
 }
 

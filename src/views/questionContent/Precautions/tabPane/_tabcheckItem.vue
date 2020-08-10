@@ -36,8 +36,6 @@ export default {
   },
   computed: {
     ...mapState('questionType', [
-      'endQuestion',
-      'delTopics',
       'currentQuestion',
     ]),
     tabStatusVal () {
@@ -75,7 +73,6 @@ export default {
   },
   methods: {
     ...mapMutations('questionType', [
-      'set_endQuestion',
       'set_currentQuestion',
     ]),
     hanldeDel (id, type) {
@@ -98,10 +95,7 @@ export default {
         let itemScore = this.data.score
         let itemSelect = this.data.select
         let lessScore = this.data.lessScore
-        if (itemEnd != null) {
-          // 判断结束题是否有值
-          this.set_endQuestion(itemEnd)
-        }
+
         //
         for (let index = this.data.start; index <= this.data.end; index++) {
           let subtopic = {
