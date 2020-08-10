@@ -21,11 +21,8 @@ const mutations = {
       state.pageData.splice(index, 1, ArrItem)
     }
   },
-  delPageData: (state, ArrItem) => {
-    const index = state.pageData.findIndex((itme) => itme.id === ArrItem)
-    if (index > -1) {
-      state.pageData.splice(index, 1)
-    }
+  delPageData: (state, index) => {
+    state.pageData.splice(index, 1)
   },
 }
 

@@ -72,7 +72,7 @@ export default {
       let item = this.options.filter(item => item.value === this.data.number)
       return item[0].label
     },
-    groupData () {
+    topicBox () {
       let group = this.data.group
       const singleBox = group.singleBox
       //---------------------------------小题计算
@@ -83,9 +83,17 @@ export default {
       const judgmentArr = this.traverse(judgment, this.letterArr)
       let topicList = [...singleArr, ...checkArr, ...judgmentArr]
       //--------------------------------------------------------
+
+      // let result = [];
+      // for (var i = 0; i < topicList.length; i += this.data.rows) {
+      //   result.push(topicList.slice(i, i + this.data.rows));
+      // }
+      return topicList
+    },
+    groupData(){
       let result = [];
-      for (var i = 0; i < topicList.length; i += this.data.rows) {
-        result.push(topicList.slice(i, i + this.data.rows));
+      for (var i = 0; i < this.topicBox.length; i += this.data.rows) {
+        result.push(this.topicBox.slice(i, i + this.data.rows));
       }
       return result
     },
@@ -111,6 +119,7 @@ export default {
   },
   methods: {
     ...mapMutations('pageContent', ['delPageData']),
+    ...mapMutations('questionType', ['set_delTopicsArr']),
     traverse (Arr, letterArr) {
       if (Arr.length > 0) {
         let data = []
@@ -132,7 +141,13 @@ export default {
       }
     },
     delHanlde (id) {
-      this.delPageData(id)
+      const index = this.pageData.findIndex((itme) => itme.id === id)
+      if(index  > -1){
+      const topicBox = this.topicBox.map(item => item.topic)
+
+        this.set_delTopicsArr(topicBox)
+        this.delPageData(index)
+      }
     },
     currentQuestionHanldeEdit (id) {
       this.$emit('current-question-hanlde-edit', id)

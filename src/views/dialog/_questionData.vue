@@ -114,12 +114,13 @@ export default {
       'endQuestion',
       'SubtitleNumber',
       'delTopics',
-      'currentQuestion'
+      'currentQuestion',
+      'letterArr'
     ]),
     ...mapState('pageContent', ['pageData']),
     errorMessage () {
       return this.errorVal != '' ? true : false
-    }
+    },
   },
   watch: {
     quesctionObj: {
@@ -168,17 +169,27 @@ export default {
       let group = this.objectiveData.group
       const singleBox = group.singleBox
       //------------------------------------小题计算
-      const singleArr = this.traverse(singleBox)
+      const singleArr = this.traverse(singleBox, this.letterArr)
       const checkbox = group.checkbox
-      const checkArr = this.traverse(checkbox)
+      const checkArr = this.traverse(checkbox, this.letterArr)
       const judgment = group.judgment
-      const judgmentArr = this.traverse(judgment)
-      //-------------------------------------------
+      const judgmentArr = this.traverse(judgment, this.letterArr)
+      //------------------xiao题号数组-------------------------
       this.topicList = [...singleArr, ...checkArr, ...judgmentArr]
       let long = this.topicList.length
+      //-------------------------------------------
+      let result = [];
+      for (var i = 0; i < this.topicList.length; i += this.objectiveData.rows) {
+        result.push(this.topicList.slice(i, i + this.objectiveData.rows));
+      }
 
-      window.console.log(this.topicList)
-      let row = this.objectiveData.rows
+      const maxWidth = result.filter(item => {
+        console.log(item)
+      })
+
+      window.console.log(maxWidth)
+
+      let row = this.objectiveData.rows // 排列行数
       let hang = Math.ceil(long / row)
       let lie = Math.ceil(hang / 4)
       let heights = lie * (row * 21) + 21
@@ -306,18 +317,25 @@ export default {
         let currentIndex = currentGroup.childGroup.findIndex(item => item.id === dataItem.id)
         if (currentIndex > -1) {
           currentGroup.childGroup.splice(currentIndex, 1, dataItem) // 替换
-          console.log(groupItem)
+
         }
       }
     },
-    traverse (Arr) {
+    traverse (Arr, letterArr)  {
       if (Arr.length > 0) {
         let data = []
-        Arr.map(item => {
-          if (item.childGroup.length > 0) {
-            data = [...data, ...item.childGroup]
-          }
+        Arr.forEach(item => {
+
+          item.childGroup.forEach(row =>{
+            let obj = {
+              ...row,
+              selectBox:row.select == 2 && row.id.indexOf('judgment') != -1 ? ['T', 'F'] : letterArr.slice(0, row.select),
+              width:row.select * 26 + 42
+            }
+            data.push(obj)
+          })
         })
+
         return data
       } else {
         return []

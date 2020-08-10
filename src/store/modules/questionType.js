@@ -149,6 +149,14 @@ const mutations = {
       }
     }
   },
+  set_delTopicsArr(state, Arr) {
+    Arr.forEach(item => {
+      let index = state.delTopics.findIndex(row => row === item)
+      if (index <= -1) {
+        state.delTopics.push(item)
+      }
+    })
+  },
   set_currentQuestion: (state) => {
     let end = state.endQuestion
     let delTopics = state.delTopics
