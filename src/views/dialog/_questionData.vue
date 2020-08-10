@@ -325,7 +325,6 @@ export default {
       if (Arr.length > 0) {
         let data = []
         Arr.forEach(item => {
-
           item.childGroup.forEach(row =>{
             let obj = {
               ...row,
