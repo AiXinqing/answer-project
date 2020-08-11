@@ -23,7 +23,7 @@
         </el-col>
         <el-col :span="24" class="select-item">
           <div class="label">每组题数:</div>
-          <el-input v-model="objectiveData.rows" size="mini" placeholder="请输入内容"></el-input>
+          <el-input v-model.number="objectiveData.rows" size="mini" placeholder="请输入内容"></el-input>
         </el-col>
       </el-row>
       <tab-pane-box
@@ -104,7 +104,8 @@ export default {
       errorVal: '',
       objectiveData: {},
       topicList: [],
-      editQuestionId: null
+      editQuestionId: null,
+      ContentHeight:0, // 内容高度
     }
   },
   computed: {
@@ -114,7 +115,12 @@ export default {
       'currentQuestion',
       'letterArr'
     ]),
-    ...mapState('pageContent', ['pageData']),
+    ...mapState('pageContent', ['pageData', 'pageLayout']),
+    pageWidth () {
+      return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
+        ? 480
+        : 745
+    },
     errorMessage () {
       return this.errorVal != '' ? true : false
     },
@@ -171,23 +177,23 @@ export default {
       const judgmentArr = this.traverse(judgment, this.letterArr)
       //------------------xiao题号数组-------------------------
       this.topicList = [...singleArr, ...checkArr, ...judgmentArr]
-      let long = this.topicList.length
+
       //-------------------------------------------
       let result = [];
       for (var i = 0; i < this.topicList.length; i += this.objectiveData.rows) {
         result.push(this.topicList.slice(i, i + this.objectiveData.rows));
       }
+      const maxWidth = []
+       result.filter(item => {
+       let widthS = item.map(row => row.width)
+       maxWidth.push(Math.max.apply( null , widthS))
+      })
 
-      // const maxWidth = result.filter(item => {
-      //   // console.log(item)
-      // })
+      // 计算出的内容高度值
+      let heights = this.HeightCalculation(maxWidth,result)
+      this.ContentHeight = heights // 内容高度
+      // 计算出的内容高度值
 
-      // window.console.log(maxWidth)
-
-      let row = this.objectiveData.rows // 排列行数
-      let hang = Math.ceil(long / row)
-      let lie = Math.ceil(hang / 4)
-      let heights = lie * (row * 21) + 21
       let totalScore = 0;
 
       this.topicList.map(item => {
@@ -199,7 +205,7 @@ export default {
       }
       var obj = {
         id: 'objective' + +new Date(),
-        height: heights,
+        height: heights + 32, // 32标题高度
         questionType: 'ObjectiveQuestion',
         content: this.objectiveData,
       }
@@ -333,6 +339,52 @@ export default {
         return data
       } else {
         return []
+      }
+    },
+    HeightCalculation(maxWidth,result){ // 计算题型内容所占高度
+      // 计算宽度所占数组长度
+      let widths = []
+      let sum = 0
+      let i
+      let a = 0
+      for ( i = 0; i < maxWidth.length; i++) {
+        sum = sum + maxWidth[i]
+        a += 1
+        if(sum >= this.pageWidth){
+          widths.push(a - 1)
+          sum = 0
+          a = 1
+          sum = sum + maxWidth[i]
+        }
+      }
+      if(maxWidth.length > 0 ){
+        let long = 0
+        if(widths.length > 0){
+          long = maxWidth.length - widths.reduce((accumulator, currentValue) => accumulator + currentValue)
+        }else{
+          long = maxWidth.length - 0
+        }
+        widths.push(long)
+      }
+      console.log(widths)
+      // let widthsLong = widths.length
+      // 计算高度所占数组长度
+      let heights = result.map(item => item.length * 22)
+
+      // 根据宽度数组 和 高度数组合成高度二维数组
+      let twoDimensional = []
+      let num = 0
+      for(let i = 0;i < widths.length;i++ ){
+        num += widths[i]
+        twoDimensional.push(heights.slice(num - widths[i],num))
+      }
+      let heightList = twoDimensional.map(item => {
+        return Math.max.apply( null , item)
+      })
+      if(heightList.length > 0){
+       return  heightList.reduce((accumulator, currentValue) => accumulator + currentValue) + heightList.length * 10
+      }else{
+        return 0
       }
     }
   },
