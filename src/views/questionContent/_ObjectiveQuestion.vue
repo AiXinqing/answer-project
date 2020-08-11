@@ -116,6 +116,7 @@ export default {
     ...mapMutations('pageContent', ['delPageData']),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
+      'set_currentQuestion',
       ]),
     traverse (Arr, letterArr) {
       if (Arr.length > 0) {
@@ -140,9 +141,9 @@ export default {
     delHanlde (id) { // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === id)
       if(index  > -1){
-
         this.del_AlreadyTopics(this.topicBox)
         this.delPageData(index)
+         this.set_currentQuestion()
       }
     },
     currentQuestionHanldeEdit (id) {

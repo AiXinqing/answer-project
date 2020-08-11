@@ -150,11 +150,14 @@ const mutations = {
     })
   },
   set_currentQuestion: (state) => {
+
     for (let i = 1; i < state.maxTopic; i++) { //
       const index = state.AlreadyTopics.findIndex(item => item.topic === i)
       if (index <= -1) {
         state.currentQuestion = i
         break;
+      } else {
+        state.currentQuestion = 1
       }
     }
 
