@@ -31,6 +31,7 @@
         :group-data="spaceTopic.group"
         @hanlde-status="hanldeStatus"
         @hanlde-add-group-question="hanldeAddGroupQuestion"
+        @hanlde-del-group="hanldeDelGroup"
       />
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
@@ -161,6 +162,23 @@ export default {
         // 追曾小题号至数组
         let objs = { start: obj.start, end: obj.end, id: obj.id }
         this.set_SubtitleNumber(objs)
+      }
+    },
+    hanldeDelGroup (id) {
+      //删除题组
+      let group = this.spaceTopic.group
+      const index = group.findIndex(item => item.id === id)
+      if (index > -1) {
+        let itemTopic = group[index]
+        // 更改题型状态值
+
+        this.del_AlreadyTopics(itemTopic.childGroup) // 删除弹框内临时数组
+        group.splice(index, 1) // 删除
+        this.delete_SubtitleNumber(id)
+
+        this.$nextTick(() => {
+          this.set_currentQuestion()
+        })
       }
     }
   },

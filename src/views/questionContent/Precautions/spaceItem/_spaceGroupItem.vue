@@ -1,9 +1,9 @@
 <template>
   <div class="space_group_item">
       <span>第</span>
-      <span> {{ SmallTopic.topicNum }} </span>
+      <span> {{ SmallTopic.topic }} </span>
       <span> 空 </span>
-      <el-input v-model.number="SmallTopic.end" size="mini"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
+      <el-input v-model.number="SmallTopic.score" size="mini"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
       <span>分</span>
     </div>
 </template>
@@ -33,4 +33,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.space_group_item {
+  margin-bottom: 10px;
+}
+.space_group_item:last-child {
+  margin-bottom: 0;
+}
 </style>

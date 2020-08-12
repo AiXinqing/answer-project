@@ -7,6 +7,7 @@
       :space-item="item"
       @hanlde-status="hanldeStatus"
       @hanlde-add-group-question="hanldeAddGroupQuestion"
+      @hanlde-del-group="hanldeDelGroup"
     />
     <div class="add_question" @click="hanldeAddSubtopic">+ 分段添加小题</div>
     <div class="question-group">
@@ -69,6 +70,10 @@ export default {
     hanldeAddGroupQuestion (obj) {
       //添加题组
       this.$emit('hanlde-add-group-question', obj)
+    },
+    hanldeDelGroup (id) {
+      //删除题组
+      this.$emit('hanlde-del-group', id)
     }
   },
 }

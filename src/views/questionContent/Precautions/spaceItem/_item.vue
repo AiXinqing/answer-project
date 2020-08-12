@@ -5,12 +5,12 @@
     <el-input v-model.number="data.start" size="mini" @blur="groupTopicHanlde"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
     <span>题到</span>
     <el-input v-model.number="data.end" size="mini" @blur="groupTopicHanlde"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
-    <span>题,每题</span>
+    <span>题,每空</span>
     <el-input v-model.number="data.score" size="mini" @blur="groupTopicHanlde"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
     <span>分,每题</span>
     <el-input v-model.number="data.space" size="mini" @blur="groupTopicHanlde"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
     <span>空</span>
-    <i class="el-icon-delete" @click="hanldeDel" ></i>
+    <i class="el-icon-delete" @click="hanldeDel(data.id)" ></i>
   </div>
 </template>
 
@@ -114,7 +114,8 @@ export default {
             ...this.data,
             pid: this.data.id,
             id: `${this.data.id}_${index}`,
-            topicNum: index
+            topic: index,
+            sum: this.data.score * this.data.space,
           })
         }
         let obj = {
@@ -128,8 +129,8 @@ export default {
         this.$emit('hanlde-add-group-question', obj)
       }
     },
-    hanldeDel () {
-
+    hanldeDel (id) {
+      this.$emit('hanlde-del-group', id)
     }
   },
 }

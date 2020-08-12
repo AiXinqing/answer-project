@@ -242,7 +242,6 @@ export default {
         let itemTopic = groupItem[index]
         // 更改题型状态值
 
-
         this.del_AlreadyTopics(itemTopic.childGroup) // 删除弹框内临时数组
         groupItem.splice(index, 1)
         this.delete_SubtitleNumber(obj.id)

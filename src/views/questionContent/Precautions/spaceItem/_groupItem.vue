@@ -3,13 +3,13 @@
   <el-collapse-item>
     <template slot="title">
       <div class="space_group_list">
-        <span>题 1 共 </span>
+        <span>题 {{data.topic}} 共 </span>
         <el-input v-model.number="data.space" size="mini"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
         <span> 空 每空 </span>
-        <el-input v-model.number="data.end" size="mini"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
-        <span> 分 共 4 分 </span>
+        <el-input v-model.number="data.score" size="mini"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
+        <span> 分 共 {{data.sum}} 分 </span>
         <span class="add_groupTopic">+ 添加小题</span>
-        <i class="el-icon-delete" @click="hanldeDel" ></i>
+        <i class="el-icon-delete" @click="hanldeDel(data.id)" ></i>
       </div>
     </template>
     <space-group-item
@@ -41,8 +41,8 @@ export default {
     GroupSmallTopic () {
       let space = this.data.space
       let arr = []
-      let i = 1
-      while (i < space) {
+
+      for (let i = 0; i < space; i++) {
         arr.push({ ...this.data, smallTopic: i })
       }
       return arr
@@ -57,8 +57,8 @@ export default {
     }
   },
   methods: {
-    hanldeDel () {
-
+    hanldeDel (id) {
+      this.$emit('hanlde-del-group', id)
     }
   },
 
@@ -87,5 +87,8 @@ export default {
 }
 i.el-icon-delete {
   margin-left: 30px;
+}
+.el-collapse-item__content {
+  padding-bottom: 10px !important;
 }
 </style>
