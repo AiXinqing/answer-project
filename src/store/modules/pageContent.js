@@ -14,10 +14,9 @@ const mutations = {
   initPageData: (state, Arr) => {
     state.pageData.push(Arr)
   },
-  amendPageData: (state, ArrItem) => {
+  amendPageData: (state, ArrItem) => { // 编辑page-data
 
     const index = state.pageData.findIndex((itme) => itme.id === ArrItem.id)
-    console.log(index)
     if (index > -1) {
       state.pageData.splice(index, 1, ArrItem)
     }

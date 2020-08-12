@@ -132,75 +132,17 @@ export default {
     preCreateQuestion () { // 数据编辑完成添加至全局数组中---------------
       //------------------------------------
       this.openedFrame = false // 关闭弹窗
+      this.set_currentQuestion()
     },
     hanldeSelect (e) {
       // 选择答题号
       window.console.log(e)
     },
-    traverse (Arr, letterArr) {
-      if (Arr.length > 0) {
-        let data = []
-        Arr.forEach(item => {
-          item.childGroup.forEach(row => {
-            let obj = {
-              ...row,
-              selectBox: row.select == 2 && row.id.indexOf('judgment') != -1 ? ['T', 'F'] : letterArr.slice(0, row.select),
-              width: row.select * 26 + 42
-            }
-            data.push(obj)
-          })
-        })
+    traverse () {
 
-        return data
-      } else {
-        return []
-      }
     },
-    HeightCalculation (maxWidth, result) { // 计算题型内容所占高度
-      // 计算宽度所占数组长度
-      let widths = []
-      let sum = 0
-      let i
-      let a = 0
-      for (i = 0; i < maxWidth.length; i++) {
-        sum = sum + maxWidth[i]
-        a += 1
-        if (sum >= this.pageWidth) {
-          widths.push(a - 1)
-          sum = 0
-          a = 1
-          sum = sum + maxWidth[i]
-        }
-      }
-      if (maxWidth.length > 0) {
-        let long = 0
-        if (widths.length > 0) {
-          long = maxWidth.length - widths.reduce((accumulator, currentValue) => accumulator + currentValue)
-        } else {
-          long = maxWidth.length - 0
-        }
-        widths.push(long)
-      }
-      console.log(widths)
-      // let widthsLong = widths.length
-      // 计算高度所占数组长度
-      let heights = result.map(item => item.length * 22)
+    HeightCalculation () { // 计算题型内容所占高度
 
-      // 根据宽度数组 和 高度数组合成高度二维数组
-      let twoDimensional = []
-      let num = 0
-      for (let i = 0; i < widths.length; i++) {
-        num += widths[i]
-        twoDimensional.push(heights.slice(num - widths[i], num))
-      }
-      let heightList = twoDimensional.map(item => {
-        return Math.max.apply(null, item)
-      })
-      if (heightList.length > 0) {
-        return heightList.reduce((accumulator, currentValue) => accumulator + currentValue) + heightList.length * 10
-      } else {
-        return 0
-      }
     }
   },
 }
