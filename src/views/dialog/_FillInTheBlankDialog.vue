@@ -155,9 +155,7 @@ export default {
     hanldeAddGroupQuestion (obj) {
       //添加题组
       let group = this.spaceTopic.group
-
       const index = group.findIndex(item => item.id === obj.id)
-
       if (index > -1) {
         group.splice(index, 1, obj) // 替换
         // 追曾小题号至数组

@@ -85,4 +85,7 @@ export default {
   margin-left: 50px;
   color: @main;
 }
+i.el-icon-delete {
+  margin-left: 30px;
+}
 </style>
