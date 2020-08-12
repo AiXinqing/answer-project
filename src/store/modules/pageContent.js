@@ -1,9 +1,10 @@
 import axios from 'axios'
 
 const state = {
-  pageLayout: {},
+  pageLayout: {}, // 页面布局
   pageData: [],
-  page_size: 1160
+  page_size: 1160, // 一页高度
+  BigQuestion: null, // 大题题号
 }
 
 const mutations = {
