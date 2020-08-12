@@ -8,7 +8,8 @@
     />
     <div class="add_question" @click="hanldeAddSubtopic">+ 分段添加小题</div>
     <div class="question-group">
-      <el-collapse v-model="activeNames" @change="handleChange">
+      <el-collapse accordion>
+        <!-- v-model="activeNames" @change="handleChange" -->
         <group-item v-for="(item, index) in groupItemData" :key="index"/>
       </el-collapse>
     </div>
@@ -16,48 +17,48 @@
 </template>
 
 <script>
-  import spaceItem from './spaceItem/_item'
-  import groupItem from './spaceItem/_groupItem.vue'
-  export default {
-    components: {
-        spaceItem,
-        groupItem
+import spaceItem from './spaceItem/_item'
+import groupItem from './spaceItem/_groupItem.vue'
+export default {
+  components: {
+    spaceItem,
+    groupItem
+  },
+  props: {
+    groupData: {
+      type: Array,
+      default: () => []
     },
-    props: {
-      groupData: {
-        type: Array,
-        default: () => []
-      },
-    },
-    data() {
-      return {
-        activeNames: []
-      }
-    },
-    computed: {
-      groupItemData() {
-        return [1]
-      }
-    },
-    methods: {
-      hanldeAddSubtopic() {
+  },
+  data () {
+    return {
+      activeNames: []
+    }
+  },
+  computed: {
+    groupItemData () {
+      return [1]
+    }
+  },
+  methods: {
+    hanldeAddSubtopic () {
 
-      },
-      handleChange(){}
     },
-  }
+    handleChange () { }
+  },
+}
 </script>
 
 <style lang="less">
-  .space_box,
-  .add_question{
-    margin-top: 20px;
-  }
-  .question-group {
-    width: 100%;
-    height: 200px;
-    overflow: auto;
-    border: 1px solid #888;
-    margin-top: 15px;
-  }
+.space_box,
+.add_question {
+  margin-top: 20px;
+}
+.question-group {
+  width: 100%;
+  height: 200px;
+  overflow: auto;
+  border: 1px solid #888;
+  margin-top: 15px;
+}
 </style>

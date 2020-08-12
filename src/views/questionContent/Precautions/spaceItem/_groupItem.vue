@@ -2,19 +2,47 @@
 <!-- 题组小题 -->
   <el-collapse-item>
     <template slot="title">
-      一致性 Consistency<i class="header-icon el-icon-info"></i>
+      <space-group-list/>
     </template>
-    <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
-    <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>
+    <space-group-item />
   </el-collapse-item>
 </template>
 
 <script>
-  export default {
+import spaceGroupItem from './_spaceGroupItem'
+import spaceGroupList from './_spaceGroupList'
+export default {
+  components: {
+    spaceGroupItem,
+    spaceGroupList
+  },
+  data () {
+    return {
+      data: {}
+    }
+  },
 
-  }
+}
 </script>
 
-<style lang="scss" scoped>
-
+<style lang="less" scoped>
+@import '~@/assets/css/variables.less';
+.space_group_item {
+  text-align: center;
+}
+.space_group_item .el-input--mini {
+  width: 48px;
+  margin: 0 10px;
+}
+.space_group_list {
+  padding-left: 1em;
+}
+.space_group_list .el-input--mini {
+  width: 48px;
+}
+.add_groupTopic {
+  font-size: 16px;
+  margin-left: 50px;
+  color: @main;
+}
 </style>

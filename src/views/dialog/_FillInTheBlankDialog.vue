@@ -24,7 +24,7 @@
         <el-col :span="24" class="select-item">
           <div class="label">每行展示</div>
           <el-input v-model.number="objectiveData.rows" size="mini" placeholder="请输入内容" />
-           <div class="label m-5" style="padding-left:5px"> 空 </div>
+            <div class="label m-5" style="padding-left:5px"> 空 </div>
         </el-col>
       </el-row>
       <space-question :group-data="spaceTopic.group"/>
@@ -42,7 +42,7 @@ import spaceQuestion from '../questionContent/Precautions/_spaceQuestion'
 import { mapState, mapMutations } from 'vuex'
 export default {
   components: {
-  spaceQuestion,
+    spaceQuestion,
   },
   data () {
     return {
@@ -54,7 +54,7 @@ export default {
         topic: '填空题',
         rows: 5,
         startQuestion: 1,
-        group:[{
+        group: [{
           start: 1,
           end: null,
           score: null,
@@ -68,7 +68,7 @@ export default {
       objectiveData: {},
       topicList: [],
       editQuestionId: null,
-      ContentHeight:0, // 内容高度
+      ContentHeight: 0, // 内容高度
     }
   },
   computed: {
@@ -126,7 +126,7 @@ export default {
       this.quesctionObj = JSON.parse(JSON.stringify(current[0].content))
       this.editQuestionId = id
       this.openedFrame = true
-      this.title='编辑填空题'
+      this.title = '编辑填空题'
       this.set_currentQuestion()
     },
     preCreateQuestion () { // 数据编辑完成添加至全局数组中---------------
@@ -137,15 +137,15 @@ export default {
       // 选择答题号
       window.console.log(e)
     },
-    traverse (Arr, letterArr)  {
+    traverse (Arr, letterArr) {
       if (Arr.length > 0) {
         let data = []
         Arr.forEach(item => {
-          item.childGroup.forEach(row =>{
+          item.childGroup.forEach(row => {
             let obj = {
               ...row,
-              selectBox:row.select == 2 && row.id.indexOf('judgment') != -1 ? ['T', 'F'] : letterArr.slice(0, row.select),
-              width:row.select * 26 + 42
+              selectBox: row.select == 2 && row.id.indexOf('judgment') != -1 ? ['T', 'F'] : letterArr.slice(0, row.select),
+              width: row.select * 26 + 42
             }
             data.push(obj)
           })
@@ -156,27 +156,27 @@ export default {
         return []
       }
     },
-    HeightCalculation(maxWidth,result){ // 计算题型内容所占高度
+    HeightCalculation (maxWidth, result) { // 计算题型内容所占高度
       // 计算宽度所占数组长度
       let widths = []
       let sum = 0
       let i
       let a = 0
-      for ( i = 0; i < maxWidth.length; i++) {
+      for (i = 0; i < maxWidth.length; i++) {
         sum = sum + maxWidth[i]
         a += 1
-        if(sum >= this.pageWidth){
+        if (sum >= this.pageWidth) {
           widths.push(a - 1)
           sum = 0
           a = 1
           sum = sum + maxWidth[i]
         }
       }
-      if(maxWidth.length > 0 ){
+      if (maxWidth.length > 0) {
         let long = 0
-        if(widths.length > 0){
+        if (widths.length > 0) {
           long = maxWidth.length - widths.reduce((accumulator, currentValue) => accumulator + currentValue)
-        }else{
+        } else {
           long = maxWidth.length - 0
         }
         widths.push(long)
@@ -189,16 +189,16 @@ export default {
       // 根据宽度数组 和 高度数组合成高度二维数组
       let twoDimensional = []
       let num = 0
-      for(let i = 0;i < widths.length;i++ ){
+      for (let i = 0; i < widths.length; i++) {
         num += widths[i]
-        twoDimensional.push(heights.slice(num - widths[i],num))
+        twoDimensional.push(heights.slice(num - widths[i], num))
       }
       let heightList = twoDimensional.map(item => {
-        return Math.max.apply( null , item)
+        return Math.max.apply(null, item)
       })
-      if(heightList.length > 0){
-       return  heightList.reduce((accumulator, currentValue) => accumulator + currentValue) + heightList.length * 10
-      }else{
+      if (heightList.length > 0) {
+        return heightList.reduce((accumulator, currentValue) => accumulator + currentValue) + heightList.length * 10
+      } else {
         return 0
       }
     }
@@ -237,7 +237,9 @@ export default {
   font-size: 14px;
   text-indent: 1em;
 }
-.m-5{margin-right: 5px}
+.m-5 {
+  margin-right: 5px;
+}
 </style>
 
 <style lang="less">
