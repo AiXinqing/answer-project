@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     hanldeAddSubtopic () {
-
+      this.$emit('hanlde-add-sub-topic')
     },
     handleChange () { },
     hanldeStatus (val) {

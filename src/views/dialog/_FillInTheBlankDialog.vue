@@ -32,6 +32,7 @@
         @hanlde-status="hanldeStatus"
         @hanlde-add-group-question="hanldeAddGroupQuestion"
         @hanlde-del-group="hanldeDelGroup"
+        @hanlde-add-sub-topic="hanldeAddSubtopic"
       />
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
@@ -180,6 +181,18 @@ export default {
           this.set_currentQuestion()
         })
       }
+    },
+    hanldeAddSubtopic () {
+      //添加分段题组
+      let obj = {
+        start: this.currentQuestion,
+        end: null,
+        score: null,
+        space: 1,
+        id: `spaceTopic_${+new Date()}`,
+        childGroup: [],
+      }
+      this.spaceTopic.group.push(obj)
     }
   },
 }
