@@ -3,16 +3,30 @@
       <span>题</span>
       <span> 1 </span>
       <span> 空 </span>
-      <el-input v-model.number="data.end" size="mini"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
+      <el-input v-model.number="SmallTopic.end" size="mini"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
       <span>分</span>
     </div>
 </template>
 
 <script>
 export default {
+  props: {
+    GroupSmallTopic: {
+      type: Object,
+      default: () => []
+    },
+  },
   data () {
     return {
-      data: {}
+      SmallTopic: {}
+    }
+  },
+  watch: {
+    GroupSmallTopic: {
+      immediate: true,
+      handler () {
+        this.SmallTopic = { ...this.GroupSmallTopic }
+      }
     }
   },
 }
