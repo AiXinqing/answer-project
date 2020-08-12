@@ -126,6 +126,7 @@ export default {
       if (currentPage.height) {
         results.push(currentPage.rects)
       }
+      console.log(results)
       return results
     },
     currentQuestionHanldeEdit (id) {
@@ -152,7 +153,7 @@ export default {
   overflow: hidden;
   background: @white;
   border-radius: 3px;
-  position: absolute;
+  position: relative;
   left: 50%;
   transform: translateX(-50%);
   .footer {

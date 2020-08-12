@@ -83,8 +83,10 @@
 </template>
 
 <script>
+import {  mapMutations } from 'vuex'
+
 import tabSingleItem from './tabPane/tabSingleItem'
-import tabCheckItem from './tabPane/_tabCheckItem'
+import tabCheckItem from './tabPane/_tabcheckItem'
 import tabJudgment from './tabPane/_tabJudgment'
 import singleTopic from './tabPane/_singleTopic'
 import checkTopic from './tabPane/_checkTopic'
@@ -127,7 +129,12 @@ export default {
     }
   },
   methods: {
-    hanldeClick () { },
+    ...mapMutations('questionType', [
+      'set_currentQuestion',
+    ]),
+    hanldeClick () {
+      this.set_currentQuestion()
+    },
     handldeDel (obj) {
       this.$emit('hanlde-dels', obj)
     },

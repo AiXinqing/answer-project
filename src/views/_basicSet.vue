@@ -8,7 +8,7 @@
     </div>
     <div class="basis_checkbox basic_btn">
       <el-button @click="questionDialog">客观题</el-button>
-      <el-button>填空题</el-button>
+      <el-button @click="fillInTheBlank">填空题</el-button>
       <el-button>作文</el-button>
     </div>
     <div class="basis_checkbox basic_btn">
@@ -17,14 +17,17 @@
       <el-button type="primary">下载</el-button>
     </div>
     <question-dialog ref="questionDialogs" />
+    <fill-in-the-blank-dialog ref="fillInTheBlanks" />
   </div>
 </template>
 
 <script>
 import questionDialog from './dialog/_questionData'
+import FillInTheBlankDialog from './dialog/_FillInTheBlankDialog'
 export default {
   components: {
     questionDialog,
+    FillInTheBlankDialog
   },
   data () {
     return {
@@ -35,6 +38,9 @@ export default {
   methods: {
     questionDialog () {
       this.$refs.questionDialogs.opened()
+    },
+    fillInTheBlank(){
+      this.$refs.fillInTheBlanks.opened()
     }
   },
 }

@@ -88,29 +88,16 @@ const state = {
       label: '二十二',
     },
   ],
-  startQuestion: 1, // 分段题组开始题号
-  endQuestion: null, // 分段题组结束题号
-  delStartQuestion: null, // 分段题组开始题号-已删除
-  minTopic: 1, // 删除最小值
   SubtitleNumber: [], // 已有的题号数组
-  delTopics: [], // 删除的题组
+  AlreadyTopics: [], // 已有的题组
   currentQuestion: 1,
-  letterArr: ['A', 'B', 'C', 'D', 'E', 'G', 'H', 'I', 'J', 'K']
+  letterArr: ['A', 'B', 'C', 'D', 'E', 'G', 'H', 'I', 'J', 'K'],
+  maxTopic: 100, // 最大题数
 }
 
 const mutations = {
-  set_startQuestion: (state, val) => {
-    // 开始题号
-    state.startQuestion = val
-  },
-  set_endQuestion: (state, val) => {
-    // 结束题号
-    state.endQuestion = val
-  },
-  set_minTopic: (state, val) => {
-    state.minTopic = val
-  },
-  set_SubtitleNumber: (state, {
+
+  set_SubtitleNumber: (state, { //题组数
     start,
     end,
     id
@@ -138,34 +125,50 @@ const mutations = {
       state.SubtitleNumber.splice(index, 1)
     }
   },
-  set_delTopics: (state, {
-    start,
-    end,
-  }) => {
-    for (let i = start; i <= end; i++) {
-      let index = state.delTopics.findIndex(item => item === i)
-      if (index <= -1) {
-        state.delTopics.push(i)
+  del_AlreadyTopics(state, Arr) { // 删除已有小题数组
+
+    Arr.forEach(item => {
+      const index = state.AlreadyTopics.findIndex(row => row.topic === item.topic)
+      if (index > -1) {
+        state.AlreadyTopics.splice(index, 1)
       }
-    }
+    })
+  },
+  Add_AlreadyTopics(state, Arr) { //新增小题数组
+    Arr.forEach(item => {
+      if (state.AlreadyTopics.length > 0) {
+        const index = state.AlreadyTopics.findIndex(row => row.topic === item.topic)
+        if (index > -1) {
+          state.AlreadyTopics.splice(index, 1, item)
+        } else {
+          state.AlreadyTopics.push(item)
+        }
+      } else {
+        state.AlreadyTopics.push(item)
+      }
+
+    })
   },
   set_currentQuestion: (state) => {
-    let end = state.endQuestion
-    let delTopics = state.delTopics
-    let minTopic = ''
-    if (delTopics.length > 0) {
-      minTopic = Math.min(...delTopics)
+
+    for (let i = 1; i < state.maxTopic; i++) { //
+      const index = state.AlreadyTopics.findIndex(item => item.topic === i)
+      if (index <= -1) {
+        state.currentQuestion = i
+        break;
+      } else {
+        state.currentQuestion = 1
+      }
     }
-    state.currentQuestion = end != null && minTopic == '' ? end + 1 :
-      minTopic != '' ? minTopic : 1
+
   },
-  set_closeFrame: (state, val) => { // 弹窗关闭置空
-    state.endQuestion = null
-    state.delStartQuestion = null
+  set_closeFrame: (state) => { // 弹窗关闭置空
     state.SubtitleNumber = []
-    state.delTopics = []
-    state.currentQuestion = val
-    state.startQuestion = val
+    state.AlreadyTopics.forEach((item, i) => {
+      if (item.subtopic != null || item.subtopic != undefined) {
+        state.AlreadyTopics.splice(i, 1)
+      }
+    })
   }
 }
 

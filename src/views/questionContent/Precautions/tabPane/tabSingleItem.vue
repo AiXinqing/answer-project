@@ -8,7 +8,7 @@
     <span>题,每题</span>
     <el-input v-model.number="data.score" size="mini" @blur="singleBoxHanlde" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
     <span>分,每题</span>
-    <el-input v-model.number="data.select" size="mini" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
+    <el-input v-model.number="data.select" size="mini" @blur="singleBoxHanlde"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
     <span>个选项</span>
     <i class="el-icon-delete" @click="hanldeDel(data.id,activeNameItem)" ></i>
   </div>
@@ -34,28 +34,57 @@ export default {
   },
   computed: {
     ...mapState('questionType', [
-      'endQuestion',
-      'delTopics',
-      'currentQuestion'
+      'currentQuestion',
+      'AlreadyTopics'
     ]),
     tabStatusVal () {
       let itemStart = this.data.start || 0
       let itemEnd = this.data.end || null
       let itemScore = this.data.score || 0
+      let AlreadyTopics = this.AlreadyTopics
+      let strStart = ''
+      let strEnd = ''
+      if(AlreadyTopics.length > 0){
+        let numStart = AlreadyTopics.findIndex(item => item.topic == itemStart)
+        let numEnd = AlreadyTopics.findIndex(item => item.topic == itemEnd)
+          if(numStart > -1){
+            strStart =`${itemStart}题已经存在，请勿重复添加`
+          }
+          if(numEnd > -1){
+            strEnd =`${itemEnd}题已经存在，请勿重复添加`
+          }
+      }
       return itemStart == 0 ? '开始题号必须大于0' :
         itemEnd == 0 && itemEnd != null ? '结束题号必须大于0' :
           itemStart == 0 && itemEnd != null ? '开始题号不能大于结束题号' :
             itemStart > itemEnd && itemEnd != null ? '开始题号不能大于结束题号' :
-              itemStart != 0 && itemEnd != null && itemScore == 0 ? '分数不能为空' : ''
+              itemStart != 0 && itemEnd != null && itemScore == 0 ? '分数不能为空':
+              strStart != ''? strStart :
+              strEnd != ''? strStart : ''
     },
     tabStatus () {
       let itemStart = this.data.start || 0
       let itemEnd = this.data.end || null
       let itemScore = this.data.score || 0
+      let AlreadyTopics = this.AlreadyTopics
+      let strStart = ''
+      let strEnd = ''
+      if(AlreadyTopics.length > 0){
+        let numStart = AlreadyTopics.findIndex(item => item.topic == itemStart)
+        let numEnd = AlreadyTopics.findIndex(item => item.topic == itemEnd)
+          if(numStart > -1){
+            strStart =`${itemStart}题已经存在，请勿重复添加`
+          }
+          if(numEnd > -1){
+            strEnd =`${itemEnd}题已经存在，请勿重复添加`
+          }
+      }
       return itemStart == 0 && itemEnd != null ? true :
         itemEnd < itemStart && itemEnd != null ? true :
           itemEnd != null && itemScore == 0 ? true :
-            itemStart != 0 && itemEnd != null && itemScore == 0 ? true : false;
+            itemStart != 0 && itemEnd != null && itemScore == 0 ? true :
+              strStart != ''? true :
+              strEnd != ''? true : false;
     },
   },
   watch: {
@@ -76,8 +105,8 @@ export default {
   },
   methods: {
     ...mapMutations('questionType', [
-      'set_endQuestion',
       'set_currentQuestion',
+      'Add_AlreadyTopics',
     ]),
     hanldeDel (id, type) {
       // 删除分段题组
@@ -98,11 +127,7 @@ export default {
         let itemEnd = this.data.end
         let itemScore = this.data.score
         let itemSelect = this.data.select
-        if (itemEnd != null) {
-          // 判断结束题是否有值
-          this.set_endQuestion(itemEnd)
-        }
-        //
+
         for (let index = this.data.start; index <= this.data.end; index++) {
           let subtopic = {
             pid: this.data.id,
@@ -124,6 +149,11 @@ export default {
             childGroup: subtopicArr
           }
         }
+
+        // 弹框临时小题数
+        const temporaryArr = subtopicArr.map(item => ({...item,subtopic:1}))
+        this.Add_AlreadyTopics(temporaryArr)
+        // temporaryArr
         this.$emit('hanlde-add-group-question', itemObj)
         this.set_currentQuestion()
       }
