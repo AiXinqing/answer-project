@@ -25,7 +25,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 @import '~@/assets/css/variables.less';
 .space_group_item {
   text-align: center;
