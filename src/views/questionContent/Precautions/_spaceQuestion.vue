@@ -2,15 +2,18 @@
 <!-- 填空题题组 -->
   <div class="space_box">
     <space-item
-      v-for="(item, index) in groupData"
+      v-for="(item, index) in topicGroup"
       :key="index"
       :space-item="item"
     />
     <div class="add_question" @click="hanldeAddSubtopic">+ 分段添加小题</div>
     <div class="question-group">
       <el-collapse accordion>
-        <!-- v-model="activeNames" @change="handleChange" -->
-        <group-item v-for="(item, index) in groupItemData" :key="index"/>
+        <group-item
+          v-for="(item, index) in groupItemData"
+          :key="index"
+          :small-topic="item"
+        />
       </el-collapse>
     </div>
   </div>
@@ -32,12 +35,25 @@ export default {
   },
   data () {
     return {
-      activeNames: []
+      activeNames: [],
+      topicGroup: []
     }
   },
   computed: {
     groupItemData () {
-      return [1]
+      let arr = []
+      this.topicGroup.map(item => {
+        arr.push(...item.childGroup.map(row => row))
+      })
+      return arr
+    }
+  },
+  watch: {
+    groupData: {
+      immediate: true,
+      handler () {
+        this.topicGroup = [...this.groupData]
+      }
     }
   },
   methods: {
