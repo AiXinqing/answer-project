@@ -27,7 +27,7 @@
            <div class="label m-5" style="padding-left:5px"> 空 </div>
         </el-col>
       </el-row>
-      <space-question />
+      <space-question :group-data="spaceTopic.group"/>
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
     <div class="dialog-footer">
@@ -49,44 +49,19 @@ export default {
       openedFrame: false,
       isdisabledFn: false,
       title: '新增填空题',
-      quesctionObj: {
+      spaceTopic: {
         number: 1,
-        topic: '选择题',
+        topic: '填空题',
         rows: 5,
         startQuestion: 1,
-        group: {
-          singleBox: [
-            {
-              start: 1,
-              end: null,
-              score: null,
-              select: 4,
-              id: 'singleBox0',
-              childGroup: [],
-            },
-          ],
-          checkbox: [
-            {
-              start: 1,
-              end: null,
-              score: null,
-              lessScore: null,
-              select: 4,
-              id: 'checkbox0',
-              childGroup: [],
-            },
-          ],
-          judgment: [
-            {
-              start: 1,
-              end: null,
-              score: null,
-              select: 2,
-              id: 'judgment0',
-              childGroup: [],
-            },
-          ],
-        },
+        group:[{
+          start: 1,
+          end: null,
+          score: null,
+          space: 1,
+          id: 'spaceTopic',
+          childGroup: [],
+        },]
       },
       closeData: {},
       errorVal: '',
@@ -118,7 +93,7 @@ export default {
       immediate: true,
       handler () {
         this.objectiveData = {
-          ...this.quesctionObj
+          ...this.spaceTopic
         }
 
       }
