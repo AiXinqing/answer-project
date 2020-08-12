@@ -5,6 +5,8 @@
       v-for="(item, index) in topicGroup"
       :key="index"
       :space-item="item"
+      @hanlde-status="hanldeStatus"
+      @hanlde-add-group-question="hanldeAddGroupQuestion"
     />
     <div class="add_question" @click="hanldeAddSubtopic">+ 分段添加小题</div>
     <div class="question-group">
@@ -60,7 +62,14 @@ export default {
     hanldeAddSubtopic () {
 
     },
-    handleChange () { }
+    handleChange () { },
+    hanldeStatus (val) {
+      this.$emit('hanlde-status', val)
+    },
+    hanldeAddGroupQuestion (obj) {
+      //添加题组
+      this.$emit('hanlde-add-group-question', obj)
+    }
   },
 }
 </script>

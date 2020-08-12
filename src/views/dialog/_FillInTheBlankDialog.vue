@@ -27,7 +27,11 @@
             <div class="label m-5" style="padding-left:5px"> 空 </div>
         </el-col>
       </el-row>
-      <space-question :group-data="spaceTopic.group"/>
+      <space-question
+        :group-data="spaceTopic.group"
+        @hanlde-status="hanldeStatus"
+        @hanlde-add-group-question="hanldeAddGroupQuestion"
+      />
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
     <div class="dialog-footer">
@@ -89,7 +93,7 @@ export default {
     },
   },
   watch: {
-    quesctionObj: {
+    spaceTopic: {
       immediate: true,
       handler () {
         this.objectiveData = {
@@ -101,6 +105,7 @@ export default {
   },
   mounted () {
     this.closeData = JSON.parse(JSON.stringify(this.quesctionObj))
+    this.set_closeFrame()
   },
   methods: {
     ...mapMutations('questionType', [
@@ -143,6 +148,22 @@ export default {
     },
     HeightCalculation () { // 计算题型内容所占高度
 
+    },
+    hanldeStatus (val) {
+      this.errorVal = val
+    },
+    hanldeAddGroupQuestion (obj) {
+      //添加题组
+      let group = this.spaceTopic.group
+
+      const index = group.findIndex(item => item.id === obj.id)
+
+      if (index > -1) {
+        group.splice(index, 1, obj) // 替换
+        // 追曾小题号至数组
+        let objs = { start: obj.start, end: obj.end, id: obj.id }
+        this.set_SubtitleNumber(objs)
+      }
     }
   },
 }

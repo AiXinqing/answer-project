@@ -1,7 +1,7 @@
 <template>
   <div class="space_group_item">
-      <span>题</span>
-      <span> 1 </span>
+      <span>第</span>
+      <span> {{ SmallTopic.topicNum }} </span>
       <span> 空 </span>
       <el-input v-model.number="SmallTopic.end" size="mini"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
       <span>分</span>
