@@ -4,9 +4,9 @@
     <template slot="title">
       <div class="space_group_list">
         <span @click.stop="clickFun">题 {{data.topic}} 共 </span>
-        <el-input v-model.number="data.space" size="mini" @click.stop.native="clickFun"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+        <el-input v-model.number="data.space" size="mini" @click.stop.native="clickFun" @blur="ChangeSpaceValue"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
         <span @click.stop="clickFun"> 空 每空 </span>
-        <el-input v-model.number="data.score" size="mini" @click.stop.native="clickFun"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+        <el-input v-model.number="data.score" size="mini" @click.stop.native="clickFun" @blur="ChangeSpaceValue"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
         <span @click.stop="clickFun"> 分 共 {{data.sum}} 分 </span>
         <span class="add_groupTopic" @click.stop="topicDetailAdd(data)">+ 添加小题空格</span>
         <i class="el-icon-delete" @click.stop="hanldeSubtopicDel(data)" ></i>
@@ -40,11 +40,12 @@ export default {
   },
   computed: {
     GroupSmallTopic () {
-      let space = this.data.space
+      let changeObj = JSON.parse(JSON.stringify(this.smallTopic))
+      let space = changeObj.space
       let arr = []
 
       for (let i = 0; i < space; i++) {
-        arr.push({ ...this.data, smallTopic: i })
+        arr.push({ ...changeObj, smallTopic: i })
       }
       return arr
     }
@@ -57,6 +58,9 @@ export default {
       }
     }
   },
+  mounted () {
+    this.data = JSON.parse(JSON.stringify(this.smallTopic))
+  },
   methods: {
     hanldeSubtopicDel (obj) {
       // 删除小题号
@@ -65,6 +69,9 @@ export default {
     topicDetailAdd (obj) {
       // 添加小题空格数
       this.$emit('topic-detail-add', obj)
+    },
+    ChangeSpaceValue () {
+      this.$emit('change-space-value', this.data)
     },
     clickFun () { }
   },

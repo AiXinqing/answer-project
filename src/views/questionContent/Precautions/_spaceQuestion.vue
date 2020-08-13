@@ -18,6 +18,7 @@
           :small-topic="item"
           @hanlde-subtopic-del="hanldeSubtopicDel"
           @topic-detail-add="topicDetailAdd"
+          @change-space-value="ChangeSpaceValue"
         />
       </el-collapse>
     </div>
@@ -84,7 +85,11 @@ export default {
     topicDetailAdd (obj) {
       // 添加小题空格数
       this.$emit('topic-detail-add', obj)
-    }
+    },
+    ChangeSpaceValue (obj) {
+      // 分值分数修改
+      this.$emit('change-space-value', obj)
+    },
   },
 }
 </script>

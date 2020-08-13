@@ -35,6 +35,7 @@
         @hanlde-add-sub-topic="hanldeAddSubtopic"
         @hanlde-subtopic-del="hanldeSubtopicDel"
         @topic-detail-add="topicDetailAdd"
+        @change-space-value="ChangeSpaceValue"
       />
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
@@ -291,7 +292,27 @@ export default {
 
       }
 
-    }
+    },
+    ChangeSpaceValue (obj) {
+      // 分值分数修改
+      // 添加小题空格数
+      let group = this.spaceTopic.group
+      const i = group.findIndex(item => item.id === obj.pid)
+      let questionArr = group[i]
+
+      if (i > -1) {
+        const index = questionArr.childGroup.findIndex(row => row.id === obj.id)
+        if (index > -1) {
+          let objItem = {
+            ...obj,
+            sum: obj.space * obj.score
+          }
+          questionArr.childGroup.splice(index, 1, objItem)
+        }
+
+
+      }
+    },
   },
 }
 </script>
