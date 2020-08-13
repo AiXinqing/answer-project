@@ -136,7 +136,6 @@ const mutations = {
     })
   },
   Add_AlreadyTopics(state, Arr) { //新增小题数组
-    console.log(Arr)
     Arr.forEach(item => {
       if (state.AlreadyTopics.length > 0) {
         const index = state.AlreadyTopics.findIndex(row => row.topic === item.topic)
