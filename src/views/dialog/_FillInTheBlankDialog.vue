@@ -187,7 +187,9 @@ export default {
       // 删除小题
       let group = this.spaceTopic.group
       const index = group.findIndex(item => item.id === obj.pid)
+
       let groupObj = JSON.parse(JSON.stringify(group[index]))
+
       let arr = []
       for (let i = groupObj.start; i <= groupObj.end; i++) {
         arr.push(i)
@@ -195,7 +197,9 @@ export default {
 
       // 删除之前数组
       this.del_AlreadyTopics(groupObj.childGroup) // 删除弹框内临时数组
-      group.splice(index, 1) // 删除
+      if (index > -1) {
+        group.splice(index, 1) // 删除
+      }
       this.delete_SubtitleNumber(obj.id)
 
       this.SplitFunc(obj, groupObj, arr)
@@ -219,9 +223,12 @@ export default {
 
       let FirstHalf = arr.splice(0, obj.topic - 1) // 前半份
       let SecondHalf = arrObj.splice(obj.topic, groupObj.end) // 后半份
-
-
-      this.spaceTopic.group.push(this.SplitArrObject(FirstHalf, groupObj), this.SplitArrObject(SecondHalf, groupObj))
+      let SplitCombine = [this.SplitArrObject(FirstHalf, groupObj), this.SplitArrObject(SecondHalf, groupObj)]
+      SplitCombine.forEach(item => {
+        if (item.start != undefined) {
+          this.spaceTopic.group.push(JSON.parse(JSON.stringify(item)))
+        }
+      })
     },
     SplitArrObject (arrParameter, groupObj) {
       // 生成数组对象
@@ -232,6 +239,8 @@ export default {
           arr.push({
             id: 'topic_' + +new Date(),
             pid: ids,
+            start: arrParameter[0],
+            end: arrParameter[arrParameter.length - 1],
             score: groupObj.score,
             space: groupObj.space,
             sum: groupObj.score * groupObj.space,
@@ -241,7 +250,7 @@ export default {
         })
         let obj = {
           start: arrParameter[0],
-          end: arrParameter[arr.length - 1],
+          end: arrParameter[arrParameter.length - 1],
           id: ids,
           score: 1,
           space: 1,
@@ -251,7 +260,7 @@ export default {
         this.Add_AlreadyTopics(arr)
         return obj
       } else {
-        return []
+        return {}
       }
     }
   },
