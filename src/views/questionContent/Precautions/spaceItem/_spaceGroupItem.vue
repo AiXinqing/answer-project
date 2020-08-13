@@ -1,7 +1,7 @@
 <template>
   <div class="space_group_item">
       <span>第</span>
-      <span> {{ SmallTopic.topic }} </span>
+      <span> {{ number }} </span>
       <span> 空 </span>
       <el-input v-model.number="SmallTopic.score" size="mini"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
       <span>分</span>
@@ -15,6 +15,10 @@ export default {
       type: Object,
       default: () => []
     },
+    number: {
+      type: Number,
+      default: 1
+    }
   },
   data () {
     return {

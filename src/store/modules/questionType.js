@@ -102,6 +102,7 @@ const mutations = {
     end,
     id
   }) => {
+    // 追加生成的题号
     let index = state.SubtitleNumber.findIndex(item => item.id === id)
     let Arr = []
     for (let i = start; i <= end; i++) {
@@ -119,7 +120,7 @@ const mutations = {
     }
   },
   delete_SubtitleNumber: (state, id) => {
-    // 追加生成的题号
+    // 删除生成的题号
     let index = state.SubtitleNumber.findIndex(item => item.id === id)
     if (index > -1) {
       state.SubtitleNumber.splice(index, 1)
@@ -135,6 +136,7 @@ const mutations = {
     })
   },
   Add_AlreadyTopics(state, Arr) { //新增小题数组
+    console.log(Arr)
     Arr.forEach(item => {
       if (state.AlreadyTopics.length > 0) {
         const index = state.AlreadyTopics.findIndex(row => row.topic === item.topic)

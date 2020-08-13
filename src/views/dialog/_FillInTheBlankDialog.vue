@@ -28,11 +28,12 @@
         </el-col>
       </el-row>
       <space-question
-        :group-data="groupInfo"
+        :group-data="objectiveData.group"
         @hanlde-status="hanldeStatus"
         @hanlde-add-group-question="hanldeAddGroupQuestion"
         @hanlde-del-group="hanldeDelGroup"
         @hanlde-add-sub-topic="hanldeAddSubtopic"
+        @hanlde-subtopic-del="hanldeSubtopicDel"
       />
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
@@ -93,9 +94,6 @@ export default {
     errorMessage () {
       return this.errorVal != '' ? true : false
     },
-    groupInfo () {
-      return this.objectiveData.group
-    }
   },
   watch: {
     spaceTopic: {
@@ -124,8 +122,6 @@ export default {
     ...mapMutations('pageContent', ['initPageData', 'amendPageData']),
     closeFrame () {
       this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
-      console.log(this.spaceTopic)
-      console.log(this.objectiveData)
       this.set_closeFrame()
       this.openedFrame = false
     },
@@ -187,6 +183,23 @@ export default {
         })
       }
     },
+    hanldeSubtopicDel (obj) {
+      // 删除小题
+      let group = this.spaceTopic.group
+      const index = group.findIndex(item => item.id === obj.pid)
+      let groupObj = JSON.parse(JSON.stringify(group[index]))
+      let arr = []
+      for (let i = groupObj.start; i <= groupObj.end; i++) {
+        arr.push(i)
+      }
+
+      // 删除之前数组
+      this.del_AlreadyTopics(groupObj.childGroup) // 删除弹框内临时数组
+      group.splice(index, 1) // 删除
+      this.delete_SubtitleNumber(obj.id)
+
+      this.SplitFunc(obj, groupObj, arr)
+    },
     hanldeAddSubtopic () {
       //添加分段题组
       let obj = {
@@ -198,6 +211,48 @@ export default {
         childGroup: [],
       }
       this.spaceTopic.group.push(obj)
+
+    },
+    SplitFunc (obj, groupObj, arr) {
+      // 删除小题拆分数组
+      let arrObj = JSON.parse(JSON.stringify(arr)) // 赋值操作
+
+      let FirstHalf = arr.splice(0, obj.topic - 1) // 前半份
+      let SecondHalf = arrObj.splice(obj.topic, groupObj.end) // 后半份
+
+
+      this.spaceTopic.group.push(this.SplitArrObject(FirstHalf, groupObj), this.SplitArrObject(SecondHalf, groupObj))
+    },
+    SplitArrObject (arrParameter, groupObj) {
+      // 生成数组对象
+      if (arrParameter.length > 0) {
+        let arr = []
+        let ids = "spaceTopic_" + +new Date()
+        arrParameter.forEach(itme => {
+          arr.push({
+            id: 'topic_' + +new Date(),
+            pid: ids,
+            score: groupObj.score,
+            space: groupObj.space,
+            sum: groupObj.score * groupObj.space,
+            topic: itme,
+            subtopic: 1,
+          })
+        })
+        let obj = {
+          start: arrParameter[0],
+          end: arrParameter[arr.length - 1],
+          id: ids,
+          score: 1,
+          space: 1,
+          childGroup: arr
+        }
+        // 弹框临时小题数
+        this.Add_AlreadyTopics(arr)
+        return obj
+      } else {
+        return []
+      }
     }
   },
 }

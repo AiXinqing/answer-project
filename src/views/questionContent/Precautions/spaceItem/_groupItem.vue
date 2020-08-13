@@ -9,13 +9,14 @@
         <el-input v-model.number="data.score" size="mini"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
         <span> 分 共 {{data.sum}} 分 </span>
         <span class="add_groupTopic">+ 添加小题</span>
-        <i class="el-icon-delete" @click="hanldeDel(data.id)" ></i>
+        <i class="el-icon-delete" @click="hanldeSubtopicDel(data)" ></i>
       </div>
     </template>
     <space-group-item
-      v-for="item in GroupSmallTopic"
-      :key="item.id"
+      v-for="(item,index) in GroupSmallTopic"
+      :key="index"
       :group-small-topic="item"
+      :number="index + 1"
     />
   </el-collapse-item>
 </template>
@@ -57,8 +58,9 @@ export default {
     }
   },
   methods: {
-    hanldeDel (id) {
-      this.$emit('hanlde-del-group', id)
+    hanldeSubtopicDel (obj) {
+      // 删除小题号
+      this.$emit('hanlde-subtopic-del', obj)
     }
   },
 

@@ -111,9 +111,12 @@ export default {
         let subtopicArr = []
         for (let index = this.data.start; index <= this.data.end; index++) {
           subtopicArr.push({
-            ...this.data,
+            score: this.data.score,
+            end: this.data.end,
+            space: this.data.space,
+            start: this.data.start,
             pid: this.data.id,
-            id: `${this.data.id}_${index}`,
+            id: `${this.data.id}_${+new Date()}`,
             topic: index,
             sum: this.data.score * this.data.space,
           })
@@ -130,6 +133,7 @@ export default {
       }
     },
     hanldeDel (id) {
+      // 题组删除
       this.$emit('hanlde-del-group', id)
     }
   },

@@ -16,6 +16,7 @@
           v-for="(item, index) in groupItemData"
           :key="index"
           :small-topic="item"
+          @hanlde-subtopic-del="hanldeSubtopicDel"
         />
       </el-collapse>
     </div>
@@ -74,6 +75,10 @@ export default {
     hanldeDelGroup (id) {
       //删除题组
       this.$emit('hanlde-del-group', id)
+    },
+    hanldeSubtopicDel (obj) {
+      // 删除小题号
+      this.$emit('hanlde-subtopic-del', obj)
     }
   },
 }
