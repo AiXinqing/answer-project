@@ -140,6 +140,19 @@ export default {
       this.set_currentQuestion()
     },
     preCreateQuestion () { // 数据编辑完成添加至全局数组中---------------
+
+      var obj = {
+        id: 'FillInTheBlank' + +new Date(),
+        height: 360, // 32标题高度
+        questionType: 'FillInTheBlank',
+        content: this.objectiveData,
+      }
+      if (this.editQuestionId == null) {
+        this.initPageData(obj)
+      } else {
+        obj.id = this.editQuestionId
+        this.amendPageData(obj)
+      }
       //------------------------------------
       this.openedFrame = false // 关闭弹窗
       this.set_currentQuestion()
