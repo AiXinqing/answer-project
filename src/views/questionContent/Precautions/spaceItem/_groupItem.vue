@@ -8,7 +8,7 @@
         <span> 空 每空 </span>
         <el-input v-model.number="data.score" size="mini"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
         <span> 分 共 {{data.sum}} 分 </span>
-        <span class="add_groupTopic">+ 添加小题</span>
+        <span class="add_groupTopic" @click="topicDetailAdd(data)">+ 添加小题空格</span>
         <i class="el-icon-delete" @click="hanldeSubtopicDel(data)" ></i>
       </div>
     </template>
@@ -61,6 +61,10 @@ export default {
     hanldeSubtopicDel (obj) {
       // 删除小题号
       this.$emit('hanlde-subtopic-del', obj)
+    },
+    topicDetailAdd (obj) {
+      // 添加小题空格数
+      this.$emit('topic-detail-add', obj)
     }
   },
 

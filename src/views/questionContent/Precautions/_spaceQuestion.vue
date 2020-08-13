@@ -11,12 +11,13 @@
     />
     <div class="add_question" @click="hanldeAddSubtopic">+ 分段添加小题</div>
     <div class="question-group">
-      <el-collapse accordion>
+      <el-collapse >
         <group-item
           v-for="(item, index) in groupItemData"
           :key="index"
           :small-topic="item"
           @hanlde-subtopic-del="hanldeSubtopicDel"
+          @topic-detail-add="topicDetailAdd"
         />
       </el-collapse>
     </div>
@@ -79,6 +80,10 @@ export default {
     hanldeSubtopicDel (obj) {
       // 删除小题号
       this.$emit('hanlde-subtopic-del', obj)
+    },
+    topicDetailAdd (obj) {
+      // 添加小题空格数
+      this.$emit('topic-detail-add', obj)
     }
   },
 }

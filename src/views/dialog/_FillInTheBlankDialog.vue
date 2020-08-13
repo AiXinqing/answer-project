@@ -34,6 +34,7 @@
         @hanlde-del-group="hanldeDelGroup"
         @hanlde-add-sub-topic="hanldeAddSubtopic"
         @hanlde-subtopic-del="hanldeSubtopicDel"
+        @topic-detail-add="topicDetailAdd"
       />
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
@@ -267,6 +268,29 @@ export default {
       } else {
         return {}
       }
+    },
+    topicDetailAdd (obj) {
+      // 添加小题空格数
+      let group = this.spaceTopic.group
+      const i = group.findIndex(item => item.id === obj.pid)
+      let questionArr = group[i]
+
+      if (i > -1) {
+        const index = questionArr.childGroup.findIndex(row => row.id === obj.id)
+        let childItem = questionArr.childGroup[index]
+        let changeItem = {}
+        if (index > -1) {
+          changeItem = {
+            ...childItem,
+            space: childItem.space + 1,
+            sum: childItem.score * (childItem.space + 1),
+          }
+          questionArr.childGroup.splice(index, 1, changeItem)
+        }
+
+
+      }
+
     }
   },
 }
