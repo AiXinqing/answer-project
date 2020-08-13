@@ -187,7 +187,9 @@ export default {
       // 删除小题
       let group = this.spaceTopic.group
       const index = group.findIndex(item => item.id === obj.pid)
-
+      // console.log(group)
+      // console.log(obj.pid)
+      // console.log(index)
       let groupObj = JSON.parse(JSON.stringify(group[index]))
 
       let arr = []
@@ -195,14 +197,13 @@ export default {
         arr.push(i)
       }
 
+      this.SplitFunc(obj, groupObj, arr)
       // 删除之前数组
       this.del_AlreadyTopics(groupObj.childGroup) // 删除弹框内临时数组
       if (index > -1) {
         group.splice(index, 1) // 删除
       }
       this.delete_SubtitleNumber(obj.id)
-
-      this.SplitFunc(obj, groupObj, arr)
     },
     hanldeAddSubtopic () {
       //添加分段题组
@@ -223,28 +224,32 @@ export default {
 
       let FirstHalf = arr.splice(0, obj.topic - 1) // 前半份
       let SecondHalf = arrObj.splice(obj.topic, groupObj.end) // 后半份
-      let SplitCombine = [this.SplitArrObject(FirstHalf, groupObj), this.SplitArrObject(SecondHalf, groupObj)]
+
+      let SplitCombine = []
+      SplitCombine.push(this.SplitArrObject(FirstHalf, groupObj))
+      SplitCombine.push(this.SplitArrObject(SecondHalf, groupObj))
       SplitCombine.forEach(item => {
         if (item.start != undefined) {
           this.spaceTopic.group.push(JSON.parse(JSON.stringify(item)))
         }
       })
+
     },
     SplitArrObject (arrParameter, groupObj) {
       // 生成数组对象
       if (arrParameter.length > 0) {
         let arr = []
         let ids = "spaceTopic_" + +new Date()
-        arrParameter.forEach(itme => {
+        arrParameter.forEach(item => {
           arr.push({
-            id: 'topic_' + +new Date(),
+            id: 'topic_' + +new Date() + item,
             pid: ids,
             start: arrParameter[0],
             end: arrParameter[arrParameter.length - 1],
             score: groupObj.score,
             space: groupObj.space,
             sum: groupObj.score * groupObj.space,
-            topic: itme,
+            topic: item,
             subtopic: 1,
           })
         })
