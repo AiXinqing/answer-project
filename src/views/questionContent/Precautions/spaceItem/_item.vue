@@ -87,7 +87,7 @@ export default {
     }
   },
   watch: {
-    itemData: {
+    spaceItem: {
       immediate: true,
       handler () {
         this.data = {

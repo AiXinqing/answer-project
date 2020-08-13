@@ -28,7 +28,7 @@
         </el-col>
       </el-row>
       <space-question
-        :group-data="spaceTopic.group"
+        :group-data="groupInfo"
         @hanlde-status="hanldeStatus"
         @hanlde-add-group-question="hanldeAddGroupQuestion"
         @hanlde-del-group="hanldeDelGroup"
@@ -93,6 +93,9 @@ export default {
     errorMessage () {
       return this.errorVal != '' ? true : false
     },
+    groupInfo () {
+      return this.objectiveData.group
+    }
   },
   watch: {
     spaceTopic: {
@@ -106,8 +109,8 @@ export default {
     }
   },
   mounted () {
-    this.closeData = JSON.parse(JSON.stringify(this.quesctionObj))
-    this.set_closeFrame()
+    this.closeData = JSON.parse(JSON.stringify(this.spaceTopic))
+    this.set_currentQuestion()
   },
   methods: {
     ...mapMutations('questionType', [
@@ -120,8 +123,10 @@ export default {
     ]),
     ...mapMutations('pageContent', ['initPageData', 'amendPageData']),
     closeFrame () {
-      this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
-      this.set_closeFrame(this.quesctionObj.startQuestion)
+      this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
+      console.log(this.spaceTopic)
+      console.log(this.objectiveData)
+      this.set_closeFrame()
       this.openedFrame = false
     },
     opened () {
@@ -130,7 +135,7 @@ export default {
     },
     openedEdit (id) {
       let current = this.pageData.filter(item => item.id === id)
-      this.quesctionObj = JSON.parse(JSON.stringify(current[0].content))
+      this.spaceTopic = JSON.parse(JSON.stringify(current[0].content))
       this.editQuestionId = id
       this.openedFrame = true
       this.title = '编辑填空题'

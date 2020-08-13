@@ -138,6 +138,7 @@ export default {
   },
   mounted () {
     this.closeData = JSON.parse(JSON.stringify(this.quesctionObj))
+    this.set_currentQuestion()
   },
   methods: {
     ...mapMutations('questionType', [
