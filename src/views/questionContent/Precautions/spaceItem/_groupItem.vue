@@ -3,13 +3,13 @@
   <el-collapse-item>
     <template slot="title">
       <div class="space_group_list">
-        <span>题 {{data.topic}} 共 </span>
-        <el-input v-model.number="data.space" size="mini"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
-        <span> 空 每空 </span>
-        <el-input v-model.number="data.score" size="mini"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
-        <span> 分 共 {{data.sum}} 分 </span>
-        <span class="add_groupTopic" @click="topicDetailAdd(data)">+ 添加小题空格</span>
-        <i class="el-icon-delete" @click="hanldeSubtopicDel(data)" ></i>
+        <span @click.stop="clickFun">题 {{data.topic}} 共 </span>
+        <el-input v-model.number="data.space" size="mini" @click.stop.native="clickFun"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+        <span @click.stop="clickFun"> 空 每空 </span>
+        <el-input v-model.number="data.score" size="mini" @click.stop.native="clickFun"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+        <span @click.stop="clickFun"> 分 共 {{data.sum}} 分 </span>
+        <span class="add_groupTopic" @click.stop="topicDetailAdd(data)">+ 添加小题空格</span>
+        <i class="el-icon-delete" @click.stop="hanldeSubtopicDel(data)" ></i>
       </div>
     </template>
     <space-group-item
@@ -65,7 +65,8 @@ export default {
     topicDetailAdd (obj) {
       // 添加小题空格数
       this.$emit('topic-detail-add', obj)
-    }
+    },
+    clickFun () { }
   },
 
 }

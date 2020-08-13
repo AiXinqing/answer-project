@@ -2,7 +2,7 @@
   <div class="big-item">
     <span>从</span>
     <!-- @keyup.native.stop="isVerifi" -->
-    <el-input v-model.number="data.start" size="mini" @blur="groupTopicHanlde"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
+    <el-input v-model.number="data.start" size="mini" @blur="groupTopicHanlde"   onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
     <span>题到</span>
     <el-input v-model.number="data.end" size="mini" @blur="groupTopicHanlde"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
     <span>题,每空</span>
@@ -135,7 +135,8 @@ export default {
     hanldeDel (id) {
       // 题组删除
       this.$emit('hanlde-del-group', id)
-    }
+    },
+    clickFun () { }
   },
 }
 </script>
