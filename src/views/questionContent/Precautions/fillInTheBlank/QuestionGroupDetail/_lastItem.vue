@@ -8,7 +8,7 @@
             <span @click.stop="clickFun"> 空 每空 </span>
             <el-input v-model.number="subData.score" size="mini" @click.stop.native="clickFun" @blur="ChangeSpaceValue"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
             <span @click.stop="clickFun"> 分 共 {{subData.sum}} 分 </span>
-            <i class="el-icon-del" @click.stop="hanldeSubtopicDel(data)" ></i>
+            <i class="el-icon-circle-clos" @click.stop="hanldeLastTopicDel(subData)" >删除</i>
           </div>
         </div>
       </template>
@@ -68,7 +68,10 @@ export default {
     clickFun () {
 
     },
-    ChangeSpaceValue () { }
+    ChangeSpaceValue () { },
+    hanldeLastTopicDel (obj) {
+      this.$emit('hanlde-last-topic-del', obj)
+    }
   },
 }
 </script>
@@ -80,5 +83,13 @@ export default {
 }
 .sub-item-group .el-input--mini {
   width: 48px;
+}
+.el-icon-circle-clos {
+  position: absolute;
+  right: 40px;
+  top: 17px;
+  font-size: 12px;
+  cursor: pointer;
+  color: #1ab394;
 }
 </style>

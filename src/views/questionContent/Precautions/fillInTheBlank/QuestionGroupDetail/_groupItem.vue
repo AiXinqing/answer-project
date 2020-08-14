@@ -4,7 +4,7 @@
     <template slot="title">
       <div class="space_group_list">
         <span @click.stop="clickFun">题 {{data.topic}} 共 </span>
-        <span v-if=" data.childGroup == undefined">
+        <span v-if=" data.childGroup == undefined || data.childGroup.length <= 0">
           <el-input v-model.number="data.space" size="mini" @click.stop.native="clickFun" @blur="ChangeSpaceValue"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
           <span @click.stop="clickFun"> 空 每空 </span>
           <el-input v-model.number="data.score" size="mini" @click.stop.native="clickFun" @blur="ChangeSpaceValue"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
@@ -19,6 +19,7 @@
       :is="isComponent"
       :sub-item-data="GroupSmallTopic"
       :sub-child-data="data.childGroup"
+      @hanlde-last-topic-del="hanldeLastTopicDel"
     />
   </el-collapse-item>
 </template>
@@ -54,7 +55,7 @@ export default {
       return arr
     },
     isComponent () {
-      return this.data.childGroup == undefined ? subItem : lastGroupItem
+      return this.data.childGroup == undefined || this.data.childGroup.length <= 0 ? subItem : lastGroupItem
     }
   },
   watch: {
@@ -80,7 +81,11 @@ export default {
     ChangeSpaceValue () {
       this.$emit('change-space-value', this.data)
     },
-    clickFun () { }
+    clickFun () { },
+    hanldeLastTopicDel (obj) {
+      // 删除小题last题组item
+      this.$emit('hanlde-last-topic-del', obj)
+    }
   },
 
 }

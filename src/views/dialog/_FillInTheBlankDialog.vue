@@ -36,6 +36,7 @@
         @hanlde-subtopic-del="hanldeSubtopicDel"
         @topic-detail-add="topicDetailAdd"
         @change-space-value="ChangeSpaceValue"
+        @hanlde-last-topic-del="hanldeLastTopicDel"
       />
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
@@ -298,11 +299,12 @@ export default {
         let changeItem = {}
         if (index > -1) {
           let subObj = {
+            fid: childItem.pid,
             pid: childItem.id,
             id: 'subTopic_' + +new Date(),
             space: 1,
             sum: 1,
-            score: childItem.score,
+            score: 1,
           }
           if (childItem.childGroup != undefined) {
             changeItem = {
@@ -347,6 +349,35 @@ export default {
 
       }
     },
+    hanldeLastTopicDel (obj) {
+      // 删除小题last题组item
+      let group = this.spaceTopic.group // 找到题组
+      const i = group.findIndex(item => item.id === obj.fid)
+      let questionArr = group[i]
+      if (i > -1) { // 找到小题
+        const a = questionArr.childGroup.findIndex(row => row.id === obj.pid)
+        let topicGroupArr = questionArr.childGroup[a]
+        if (a > -1) { // 找到小题题空
+
+          const index = topicGroupArr.childGroup.findIndex(row => row.id === obj.id)
+          let lastObj = topicGroupArr.childGroup[index]
+          if (index > -1) {
+            let subObj = { // 小题
+              ...topicGroupArr,
+              space: topicGroupArr.space - 1,
+              sum: topicGroupArr.sum - lastObj.space * lastObj.score
+            }
+            questionArr.childGroup.splice(a, 1, subObj) // 替换被改变的小题
+
+            topicGroupArr.childGroup.splice(index, 1)
+          }
+        }
+        console.log(topicGroupArr)
+      }
+
+      console.log(questionArr)
+
+    }
   },
 }
 </script>

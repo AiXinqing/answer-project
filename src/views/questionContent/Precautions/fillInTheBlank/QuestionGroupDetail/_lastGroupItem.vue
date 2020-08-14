@@ -5,6 +5,7 @@
       :key="i"
       :sub-item-info="item"
       :number="i +1"
+      @hanlde-last-topic-del="hanldeLastTopicDel"
     />
   </el-collapse>
 </template>
@@ -24,6 +25,11 @@ export default {
   data () {
     return {
       data: {}
+    }
+  },
+  methods: {
+    hanldeLastTopicDel (obj) {
+      this.$emit('hanlde-last-topic-del', obj)
     }
   },
 }

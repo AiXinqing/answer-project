@@ -19,6 +19,7 @@
           @hanlde-subtopic-del="hanldeSubtopicDel"
           @topic-detail-add="topicDetailAdd"
           @change-space-value="ChangeSpaceValue"
+          @hanlde-last-topic-del="hanldeLastTopicDel"
         />
       </el-collapse>
     </div>
@@ -90,6 +91,10 @@ export default {
       // 分值分数修改
       this.$emit('change-space-value', obj)
     },
+    hanldeLastTopicDel (obj) {
+      // 删除小题last题组item
+      this.$emit('hanlde-last-topic-del', obj)
+    }
   },
 }
 </script>
