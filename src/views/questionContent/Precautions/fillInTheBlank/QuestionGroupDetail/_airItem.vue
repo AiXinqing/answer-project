@@ -3,7 +3,7 @@
       <span>第</span>
       <span> {{ number }} </span>
       <span> 空 </span>
-      <el-input v-model.number="SmallTopic.score" size="mini" @blur="changeLastSubTopicScore(SmallTopic)" @click.stop.native="clickFun"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+      <el-input v-model.number="score" size="mini" @blur="changeLastSubTopicScore(SmallTopic)" @click.stop.native="clickFun"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
       <span>分</span>
     </div>
 </template>
@@ -17,12 +17,14 @@ export default {
     },
     number: {
       type: Number,
-      default: 1
+      default: 1,
+      oldObj: {}
     }
   },
   data () {
     return {
-      SmallTopic: {}
+      SmallTopic: {},
+      score: this.GroupSmallTopic.score
     }
   },
   watch: {
@@ -33,12 +35,19 @@ export default {
       }
     }
   },
+  mounted () {
+    this.oldObj = JSON.parse(JSON.stringify(this.SmallTopic));
+  },
   methods: {
     clickFun () {
 
     },
     changeLastSubTopicScore (obj) {
-      this.$emit('change-last-sub-topic-score', obj)
+      let newObj = {
+        ...obj,
+        score: this.score
+      }
+      this.$emit('change-last-sub-topic-score', newObj, this.oldObj)
     }
   },
 }

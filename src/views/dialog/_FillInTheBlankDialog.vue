@@ -107,7 +107,6 @@ export default {
           ...this.spaceTopic,
           group: this.spaceTopic.group.sort((a, b) => { return a.start - b.start })
         }
-
       }
     }
   },
@@ -346,8 +345,6 @@ export default {
           }
           questionArr.childGroup.splice(index, 1, objItem)
         }
-
-
       }
     },
     hanldeLastTopicDel (obj) {
@@ -376,9 +373,33 @@ export default {
       }
 
     },
-    changeLastSubTopicScore (obj) {
+    changeLastSubTopicScore (obj, oldObj) {
       // last-sub分值改变
-      console.log(obj)
+
+      let group = this.spaceTopic.group
+
+      let gid = obj.fid == undefined ? obj.pid : obj.fid
+      let sid = obj.fid == undefined ? obj.id : obj.pid
+
+      const i = group.findIndex(item => item.id === gid)
+      let questionArr = group[i]
+
+      if (i > -1) {
+        const a = questionArr.childGroup.findIndex(row => row.id === sid)
+        let subObj = questionArr.childGroup[a]
+        if (a > -1) {
+
+          if (obj.fid == undefined) {
+            let sums = subObj.sum - oldObj.score + obj.score
+
+            let last = { ...subObj, sum: sums }
+
+            questionArr.childGroup.splice(a, 1, last)
+          }
+        }
+      }
+
+
     }
   },
 }

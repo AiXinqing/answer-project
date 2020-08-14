@@ -23,8 +23,8 @@ export default {
     },
   },
   methods: {
-    changeLastSubTopicScore (obj) {
-      this.$emit('change-last-sub-topic-score', obj)
+    changeLastSubTopicScore (obj, oldObj) {
+      this.$emit('change-last-sub-topic-score', obj, oldObj)
     }
   },
 }
