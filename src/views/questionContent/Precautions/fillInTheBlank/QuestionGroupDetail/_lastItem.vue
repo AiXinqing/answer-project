@@ -53,7 +53,6 @@ export default {
       for (let i = 0; i < space; i++) {
         arr.push({ ...changeObj, subItemInfo: i })
       }
-      console.log(arr)
       return arr
     },
   },

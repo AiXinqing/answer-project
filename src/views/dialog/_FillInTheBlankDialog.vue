@@ -301,7 +301,7 @@ export default {
           let subObj = {
             fid: childItem.pid,
             pid: childItem.id,
-            id: 'subTopic_' + +new Date(),
+            id: 'subLastTopic_' + +new Date(),
             space: 1,
             sum: 1,
             score: 1,
@@ -311,14 +311,14 @@ export default {
               ...childItem,
               space: childItem.space + 1,
               sum: childItem.score * (childItem.space + 1),
-              childGroup: [...childItem.childGroup, subObj]
+              childGroup: [...childItem.childGroup, { ...subObj, id: 'subLastTopic_' + +new Date() }]
             }
           } else {
             changeItem = {
               ...childItem,
               space: 1,
               sum: 1,
-              childGroup: [subObj]
+              childGroup: [{ ...subObj }]
             }
           }
 
@@ -388,13 +388,20 @@ export default {
         const a = questionArr.childGroup.findIndex(row => row.id === sid)
         let subObj = questionArr.childGroup[a]
         if (a > -1) {
-
           if (obj.fid == undefined) {
             let sums = subObj.sum - oldObj.score + obj.score
-
             let last = { ...subObj, sum: sums }
-
             questionArr.childGroup.splice(a, 1, last)
+          } else {
+            const index = subObj.childGroup.findIndex(row => row.id === obj.id)
+            let subLast = subObj.childGroup[index]
+            if (index > -1) {
+              let subLastSum = subLast.sum - oldObj.score + obj.score
+              console.log(subLastSum)
+              let subLastItem = { ...subLast, sum: subLastSum }
+              subObj.childGroup.splice(a, 1, subLastItem)
+              console.log(subObj)
+            }
           }
         }
       }

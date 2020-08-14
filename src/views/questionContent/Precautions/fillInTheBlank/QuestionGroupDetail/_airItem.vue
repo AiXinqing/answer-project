@@ -32,12 +32,11 @@ export default {
       immediate: true,
       handler () {
         this.SmallTopic = { ...this.GroupSmallTopic }
+        this.oldObj = JSON.parse(JSON.stringify(this.GroupSmallTopic));
       }
     }
   },
-  mounted () {
-    this.oldObj = JSON.parse(JSON.stringify(this.SmallTopic));
-  },
+
   methods: {
     clickFun () {
 
