@@ -6,6 +6,7 @@
       :sub-item-info="item"
       :number="i +1"
       @hanlde-last-topic-del="hanldeLastTopicDel"
+      @change-last-sub-topic-score="changeLastSubTopicScore"
     />
   </el-collapse>
 </template>
@@ -30,6 +31,10 @@ export default {
   methods: {
     hanldeLastTopicDel (obj) {
       this.$emit('hanlde-last-topic-del', obj)
+    },
+    changeLastSubTopicScore (obj) {
+      // last-sub分值改变
+      this.$emit('change-last-sub-topic-score', obj)
     }
   },
 }

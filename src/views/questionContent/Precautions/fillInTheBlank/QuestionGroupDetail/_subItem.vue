@@ -5,6 +5,7 @@
       :key="index"
       :group-small-topic="item"
       :number="index + 1"
+      @change-last-sub-topic-score="changeLastSubTopicScore"
     />
   </div>
 </template>
@@ -20,6 +21,11 @@ export default {
       type: Array,
       default: () => []
     },
+  },
+  methods: {
+    changeLastSubTopicScore (obj) {
+      this.$emit('change-last-sub-topic-score', obj)
+    }
   },
 }
 </script>

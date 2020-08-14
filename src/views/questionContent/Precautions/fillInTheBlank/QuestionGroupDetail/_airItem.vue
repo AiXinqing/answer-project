@@ -3,7 +3,7 @@
       <span>第</span>
       <span> {{ number }} </span>
       <span> 空 </span>
-      <el-input v-model.number="SmallTopic.score" size="mini" @blur="ChangeSpaceValue(SmallTopic)" @click.stop.native="clickFun"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+      <el-input v-model.number="SmallTopic.score" size="mini" @blur="changeLastSubTopicScore(SmallTopic)" @click.stop.native="clickFun"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
       <span>分</span>
     </div>
 </template>
@@ -37,8 +37,8 @@ export default {
     clickFun () {
 
     },
-    ChangeSpaceValue (obj) {
-      console.log(obj)
+    changeLastSubTopicScore (obj) {
+      this.$emit('change-last-sub-topic-score', obj)
     }
   },
 }

@@ -37,6 +37,7 @@
         @topic-detail-add="topicDetailAdd"
         @change-space-value="ChangeSpaceValue"
         @hanlde-last-topic-del="hanldeLastTopicDel"
+        @change-last-sub-topic-score="changeLastSubTopicScore"
       />
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
@@ -374,6 +375,10 @@ export default {
         }
       }
 
+    },
+    changeLastSubTopicScore (obj) {
+      // last-sub分值改变
+      console.log(obj)
     }
   },
 }

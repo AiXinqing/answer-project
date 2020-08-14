@@ -20,6 +20,7 @@
       :sub-item-data="GroupSmallTopic"
       :sub-child-data="data.childGroup"
       @hanlde-last-topic-del="hanldeLastTopicDel"
+      @change-last-sub-topic-score="changeLastSubTopicScore"
     />
   </el-collapse-item>
 </template>
@@ -85,6 +86,10 @@ export default {
     hanldeLastTopicDel (obj) {
       // 删除小题last题组item
       this.$emit('hanlde-last-topic-del', obj)
+    },
+    changeLastSubTopicScore (obj) {
+      // last-sub分值改变
+      this.$emit('change-last-sub-topic-score', obj)
     }
   },
 

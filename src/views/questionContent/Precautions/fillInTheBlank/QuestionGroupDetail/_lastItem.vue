@@ -17,6 +17,7 @@
           v-for="(item, index) in GroupSmallTopic"
           :key="index"
           :group-small-topic="item"
+          @change-last-sub-topic-score="changeLastSubTopicScore"
         />
       </div>
     </el-collapse-item>
@@ -71,6 +72,10 @@ export default {
     ChangeSpaceValue () { },
     hanldeLastTopicDel (obj) {
       this.$emit('hanlde-last-topic-del', obj)
+    },
+    changeLastSubTopicScore (obj) {
+      // last-sub分值改变
+      this.$emit('change-last-sub-topic-score', obj)
     }
   },
 }
