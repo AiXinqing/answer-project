@@ -116,7 +116,7 @@ export default {
             space: this.data.space,
             start: this.data.start,
             pid: this.data.id,
-            id: `${this.data.id}_${+new Date()}`,
+            id: `${this.data.id}_${+new Date()}_${index}`,
             topic: index,
             sum: this.data.score * this.data.space,
           })

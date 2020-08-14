@@ -252,7 +252,7 @@ export default {
         }
         this.spaceTopic.group = this.spaceTopic.group.sort((a, b) => { return a.start - b.start })
       })
-      // console.log(this.spaceTopic.group)
+
     },
     SplitArrObject (arrParameter, groupObj) {
       // 生成数组对象
@@ -270,6 +270,7 @@ export default {
             sum: groupObj.score * groupObj.space,
             topic: item,
             subtopic: 1,
+            childGroup: [],
           })
         })
         let obj = {
@@ -292,7 +293,6 @@ export default {
       let group = this.spaceTopic.group
       const i = group.findIndex(item => item.id === obj.pid)
       let questionArr = group[i]
-
       if (i > -1) {
         const index = questionArr.childGroup.findIndex(row => row.id === obj.id)
         let childItem = questionArr.childGroup[index]
@@ -372,10 +372,7 @@ export default {
             topicGroupArr.childGroup.splice(index, 1)
           }
         }
-        console.log(topicGroupArr)
       }
-
-      console.log(questionArr)
 
     }
   },
