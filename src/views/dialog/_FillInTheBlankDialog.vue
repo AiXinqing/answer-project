@@ -102,7 +102,8 @@ export default {
       immediate: true,
       handler () {
         this.objectiveData = {
-          ...this.spaceTopic
+          ...this.spaceTopic,
+          group: this.spaceTopic.group.sort((a, b) => { return a.start - b.start })
         }
 
       }
@@ -202,9 +203,9 @@ export default {
       // 删除小题
       let group = this.spaceTopic.group
       const index = group.findIndex(item => item.id === obj.pid)
-      // console.log(group)
-      // console.log(obj.pid)
-      // console.log(index)
+      console.log(group)
+      console.log(obj.pid)
+      console.log(index)
       let groupObj = JSON.parse(JSON.stringify(group[index]))
 
       let arr = []
@@ -243,12 +244,14 @@ export default {
       let SplitCombine = []
       SplitCombine.push(this.SplitArrObject(FirstHalf, groupObj))
       SplitCombine.push(this.SplitArrObject(SecondHalf, groupObj))
+      SplitCombine = SplitCombine.sort((a, b) => { return a.start - b.start })
       SplitCombine.forEach(item => {
         if (item.start != undefined) {
-          this.spaceTopic.group.push(JSON.parse(JSON.stringify(item)))
+          this.spaceTopic.group.push(item)
         }
+        this.spaceTopic.group = this.spaceTopic.group.sort((a, b) => { return a.start - b.start })
       })
-
+      // console.log(this.spaceTopic.group)
     },
     SplitArrObject (arrParameter, groupObj) {
       // 生成数组对象
