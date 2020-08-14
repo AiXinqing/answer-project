@@ -6,7 +6,7 @@
     <div class="basis_checkbox">
       <el-checkbox v-model="checked">分区答题卡</el-checkbox>
     </div>
-    <div class="basis_checkbox basic_btn">
+    <div class="basis_checkbox basic_btn" style="padding-left:5px">
       <el-button @click="questionDialog">客观题</el-button>
       <el-button @click="fillInTheBlank">填空题</el-button>
       <el-button>解答题</el-button>
@@ -15,7 +15,7 @@
       <el-button>作文(语)</el-button>
       <el-button>非作答</el-button>
     </div>
-    <div class="basis_checkbox basic_btn">
+    <div class="basis_checkbox basic_btn save-btn">
       <el-button type="primary">预览</el-button>
       <el-button type="primary">保存</el-button>
       <el-button type="primary">下载</el-button>
@@ -104,5 +104,17 @@ export default {
 }
 .el-checkbox__input.is-checked + .el-checkbox__label {
   color: @main !important;
+}
+.el-button + .el-button {
+  margin-left: 0;
+}
+button.el-button.el-button--default.el-button--medium {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+.basis_checkbox.basic_btn.save-btn {
+  .el-button + .el-button {
+    margin-left: 10px;
+  }
 }
 </style>
