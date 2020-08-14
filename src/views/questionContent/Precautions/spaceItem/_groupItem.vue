@@ -4,28 +4,35 @@
     <template slot="title">
       <div class="space_group_list">
         <span @click.stop="clickFun">题 {{data.topic}} 共 </span>
-        <el-input v-model.number="data.space" size="mini" @click.stop.native="clickFun" @blur="ChangeSpaceValue"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
-        <span @click.stop="clickFun"> 空 每空 </span>
-        <el-input v-model.number="data.score" size="mini" @click.stop.native="clickFun" @blur="ChangeSpaceValue"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
-        <span @click.stop="clickFun"> 分 共 {{data.sum}} 分 </span>
-        <span class="add_groupTopic" @click.stop="topicDetailAdd(data)">+ 添加小题空格</span>
-        <i class="el-icon-delete" @click.stop="hanldeSubtopicDel(data)" ></i>
+        <span v-if=" data.childGroup == undefined">
+          <el-input v-model.number="data.space" size="mini" @click.stop.native="clickFun" @blur="ChangeSpaceValue"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+          <span @click.stop="clickFun"> 空 每空 </span>
+          <el-input v-model.number="data.score" size="mini" @click.stop.native="clickFun" @blur="ChangeSpaceValue"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+          <span @click.stop="clickFun"> 分 共 {{data.sum}} 分 </span>
+        </span>
+        <span v-else>{{data.sum}} 分</span>
+        <span class="add_groupTopic" @click.stop="topicDetailAdd(data)">+ 添加小题</span>
+        <i class="el-icon-del" @click.stop="hanldeSubtopicDel(data)" ></i>
       </div>
     </template>
-    <space-group-item
+    <component
+      :is="isComponent"
       v-for="(item,index) in GroupSmallTopic"
       :key="index"
       :group-small-topic="item"
       :number="index + 1"
+      :sub-child-data="data.childGroup"
     />
   </el-collapse-item>
 </template>
 
 <script>
 import spaceGroupItem from './_spaceGroupItem'
+import subGroupItem from './_subGroupItem' // 小题详情下小题组
 export default {
   components: {
     spaceGroupItem,
+    subGroupItem,
   },
   props: {
     smallTopic: {
@@ -48,6 +55,9 @@ export default {
         arr.push({ ...changeObj, smallTopic: i })
       }
       return arr
+    },
+    isComponent () {
+      return this.data.child != undefined ? subGroupItem : spaceGroupItem
     }
   },
   watch: {
@@ -98,11 +108,24 @@ export default {
   font-size: 16px;
   margin-left: 50px;
   color: @main;
+  position: absolute;
+  right: 80px;
 }
-i.el-icon-delete {
+i.el-icon-del {
   margin-left: 30px;
+  position: absolute;
+  right: 50px;
+  background-color: #1ab394;
+  font-size: 12px;
+  width: 12px;
+  height: 1px;
+  top: 6px;
+  margin: 20px 0;
 }
 .el-collapse-item__content {
-  padding-bottom: 10px !important;
+  padding-bottom: 0px !important;
+}
+.el-collapse-item__header {
+  position: relative;
 }
 </style>
