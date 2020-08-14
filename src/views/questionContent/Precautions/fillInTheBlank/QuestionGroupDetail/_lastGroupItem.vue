@@ -4,6 +4,7 @@
       v-for="(item,i) in subChildData"
       :key="i"
       :sub-item-info="item"
+      :number="i +1"
     />
   </el-collapse>
 </template>

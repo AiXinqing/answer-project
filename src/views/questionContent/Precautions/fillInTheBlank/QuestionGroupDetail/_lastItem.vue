@@ -3,7 +3,7 @@
       <template slot="title">
         <div class="Sub-question-group">
           <div class="sub-item-group">
-            <span @click.stop="clickFun">(1) 共</span>
+            <span @click.stop="clickFun">({{number}}) 共</span>
             <el-input v-model.number="subData.space" size="mini" @click.stop.native="clickFun" @blur="ChangeSpaceValue"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
             <span @click.stop="clickFun"> 空 每空 </span>
             <el-input v-model.number="subData.score" size="mini" @click.stop.native="clickFun" @blur="ChangeSpaceValue"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
@@ -15,7 +15,7 @@
         <air-item
           v-for="(item, index) in GroupSmallTopic"
           :key="index"
-          :small-topic="item"
+          :group-small-topic="item"
         />
       </div>
     </el-collapse-item>
@@ -32,6 +32,10 @@ export default {
       type: Object,
       default: () => { }
     },
+    number: {
+      type: Number,
+      default: 1
+    }
   },
   data () {
     return {
@@ -52,10 +56,10 @@ export default {
     },
   },
   watch: {
-    smallTopic: {
+    subItemInfo: {
       immediate: true,
       handler () {
-        this.subData = { ...this.smallTopic }
+        this.subData = { ...this.subItemInfo }
       }
     }
   },

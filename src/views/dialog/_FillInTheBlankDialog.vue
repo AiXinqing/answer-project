@@ -302,6 +302,7 @@ export default {
             id: 'subTopic_' + +new Date(),
             space: 1,
             sum: 1,
+            score: childItem.score,
           }
           if (childItem.childGroup != undefined) {
             changeItem = {
