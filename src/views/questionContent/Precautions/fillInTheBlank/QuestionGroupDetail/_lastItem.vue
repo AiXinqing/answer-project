@@ -12,23 +12,20 @@
         </div>
       </template>
       <div class="space_group_item">
-        <group-item
-          v-for="(item, index) in groupItemData"
+        <air-item
+          v-for="(item, index) in GroupSmallTopic"
           :key="index"
           :small-topic="item"
-          @hanlde-subtopic-del="hanldeSubtopicDel"
-          @topic-detail-add="topicDetailAdd"
-          @change-space-value="ChangeSpaceValue"
         />
       </div>
     </el-collapse-item>
 </template>
 
 <script>
-import groupItem from './_groupItem'
+import airItem from './_airItem'
 export default {
   components: {
-    groupItem
+    airItem
   },
   props: {
     subItemInfo: {
@@ -50,6 +47,7 @@ export default {
       for (let i = 0; i < space; i++) {
         arr.push({ ...changeObj, subItemInfo: i })
       }
+      console.log(arr)
       return arr
     },
   },
@@ -71,4 +69,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.el-collapse-item__header {
+  height: auto;
+  min-height: 48px;
+}
+.sub-item-group .el-input--mini {
+  width: 48px;
+}
 </style>

@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import spaceItem from './spaceItem/_item'
-import groupItem from './spaceItem/_groupItem.vue'
+import spaceItem from './fillInTheBlank/_item'
+import groupItem from './fillInTheBlank/QuestionGroupDetail/_groupItem'
 export default {
   components: {
     spaceItem,

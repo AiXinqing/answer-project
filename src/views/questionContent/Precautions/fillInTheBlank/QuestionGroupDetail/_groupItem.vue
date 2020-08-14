@@ -17,22 +17,19 @@
     </template>
     <component
       :is="isComponent"
-      v-for="(item,index) in GroupSmallTopic"
-      :key="index"
-      :group-small-topic="item"
-      :number="index + 1"
+      :sub-item-data="GroupSmallTopic"
       :sub-child-data="data.childGroup"
     />
   </el-collapse-item>
 </template>
 
 <script>
-import spaceGroupItem from './_spaceGroupItem'
-import subGroupItem from './_subGroupItem' // 小题详情下小题组
+import subItem from './_subItem' // 空
+import lastGroupItem from './_lastGroupItem' // 小题详情下小题组
 export default {
   components: {
-    spaceGroupItem,
-    subGroupItem,
+    subItem,
+    lastGroupItem,
   },
   props: {
     smallTopic: {
@@ -57,7 +54,7 @@ export default {
       return arr
     },
     isComponent () {
-      return this.data.child != undefined ? subGroupItem : spaceGroupItem
+      return this.data.childGroup == undefined ? subItem : lastGroupItem
     }
   },
   watch: {
@@ -93,6 +90,9 @@ export default {
 @import '~@/assets/css/variables.less';
 .space_group_item {
   text-align: center;
+  &:last-child {
+    margin-bottom: 10px;
+  }
 }
 .space_group_item .el-input--mini {
   width: 48px;
@@ -127,5 +127,6 @@ i.el-icon-del {
 }
 .el-collapse-item__header {
   position: relative;
+  min-height: 48px;
 }
 </style>

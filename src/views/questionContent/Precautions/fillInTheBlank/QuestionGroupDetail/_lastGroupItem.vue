@@ -1,6 +1,6 @@
 <template>
   <el-collapse class="el-collapse-sub">
-    <sub-collapse-item
+    <last-item
       v-for="(item,i) in subChildData"
       :key="i"
       :sub-item-info="item"
@@ -9,10 +9,10 @@
 </template>
 
 <script>
-import subCollapseItem from './_subCollapseItem'
+import lastItem from './_lastItem'
 export default {
   components: {
-    subCollapseItem,
+    lastItem,
   },
   props: {
     subChildData: {

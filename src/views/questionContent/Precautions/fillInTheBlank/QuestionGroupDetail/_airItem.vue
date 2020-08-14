@@ -40,7 +40,8 @@ export default {
 .space_group_item {
   margin-bottom: 10px;
 }
-.space_group_item:last-child {
-  margin-bottom: 0;
+
+.space_group_item .el-input--mini {
+  width: 48px;
 }
 </style>

@@ -287,7 +287,7 @@ export default {
       }
     },
     topicDetailAdd (obj) {
-      // 添加小题空格数
+      // 添加小题
       let group = this.spaceTopic.group
       const i = group.findIndex(item => item.id === obj.pid)
       let questionArr = group[i]
@@ -297,11 +297,28 @@ export default {
         let childItem = questionArr.childGroup[index]
         let changeItem = {}
         if (index > -1) {
-          changeItem = {
-            ...childItem,
-            space: childItem.space + 1,
-            sum: childItem.score * (childItem.space + 1),
+          let subObj = {
+            pid: childItem.id,
+            id: 'subTopic_' + +new Date(),
+            space: 1,
+            sum: 1,
           }
+          if (childItem.childGroup != undefined) {
+            changeItem = {
+              ...childItem,
+              space: childItem.space + 1,
+              sum: childItem.score * (childItem.space + 1),
+              childGroup: [...childItem.childGroup, subObj]
+            }
+          } else {
+            changeItem = {
+              ...childItem,
+              space: 1,
+              sum: 1,
+              childGroup: [subObj]
+            }
+          }
+
           questionArr.childGroup.splice(index, 1, changeItem)
         }
 
