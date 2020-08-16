@@ -93,6 +93,7 @@ const state = {
   currentQuestion: 1,
   letterArr: ['A', 'B', 'C', 'D', 'E', 'G', 'H', 'I', 'J', 'K'],
   maxTopic: 100, // 最大题数
+  determineTopic: [], // 确定下的小题
 }
 
 const mutations = {
@@ -150,6 +151,9 @@ const mutations = {
 
     })
   },
+  Empty_AlreadyTopics: (state) => { // 清空数据
+    state.AlreadyTopics = []
+  },
   set_currentQuestion: (state) => {
 
     for (let i = 1; i < state.maxTopic; i++) { //
@@ -168,6 +172,16 @@ const mutations = {
     state.AlreadyTopics.forEach((item, i) => {
       if (item.subtopic != null || item.subtopic != undefined) {
         state.AlreadyTopics.splice(i, 1)
+      }
+    })
+  },
+  set_determineTopic: (state, Arr) => { // 添加确定值
+    Arr.forEach(item => {
+      const index = state.determineTopic.findIndex(row => row.topic === item.topic)
+      if (index > -1) {
+        state.determineTopic.splice(index, 1, item)
+      } else {
+        state.determineTopic.push(item)
       }
     })
   }

@@ -113,7 +113,8 @@ export default {
       'options',
       'AlreadyTopics',
       'currentQuestion',
-      'letterArr'
+      'letterArr',
+      'determineTopic'
     ]),
     ...mapState('pageContent', ['pageData', 'pageLayout']),
     pageWidth () {
@@ -147,16 +148,23 @@ export default {
       'set_closeFrame',
       'Add_AlreadyTopics', // 小题数组
       'del_AlreadyTopics', // 删除题组-小题
+      'set_determineTopic', // 储存确定题型
+      'Empty_AlreadyTopics', // 清空
     ]),
     ...mapMutations('pageContent', ['initPageData', 'amendPageData']),
-    closeFrame () {
+    closeFrame () { // 取消弹框
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
       this.set_closeFrame(this.quesctionObj.startQuestion)
       this.openedFrame = false
+      // this.determineTopic
+      this.Empty_AlreadyTopics() // 清空
+      this.Add_AlreadyTopics(this.determineTopic)
     },
     opened () {
       this.openedFrame = true
       this.set_currentQuestion()
+      this.Empty_AlreadyTopics() // 清空
+      this.Add_AlreadyTopics(this.determineTopic)
     },
     openedEdit (id) {
       let current = this.pageData.filter(item => item.id === id)
@@ -177,6 +185,7 @@ export default {
       const judgmentArr = this.traverse(judgment, this.letterArr)
       //------------------xiao题号数组-------------------------
       this.topicList = [...singleArr, ...checkArr, ...judgmentArr]
+      this.set_determineTopic(this.topicList) // 储存确实题型
 
       //-------------------------------------------
       let result = [];

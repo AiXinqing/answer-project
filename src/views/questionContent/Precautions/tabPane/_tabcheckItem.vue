@@ -49,10 +49,10 @@ export default {
       if(AlreadyTopics.length > 0){
         let numStart = AlreadyTopics.findIndex(item => item.topic == itemStart)
         let numEnd = AlreadyTopics.findIndex(item => item.topic == itemEnd)
-          if (numStart > -1 && AlreadyTopics[numStart] == this.data) {
+          if (numStart > -1 &&  AlreadyTopics[numStart].pid != this.data.id) {
             strStart = `${itemStart}题已经存在，请勿重复添加`
           }
-          if (numEnd > -1 &&  AlreadyTopics[numStart] == this.data) {
+          if (numEnd > -1 &&  AlreadyTopics[numEnd].pid != this.data.id) {
             strEnd = `${itemEnd}题已经存在，请勿重复添加`
           }
       }
@@ -74,12 +74,12 @@ export default {
       if(AlreadyTopics.length > 0){
         let numStart = AlreadyTopics.findIndex(item => item.topic == itemStart)
         let numEnd = AlreadyTopics.findIndex(item => item.topic == itemEnd)
-          if (numStart > -1 && AlreadyTopics[numStart] == this.data) {
-          strStart = `${itemStart}题已经存在，请勿重复添加`
-        }
-        if (numEnd > -1 &&  AlreadyTopics[numStart] == this.data) {
-          strEnd = `${itemEnd}题已经存在，请勿重复添加`
-        }
+          if (numStart > -1 &&  AlreadyTopics[numStart].pid != this.data.id) {
+            strStart = `${itemStart}题已经存在，请勿重复添加`
+          }
+          if (numEnd > -1 &&  AlreadyTopics[numEnd].pid != this.data.id) {
+            strEnd = `${itemEnd}题已经存在，请勿重复添加`
+          }
       }
       return itemStart == 0 && itemEnd != null ? true :
         itemEnd < itemStart && itemEnd != null ? true :
