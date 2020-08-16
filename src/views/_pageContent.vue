@@ -34,6 +34,7 @@
 import { mapState, mapActions } from 'vuex'
 import AnswerSheetTitle from './questionContent/_answerSheetTitle' // 答题卡标题
 import ObjectiveQuestion from './questionContent/_ObjectiveQuestion' // 客观题
+import FillInTheBlank from './questionContent/_FillInTheBlank' // 填空题
 import columnDialog from './dialog/_studentColumnDialog'
 import AdmissionNumberDialog from './dialog/_AdmissionNumberDialog'
 import questionDialog from './dialog/_questionData'
@@ -44,7 +45,8 @@ export default {
     ObjectiveQuestion,
     columnDialog,
     AdmissionNumberDialog,
-    questionDialog
+    questionDialog,
+    FillInTheBlank
   },
   data () {
     return {
@@ -126,7 +128,7 @@ export default {
       if (currentPage.height) {
         results.push(currentPage.rects)
       }
-      console.log(results)
+      // console.log(results)
       return results
     },
     currentQuestionHanldeEdit (id) {

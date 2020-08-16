@@ -1,9 +1,10 @@
 import axios from 'axios'
 
 const state = {
-  pageLayout: {},
+  pageLayout: {}, // 页面布局
   pageData: [],
-  page_size: 1160
+  page_size: 1160, // 一页高度
+  BigQuestion: null, // 大题题号
 }
 
 const mutations = {
@@ -13,10 +14,9 @@ const mutations = {
   initPageData: (state, Arr) => {
     state.pageData.push(Arr)
   },
-  amendPageData: (state, ArrItem) => {
+  amendPageData: (state, ArrItem) => { // 编辑page-data
 
     const index = state.pageData.findIndex((itme) => itme.id === ArrItem.id)
-    console.log(index)
     if (index > -1) {
       state.pageData.splice(index, 1, ArrItem)
     }

@@ -1,9 +1,7 @@
 <template>
+<!-- 选这题 -->
   <div class="question-info">
     <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
-      <!-- <span>{{numberTitle}}.</span>
-      <span>{{data.topic}}</span>
-      <span>({{data.totalScore}}分)</span> -->
       <div v-html="cotent"></div>
     </div>
     <quill-editor
@@ -61,8 +59,8 @@ export default {
     return {
       data: {},
       //TopicContent:'',
-      isEditor:false,
-      cotent:''
+      isEditor: false,
+      cotent: ''
     }
   },
   computed: {
@@ -85,7 +83,7 @@ export default {
       //--------------------------------------------------------
       return topicList
     },
-    groupData(){
+    groupData () {
       let result = [];
       for (var i = 0; i < this.topicBox.length; i += this.data.rows) {
         result.push(this.topicBox.slice(i, i + this.data.rows));
@@ -105,7 +103,7 @@ export default {
         }
       }
     },
-    TopicContent:{
+    TopicContent: {
       immediate: true,
       handler () {
         this.cotent = this.TopicContent
@@ -117,17 +115,17 @@ export default {
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
-      ]),
+    ]),
     traverse (Arr, letterArr) {
       if (Arr.length > 0) {
         let data = []
         Arr.forEach(item => {
 
-          item.childGroup.forEach(row =>{
+          item.childGroup.forEach(row => {
             let obj = {
               ...row,
-              selectBox:row.select == 2 && row.id.indexOf('judgment') != -1 ? ['T', 'F'] : letterArr.slice(0, row.select),
-              width:row.select * 26 + 42
+              selectBox: row.select == 2 && row.id.indexOf('judgment') != -1 ? ['T', 'F'] : letterArr.slice(0, row.select),
+              width: row.select * 26 + 42
             }
             data.push(obj)
           })
@@ -140,19 +138,19 @@ export default {
     },
     delHanlde (id) { // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === id)
-      if(index  > -1){
+      if (index > -1) {
         this.del_AlreadyTopics(this.topicBox)
         this.delPageData(index)
-         this.set_currentQuestion()
+        this.set_currentQuestion()
       }
     },
     currentQuestionHanldeEdit (id) {
       this.$emit('current-question-hanlde-edit', id)
     },
-    hanldeEditor(){
+    hanldeEditor () {
       this.isEditor = true
     },
-    hanldeCloseEsitor(content){
+    hanldeCloseEsitor (content) {
       this.isEditor = false
       this.cotent = content
     }

@@ -102,6 +102,7 @@ const mutations = {
     end,
     id
   }) => {
+    // 追加生成的题号
     let index = state.SubtitleNumber.findIndex(item => item.id === id)
     let Arr = []
     for (let i = start; i <= end; i++) {
@@ -119,7 +120,7 @@ const mutations = {
     }
   },
   delete_SubtitleNumber: (state, id) => {
-    // 追加生成的题号
+    // 删除生成的题号
     let index = state.SubtitleNumber.findIndex(item => item.id === id)
     if (index > -1) {
       state.SubtitleNumber.splice(index, 1)
