@@ -158,7 +158,7 @@ export default {
         }
 
         if (this.BigQuestion != null) {
-          this.spaceTopic.number = this.BigQuestion
+          this.objectiveData.number = this.BigQuestion
         }
       }
     }

@@ -116,7 +116,7 @@ export default {
       'letterArr',
       'determineTopic'
     ]),
-    ...mapState('pageContent', ['pageData', 'pageLayout']),
+    ...mapState('pageContent', ['pageData', 'pageLayout','BigQuestion']),
     pageWidth () {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 480
