@@ -31,22 +31,23 @@ export default {
   computed: {
     ...mapState('questionType', [
       'currentQuestion',
-      'AlreadyTopics'
+      'AlreadyTopics',
+      'determineTopic', // 确定小题数值
     ]),
     tabStatusVal () {
       let itemStart = this.data.start || 0
       let itemEnd = this.data.end || null
       let itemScore = this.data.score || 0
-      let AlreadyTopics = this.AlreadyTopics
+      let determineTopic = this.determineTopic
       let strStart = ''
       let strEnd = ''
-      if (AlreadyTopics.length > 0) {
-        let numStart = AlreadyTopics.findIndex(item => item.topic == itemStart)
-        let numEnd = AlreadyTopics.findIndex(item => item.topic == itemEnd)
+      if (determineTopic.length > 0) {
+        let numStart = determineTopic.findIndex(item => item.topic == itemStart)
+        let numEnd = determineTopic.findIndex(item => item.topic == itemEnd)
         if (numStart > -1) {
           strStart = `${itemStart}题已经存在，请勿重复添加`
         }
-        if (numEnd > -1) {
+        if (numEnd > -1 ) {
           strEnd = `${itemEnd}题已经存在，请勿重复添加`
         }
       }
@@ -62,13 +63,15 @@ export default {
       let itemStart = this.data.start || 0
       let itemEnd = this.data.end || null
       let itemScore = this.data.score || 0
-      let AlreadyTopics = this.AlreadyTopics
+      let determineTopic = this.determineTopic
       let strStart = ''
       let strEnd = ''
-      if (AlreadyTopics.length > 0) {
-        let numStart = AlreadyTopics.findIndex(item => item.topic == itemStart)
-        let numEnd = AlreadyTopics.findIndex(item => item.topic == itemEnd)
-        if (numStart > -1) {
+      if (determineTopic.length > 0) {
+
+        let numStart = determineTopic.findIndex(item => item.topic == itemStart)
+        let numEnd = determineTopic.findIndex(item => item.topic == itemEnd)
+
+        if (numStart > -1 ) {
           strStart = `${itemStart}题已经存在，请勿重复添加`
         }
         if (numEnd > -1) {

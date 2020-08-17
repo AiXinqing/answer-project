@@ -87,7 +87,8 @@ export default {
       'options',
       'AlreadyTopics',
       'currentQuestion',
-      'letterArr'
+      'letterArr',
+      'determineTopic'
     ]),
     ...mapState('pageContent', ['pageData', 'pageLayout']),
     pageWidth () {
@@ -122,16 +123,24 @@ export default {
       'set_closeFrame',
       'Add_AlreadyTopics', // 小题数组
       'del_AlreadyTopics', // 删除题组-小题
+      'set_determineTopic', // 储存确定题型
+      'Empty_AlreadyTopics', // 清空
     ]),
     ...mapMutations('pageContent', ['initPageData', 'amendPageData']),
-    closeFrame () {
+    closeFrame () { // 关闭弹框
       this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
       this.set_closeFrame()
       this.openedFrame = false
+      //--------------
+      this.Empty_AlreadyTopics() // 清空
+      this.Add_AlreadyTopics(this.determineTopic)
     },
     opened () {
       this.openedFrame = true
       this.set_currentQuestion()
+      //-------------------打开
+      this.Empty_AlreadyTopics() // 清空
+      this.Add_AlreadyTopics(this.determineTopic)
     },
     openedEdit (id) {
       let current = this.pageData.filter(item => item.id === id)
@@ -204,9 +213,11 @@ export default {
       // 删除小题
       let group = this.spaceTopic.group
       const index = group.findIndex(item => item.id === obj.pid)
+
       console.log(group)
       console.log(obj.pid)
       console.log(index)
+
       let groupObj = JSON.parse(JSON.stringify(group[index]))
 
       let arr = []
@@ -215,8 +226,7 @@ export default {
       }
 
       this.SplitFunc(obj, groupObj, arr)
-      // 删除之前数组
-      this.del_AlreadyTopics(groupObj.childGroup) // 删除弹框内临时数组
+
       if (index > -1) {
         group.splice(index, 1) // 删除
       }
@@ -236,7 +246,7 @@ export default {
 
     },
     SplitFunc (obj, groupObj, arr) {
-      // 删除小题拆分数组
+      // 删除小题拆分数组 sub
       let arrObj = JSON.parse(JSON.stringify(arr)) // 赋值操作
 
       let FirstHalf = arr.splice(0, obj.topic - 1) // 前半份
@@ -252,6 +262,8 @@ export default {
         }
         this.spaceTopic.group = this.spaceTopic.group.sort((a, b) => { return a.start - b.start })
       })
+       // 删除之前数组
+      this.del_AlreadyTopics([obj]) // 删除弹框内临时数组
 
     },
     SplitArrObject (arrParameter, groupObj) {
@@ -362,8 +374,8 @@ export default {
           if (index > -1) {
             let subObj = { // 小题
               ...topicGroupArr,
-              space: topicGroupArr.space - 1,
-              sum: topicGroupArr.sum - lastObj.space * lastObj.score
+              space: topicGroupArr.space - 1 < 0 ? 0 : topicGroupArr.space - 1,
+              sum: topicGroupArr.sum - lastObj.space * lastObj.score < 0 ? 0 : topicGroupArr.sum - lastObj.space * lastObj.score
             }
             questionArr.childGroup.splice(a, 1, subObj) // 替换被改变的小题
 

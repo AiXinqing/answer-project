@@ -12,7 +12,7 @@
         </span>
         <span v-else>{{data.sum}} 分</span>
         <span class="add_groupTopic" @click.stop="topicDetailAdd(data)">+ 添加小题</span>
-        <i class="el-icon-del" @click.stop="hanldeSubtopicDel(data)" ></i>
+        <i class="el-icon-del" @click.stop="hanldeSubtopicDel(data)" >-</i>
       </div>
     </template>
     <component
@@ -122,15 +122,14 @@ export default {
   right: 80px;
 }
 i.el-icon-del {
-  margin-left: 30px;
   position: absolute;
   right: 50px;
-  background-color: #1ab394;
-  font-size: 12px;
-  width: 12px;
-  height: 1px;
-  top: 6px;
-  margin: 20px 0;
+  font-size: 18px;
+  color: @main;
+  height: 100%;
+  width: 28px;
+  text-align: center;
+  line-height: 48px;
 }
 .el-collapse-item__content {
   padding-bottom: 0px !important;

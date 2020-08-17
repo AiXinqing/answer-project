@@ -14,7 +14,14 @@
         <span class="layui-btn layui-btn-xs" @click="currentQuestionHanldeEdit()">编辑</span>
         <span class="layui-btn layui-btn-xs" @click="delHanlde(questionData.id)">删除</span>
       </div>
-
+    </div>
+    <div class="content-info">
+      <div class="content-row">
+        <a><i>1(1)</i><span></span></a>
+        <a><i></i><span></span></a>
+        <a><i></i><span></span></a>
+        <a><i></i><span></span></a>
+      </div>
     </div>
   </div>
 </template>
@@ -55,6 +62,32 @@ export default {
 
     TopicContent () {
       return `<span>${this.numberTitle}.</span><span>${this.data.topic}</span><span>(${this.data.totalScore})分</span>`
+    },
+    topicGroupData(){
+      const arrays1 = [{child:[{space:1},{space:3}],space:4},{space:1,child:[]},{space:1,child:[]}];
+      let temporaryArr=[]
+      let data = []
+      arrays1.forEach(ele => {
+        if(ele.child.length > 0){
+              ele.child.forEach(row => {
+                  for(let i = 1; i <= row.space ;i++){
+                    temporaryArr.push({...row,tp:i})
+
+                  }
+              })
+        } else {
+          console.log('11')
+          temporaryArr.push(ele)
+        }
+        if(temporaryArr.length >= 4){
+          data.push(temporaryArr)
+          temporaryArr = []
+        }
+      })
+      if(temporaryArr.length > 0){
+          data.push(temporaryArr)
+        } console.log(data)
+        return data
     }
   },
   watch: {
@@ -151,4 +184,27 @@ export default {
     div{border-color: @main}
   }
 }
+.content-row  {
+  a{
+    display: inline-block;
+    height: 30px;
+    margin-left: 5px;
+    i{
+      display: inline-block;
+      min-width: 24px;
+      font-size: 12px;
+      font-style: normal;
+      text-align: center;
+    }
+    span{
+      display: inline-block;
+      height: 30px;
+      width: 80px;
+      top: 3px;
+      position: relative;
+      border-bottom: 1px solid #888;
+    }
+  }
+}
+
 </style>
