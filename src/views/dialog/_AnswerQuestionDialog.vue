@@ -1,12 +1,12 @@
 <template>
   <hj-dialog
-    class="newAdd-content"
+    class="newAdd-content answer_box"
     :title="title"
     :visible.sync="openedFrame"
     :width="'600px'"
     :before-close="closeFrame"
   >
-    <div class="item-box answer_box">
+    <div class="item-box ">
       <el-row>
         <el-col :span="12" class="select-item">
           <div class="label">大题题号:</div>
@@ -26,6 +26,7 @@
         v-for="(item,i) in dataTopic.group"
         :key="i"
         :form-data="item"
+        @hanlde-status="hanldeStatus"
       />
       <div class="question-group">
         <answer-item />
@@ -129,6 +130,9 @@ export default {
     },
     preCreateQuestion () {
       //确定信息
+    },
+    hanldeStatus (val) {
+      this.errorVal = val
     }
   },
 }
@@ -145,6 +149,7 @@ export default {
   .big-item input {
     width: 68px;
     margin-top: 10px;
+    text-align: center;
   }
   .condition_box {
     margin-top: 15px;
@@ -167,6 +172,10 @@ export default {
     input {
       width: 48px;
     }
+  }
+  .error-message {
+    margin-top: 10px;
+    text-indent: 0;
   }
 }
 </style>
