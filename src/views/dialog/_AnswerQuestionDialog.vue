@@ -21,20 +21,15 @@
           <div class="label">题目:</div>
           <el-input v-model="dataTopic.topic" size="mini" placeholder="请输入内容"></el-input>
         </el-col>
-        <!-- <el-col :span="24" class="select-item">
-          <div class="label">每行展示</div>
-          <el-input v-model.number="dataTopic.rows" size="mini" placeholder="请输入内容" />
-            <div class="label m-5" style="padding-left:5px"> 空 </div>
-        </el-col> -->
       </el-row>
-      <div class="big-item">
-        <span>从</span>
-        <el-input v-model.number="dataTopic.start" size="mini"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
-        <span class="p-5"> 题到 </span>
-        <el-input v-model.number="dataTopic.end" size="mini"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
-        <span class="p-5"> 题 </span>
+      <add-form
+        v-for="(item,i) in dataTopic.group"
+        :key="i"
+        :form-data="item"
+      />
+      <div class="question-group">
+        <answer-item />
       </div>
-      <div class="question-group"></div>
       <div class="condition_box">
         <el-checkbox v-model="ShowScore">小题显示分数</el-checkbox>
         <el-checkbox v-model="HorizontalLine">生成解答题横线</el-checkbox>
@@ -56,8 +51,14 @@
 
 <script>
 // import spaceQuestion from '../questionContent/Precautions/_spaceQuestion'
+import AddForm from '../questionContent/Precautions/answer/_index'
+import answerItem from '../questionContent/Precautions/answer/_item'
 import { mapState } from 'vuex'
 export default {
+  components: {
+    AddForm,
+    answerItem
+  },
   data () {
     return {
       dataTopic: {},
