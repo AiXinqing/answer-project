@@ -41,14 +41,29 @@ export default {
       let determineTopic = this.determineTopic
       let strStart = ''
       let strEnd = ''
-      if (determineTopic.length > 0) {
+
+      let AlreadyTopics = this.AlreadyTopics
+
+
+      if (determineTopic.length > 0 || AlreadyTopics.length > 0) {
         let numStart = determineTopic.findIndex(item => item.topic == itemStart)
+        let index = AlreadyTopics.findIndex(item => item.topic == itemStart)
         let numEnd = determineTopic.findIndex(item => item.topic == itemEnd)
-        if (numStart > -1) {
-          strStart = `${itemStart}题已经存在，请勿重复添加`
+        let endIndex = AlreadyTopics.findIndex(item => item.topic == itemStart)
+        if (numStart > -1 || index > -1) {
+          if (AlreadyTopics[index].pid == this.data.id && numStart <= -1) {
+            strStart = ''
+          } else {
+
+            strStart = `${itemStart}题已经存在，请勿重复添加`
+          }
         }
-        if (numEnd > -1 ) {
-          strEnd = `${itemEnd}题已经存在，请勿重复添加`
+        if (numEnd > -1 || endIndex > -1) {
+          if (AlreadyTopics[endIndex].pid == this.data.id && numEnd <= -1) {
+            strEnd = ''
+          } else {
+            strEnd = `${itemEnd}题已经存在，请勿重复添加`
+          }
         }
       }
       return itemStart == 0 ? '开始题号必须大于0' :
@@ -64,18 +79,28 @@ export default {
       let itemEnd = this.data.end || null
       let itemScore = this.data.score || 0
       let determineTopic = this.determineTopic
+      let AlreadyTopics = this.AlreadyTopics
       let strStart = ''
       let strEnd = ''
-      if (determineTopic.length > 0) {
-
+      if (determineTopic.length > 0 || AlreadyTopics.length > 0) {
         let numStart = determineTopic.findIndex(item => item.topic == itemStart)
+        let index = AlreadyTopics.findIndex(item => item.topic == itemStart)
         let numEnd = determineTopic.findIndex(item => item.topic == itemEnd)
+        let endIndex = AlreadyTopics.findIndex(item => item.topic == itemStart)
+        if (numStart > -1 || index > -1) {
+          if (AlreadyTopics[index].pid == this.data.id && numStart <= -1) {
+            strStart = ''
+          } else {
 
-        if (numStart > -1 ) {
-          strStart = `${itemStart}题已经存在，请勿重复添加`
+            strStart = `${itemStart}题已经存在，请勿重复添加`
+          }
         }
-        if (numEnd > -1) {
-          strEnd = `${itemEnd}题已经存在，请勿重复添加`
+        if (numEnd > -1 || endIndex > -1) {
+          if (AlreadyTopics[endIndex].pid == this.data.id && numEnd <= -1) {
+            strEnd = ''
+          } else {
+            strEnd = `${itemEnd}题已经存在，请勿重复添加`
+          }
         }
       }
       return itemStart == 0 && itemEnd != null ? true :

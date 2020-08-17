@@ -431,9 +431,14 @@ export default {
   font-size: 14px;
   text-indent: 1em;
 }
-</style>
+.question-group {
+  .group_item:last-child {
+    .el-row:last-child {
+      border-bottom: none;
+    }
+  }
+}
 
-<style lang="less">
 .el-tabs__nav-wrap {
   border-top: 1px solid #eee;
   border-left: 1px solid #eee;
