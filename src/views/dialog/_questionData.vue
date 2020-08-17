@@ -156,7 +156,7 @@ export default {
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
       this.set_closeFrame(this.quesctionObj.startQuestion)
       this.openedFrame = false
-      // this.determineTopic
+
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
     },
@@ -227,9 +227,11 @@ export default {
       }
       // guan bi - 清楚数据
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
+
       this.set_closeFrame(this.quesctionObj.startQuestion)
       // 小题数组追加数据
       this.Add_AlreadyTopics(this.topicList)
+      this.set_determineTopic(this.topicList)
       //------------------------------------
       this.openedFrame = false // 关闭弹窗
     },

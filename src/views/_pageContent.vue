@@ -19,6 +19,7 @@
           @hanldeStudent="hanldeStudent"
           @edit-admission-number="editAdmissionNumber"
           @current-question-hanlde-edit="currentQuestionHanldeEdit"
+          @current-question-fill-edit="currentQuestionFillEdit"
         />
       </div>
     </div>
@@ -27,6 +28,7 @@
     <!-- 准考证号 -->
     <admission-number-dialog ref="admissionDialog" />
     <question-dialog ref="questionDialogs" />
+     <fill-in-the-blank-dialog ref="fillInTheBlanks" />
   </div>
 </template>
 
@@ -38,6 +40,7 @@ import FillInTheBlank from './questionContent/_FillInTheBlank' // 填空题
 import columnDialog from './dialog/_studentColumnDialog'
 import AdmissionNumberDialog from './dialog/_AdmissionNumberDialog'
 import questionDialog from './dialog/_questionData'
+import FillInTheBlankDialog from './dialog/_FillInTheBlankDialog'
 
 export default {
   components: {
@@ -46,7 +49,8 @@ export default {
     columnDialog,
     AdmissionNumberDialog,
     questionDialog,
-    FillInTheBlank
+    FillInTheBlank,
+    FillInTheBlankDialog
   },
   data () {
     return {
@@ -133,6 +137,9 @@ export default {
     },
     currentQuestionHanldeEdit (id) {
       this.$refs.questionDialogs.openedEdit(id)
+    },
+    currentQuestionFillEdit (id) {
+      this.$refs.fillInTheBlanks.openedEdit(id)
     }
   },
 }

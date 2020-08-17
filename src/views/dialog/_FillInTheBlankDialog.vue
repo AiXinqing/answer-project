@@ -63,7 +63,7 @@ export default {
       spaceTopic: {
         number: 1,
         topic: '填空题',
-        rows: 5,
+        rows: 4,
         startQuestion: 1,
         group: [{
           start: 1,
@@ -99,6 +99,54 @@ export default {
     errorMessage () {
       return this.errorVal != '' ? true : false
     },
+    topicGroupData () {
+      let rows = this.objectiveData.rows
+      let array = this.objectiveData.group.map(item => {
+        return item.childGroup
+      })
+      if (array.length > 0) {
+        array = array[0]
+        let temporaryArr = []
+        let datas = []
+        array.forEach(ele => {
+          if (ele.childGroup != undefined) {
+            ele.childGroup.forEach((row, index) => {
+              for (let i = 1; i <= row.space; i++) {
+                if (i == 1) {
+                  temporaryArr.push({ ...row, lgTopic: index + 1 }) // 小标题
+                } else {
+                  temporaryArr.push({ ...row })
+                }
+                if (temporaryArr.length >= rows) {
+                  datas.push(temporaryArr)
+                  temporaryArr = []
+                }
+              }
+            })
+          } else {
+            for (let i = 1; i <= ele.space; i++) {
+              if (i == 1) {
+                temporaryArr.push({ ...ele, lgTopic: 0 }) // 小标题
+              } else {
+                temporaryArr.push({ ...ele })
+              }
+              if (temporaryArr.length >= rows) {
+                datas.push(temporaryArr)
+                temporaryArr = []
+              }
+            }
+          }
+          if (temporaryArr.length >= rows) {
+            datas.push(temporaryArr)
+            temporaryArr = []
+          }
+        })
+        if (temporaryArr.length > 0) {
+          datas.push(temporaryArr)
+        }
+        return datas
+      } else { return [] }
+    }
   },
   watch: {
     spaceTopic: {
@@ -144,6 +192,7 @@ export default {
     },
     openedEdit (id) {
       let current = this.pageData.filter(item => item.id === id)
+
       this.spaceTopic = JSON.parse(JSON.stringify(current[0].content))
       this.editQuestionId = id
       this.openedFrame = true
@@ -151,22 +200,45 @@ export default {
       this.set_currentQuestion()
     },
     preCreateQuestion () { // 数据编辑完成添加至全局数组中---------------
+      // 计算高度
+      let height = this.topicGroupData.length * 2 + 17 + 32
+      // 此题总分计算
+      this.objectiveData.group.forEach(item => {
+        this.topicList.push(...item.childGroup)
+      })
 
-      var obj = {
+      let totalScore = 0;
+
+      this.topicList.map(item => {
+        totalScore += item.score
+      })
+
+      // 此题总分计算
+      let obj = {
         id: 'FillInTheBlank' + +new Date(),
-        height: 360, // 32标题高度
+        height: height, // 32标题高度
         questionType: 'FillInTheBlank',
-        content: this.objectiveData,
+        content: { ...this.objectiveData, totalScore: totalScore, },
+        // 此题总分
       }
+
       if (this.editQuestionId == null) {
         this.initPageData(obj)
       } else {
         obj.id = this.editQuestionId
         this.amendPageData(obj)
       }
+
       //------------------------------------
       this.openedFrame = false // 关闭弹窗
+
+      this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
+      this.set_closeFrame() // 改变大题号
+      // 小题数组追加至确定题型
+      this.Add_AlreadyTopics(this.topicList)
+      this.set_determineTopic(this.topicList)
       this.set_currentQuestion()
+
     },
     hanldeSelect (e) {
       // 选择答题号
@@ -214,9 +286,9 @@ export default {
       let group = this.spaceTopic.group
       const index = group.findIndex(item => item.id === obj.pid)
 
-      console.log(group)
-      console.log(obj.pid)
-      console.log(index)
+      // console.log(group)
+      // console.log(obj.pid)
+      // console.log(index)
 
       let groupObj = JSON.parse(JSON.stringify(group[index]))
 
@@ -262,7 +334,7 @@ export default {
         }
         this.spaceTopic.group = this.spaceTopic.group.sort((a, b) => { return a.start - b.start })
       })
-       // 删除之前数组
+      // 删除之前数组
       this.del_AlreadyTopics([obj]) // 删除弹框内临时数组
 
     },
@@ -317,6 +389,7 @@ export default {
             space: 1,
             sum: 1,
             score: 1,
+            topic: childItem.topic
           }
           if (childItem.childGroup != undefined) {
             changeItem = {
@@ -409,10 +482,9 @@ export default {
             let subLast = subObj.childGroup[index]
             if (index > -1) {
               let subLastSum = subLast.sum - oldObj.score + obj.score
-              console.log(subLastSum)
+
               let subLastItem = { ...subLast, sum: subLastSum }
               subObj.childGroup.splice(a, 1, subLastItem)
-              console.log(subObj)
             }
           }
         }
