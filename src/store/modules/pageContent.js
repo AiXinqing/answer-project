@@ -4,7 +4,7 @@ const state = {
   pageLayout: {}, // 页面布局
   pageData: [],
   page_size: 1160, // 一页高度
-  BigQuestion: null, // 大题题号
+  BigQuestion: 1, // 大题题号
 }
 
 const mutations = {
@@ -24,6 +24,9 @@ const mutations = {
   delPageData: (state, index) => {
     state.pageData.splice(index, 1)
   },
+  set_objectiveData: (state, val) => {
+    state.BigQuestion = val + 1
+  }
 }
 
 const actions = {

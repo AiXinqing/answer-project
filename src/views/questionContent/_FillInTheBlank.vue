@@ -9,18 +9,31 @@
       :topic-content="TopicContent"
       @hanlde-close-esitor="hanldeCloseEsitor"
     />
-    <div class="question_array">
+    <div class="question_arrays">
       <div class="question_editOrDel">
-        <span class="layui-btn layui-btn-xs" @click="currentQuestionHanldeEdit()">编辑</span>
+        <span class="layui-btn layui-btn-xs" @click="currentQuestionFillEdit(questionData.id)">编辑</span>
         <span class="layui-btn layui-btn-xs" @click="delHanlde(questionData.id)">删除</span>
       </div>
     </div>
     <div class="content-info">
-      <div class="content-row">
-        <a><i>1(1)</i><span></span></a>
-        <a><i></i><span></span></a>
-        <a><i></i><span></span></a>
-        <a><i></i><span></span></a>
+      <div
+        class="content-row"
+        v-for="(item,i) in topicGroupData"
+        :key="i"
+      >
+        <a
+          v-for="(row,a) in item"
+          :key="a"
+          :style="{'width':pageWidth / data.rows + 'px'}"
+        >
+        <i v-if="row.lgTopic != undefined" ref="iWidth">
+          <template v-if="row.lgTopic < 2 ">{{row.topic}}</template>
+          <template v-if="row.lgTopic != 0">({{row.lgTopic}})</template>
+        </i>
+        <i v-else ref="iWidth"></i>
+        <span v-if="row.lgTopic != undefined" :style="{'width':'calc(100% - 23px)'}"/>
+        <span v-else :style="{'width':'calc(100% - 22px)'}"/>
+        </a>
       </div>
     </div>
   </div>
@@ -47,14 +60,13 @@ export default {
   data () {
     return {
       data: {},
-      //TopicContent:'',
       isEditor: false,
       cotent: ''
     }
   },
   computed: {
     ...mapState('questionType', ['options', 'letterArr']),
-    ...mapState('pageContent', ['pageData']),
+    ...mapState('pageContent', ['pageData', 'pageLayout']),
     numberTitle () {
       let item = this.options.filter(item => item.value === this.data.number)
       return item[0].label
@@ -63,31 +75,65 @@ export default {
     TopicContent () {
       return `<span>${this.numberTitle}.</span><span>${this.data.topic}</span><span>(${this.data.totalScore})分</span>`
     },
-    topicGroupData(){
-      const arrays1 = [{child:[{space:1},{space:3}],space:4},{space:1,child:[]},{space:1,child:[]}];
-      let temporaryArr=[]
-      let data = []
-      arrays1.forEach(ele => {
-        if(ele.child.length > 0){
-              ele.child.forEach(row => {
-                  for(let i = 1; i <= row.space ;i++){
-                    temporaryArr.push({...row,tp:i})
-
-                  }
-              })
-        } else {
-          console.log('11')
-          temporaryArr.push(ele)
-        }
-        if(temporaryArr.length >= 4){
-          data.push(temporaryArr)
-          temporaryArr = []
-        }
+    pageWidth () {
+      return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
+        ? 440
+        : 695
+    },
+    topicGroupData () {
+      let rows = this.data.rows
+      let array = this.data.group.map(item => {
+        return item.childGroup
       })
-      if(temporaryArr.length > 0){
-          data.push(temporaryArr)
-        } console.log(data)
-        return data
+      if (array.length > 0) {
+        array = array[0]
+        let temporaryArr = []
+        let datas = []
+        array.forEach(ele => {
+          if (ele.childGroup != undefined) {
+            ele.childGroup.forEach((row, index) => {
+              for (let i = 1; i <= row.space; i++) {
+                if (i == 1) {
+                  temporaryArr.push({ ...row, lgTopic: index + 1 }) // 小标题
+                } else {
+                  temporaryArr.push({ ...row })
+                }
+                if (temporaryArr.length >= rows) {
+                  datas.push(temporaryArr)
+                  temporaryArr = []
+                }
+              }
+            })
+          } else {
+            for (let i = 1; i <= ele.space; i++) {
+              if (i == 1) {
+                temporaryArr.push({ ...ele, lgTopic: 0 }) // 小标题
+              } else {
+                temporaryArr.push({ ...ele })
+              }
+              if (temporaryArr.length >= rows) {
+                datas.push(temporaryArr)
+                temporaryArr = []
+              }
+            }
+          }
+          if (temporaryArr.length >= rows) {
+            datas.push(temporaryArr)
+            temporaryArr = []
+          }
+        })
+        if (temporaryArr.length > 0) {
+          datas.push(temporaryArr)
+        }
+        return datas
+      } else { return [] }
+    },
+    topicBox () {
+      let topicList = []
+      this.data.group.forEach(item => {
+        topicList.push(...item.childGroup)
+      })
+      return topicList
     }
   },
   watch: {
@@ -111,32 +157,18 @@ export default {
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
+      'del_determineTopic'
     ]),
-    traverse (Arr, letterArr) {
-      if (Arr.length > 0) {
-        let data = []
-        Arr.forEach(item => {
-
-          item.childGroup.forEach(row => {
-            let obj = {
-              ...row,
-              selectBox: row.select == 2 && row.id.indexOf('judgment') != -1 ? ['T', 'F'] : letterArr.slice(0, row.select),
-              width: row.select * 26 + 42
-            }
-            data.push(obj)
-          })
-        })
-
-        return data
-      } else {
-        return []
+    delHanlde (id) { // 删除大题-小题数
+      const index = this.pageData.findIndex((itme) => itme.id === id)
+      if (index > -1) {
+        this.del_determineTopic(this.topicBox)
+        this.delPageData(index)
+        this.set_currentQuestion()
       }
     },
-    delHanlde (id) { // 删除大题-小题数
-      console.log(id)
-    },
-    currentQuestionHanldeEdit () {
-
+    currentQuestionFillEdit (id) {
+      this.$emit('current-question-fill-edit', id)
     },
     hanldeEditor () {
       this.isEditor = true
@@ -157,10 +189,18 @@ export default {
     color: @font-333;
   }
 }
-.question_array {
+.question-info{
+  &:hover{
+    .question_arrays{
+      display: block;
+    }
+  }
+}
+.question_arrays {
   position: relative;
   display: flex;
   flex-wrap: wrap;
+  display: none;
 
   .question_editOrDel {
     position: absolute;
@@ -184,14 +224,19 @@ export default {
     div{border-color: @main}
   }
 }
+.content-info{
+  border:1px solid @font-888;
+  padding-bottom: 15px;
+}
 .content-row  {
   a{
     display: inline-block;
     height: 30px;
     margin-left: 5px;
+    width: 100%;
     i{
       display: inline-block;
-      min-width: 24px;
+      min-width: 22px;
       font-size: 12px;
       font-style: normal;
       text-align: center;
@@ -203,8 +248,10 @@ export default {
       top: 3px;
       position: relative;
       border-bottom: 1px solid #888;
+      width: calc(100% - 22px)
     }
   }
+  margin-bottom: 10px;
 }
 
 </style>

@@ -133,7 +133,9 @@ export default {
         this.objectiveData = {
           ...this.quesctionObj
         }
-
+        if (this.BigQuestion != null) {
+          this.objectiveData.number = this.BigQuestion
+        }
       }
     }
   },
@@ -151,12 +153,12 @@ export default {
       'set_determineTopic', // 储存确定题型
       'Empty_AlreadyTopics', // 清空
     ]),
-    ...mapMutations('pageContent', ['initPageData', 'amendPageData']),
+    ...mapMutations('pageContent', ['initPageData', 'amendPageData', 'set_objectiveData',]),
     closeFrame () { // 取消弹框
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
       this.set_closeFrame(this.quesctionObj.startQuestion)
       this.openedFrame = false
-      // this.determineTopic
+
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
     },
@@ -225,11 +227,15 @@ export default {
         obj.id = this.editQuestionId
         this.amendPageData(obj)
       }
+      this.set_objectiveData(this.quesctionObj.number) // 大题号修改
       // guan bi - 清楚数据
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
+
       this.set_closeFrame(this.quesctionObj.startQuestion)
       // 小题数组追加数据
       this.Add_AlreadyTopics(this.topicList)
+      this.set_determineTopic(this.topicList)
+
       //------------------------------------
       this.openedFrame = false // 关闭弹窗
     },
@@ -398,7 +404,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less" >
 @import '~@/assets/css/variables.less';
 .select-item {
   display: flex;
@@ -429,9 +435,14 @@ export default {
   font-size: 14px;
   text-indent: 1em;
 }
-</style>
+.question-group {
+  .group_item:last-child {
+    .el-row:last-child {
+      border-bottom: none;
+    }
+  }
+}
 
-<style lang="less">
 .el-tabs__nav-wrap {
   border-top: 1px solid #eee;
   border-left: 1px solid #eee;

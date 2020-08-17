@@ -184,6 +184,14 @@ const mutations = {
         state.determineTopic.push(item)
       }
     })
+  },
+  del_determineTopic: (state, Arr) => {
+    Arr.forEach(item => {
+      const index = state.determineTopic.findIndex(row => row.topic === item.topic)
+      if (index > -1) {
+        state.determineTopic.splice(index, 1)
+      }
+    })
   }
 }
 
