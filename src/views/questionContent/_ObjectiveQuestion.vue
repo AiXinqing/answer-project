@@ -115,6 +115,7 @@ export default {
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
+      'del_determineTopic'
     ]),
     traverse (Arr, letterArr) {
       if (Arr.length > 0) {
@@ -140,6 +141,7 @@ export default {
       const index = this.pageData.findIndex((itme) => itme.id === id)
       if (index > -1) {
         this.del_AlreadyTopics(this.topicBox)
+        this.del_determineTopic(this.topicBox)
         this.delPageData(index)
         this.set_currentQuestion()
       }

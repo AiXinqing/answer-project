@@ -41,7 +41,7 @@ import columnDialog from './dialog/_studentColumnDialog'
 import AdmissionNumberDialog from './dialog/_AdmissionNumberDialog'
 import questionDialog from './dialog/_questionData'
 import FillInTheBlankDialog from './dialog/_FillInTheBlankDialog'
-import { constants } from 'zlib';
+// import { constants } from 'zlib';
 
 export default {
   components: {
