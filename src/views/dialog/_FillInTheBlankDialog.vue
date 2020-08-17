@@ -104,46 +104,59 @@ export default {
       let array = this.objectiveData.group.map(item => {
         return item.childGroup
       })
+      console.log(array)
       if (array.length > 0) {
         array = array[0]
         let temporaryArr = []
         let datas = []
         array.forEach(ele => {
+
           if (ele.childGroup != undefined) {
             ele.childGroup.forEach((row, index) => {
               for (let i = 1; i <= row.space; i++) {
-                if (i == 1) {
-                  temporaryArr.push({ ...row, lgTopic: index + 1 }) // 小标题
-                } else {
-                  temporaryArr.push({ ...row })
-                }
-                if (temporaryArr.length >= rows) {
+                if (temporaryArr.length + 1 > rows) {
                   datas.push(temporaryArr)
                   temporaryArr = []
+                  if (i == 1) {
+                    temporaryArr.push({ ...row, lgTopic: index + 1 }) // 小标题
+                  } else {
+                    temporaryArr.push(row)
+                  }
+                }else{
+                  if (i == 1) {
+                    temporaryArr.push({ ...row, lgTopic: index + 1 }) // 小标题
+                  } else {
+                    temporaryArr.push(row)
+                  }
                 }
               }
             })
           } else {
             for (let i = 1; i <= ele.space; i++) {
-              if (i == 1) {
-                temporaryArr.push({ ...ele, lgTopic: 0 }) // 小标题
-              } else {
-                temporaryArr.push({ ...ele })
-              }
-              if (temporaryArr.length >= rows) {
+
+              if (temporaryArr.length + 1 > rows) {
+
                 datas.push(temporaryArr)
                 temporaryArr = []
+                if (i == 1) {
+                  temporaryArr.push({ ...ele, lgTopic: 0 }) // 小标题
+                } else {
+                  temporaryArr.push(ele)
+                }
+              }else{
+                if (i == 1) {
+                  temporaryArr.push({ ...ele, lgTopic: 0 }) // 小标题
+                } else {
+                  temporaryArr.push(ele)
+                }
               }
             }
-          }
-          if (temporaryArr.length >= rows) {
-            datas.push(temporaryArr)
-            temporaryArr = []
           }
         })
         if (temporaryArr.length > 0) {
           datas.push(temporaryArr)
         }
+        console.log(datas)
         return datas
       } else { return [] }
     }
@@ -205,7 +218,7 @@ export default {
     },
     preCreateQuestion () { // 数据编辑完成添加至全局数组中---------------
       // 计算高度
-      let height = this.topicGroupData.length * 2 + 17 + 32
+      let height = this.topicGroupData.length * 46 + 17 + 32
       // 此题总分计算
       this.objectiveData.group.forEach(item => {
         this.topicList.push(...item.childGroup)
