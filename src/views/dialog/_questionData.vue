@@ -400,7 +400,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less" >
 @import '~@/assets/css/variables.less';
 .select-item {
   display: flex;

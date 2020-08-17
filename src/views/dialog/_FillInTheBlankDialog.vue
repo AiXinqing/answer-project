@@ -496,41 +496,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-@import '~@/assets/css/variables.less';
-.select-item {
-  display: flex;
-  .label {
-    width: 70px;
-    position: relative;
-    top: 4px;
-  }
-}
-.select-item:last-child {
-  margin-top: 20px;
-  .el-input.el-input--mini {
-    width: 130px;
-  }
-}
-.hj-select {
-  width: 130px;
-}
-.card_top {
-  margin-top: 20px;
-}
-.el-tabs--border-card {
-  box-shadow: none !important;
-  border: none;
-}
-.error-message {
-  color: red;
-  font-size: 14px;
-  text-indent: 1em;
-}
-.m-5 {
-  margin-right: 5px;
-}
-</style>
+
 
 <style lang="less">
 .el-tabs__nav-wrap {
