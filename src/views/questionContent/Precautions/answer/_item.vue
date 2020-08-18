@@ -2,16 +2,11 @@
 <el-collapse-item>
   <template slot="title">
   <div class="space_group_list">
-      <span @click.stop="clickFun">题 {{data.topic}} 共 </span>
-      <span v-if=" data.childGroup == undefined || data.childGroup.length <= 0">
-        <el-input v-model.number="data.space" size="mini"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
-        <span @click.stop="clickFun"> 空 每空 </span>
-        <el-input v-model.number="data.score" size="mini"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
-        <span @click.stop="clickFun"> 分 共 {{data.sum}} 分 </span>
-      </span>
-      <span v-else>{{data.sum}} 分</span>
+      <span class="space_group_title">1</span>
+      <el-input v-model.number="data.space" size="mini" class="space_group_item"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+      <span> 分</span>
       <span class="add_groupTopic">+ 添加小题</span>
-      <i class="el-icon-del "  >-</i>
+      <i class="el-icon-del " >-</i>
   </div>
   </template>
   <el-collapse class="sub_item">
@@ -35,11 +30,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.space_group_list {
-  margin: 10px 0;
-}
 .sub_item {
   width: 96%;
   margin-left: 2%;
+}
+.space_group_item {
+  margin-left: 41%;
+}
+.el-collapse {
+  border-bottom: none;
 }
 </style>
