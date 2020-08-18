@@ -27,10 +27,18 @@
         :key="i"
         :form-data="item"
         @hanlde-status="hanldeStatus"
+        @add-answer-topic-group="addAnswerTopicGroup"
       />
       <div class="question-group">
         <el-collapse >
-          <answer-item />
+
+          <answer-item
+            v-for="(item,i) in childGroups"
+            :key="i"
+            :child-data="item"
+            @add-sub-answer-item="addSubAnswerItem"
+            @add-last-answer-item="addLastAnswerItem"
+          />
         </el-collapse>
       </div>
       <div class="condition_box">
@@ -80,7 +88,7 @@ export default {
         group: [{
           start: 1,
           end: null,
-          score: null,
+          score: 1,
           space: 1,
           id: 'answerTopic',
           childGroup: [],
@@ -96,8 +104,12 @@ export default {
       'letterArr',
       'determineTopic'
     ]),
-    name () {
-      return this.data
+    childGroups () {
+      let Arr = []
+      this.dataTopic.group.forEach(item => {
+        Arr.push(...item.childGroup)
+      })
+      return Arr
     },
     errorMessage () {
       return this.errorVal != '' ? true : false
@@ -121,6 +133,9 @@ export default {
   },
   methods: {
     ...mapMutations('pageContent', ['initPageData', 'amendPageData', 'set_objectiveData',]),
+    ...mapMutations('questionType', [
+      'set_AlreadyTopics'
+    ]),
     opened () {
       // 开打弹框
       this.openedFrame = true
@@ -139,7 +154,47 @@ export default {
     },
     hanldeStatus (val) {
       this.errorVal = val
-    }
+    },
+    addAnswerTopicGroup (obj) {
+      // 新增题组数据
+      let group = this.dataTopic.group
+      let index = group.findIndex(item => item.id == obj.id)
+      if (index > -1) {
+        group.splice(index, 1, obj)
+      }
+
+    },
+    addSubAnswerItem (obj) {
+      // 新增题组数据
+      let group = this.dataTopic.group
+      let index = group.findIndex(item => item.id == obj.pid)
+      if (index > -1) {
+        let subItem = group[index]
+        let itemIndex = subItem.childGroup.findIndex(item => item.id == obj.id)
+
+        if (itemIndex > -1) {
+          subItem.childGroup.splice(itemIndex, 1, obj)
+        }
+      }
+    },
+    addLastAnswerItem (obj) {
+
+      let group = this.dataTopic.group
+      let index = group.findIndex(item => item.id == obj.fid)
+      if (index > -1) {
+        let items = group[index]
+        let itemsIndex = items.childGroup.findIndex(item => item.id == obj.pid)
+        if (itemsIndex > -1) {
+          let subItems = items.childGroup[itemsIndex]
+          let subItemIndex = subItems.childGroup.findIndex(item => item.id == obj.id)
+          if (subItemIndex > -1) {
+            subItems.childGroup.splice(subItemIndex, 1, obj)
+
+            this.set_AlreadyTopics([subItems]) // 更新临时数组
+          }
+        }
+      }
+    },
   },
 }
 </script>

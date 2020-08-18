@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
   props: {
     formData: {
@@ -92,10 +92,31 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('questionType', [
+      'Add_AlreadyTopics', // 删除题组-小题
+    ]),
     groupTopicHanlde () {
       this.$emit('hanlde-status', this.tabStatusVal)
       if (!this.tabStatus) {
-        console.log(1)
+
+        let datas = this.data
+        let start = datas.start
+        let end = datas.end
+        let topicList = []
+        for (let i = start; i <= end; i++) {
+          let obj = {
+            ...datas,
+            pid: datas.id,
+            id: `answer_${+new Date()}_${i}`,
+            topic: i
+          }
+          topicList.push(obj)
+        }
+
+        //追加近临时题组
+        this.Add_AlreadyTopics(topicList)
+        // 抛向父级追加近数组
+        this.$emit('add-answer-topic-group', { ...datas, childGroup: topicList })
       }
     }
   },

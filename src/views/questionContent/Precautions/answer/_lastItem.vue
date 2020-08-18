@@ -2,15 +2,19 @@
 <el-collapse-item>
   <template slot="title">
   <div class="space_group_list">
-      <span class="space_group_title">1.1.1</span>
-      <el-input v-model.number="data.space" size="mini" class="space_group_items"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+      <span class="space_group_title">{{lastData.topic}}</span>
+      <el-input v-model.number="lastData.score" size="mini" class="space_group_items"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
       <span> 分</span>
-      <span class="add_groupTopic">+ 添加小题</span>
+      <span class="add_groupTopic" @click="pointsAnswerGroup">+ 添加小题</span>
       <i class="el-icon-del " >-</i>
   </div>
   </template>
-  <el-collapse >
-    <points-item/>
+  <el-collapse v-show="pointsData.length > 0">
+    <points-item
+      v-for="(item,i) in pointsData"
+      :key="i"
+      :points-item-data="item"
+    />
   </el-collapse>
 </el-collapse-item>
 </template>
@@ -18,12 +22,59 @@
 <script>
 import pointsItem from './_pointsItem'
 export default {
+  props: {
+    lastItemData: {
+      type: Object,
+      default: () => { }
+    },
+  },
   components: {
     pointsItem,
   },
   data () {
     return {
-      data: {}
+      lastData: {}
+    }
+  },
+  computed: {
+    pointsData () {
+      return this.lastData.childGroup
+    }
+  },
+  watch: {
+    lastItemData: {
+      immediate: true,
+      handler () {
+        this.lastData = {
+          ...this.lastItemData
+        }
+        if (this.lastData.childGroup.length > 0) {
+          let sum = 0
+          this.lastData.childGroup.forEach(item => {
+            sum += item.score
+          })
+          this.lastData.score = sum
+        }
+      }
+    }
+  },
+  methods: {
+    pointsAnswerGroup () {
+      let temporaryArr = JSON.parse(JSON.stringify(this.lastData.childGroup)) || []
+      let datas = this.lastData
+      let long = temporaryArr.length + 1
+      let subObj = {
+        ...datas,
+        fid: datas.pid,
+        sid: datas.pid,
+        pid: datas.id,
+        id: `answerPoints_${+new Date()}_${datas.topic}_${long}`,
+        topic: `${datas.topic}.${long}`,
+        score: 1
+      }
+      temporaryArr.push({ ...subObj, childGroup: [] })
+
+      this.$emit('add-last-answer-item', { ...datas, childGroup: temporaryArr })
     }
   },
 }
@@ -42,6 +93,6 @@ export default {
 </style>
 <style lang="less" scoped>
 .space_group_items {
-  margin-left: 38%;
+  margin-left: 36%;
 }
 </style>
