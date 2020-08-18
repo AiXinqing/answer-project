@@ -14,17 +14,17 @@
       <i class="el-icon-del "  >-</i>
   </div>
   </template>
-  <el-collapse class="sub_item">
-    <answer-sub-item/>
+  <el-collapse >
+    <points-item/>
   </el-collapse>
 </el-collapse-item>
 </template>
 
 <script>
-import answerSubItem from './_subItem'
+import pointsItem from './_pointsItem'
 export default {
   components: {
-    answerSubItem,
+    pointsItem,
   },
   data () {
     return {
@@ -34,12 +34,8 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-.space_group_list {
-  margin: 10px 0;
-}
-.sub_item {
-  width: 96%;
-  margin-left: 2%;
+<style lang="less" >
+.el-collapse {
+  border-bottom: none;
 }
 </style>

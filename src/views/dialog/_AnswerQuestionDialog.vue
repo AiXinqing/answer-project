@@ -29,7 +29,9 @@
         @hanlde-status="hanldeStatus"
       />
       <div class="question-group">
-        <answer-item />
+        <el-collapse >
+          <answer-item />
+        </el-collapse>
       </div>
       <div class="condition_box">
         <el-checkbox v-model="ShowScore">小题显示分数</el-checkbox>

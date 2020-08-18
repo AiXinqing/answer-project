@@ -15,16 +15,16 @@
   </div>
   </template>
   <el-collapse class="sub_item">
-    <answer-sub-item/>
+    <answer-last-item/>
   </el-collapse>
 </el-collapse-item>
 </template>
 
 <script>
-import answerSubItem from './_subItem'
+import answerLastItem from './_lastItem'
 export default {
   components: {
-    answerSubItem,
+    answerLastItem,
   },
   data () {
     return {
@@ -34,12 +34,6 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-.space_group_list {
-  margin: 10px 0;
-}
-.sub_item {
-  width: 96%;
-  margin-left: 2%;
-}
-</style>
+
+
+
