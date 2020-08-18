@@ -63,10 +63,12 @@ export default {
       let temporaryArr = JSON.parse(JSON.stringify(this.lastData.childGroup)) || []
       let datas = this.lastData
       let long = temporaryArr.length + 1
+      console.log(datas)
       let subObj = {
         ...datas,
+        spId: datas.sid,
+        sid: datas.fid,
         fid: datas.pid,
-        sid: datas.pid,
         pid: datas.id,
         id: `answerPoints_${+new Date()}_${datas.topic}_${long}`,
         topic: `${datas.topic}.${long}`,
@@ -74,7 +76,7 @@ export default {
       }
       temporaryArr.push({ ...subObj, childGroup: [] })
 
-      this.$emit('add-last-answer-item', { ...datas, childGroup: temporaryArr })
+      this.$emit('add-points-answer-group', { ...datas, childGroup: temporaryArr })
     }
   },
 }
@@ -82,9 +84,8 @@ export default {
 
 <style lang="less" >
 .el-collapse {
-  border-bottom: none;
+  border-bottom: none !important;
 }
-
 .space_group_title {
   position: relative;
   width: 100px;

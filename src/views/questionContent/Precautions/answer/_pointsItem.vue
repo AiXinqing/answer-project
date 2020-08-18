@@ -1,8 +1,8 @@
 <template>
 <!-- 分值item -->
   <div class="points_list">
-    <span >1.1.1.1 </span>
-    <el-input v-model.number="data.score" size="mini" class="points_list_input"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+    <span >{{pointsData.topic}} </span>
+    <el-input v-model.number="pointsData.score" size="mini" class="points_list_input"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
     <span > 分  </span>
     <i class="el-icon-del list-del" >-</i>
   </div>
@@ -10,9 +10,25 @@
 
 <script>
 export default {
+  props: {
+    pointsItemData: {
+      type: Object,
+      default: () => { }
+    },
+  },
   data () {
     return {
-      data: {}
+      pointsData: {}
+    }
+  },
+  watch: {
+    pointsItemData: {
+      immediate: true,
+      handler () {
+        this.pointsData = {
+          ...this.pointsItemData
+        }
+      }
     }
   },
 }
@@ -37,6 +53,7 @@ export default {
   height: 30px;
   line-height: 30px;
   cursor: pointer;
+  position: unset;
 }
 .el-collapse {
   border-bottom: none;

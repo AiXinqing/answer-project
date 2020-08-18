@@ -14,6 +14,7 @@
       v-for="(item,i) in childGroup"
       :key="i"
       :last-item-data="item"
+      @add-points-answer-group="addPointsAnswerGroup"
     />
   </el-collapse>
 </el-collapse-item>
@@ -76,6 +77,10 @@ export default {
 
       this.$emit('add-last-answer-item', { ...datas, childGroup: temporaryArr })
       // this.set_AlreadyTopics([{ ...datas, childGroup: temporaryArr }]) // 更新此题数据
+    },
+    addPointsAnswerGroup (obj) {
+      // 添加小题下的小题
+      this.$emit('add-points-answer-group', obj)
     }
   },
 }

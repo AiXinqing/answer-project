@@ -108,7 +108,9 @@ export default {
             ...datas,
             pid: datas.id,
             id: `answer_${+new Date()}_${i}`,
-            topic: i
+            topic: i,
+            childGroup: [],
+            score: 1,
           }
           topicList.push(obj)
         }

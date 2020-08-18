@@ -38,6 +38,7 @@
             :child-data="item"
             @add-sub-answer-item="addSubAnswerItem"
             @add-last-answer-item="addLastAnswerItem"
+            @add-points-answer-group="addPointsAnswerGroup"
           />
         </el-collapse>
       </div>
@@ -178,7 +179,6 @@ export default {
       }
     },
     addLastAnswerItem (obj) {
-
       let group = this.dataTopic.group
       let index = group.findIndex(item => item.id == obj.fid)
       if (index > -1) {
@@ -195,6 +195,30 @@ export default {
         }
       }
     },
+    addPointsAnswerGroup (obj) {
+      // 添加小题下的小题
+      // console.log(obj)
+      let group = this.dataTopic.group
+      let index = group.findIndex(item => item.id == obj.sid)
+      if (index > -1) {
+        let items = group[index]
+        let itemsIndex = items.childGroup.findIndex(item => item.id == obj.fid)
+        if (itemsIndex > -1) {
+          let subItems = items.childGroup[itemsIndex]
+          let subItemIndex = subItems.childGroup.findIndex(item => item.id == obj.pid)
+
+          if (subItemIndex > -1) {
+            let lastItem = subItems.childGroup[subItemIndex]
+            let lastIndex = lastItem.childGroup.findIndex(item => item.id == obj.id)
+            if (lastIndex > -1) {
+              lastItem.childGroup.splice(lastIndex, 1, obj)
+              this.set_AlreadyTopics([subItems]) // 更新临时数组
+            }
+
+          }
+        }
+      }
+    }
   },
 }
 </script>

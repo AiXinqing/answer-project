@@ -16,6 +16,7 @@
       :key="i"
       :sub-child-data="item"
       @add-last-answer-item="addLastAnswerItem"
+      @add-points-answer-group="addPointsAnswerGroup"
     />
   </el-collapse>
 
@@ -90,6 +91,10 @@ export default {
     addLastAnswerItem (obj) {
       // 新增小题下小题
       this.$emit('add-last-answer-item', obj)
+    },
+    addPointsAnswerGroup (obj) {
+      // 添加小题下的小题
+      this.$emit('add-points-answer-group', obj)
     }
   },
 }
