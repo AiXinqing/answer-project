@@ -116,7 +116,7 @@ export default {
       'letterArr',
       'determineTopic'
     ]),
-    ...mapState('pageContent', ['pageData', 'pageLayout']),
+    ...mapState('pageContent', ['pageData', 'pageLayout','BigQuestion']),
     pageWidth () {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 480
@@ -133,7 +133,9 @@ export default {
         this.objectiveData = {
           ...this.quesctionObj
         }
-
+        if (this.BigQuestion != null) {
+          this.objectiveData.number = this.BigQuestion
+        }
       }
     }
   },
@@ -151,7 +153,7 @@ export default {
       'set_determineTopic', // 储存确定题型
       'Empty_AlreadyTopics', // 清空
     ]),
-    ...mapMutations('pageContent', ['initPageData', 'amendPageData']),
+    ...mapMutations('pageContent', ['initPageData', 'amendPageData', 'set_objectiveData',]),
     closeFrame () { // 取消弹框
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
       this.set_closeFrame(this.quesctionObj.startQuestion)
@@ -225,6 +227,7 @@ export default {
         obj.id = this.editQuestionId
         this.amendPageData(obj)
       }
+      this.set_objectiveData(this.quesctionObj.number) // 大题号修改
       // guan bi - 清楚数据
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
 
@@ -232,6 +235,7 @@ export default {
       // 小题数组追加数据
       this.Add_AlreadyTopics(this.topicList)
       this.set_determineTopic(this.topicList)
+
       //------------------------------------
       this.openedFrame = false // 关闭弹窗
     },

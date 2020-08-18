@@ -41,6 +41,7 @@ import columnDialog from './dialog/_studentColumnDialog'
 import AdmissionNumberDialog from './dialog/_AdmissionNumberDialog'
 import questionDialog from './dialog/_questionData'
 import FillInTheBlankDialog from './dialog/_FillInTheBlankDialog'
+// import { constants } from 'zlib';
 
 export default {
   components: {
@@ -85,54 +86,27 @@ export default {
       this.$refs.admissionDialog.openedFrameFunc()
     },
     pageContentFunc (rects = []) {
-
+     // 重组题-分页
       const results = []
-      // currentPage.height 总高度
+       // currentPage.height 总高度
       var currentPage = {
         height: 0,
         rects: [],
       }
-      // 重置高度
-      function resetCurrentPage () {
-        currentPage.height = 0
-        currentPage.rects = []
-      }
       rects.forEach((rect) => {
-        const avalibleHeight = this.page_size - currentPage.height
-        if (rect.height > avalibleHeight) {
-          // 分页-剩余高度新建rect
-          currentPage.rects.push({
-            ...rect,
-            castHeight: avalibleHeight,
-          })
-          results.push(currentPage.rects) // 增加一页
-          resetCurrentPage()
-          // 判断当前rect高度能分几页
-          let height = rect.height - avalibleHeight
-          while (height > this.page_size) {
-            results.push([{
-              ...rect,
-              castHeight: this.page_size,
-            },])
-            height -= this.page_size
-          }
-          currentPage.height = height
-          currentPage.rects.push({
-            ...rect,
-            castHeight: height,
-          })
-        } else {
-          currentPage.height += rect.height
-          currentPage.rects.push({
-            ...rect,
-            castHeight: rect.height,
-          })
+        currentPage.height += rect.height
+        if(currentPage.height < this.page_size){
+          currentPage.rects.push(rect)
+        }else{
+          currentPage.height = rect.rects
+          results.push(currentPage.rects)
+          currentPage.rects = []
+          currentPage.rects.push(rect)
         }
       })
-      if (currentPage.height) {
-        results.push(currentPage.rects)
-      }
-      // console.log(results)
+      if(currentPage.rects.length > 0){
+          results.push(currentPage.rects)
+        }
       return results
     },
     currentQuestionHanldeEdit (id) {

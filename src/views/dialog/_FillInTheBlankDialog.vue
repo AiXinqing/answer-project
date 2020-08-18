@@ -90,7 +90,7 @@ export default {
       'letterArr',
       'determineTopic'
     ]),
-    ...mapState('pageContent', ['pageData', 'pageLayout']),
+    ...mapState('pageContent', ['pageData', 'pageLayout', 'BigQuestion']),
     pageWidth () {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 480
@@ -104,46 +104,59 @@ export default {
       let array = this.objectiveData.group.map(item => {
         return item.childGroup
       })
+      console.log(array)
       if (array.length > 0) {
         array = array[0]
         let temporaryArr = []
         let datas = []
         array.forEach(ele => {
+
           if (ele.childGroup != undefined) {
             ele.childGroup.forEach((row, index) => {
               for (let i = 1; i <= row.space; i++) {
-                if (i == 1) {
-                  temporaryArr.push({ ...row, lgTopic: index + 1 }) // 小标题
-                } else {
-                  temporaryArr.push({ ...row })
-                }
-                if (temporaryArr.length >= rows) {
+                if (temporaryArr.length + 1 > rows) {
                   datas.push(temporaryArr)
                   temporaryArr = []
+                  if (i == 1) {
+                    temporaryArr.push({ ...row, lgTopic: index + 1 }) // 小标题
+                  } else {
+                    temporaryArr.push(row)
+                  }
+                }else{
+                  if (i == 1) {
+                    temporaryArr.push({ ...row, lgTopic: index + 1 }) // 小标题
+                  } else {
+                    temporaryArr.push(row)
+                  }
                 }
               }
             })
           } else {
             for (let i = 1; i <= ele.space; i++) {
-              if (i == 1) {
-                temporaryArr.push({ ...ele, lgTopic: 0 }) // 小标题
-              } else {
-                temporaryArr.push({ ...ele })
-              }
-              if (temporaryArr.length >= rows) {
+
+              if (temporaryArr.length + 1 > rows) {
+
                 datas.push(temporaryArr)
                 temporaryArr = []
+                if (i == 1) {
+                  temporaryArr.push({ ...ele, lgTopic: 0 }) // 小标题
+                } else {
+                  temporaryArr.push(ele)
+                }
+              }else{
+                if (i == 1) {
+                  temporaryArr.push({ ...ele, lgTopic: 0 }) // 小标题
+                } else {
+                  temporaryArr.push(ele)
+                }
               }
             }
-          }
-          if (temporaryArr.length >= rows) {
-            datas.push(temporaryArr)
-            temporaryArr = []
           }
         })
         if (temporaryArr.length > 0) {
           datas.push(temporaryArr)
         }
+        console.log(datas)
         return datas
       } else { return [] }
     }
@@ -155,6 +168,10 @@ export default {
         this.objectiveData = {
           ...this.spaceTopic,
           group: this.spaceTopic.group.sort((a, b) => { return a.start - b.start })
+        }
+
+        if (this.BigQuestion != null) {
+          this.objectiveData.number = this.BigQuestion
         }
       }
     }
@@ -174,7 +191,7 @@ export default {
       'set_determineTopic', // 储存确定题型
       'Empty_AlreadyTopics', // 清空
     ]),
-    ...mapMutations('pageContent', ['initPageData', 'amendPageData']),
+    ...mapMutations('pageContent', ['initPageData', 'amendPageData', 'set_objectiveData',]),
     closeFrame () { // 关闭弹框
       this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
       this.set_closeFrame()
@@ -201,7 +218,7 @@ export default {
     },
     preCreateQuestion () { // 数据编辑完成添加至全局数组中---------------
       // 计算高度
-      let height = this.topicGroupData.length * 2 + 17 + 32
+      let height = this.topicGroupData.length * 46 + 17 + 32
       // 此题总分计算
       this.objectiveData.group.forEach(item => {
         this.topicList.push(...item.childGroup)
@@ -228,7 +245,7 @@ export default {
         obj.id = this.editQuestionId
         this.amendPageData(obj)
       }
-
+      this.set_objectiveData(this.spaceTopic.number) // 大题号修改
       //------------------------------------
       this.openedFrame = false // 关闭弹窗
 

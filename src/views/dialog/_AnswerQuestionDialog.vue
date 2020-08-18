@@ -54,7 +54,7 @@
 // import spaceQuestion from '../questionContent/Precautions/_spaceQuestion'
 import AddForm from '../questionContent/Precautions/answer/_index'
 import answerItem from '../questionContent/Precautions/answer/_item'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
   components: {
     AddForm,
@@ -111,10 +111,14 @@ export default {
         this.dataTopic = {
           ...this.questionData
         }
+        if (this.dataTopic != null) {
+          this.dataTopic.number = this.BigQuestion
+        }
       }
     }
   },
   methods: {
+    ...mapMutations('pageContent', ['initPageData', 'amendPageData', 'set_objectiveData',]),
     opened () {
       // 开打弹框
       this.openedFrame = true

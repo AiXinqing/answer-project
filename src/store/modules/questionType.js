@@ -92,7 +92,7 @@ const state = {
   AlreadyTopics: [], // 已有的题组
   currentQuestion: 1,
   letterArr: ['A', 'B', 'C', 'D', 'E', 'G', 'H', 'I', 'J', 'K'],
-  maxTopic: 100, // 最大题数
+  maxTopic: 200, // 最大题数
   determineTopic: [], // 确定下的小题
 }
 
