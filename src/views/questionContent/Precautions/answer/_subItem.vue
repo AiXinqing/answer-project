@@ -49,13 +49,13 @@ export default {
         this.data = {
           ...this.subChildData
         }
-        if (this.data.childGroup.length > 0) {
-          let sum = 0
-          this.data.childGroup.forEach(item => {
-            sum += item.score
-          })
-          this.data.score = sum
-        }
+        // if (this.data.childGroup.length > 0) {
+        //   let sum = 0
+        //   this.data.childGroup.forEach(item => {
+        //     sum += item.score
+        //   })
+        //   this.data.score = sum
+        // }
       }
     }
   },

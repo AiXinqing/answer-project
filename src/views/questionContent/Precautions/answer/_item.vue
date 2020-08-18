@@ -54,14 +54,12 @@ export default {
           ...this.childData
         }
         if (this.data.childGroup.length > 0) {
+          console.log(this.data)
           let sum = 0
           this.data.childGroup.forEach(item => {
             sum += item.score
           })
           this.data.score = sum
-          // if (this.data != undefined) {
-          //   this.$emit('edit-score', this.data)
-          // }
         }
       }
     }

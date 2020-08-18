@@ -48,13 +48,13 @@ export default {
         this.lastData = {
           ...this.lastItemData
         }
-        if (this.lastData.childGroup.length > 0) {
-          let sum = 0
-          this.lastData.childGroup.forEach(item => {
-            sum += item.score
-          })
-          this.lastData.score = sum
-        }
+        // if (this.lastData.childGroup.length > 0) {
+        //   let sum = 0
+        //   this.lastData.childGroup.forEach(item => {
+        //     sum += item.score
+        //   })
+        //   this.lastData.score = sum
+        // }
       }
     }
   },

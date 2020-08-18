@@ -175,20 +175,37 @@ export default {
 
         if (itemIndex > -1) {
           subItem.childGroup.splice(itemIndex, 1, obj)
+          // 改变分数值
+          subItem.childGroup[itemIndex].score = this.calculateTheScore(subItem.childGroup[itemIndex])
+
         }
       }
     },
     addLastAnswerItem (obj) {
+      // 新增小题
       let group = this.dataTopic.group
       let index = group.findIndex(item => item.id == obj.fid)
       if (index > -1) {
         let items = group[index]
         let itemsIndex = items.childGroup.findIndex(item => item.id == obj.pid)
+
         if (itemsIndex > -1) {
-          let subItems = items.childGroup[itemsIndex]
+
+          let subItems = items.childGroup[itemsIndex] // 当前小题
           let subItemIndex = subItems.childGroup.findIndex(item => item.id == obj.id)
+
           if (subItemIndex > -1) {
+
             subItems.childGroup.splice(subItemIndex, 1, obj)
+
+            let lastItem = subItems.childGroup[index]
+            // 更改分值
+            lastItem.score = this.calculateTheScore(lastItem)
+            this.$nextTick(() => {
+              subItems.score = this.calculateTheScore(subItems)
+            })
+
+
 
             this.set_AlreadyTopics([subItems]) // 更新临时数组
           }
@@ -212,12 +229,27 @@ export default {
             let lastIndex = lastItem.childGroup.findIndex(item => item.id == obj.id)
             if (lastIndex > -1) {
               lastItem.childGroup.splice(lastIndex, 1, obj)
+
+              // 更改分值
+              subItems.score = this.calculateTheScore(subItems)
+              lastItem.score = this.calculateTheScore(lastItem)
+              this.$nextTick(() => {
+                subItems.score = this.calculateTheScore(subItems)
+              })
+
               this.set_AlreadyTopics([subItems]) // 更新临时数组
             }
 
           }
         }
       }
+    },
+    calculateTheScore (obj) {
+      let sum = 0
+      obj.childGroup.forEach(item => {
+        sum += item.score
+      })
+      return sum
     }
   },
 }
