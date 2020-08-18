@@ -36,9 +36,10 @@
             v-for="(item,i) in childGroups"
             :key="i"
             :child-data="item"
-            @add-sub-answer-item="addSubAnswerItem"
-            @add-last-answer-item="addLastAnswerItem"
-            @add-points-answer-group="addPointsAnswerGroup"
+            @pre-edit-sub-answer-item="preEditSubAnswerItem"
+            @pre-edit-last-answer-item="preEditLastAnswerItem"
+            @pre-edit-points-answer-group="preEditPointsAnswerGroup"
+            @pre-edit-points-item="preEditPointsItem"
           />
         </el-collapse>
       </div>
@@ -135,7 +136,8 @@ export default {
   methods: {
     ...mapMutations('pageContent', ['initPageData', 'amendPageData', 'set_objectiveData',]),
     ...mapMutations('questionType', [
-      'set_AlreadyTopics'
+      'set_AlreadyTopics',
+      'del_AlreadyTopics'
     ]),
     opened () {
       // 开打弹框
@@ -165,7 +167,7 @@ export default {
       }
 
     },
-    addSubAnswerItem (obj) {
+    preEditSubAnswerItem (obj, isDel = false) {
       // 新增题组数据
       let group = this.dataTopic.group
       let index = group.findIndex(item => item.id == obj.pid)
@@ -174,14 +176,18 @@ export default {
         let itemIndex = subItem.childGroup.findIndex(item => item.id == obj.id)
 
         if (itemIndex > -1) {
-          subItem.childGroup.splice(itemIndex, 1, obj)
-          // 改变分数值
-          subItem.childGroup[itemIndex].score = this.calculateTheScore(subItem.childGroup[itemIndex])
+          if (isDel) {
+            subItem.childGroup.splice(itemIndex, 1)
+          } else {
+            subItem.childGroup.splice(itemIndex, 1, obj)
+            // 改变分数值
+            subItem.childGroup[itemIndex].score = this.calculateTheScore(subItem.childGroup[itemIndex])
+          }
 
         }
       }
     },
-    addLastAnswerItem (obj) {
+    preEditLastAnswerItem (obj, isDel = false) {
       // 新增小题
       let group = this.dataTopic.group
       let index = group.findIndex(item => item.id == obj.fid)
@@ -195,24 +201,25 @@ export default {
           let subItemIndex = subItems.childGroup.findIndex(item => item.id == obj.id)
 
           if (subItemIndex > -1) {
+            if (isDel) {
+              subItems.childGroup.splice(subItemIndex, 1)
+            } else {
+              subItems.childGroup.splice(subItemIndex, 1, obj)
 
-            subItems.childGroup.splice(subItemIndex, 1, obj)
-
-            let lastItem = subItems.childGroup[index]
-            // 更改分值
-            lastItem.score = this.calculateTheScore(lastItem)
-            this.$nextTick(() => {
-              subItems.score = this.calculateTheScore(subItems)
-            })
-
-
-
+              let lastItem = subItems.childGroup[index]
+              // 更改分值
+              lastItem.score = this.calculateTheScore(lastItem)
+              this.$nextTick(() => {
+                subItems.score = this.calculateTheScore(subItems)
+              })
+            }
             this.set_AlreadyTopics([subItems]) // 更新临时数组
+
           }
         }
       }
     },
-    addPointsAnswerGroup (obj) {
+    preEditPointsAnswerGroup (obj, isDel = false) {
       // 添加小题下的小题
       // console.log(obj)
       let group = this.dataTopic.group
@@ -228,16 +235,61 @@ export default {
             let lastItem = subItems.childGroup[subItemIndex]
             let lastIndex = lastItem.childGroup.findIndex(item => item.id == obj.id)
             if (lastIndex > -1) {
-              lastItem.childGroup.splice(lastIndex, 1, obj)
+              if (isDel) {
+                lastItem.childGroup.splice(lastIndex, 1)
+              } else {
+                lastItem.childGroup.splice(lastIndex, 1, obj)
 
-              // 更改分值
-              subItems.score = this.calculateTheScore(subItems)
-              lastItem.score = this.calculateTheScore(lastItem)
-              this.$nextTick(() => {
+                // 更改分值
                 subItems.score = this.calculateTheScore(subItems)
-              })
+                lastItem.score = this.calculateTheScore(lastItem)
+                this.$nextTick(() => {
+                  subItems.score = this.calculateTheScore(subItems)
+                })
+              }
+
 
               this.set_AlreadyTopics([subItems]) // 更新临时数组
+            }
+
+          }
+        }
+      }
+    },
+    preEditPointsItem (obj, isDel = false) {
+      // 末尾题
+      let group = this.dataTopic.group
+      let index = group.findIndex(item => item.id == obj.spId)
+      if (index > -1) {
+        let items = group[index]
+        let itemsIndex = items.childGroup.findIndex(item => item.id == obj.sid)
+        if (itemsIndex > -1) {
+          let subItems = items.childGroup[itemsIndex]
+          let subItemIndex = subItems.childGroup.findIndex(item => item.id == obj.fid)
+
+          if (subItemIndex > -1) {
+            let lastItem = subItems.childGroup[subItemIndex]
+            let lastIndex = lastItem.childGroup.findIndex(item => item.id == obj.pid)
+            if (lastIndex > -1) {
+              let pointsItem = lastItem.childGroup[subItemIndex]
+              let pointsIndex = pointsItem.childGroup.findIndex(item => item.id == obj.id)
+              if (pointsIndex > -1) {
+                if (isDel) {
+                  pointsItem.childGroup.splice(pointsIndex, 1)
+                } else {
+                  pointsItem.childGroup.splice(pointsIndex, 1, obj)
+
+                  // 更改分值
+                  pointsItem.score = this.calculateTheScore(pointsItem)
+                  subItems.score = this.calculateTheScore(subItems)
+                  lastItem.score = this.calculateTheScore(lastItem)
+                  this.$nextTick(() => {
+                    subItems.score = this.calculateTheScore(subItems)
+                  })
+                }
+                this.set_AlreadyTopics([subItems]) // 更新临时数组
+              }
+
             }
 
           }
@@ -250,7 +302,7 @@ export default {
         sum += item.score
       })
       return sum
-    }
+    },
   },
 }
 </script>

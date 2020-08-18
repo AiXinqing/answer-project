@@ -4,7 +4,7 @@
     <span >{{pointsData.topic}} </span>
     <el-input v-model.number="pointsData.score" size="mini" class="points_list_input"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
     <span > 分  </span>
-    <i class="el-icon-del list-del" >-</i>
+    <i class="el-icon-del list-del" @click="delPointsItem">-</i>
   </div>
 </template>
 
@@ -29,6 +29,11 @@ export default {
           ...this.pointsItemData
         }
       }
+    }
+  },
+  methods: {
+    delPointsItem () {
+      this.$emit('pre-edit-points-item', this.pointsData, true)
     }
   },
 }
