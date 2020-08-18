@@ -36,6 +36,7 @@ export default {
   right: 80px !important;
   height: 30px;
   line-height: 30px;
+  cursor: pointer;
 }
 .el-collapse {
   border-bottom: none;
