@@ -118,7 +118,8 @@ export default {
     },
   },
   mounted () {
-    this.closeData = []
+    this.closeData = JSON.parse(JSON.stringify(this.questionData))
+    this.set_currentQuestion()
   },
   watch: {
     questionData: {
@@ -137,7 +138,8 @@ export default {
     ...mapMutations('pageContent', ['initPageData', 'amendPageData', 'set_objectiveData',]),
     ...mapMutations('questionType', [
       'set_AlreadyTopics',
-      'del_AlreadyTopics'
+      'del_AlreadyTopics',
+      'set_currentQuestion'
     ]),
     opened () {
       // 开打弹框
@@ -150,10 +152,68 @@ export default {
     },
     closeFrame () {
       // 关闭弹窗
+      this.questionData = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
     },
     preCreateQuestion () {
       //确定信息
+      console.log(this.questionData)
+      let group = this.questionData.group
+      // let group = [...this.questionData.group.map(item => item.childGroup)]
+      let itemArr = []
+      // group[0].forEach(item => {
+      //   console.log(item)
+      //   if (item.childGroup.length > 0) {
+      //     itemArr.push(...item.childGroup)
+      //   }
+      // })
+      group.forEach(item => {
+        console.log(item)
+        if (item.childGroup.length > 0) {
+
+          let subItem = item.childGroup
+
+          subItem.forEach(subEle => {
+            if (subEle.childGroup.length > 0) {
+
+              let lastItem = subEle.childGroup
+
+              lastItem.forEach(lastEle => {
+
+                if (lastEle.childGroup.length > 0) {
+
+                  let pointsItem = lastEle.childGroup
+
+                  pointsItem.forEach(ele => {
+
+                    if (ele.childGroup > 0) {
+                      ele.childGroup.forEach(eleItem => {
+                        itemArr.push(eleItem)
+                      })
+                    } else {
+                      itemArr.push(ele)
+                    }
+
+                  })
+
+                } else {
+                  itemArr.push(lastEle)
+                }
+
+              })
+
+            } else {
+              itemArr.push(subEle)
+            }
+
+          })
+
+        } else {
+          itemArr.push(item)
+        }
+      })
+      console.log(itemArr)
+
     },
     hanldeStatus (val) {
       this.errorVal = val
@@ -221,7 +281,7 @@ export default {
     },
     preEditPointsAnswerGroup (obj, isDel = false) {
       // 添加小题下的小题
-      // console.log(obj)
+
       let group = this.dataTopic.group
       let index = group.findIndex(item => item.id == obj.sid)
       if (index > -1) {
