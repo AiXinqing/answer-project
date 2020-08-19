@@ -1,6 +1,6 @@
 <template>
 <!-- 解答题 -->
-  <div class="question-info">
+  <div class="question-info" :style="{'margin-top':data.top != undefined ? data.top : 0  }">
     <div v-if="data.first">
       <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
         <div v-html="cotent"></div>
@@ -18,12 +18,15 @@
       </div>
     </div>
     <div class="answer_question_box"
-      :style="{'height':data.height + 'px'}"
+      :style="{
+        'height':data.height + 'px',
+        'border-top':data.first || data.borderTop != undefined  ? '1px solid #888':'none',
+      }"
     >
       <div class="question_box_title" v-if="!contentData.HorizontalLine">
-        <span>
+        <span class="title">
           {{topicData.topic}}
-          <span v-if="contentData.ShowScore">({{topicData.score}})分</span>
+          <span v-if="contentData.ShowScore && topicData.score != undefined">({{topicData.score}})分</span>
         </span>
       </div>
       <div
@@ -34,7 +37,7 @@
       >
         <span class="title" v-if="i == 0">
           {{topicData.topic}}
-          <span v-if="contentData.ShowScore">({{topicData.score}})分</span>
+          <span v-if="contentData.ShowScore && topicData.score != undefined">({{topicData.score}})分</span>
         </span>
         <span class="line-style" :style="{'width':i == 0 ? 'calc(100% - 60px)':'100%'}"></span>
       </div>
@@ -146,6 +149,8 @@ export default {
 .answer_question_box {
   padding: 0 10px;
   border: 1px solid @font-888;
+  border-top: none;
+  overflow: hidden;
   .question_box_title {
     span.title {
       font-size: 12px;

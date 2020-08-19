@@ -3,7 +3,7 @@ import axios from 'axios'
 const state = {
   pageLayout: {}, // 页面布局
   pageData: [],
-  page_size: 1160, // 一页高度
+  page_size: 1160 - 20, // 一页高度
   BigQuestion: 1, // 大题题号
   pageHeight: [], // 页面高度
 }

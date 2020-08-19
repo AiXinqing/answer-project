@@ -114,7 +114,11 @@ export default {
           currentPage.height = rect.height
           results.push(currentPage.rects)
           currentPage.rects = []
-          currentPage.rects.push(rect)
+          if (rect.pid != undefined) {
+            currentPage.rects.push({ ...rect, borderTop: true })
+          } else {
+            currentPage.rects.push(rect)
+          }
         }
       })
       if (currentPage.rects.length > 0) {
@@ -143,6 +147,7 @@ export default {
   float: left;
 }
 .page-contents {
+  padding-top: 20px;
   width: 785px;
   height: 1170px;
   border: 1px solid @font-333;
@@ -154,12 +159,12 @@ export default {
   transform: translateX(-50%);
   .footer {
     position: relative;
-    padding-top: 20px;
     width: calc(100% - 40px);
+    padding-top: 20px;
     left: 20px;
-    // &.answer {
-    //   padding-top: 0px;
-    // }
+    &.answer {
+      padding-top: 0px;
+    }
   }
   margin-bottom: 20px;
   &:last-child {

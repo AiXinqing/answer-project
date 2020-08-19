@@ -284,6 +284,7 @@ export default {
             let nextObj = { // 下半部分
               ...obj,
               height: difference,
+              top: 20,
               content: { ...obj.content, group: {} }
             }
             Arr.push(preObj, nextObj)
@@ -315,7 +316,8 @@ export default {
       //------------------------------------
       this.openedFrame = false // 关闭弹窗
       // 清空弹框数据
-      this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
+
+      this.questionData = JSON.parse(JSON.stringify(this.closeData))
       this.set_closeFrame() // 弹窗关闭置空
       this.set_determineTopic(this.topicList)
       this.set_currentQuestion()
