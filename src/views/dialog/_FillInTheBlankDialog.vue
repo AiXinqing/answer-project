@@ -104,7 +104,7 @@ export default {
       let array = this.objectiveData.group.map(item => {
         return item.childGroup
       })
-      console.log(array)
+
       if (array.length > 0) {
         array = array[0]
         let temporaryArr = []
@@ -122,7 +122,7 @@ export default {
                   } else {
                     temporaryArr.push(row)
                   }
-                }else{
+                } else {
                   if (i == 1) {
                     temporaryArr.push({ ...row, lgTopic: index + 1 }) // 小标题
                   } else {
@@ -143,7 +143,7 @@ export default {
                 } else {
                   temporaryArr.push(ele)
                 }
-              }else{
+              } else {
                 if (i == 1) {
                   temporaryArr.push({ ...ele, lgTopic: 0 }) // 小标题
                 } else {
@@ -156,7 +156,6 @@ export default {
         if (temporaryArr.length > 0) {
           datas.push(temporaryArr)
         }
-        console.log(datas)
         return datas
       } else { return [] }
     }

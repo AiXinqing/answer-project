@@ -9,8 +9,9 @@
       <div
         v-for="(row, a) in item"
         :key="a"
-        class="footer"
-        :style="{ minHeight: row.castHeight + 'px' }"
+        :class="['footer',{'answer':row.first != undefined && row.first == false}]"
+        ref="box"
+        :style="{ minHeight: row.height + 'px' }"
       >
         <component
           :is="row.questionType"
@@ -20,6 +21,7 @@
           @edit-admission-number="editAdmissionNumber"
           @current-question-hanlde-edit="currentQuestionHanldeEdit"
           @current-question-fill-edit="currentQuestionFillEdit"
+          @current-question-answer-edit="currentQuestionAnswerEdit"
         />
       </div>
     </div>
@@ -28,19 +30,22 @@
     <!-- 准考证号 -->
     <admission-number-dialog ref="admissionDialog" />
     <question-dialog ref="questionDialogs" />
-     <fill-in-the-blank-dialog ref="fillInTheBlanks" />
+    <fill-in-the-blank-dialog ref="fillInTheBlanks" />
+    <public-dialog ref="publicDialog" />
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import AnswerSheetTitle from './questionContent/_answerSheetTitle' // 答题卡标题
 import ObjectiveQuestion from './questionContent/_ObjectiveQuestion' // 客观题
 import FillInTheBlank from './questionContent/_FillInTheBlank' // 填空题
+import answerQuestion from './questionContent/_answerQuestion' // 解答题
 import columnDialog from './dialog/_studentColumnDialog'
 import AdmissionNumberDialog from './dialog/_AdmissionNumberDialog'
 import questionDialog from './dialog/_questionData'
 import FillInTheBlankDialog from './dialog/_FillInTheBlankDialog'
+import publicDialog from './dialog/_publicDialog'
 // import { constants } from 'zlib';
 
 export default {
@@ -51,11 +56,14 @@ export default {
     AdmissionNumberDialog,
     questionDialog,
     FillInTheBlank,
-    FillInTheBlankDialog
+    FillInTheBlankDialog,
+    answerQuestion,
+    publicDialog
   },
   data () {
     return {
       contentData: [],
+      heightArray: []
     }
   },
   computed: {
@@ -64,13 +72,20 @@ export default {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 520
         : 785
-    }
+    },
   },
   watch: {
     pageData: {
       immediate: true,
       handler () {
         this.contentData = this.pageContentFunc(this.pageData)
+        if (this.contentData.length > 0) {
+          this.$nextTick(() => {
+            this.heightArray = this.$refs['box'].map(item => item.clientHeight)
+            this.set_pageHeight(this.heightArray)
+
+          })
+        }
       }
     }
   },
@@ -79,6 +94,7 @@ export default {
   },
   methods: {
     ...mapActions('pageContent', ['getPageData']),
+    ...mapMutations('pageContent', ['set_pageHeight']),
     hanldeStudent (Arr) {
       this.$refs.studentDialog.openedFrameFunc(Arr)
     },
@@ -86,27 +102,32 @@ export default {
       this.$refs.admissionDialog.openedFrameFunc()
     },
     pageContentFunc (rects = []) {
-     // 重组题-分页
+      // 重组题-分页
       const results = []
-       // currentPage.height 总高度
+      // currentPage.height 总高度
       var currentPage = {
         height: 0,
         rects: [],
       }
       rects.forEach((rect) => {
-        currentPage.height += rect.height
-        if(currentPage.height < this.page_size){
+        currentPage.height += parseInt(rect.height)
+
+        if (currentPage.height < this.page_size) {
           currentPage.rects.push(rect)
-        }else{
-          currentPage.height = rect.rects
+        } else {
+          currentPage.height = rect.height
           results.push(currentPage.rects)
           currentPage.rects = []
-          currentPage.rects.push(rect)
+          if (rect.pid != undefined) {
+            currentPage.rects.push({ ...rect, borderTop: true })
+          } else {
+            currentPage.rects.push(rect)
+          }
         }
       })
-      if(currentPage.rects.length > 0){
-          results.push(currentPage.rects)
-        }
+      if (currentPage.rects.length > 0) {
+        results.push(currentPage.rects)
+      }
       return results
     },
     currentQuestionHanldeEdit (id) {
@@ -114,6 +135,9 @@ export default {
     },
     currentQuestionFillEdit (id) {
       this.$refs.fillInTheBlanks.openedEdit(id)
+    },
+    currentQuestionAnswerEdit (obj) {
+      this.$refs.publicDialog.openedEdit('answerQuestion', obj)
     }
   },
 }
@@ -130,6 +154,7 @@ export default {
   float: left;
 }
 .page-contents {
+  padding-top: 20px;
   width: 785px;
   height: 1170px;
   border: 1px solid @font-333;
@@ -141,9 +166,12 @@ export default {
   transform: translateX(-50%);
   .footer {
     position: relative;
-    padding-top: 20px;
     width: calc(100% - 40px);
+    padding-top: 20px;
     left: 20px;
+    &.answer {
+      padding-top: 0px;
+    }
   }
   margin-bottom: 20px;
   &:last-child {

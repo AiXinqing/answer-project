@@ -151,6 +151,14 @@ const mutations = {
 
     })
   },
+  set_AlreadyTopics: (state, Arr) => {
+    Arr.forEach(item => {
+      const index = state.AlreadyTopics.findIndex(row => row.topic == item.topic)
+      if (index > -1) {
+        state.AlreadyTopics.splice(index, 1, item)
+      }
+    })
+  },
   Empty_AlreadyTopics: (state) => { // 清空数据
     state.AlreadyTopics = []
   },
