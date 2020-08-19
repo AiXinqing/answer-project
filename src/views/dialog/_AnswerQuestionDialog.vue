@@ -46,7 +46,7 @@
       <div class="condition_box">
         <el-checkbox v-model="dataTopic.ShowScore">小题显示分数</el-checkbox>
         <el-checkbox v-model="dataTopic.HorizontalLine">生成解答题横线</el-checkbox>
-        <span class="answer_rows" v-show="dataTopic.ShowScore">
+        <span class="answer_rows" v-show="dataTopic.HorizontalLine">
           <span>行数：</span>
           <el-input v-model.number="dataTopic.rows" size="mini"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
           <span class="p-5"> 行 </span>
@@ -85,7 +85,7 @@ export default {
         rows: 6,
         startQuestion: 1,
         HorizontalLine: false, // 横行
-        ShowScore: false, // 显示分数
+        ShowScore: true, // 显示分数
         group: [{
           start: 1,
           end: null,
@@ -107,7 +107,8 @@ export default {
     ]),
     ...mapState('pageContent', [
       'pageHeight',
-      'page_size'
+      'page_size',
+      'BigQuestion'
     ]),
     childGroups () {
       let Arr = []
@@ -169,9 +170,13 @@ export default {
       return itemArr
     },
     topicList () {
-
       let Arr = [...this.dataTopic.group.map(item => item.childGroup)]
       return Arr
+    },
+    totalScore () {
+      return this.topicList[0].map(item => item.score).reduce((accumulator, currentValue) => {
+        return accumulator + currentValue
+      })
     }
   },
   mounted () {
@@ -201,7 +206,9 @@ export default {
     ...mapMutations('questionType', [
       'set_AlreadyTopics',
       'del_AlreadyTopics',
-      'set_currentQuestion'
+      'set_currentQuestion',
+      'set_closeFrame',
+      'set_determineTopic'
     ]),
     ...mapMutations('answerQuestion', ['set_answerQuestionArr',]),
     opened () {
@@ -227,27 +234,43 @@ export default {
       let currentPageHeight = this.page_size - heights - 20 - 32 // 20当前大题下移的20，32标题高度
       let Arr = []
       let date = +new Date()
-      let rectHeight = 220 // 小题初始高度
+      let rectHeight = this.dataTopic.rows * 35 + 10 // 小题初始高度
 
       this.RefactorData.forEach((item, index) => {
         // 计算解答题生成的答题框，获取当页高度和所占高度，每个答题框
-
+        // 当前页面剩余高度-当前解答题框
+        currentPageHeight -= rectHeight
         let obj = {
           height: rectHeight,
           id: `answer${+new Date()}_${index}`,
           pid: `answer${date}`,
           questionType: 'answerQuestion',
-          content: []
+          content: {}
         }
-        obj = {
-          ...obj,
-          content: [{
-            ...this.dataTopic,
-            group: [item]
-          }]
+        if (index == 0) {
+          obj = {
+            ...obj,
+            first: true,
+            content: {
+              ...this.dataTopic,
+              totalScore: this.totalScore,
+              group: { ...item }
+            }
+          }
+        } else {
+          obj = {
+            ...obj,
+            first: false,
+            content: {
+              ...this.dataTopic,
+              group: { ...item }
+            }
+          }
         }
-        // 当前页面剩余高度-当前解答题框
-        currentPageHeight -= rectHeight
+
+        console.log(currentPageHeight)
+        console.log(item)
+
         if (currentPageHeight >= rectHeight) {
           Arr.push(obj)
         } else {
@@ -261,7 +284,7 @@ export default {
             let nextObj = { // 下半部分
               ...obj,
               height: difference,
-              content: [{ ...obj.content, group: [] }]
+              content: { ...obj.content, group: {} }
             }
             Arr.push(preObj, nextObj)
 
@@ -288,7 +311,7 @@ export default {
       // 解答题-编辑时使用数据
       this.set_answerQuestionArr({ ...this.spaceTopic, pid: `answer${date}` })
       // 大题号修改
-      this.set_objectiveData(this.spaceTopic.number)
+      this.set_objectiveData(this.dataTopic.number)
       //------------------------------------
       this.openedFrame = false // 关闭弹窗
       // 清空弹框数据

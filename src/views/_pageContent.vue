@@ -9,7 +9,7 @@
       <div
         v-for="(row, a) in item"
         :key="a"
-        class="footer"
+        :class="['footer',{'answer':row.first != undefined && row.first == false}]"
         ref="box"
         :style="{ minHeight: row.height + 'px' }"
       >
@@ -38,6 +38,7 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 import AnswerSheetTitle from './questionContent/_answerSheetTitle' // 答题卡标题
 import ObjectiveQuestion from './questionContent/_ObjectiveQuestion' // 客观题
 import FillInTheBlank from './questionContent/_FillInTheBlank' // 填空题
+import answerQuestion from './questionContent/_answerQuestion' // 解答题
 import columnDialog from './dialog/_studentColumnDialog'
 import AdmissionNumberDialog from './dialog/_AdmissionNumberDialog'
 import questionDialog from './dialog/_questionData'
@@ -52,7 +53,8 @@ export default {
     AdmissionNumberDialog,
     questionDialog,
     FillInTheBlank,
-    FillInTheBlankDialog
+    FillInTheBlankDialog,
+    answerQuestion,
   },
   data () {
     return {
@@ -104,11 +106,12 @@ export default {
         rects: [],
       }
       rects.forEach((rect) => {
-        currentPage.height += rect.height
+        currentPage.height += parseInt(rect.height)
+
         if (currentPage.height < this.page_size) {
           currentPage.rects.push(rect)
         } else {
-          currentPage.height = rect.rects
+          currentPage.height = rect.height
           results.push(currentPage.rects)
           currentPage.rects = []
           currentPage.rects.push(rect)
@@ -117,7 +120,6 @@ export default {
       if (currentPage.rects.length > 0) {
         results.push(currentPage.rects)
       }
-
       return results
     },
     currentQuestionHanldeEdit (id) {
@@ -155,6 +157,9 @@ export default {
     padding-top: 20px;
     width: calc(100% - 40px);
     left: 20px;
+    // &.answer {
+    //   padding-top: 0px;
+    // }
   }
   margin-bottom: 20px;
   &:last-child {

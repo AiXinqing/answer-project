@@ -104,7 +104,7 @@ export default {
       let array = this.objectiveData.group.map(item => {
         return item.childGroup
       })
-      console.log(array)
+
       if (array.length > 0) {
         array = array[0]
         let temporaryArr = []
