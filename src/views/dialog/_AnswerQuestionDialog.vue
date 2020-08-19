@@ -110,6 +110,7 @@ export default {
       'page_size',
       'BigQuestion'
     ]),
+    ...mapState('answerQuestion', ['answerQuestionArr',]),
     childGroups () {
       let Arr = []
       this.dataTopic.group.forEach(item => {
@@ -215,10 +216,13 @@ export default {
       // 开打弹框
       this.openedFrame = true
     },
-    openedEdit (id) {
+    openedEdit (obj) {
       //编辑弹框
       this.openedFrame = true
-      console.log(id)
+      let index = this.answerQuestionArr.findIndex(itme => itme.pid === obj.pid)
+      if (index > -1) {
+        this.questionData = JSON.parse(JSON.stringify(this.answerQuestionArr[index]))
+      }
     },
     closeFrame () {
       // 关闭弹窗
@@ -268,8 +272,8 @@ export default {
           }
         }
 
-        console.log(currentPageHeight)
-        console.log(item)
+        // console.log(currentPageHeight)
+        // console.log(item)
 
         if (currentPageHeight >= rectHeight) {
           Arr.push(obj)
@@ -310,7 +314,7 @@ export default {
         })
       }
       // 解答题-编辑时使用数据
-      this.set_answerQuestionArr({ ...this.spaceTopic, pid: `answer${date}` })
+      this.set_answerQuestionArr({ ...this.questionData, pid: `answer${date}` })
       // 大题号修改
       this.set_objectiveData(this.dataTopic.number)
       //------------------------------------

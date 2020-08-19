@@ -21,6 +21,7 @@
           @edit-admission-number="editAdmissionNumber"
           @current-question-hanlde-edit="currentQuestionHanldeEdit"
           @current-question-fill-edit="currentQuestionFillEdit"
+          @current-question-answer-edit="currentQuestionAnswerEdit"
         />
       </div>
     </div>
@@ -30,6 +31,7 @@
     <admission-number-dialog ref="admissionDialog" />
     <question-dialog ref="questionDialogs" />
     <fill-in-the-blank-dialog ref="fillInTheBlanks" />
+    <public-dialog ref="publicDialog" />
   </div>
 </template>
 
@@ -43,6 +45,7 @@ import columnDialog from './dialog/_studentColumnDialog'
 import AdmissionNumberDialog from './dialog/_AdmissionNumberDialog'
 import questionDialog from './dialog/_questionData'
 import FillInTheBlankDialog from './dialog/_FillInTheBlankDialog'
+import publicDialog from './dialog/_publicDialog'
 // import { constants } from 'zlib';
 
 export default {
@@ -55,6 +58,7 @@ export default {
     FillInTheBlank,
     FillInTheBlankDialog,
     answerQuestion,
+    publicDialog
   },
   data () {
     return {
@@ -132,6 +136,9 @@ export default {
     currentQuestionFillEdit (id) {
       this.$refs.fillInTheBlanks.openedEdit(id)
     },
+    currentQuestionAnswerEdit (obj) {
+      this.$refs.publicDialog.openedEdit('answerQuestion', obj)
+    }
   },
 }
 </script>

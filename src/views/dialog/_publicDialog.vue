@@ -22,6 +22,15 @@ export default {
         default:
           break
       }
+    },
+    openedEdit (type, obj) {
+      switch (type) {
+        case 'answerQuestion':
+          this.$refs.AnswerQuestionDialog.openedEdit(obj)
+          break
+        default:
+          break
+      }
     }
   },
 }

@@ -13,8 +13,8 @@
     </div>
     <div class="question_arrays">
       <div class="question_editOrDel">
-        <span class="layui-btn layui-btn-xs" @click="currentQuestionFillEdit(data.pid)">编辑</span>
-        <span class="layui-btn layui-btn-xs" @click="delHanlde(data.id)">删除</span>
+        <span class="layui-btn layui-btn-xs" @click="currentQuestionAnswerEdit">编辑</span>
+        <span class="layui-btn layui-btn-xs" @click="delHanlde">删除</span>
       </div>
     </div>
     <div class="answer_question_box"
@@ -128,17 +128,18 @@ export default {
     hanldeEditor () {
       this.isEditor = true
     },
-    currentQuestionFillEdit (id) {
-      this.$emit('current-question-fill-edit', id)
+    currentQuestionAnswerEdit () {
+      this.$emit('current-question-answer-edit', this.data)
     },
-    delHanlde (id) { // 删除大题-小题数
-      // const index = this.pageData.findIndex((itme) => itme.id === id)
-      // if (index > -1) {
-      //   this.del_determineTopic(this.topicBox)
-      //   this.delPageData(index)
-      //   this.set_currentQuestion()
-      // }
-      console.log(id)
+    delHanlde () { // 删除大题-小题数
+      const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
+      if (index > -1) {
+        console.log(this.contentData.group)
+        // this.delPageData(index)
+        // this.del_determineTopic(this.topicBox)
+        // this.set_currentQuestion()
+      }
+
     },
   },
 }
