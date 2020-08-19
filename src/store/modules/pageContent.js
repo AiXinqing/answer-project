@@ -16,10 +16,15 @@ const mutations = {
     state.pageData.push(Arr)
   },
   amendPageData: (state, ArrItem) => { // 编辑page-data
-
     const index = state.pageData.findIndex((itme) => itme.id === ArrItem.id)
     if (index > -1) {
       state.pageData.splice(index, 1, ArrItem)
+    }
+  },
+  deletePageData: (state, id) => { // 解答题使用
+    const index = state.pageData.findIndex((itme) => itme.pid === id)
+    if (index > -1) {
+      state.pageData.splice(index, 1)
     }
   },
   delPageData: (state, index) => {
