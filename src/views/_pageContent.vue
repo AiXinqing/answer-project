@@ -10,7 +10,8 @@
         v-for="(row, a) in item"
         :key="a"
         class="footer"
-        :style="{ minHeight: row.castHeight + 'px' }"
+        ref="box"
+        :style="{ minHeight: row.height + 'px' }"
       >
         <component
           :is="row.questionType"
@@ -28,12 +29,12 @@
     <!-- 准考证号 -->
     <admission-number-dialog ref="admissionDialog" />
     <question-dialog ref="questionDialogs" />
-     <fill-in-the-blank-dialog ref="fillInTheBlanks" />
+    <fill-in-the-blank-dialog ref="fillInTheBlanks" />
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import AnswerSheetTitle from './questionContent/_answerSheetTitle' // 答题卡标题
 import ObjectiveQuestion from './questionContent/_ObjectiveQuestion' // 客观题
 import FillInTheBlank from './questionContent/_FillInTheBlank' // 填空题
@@ -56,6 +57,7 @@ export default {
   data () {
     return {
       contentData: [],
+      heightArray: []
     }
   },
   computed: {
@@ -64,13 +66,20 @@ export default {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 520
         : 785
-    }
+    },
   },
   watch: {
     pageData: {
       immediate: true,
       handler () {
         this.contentData = this.pageContentFunc(this.pageData)
+        if (this.contentData.length > 0) {
+          this.$nextTick(() => {
+            this.heightArray = this.$refs['box'].map(item => item.clientHeight)
+            this.set_pageHeight(this.heightArray)
+
+          })
+        }
       }
     }
   },
@@ -79,6 +88,7 @@ export default {
   },
   methods: {
     ...mapActions('pageContent', ['getPageData']),
+    ...mapMutations('pageContent', ['set_pageHeight']),
     hanldeStudent (Arr) {
       this.$refs.studentDialog.openedFrameFunc(Arr)
     },
@@ -86,27 +96,28 @@ export default {
       this.$refs.admissionDialog.openedFrameFunc()
     },
     pageContentFunc (rects = []) {
-     // 重组题-分页
+      // 重组题-分页
       const results = []
-       // currentPage.height 总高度
+      // currentPage.height 总高度
       var currentPage = {
         height: 0,
         rects: [],
       }
       rects.forEach((rect) => {
         currentPage.height += rect.height
-        if(currentPage.height < this.page_size){
+        if (currentPage.height < this.page_size) {
           currentPage.rects.push(rect)
-        }else{
+        } else {
           currentPage.height = rect.rects
           results.push(currentPage.rects)
           currentPage.rects = []
           currentPage.rects.push(rect)
         }
       })
-      if(currentPage.rects.length > 0){
-          results.push(currentPage.rects)
-        }
+      if (currentPage.rects.length > 0) {
+        results.push(currentPage.rects)
+      }
+
       return results
     },
     currentQuestionHanldeEdit (id) {
@@ -114,7 +125,7 @@ export default {
     },
     currentQuestionFillEdit (id) {
       this.$refs.fillInTheBlanks.openedEdit(id)
-    }
+    },
   },
 }
 </script>

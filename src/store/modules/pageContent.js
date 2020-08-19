@@ -5,6 +5,7 @@ const state = {
   pageData: [],
   page_size: 1160, // 一页高度
   BigQuestion: 1, // 大题题号
+  pageHeight: [], // 页面高度
 }
 
 const mutations = {
@@ -26,6 +27,30 @@ const mutations = {
   },
   set_objectiveData: (state, val) => {
     state.BigQuestion = val + 1
+  },
+  set_pageHeight: (state, Arr = []) => {
+    // 页面高度更新
+    const results = []
+    // currentPage.height 总高度
+    var currentPage = {
+      height: 0,
+      rects: [],
+    }
+    Arr.forEach((rect) => {
+      currentPage.height += rect
+      if (currentPage.height < state.page_size) {
+        currentPage.rects.push(rect)
+      } else {
+        currentPage.height = rect
+        results.push(currentPage.rects)
+        currentPage.rects = []
+        currentPage.rects.push(rect)
+      }
+    })
+    if (currentPage.rects.length > 0) {
+      results.push(currentPage.rects)
+    }
+    state.pageHeight = results
   }
 }
 

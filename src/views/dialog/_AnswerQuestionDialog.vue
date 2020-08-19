@@ -106,6 +106,7 @@ export default {
       'letterArr',
       'determineTopic'
     ]),
+    ...mapState('pageContent', ['pageHeight']),
     childGroups () {
       let Arr = []
       this.dataTopic.group.forEach(item => {
@@ -116,59 +117,10 @@ export default {
     errorMessage () {
       return this.errorVal != '' ? true : false
     },
-  },
-  mounted () {
-    this.closeData = JSON.parse(JSON.stringify(this.questionData))
-    this.set_currentQuestion()
-  },
-  watch: {
-    questionData: {
-      immediate: true,
-      handler () {
-        this.dataTopic = {
-          ...this.questionData
-        }
-        if (this.dataTopic != null) {
-          this.dataTopic.number = this.BigQuestion
-        }
-      }
-    }
-  },
-  methods: {
-    ...mapMutations('pageContent', ['initPageData', 'amendPageData', 'set_objectiveData',]),
-    ...mapMutations('questionType', [
-      'set_AlreadyTopics',
-      'del_AlreadyTopics',
-      'set_currentQuestion'
-    ]),
-    opened () {
-      // 开打弹框
-      this.openedFrame = true
-    },
-    openedEdit (id) {
-      //编辑弹框
-      this.openedFrame = true
-      console.log(id)
-    },
-    closeFrame () {
-      // 关闭弹窗
-      this.questionData = JSON.parse(JSON.stringify(this.closeData))
-      this.openedFrame = false
-    },
-    preCreateQuestion () {
-      //确定信息
-      console.log(this.questionData)
+    RefactorData () {
       let group = this.questionData.group
-      // let group = [...this.questionData.group.map(item => item.childGroup)]
       let itemArr = []
-      // group[0].forEach(item => {
-      //   console.log(item)
-      //   if (item.childGroup.length > 0) {
-      //     itemArr.push(...item.childGroup)
-      //   }
-      // })
       group.forEach(item => {
-        console.log(item)
         if (item.childGroup.length > 0) {
 
           let subItem = item.childGroup
@@ -212,7 +164,51 @@ export default {
           itemArr.push(item)
         }
       })
-      console.log(itemArr)
+      return itemArr
+    }
+  },
+  mounted () {
+    this.closeData = JSON.parse(JSON.stringify(this.questionData))
+    this.set_currentQuestion()
+  },
+  watch: {
+    questionData: {
+      immediate: true,
+      handler () {
+        this.dataTopic = {
+          ...this.questionData
+        }
+        if (this.dataTopic != null) {
+          this.dataTopic.number = this.BigQuestion
+        }
+      }
+    }
+  },
+  methods: {
+    ...mapMutations('pageContent', ['initPageData', 'amendPageData', 'set_objectiveData',]),
+    ...mapMutations('questionType', [
+      'set_AlreadyTopics',
+      'del_AlreadyTopics',
+      'set_currentQuestion'
+    ]),
+    opened () {
+      // 开打弹框
+      this.openedFrame = true
+    },
+    openedEdit (id) {
+      //编辑弹框
+      this.openedFrame = true
+      console.log(id)
+    },
+    closeFrame () {
+      // 关闭弹窗
+      this.questionData = JSON.parse(JSON.stringify(this.closeData))
+      this.openedFrame = false
+    },
+    preCreateQuestion () {
+      //确定信息
+      console.log(this.RefactorData)
+      this.RefactorData
 
     },
     hanldeStatus (val) {
