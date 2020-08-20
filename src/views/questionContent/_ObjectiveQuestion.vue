@@ -2,7 +2,7 @@
 <!-- 选这题 -->
   <div class="question-info">
     <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
-      <div v-html="cotent"></div>
+      <div class="title-span" v-html="cotent"></div>
     </div>
     <quill-editor
       v-show="isEditor"

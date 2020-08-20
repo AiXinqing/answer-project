@@ -80,8 +80,6 @@ export default {
 
       if (!this.tabStatus) {
 
-        console.log(topicList)
-
         this.Add_AlreadyTopics(topicList) // 存数组 totalScore
         this.$emit('pre-optional-data', { ...this.data, childGroup: topicList, totalScore: totalScore })
       }
