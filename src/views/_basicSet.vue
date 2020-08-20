@@ -10,7 +10,7 @@
       <el-button @click="questionDialog">客观题</el-button>
       <el-button @click="fillInTheBlank">填空题</el-button>
       <el-button @click="answerQuestion">解答题</el-button>
-      <el-button>选做题</el-button>
+      <el-button @click="optionalQuestion">选做题</el-button>
       <el-button>作文(英)</el-button>
       <el-button>作文(语)</el-button>
       <el-button>非作答</el-button>
@@ -51,6 +51,9 @@ export default {
     },
     answerQuestion () {
       this.$refs.publicDialog.opened('answerQuestion')
+    },
+    optionalQuestion () {
+      this.$refs.publicDialog.opened('optionalQuestion')
     }
   },
 }
