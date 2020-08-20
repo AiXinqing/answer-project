@@ -51,7 +51,7 @@ export default {
         let numEnd = determineTopic.findIndex(item => item.topic == itemEnd)
         let endIndex = AlreadyTopics.findIndex(item => item.topic == itemStart)
         if (numStart > -1 || index > -1) {
-          if (AlreadyTopics[index].pid == this.data.id && numStart <= -1) {
+          if (AlreadyTopics[index].pid != undefined && AlreadyTopics[index].pid == this.data.id && numStart <= -1) {
             strStart = ''
           } else {
 
@@ -59,7 +59,7 @@ export default {
           }
         }
         if (numEnd > -1 || endIndex > -1) {
-          if (AlreadyTopics[endIndex].pid == this.data.id && numEnd <= -1) {
+          if (AlreadyTopics[endIndex].pid != undefined && AlreadyTopics[endIndex].pid == this.data.id && numEnd <= -1) {
             strEnd = ''
           } else {
             strEnd = `${itemEnd}题已经存在，请勿重复添加`
@@ -88,7 +88,7 @@ export default {
         let numEnd = determineTopic.findIndex(item => item.topic == itemEnd)
         let endIndex = AlreadyTopics.findIndex(item => item.topic == itemStart)
         if (numStart > -1 || index > -1) {
-          if (AlreadyTopics[index].pid == this.data.id && numStart <= -1) {
+          if (AlreadyTopics[index].pid != undefined && AlreadyTopics[index].pid == this.data.id && numStart <= -1) {
             strStart = ''
           } else {
 
@@ -96,7 +96,7 @@ export default {
           }
         }
         if (numEnd > -1 || endIndex > -1) {
-          if (AlreadyTopics[endIndex].pid == this.data.id && numEnd <= -1) {
+          if (AlreadyTopics[endIndex].pid != undefined && AlreadyTopics[endIndex].pid == this.data.id && numEnd <= -1) {
             strEnd = ''
           } else {
             strEnd = `${itemEnd}题已经存在，请勿重复添加`
