@@ -26,14 +26,11 @@
         v-for="(item,i) in data.group"
         :key="i"
         :form-data="item"
-        @hanlde-status="hanldeStatus"
-        @add-answer-topic-group="addAnswerTopicGroup"
       />
       <div class="question-group">
 
       </div>
       <div class="condition_box">
-        <el-checkbox v-model="data.ShowScore">小题显示分数</el-checkbox>
         <el-checkbox v-model="data.HorizontalLine">生成解答题横线</el-checkbox>
         <span class="answer_rows" v-show="data.HorizontalLine">
           <span>行数：</span>
@@ -52,10 +49,13 @@
 </template>
 
 <script>
-// import AddForm from '../questionContent/Precautions/answer/_index'
+import AddForm from '../questionContent/Precautions/optional/_index'
 // import answerItem from '../questionContent/Precautions/answer/_item'
 import { mapState, mapMutations } from 'vuex'
 export default {
+  components: {
+    AddForm,
+  },
   data () {
     return {
       data: {},
@@ -71,7 +71,6 @@ export default {
         rows: 6,
         startQuestion: 1,
         HorizontalLine: false, // 横行
-        ShowScore: true, // 显示分数
         group: [{
           start: 1,
           end: null,
@@ -114,12 +113,19 @@ export default {
       }
     }
   },
+  mounted () {
+    this.closeData = JSON.parse(JSON.stringify(this.questionData))
+    this.set_currentQuestion()
+  },
   methods: {
     ...mapMutations('pageContent', [
       'initPageData',
       'amendPageData',
       'set_objectiveData',
       'deletePageData'
+    ]),
+    ...mapMutations('questionType', [
+      'set_currentQuestion',
     ]),
     opened () {
       // 开打弹框
@@ -143,45 +149,6 @@ export default {
 </script>
 
 <style lang="less" >
-.answer_box {
-  .select-item:last-child {
-    margin-top: 0;
-  }
-  .big-item .el-input--mini {
-    width: 68px;
-  }
-  .big-item input {
-    width: 68px;
-    margin-top: 10px;
-    text-align: center;
-  }
-  .condition_box {
-    margin-top: 15px;
-  }
-  .big-item {
-    span {
-      top: 15px;
-    }
-  }
-  .p-5 {
-    padding: 0 5px;
-  }
-  .answer_rows {
-    display: inline-block;
-    width: 140px;
-    position: absolute;
-    margin-top: -3px;
-    margin-left: 40px;
-    .el-input,
-    input {
-      width: 48px;
-    }
-  }
-  .error-message {
-    margin-top: 10px;
-    text-indent: 0;
-  }
-}
 </style>
 
 
