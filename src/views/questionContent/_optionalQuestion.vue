@@ -79,8 +79,7 @@ export default {
       return `<span>${this.numberTitle}.</span><span>${this.contentData.topic}</span><span class='p-5'>(${totalScore})</span>分<span class='optional-prompt'>${this.promptTitle}</span>`
     },
     topicData () {
-
-      return this.contentData.group
+      return this.contentData.group[0].childGroup
     },
     rowsData () {
       let Arr = []
@@ -97,8 +96,6 @@ export default {
         this.data = {
           ...this.questionData
         }
-        console.log(this.data)
-        console.log(this.contentData)
       }
     },
     TopicContent: {
@@ -126,12 +123,14 @@ export default {
       this.isEditor = true
     },
     currentQuestionAnswerEdit () {
-      this.$emit('current-question-answer-edit', this.data)
+      this.$emit('current-question-optional-edit', this.contentData, this.data.id)
     },
     delHanlde () { // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
       if (index > -1) {
-        console.log(this.contentData.group)
+        this.del_determineTopic(this.topicData)
+        this.delPageData(index)
+        this.set_currentQuestion()
       }
 
     },

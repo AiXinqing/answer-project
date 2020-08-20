@@ -144,6 +144,7 @@ export default {
       'Add_AlreadyTopics',
       'set_closeFrame',
       'set_determineTopic',
+      'once_AlreadyTopics',
     ]),
     opened () {
       // 开打弹框
@@ -155,10 +156,10 @@ export default {
     openedEdit (obj) {
       //编辑弹框
       this.set_currentQuestion()
-      this.editQuestionId = obj.pid
+      this.editQuestionId = obj.id
       this.openedFrame = true
-      this.Empty_AlreadyTopics() // 清空
-      this.Add_AlreadyTopics(this.determineTopic)
+      this.data = JSON.parse(JSON.stringify(obj))
+      this.title = '编辑选作题'
     },
     closeFrame () {
       // 关闭弹窗
@@ -206,7 +207,7 @@ export default {
           objArr.push(nextObj)
         }
       }
-
+      console.log(this.editQuestionId)
       if (this.editQuestionId == null) {
         // 新增
         objArr.forEach(obj => {
@@ -217,7 +218,8 @@ export default {
         //清空编辑前数据
         // this.deletePageData(this.dataTopic.pid)
         objArr.forEach(obj => {
-          this.initPageData(obj)
+
+          this.amendPageData({ ...obj, id: this.editQuestionId })
         })
       }
       // 大题号修改
@@ -240,7 +242,7 @@ export default {
       // 新增题组
       const index = this.data.group.findIndex(item => item.id === obj.id)
       if (index > -1) {
-        this.questionData.group.splice(index, 1, obj)
+        this.data.group.splice(index, 1, obj)
       }
     },
     rowsFunc () {

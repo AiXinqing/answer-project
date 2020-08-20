@@ -22,6 +22,7 @@
           @current-question-hanlde-edit="currentQuestionHanldeEdit"
           @current-question-fill-edit="currentQuestionFillEdit"
           @current-question-answer-edit="currentQuestionAnswerEdit"
+          @current-question-optional-edit="currentQuestionOptionalEdit"
         />
       </div>
     </div>
@@ -141,6 +142,10 @@ export default {
     },
     currentQuestionAnswerEdit (obj) {
       this.$refs.publicDialog.openedEdit('answerQuestion', obj)
+    },
+    currentQuestionOptionalEdit (obj, id) {
+
+      this.$refs.publicDialog.openedEdit('optionalQuestion', obj, id)
     }
   },
 }

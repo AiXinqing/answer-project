@@ -14,16 +14,24 @@ const mutations = {
   },
   initPageData: (state, Arr) => {
     state.pageData.push(Arr)
+    state.pageData = state.pageData.sort((a, b) => {
+      return a.order - b.order;
+    })
   },
   amendPageData: (state, ArrItem) => { // 编辑page-data
     const index = state.pageData.findIndex((itme) => itme.id === ArrItem.id)
     if (index > -1) {
       state.pageData.splice(index, 1, ArrItem)
+      state.pageData = state.pageData.sort((a, b) => {
+        return a.order - b.order;
+      })
     }
   },
   deletePageData: (state, id) => { // 解答题使用
     state.pageData = state.pageData.filter((item) => {
       return ![id].includes(item.pid)
+    }).sort((a, b) => {
+      return a.order - b.order;
     })
 
   },

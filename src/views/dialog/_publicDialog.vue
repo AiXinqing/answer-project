@@ -31,13 +31,13 @@ export default {
           break
       }
     },
-    openedEdit (type, obj) {
+    openedEdit (type, obj, id) {
       switch (type) {
         case 'answerQuestion':
           this.$refs.AnswerQuestionDialog.openedEdit(obj)
           break
         case 'optionalQuestion':
-          this.$refs.optionalQuestionDialog.openedEdit(obj)
+          this.$refs.optionalQuestionDialog.openedEdit({ ...obj, id: id })
           break
         default:
           break

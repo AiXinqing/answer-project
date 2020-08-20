@@ -58,16 +58,17 @@ export default {
   methods: {
     ...mapMutations('questionType', [
       'Add_AlreadyTopics',
+      'once_AlreadyTopics',
     ]),
     groupTopicHanlde () {
-      const { choices, start, end, id, score } = this.data
+      const { choices, start, id, score } = this.data
       // 报错信息
       this.$emit('hanlde-status', this.tabStatusVal)
       let topicList = []
       this.data.end = choices + start - 1
       let totalScore = 0
 
-      for (let i = start; i <= end; i++) {
+      for (let i = start; i <= this.data.end; i++) {
         let obj = {
           pid: id,
           id: `optional_${+new Date()}_${i}`,
@@ -78,15 +79,21 @@ export default {
         topicList.push(obj)
       }
 
-      if (!this.tabStatus) {
 
+      if (!this.tabStatus) {
+        // console.log(this.data.childGroup)
+        if (this.data.childGroup.length > 0) {
+          console.log(this.data.childGroup)
+          this.data.childGroup.forEach(item => {
+            this.once_AlreadyTopics(item.id)
+          })
+          //
+        }
+        let objL = JSON.parse(JSON.stringify({ ...this.data, childGroup: [] }))
         this.Add_AlreadyTopics(topicList) // 存数组 totalScore
-        this.$emit('pre-optional-data', { ...this.data, childGroup: topicList, totalScore: totalScore })
+        this.$emit('pre-optional-data', { ...objL, childGroup: topicList, totalScore: totalScore })
       }
     }
   },
 }
 </script>
-
-<style lang="scss" scoped>
-</style>

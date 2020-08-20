@@ -151,6 +151,12 @@ const mutations = {
 
     })
   },
+  once_AlreadyTopics: (state, id) => {
+    // 一次清除
+    state.AlreadyTopics = state.AlreadyTopics.filter((item) => {
+      return ![id].includes(item.id)
+    })
+  },
   set_AlreadyTopics: (state, Arr) => {
     Arr.forEach(item => {
       const index = state.AlreadyTopics.findIndex(row => row.topic == item.topic)
