@@ -136,6 +136,7 @@ export default {
       'amendPageData',
       'set_objectiveData',
       'deletePageData',
+      'pageData',
     ]),
     ...mapMutations('questionType', [
       'set_currentQuestion',
@@ -179,7 +180,8 @@ export default {
         height: rectHeight,
         id: 'optional' + +new Date(),
         questionType: 'optionalQuestion',
-        content: this.data
+        content: this.data,
+        order: this.pageData.length
       }
       if (currentPageHeight > rectHeight) {
         objArr.push(obj)

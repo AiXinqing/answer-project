@@ -192,7 +192,7 @@ export default {
       'set_determineTopic', // 储存确定题型
       'Empty_AlreadyTopics', // 清空
     ]),
-    ...mapMutations('pageContent', ['initPageData', 'amendPageData', 'set_objectiveData',]),
+    ...mapMutations('pageContent', ['initPageData', 'amendPageData', 'set_objectiveData', 'pageData']),
     closeFrame () { // 关闭弹框
       this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
       this.set_closeFrame()
@@ -237,6 +237,7 @@ export default {
         height: height, // 32标题高度
         questionType: 'FillInTheBlank',
         content: { ...this.objectiveData, totalScore: totalScore, },
+        order: this.pageData.length
         // 此题总分
       }
 

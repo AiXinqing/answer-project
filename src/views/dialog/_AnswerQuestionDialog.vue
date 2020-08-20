@@ -205,7 +205,8 @@ export default {
       'initPageData',
       'amendPageData',
       'set_objectiveData',
-      'deletePageData'
+      'deletePageData',
+      'pageData',
     ]),
     ...mapMutations('questionType', [
       'set_AlreadyTopics',
@@ -259,7 +260,8 @@ export default {
           id: `answer${+new Date()}_${index}`,
           pid: `answer${date}`,
           questionType: 'answerQuestion',
-          content: {}
+          content: {},
+          order: this.pageData.length + index
         }
         if (index == 0) {
           obj = {
@@ -269,7 +271,7 @@ export default {
               ...this.dataTopic,
               totalScore: this.totalScore,
               group: { ...item }
-            }
+            },
           }
         } else {
           obj = {
@@ -300,6 +302,7 @@ export default {
               ...obj,
               height: difference,
               top: 20,
+              order: obj.order + 1,
               content: { ...obj.content, group: {} }
             }
             Arr.push(preObj, nextObj)

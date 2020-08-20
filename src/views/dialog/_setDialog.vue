@@ -108,6 +108,7 @@ export default {
           titleInfo: this.titleInfo,
           titleRows: this.titleRows
         },
+        order: 0
       }
       //
       if (change == 1) {
