@@ -76,7 +76,7 @@ export default {
       dataTopic: {},
       closeData: {},
       title: '新增解答题',
-      editQuestionId:null,
+      editQuestionId: null,
       openedFrame: false,
       isdisabledFn: false,
       errorVal: '',
@@ -210,12 +210,16 @@ export default {
       'del_AlreadyTopics',
       'set_currentQuestion',
       'set_closeFrame',
-      'set_determineTopic'
+      'set_determineTopic',
+      'Empty_AlreadyTopics',
+      'Add_AlreadyTopics',
     ]),
     ...mapMutations('answerQuestion', ['set_answerQuestionArr',]),
     opened () {
       // 开打弹框
       this.openedFrame = true
+      this.Empty_AlreadyTopics() // 清空
+      this.Add_AlreadyTopics(this.determineTopic)
     },
     openedEdit (obj) {
       //编辑弹框
@@ -225,6 +229,8 @@ export default {
       if (index > -1) {
         this.questionData = JSON.parse(JSON.stringify(this.answerQuestionArr[index]))
       }
+      this.Empty_AlreadyTopics() // 清空
+      this.Add_AlreadyTopics(this.determineTopic)
     },
     closeFrame () {
       // 关闭弹窗
@@ -237,7 +243,7 @@ export default {
       let heights = this.pageHeight[this.pageHeight.length - 1].map(item => item).reduce((accumulator, currentValue) => {
         return accumulator + currentValue;
       })
-      let currentPageHeight = this.page_size - heights - 20 - 32 // 20当前大题下移的20，32标题高度
+      let currentPageHeight = this.page_size - heights - 20 - 20 // 20当前大题下移的20，32标题高度
       let Arr = []
       let date = +new Date()
       let rectHeight = this.dataTopic.rows * 35 + 10 // 小题初始高度
@@ -282,7 +288,7 @@ export default {
         } else {
           // 超出高度部分拆分成两个对象，分上下部分
           if (currentPageHeight >= 52) {
-            let difference = rectHeight - currentPageHeight; // 差值
+            let difference = Math.abs(rectHeight - currentPageHeight) // 差值
             let preObj = { // 上半部分
               ...obj,
               height: currentPageHeight

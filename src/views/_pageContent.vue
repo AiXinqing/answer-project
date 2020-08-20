@@ -83,7 +83,6 @@ export default {
           this.$nextTick(() => {
             this.heightArray = this.$refs['box'].map(item => item.clientHeight)
             this.set_pageHeight(this.heightArray)
-
           })
         }
       }

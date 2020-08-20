@@ -40,7 +40,7 @@
         <el-checkbox v-model="data.HorizontalLine">生成解答题横线</el-checkbox>
         <span class="answer_rows" v-show="data.HorizontalLine">
           <span>行数：</span>
-          <el-input v-model.number="data.rows" size="mini"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
+          <el-input v-model.number="data.rows" size="mini" @input="rowsFunc"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
           <span class="p-5"> 行 </span>
         </span>
       </div>
@@ -117,9 +117,10 @@ export default {
         this.data = {
           ...this.questionData
         }
-        if (this.data != null) {
+        if (this.data.group[0].choices == '') {
           this.data.number = this.BigQuestion
         }
+
       }
     }
   },
@@ -132,27 +133,95 @@ export default {
       'initPageData',
       'amendPageData',
       'set_objectiveData',
-      'deletePageData'
+      'deletePageData',
     ]),
     ...mapMutations('questionType', [
       'set_currentQuestion',
+      'Empty_AlreadyTopics',
+      'Add_AlreadyTopics',
     ]),
     opened () {
       // 开打弹框
+      this.set_currentQuestion()
       this.openedFrame = true
+      this.Empty_AlreadyTopics() // 清空
+      this.Add_AlreadyTopics(this.determineTopic)
     },
     openedEdit (obj) {
       //编辑弹框
+      this.set_currentQuestion()
       this.editQuestionId = obj.pid
       this.openedFrame = true
+      this.Empty_AlreadyTopics() // 清空
+      this.Add_AlreadyTopics(this.determineTopic)
     },
     closeFrame () {
       // 关闭弹窗
+      this.set_currentQuestion()
       this.questionData = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
     },
     preCreateQuestion () {
+      // 当前页内容所占高度
+      const { rows } = this.data
+      let heights = this.pageHeight[this.pageHeight.length - 1].map(item => item).reduce((accumulator, currentValue) => {
+        return accumulator + currentValue;
+      })
+      let currentPageHeight = this.page_size - heights - 20 - 20 // 20当前大题下移的20，50标题高度 20每页底部余留
+      console.log(currentPageHeight)
+      let rectHeight = rows * 35 + 10 // 当前内容高度
+      let objArr = []
+      let obj = {
+        height: rectHeight,
+        id: 'optional' + +new Date(),
+        questionType: 'optionalQuestion',
+        content: this.data
+      }
+      if (currentPageHeight > rectHeight) {
+        objArr.push(obj)
+      } else {
+        // 当页所剩差值
+        let difference = Math.abs(currentPageHeight - rectHeight)
+        console.log(difference)
+        if (difference < 50 && difference != 50) {
+          console.log(difference)
+          objArr.push(obj)
+        } else {
+          // 内容拆分值
+          console.log(1)
+          let SplitHeight = rectHeight - difference
+          let preObj = {
+            ...obj,
+            height: difference
+          }
+          let nextObj = { ...obj, height: SplitHeight }
+          objArr.push(preObj)
+          objArr.push(nextObj)
+        }
+      }
 
+      if (this.editQuestionId == null) {
+        // 新增
+        objArr.forEach(obj => {
+          this.initPageData(obj)
+        })
+      } else {
+        // 编辑
+        //清空编辑前数据
+        // this.deletePageData(this.dataTopic.pid)
+        objArr.forEach(obj => {
+          this.initPageData(obj)
+        })
+      }
+      // 大题号修改
+      this.set_objectiveData(this.dataTopic.number)
+      //------------------------------------
+      this.openedFrame = false // 关闭弹窗
+      // 清空弹框数据
+      this.data = JSON.parse(JSON.stringify(this.closeData))
+      this.set_closeFrame() // 弹窗关闭置空
+      this.set_determineTopic(this.data.group.childGroup)
+      this.set_currentQuestion()
     },
     hanldeStatus (val) {
       // 报错状态
@@ -160,13 +229,19 @@ export default {
     },
     preOptionalData (obj) {
       // 新增题组
-      console.log(obj)
-      // console.log(this.data.group)
       const index = this.data.group.findIndex(item => item.id === obj.id)
       if (index > -1) {
         this.data.group.splice(index, 1, obj)
       }
-
+    },
+    rowsFunc () {
+      if (this.data.rows <= 0) {
+        this.errorVal = '行数必须大于0'
+        this.isdisabledFn = true
+      } else {
+        this.errorVal = ''
+        this.isdisabledFn = false
+      }
     }
   },
 }
