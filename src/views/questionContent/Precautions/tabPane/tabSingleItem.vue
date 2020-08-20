@@ -143,11 +143,8 @@ export default {
     singleBoxHanlde () {
 
       // 新增题组-小题详情
-      const StatusObj = {
-        val: this.tabStatusVal,
-        status: this.tabStatus
-      }
-      this.$emit('hanlde-status', StatusObj)
+
+      this.$emit('hanlde-status', this.tabStatusVal)
 
       if (!this.tabStatus) {
         let subtopicArr = []

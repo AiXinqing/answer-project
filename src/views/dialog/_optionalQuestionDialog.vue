@@ -26,9 +26,15 @@
         v-for="(item,i) in data.group"
         :key="i"
         :form-data="item"
+        @hanlde-status="hanldeStatus"
+        @pre-optional-data="preOptionalData"
       />
       <div class="question-group">
-
+        <optional-item
+          v-for="(item,i) in groupItemData"
+          :key="i"
+          :optional-data="item"
+        />
       </div>
       <div class="condition_box">
         <el-checkbox v-model="data.HorizontalLine">生成解答题横线</el-checkbox>
@@ -38,7 +44,6 @@
           <span class="p-5"> 行 </span>
         </span>
       </div>
-
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
     <div class="dialog-footer">
@@ -50,11 +55,12 @@
 
 <script>
 import AddForm from '../questionContent/Precautions/optional/_index'
-// import answerItem from '../questionContent/Precautions/answer/_item'
+import optionalItem from '../questionContent/Precautions/optional/_item'
 import { mapState, mapMutations } from 'vuex'
 export default {
   components: {
     AddForm,
+    optionalItem,
   },
   data () {
     return {
@@ -72,10 +78,11 @@ export default {
         startQuestion: 1,
         HorizontalLine: false, // 横行
         group: [{
+          choices: '', // 几选几
+          select: '',
           start: 1,
-          end: null,
-          score: 1,
-          space: 1,
+          end: '',
+          score: '',
           id: 'optionalTopic',
           childGroup: [],
         },]
@@ -99,6 +106,9 @@ export default {
     errorMessage () {
       return this.errorVal != '' ? true : false
     },
+    groupItemData () {
+      return this.data.group.map(item => item.childGroup)[0]
+    }
   },
   watch: {
     questionData: {
@@ -142,6 +152,20 @@ export default {
       this.openedFrame = false
     },
     preCreateQuestion () {
+
+    },
+    hanldeStatus (val) {
+      // 报错状态
+      this.errorVal = val
+    },
+    preOptionalData (obj) {
+      // 新增题组
+      console.log(obj)
+      // console.log(this.data.group)
+      const index = this.data.group.findIndex(item => item.id === obj.id)
+      if (index > -1) {
+        this.data.group.splice(index, 1, obj)
+      }
 
     }
   },
