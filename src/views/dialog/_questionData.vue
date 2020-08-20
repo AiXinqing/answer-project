@@ -116,7 +116,7 @@ export default {
       'letterArr',
       'determineTopic'
     ]),
-    ...mapState('pageContent', ['pageData', 'pageLayout', 'BigQuestion']),
+    ...mapState('pageContent', ['pageData', 'pageLayout', 'BigQuestion', 'pageData',]),
     pageWidth () {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 480
@@ -155,7 +155,11 @@ export default {
       'set_determineTopic', // 储存确定题型
       'Empty_AlreadyTopics', // 清空
     ]),
-    ...mapMutations('pageContent', ['initPageData', 'amendPageData', 'set_objectiveData',]),
+    ...mapMutations('pageContent', [
+      'initPageData',
+      'amendPageData',
+      'set_objectiveData',
+    ]),
     closeFrame () { // 取消弹框
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
       this.set_closeFrame(this.quesctionObj.startQuestion)
@@ -221,6 +225,7 @@ export default {
         height: heights + 32, // 32标题高度
         questionType: 'ObjectiveQuestion',
         content: this.objectiveData,
+        order: this.pageData.length
       }
 
       if (this.editQuestionId == null) {

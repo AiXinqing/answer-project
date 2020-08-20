@@ -109,7 +109,8 @@ export default {
     ...mapState('pageContent', [
       'pageHeight',
       'page_size',
-      'BigQuestion'
+      'BigQuestion',
+      'pageData',
     ]),
     ...mapState('answerQuestion', ['answerQuestionArr',]),
     childGroups () {
@@ -205,8 +206,7 @@ export default {
       'initPageData',
       'amendPageData',
       'set_objectiveData',
-      'deletePageData',
-      'pageData',
+      'deletePageData'
     ]),
     ...mapMutations('questionType', [
       'set_AlreadyTopics',
