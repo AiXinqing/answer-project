@@ -21,8 +21,11 @@
     >
     <div class="topic_number_box">
       <span class="black_icon"></span>
-      <span class="digital">1</span>
-      <span class="digital">2</span>
+
+      <span class="digital"
+        v-for="(item,i) in topicData"
+        :key="i"
+      >{{item.topic}}</span>
       <span class="black_icon"></span>
     </div>
     <div class="number-info">
