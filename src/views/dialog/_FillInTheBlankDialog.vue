@@ -169,8 +169,10 @@ export default {
           group: this.spaceTopic.group.sort((a, b) => { return a.start - b.start })
         }
 
-        if (this.BigQuestion != null) {
-          this.objectiveData.number = this.BigQuestion
+        if (this.editQuestionId == null) {
+          this.$nextTick(() => {
+            this.objectiveData.number = this.BigQuestion
+          })
         }
       }
     }

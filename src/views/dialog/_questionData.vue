@@ -116,7 +116,7 @@ export default {
       'letterArr',
       'determineTopic'
     ]),
-    ...mapState('pageContent', ['pageData', 'pageLayout','BigQuestion']),
+    ...mapState('pageContent', ['pageData', 'pageLayout', 'BigQuestion']),
     pageWidth () {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 480
@@ -133,8 +133,10 @@ export default {
         this.objectiveData = {
           ...this.quesctionObj
         }
-        if (this.BigQuestion != null) {
-          this.objectiveData.number = this.BigQuestion
+        if (this.editQuestionId == null) {
+          this.$nextTick(() => {
+            this.objectiveData.number = this.BigQuestion
+          })
         }
       }
     }

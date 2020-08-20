@@ -192,8 +192,10 @@ export default {
         this.dataTopic = {
           ...this.questionData
         }
-        if (this.dataTopic != null) {
-          this.dataTopic.number = this.BigQuestion
+        if (this.editQuestionId == null) {
+          this.$nextTick(() => {
+            this.dataTopic.number = this.BigQuestion
+          })
         }
       }
     }

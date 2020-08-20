@@ -41,6 +41,7 @@ import AnswerSheetTitle from './questionContent/_answerSheetTitle' // 答题卡�
 import ObjectiveQuestion from './questionContent/_ObjectiveQuestion' // 客观题
 import FillInTheBlank from './questionContent/_FillInTheBlank' // 填空题
 import answerQuestion from './questionContent/_answerQuestion' // 解答题
+import optionalQuestion from './questionContent/_optionalQuestion' // 选作题
 import columnDialog from './dialog/_studentColumnDialog'
 import AdmissionNumberDialog from './dialog/_AdmissionNumberDialog'
 import questionDialog from './dialog/_questionData'
@@ -58,7 +59,8 @@ export default {
     FillInTheBlank,
     FillInTheBlankDialog,
     answerQuestion,
-    publicDialog
+    publicDialog,
+    optionalQuestion,
   },
   data () {
     return {

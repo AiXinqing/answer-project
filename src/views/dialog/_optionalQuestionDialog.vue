@@ -117,8 +117,10 @@ export default {
         this.data = {
           ...this.questionData
         }
-        if (this.data.group[0].choices == '') {
-          this.data.number = this.BigQuestion
+        if (this.editQuestionId == null) {
+          this.$nextTick(() => {
+            this.data.number = this.BigQuestion
+          })
         }
 
       }
