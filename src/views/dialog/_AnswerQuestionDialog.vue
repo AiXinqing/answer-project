@@ -76,6 +76,7 @@ export default {
       dataTopic: {},
       closeData: {},
       title: '新增解答题',
+      editQuestionId:null,
       openedFrame: false,
       isdisabledFn: false,
       errorVal: '',
@@ -218,6 +219,7 @@ export default {
     },
     openedEdit (obj) {
       //编辑弹框
+      this.editQuestionId = obj.pid
       this.openedFrame = true
       let index = this.answerQuestionArr.findIndex(itme => itme.pid === obj.pid)
       if (index > -1) {
@@ -308,7 +310,7 @@ export default {
       } else {
         // 编辑
         //清空编辑前数据
-        this.deletePageData(this.spaceTopic.pid)
+        this.deletePageData(this.dataTopic.pid)
         Arr.forEach(obj => {
           this.initPageData(obj)
         })

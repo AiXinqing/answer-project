@@ -22,10 +22,10 @@ const mutations = {
     }
   },
   deletePageData: (state, id) => { // 解答题使用
-    const index = state.pageData.findIndex((itme) => itme.pid === id)
-    if (index > -1) {
-      state.pageData.splice(index, 1)
-    }
+    state.pageData = state.pageData.filter((item) => {
+      return ![id].includes(item.pid)
+    })
+
   },
   delPageData: (state, index) => {
     state.pageData.splice(index, 1)
