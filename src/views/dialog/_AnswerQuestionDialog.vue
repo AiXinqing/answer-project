@@ -291,6 +291,7 @@ export default {
           // 超出高度部分拆分成两个对象，分上下部分
           if (currentPageHeight >= 52) {
             let difference = Math.abs(rectHeight - currentPageHeight) // 差值
+
             let preObj = { // 上半部分
               ...obj,
               height: currentPageHeight

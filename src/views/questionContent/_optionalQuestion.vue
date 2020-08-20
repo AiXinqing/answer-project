@@ -19,6 +19,22 @@
         'height':data.height + 'px',
       }"
     >
+    <div class="topic_number_box">
+      <span class="black_icon"></span>
+      <span class="digital">1</span>
+      <span class="digital">2</span>
+      <span class="black_icon"></span>
+    </div>
+    <div class="number-info">
+      <span>我选的题号（1分）</span>
+    </div>
+    <div v-if="contentData.HorizontalLine">
+      <div
+        v-for="(item,i) in rowsData"
+        :key="i"
+        class="optional-item-list"
+      ></div>
+    </div>
     </div>
 
   </div>
@@ -144,6 +160,39 @@ export default {
     .p-5 {
       margin: 0 5px;
     }
+  }
+}
+.optional-item-list {
+  height: 34px;
+  line-height: 34px;
+  border-bottom: 1px solid #888;
+}
+.number-info {
+  height: 20px;
+  line-height: 20px;
+  font-size: 12px;
+  position: relative;
+}
+.topic_number_box {
+  height: 20px;
+  text-align: right;
+  width: 100%;
+  span {
+    display: inline-block;
+    margin-left: 5px;
+  }
+  .black_icon {
+    width: 16px;
+    height: 10px;
+    background-color: #000;
+  }
+  .digital {
+    min-width: 26px;
+    font-size: 12px;
+    border: 1px solid #000;
+    text-align: center;
+    height: 10px;
+    line-height: 10px;
   }
 }
 </style>

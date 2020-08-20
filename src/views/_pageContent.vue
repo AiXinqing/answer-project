@@ -129,6 +129,7 @@ export default {
       if (currentPage.rects.length > 0) {
         results.push(currentPage.rects)
       }
+      console.log(results)
       return results
     },
     currentQuestionHanldeEdit (id) {

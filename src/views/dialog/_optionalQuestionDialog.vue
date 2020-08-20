@@ -173,7 +173,7 @@ export default {
       })
       let currentPageHeight = this.page_size - heights - 20 - 20 // 20当前大题下移的20，50标题高度 20每页底部余留
       console.log(currentPageHeight)
-      let rectHeight = rows * 35 + 10 // 当前内容高度
+      let rectHeight = rows * 35 + 10 + 40 // 当前内容高度 45(内部高度)
       let objArr = []
       let obj = {
         height: rectHeight,
@@ -186,19 +186,20 @@ export default {
       } else {
         // 当页所剩差值
         let difference = Math.abs(currentPageHeight - rectHeight)
-        console.log(difference)
-        if (difference < 50 && difference != 50) {
-          console.log(difference)
+        let SplitHeight = Math.abs(rectHeight - difference)
+
+        if (SplitHeight < 50 && SplitHeight != 50) {
           objArr.push(obj)
         } else {
           // 内容拆分值
-          console.log(1)
-          let SplitHeight = rectHeight - difference
+
           let preObj = {
             ...obj,
-            height: difference
+            height: SplitHeight,
+            first: true,
+
           }
-          let nextObj = { ...obj, height: SplitHeight }
+          let nextObj = { ...obj, height: difference }
           objArr.push(preObj)
           objArr.push(nextObj)
         }
