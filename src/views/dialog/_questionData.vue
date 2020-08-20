@@ -230,14 +230,13 @@ export default {
         this.amendPageData(obj)
       }
       this.set_objectiveData(this.quesctionObj.number) // 大题号修改
+      // 小题数组追加数据
+      this.Add_AlreadyTopics(this.topicList)
+      this.set_determineTopic(this.topicList)
       // guan bi - 清楚数据
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
 
       this.set_closeFrame(this.quesctionObj.startQuestion)
-      // 小题数组追加数据
-      this.Add_AlreadyTopics(this.topicList)
-      this.set_determineTopic(this.topicList)
-
       //------------------------------------
       this.openedFrame = false // 关闭弹窗
     },

@@ -141,6 +141,8 @@ export default {
       'set_currentQuestion',
       'Empty_AlreadyTopics',
       'Add_AlreadyTopics',
+      'set_closeFrame',
+      'set_determineTopic',
     ]),
     opened () {
       // 开打弹框
@@ -216,14 +218,16 @@ export default {
         })
       }
       // 大题号修改
-      this.set_objectiveData(this.dataTopic.number)
+      this.set_objectiveData(this.data.number)
       //------------------------------------
       this.openedFrame = false // 关闭弹窗
       // 清空弹框数据
+
+      this.set_determineTopic(this.data.group[0].childGroup)
+      this.set_currentQuestion()
+
       this.data = JSON.parse(JSON.stringify(this.closeData))
       this.set_closeFrame() // 弹窗关闭置空
-      this.set_determineTopic(this.data.group.childGroup)
-      this.set_currentQuestion()
     },
     hanldeStatus (val) {
       // 报错状态
@@ -233,7 +237,7 @@ export default {
       // 新增题组
       const index = this.data.group.findIndex(item => item.id === obj.id)
       if (index > -1) {
-        this.data.group.splice(index, 1, obj)
+        this.questionData.group.splice(index, 1, obj)
       }
     },
     rowsFunc () {

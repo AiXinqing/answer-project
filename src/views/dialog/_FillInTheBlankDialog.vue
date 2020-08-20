@@ -250,12 +250,13 @@ export default {
       //------------------------------------
       this.openedFrame = false // 关闭弹窗
 
-      this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
-      this.set_closeFrame() // 改变大题号
       // 小题数组追加至确定题型
       this.Add_AlreadyTopics(this.topicList)
       this.set_determineTopic(this.topicList)
       this.set_currentQuestion()
+      //------------------------
+      this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
+      this.set_closeFrame() // 改变大题号
 
     },
     hanldeSelect (e) {

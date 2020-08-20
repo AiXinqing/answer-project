@@ -329,12 +329,12 @@ export default {
       this.set_objectiveData(this.dataTopic.number)
       //------------------------------------
       this.openedFrame = false // 关闭弹窗
-      // 清空弹框数据
-
-      this.questionData = JSON.parse(JSON.stringify(this.closeData))
-      this.set_closeFrame() // 弹窗关闭置空
       this.set_determineTopic(this.topicList)
       this.set_currentQuestion()
+      // 清空弹框数据
+      this.questionData = JSON.parse(JSON.stringify(this.closeData))
+      this.set_closeFrame() // 弹窗关闭置空
+
     },
     hanldeStatus (val) {
       this.errorVal = val
