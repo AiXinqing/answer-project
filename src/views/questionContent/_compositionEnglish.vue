@@ -105,8 +105,6 @@ export default {
         this.data = {
           ...this.questionData
         }
-        console.log(this.data)
-        console.log(this.contentData)
       }
     },
     TopicContent: {
@@ -139,7 +137,6 @@ export default {
     },
     delHanlde () { // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
-      console.log(index)
       if (index > -1) {
         this.del_determineTopic([this.contentData])
         this.Empty_PageData(this.data.id)

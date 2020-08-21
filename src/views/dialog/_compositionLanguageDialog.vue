@@ -7,6 +7,8 @@
     :width="'600px'"
     :before-close="closeFrame"
   >
+  <div class="dialog_content">
+
     <div class="item-box ">
       <el-row>
         <el-col :span="10" class="select-item">
@@ -65,6 +67,7 @@
       </el-row>
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
+  </div>
     <div class="dialog-footer">
       <hj-button type="cancel" @click="closeFrame">取 消</hj-button>
       <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateQuestion">确 定</hj-button>
