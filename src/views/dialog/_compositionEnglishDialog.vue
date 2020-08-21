@@ -33,21 +33,21 @@
         <el-row>
           <el-col :span="12" class="select-item composition_topic">
             <div class="label">小题题号:</div>
-            <el-input v-model="data.startQuestion" size="mini" placeholder="" />
+            <el-input v-model.number="data.topic" @blur="hanldeVerification" size="mini" placeholder="" />
             <span>题</span>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12" class="select-item">
             <div class="label">分数:</div>
-            <el-input v-model="data.score" size="mini" placeholder="" />
+            <el-input v-model.number="data.score" @blur="hanldeVerification" @input="hanldeRowsFunc" size="mini" placeholder="" />
             <span>分</span>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12" class="select-item">
             <div class="label">作文行数:</div>
-            <el-input v-model="data.rows" @input="hanldeRowsFunc" size="mini" placeholder="" />
+            <el-input v-model.number="data.rows" @blur="hanldeVerification" @input="hanldeRowsFunc" size="mini" placeholder="" />
             <span>分</span>
           </el-col>
         </el-row>
@@ -64,6 +64,7 @@
 <script>
 
 import { mapState, mapMutations } from 'vuex'
+import { black } from 'color-name';
 export default {
   components: {
 
@@ -73,7 +74,7 @@ export default {
       data: {},
       title: '设置',
       openedFrame: false,
-      isdisabledFn: false,
+      // isdisabledFn: false,
       closeData: {},
       editQuestionId: null,
       errorVal: '',
@@ -81,7 +82,7 @@ export default {
         number: 1, // 大题号
         name: '作文',
         rows: 10,
-        startQuestion: 1,
+        topic: 1,
         Attach: false,
         score: '',
       }
@@ -106,6 +107,66 @@ export default {
     },
     groupItemData () {
       return this.data.group.map(item => item.childGroup)[0]
+    },
+    isdisabledFn () {
+      return this.errorVal != '' ? true : false
+    },
+    tabStatusVal () {
+      const { topic, score, rows } = this.data
+      let determineTopic = this.determineTopic
+      let str = ''
+      if (determineTopic.length > 0) {
+
+        let index = determineTopic.findIndex(item => item.topic == topic)
+        if (index > -1) {
+          str = `${topic}题已经存在，请勿重复添加`
+        }
+      }
+      return score == '' ? '分数不能为空' :
+        rows == '' ? '作文行数不能为空' :
+          topic == '' ? '小题题号不能为空' :
+            str != '' ? str : ''
+    },
+    tabStatus () {
+      const { topic, score, rows } = this.data
+      let determineTopic = this.determineTopic
+      console.log(determineTopic)
+      let str = ''
+      if (determineTopic.length > 0) {
+
+        let index = determineTopic.findIndex(item => item.topic == topic)
+        if (index > -1) {
+          str = `${topic}题已经存在，请勿重复添加`
+        }
+      }
+      return score == '' ? true :
+        rows == '' ? true :
+          topic == '' ? true :
+            str != '' ? true : false
+    },
+    rowsData () {
+      // 计算内容是否分页
+      const { rows } = this.data
+      let Arr = []
+      let heights = this.pageHeight[this.pageHeight.length - 1].map(item => item).reduce((accumulator, currentValue) => {
+        return accumulator + currentValue;
+      })
+      let currentPageHeight = this.page_size - heights // 当前页剩余可用高度
+      // 67 = 20 (ivtop值) - 37 (标题高度+边框) - 10 (容器padding-bottom) 35 行高
+      let AvailableRow = Math.floor((currentPageHeight - 67) / 35) // 向下取整
+      //----------------------------------------------------------------------------------
+      if (AvailableRow > 0) {
+        let Difference = AvailableRow - rows
+        if (Difference > 0) {
+          Arr.push(rows)
+        } else {
+          Arr.push(AvailableRow) // 上部分
+          Arr.push(Math.abs(Difference)) // 下部分
+        }
+      } else {
+        Arr.push(rows)
+      }
+      return Arr
     }
   },
   watch: {
@@ -118,6 +179,7 @@ export default {
         if (this.editQuestionId == null) {
           this.$nextTick(() => {
             this.data.number = this.BigQuestion
+            this.data.topic = this.currentQuestion
           })
         }
 
@@ -132,16 +194,13 @@ export default {
     ...mapMutations('pageContent', [
       'initPageData',
       'amendPageData',
-      'set_objectiveData',
-      'deletePageData'
+      'set_objectiveData'
     ]),
     ...mapMutations('questionType', [
       'set_currentQuestion',
       'Empty_AlreadyTopics',
       'Add_AlreadyTopics',
-      'set_closeFrame',
       'set_determineTopic',
-      'once_AlreadyTopics',
     ]),
     opened () {
       // 开打弹框
@@ -164,18 +223,64 @@ export default {
       this.questionData = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
     },
-    hanldeStatus (val) {
-      // 报错状态
-      this.errorVal = val
+
+    preCreateQuestion () {
+      this.errorVal = this.tabStatusVal
+      if (!this.tabStatus) {
+        let objId = `compositionEnglish${+new Date()}`
+        //------------------------------------------------------------
+        console.log(this.rowsData)
+        let obj = {}
+        let ArrData = this.rowsData.map((item, i) => {
+          obj = {
+            height: item * 35,
+            id: objId,
+            questionType: 'compositionEnglish',
+            content: this.data,
+            order: this.pageData.length,
+            first: i == 0 ? true : false,
+            showRow: item
+          }
+          return obj
+        })
+
+        //-------------------------------------------------------------------------------------
+        if (this.editQuestionId == null) {
+          // 新增
+          ArrData.forEach(obj => {
+            this.initPageData(obj)
+          })
+          this.Add_AlreadyTopics([this.data])
+          this.set_determineTopic([this.data])
+        } else {
+          // 编辑
+          //清空编辑前数据
+          // this.deletePageData(this.dataTopic.pid)
+          // ArrData.forEach(obj => {
+
+          //   this.amendPageData({ ...obj, id: this.editQuestionId })
+          // })
+        }
+
+        console.log(ArrData)
+        this.set_currentQuestion()
+        this.data = JSON.parse(JSON.stringify(this.closeData))
+        this.openedFrame = false
+      }
+
     },
-    preCreateQuestion () { },
     hanldeRowsFunc () {
-      const { rows } = this.data
+      const { rows, score } = this.data
       if (rows <= 0) {
         this.errorVal = '作文行数必须大于0'
+      } else if (score <= 0) {
+        this.errorVal = '分数必须大于0'
       } else {
         this.errorVal = ''
       }
+    },
+    hanldeVerification () {
+      this.errorVal = this.tabStatusVal
     }
   },
 }
