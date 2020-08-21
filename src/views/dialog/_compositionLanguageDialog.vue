@@ -214,6 +214,10 @@ export default {
 .el-radio__inner:hover {
   border-color: @main;
 }
+.el-input.is-active .el-input__inner,
+.el-input__inner:focus {
+  border-color: @main;
+}
 </style>
 
 

@@ -7,50 +7,53 @@
     :width="'600px'"
     :before-close="closeFrame"
   >
-    <div class="item-box ">
-      <el-row>
-        <el-col :span="10" class="select-item">
-          <div class="label">大题题号:</div>
-          <hj-select
-            :items="options"
-            size="mini"
-            :value="data.number"
+    <div class="dialog_content">
 
-          ></hj-select>
-        </el-col>
-        <el-col :span="8" class="select-item composition_item">
-          <div class="label">题目:</div>
-          <el-input v-model="data.topic" size="mini" placeholder="请输入内容"></el-input>
-        </el-col>
-        <el-col :span="4" class="select-item composition_item_5">
-          <el-checkbox v-model="data.Attach">附加题</el-checkbox>
-        </el-col>
-      </el-row>
+      <div class="item-box ">
+        <el-row>
+          <el-col :span="10" class="select-item">
+            <div class="label">大题题号:</div>
+            <hj-select
+              :items="options"
+              size="mini"
+              :value="data.number"
+
+            ></hj-select>
+          </el-col>
+          <el-col :span="8" class="select-item composition_item">
+            <div class="label">题目:</div>
+            <el-input v-model="data.name" size="mini" placeholder=""></el-input>
+          </el-col>
+          <el-col :span="4" class="select-item composition_item_5">
+            <el-checkbox v-model="data.Attach">附加题</el-checkbox>
+          </el-col>
+        </el-row>
+      </div>
+      <div class="item-box">
+        <el-row>
+          <el-col :span="12" class="select-item composition_topic">
+            <div class="label">小题题号:</div>
+            <el-input v-model="data.startQuestion" size="mini" placeholder="" />
+            <span>题</span>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12" class="select-item">
+            <div class="label">分数:</div>
+            <el-input v-model="data.score" size="mini" placeholder="" />
+            <span>分</span>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12" class="select-item">
+            <div class="label">作文行数:</div>
+            <el-input v-model="data.rows" @input="hanldeRowsFunc" size="mini" placeholder="" />
+            <span>分</span>
+          </el-col>
+        </el-row>
+      </div>
+      <div class="error-message" v-if="errorMessage"><i></i>{{ errorVal }}</div>
     </div>
-    <div class="item-box">
-      <el-row>
-        <el-col :span="12" class="select-item composition_topic">
-          <div class="label">小题题号:</div>
-          <el-input v-model="data.number" size="mini" placeholder="请输入内容" />
-          <span>题</span>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="12" class="select-item">
-          <div class="label">分数:</div>
-          <el-input v-model="data.number" size="mini" placeholder="请输入内容" />
-          <span>分</span>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="12" class="select-item">
-          <div class="label">作文行数:</div>
-          <el-input v-model="data.number" size="mini" placeholder="请输入内容" />
-          <span>分</span>
-        </el-col>
-      </el-row>
-    </div>
-    <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
     <div class="dialog-footer">
       <hj-button type="cancel" @click="closeFrame">取 消</hj-button>
       <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateQuestion">确 定</hj-button>
@@ -75,21 +78,12 @@ export default {
       editQuestionId: null,
       errorVal: '',
       questionData: {
-        number: 1,
-        topic: '选作题',
-        rows: 6,
+        number: 1, // 大题号
+        name: '作文',
+        rows: 10,
         startQuestion: 1,
-        HorizontalLine: false, // 横行
         Attach: false,
-        group: [{
-          choices: '', // 几选几
-          select: '',
-          start: 1,
-          end: '',
-          score: '',
-          id: 'optionalTopic',
-          childGroup: [],
-        },]
+        score: '',
       }
     }
   },
@@ -98,7 +92,6 @@ export default {
       'options',
       'AlreadyTopics',
       'currentQuestion',
-      'letterArr',
       'determineTopic'
     ]),
     ...mapState('pageContent', [
@@ -175,24 +168,36 @@ export default {
       // 报错状态
       this.errorVal = val
     },
-    preOptionalData (obj) {
-      // 新增题组
-      const index = this.data.group.findIndex(item => item.id === obj.id)
-      if (index > -1) {
-        this.data.group.splice(index, 1, obj)
+    preCreateQuestion () { },
+    hanldeRowsFunc () {
+      const { rows } = this.data
+      if (rows <= 0) {
+        this.errorVal = '作文行数必须大于0'
+      } else {
+        this.errorVal = ''
       }
-    },
-    preCreateQuestion () { }
+    }
   },
 }
 </script>
 
 <style lang="less" >
 .composition_box {
+  .el-dialog__body {
+    padding: 10px 0 15px !important;
+  }
+  .dialog_content {
+    border-bottom: 1px solid #eee;
+    padding: 0 20px 30px;
+  }
   .select-item .label {
     width: 85px;
     line-height: 28px;
     top: 0;
+  }
+  .dialog-footer {
+    padding-top: 15px;
+    padding-right: 20px;
   }
   .item-box:nth-child(n + 2) {
     .el-row {
@@ -227,6 +232,19 @@ export default {
   }
   .el-radio__inner {
     margin-left: -10px;
+  }
+  .error-message {
+    margin-top: 15px;
+    margin-left: -17px;
+    i {
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background-color: red;
+      position: relative;
+      left: -10px;
+    }
   }
 }
 </style>
