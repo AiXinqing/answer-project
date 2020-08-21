@@ -63,10 +63,10 @@ export default {
           this.$refs.optionalQuestionDialog.openedEdit({ ...obj, id: id })
           break
         case 'compositionEnglish':
-          this.$refs.compositionEnglish.openedEdit({ ...obj, id: id })
+          this.$refs.compositionEnglish.openedEdit(obj)
           break
         case 'compositionLanguage':
-          this.$refs.compositionLanguage.openedEdit({ ...obj, id: id })
+          this.$refs.compositionLanguage.openedEdit(obj)
           break
         case 'NonRresponseArea':
           this.$refs.NonRresponseArea.openedEdit({ ...obj, id: id })

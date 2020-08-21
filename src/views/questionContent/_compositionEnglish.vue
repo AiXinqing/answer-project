@@ -1,6 +1,7 @@
 <template>
   <div class="question-info">
-    <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
+    <template v-if="data.first">
+      <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
         <div class="title-span" v-html="cotent"></div>
       </div>
       <quill-editor
@@ -8,36 +9,39 @@
         :topic-content="TopicContent"
         @hanlde-close-esitor="hanldeCloseEsitor"
       />
+    </template>
+
     <div class="question_arrays">
       <div class="question_editOrDel">
-        <span class="layui-btn layui-btn-xs" @click="currentQuestionAnswerEdit">编辑</span>
+        <span class="layui-btn layui-btn-xs" @click="compositionEnglishEdit">编辑</span>
         <span class="layui-btn layui-btn-xs" @click="delHanlde">删除</span>
       </div>
     </div>
-    <div class="answer_question_box optional_box"
+    <div class="answer_question_box composition_box"
       :style="{
         'height':data.height + 'px',
       }"
     >
-    <div class="topic_number_box">
-      <span class="black_icon"></span>
 
-      <span class="digital"
-        v-for="(item,i) in topicData"
-        :key="i"
-      >{{item.topic}}</span>
-      <span class="black_icon"></span>
-    </div>
-    <div class="number-info">
-      <span>我选的题号（1分）</span>
-    </div>
-    <div v-if="contentData.HorizontalLine">
       <div
         v-for="(item,i) in rowsData"
         :key="i"
-        class="optional-item-list"
-      ></div>
-    </div>
+        class="compositionEnglish_item"
+      >
+      <template  v-if="data.first">
+        <span
+        v-if="i == 0"
+        class="pre-t5"
+        :style="{'width':strLong + 'px'}">{{contentData.topic}}.</span>
+        <span
+          class="line-style"
+          :style="{'width':'calc(100% - '+ strLong +'px)'}"
+        />
+      </template>
+      <template v-else>
+        <span class="line-style" style="width:100%"/>
+      </template>
+      </div>
     </div>
 
   </div>
@@ -75,17 +79,20 @@ export default {
       let item = this.options.filter(item => item.value === this.contentData.number)
       return item[0].label
     },
+    strLong () {
 
+      let long = this.contentData.topic.toString().length
+      return parseInt(long) * 8 + 1
+    },
     TopicContent () {
-      let totalScore = this.contentData.group[0].totalScore
-      return `<span>${this.numberTitle}.</span><span>${this.contentData.topic}</span><span class='p-5'>(${totalScore})</span>分`
+      return `<span>${this.numberTitle}.</span><span>${this.contentData.name}</span><span class='p-5'>(${this.contentData.score})</span>分`
     },
     topicData () {
-      return this.contentData.group[0].childGroup
+      return ''
     },
     rowsData () {
       let Arr = []
-      for (let i = 1; i <= this.contentData.rows; i++) {
+      for (let i = 1; i <= this.data.showRow; i++) {
         Arr.push(i)
       }
       return Arr
@@ -98,6 +105,8 @@ export default {
         this.data = {
           ...this.questionData
         }
+        console.log(this.data)
+        console.log(this.contentData)
       }
     },
     TopicContent: {
@@ -107,11 +116,12 @@ export default {
       }
     }
   },
-  // mounted () {
-  //   this.$nextTick(()=>)
-  // },
+
   methods: {
-    ...mapMutations('pageContent', ['delPageData']),
+    ...mapMutations('pageContent', [
+      'delPageData',
+      'Empty_PageData'
+    ]),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
@@ -124,14 +134,15 @@ export default {
     hanldeEditor () {
       this.isEditor = true
     },
-    currentQuestionAnswerEdit () {
-      this.$emit('current-question-optional-edit', this.contentData, this.data.id)
+    compositionEnglishEdit () {
+      this.$emit('composition-english-edit', this.data)
     },
     delHanlde () { // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
+      console.log(index)
       if (index > -1) {
-        this.del_determineTopic(this.topicData)
-        this.delPageData(index)
+        this.del_determineTopic([this.contentData])
+        this.Empty_PageData(this.data.id)
         this.set_currentQuestion()
       }
 
@@ -143,57 +154,27 @@ export default {
 
 <style lang="less" >
 .answer_question_box {
-  &.optional_box {
+  &.composition_box {
     border-top: 1px solid #888;
+    padding-bottom: 5px;
   }
 }
-.question-title {
-  .title-span {
-    color: #000 !important;
-    font-weight: 600;
-    span {
-      &.optional-prompt {
-        color: #333;
-        margin-left: 5px;
-        font-weight: 400;
-      }
-    }
-    .p-5 {
-      margin: 0 5px;
-    }
-  }
-}
-.optional-item-list {
-  height: 34px;
-  line-height: 34px;
-  border-bottom: 1px solid #888;
-}
-.number-info {
-  height: 20px;
-  line-height: 20px;
-  font-size: 12px;
-  position: relative;
-}
-.topic_number_box {
-  height: 20px;
-  text-align: right;
+.compositionEnglish_item {
   width: 100%;
+  height: 35px;
+  display: inline-flex;
   span {
     display: inline-block;
-    margin-left: 5px;
   }
-  .black_icon {
-    width: 16px;
-    height: 10px;
-    background-color: #000;
-  }
-  .digital {
-    min-width: 26px;
+  .pre-t5 {
+    position: relative;
+    top: 18px;
     font-size: 12px;
-    border: 1px solid #000;
-    text-align: center;
-    height: 10px;
-    line-height: 10px;
+  }
+  .line-style {
+    height: 34px;
+    border-bottom: 1px solid #888;
+    flex-basis: auto;
   }
 }
 </style>

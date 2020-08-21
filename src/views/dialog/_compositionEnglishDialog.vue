@@ -64,7 +64,7 @@
 <script>
 
 import { mapState, mapMutations } from 'vuex'
-import { black } from 'color-name';
+
 export default {
   components: {
 
@@ -85,7 +85,8 @@ export default {
         topic: 1,
         Attach: false,
         score: '',
-      }
+      },
+      editData: {}
     }
   },
   computed: {
@@ -119,7 +120,11 @@ export default {
 
         let index = determineTopic.findIndex(item => item.topic == topic)
         if (index > -1) {
-          str = `${topic}题已经存在，请勿重复添加`
+          if (this.editQuestionId != null && this.editData.content.topic == this.data.topic) {
+            str = ''
+          } else {
+            str = `${topic}题已经存在，请勿重复添加`
+          }
         }
       }
       return score == '' ? '分数不能为空' :
@@ -130,13 +135,17 @@ export default {
     tabStatus () {
       const { topic, score, rows } = this.data
       let determineTopic = this.determineTopic
-      console.log(determineTopic)
+
       let str = ''
       if (determineTopic.length > 0) {
 
         let index = determineTopic.findIndex(item => item.topic == topic)
         if (index > -1) {
-          str = `${topic}题已经存在，请勿重复添加`
+          if (this.editQuestionId != null && this.editData.content.topic == this.data.topic) {
+            str = ''
+          } else {
+            str = `${topic}题已经存在，请勿重复添加`
+          }
         }
       }
       return score == '' ? true :
@@ -152,7 +161,16 @@ export default {
         return accumulator + currentValue;
       })
       let currentPageHeight = this.page_size - heights // 当前页剩余可用高度
-      // 67 = 20 (ivtop值) - 37 (标题高度+边框) - 10 (容器padding-bottom) 35 行高
+
+      if (this.editQuestionId != null) { // 编辑
+        let editHeight = 0
+        this.pageData.filter(item => item.id == this.editData.id).forEach(item => {
+          editHeight += item.TotalHeight
+        })
+        currentPageHeight = currentPageHeight + editHeight + 9
+      }
+
+      // 67 = 20 (ivtop值) - 32 (标题高度+边框) - 5(底部) - 10 (容器padding-bottom) 35 行高
       let AvailableRow = Math.floor((currentPageHeight - 67) / 35) // 向下取整
       //----------------------------------------------------------------------------------
       if (AvailableRow > 0) {
@@ -193,8 +211,7 @@ export default {
   methods: {
     ...mapMutations('pageContent', [
       'initPageData',
-      'amendPageData',
-      'set_objectiveData'
+      'Empty_PageData'
     ]),
     ...mapMutations('questionType', [
       'set_currentQuestion',
@@ -210,12 +227,13 @@ export default {
       this.Add_AlreadyTopics(this.determineTopic)
     },
     openedEdit (obj) {
+      this.editData = JSON.parse(JSON.stringify(obj))
       //编辑弹框
       this.set_currentQuestion()
       this.editQuestionId = obj.id
       this.openedFrame = true
-      this.data = JSON.parse(JSON.stringify(obj))
-      this.title = '编辑选作题'
+      this.data = JSON.parse(JSON.stringify(obj.content))
+      this.title = '编辑作文'
     },
     closeFrame () {
       // 关闭弹窗
@@ -227,9 +245,8 @@ export default {
     preCreateQuestion () {
       this.errorVal = this.tabStatusVal
       if (!this.tabStatus) {
-        let objId = `compositionEnglish${+new Date()}`
+        let objId = `compositionEnglish_${+new Date()}`
         //------------------------------------------------------------
-        console.log(this.rowsData)
         let obj = {}
         let ArrData = this.rowsData.map((item, i) => {
           obj = {
@@ -239,7 +256,8 @@ export default {
             content: this.data,
             order: this.pageData.length,
             first: i == 0 ? true : false,
-            showRow: item
+            showRow: item,
+            TotalHeight: i == 0 ? item * 35 + 67 : item * 20
           }
           return obj
         })
@@ -255,14 +273,13 @@ export default {
         } else {
           // 编辑
           //清空编辑前数据
-          // this.deletePageData(this.dataTopic.pid)
-          // ArrData.forEach(obj => {
+          this.Empty_PageData(this.editData.id)
 
-          //   this.amendPageData({ ...obj, id: this.editQuestionId })
-          // })
+          ArrData.forEach(obj => {
+            this.initPageData(obj)
+          })
         }
 
-        console.log(ArrData)
         this.set_currentQuestion()
         this.data = JSON.parse(JSON.stringify(this.closeData))
         this.openedFrame = false

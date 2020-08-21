@@ -35,9 +35,19 @@ const mutations = {
     })
 
   },
+  Empty_PageData: (state, id) => { // 内容分页
+
+    state.pageData = state.pageData.filter((item) => {
+      return ![id].includes(item.id)
+    }).sort((a, b) => {
+      return a.order - b.order;
+    })
+    console.log(state.pageData)
+  },
   delPageData: (state, index) => {
     state.pageData.splice(index, 1)
   },
+
   set_objectiveData: (state, val) => {
     state.BigQuestion = val + 1
   },
