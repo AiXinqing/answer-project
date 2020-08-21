@@ -11,9 +11,9 @@
       <el-button @click="fillInTheBlank">填空题</el-button>
       <el-button @click="answerQuestion">解答题</el-button>
       <el-button @click="optionalQuestion">选做题</el-button>
-      <el-button>作文(英)</el-button>
-      <el-button>作文(语)</el-button>
-      <el-button>非作答</el-button>
+      <el-button @click="compositionEnglish">作文(英)</el-button>
+      <el-button @click="compositionLanguage">作文(语)</el-button>
+      <el-button @click="NonRresponseArea">非作答</el-button>
     </div>
     <div class="basis_checkbox basic_btn save-btn">
       <el-button type="primary">预览</el-button>
@@ -54,6 +54,15 @@ export default {
     },
     optionalQuestion () {
       this.$refs.publicDialog.opened('optionalQuestion')
+    },
+    compositionEnglish () {
+      this.$refs.publicDialog.opened('compositionEnglish')
+    },
+    compositionLanguage () {
+      this.$refs.publicDialog.opened('compositionLanguage')
+    },
+    NonRresponseArea () {
+      this.$refs.publicDialog.opened('NonRresponseArea')
     }
   },
 }
