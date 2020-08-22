@@ -87,7 +87,6 @@ export default {
       data: {},
       title: '设置',
       openedFrame: false,
-      // isdisabledFn: false,
       closeData: {},
       editQuestionId: null,
       errorVal: '',
@@ -106,18 +105,22 @@ export default {
   computed: {
     ...mapState('questionType', [
       'options',
-      'AlreadyTopics',
       'currentQuestion',
-      'letterArr',
-      'determineTopic'
+      'determineTopic',
     ]),
     ...mapState('pageContent', [
       'pageHeight',
       'page_size',
       'BigQuestion',
       'pageData',
+      'pageLayout',
     ]),
-    ...mapState('answerQuestion', ['answerQuestionArr',]),
+    latticeWidth () {
+      // 格子承载宽度
+      return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
+        ? 456
+        : 722
+    },
     errorMessage () {
       return this.errorVal != '' ? true : false
     },
@@ -169,6 +172,40 @@ export default {
               minWordCount > totalWordCount ? true :
                 str != '' ? true : false
     },
+    rowsData () {
+      // 计算内容是否分页
+      // const { rows } = this.data
+      let Arr = []
+      let heights = this.pageHeight[this.pageHeight.length - 1].map(item => item).reduce((accumulator, currentValue) => {
+        return accumulator + currentValue;
+      })
+      let currentPageHeight = this.page_size - heights // 当前页剩余可用高度
+
+      if (this.editQuestionId != null) { // 编辑
+        let editHeight = 0
+        this.pageData.filter(item => item.id == this.editData.id).forEach(item => {
+          editHeight += item.TotalHeight
+        })
+        currentPageHeight = currentPageHeight + editHeight + 9
+      }
+
+      // 67 = 20 (ivtop值) - 32 (标题高度+边框) - 5(底部) - 10 (容器padding-bottom) 35 行高
+      let AvailableRow = Math.floor((currentPageHeight - 67) / 35) // 向下取整
+      //----------------------------------------------------------------------------------
+      console.log(AvailableRow)
+      // if (AvailableRow > 0) {
+      //   let Difference = AvailableRow - rows
+      //   if (Difference > 0) {
+      //     Arr.push(rows)
+      //   } else {
+      //     Arr.push(AvailableRow) // 上部分
+      //     Arr.push(Math.abs(Difference)) // 下部分
+      //   }
+      // } else {
+      //   Arr.push(rows)
+      // }
+      return Arr
+    }
   },
   watch: {
     questionData: {
