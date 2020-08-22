@@ -17,11 +17,7 @@
         <span class="layui-btn layui-btn-xs" @click="delHanlde">删除</span>
       </div>
     </div>
-    <div class="answer_question_box composition_box"
-      :style="{
-        'height':data.height + 'px',
-      }"
-    >
+    <div class="answer_question_box composition_box">
 
       <div
         v-for="(item,i) in rowsData"

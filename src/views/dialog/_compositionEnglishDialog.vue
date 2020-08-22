@@ -152,21 +152,30 @@ export default {
           topic == '' ? true :
             str != '' ? true : false
     },
+    currentPageHeight () {
+
+      let heights = this.pageHeight[this.pageHeight.length - 1].map(item => item).reduce((accumulator, currentValue) => {
+        return accumulator + currentValue;
+      })
+
+      let currentPageHeight = this.page_size - heights - 32 // 当前页剩余可用高度
+      return currentPageHeight
+    },
+    BeforeEditing () {
+      let num = 0
+      if (this.editQuestionId == null) {
+        num = this.currentPageHeight
+      }
+      return num
+    },
     rowsData () {
       // 计算内容是否分页
       const { rows } = this.data
       let Arr = []
-      let heights = this.pageHeight[this.pageHeight.length - 1].map(item => item).reduce((accumulator, currentValue) => {
-        return accumulator + currentValue;
-      })
-      let currentPageHeight = this.page_size - heights // 当前页剩余可用高度
+      let currentPageHeight = this.currentPageHeight
 
       if (this.editQuestionId != null) { // 编辑
-        let editHeight = 0
-        this.pageData.filter(item => item.id == this.editData.id).forEach(item => {
-          editHeight += item.TotalHeight
-        })
-        currentPageHeight = currentPageHeight + editHeight + 9
+        currentPageHeight = this.editData.BeforeEditing
       }
 
       // 67 = 20 (ivtop值) - 32 (标题高度+边框) - 5(底部) - 10 (容器padding-bottom) 35 行高
@@ -249,14 +258,14 @@ export default {
         let obj = {}
         let ArrData = this.rowsData.map((item, i) => {
           obj = {
-            height: item * 35,
+            height: i == 0 ? item * 35 + 52 : item * 35,
             id: objId,
             questionType: 'compositionEnglish',
             content: this.data,
             order: this.pageData.length,
             first: i == 0 ? true : false,
             showRow: item,
-            TotalHeight: i == 0 ? item * 35 + 67 : item * 20
+            BeforeEditing: this.editQuestionId != null ? this.editData.BeforeEditing : this.BeforeEditing
           }
           return obj
         })

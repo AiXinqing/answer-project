@@ -209,10 +209,7 @@ export default {
       let currentPageHeight = this.currentPageHeight
 
       if (this.editQuestionId != null) { // 编辑
-        // let editHeight = 0
-        // this.pageData.filter(item => item.id == this.editData.id).forEach(item => {
-        //   editHeight += item.TotalHeight
-        // })
+
         currentPageHeight = this.editData.BeforeEditing
       }
       console.log(currentPageHeight)
@@ -229,10 +226,6 @@ export default {
 
       let AvailableRow = Math.floor((currentPageHeight - 77) / rowHeight) // 向下取整
       //----------------------------------------------------------------------------------
-      // console.log(row)
-      // console.log(containerHeight)
-      // console.log(AvailableRow)
-      // console.log(this.pageRow)
 
       let temArr = [row]
       let i = AvailableRow
