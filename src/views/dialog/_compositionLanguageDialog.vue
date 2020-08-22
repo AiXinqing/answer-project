@@ -99,6 +99,7 @@ export default {
         minWordCount: 800,
         mark: '1', // 1 ，2
         totalWordCount: 1000,
+        spacing: 4, // 间距
       }
     }
   },
@@ -115,11 +116,22 @@ export default {
       'pageData',
       'pageLayout',
     ]),
-    latticeWidth () {
+    containerWidth () {
       // 格子承载宽度
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 456
-        : 722
+        : 720
+    },
+    latticeWidth () {
+      // 格子宽度
+      return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
+        ? 32
+        : 30
+    },
+    pageRow () {
+      // 一页所占用的行数
+      let row = Math.floor((this.page_size - 60) / (this.latticeWidth + this.data.spacing))
+      return row
     },
     errorMessage () {
       return this.errorVal != '' ? true : false
@@ -174,7 +186,7 @@ export default {
     },
     rowsData () {
       // 计算内容是否分页
-      // const { rows } = this.data
+      const { totalWordCount, spacing } = this.data
       let Arr = []
       let heights = this.pageHeight[this.pageHeight.length - 1].map(item => item).reduce((accumulator, currentValue) => {
         return accumulator + currentValue;
@@ -188,22 +200,38 @@ export default {
         })
         currentPageHeight = currentPageHeight + editHeight + 9
       }
+      //内容高度-----------------------------------------------------------------
+      //一行数格子 = 向下取整（总字数/格数）
+      let lattice = Math.floor(this.containerWidth / this.latticeWidth)
+      // 行数 向上取整
+      let row = Math.ceil(totalWordCount / lattice)
 
-      // 67 = 20 (ivtop值) - 32 (标题高度+边框) - 5(底部) - 10 (容器padding-bottom) 35 行高
-      let AvailableRow = Math.floor((currentPageHeight - 67) / 35) // 向下取整
+      //行数高度 = 格子大小 + 间距（间距同上要求）
+      let rowHeight = this.latticeWidth + spacing
+      // 内容高度 = 行数 * 行数高度 + 内部标题高度 45 + 标题高度 32
+      // let containerHeight = row * rowHeight + 32 + 45
+
+      let AvailableRow = Math.floor((currentPageHeight - 77) / rowHeight) // 向下取整
       //----------------------------------------------------------------------------------
-      console.log(AvailableRow)
-      // if (AvailableRow > 0) {
-      //   let Difference = AvailableRow - rows
-      //   if (Difference > 0) {
-      //     Arr.push(rows)
-      //   } else {
-      //     Arr.push(AvailableRow) // 上部分
-      //     Arr.push(Math.abs(Difference)) // 下部分
-      //   }
-      // } else {
-      //   Arr.push(rows)
-      // }
+      // console.log(row)
+      // console.log(containerHeight)
+      // console.log(AvailableRow)
+      // console.log(this.pageRow)
+
+      let temArr = [row]
+      let i = AvailableRow
+      for (var a = 0; a < row; a++) {
+        var val = temArr[a] - i
+        if (val > 0) {
+          temArr.push(val)
+          Arr.push(i)
+          i = this.pageRow
+        } else {
+          Arr.push(temArr[a])
+          break;
+        }
+      }
+
       return Arr
     }
   },
@@ -275,9 +303,53 @@ export default {
       }
     },
     preCreateQuestion () {
+      const { spacing } = this.data
       this.errorVal = this.tabStatusVal
       if (!this.tabStatus) {
-        console.log(1)
+        // console.log(this.rowsData)
+        //一行数格子 = 向下取整（总字数/格数）
+        let lattice = Math.floor(this.containerWidth / this.latticeWidth)
+        //行数高度 = 格子大小 + 间距（间距同上要求）
+        let rowHeight = this.latticeWidth + spacing
+
+        let objId = `compositionLanguage_${+new Date()}`
+        //------------------------------------------------------------
+        let obj = {}
+        let ArrData = this.rowsData.map((item, i) => {
+          obj = {
+            height: item * 35,
+            id: objId,
+            questionType: 'compositionLanguage',
+            content: this.data,
+            order: this.pageData.length,
+            first: i == 0 ? true : false,
+            lattice: lattice,
+            showRow: item,
+            TotalHeight: i == 0 ? item * rowHeight + 77 : item * rowHeight
+          }
+          return obj
+        })
+        //-------------------------------------------------------------------------------------
+        if (this.editQuestionId == null) {
+          // 新增
+          ArrData.forEach(obj => {
+            this.initPageData(obj)
+          })
+          this.Add_AlreadyTopics([this.data])
+          this.set_determineTopic([this.data])
+        } else {
+          // 编辑
+          //清空编辑前数据
+          this.Empty_PageData(this.editData.id)
+
+          ArrData.forEach(obj => {
+            this.initPageData(obj)
+          })
+        }
+
+        this.set_currentQuestion()
+        this.data = JSON.parse(JSON.stringify(this.closeData))
+        this.openedFrame = false
       }
     },
     hanldeRowsFunc () {

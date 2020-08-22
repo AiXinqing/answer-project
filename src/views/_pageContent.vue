@@ -45,6 +45,7 @@ import FillInTheBlank from './questionContent/_FillInTheBlank' // 填空题
 import answerQuestion from './questionContent/_answerQuestion' // 解答题
 import optionalQuestion from './questionContent/_optionalQuestion' // 选作题
 import compositionEnglish from './questionContent/_compositionEnglish' // 作文英语
+import compositionLanguage from './questionContent/_compositionLanguage' // 作文语文
 import columnDialog from './dialog/_studentColumnDialog'
 import AdmissionNumberDialog from './dialog/_AdmissionNumberDialog'
 import questionDialog from './dialog/_questionData'
@@ -65,6 +66,7 @@ export default {
     publicDialog,
     optionalQuestion,
     compositionEnglish,
+    compositionLanguage,
   },
   data () {
     return {
