@@ -13,34 +13,32 @@
 
     <div class="question_arrays">
       <div class="question_editOrDel">
-        <span class="layui-btn layui-btn-xs" @click="compositionEnglishEdit">编辑</span>
+        <span class="layui-btn layui-btn-xs" @click="compositionLanguagehEdit">编辑</span>
         <span class="layui-btn layui-btn-xs" @click="delHanlde">删除</span>
       </div>
     </div>
-    <div class="answer_question_box composition_box"
-      :style="{
-        'height':data.height + 'px',
-      }"
-    >
-
-      <div
-        v-for="(item,i) in rowsData"
-        :key="i"
-        class="compositionLanguage_item"
-      >
-      <template  v-if="data.first">
-        <span
-        v-if="i == 0"
-        class="pre-t5"
-        :style="{'width':strLong + 'px'}">{{contentData.topic}}.</span>
-        <span
-          class="line-style"
-          :style="{'width':'calc(100% - '+ strLong +'px)'}"
-        />
+    <div class="answer_question_box composition_box">
+      <template v-if="data.first">
+        <div class="Language_item_title">
+          <span>1.</span>
+        </div>
       </template>
-      <template v-else>
-        <span class="line-style" style="width:100%"/>
-      </template>
+      <div class="compositionLanguage_box">
+        <div
+          v-for="(item,i) in rowsData"
+          :key="i"
+          class="compositionLanguage_item"
+          :style="{'height':i != rowsData.length - 1 ? data.rowHeight + 'px':data.rowHeight - contentData.spacing + 'px'}"
+        >
+          <span
+            v-for="(item,i) in latticeData"
+            :key="i"
+            :style="{
+              'width':data.rowWidth - 1 + 'px',
+              'height':data.rowWidth - 1 + 'px',
+            }"
+          />
+        </div>
       </div>
     </div>
 
@@ -96,6 +94,13 @@ export default {
         Arr.push(i)
       }
       return Arr
+    },
+    latticeData () {
+      let Arr = []
+      for (let i = 1; i <= this.data.lattice; i++) {
+        Arr.push(i)
+      }
+      return Arr
     }
   },
   watch: {
@@ -134,8 +139,8 @@ export default {
     hanldeEditor () {
       this.isEditor = true
     },
-    compositionEnglishEdit () {
-      this.$emit('composition-english-edit', this.data)
+    compositionLanguagehEdit () {
+      this.$emit('composition-language-edit', this.data)
     },
     delHanlde () { // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
@@ -152,28 +157,34 @@ export default {
 
 
 <style lang="less" >
-.answer_question_box {
-  &.composition_box {
-    border-top: 1px solid #888;
-    padding-bottom: 5px;
-  }
+.answer_question_box.composition_box {
+  padding-top: 10px;
 }
-.compositionEnglish_item {
-  width: 100%;
-  height: 35px;
-  display: inline-flex;
-  span {
-    display: inline-block;
+.Language_item_title {
+  height: 45px;
+  position: relative;
+  margin-top: -10px;
+  line-height: 45px;
+  font-size: 14px;
+}
+.compositionLanguage_box {
+  border: 1px solid #888;
+  border-left: 2px solid #bfbfbf;
+  border-right: 2px solid #bfbfbf;
+  .compositionLanguage_item {
+    span {
+      display: inline-block;
+      border: 1px solid #888;
+      border-left: none;
+    }
+    span:last-child {
+      border-right: none;
+    }
   }
-  .pre-t5 {
-    position: relative;
-    top: 18px;
-    font-size: 12px;
-  }
-  .line-style {
-    height: 34px;
-    border-bottom: 1px solid #888;
-    flex-basis: auto;
+  .compositionLanguage_item:first-child {
+    span {
+      border-top: none;
+    }
   }
 }
 </style>

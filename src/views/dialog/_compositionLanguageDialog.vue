@@ -191,7 +191,7 @@ export default {
       let heights = this.pageHeight[this.pageHeight.length - 1].map(item => item).reduce((accumulator, currentValue) => {
         return accumulator + currentValue;
       })
-      let currentPageHeight = this.page_size - heights // 当前页剩余可用高度
+      let currentPageHeight = this.page_size - heights - 32 // 当前页剩余可用高度
 
       if (this.editQuestionId != null) { // 编辑
         let editHeight = 0
@@ -311,13 +311,14 @@ export default {
         let lattice = Math.floor(this.containerWidth / this.latticeWidth)
         //行数高度 = 格子大小 + 间距（间距同上要求）
         let rowHeight = this.latticeWidth + spacing
-
+        console.log(this.latticeWidth)
+        console.log(rowHeight)
         let objId = `compositionLanguage_${+new Date()}`
         //------------------------------------------------------------
         let obj = {}
         let ArrData = this.rowsData.map((item, i) => {
           obj = {
-            height: item * 35,
+            height: i == 0 ? item * rowHeight + 77 : item * rowHeight,
             id: objId,
             questionType: 'compositionLanguage',
             content: this.data,
@@ -325,7 +326,9 @@ export default {
             first: i == 0 ? true : false,
             lattice: lattice,
             showRow: item,
-            TotalHeight: i == 0 ? item * rowHeight + 77 : item * rowHeight
+            rowHeight: rowHeight,
+            rowWidth: this.latticeWidth,
+            TotalHeight: i == 0 ? item * rowHeight + 97 : item * rowHeight + 20
           }
           return obj
         })

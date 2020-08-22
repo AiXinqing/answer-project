@@ -118,11 +118,11 @@ export default {
       }
       rects.forEach((rect) => {
         currentPage.height += rect.height
-        console.log(currentPage.height)
+        // console.log(currentPage.height)
         if (currentPage.height < this.page_size) {
           currentPage.rects.push(rect)
         } else {
-          console.log(currentPage.height)
+          // console.log(currentPage.height)
           currentPage.height = rect.height
           results.push(currentPage.rects)
           currentPage.rects = []
@@ -136,7 +136,7 @@ export default {
       if (currentPage.rects.length > 0) {
         results.push(currentPage.rects)
       }
-      console.log(results)
+      // console.log(results)
       return results
     },
     currentQuestionHanldeEdit (id) {
