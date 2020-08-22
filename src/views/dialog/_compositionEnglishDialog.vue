@@ -102,7 +102,6 @@ export default {
       'BigQuestion',
       'pageData',
     ]),
-    ...mapState('answerQuestion', ['answerQuestionArr',]),
     errorMessage () {
       return this.errorVal != '' ? true : false
     },

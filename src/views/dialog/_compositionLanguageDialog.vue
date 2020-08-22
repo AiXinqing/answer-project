@@ -100,7 +100,9 @@ export default {
         mark: '1', // 1 ，2
         totalWordCount: 1000,
         spacing: 4, // 间距
-      }
+      },
+      editData: {},
+
     }
   },
   computed: {
@@ -184,22 +186,36 @@ export default {
               minWordCount > totalWordCount ? true :
                 str != '' ? true : false
     },
+    currentPageHeight () {
+
+      let heights = this.pageHeight[this.pageHeight.length - 1].map(item => item).reduce((accumulator, currentValue) => {
+        return accumulator + currentValue;
+      })
+
+      let currentPageHeight = this.page_size - heights - 32 // 当前页剩余可用高度
+      return currentPageHeight
+    },
+    BeforeEditing () {
+      let num = 0
+      if (this.editQuestionId == null) {
+        num = this.currentPageHeight
+      }
+      return num
+    },
     rowsData () {
       // 计算内容是否分页
       const { totalWordCount, spacing } = this.data
       let Arr = []
-      let heights = this.pageHeight[this.pageHeight.length - 1].map(item => item).reduce((accumulator, currentValue) => {
-        return accumulator + currentValue;
-      })
-      let currentPageHeight = this.page_size - heights - 32 // 当前页剩余可用高度
+      let currentPageHeight = this.currentPageHeight
 
       if (this.editQuestionId != null) { // 编辑
-        let editHeight = 0
-        this.pageData.filter(item => item.id == this.editData.id).forEach(item => {
-          editHeight += item.TotalHeight
-        })
-        currentPageHeight = currentPageHeight + editHeight + 9
+        // let editHeight = 0
+        // this.pageData.filter(item => item.id == this.editData.id).forEach(item => {
+        //   editHeight += item.TotalHeight
+        // })
+        currentPageHeight = this.editData.BeforeEditing
       }
+      console.log(currentPageHeight)
       //内容高度-----------------------------------------------------------------
       //一行数格子 = 向下取整（总字数/格数）
       let lattice = Math.floor(this.containerWidth / this.latticeWidth)
@@ -258,17 +274,13 @@ export default {
   methods: {
     ...mapMutations('pageContent', [
       'initPageData',
-      'amendPageData',
-      'set_objectiveData',
-      'deletePageData'
+      'Empty_PageData'
     ]),
     ...mapMutations('questionType', [
       'set_currentQuestion',
       'Empty_AlreadyTopics',
       'Add_AlreadyTopics',
-      'set_closeFrame',
       'set_determineTopic',
-      'once_AlreadyTopics',
     ]),
     opened () {
       // 开打弹框
@@ -278,12 +290,13 @@ export default {
       this.Add_AlreadyTopics(this.determineTopic)
     },
     openedEdit (obj) {
+      this.editData = JSON.parse(JSON.stringify(obj))
       //编辑弹框
       this.set_currentQuestion()
       this.editQuestionId = obj.id
       this.openedFrame = true
-      this.data = JSON.parse(JSON.stringify(obj))
-      this.title = '编辑选作题'
+      this.data = JSON.parse(JSON.stringify(obj.content))
+      this.title = '编辑作文'
     },
     closeFrame () {
       // 关闭弹窗
@@ -311,8 +324,7 @@ export default {
         let lattice = Math.floor(this.containerWidth / this.latticeWidth)
         //行数高度 = 格子大小 + 间距（间距同上要求）
         let rowHeight = this.latticeWidth + spacing
-        console.log(this.latticeWidth)
-        console.log(rowHeight)
+
         let objId = `compositionLanguage_${+new Date()}`
         //------------------------------------------------------------
         let obj = {}
@@ -328,7 +340,7 @@ export default {
             showRow: item,
             rowHeight: rowHeight,
             rowWidth: this.latticeWidth,
-            TotalHeight: i == 0 ? item * rowHeight + 97 : item * rowHeight + 20
+            BeforeEditing: this.editQuestionId != null ? this.editData.BeforeEditing : this.BeforeEditing
           }
           return obj
         })
