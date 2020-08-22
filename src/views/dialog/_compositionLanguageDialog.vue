@@ -22,7 +22,7 @@
         </el-col>
         <el-col :span="8" class="select-item composition_item">
           <div class="label">题目:</div>
-          <el-input v-model="data.topic" size="mini" placeholder="请输入内容"></el-input>
+          <el-input v-model="data.topic" size="mini" placeholder=""></el-input>
         </el-col>
         <el-col :span="4" class="select-item composition_item_5">
           <el-checkbox v-model="data.Attach">附加题</el-checkbox>
@@ -33,35 +33,35 @@
       <el-row>
         <el-col :span="12" class="select-item composition_topic">
           <div class="label">小题题号:</div>
-          <el-input v-model="data.number" size="mini" placeholder="请输入内容" />
+          <el-input v-model.number="data.topic" size="mini" @blur="hanldeVerification" placeholder="" />
           <span>题</span>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="12" class="select-item">
           <div class="label">分数:</div>
-          <el-input v-model="data.number" size="mini" placeholder="请输入内容" />
+          <el-input v-model="data.score" @input="hanldeRowsFunc" @blur="hanldeVerification" size="mini" placeholder="" />
           <span>分</span>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="12" class="select-item">
           <div class="label">字数最少:</div>
-          <el-input v-model="data.number" size="mini" placeholder="请输入内容" />
+          <el-input v-model="data.minWordCount" @input="hanldeRowsFunc" @blur="hanldeVerification" size="mini" placeholder="" />
           <span>字</span>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="24" class="select-item">
           <div class="label">字数标记:</div>
-          <el-radio v-model="data.radio" label="1">最少字数处显示一个字数标记</el-radio>
-          <el-radio v-model="data.radio" label="2">每100字显示一个字数标记</el-radio>
+          <el-radio v-model="data.mark" label="1">最少字数处显示一个字数标记</el-radio>
+          <el-radio v-model="data.mark" label="2">每100字显示一个字数标记</el-radio>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="12" class="select-item">
           <div class="label">总字数:</div>
-          <el-input v-model="data.number" size="mini" placeholder="请输入内容" />
+          <el-input v-model.number="data.totalWordCount" @input="hanldeRowsFunc" @blur="hanldeVerification" size="mini" placeholder="" />
           <span>字</span>
         </el-col>
       </el-row>
@@ -87,27 +87,19 @@ export default {
       data: {},
       title: '设置',
       openedFrame: false,
-      isdisabledFn: false,
+      // isdisabledFn: false,
       closeData: {},
       editQuestionId: null,
       errorVal: '',
       questionData: {
-        number: 1,
-        topic: '选作题',
-        rows: 6,
-        startQuestion: 1,
-        HorizontalLine: false, // 横行
+        number: 1, // 大题号
+        name: '作文', // 题目
         Attach: false,
-        radio: '',
-        group: [{
-          choices: '', // 几选几
-          select: '',
-          start: 1,
-          end: '',
-          score: '',
-          id: 'optionalTopic',
-          childGroup: [],
-        },]
+        topic: 1,
+        score: '',
+        minWordCount: 800,
+        mark: '1', // 1 ，2
+        totalWordCount: 1000,
       }
     }
   },
@@ -129,9 +121,54 @@ export default {
     errorMessage () {
       return this.errorVal != '' ? true : false
     },
-    groupItemData () {
-      return this.data.group.map(item => item.childGroup)[0]
-    }
+    isdisabledFn () {
+      return this.errorVal != '' ? true : false
+    },
+    tabStatusVal () {
+      const { topic, score, minWordCount, totalWordCount } = this.data
+      let determineTopic = this.determineTopic
+      let str = ''
+      if (determineTopic.length > 0) {
+
+        let index = determineTopic.findIndex(item => item.topic == topic)
+        if (index > -1) {
+          if (this.editQuestionId != null && this.editData.content.topic == this.data.topic) {
+            str = ''
+          } else {
+            str = `${topic}题已经存在，请勿重复添加`
+          }
+        }
+      }
+      return topic == '' ? '小题题号不能为空' :
+        score == '' ? '分数不能为空' :
+          minWordCount == '' ? '最少字数不能为空' :
+            totalWordCount == '' ? '总字数不能为空' :
+              minWordCount > totalWordCount ? '最少字数不能大于总字数' :
+                str != '' ? str : ''
+    },
+    tabStatus () {
+      const { topic, score, minWordCount, totalWordCount } = this.data
+      let determineTopic = this.determineTopic
+
+      let str = ''
+      if (determineTopic.length > 0) {
+
+        let index = determineTopic.findIndex(item => item.topic == topic)
+        if (index > -1) {
+          if (this.editQuestionId != null && this.editData.content.topic == this.data.topic) {
+            str = ''
+          } else {
+            str = `${topic}题已经存在，请勿重复添加`
+          }
+        }
+      }
+      return topic == '' ? true :
+        score == '' ? true :
+          minWordCount == '' ? true :
+            totalWordCount == '' ? true :
+              minWordCount > totalWordCount ? true :
+                str != '' ? true : false
+    },
   },
   watch: {
     questionData: {
@@ -200,7 +237,27 @@ export default {
         this.data.group.splice(index, 1, obj)
       }
     },
-    preCreateQuestion () { }
+    preCreateQuestion () {
+      this.errorVal = this.tabStatusVal
+      if (!this.tabStatus) {
+        console.log(1)
+      }
+    },
+    hanldeRowsFunc () {
+      const { minWordCount, score, totalWordCount } = this.data
+      if (minWordCount <= 0) {
+        this.errorVal = '最少字数必须大于0'
+      } else if (score <= 0) {
+        this.errorVal = '分数必须大于0'
+      } else if (totalWordCount <= 0) {
+        this.errorVal = '最少字数不能大于总字数'
+      } else {
+        this.errorVal = ''
+      }
+    },
+    hanldeVerification () {
+      this.errorVal = this.tabStatusVal
+    }
   },
 }
 </script>
@@ -208,18 +265,18 @@ export default {
 <style lang="less" >
 @import '~@/assets/css/variables.less';
 .el-radio__input.is-checked + .el-radio__label {
-  color: @main;
+  color: @main !important;
 }
 .el-radio__input.is-checked .el-radio__inner {
-  border-color: @main;
-  background: @main;
+  border-color: @main !important;
+  background: @main !important;
 }
 .el-radio__inner:hover {
-  border-color: @main;
+  border-color: @main !important;
 }
 .el-input.is-active .el-input__inner,
 .el-input__inner:focus {
-  border-color: @main;
+  border-color: @main !important;
 }
 </style>
 
