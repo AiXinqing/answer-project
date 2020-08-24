@@ -1,4 +1,5 @@
 <template>
+<!-- 填空题 -->
   <hj-dialog
     class="newAdd-content answer_box"
     :title="title"
@@ -195,7 +196,10 @@ export default {
         }
         if (this.editQuestionId == null) {
           this.$nextTick(() => {
-            this.dataTopic.number = this.BigQuestion
+            this.dataTopic = {
+              ...this.dataTopic,
+              number: this.BigQuestion
+            }
           })
         }
       }

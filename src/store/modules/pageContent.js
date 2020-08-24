@@ -48,8 +48,8 @@ const mutations = {
     state.pageData.splice(index, 1)
   },
 
-  set_objectiveData: (state, val) => {
-    state.BigQuestion = val + 1
+  set_objectiveData: (state) => {
+    state.BigQuestion = state.BigQuestion + 1
   },
   set_pageHeight: (state, Arr = []) => {
     // 页面高度更新

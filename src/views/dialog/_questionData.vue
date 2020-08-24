@@ -1,4 +1,5 @@
 <template>
+  <!-- 选择题 -->
   <hj-dialog
     class="newAdd-content"
     :title="title"
@@ -135,7 +136,10 @@ export default {
         }
         if (this.editQuestionId == null) {
           this.$nextTick(() => {
-            this.objectiveData.number = this.BigQuestion
+            this.objectiveData = {
+              ...this.objectiveData,
+              number: this.BigQuestion
+            }
           })
         }
       }
@@ -234,7 +238,7 @@ export default {
         obj.id = this.editQuestionId
         this.amendPageData(obj)
       }
-      this.set_objectiveData(this.quesctionObj.number) // 大题号修改
+      this.set_objectiveData() // 大题号增加
       // 小题数组追加数据
       this.Add_AlreadyTopics(this.topicList)
       this.set_determineTopic(this.topicList)

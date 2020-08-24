@@ -204,8 +204,11 @@ export default {
         }
         if (this.editQuestionId == null) {
           this.$nextTick(() => {
-            this.data.number = this.BigQuestion
-            this.data.topic = this.currentQuestion
+            this.data = {
+              ...this.data,
+              number: this.BigQuestion,
+              topic: this.currentQuestion
+            }
           })
         }
 
