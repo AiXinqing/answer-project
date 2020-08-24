@@ -6,6 +6,7 @@ const state = {
   page_size: 1160 - 20, // 一页高度
   BigQuestion: 1, // 大题题号
   pageHeight: [], // 页面高度
+  orderSort: 0, // 排序
 }
 
 const mutations = {
@@ -42,7 +43,6 @@ const mutations = {
     }).sort((a, b) => {
       return a.order - b.order;
     })
-    console.log(state.pageData)
   },
   delPageData: (state, index) => {
     state.pageData.splice(index, 1)
@@ -74,6 +74,9 @@ const mutations = {
       results.push(currentPage.rects)
     }
     state.pageHeight = results
+  },
+  set_orderSort: (state) => {
+    state.orderSort = state.orderSort + 1
   }
 }
 

@@ -90,7 +90,12 @@ export default {
       'letterArr',
       'determineTopic'
     ]),
-    ...mapState('pageContent', ['pageData', 'pageLayout', 'BigQuestion']),
+    ...mapState('pageContent', [
+      'pageData',
+      'pageLayout',
+      'BigQuestion',
+      'orderSort'
+    ]),
     pageWidth () {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 480
@@ -192,7 +197,12 @@ export default {
       'set_determineTopic', // 储存确定题型
       'Empty_AlreadyTopics', // 清空
     ]),
-    ...mapMutations('pageContent', ['initPageData', 'amendPageData', 'set_objectiveData']),
+    ...mapMutations('pageContent', [
+      'initPageData',
+      'amendPageData',
+      'set_objectiveData',
+      'set_orderSort'
+    ]),
     closeFrame () { // 关闭弹框
       this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
       this.set_closeFrame()
@@ -239,7 +249,7 @@ export default {
         height: height, // 32标题高度
         questionType: 'FillInTheBlank',
         content: { ...this.objectiveData, totalScore: totalScore, },
-        order: this.pageData.length
+        order: this.orderSort
         // 此题总分
       }
 
@@ -251,6 +261,7 @@ export default {
       }
       this.set_objectiveData(this.spaceTopic.number) // 大题号修改
       //------------------------------------
+      this.set_orderSort()
       this.openedFrame = false // 关闭弹窗
 
       // 小题数组追加至确定题型

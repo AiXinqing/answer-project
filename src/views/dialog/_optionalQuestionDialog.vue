@@ -102,6 +102,7 @@ export default {
       'page_size',
       'BigQuestion',
       'pageData',
+      'orderSort',
     ]),
     ...mapState('answerQuestion', ['answerQuestionArr',]),
     errorMessage () {
@@ -139,7 +140,8 @@ export default {
       'initPageData',
       'amendPageData',
       'set_objectiveData',
-      'deletePageData'
+      'deletePageData',
+      'set_orderSort'
     ]),
     ...mapMutations('questionType', [
       'set_currentQuestion',
@@ -187,7 +189,7 @@ export default {
         id: 'optional' + +new Date(),
         questionType: 'optionalQuestion',
         content: this.data,
-        order: this.pageData.length
+        order: this.orderSort
       }
       if (currentPageHeight > rectHeight) {
         objArr.push(obj)
@@ -212,7 +214,7 @@ export default {
           objArr.push(nextObj)
         }
       }
-      console.log(this.editQuestionId)
+
       if (this.editQuestionId == null) {
         // 新增
         objArr.forEach(obj => {
@@ -230,6 +232,7 @@ export default {
       // 大题号修改
       this.set_objectiveData(this.data.number)
       //------------------------------------
+      this.set_orderSort()
       this.openedFrame = false // 关闭弹窗
       // 清空弹框数据
 

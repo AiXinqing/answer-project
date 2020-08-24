@@ -118,7 +118,11 @@ export default {
       'letterArr',
       'determineTopic'
     ]),
-    ...mapState('pageContent', ['pageData', 'pageLayout', 'BigQuestion', 'pageData',]),
+    ...mapState('pageContent', [
+      'pageData',
+      'pageLayout',
+      'BigQuestion',
+      'pageData', 'orderSort']),
     pageWidth () {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 480
@@ -164,6 +168,7 @@ export default {
       'initPageData',
       'amendPageData',
       'set_objectiveData',
+      'set_orderSort'
     ]),
     closeFrame () { // 取消弹框
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
@@ -233,7 +238,7 @@ export default {
         height: heights + 32, // 32标题高度
         questionType: 'ObjectiveQuestion',
         content: this.objectiveData,
-        order: this.pageData.length
+        order: this.orderSort
       }
 
       if (this.editQuestionId == null) {
@@ -251,6 +256,7 @@ export default {
 
       this.set_closeFrame(this.quesctionObj.startQuestion)
       //------------------------------------
+      this.set_orderSort()
       this.openedFrame = false // 关闭弹窗
     },
     hanldeSelect (e) {

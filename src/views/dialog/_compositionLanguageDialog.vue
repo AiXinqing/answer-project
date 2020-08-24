@@ -117,6 +117,7 @@ export default {
       'BigQuestion',
       'pageData',
       'pageLayout',
+      'orderSort',
     ]),
     containerWidth () {
       // 格子承载宽度
@@ -271,7 +272,8 @@ export default {
   methods: {
     ...mapMutations('pageContent', [
       'initPageData',
-      'Empty_PageData'
+      'Empty_PageData',
+      'set_orderSort',
     ]),
     ...mapMutations('questionType', [
       'set_currentQuestion',
@@ -333,7 +335,7 @@ export default {
             id: objId,
             questionType: 'compositionLanguage',
             content: this.data,
-            order: this.pageData.length,
+            order: this.orderSort,
             first: i == 0 ? true : false,
             lattice: lattice,
             showRow: item,
@@ -348,6 +350,7 @@ export default {
           // 新增
           ArrData.forEach(obj => {
             this.initPageData(obj)
+            this.set_orderSort()
           })
           this.Add_AlreadyTopics([this.data])
           this.set_determineTopic([this.data])
@@ -358,6 +361,7 @@ export default {
 
           ArrData.forEach(obj => {
             this.initPageData(obj)
+            this.set_orderSort()
           })
         }
 

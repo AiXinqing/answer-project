@@ -17,7 +17,9 @@ var state = {
   // 一页高度
   BigQuestion: 1,
   // 大题题号
-  pageHeight: [] // 页面高度
+  pageHeight: [],
+  // 页面高度
+  orderSort: 0 // 排序
 
 };
 var mutations = {
@@ -58,7 +60,6 @@ var mutations = {
     }).sort(function (a, b) {
       return a.order - b.order;
     });
-    console.log(state.pageData);
   },
   delPageData: function delPageData(state, index) {
     state.pageData.splice(index, 1);
@@ -93,6 +94,9 @@ var mutations = {
     }
 
     state.pageHeight = results;
+  },
+  set_orderSort: function set_orderSort(state) {
+    state.orderSort = state.orderSort + 1;
   }
 };
 var actions = {

@@ -101,6 +101,7 @@ export default {
       'page_size',
       'BigQuestion',
       'pageData',
+      'orderSort',
     ]),
     errorMessage () {
       return this.errorVal != '' ? true : false
@@ -222,7 +223,8 @@ export default {
   methods: {
     ...mapMutations('pageContent', [
       'initPageData',
-      'Empty_PageData'
+      'Empty_PageData',
+      'set_orderSort',
     ]),
     ...mapMutations('questionType', [
       'set_currentQuestion',
@@ -267,7 +269,7 @@ export default {
             id: objId,
             questionType: 'compositionEnglish',
             content: this.data,
-            order: this.pageData.length,
+            order: this.orderSort,
             first: i == 0 ? true : false,
             showRow: item,
             BeforeEditing: this.editQuestionId != null ? this.editData.BeforeEditing : this.BeforeEditing
@@ -280,6 +282,7 @@ export default {
           // 新增
           ArrData.forEach(obj => {
             this.initPageData(obj)
+            this.set_orderSort()
           })
           this.Add_AlreadyTopics([this.data])
           this.set_determineTopic([this.data])
@@ -290,6 +293,7 @@ export default {
 
           ArrData.forEach(obj => {
             this.initPageData(obj)
+            this.set_orderSort()
           })
         }
 

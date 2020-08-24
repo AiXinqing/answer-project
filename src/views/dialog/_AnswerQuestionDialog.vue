@@ -112,6 +112,7 @@ export default {
       'page_size',
       'BigQuestion',
       'pageData',
+      'orderSort',
     ]),
     ...mapState('answerQuestion', ['answerQuestionArr',]),
     childGroups () {
@@ -211,7 +212,8 @@ export default {
       'initPageData',
       'amendPageData',
       'set_objectiveData',
-      'deletePageData'
+      'deletePageData',
+      'set_orderSort'
     ]),
     ...mapMutations('questionType', [
       'set_AlreadyTopics',
@@ -269,7 +271,7 @@ export default {
           pid: `answer${date}`,
           questionType: 'answerQuestion',
           content: {},
-          order: this.pageData.length + index
+          order: this.orderSort
         }
         if (index == 0) {
           obj = {
@@ -306,11 +308,12 @@ export default {
               ...obj,
               height: currentPageHeight
             }
+            this.set_orderSort()
             let nextObj = { // 下半部分
               ...obj,
               height: difference,
               top: 20,
-              order: obj.order + 1,
+              order: this.orderSort,
               content: { ...obj.content, group: {} }
             }
             Arr.push(preObj, nextObj)
@@ -340,6 +343,7 @@ export default {
       // 大题号修改
       this.set_objectiveData(this.dataTopic.number)
       //------------------------------------
+      this.set_orderSort()
       this.openedFrame = false // 关闭弹窗
       this.set_determineTopic(this.topicList)
       this.set_currentQuestion()
