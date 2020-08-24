@@ -30,6 +30,7 @@
       <tab-pane-box
         :tab-pane-data="tabData"
         :group-data="objectiveData.group"
+        :edit-id="editQuestionId"
         @hanlde-dels="hanldeDel"
         @hanlde-add-subtopic="hanldeAddSubtopic"
         @hanlde-status="hanldeStatus"

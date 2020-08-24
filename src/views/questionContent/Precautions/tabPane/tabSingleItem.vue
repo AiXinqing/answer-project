@@ -25,6 +25,10 @@ export default {
     activeNameItem: {
       type: String,
       default: 'singleBox'
+    },
+    editIds: {
+      teyp: Number,
+      default: null
     }
   },
   data () {
@@ -53,28 +57,37 @@ export default {
         let endIndex = AlreadyTopics.findIndex(item => item.topic == itemStart)
 
         if (numStart > -1 || index > -1) {
-          if (AlreadyTopics[index].pid == this.data.id && numStart <= -1) {
-            strStart = ''
-          } else {
+          if (this.editIds != null) {
+            if (AlreadyTopics[index].pid == this.data.id) {
+              strStart = ''
+            } else {
 
+              strStart = `${itemStart}题已经存在，请勿重复添加`
+            }
+          } else {
             strStart = `${itemStart}题已经存在，请勿重复添加`
           }
         }
         if (numEnd > -1 || endIndex > -1) {
-          if (AlreadyTopics[endIndex].pid == this.data.id && numEnd <= -1) {
-            strEnd = ''
+          if (this.editIds != null) {
+            if (AlreadyTopics[endIndex].pid == this.data.id) {
+              strEnd = ''
+            } else {
+              strEnd = `${itemEnd}题已经存在，请勿重复添加`
+            }
           } else {
-            strEnd = `${itemEnd}题已经存在，请勿重复添加`
+            strStart = `${itemStart}题已经存在，请勿重复添加`
           }
         }
       }
+
       return itemStart == 0 ? '开始题号必须大于0' :
         itemEnd == 0 ? '结束题号必须大于0' :
           itemStart == 0 && itemEnd != null ? '开始题号不能大于结束题号' :
             itemStart > itemEnd && itemEnd != null ? '开始题号不能大于结束题号' :
               itemStart != 0 && itemEnd != null && itemScore == 0 ? '分数不能为空' :
-                strStart != '' ? strStart :
-                  strEnd != '' ? strStart : ''
+                strStart.length > 0 ? strStart :
+                  strEnd.length > 0 ? strEnd : ''
     },
     tabStatus () {
       let itemStart = this.data.start || 0
@@ -91,18 +104,26 @@ export default {
         let numEnd = determineTopic.findIndex(item => item.topic == itemEnd)
         let endIndex = AlreadyTopics.findIndex(item => item.topic == itemStart)
         if (numStart > -1 || index > -1) {
-          if (AlreadyTopics[index].pid == this.data.id && numStart <= -1) {
-            strStart = ''
-          } else {
+          if (this.editIds != null) {
+            if (AlreadyTopics[index].pid == this.data.id) {
+              strStart = ''
+            } else {
 
+              strStart = `${itemStart}题已经存在，请勿重复添加`
+            }
+          } else {
             strStart = `${itemStart}题已经存在，请勿重复添加`
           }
         }
         if (numEnd > -1 || endIndex > -1) {
-          if (AlreadyTopics[endIndex].pid == this.data.id && numEnd <= -1) {
-            strEnd = ''
+          if (this.editIds != null) {
+            if (AlreadyTopics[endIndex].pid == this.data.id) {
+              strEnd = ''
+            } else {
+              strEnd = `${itemEnd}题已经存在，请勿重复添加`
+            }
           } else {
-            strEnd = `${itemEnd}题已经存在，请勿重复添加`
+            strStart = `${itemStart}题已经存在，请勿重复添加`
           }
         }
       }
@@ -143,8 +164,11 @@ export default {
     singleBoxHanlde () {
 
       // 新增题组-小题详情
-
-      this.$emit('hanlde-status', this.tabStatusVal)
+      const StatusObj = {
+        val: this.tabStatusVal,
+        status: this.tabStatus
+      }
+      this.$emit('hanlde-status', StatusObj)
 
       if (!this.tabStatus) {
         let subtopicArr = []
