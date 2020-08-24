@@ -29,6 +29,7 @@
       </el-row>
       <space-question
         :group-data="objectiveData.group"
+        :edit-id="editQuestionId"
         @hanlde-status="hanldeStatus"
         @hanlde-add-group-question="hanldeAddGroupQuestion"
         @hanlde-del-group="hanldeDelGroup"

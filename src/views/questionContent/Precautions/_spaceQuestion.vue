@@ -5,6 +5,7 @@
       v-for="(item, index) in topicGroup"
       :key="index"
       :space-item="item"
+      :edit-id="editId"
       @hanlde-status="hanldeStatus"
       @hanlde-add-group-question="hanldeAddGroupQuestion"
       @hanlde-del-group="hanldeDelGroup"
@@ -40,6 +41,10 @@ export default {
       type: Array,
       default: () => []
     },
+    editId: {
+      tyoe: Number,
+      default: null
+    }
   },
   data () {
     return {
