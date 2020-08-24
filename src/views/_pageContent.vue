@@ -28,12 +28,7 @@
         />
       </div>
     </div>
-    <!-- 学生标题 -->
-    <column-dialog ref="studentDialog" />
-    <!-- 准考证号 -->
-    <admission-number-dialog ref="admissionDialog" />
-    <question-dialog ref="questionDialogs" />
-    <fill-in-the-blank-dialog ref="fillInTheBlanks" />
+    <!-- 公有弹框组件 -->
     <public-dialog ref="publicDialog" />
   </div>
 </template>
@@ -47,22 +42,13 @@ import answerQuestion from './questionContent/_answerQuestion' // 解答题
 import optionalQuestion from './questionContent/_optionalQuestion' // 选作题
 import compositionEnglish from './questionContent/_compositionEnglish' // 作文英语
 import compositionLanguage from './questionContent/_compositionLanguage' // 作文语文
-import columnDialog from './dialog/_studentColumnDialog'
-import AdmissionNumberDialog from './dialog/_AdmissionNumberDialog'
-import questionDialog from './dialog/_questionData'
-import FillInTheBlankDialog from './dialog/_FillInTheBlankDialog'
 import publicDialog from './dialog/_publicDialog'
-// import { constants } from 'zlib';
 
 export default {
   components: {
     AnswerSheetTitle,
     ObjectiveQuestion,
-    columnDialog,
-    AdmissionNumberDialog,
-    questionDialog,
     FillInTheBlank,
-    FillInTheBlankDialog,
     answerQuestion,
     publicDialog,
     optionalQuestion,
@@ -104,10 +90,10 @@ export default {
     ...mapActions('pageContent', ['getPageData']),
     ...mapMutations('pageContent', ['set_pageHeight']),
     hanldeStudent (Arr) {
-      this.$refs.studentDialog.openedFrameFunc(Arr)
+      this.$refs.publicDialog.opened('studentTitle', Arr)
     },
     editAdmissionNumber () {
-      this.$refs.admissionDialog.openedFrameFunc()
+      this.$refs.publicDialog.opened('AdmissionNumber')
     },
     pageContentFunc (rects = []) {
       // 重组题-分页
@@ -119,11 +105,9 @@ export default {
       }
       rects.forEach((rect) => {
         currentPage.height += rect.height
-        // console.log(currentPage.height)
         if (currentPage.height < this.page_size) {
           currentPage.rects.push(rect)
         } else {
-          // console.log(currentPage.height)
           currentPage.height = rect.height
           results.push(currentPage.rects)
           currentPage.rects = []
@@ -137,14 +121,13 @@ export default {
       if (currentPage.rects.length > 0) {
         results.push(currentPage.rects)
       }
-      // console.log(results)
       return results
     },
     currentQuestionHanldeEdit (id) {
-      this.$refs.questionDialogs.openedEdit(id)
+      this.$refs.publicDialog.openedEdit('questionDialogs', id)
     },
     currentQuestionFillEdit (id) {
-      this.$refs.fillInTheBlanks.openedEdit(id)
+      this.$refs.publicDialog.openedEdit('fillInTheBlanks', id)
     },
     currentQuestionAnswerEdit (obj) {
       this.$refs.publicDialog.openedEdit('answerQuestion', obj)

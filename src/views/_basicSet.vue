@@ -20,20 +20,15 @@
       <el-button type="primary">保存</el-button>
       <el-button type="primary">下载</el-button>
     </div>
-    <question-dialog ref="questionDialogs" />
-    <fill-in-the-blank-dialog ref="fillInTheBlanks" />
     <public-dialog ref="publicDialog" />
   </div>
 </template>
 
 <script>
-import questionDialog from './dialog/_questionData'
-import FillInTheBlankDialog from './dialog/_FillInTheBlankDialog'
+
 import publicDialog from './dialog/_publicDialog'
 export default {
   components: {
-    questionDialog,
-    FillInTheBlankDialog,
     publicDialog
   },
   data () {
@@ -44,10 +39,10 @@ export default {
   },
   methods: {
     questionDialog () {
-      this.$refs.questionDialogs.opened()
+      this.$refs.publicDialog.opened('questionDialogs')
     },
     fillInTheBlank () {
-      this.$refs.fillInTheBlanks.opened()
+      this.$refs.publicDialog.opened('fillInTheBlanks')
     },
     answerQuestion () {
       this.$refs.publicDialog.opened('answerQuestion')
