@@ -280,6 +280,8 @@ export default {
       'set_determineTopic',
     ]),
     opened () {
+      this.questionData.number = this.BigQuestion
+      this.data.number = this.BigQuestion
       // 开打弹框
       this.set_currentQuestion()
       this.openedFrame = true

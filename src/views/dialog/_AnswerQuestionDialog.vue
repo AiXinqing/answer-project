@@ -194,6 +194,7 @@ export default {
         this.dataTopic = {
           ...this.questionData
         }
+
         if (this.editQuestionId == null) {
           this.$nextTick(() => {
             this.dataTopic = {
@@ -203,7 +204,7 @@ export default {
           })
         }
       }
-    }
+    },
   },
   methods: {
     ...mapMutations('pageContent', [
@@ -224,6 +225,9 @@ export default {
     ...mapMutations('answerQuestion', ['set_answerQuestionArr',]),
     opened () {
       // 开打弹框
+      this.questionData.number = this.BigQuestion
+      this.dataTopic.number = this.BigQuestion
+
       this.openedFrame = true
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)

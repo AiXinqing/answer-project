@@ -202,6 +202,8 @@ export default {
       this.Add_AlreadyTopics(this.determineTopic)
     },
     opened () {
+      this.spaceTopic.number = this.BigQuestion
+      this.objectiveData.number = this.BigQuestion
       this.openedFrame = true
       this.set_currentQuestion()
       //-------------------打开

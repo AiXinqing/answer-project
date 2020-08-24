@@ -173,6 +173,9 @@ export default {
       this.Add_AlreadyTopics(this.determineTopic)
     },
     opened () {
+      this.quesctionObj.number = this.BigQuestion
+      this.objectiveData.number = this.BigQuestion
+
       this.openedFrame = true
       this.set_currentQuestion()
       this.Empty_AlreadyTopics() // 清空
