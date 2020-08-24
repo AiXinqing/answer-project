@@ -125,7 +125,8 @@ export default {
   methods: {
     ...mapMutations('pageContent', [
       'delPageData',
-      'Empty_PageData'
+      'Empty_PageData',
+      'del_objectiveData',
     ]),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
@@ -148,6 +149,7 @@ export default {
         this.del_determineTopic([this.contentData])
         this.Empty_PageData(this.data.id)
         this.set_currentQuestion()
+        this.del_objectiveData() // 删减一个大题号
       }
 
     },

@@ -115,7 +115,7 @@ export default {
   //   this.$nextTick(()=>)
   // },
   methods: {
-    ...mapMutations('pageContent', ['delPageData']),
+    ...mapMutations('pageContent', ['delPageData', 'del_objectiveData']),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
@@ -138,6 +138,7 @@ export default {
         // this.delPageData(index)
         // this.del_determineTopic(this.topicBox)
         // this.set_currentQuestion()
+        this.del_objectiveData() // 删减一个大题号
       }
 
     },

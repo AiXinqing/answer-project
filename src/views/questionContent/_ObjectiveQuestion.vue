@@ -111,7 +111,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('pageContent', ['delPageData']),
+    ...mapMutations('pageContent', ['delPageData', 'del_objectiveData']),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
@@ -144,6 +144,7 @@ export default {
         this.del_determineTopic(this.topicBox)
         this.delPageData(index)
         this.set_currentQuestion()
+        this.del_objectiveData() // 删减一个大题号
       }
     },
     currentQuestionHanldeEdit (id) {
