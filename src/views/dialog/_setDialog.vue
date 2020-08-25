@@ -78,14 +78,9 @@ export default {
   },
   computed: {
     ...mapState('titleSet', ['textVal', 'titleInfo', 'titleRows']),
-    ...mapState('pageContent', ['orderSort']),
   },
   methods: {
-    ...mapMutations('pageContent', [
-      'initPageLayout',
-      'initPageData',
-      'amendPageData',
-      'set_orderSort']),
+    ...mapMutations('pageContent', ['initPageLayout', 'initPageData', 'amendPageData']),
     openRForm (type) {
       if (type === 1) {
         this.createLayout = true
@@ -113,7 +108,6 @@ export default {
           titleInfo: this.titleInfo,
           titleRows: this.titleRows
         },
-        order: this.orderSort
       }
       //
       if (change == 1) {
@@ -131,8 +125,6 @@ export default {
         // this.initPageData(text)
         // 临时测试题------------------------------
       }
-      // order排序
-      this.set_orderSort()
       this.openedFrame = false
     },
     hanldeTab (item) {

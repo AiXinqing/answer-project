@@ -55,5 +55,8 @@ export default {
   .el-row {
     border-bottom: 1px solid #888;
   }
+  .el-row:last-child {
+    border-bottom: none;
+  }
 }
 </style>

@@ -16,6 +16,7 @@ export default {
   components: {},
   data () {
     return {
+      // studentInfoArr:[],
       studentInfoList: []
     }
   },
@@ -25,6 +26,10 @@ export default {
 
       return this.titleInfo.filter(item => item.checked == true)
     }
+    // ...mapGetters('titleSet', ['studentInfoArr']),
+    // checkedInfo () {
+    //   return this.studentInfoArr.filter((item) => item.checked)
+    // },
   },
   watch: {
     titleInfo (val) {

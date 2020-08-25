@@ -1,8 +1,10 @@
 <template>
-<!-- 选这题 -->
   <div class="question-info">
     <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
-      <div class="title-span" v-html="cotent"></div>
+      <!-- <span>{{numberTitle}}.</span>
+      <span>{{data.topic}}</span>
+      <span>({{data.totalScore}}分)</span> -->
+      <div v-html="cotent"></div>
     </div>
     <quill-editor
       v-show="isEditor"
@@ -59,8 +61,8 @@ export default {
     return {
       data: {},
       //TopicContent:'',
-      isEditor: false,
-      cotent: ''
+      isEditor:false,
+      cotent:''
     }
   },
   computed: {
@@ -70,23 +72,18 @@ export default {
       let item = this.options.filter(item => item.value === this.data.number)
       return item[0].label
     },
-    topicBox () {
+    groupData () {
       let group = this.data.group
       const singleBox = group.singleBox
-      //---------------------------------小题计算
       const singleArr = this.traverse(singleBox, this.letterArr)
       const checkbox = group.checkbox
       const checkArr = this.traverse(checkbox, this.letterArr)
       const judgment = group.judgment
       const judgmentArr = this.traverse(judgment, this.letterArr)
       let topicList = [...singleArr, ...checkArr, ...judgmentArr]
-      //--------------------------------------------------------
-      return topicList
-    },
-    groupData () {
       let result = [];
-      for (var i = 0; i < this.topicBox.length; i += this.data.rows) {
-        result.push(this.topicBox.slice(i, i + this.data.rows));
+      for (var i = 0; i < topicList.length; i += this.data.rows) {
+        result.push(topicList.slice(i, i + this.data.rows));
       }
       return result
     },
@@ -103,7 +100,7 @@ export default {
         }
       }
     },
-    TopicContent: {
+    TopicContent:{
       immediate: true,
       handler () {
         this.cotent = this.TopicContent
@@ -111,51 +108,43 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('pageContent', ['delPageData', 'del_objectiveData']),
-    ...mapMutations('questionType', [
-      'del_AlreadyTopics',
-      'set_currentQuestion',
-      'del_determineTopic'
-    ]),
+    ...mapMutations('pageContent', ['delPageData']),
     traverse (Arr, letterArr) {
       if (Arr.length > 0) {
         let data = []
-        Arr.forEach(item => {
-
-          item.childGroup.forEach(row => {
-            let obj = {
-              ...row,
-              selectBox: row.select == 2 && row.id.indexOf('judgment') != -1 ? ['T', 'F'] : letterArr.slice(0, row.select),
-              width: row.select * 26 + 42
-            }
-            data.push(obj)
-          })
+        Arr.map(item => {
+          if (item.childGroup.length > 0) {
+            let childGroup = item.childGroup.map(row => {
+              let select = item.select
+              let selectBox = []
+              if (select == 2) {
+                selectBox = ['T', 'F']
+              } else {
+                selectBox = letterArr.slice(0, select)
+              }
+              return { ...row, selectBox: selectBox }
+            })
+            data = [...data, ...childGroup]
+          }
         })
-
         return data
       } else {
         return []
       }
     },
-    delHanlde (id) { // 删除大题-小题数
-      const index = this.pageData.findIndex((itme) => itme.id === id)
-      if (index > -1) {
-        this.del_AlreadyTopics(this.topicBox)
-        this.del_determineTopic(this.topicBox)
-        this.delPageData(index)
-        this.set_currentQuestion()
-        this.del_objectiveData() // 删减一个大题号
-      }
+    delHanlde (id) {
+      this.delPageData(id)
     },
     currentQuestionHanldeEdit (id) {
       this.$emit('current-question-hanlde-edit', id)
     },
-    hanldeEditor () {
+    hanldeEditor(){
       this.isEditor = true
     },
-    hanldeCloseEsitor (content) {
+    hanldeCloseEsitor(content){
       this.isEditor = false
       this.cotent = content
+      //console.log(content)
     }
   },
 }
@@ -205,7 +194,6 @@ export default {
     right: 0;
     top: -10px;
     display: none;
-    z-index: 99;
     span {
       margin-left: 10px;
     }
@@ -217,14 +205,6 @@ export default {
   }
   .question-title img {
     max-width: 100%;
-  }
-  .question-title>div {
-    padding: 10px 0 10px 10px;
-    border: 1px solid #fff;
-    p{margin: 0 0}
-}
-  .question-title:hover{
-     div{border-color: @main}
   }
 }
 </style>

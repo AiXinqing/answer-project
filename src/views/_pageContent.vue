@@ -9,9 +9,8 @@
       <div
         v-for="(row, a) in item"
         :key="a"
-        :class="['footer',{'answer':row.first != undefined && row.first == false}]"
-        ref="box"
-        :style="{ minHeight: row.height + 'px' }"
+        class="footer"
+        :style="{ minHeight: row.castHeight + 'px' }"
       >
         <component
           :is="row.questionType"
@@ -20,45 +19,36 @@
           @hanldeStudent="hanldeStudent"
           @edit-admission-number="editAdmissionNumber"
           @current-question-hanlde-edit="currentQuestionHanldeEdit"
-          @current-question-fill-edit="currentQuestionFillEdit"
-          @current-question-answer-edit="currentQuestionAnswerEdit"
-          @current-question-optional-edit="currentQuestionOptionalEdit"
-          @composition-english-edit="compositionEnglishEdit"
-          @composition-language-edit="compositionLanguageEdit"
         />
       </div>
     </div>
-    <!-- 公有弹框组件 -->
-    <public-dialog ref="publicDialog" />
+    <!-- 学生标题 -->
+    <column-dialog ref="studentDialog" />
+    <!-- 准考证号 -->
+    <admission-number-dialog ref="admissionDialog" />
+    <question-dialog ref="questionDialogs" />
   </div>
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import AnswerSheetTitle from './questionContent/_answerSheetTitle' // 答题卡标题
 import ObjectiveQuestion from './questionContent/_ObjectiveQuestion' // 客观题
-import FillInTheBlank from './questionContent/_FillInTheBlank' // 填空题
-import answerQuestion from './questionContent/_answerQuestion' // 解答题
-import optionalQuestion from './questionContent/_optionalQuestion' // 选作题
-import compositionEnglish from './questionContent/_compositionEnglish' // 作文英语
-import compositionLanguage from './questionContent/_compositionLanguage' // 作文语文
-import publicDialog from './dialog/_publicDialog'
+import columnDialog from './dialog/_studentColumnDialog'
+import AdmissionNumberDialog from './dialog/_AdmissionNumberDialog'
+import questionDialog from './dialog/_questionData'
 
 export default {
   components: {
     AnswerSheetTitle,
     ObjectiveQuestion,
-    FillInTheBlank,
-    answerQuestion,
-    publicDialog,
-    optionalQuestion,
-    compositionEnglish,
-    compositionLanguage,
+    columnDialog,
+    AdmissionNumberDialog,
+    questionDialog
   },
   data () {
     return {
       contentData: [],
-      heightArray: []
     }
   },
   computed: {
@@ -67,19 +57,13 @@ export default {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 520
         : 785
-    },
+    }
   },
   watch: {
     pageData: {
       immediate: true,
       handler () {
         this.contentData = this.pageContentFunc(this.pageData)
-        if (this.contentData.length > 0) {
-          this.$nextTick(() => {
-            this.heightArray = this.$refs['box'].map(item => item.clientHeight)
-            this.set_pageHeight(this.heightArray)
-          })
-        }
       }
     }
   },
@@ -88,59 +72,64 @@ export default {
   },
   methods: {
     ...mapActions('pageContent', ['getPageData']),
-    ...mapMutations('pageContent', ['set_pageHeight']),
     hanldeStudent (Arr) {
-      this.$refs.publicDialog.opened('studentTitle', Arr)
+      this.$refs.studentDialog.openedFrameFunc(Arr)
     },
     editAdmissionNumber () {
-      this.$refs.publicDialog.opened('AdmissionNumber')
+      this.$refs.admissionDialog.openedFrameFunc()
     },
     pageContentFunc (rects = []) {
-      // 重组题-分页
+
       const results = []
       // currentPage.height 总高度
       var currentPage = {
         height: 0,
         rects: [],
       }
+      // 重置高度
+      function resetCurrentPage () {
+        currentPage.height = 0
+        currentPage.rects = []
+      }
       rects.forEach((rect) => {
-        currentPage.height += rect.height
-        if (currentPage.height < this.page_size) {
-          currentPage.rects.push(rect)
-        } else {
-          currentPage.height = rect.height
-          results.push(currentPage.rects)
-          currentPage.rects = []
-          if (rect.pid != undefined) {
-            currentPage.rects.push({ ...rect, borderTop: true })
-          } else {
-            currentPage.rects.push(rect)
+        const avalibleHeight = this.page_size - currentPage.height
+        if (rect.height > avalibleHeight) {
+          // 分页-剩余高度新建rect
+          currentPage.rects.push({
+            ...rect,
+            castHeight: avalibleHeight,
+          })
+          results.push(currentPage.rects) // 增加一页
+          resetCurrentPage()
+          // 判断当前rect高度能分几页
+          let height = rect.height - avalibleHeight
+          while (height > this.page_size) {
+            results.push([{
+              ...rect,
+              castHeight: this.page_size,
+            },])
+            height -= this.page_size
           }
+          currentPage.height = height
+          currentPage.rects.push({
+            ...rect,
+            castHeight: height,
+          })
+        } else {
+          currentPage.height += rect.height
+          currentPage.rects.push({
+            ...rect,
+            castHeight: rect.height,
+          })
         }
       })
-      if (currentPage.rects.length > 0) {
+      if (currentPage.height) {
         results.push(currentPage.rects)
       }
       return results
     },
     currentQuestionHanldeEdit (id) {
-      this.$refs.publicDialog.openedEdit('questionDialogs', id)
-    },
-    currentQuestionFillEdit (id) {
-      this.$refs.publicDialog.openedEdit('fillInTheBlanks', id)
-    },
-    currentQuestionAnswerEdit (obj) {
-      this.$refs.publicDialog.openedEdit('answerQuestion', obj)
-    },
-    currentQuestionOptionalEdit (obj, id) {
-
-      this.$refs.publicDialog.openedEdit('optionalQuestion', obj, id)
-    },
-    compositionEnglishEdit (obj) {
-      this.$refs.publicDialog.openedEdit('compositionEnglish', obj)
-    },
-    compositionLanguageEdit (obj) {
-      this.$refs.publicDialog.openedEdit('compositionLanguage', obj)
+      this.$refs.questionDialogs.openedEdit(id)
     }
   },
 }
@@ -157,24 +146,20 @@ export default {
   float: left;
 }
 .page-contents {
-  padding-top: 20px;
   width: 785px;
   height: 1170px;
   border: 1px solid @font-333;
   overflow: hidden;
   background: @white;
   border-radius: 3px;
-  position: relative;
+  position: absolute;
   left: 50%;
   transform: translateX(-50%);
   .footer {
     position: relative;
-    width: calc(100% - 40px);
     padding-top: 20px;
+    width: calc(100% - 40px);
     left: 20px;
-    &.answer {
-      padding-top: 0px;
-    }
   }
   margin-bottom: 20px;
   &:last-child {

@@ -14,7 +14,6 @@
             :key="row.id"
             :item-data="row"
             :active-name-item="activeName"
-            :edit-ids="editId"
             @hanlde-del="handldeDel"
             @hanlde-status="hanldeStatus"
             @hanlde-add-group-question="hanldeAddGroupQuestion"
@@ -26,7 +25,6 @@
             :key="row.id"
             :item-data="row"
             :active-name-item="activeName"
-            :edit-ids="editId"
             @hanlde-del="handldeDel"
             @hanlde-status="hanldeStatus"
             @hanlde-add-group-question="hanldeAddGroupQuestion"
@@ -38,7 +36,6 @@
             :key="row.id"
             :item-data="row"
             :active-name-item="activeName"
-            :edit-ids="editId"
             @hanlde-del="handldeDel"
             @hanlde-status="hanldeStatus"
             @hanlde-add-group-question="hanldeAddGroupQuestion"
@@ -86,10 +83,8 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
-
 import tabSingleItem from './tabPane/tabSingleItem'
-import tabCheckItem from './tabPane/_tabcheckItem'
+import tabCheckItem from './tabPane/_tabCheckItem'
 import tabJudgment from './tabPane/_tabJudgment'
 import singleTopic from './tabPane/_singleTopic'
 import checkTopic from './tabPane/_checkTopic'
@@ -112,10 +107,6 @@ export default {
       type: Object,
       default: () => { },
     },
-    editId: {
-      teyp: Number,
-      default: null
-    }
   },
   data () {
     return {
@@ -136,12 +127,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('questionType', [
-      'set_currentQuestion',
-    ]),
-    hanldeClick () {
-      this.set_currentQuestion()
-    },
+    hanldeClick () { },
     handldeDel (obj) {
       this.$emit('hanlde-dels', obj)
     },

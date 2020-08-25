@@ -1,5 +1,4 @@
 <template>
-  <!-- 选择题 -->
   <hj-dialog
     class="newAdd-content"
     :title="title"
@@ -24,13 +23,12 @@
         </el-col>
         <el-col :span="24" class="select-item">
           <div class="label">每组题数:</div>
-          <el-input v-model.number="objectiveData.rows" size="mini" placeholder="请输入内容"></el-input>
+          <el-input v-model="objectiveData.rows" size="mini" placeholder="请输入内容"></el-input>
         </el-col>
       </el-row>
       <tab-pane-box
         :tab-pane-data="tabData"
         :group-data="objectiveData.group"
-        :edit-id="editQuestionId"
         @hanlde-dels="hanldeDel"
         @hanlde-add-subtopic="hanldeAddSubtopic"
         @hanlde-status="hanldeStatus"
@@ -106,31 +104,22 @@ export default {
       errorVal: '',
       objectiveData: {},
       topicList: [],
-      editQuestionId: null,
-      ContentHeight: 0, // 内容高度
+      editQuestionId: null
     }
   },
   computed: {
     ...mapState('questionType', [
       'options',
-      'AlreadyTopics',
-      'currentQuestion',
-      'letterArr',
-      'determineTopic'
+      'startQuestion',
+      'endQuestion',
+      'SubtitleNumber',
+      'delTopics',
+      'currentQuestion'
     ]),
-    ...mapState('pageContent', [
-      'pageData',
-      'pageLayout',
-      'BigQuestion',
-      'pageData', 'orderSort']),
-    pageWidth () {
-      return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
-        ? 480
-        : 745
-    },
+    ...mapState('pageContent', ['pageData']),
     errorMessage () {
       return this.errorVal != '' ? true : false
-    },
+    }
   },
   watch: {
     quesctionObj: {
@@ -139,14 +128,7 @@ export default {
         this.objectiveData = {
           ...this.quesctionObj
         }
-        if (this.editQuestionId == null) {
-          this.$nextTick(() => {
-            this.objectiveData = {
-              ...this.objectiveData,
-              number: this.BigQuestion
-            }
-          })
-        }
+
       }
     }
   },
@@ -155,75 +137,46 @@ export default {
   },
   methods: {
     ...mapMutations('questionType', [
+      'set_startQuestion',
+      'set_endQuestion',
+      'set_minTopic',
       'set_SubtitleNumber',
       'delete_SubtitleNumber',
+      'set_delTopics',
       'set_currentQuestion',
       'set_closeFrame',
-      'Add_AlreadyTopics', // 小题数组
-      'del_AlreadyTopics', // 删除题组-小题
-      'set_determineTopic', // 储存确定题型
-      'Empty_AlreadyTopics', // 清空
     ]),
-    ...mapMutations('pageContent', [
-      'initPageData',
-      'amendPageData',
-      'set_objectiveData',
-      'set_orderSort'
-    ]),
-    closeFrame () { // 取消弹框
+    ...mapMutations('pageContent', ['initPageData', 'amendPageData']),
+    closeFrame () {
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
       this.set_closeFrame(this.quesctionObj.startQuestion)
       this.openedFrame = false
-
-      this.Empty_AlreadyTopics() // 清空
-      this.Add_AlreadyTopics(this.determineTopic)
     },
     opened () {
-      this.quesctionObj.number = this.BigQuestion
-      this.objectiveData.number = this.BigQuestion
-
       this.openedFrame = true
-      this.set_currentQuestion()
-      this.Empty_AlreadyTopics() // 清空
-      this.Add_AlreadyTopics(this.determineTopic)
     },
     openedEdit (id) {
       let current = this.pageData.filter(item => item.id === id)
       this.quesctionObj = JSON.parse(JSON.stringify(current[0].content))
       this.editQuestionId = id
       this.openedFrame = true
-      this.title = '编辑客观题'
-      this.set_currentQuestion()
     },
     preCreateQuestion () { // 数据编辑完成添加至全局数组中---------------
       let group = this.objectiveData.group
       const singleBox = group.singleBox
-      //------------------------------------小题计算
-      const singleArr = this.traverse(singleBox, this.letterArr)
+      const singleArr = this.traverse(singleBox)
       const checkbox = group.checkbox
-      const checkArr = this.traverse(checkbox, this.letterArr)
+      const checkArr = this.traverse(checkbox)
       const judgment = group.judgment
-      const judgmentArr = this.traverse(judgment, this.letterArr)
-      //------------------xiao题号数组-------------------------
+      const judgmentArr = this.traverse(judgment)
       this.topicList = [...singleArr, ...checkArr, ...judgmentArr]
-      this.set_determineTopic(this.topicList) // 储存确实题型
+      let long = this.topicList.length
 
-      //-------------------------------------------
-      let result = [];
-      for (var i = 0; i < this.topicList.length; i += this.objectiveData.rows) {
-        result.push(this.topicList.slice(i, i + this.objectiveData.rows));
-      }
-      const maxWidth = []
-      result.filter(item => {
-        let widthS = item.map(row => row.width)
-        maxWidth.push(Math.max.apply(null, widthS))
-      })
-
-      // 计算出的内容高度值
-      let heights = this.HeightCalculation(maxWidth, result)
-      this.ContentHeight = heights // 内容高度
-      // 计算出的内容高度值
-
+      window.console.log(this.topicList)
+      let row = this.objectiveData.rows
+      let hang = Math.ceil(long / row)
+      let lie = Math.ceil(hang / 4)
+      let heights = lie * (row * 21) + 21
       let totalScore = 0;
 
       this.topicList.map(item => {
@@ -235,10 +188,9 @@ export default {
       }
       var obj = {
         id: 'objective' + +new Date(),
-        height: heights + 32, // 32标题高度
+        height: heights,
         questionType: 'ObjectiveQuestion',
         content: this.objectiveData,
-        order: this.orderSort
       }
 
       if (this.editQuestionId == null) {
@@ -247,17 +199,10 @@ export default {
         obj.id = this.editQuestionId
         this.amendPageData(obj)
       }
-      this.set_objectiveData() // 大题号增加
-      // 小题数组追加数据
-      this.Add_AlreadyTopics(this.topicList)
-      this.set_determineTopic(this.topicList)
       // guan bi - 清楚数据
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
-
       this.set_closeFrame(this.quesctionObj.startQuestion)
-      //------------------------------------
-      this.set_orderSort()
-      this.openedFrame = false // 关闭弹窗
+      this.openedFrame = false
     },
     hanldeSelect (e) {
       // 选择答题号
@@ -276,11 +221,15 @@ export default {
       if (index > -1) {
         let itemTopic = groupItem[index]
         // 更改题型状态值
+        if (this.minTopic <= itemTopic.end) {
+          this.set_minTopic(itemTopic.end)
+        }
+        this.set_endQuestion(itemTopic.end)
+        this.set_startQuestion(itemTopic.start)
 
-        this.del_AlreadyTopics(itemTopic.childGroup) // 删除弹框内临时数组
         groupItem.splice(index, 1)
         this.delete_SubtitleNumber(obj.id)
-
+        this.set_delTopics({ start: itemTopic.start, end: itemTopic.end })
         this.$nextTick(() => {
           this.set_currentQuestion()
         })
@@ -352,79 +301,28 @@ export default {
         let currentIndex = currentGroup.childGroup.findIndex(item => item.id === dataItem.id)
         if (currentIndex > -1) {
           currentGroup.childGroup.splice(currentIndex, 1, dataItem) // 替换
-
+          console.log(groupItem)
         }
       }
     },
-    traverse (Arr, letterArr) {
+    traverse (Arr) {
       if (Arr.length > 0) {
         let data = []
-        Arr.forEach(item => {
-          item.childGroup.forEach(row => {
-            let obj = {
-              ...row,
-              selectBox: row.select == 2 && row.id.indexOf('judgment') != -1 ? ['T', 'F'] : letterArr.slice(0, row.select),
-              width: row.select * 26 + 42
-            }
-            data.push(obj)
-          })
+        Arr.map(item => {
+          if (item.childGroup.length > 0) {
+            data = [...data, ...item.childGroup]
+          }
         })
-
         return data
       } else {
         return []
-      }
-    },
-    HeightCalculation (maxWidth, result) { // 计算题型内容所占高度
-      // 计算宽度所占数组长度
-      let widths = []
-      let sum = 0
-      let i
-      let a = 0
-      for (i = 0; i < maxWidth.length; i++) {
-        sum = sum + maxWidth[i]
-        a += 1
-        if (sum >= this.pageWidth) {
-          widths.push(a - 1)
-          sum = 0
-          a = 1
-          sum = sum + maxWidth[i]
-        }
-      }
-      if (maxWidth.length > 0) {
-        let long = 0
-        if (widths.length > 0) {
-          long = maxWidth.length - widths.reduce((accumulator, currentValue) => accumulator + currentValue)
-        } else {
-          long = maxWidth.length - 0
-        }
-        widths.push(long)
-      }
-      // let widthsLong = widths.length
-      // 计算高度所占数组长度
-      let heights = result.map(item => item.length * 22)
-
-      // 根据宽度数组 和 高度数组合成高度二维数组
-      let twoDimensional = []
-      let num = 0
-      for (let i = 0; i < widths.length; i++) {
-        num += widths[i]
-        twoDimensional.push(heights.slice(num - widths[i], num))
-      }
-      let heightList = twoDimensional.map(item => {
-        return Math.max.apply(null, item)
-      })
-      if (heightList.length > 0) {
-        return heightList.reduce((accumulator, currentValue) => accumulator + currentValue) + heightList.length * 10
-      } else {
-        return 0
       }
     }
   },
 }
 </script>
 
-<style lang="less" >
+<style lang="less" scoped>
 @import '~@/assets/css/variables.less';
 .select-item {
   display: flex;
@@ -455,14 +353,9 @@ export default {
   font-size: 14px;
   text-indent: 1em;
 }
-.question-group {
-  .group_item:last-child {
-    .el-row:last-child {
-      border-bottom: none;
-    }
-  }
-}
+</style>
 
+<style lang="less">
 .el-tabs__nav-wrap {
   border-top: 1px solid #eee;
   border-left: 1px solid #eee;
