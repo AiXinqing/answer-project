@@ -21,6 +21,7 @@
           @edit-admission-number="editAdmissionNumber"
           @current-question-hanlde-edit="currentQuestionHanldeEdit"
           @current-question-fill-edit="currentQuestionFillEdit"
+          @hanlde-subtraction="hanldeSubtraction"
           @current-question-answer-edit="currentQuestionAnswerEdit"
           @current-question-optional-edit="currentQuestionOptionalEdit"
           @composition-english-edit="compositionEnglishEdit"
@@ -95,34 +96,6 @@ export default {
     editAdmissionNumber () {
       this.$refs.publicDialog.opened('AdmissionNumber')
     },
-    // pageContentFunc (rects = []) {
-    //   // 重组题-分页
-    //   const results = []
-    //   // currentPage.height 总高度
-    //   var currentPage = {
-    //     height: 0,
-    //     rects: [],
-    //   }
-    //   rects.forEach((rect) => {
-    //     currentPage.height += rect.height
-    //     if (currentPage.height < this.page_size) {
-    //       currentPage.rects.push(rect)
-    //     } else {
-    //       currentPage.height = rect.height
-    //       results.push(currentPage.rects)
-    //       currentPage.rects = []
-    //       if (rect.pid != undefined) {
-    //         currentPage.rects.push({ ...rect, borderTop: true })
-    //       } else {
-    //         currentPage.rects.push(rect)
-    //       }
-    //     }
-    //   })
-    //   if (currentPage.rects.length > 0) {
-    //     results.push(currentPage.rects)
-    //   }
-    //   return results
-    // },
     pageContentFunc (rects = []) {
 
       let results = []
@@ -162,10 +135,10 @@ export default {
           restCutPage()
           // 判罚当前高度能分几页
           let height = rect.height - avalibleHeight + SplitVal;
-          console.log(itemObj)
+          // console.log(itemObj)
           while (height > this.page_size) {
             let content = this.pageShow(rect)
-            console.log(content)
+            // console.log(content)
             // SplitVal = page_size - content.height
 
             results.push([{
@@ -176,7 +149,7 @@ export default {
             height -= content.height;
           }
 
-          console.log(height)
+          // console.log(height)
 
           if (rect.questionType != 'ObjectiveQuestion' && avalibleHeight >= 32) {
             curPage.height = height
@@ -185,7 +158,7 @@ export default {
             height = curPage.height
           }
 
-          console.log(rect)
+          // console.log(rect)
 
           curPage.rects.push({
             ...rect,
@@ -202,10 +175,10 @@ export default {
         }
       })
       if (curPage.height) {
-        console.log(2)
+        // console.log(2)
         results.push(curPage.rects)
       }
-      console.log(results)
+      // console.log(results)
       return results
     },
     questionType (obj, rectHeigth) {
@@ -238,6 +211,10 @@ export default {
     },
     currentQuestionHanldeEdit (id) {
       this.$refs.publicDialog.openedEdit('questionDialogs', id)
+    },
+    hanldeSubtraction (id, num) {
+      // 选择题每组行数加减法
+      this.$refs.publicDialog.change('questionDialogs', id, num)
     },
     currentQuestionFillEdit (id) {
       this.$refs.publicDialog.openedEdit('fillInTheBlanks', id)

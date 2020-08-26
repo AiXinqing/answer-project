@@ -23,9 +23,9 @@ const mutations = {
     const index = state.pageData.findIndex((itme) => itme.id === ArrItem.id)
     if (index > -1) {
       state.pageData.splice(index, 1, ArrItem)
-      state.pageData = state.pageData.sort((a, b) => {
-        return a.order - b.order;
-      })
+      // state.pageData = state.pageData.sort((a, b) => {
+      //   return a.order - b.order;
+      // })
     }
   },
   deletePageData: (state, id) => { // 解答题使用

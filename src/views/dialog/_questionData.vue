@@ -187,6 +187,34 @@ export default {
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
     },
+    change (id, num) {
+      let current = this.pageData.filter(item => item.id === id)
+      this.quesctionObj = JSON.parse(JSON.stringify(current[0].content))
+      this.editQuestionId = id
+
+      let rows = this.quesctionObj.rows
+      if (num == 1) { // 1减法 2加法
+
+        if (rows > 1) {
+          rows -= 1
+        } else {
+          rows = 1
+        }
+      } else {
+        if (rows < 10) {
+          rows += 1
+        } else {
+          rows = 10
+        }
+      }
+      this.quesctionObj.rows = rows
+      this.objectiveData.rows = rows
+      this.$nextTick(() => {
+
+        this.preCreateQuestion()
+      })
+      console.log(this.objectiveData)
+    },
     openedEdit (id) {
       let current = this.pageData.filter(item => item.id === id)
       this.quesctionObj = JSON.parse(JSON.stringify(current[0].content))

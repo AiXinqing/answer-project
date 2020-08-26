@@ -39,10 +39,9 @@ var mutations = {
     });
 
     if (index > -1) {
-      state.pageData.splice(index, 1, ArrItem);
-      state.pageData = state.pageData.sort(function (a, b) {
-        return a.order - b.order;
-      });
+      state.pageData.splice(index, 1, ArrItem); // state.pageData = state.pageData.sort((a, b) => {
+      //   return a.order - b.order;
+      // })
     }
   },
   deletePageData: function deletePageData(state, id) {
