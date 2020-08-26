@@ -135,9 +135,9 @@ export default {
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
       if (index > -1) {
         console.log(this.contentData.group)
-        // this.delPageData(index)
-        // this.del_determineTopic(this.topicBox)
-        // this.set_currentQuestion()
+        this.delPageData(index)
+        this.del_determineTopic(this.topicBox)
+        this.set_currentQuestion()
         this.del_objectiveData() // 删减一个大题号
       }
 
@@ -148,6 +148,13 @@ export default {
 
 <style lang="less" >
 @import '~@/assets/css/variables.less';
+.question-info {
+  &:hover {
+    .question_editOrDel {
+      display: block;
+    }
+  }
+}
 .answer_question_box {
   padding: 0 10px;
   border: 1px solid @font-888;
@@ -174,5 +181,12 @@ export default {
       width: 100%;
     }
   }
+}
+.question-title {
+  border: 1px solid #fff;
+  cursor: text;
+}
+.question-title:hover {
+  border-color: @main;
 }
 </style>

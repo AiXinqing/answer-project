@@ -1,5 +1,6 @@
 const state = {
-  options: [{
+  options: [
+    {
       value: 1,
       label: '一',
     },
@@ -97,14 +98,17 @@ const state = {
 }
 
 const mutations = {
-
-  set_SubtitleNumber: (state, { //题组数
-    start,
-    end,
-    id
-  }) => {
+  set_SubtitleNumber: (
+    state,
+    {
+      //题组数
+      start,
+      end,
+      id,
+    }
+  ) => {
     // 追加生成的题号
-    let index = state.SubtitleNumber.findIndex(item => item.id === id)
+    let index = state.SubtitleNumber.findIndex((item) => item.id === id)
     let Arr = []
     for (let i = start; i <= end; i++) {
       Arr.push(i)
@@ -112,7 +116,7 @@ const mutations = {
 
     let obj = {
       id: id,
-      data: Arr
+      data: Arr,
     }
     if (index > -1) {
       state.SubtitleNumber.splice(index, 1, obj)
@@ -122,24 +126,29 @@ const mutations = {
   },
   delete_SubtitleNumber: (state, id) => {
     // 删除生成的题号
-    let index = state.SubtitleNumber.findIndex(item => item.id === id)
+    let index = state.SubtitleNumber.findIndex((item) => item.id === id)
     if (index > -1) {
       state.SubtitleNumber.splice(index, 1)
     }
   },
-  del_AlreadyTopics(state, Arr) { // 删除已有小题数组
-
-    Arr.forEach(item => {
-      const index = state.AlreadyTopics.findIndex(row => row.topic === item.topic)
+  del_AlreadyTopics(state, Arr) {
+    // 删除已有小题数组
+    Arr.forEach((item) => {
+      const index = state.AlreadyTopics.findIndex(
+        (row) => row.topic === item.topic
+      )
       if (index > -1) {
         state.AlreadyTopics.splice(index, 1)
       }
     })
   },
-  Add_AlreadyTopics(state, Arr) { //新增小题数组
-    Arr.forEach(item => {
+  Add_AlreadyTopics(state, Arr) {
+    //新增小题数组
+    Arr.forEach((item) => {
       if (state.AlreadyTopics.length > 0) {
-        const index = state.AlreadyTopics.findIndex(row => row.topic === item.topic)
+        const index = state.AlreadyTopics.findIndex(
+          (row) => row.topic === item.topic
+        )
         if (index > -1) {
           state.AlreadyTopics.splice(index, 1, item)
         } else {
@@ -148,7 +157,6 @@ const mutations = {
       } else {
         state.AlreadyTopics.push(item)
       }
-
     })
   },
   once_AlreadyTopics: (state, id) => {
@@ -157,31 +165,40 @@ const mutations = {
       return ![id].includes(item.id)
     })
   },
+  Fullin_once_AlreadyTopics: (state, pid) => {
+    // 解答一次清除
+    state.AlreadyTopics = state.AlreadyTopics.filter((item) => {
+      return ![pid].includes(item.pid)
+    })
+  },
   set_AlreadyTopics: (state, Arr) => {
-    Arr.forEach(item => {
-      const index = state.AlreadyTopics.findIndex(row => row.topic == item.topic)
+    Arr.forEach((item) => {
+      const index = state.AlreadyTopics.findIndex(
+        (row) => row.topic == item.topic
+      )
       if (index > -1) {
         state.AlreadyTopics.splice(index, 1, item)
       }
     })
   },
-  Empty_AlreadyTopics: (state) => { // 清空数据
+  Empty_AlreadyTopics: (state) => {
+    // 清空数据
     state.AlreadyTopics = []
   },
   set_currentQuestion: (state) => {
-
-    for (let i = 1; i < state.maxTopic; i++) { //
-      const index = state.AlreadyTopics.findIndex(item => item.topic === i)
+    for (let i = 1; i < state.maxTopic; i++) {
+      //
+      const index = state.AlreadyTopics.findIndex((item) => item.topic === i)
       if (index <= -1) {
         state.currentQuestion = i
-        break;
+        break
       } else {
         state.currentQuestion = 1
       }
     }
-
   },
-  set_closeFrame: (state) => { // 弹窗关闭置空
+  set_closeFrame: (state) => {
+    // 弹窗关闭置空
     state.SubtitleNumber = []
     state.AlreadyTopics.forEach((item, i) => {
       if (item.subtopic != null || item.subtopic != undefined) {
@@ -189,9 +206,12 @@ const mutations = {
       }
     })
   },
-  set_determineTopic: (state, Arr) => { // 添加确定值
-    Arr.forEach(item => {
-      const index = state.determineTopic.findIndex(row => row.topic === item.topic)
+  set_determineTopic: (state, Arr) => {
+    // 添加确定值
+    Arr.forEach((item) => {
+      const index = state.determineTopic.findIndex(
+        (row) => row.topic === item.topic
+      )
       if (index > -1) {
         state.determineTopic.splice(index, 1, item)
       } else {
@@ -200,13 +220,15 @@ const mutations = {
     })
   },
   del_determineTopic: (state, Arr) => {
-    Arr.forEach(item => {
-      const index = state.determineTopic.findIndex(row => row.topic === item.topic)
+    Arr.forEach((item) => {
+      const index = state.determineTopic.findIndex(
+        (row) => row.topic === item.topic
+      )
       if (index > -1) {
         state.determineTopic.splice(index, 1)
       }
     })
-  }
+  },
 }
 
 const actions = {}

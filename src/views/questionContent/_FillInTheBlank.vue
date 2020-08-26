@@ -207,7 +207,7 @@ export default {
     position: absolute;
     right: 0;
     top: -10px;
-    display: block;
+    // display: block;
     z-index: 99;
     span {
       margin-left: 10px;
