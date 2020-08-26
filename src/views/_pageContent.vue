@@ -11,7 +11,7 @@
         :key="a"
         :class="['footer',{'answer':row.first != undefined && row.first == false}]"
         ref="box"
-        :style="{ minHeight: row.height + 'px' }"
+        :style="{ minHeight: row.castHeight + 'px' }"
       >
         <component
           :is="row.questionType"
@@ -124,53 +124,117 @@ export default {
     //   return results
     // },
     pageContentFunc (rects = []) {
-      const results = []
-      // currentPage.height 总高度
-      var currentPage = {
+
+      let results = []
+      let SplitVal = 0 // 拆分所用
+      let curPage = {
         height: 0,
-        rects: [],
+        rects: []
       }
-      // 重置高度
-      function resetCurrentPage () {
-        currentPage.height = 0
-        currentPage.rects = []
+      function restCutPage () {
+        curPage.height = 0
+        curPage.rects = []
       }
-      rects.forEach((rect) => {
-        const avalibleHeight = this.page_size - currentPage.height
+      rects.forEach(rect => {
+        //rect.height = rect.height + 20
+        // avalible 剩余高度
+        let avalibleHeight = this.page_size - curPage.height
+        let itemObj = JSON.parse(JSON.stringify(rect))
+        // 高度溢出
         if (rect.height > avalibleHeight) {
-          // 分页-剩余高度新建rect
-          currentPage.rects.push({
-            ...rect,
-            castHeight: avalibleHeight,
-          })
-          results.push(currentPage.rects) // 增加一页
-          resetCurrentPage()
-          // 判断当前rect高度能分几页
-          let height = rect.height - avalibleHeight
+
+          let curRect = this.questionType(rect, avalibleHeight)
+
+          if (rect.questionType != 'ObjectiveQuestion' && avalibleHeight >= 32) {
+            SplitVal = avalibleHeight - curRect.height
+
+            curPage.rects.push({
+              ...rect,
+              castHeight: curRect.height,
+              showData: itemObj.showData.splice(0, curRect.row),
+              first: true
+            })
+          }
+
+          // 追加一页页面
+          results.push(curPage.rects)
+          // 重置高度
+          restCutPage()
+          // 判罚当前高度能分几页
+          let height = rect.height - avalibleHeight + SplitVal;
+          console.log(itemObj)
           while (height > this.page_size) {
+            let content = this.pageShow(rect)
+            console.log(content)
+            // SplitVal = page_size - content.height
+
             results.push([{
               ...rect,
-              castHeight: this.page_size,
-            },])
-            height -= this.page_size
+              castHeight: content.height, // 追加一页高度
+              showData: itemObj.showData.splice(0, content.row),
+            }]);
+            height -= content.height;
           }
-          currentPage.height = height
-          currentPage.rects.push({
+
+          console.log(height)
+
+          if (rect.questionType != 'ObjectiveQuestion' && avalibleHeight >= 32) {
+            curPage.height = height
+          } else {
+            curPage.height = rect.height
+            height = curPage.height
+          }
+
+          console.log(rect)
+
+          curPage.rects.push({
             ...rect,
             castHeight: height,
-          })
+            showData: itemObj.showData,
+          }) // 追加剩余高度
+
         } else {
-          currentPage.height += rect.height
-          currentPage.rects.push({
+          curPage.height += rect.height
+          curPage.rects.push({
             ...rect,
             castHeight: rect.height,
           })
         }
       })
-      if (currentPage.height) {
-        results.push(currentPage.rects)
+      if (curPage.height) {
+        console.log(2)
+        results.push(curPage.rects)
       }
+      console.log(results)
       return results
+    },
+    questionType (obj, rectHeigth) {
+      let MarginHeight = obj.MarginHeight + obj.heightTitle
+      let contentHeight = rectHeigth - MarginHeight
+      switch (obj.questionType) {
+        case 'FillInTheBlank':
+
+          var row = Math.floor(contentHeight / 45)
+          return { height: row * 45 + MarginHeight, row: row }
+        case '':
+          break;
+        default:
+          return { height: 0, row: 0 }
+      }
+      // console.log(obj)
+    },
+    pageShow (obj) {
+      let MarginHeight = obj.MarginHeight
+      let contentHeight = this.page_size - MarginHeight
+      switch (obj.questionType) {
+        case 'FillInTheBlank':
+          var row = Math.floor(contentHeight / 45)
+          return { height: row * 45 + MarginHeight, row: row }
+        case '':
+          break;
+        default:
+          return { height: 0, row: 0 }
+      }
     },
     currentQuestionHanldeEdit (id) {
       this.$refs.publicDialog.openedEdit('questionDialogs', id)

@@ -1,5 +1,5 @@
 <template>
-<!-- 选这题 -->
+<!-- 选择题 -->
   <div class="question-info">
     <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
       <div class="title-span" v-html="cotent"></div>
