@@ -231,6 +231,7 @@ export default {
       this.Add_AlreadyTopics(this.determineTopic)
     },
     opened () {
+      this.spaceTopic = JSON.parse(JSON.stringify({ ...this.spaceTopic, start: this.currentQuestion }))
       this.spaceTopic.number = this.BigQuestion
       this.objectiveData.number = this.BigQuestion
       this.openedFrame = true
@@ -273,9 +274,14 @@ export default {
         questionType: 'FillInTheBlank',
         content: { ...this.objectiveData, totalScore: totalScore },
         order: this.orderSort,
-        showData: this.topicGroupData
+        showData: this.topicGroupData,
+        first: true,
         // 此题总分
       }
+      // 小题数组追加至确定题型
+      this.Add_AlreadyTopics(this.topicList)
+      this.set_determineTopic(this.topicList)
+      this.set_currentQuestion()
 
       if (this.editQuestionId == null) {
         this.initPageData(obj)
@@ -288,10 +294,7 @@ export default {
       this.set_orderSort()
       this.openedFrame = false // 关闭弹窗
 
-      // 小题数组追加至确定题型
-      this.Add_AlreadyTopics(this.topicList)
-      this.set_determineTopic(this.topicList)
-      this.set_currentQuestion()
+
       //------------------------
       this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
       this.set_closeFrame() // 改变大题号
@@ -349,10 +352,10 @@ export default {
       let lastIndex = groupObj.childGroup.findIndex(
         (item) => item.id === obj.id
       )
-      console.log(obj)
-      console.log(index)
-      console.log(lastIndex)
-      console.log(arr)
+      // console.log(obj)
+      // console.log(index)
+      // console.log(lastIndex)
+      // console.log(arr)
       if (lastIndex > -1) {
         console.log(obj.topic)
         if (obj.topic == arr[0]) {
@@ -437,7 +440,7 @@ export default {
       let SplitCombine = []
       SplitCombine.push(this.SplitArrObject(FirstHalf, groupObj))
       SplitCombine.push(this.SplitArrObject(SecondHalf, groupObj))
-      console.log(SplitCombine)
+      // console.log(SplitCombine)
       return SplitCombine.sort((a, b) => {
         return a.start - b.start
       })

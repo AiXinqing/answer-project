@@ -179,6 +179,7 @@ export default {
       this.Add_AlreadyTopics(this.determineTopic)
     },
     opened () {
+      // this.quesctionObj = JSON.parse(JSON.stringify({ ...this.quesctionObj, group:{}}))
       this.quesctionObj.number = this.BigQuestion
       this.objectiveData.number = this.BigQuestion
 
@@ -215,6 +216,7 @@ export default {
       })
       console.log(this.objectiveData)
     },
+
     openedEdit (id) {
       let current = this.pageData.filter(item => item.id === id)
       this.quesctionObj = JSON.parse(JSON.stringify(current[0].content))

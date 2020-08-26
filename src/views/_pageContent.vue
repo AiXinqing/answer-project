@@ -231,7 +231,7 @@ export default {
     },
     compositionLanguageEdit (obj) {
       this.$refs.publicDialog.openedEdit('compositionLanguage', obj)
-    }
+    },
   },
 }
 </script>

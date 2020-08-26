@@ -141,6 +141,9 @@ export default {
         default:
           break
       }
+    },
+    hanldeCurQuestion () {
+      this.$refs.fillInTheBlanks.hanldeCurQuestion()
     }
   },
 }
