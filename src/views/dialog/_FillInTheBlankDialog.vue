@@ -123,11 +123,11 @@ export default {
     topicGroupData () {
       let rows = this.objectiveData.rows
       let array = []
-      console.log(this.objectiveData)
+
       this.objectiveData.group.map((item) => {
         array.push(...item.childGroup)
       })
-      console.log(array)
+
       if (array.length > 0) {
         let temporaryArr = []
         let datas = []
@@ -177,7 +177,7 @@ export default {
         if (temporaryArr.length > 0) {
           datas.push(temporaryArr)
         }
-         console.log(datas)
+
         return datas
       } else {
 
@@ -402,7 +402,7 @@ export default {
             group.splice(index, 1) // 删除
 
             this.spaceTopic.group.splice(0,1, ...SplitArray)
-            this.topicGroupData
+
           }
         }
       }
