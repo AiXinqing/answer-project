@@ -123,14 +123,17 @@ export default {
     topicGroupData () {
       let rows = this.objectiveData.rows
       let array = []
+      console.log(this.objectiveData)
       this.objectiveData.group.map((item) => {
         array.push(...item.childGroup)
       })
+      console.log(array)
       if (array.length > 0) {
         let temporaryArr = []
         let datas = []
         array.forEach((ele) => {
-          if (ele.childGroup != undefined) {
+
+          if (ele.childGroup != undefined && ele.childGroup.length > 0) {
             ele.childGroup.forEach((row, index) => {
               for (let i = 1; i <= row.space; i++) {
                 if (temporaryArr.length + 1 > rows) {
@@ -151,6 +154,7 @@ export default {
               }
             })
           } else {
+
             for (let i = 1; i <= ele.space; i++) {
               if (temporaryArr.length + 1 > rows) {
                 datas.push(temporaryArr)
@@ -173,8 +177,10 @@ export default {
         if (temporaryArr.length > 0) {
           datas.push(temporaryArr)
         }
+         console.log(datas)
         return datas
       } else {
+
         return []
       }
     },
@@ -185,11 +191,8 @@ export default {
       handler () {
         this.objectiveData = {
           ...this.spaceTopic,
-          group: this.spaceTopic.group.sort((a, b) => {
-            return a.start - b.start
-          }),
         }
-        // console.log(this.objectiveData)
+
         if (this.editQuestionId == null) {
           this.$nextTick(() => {
             this.objectiveData.number = this.BigQuestion
@@ -251,7 +254,7 @@ export default {
     preCreateQuestion () {
       // 数据编辑完成添加至全局数组中---------------
       // 计算高度
-      console.log(this.topicGroupData)
+      // console.log(this.topicGroupData)
       let height = this.topicGroupData.length * 45 + 17 + 32
       // 此题总分计算
       this.objectiveData.group.forEach((item) => {
@@ -356,7 +359,7 @@ export default {
       // console.log(lastIndex)
       // console.log(arr)
       if (lastIndex > -1) {
-        console.log(obj.topic)
+
         if (obj.topic == arr[0]) {
           // 判断点击的是否是首尾
           this.del_AlreadyTopics([groupObj.childGroup[index]])
@@ -396,23 +399,10 @@ export default {
                 itemArr.push(...item.childGroup)
               }
             })
-            console.log(SplitArray)
-            // // this.set_SubtitleNumber(itemArr)
             group.splice(index, 1) // 删除
-            // let dataObj = JSON.parse(JSON.stringify(this.spaceTopic))
-            SplitArray.forEach((item) => {
-              // dataObj.group.push(item)
-              group.push(item)
-            })
-            this.spaceTopic = JSON.parse(JSON.stringify(dataObj))
-            // dataObj.group = dataObj.group.sort((a, b) => {
-            //   return a.start - b.start
-            // })
-            // dataObj.group.forEach((item) => {
-            //   group.push(item)
-            //   console.log(item)
-            // })
-            // console.log(dataObj.group)
+
+            this.spaceTopic.group.splice(0,1, ...SplitArray)
+            this.topicGroupData
           }
         }
       }
