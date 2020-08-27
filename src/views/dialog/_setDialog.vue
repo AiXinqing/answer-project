@@ -106,8 +106,10 @@ export default {
 
       const TestData = {
         id: 1,
-        height: 400,
+        height: 380,
         questionType: 'AnswerSheetTitle',
+        MarginHeight: 0,
+        heightTitle: 0,
         content: {
           textVal: this.textVal,
           titleInfo: this.titleInfo,

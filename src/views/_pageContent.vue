@@ -109,19 +109,20 @@ export default {
         curPage.rects = []
       }
       rects.forEach(rect => {
-        if (rect.first) { rect.height = rect.height - 20 }
-        //rect.height = rect.height + 20
+        // if (rect.first) { rect.height = rect.height - 20 }
+        let curH = rect.height + 20
         // avalible 剩余高度
         let avalibleHeight = this.page_size - curPage.height
         let itemObj = JSON.parse(JSON.stringify(rect))
         let whetherShow = this.shawDataFunc(rect) // 是否显示
+
         // 高度溢出
-        if (rect.height > avalibleHeight) {
+        if (curH > avalibleHeight) {
 
           let curRect = this.questionType(rect, avalibleHeight)
-          // let mergeObj = {} //
-
-          if (rect.questionType != 'ObjectiveQuestion' && avalibleHeight >= 32 && curRect.height != 0) {
+          let sd = this.shawDataFunc(rect, avalibleHeight, curRect.height)
+          console.log(sd)
+          if (sd) {
             SplitVal = avalibleHeight - curRect.height
 
             curPage.rects.push({
@@ -156,7 +157,7 @@ export default {
           if (rect.questionType != 'ObjectiveQuestion' && avalibleHeight >= 32 && curRect.height != 0) {
             curPage.height = height
           } else {
-            curPage.height = rect.height
+            curPage.height = curH
             height = curPage.height
           }
 
@@ -171,7 +172,7 @@ export default {
           }) // 追加剩余高度
 
         } else {
-          curPage.height += rect.height
+          curPage.height += curH
           curPage.rects.push({
             ...rect,
             castHeight: rect.height,
@@ -198,6 +199,10 @@ export default {
           RowHeight = 35
           row = Math.floor(contentHeight / RowHeight)
           return { height: row * RowHeight + MarginHeight, row: row }
+        case 'optionalQuestion':
+          RowHeight = 35
+          row = Math.floor(contentHeight / RowHeight)
+          return { height: row * RowHeight + MarginHeight, row: row }
         default:
           return { height: 0, row: 0 }
       }
@@ -215,15 +220,30 @@ export default {
           RowHeight = 35
           row = Math.floor(contentHeight / RowHeight)
           return { height: row * RowHeight + MarginHeight, row: row }
+        case 'optionalQuestion':
+          RowHeight = 35
+          row = Math.floor(contentHeight / RowHeight)
+          return { height: row * RowHeight + MarginHeight, row: row }
         default:
           return { height: 0, row: 0 }
       }
     },
-    shawDataFunc (obj) {
+    shawDataFunc (obj, avalibleHeight, Remaini) {
+      if (obj.questionType == 'ObjectiveQuestion') {
+        return false
+      } else if (avalibleHeight < 32) {
+        return false
+      } else if (obj.questionType == 'optionalQuestion' && Remaini < 108) {
+        return false
+      } else {
+        return true
+      }
+    },
+    isToPage (obj, ) {
       switch (obj.questionType) {
         case 'FillInTheBlank':
           return true
-        // case 'answerQuestion':
+        // case 'optionalQuestion':
         //   return true
         default:
           return false

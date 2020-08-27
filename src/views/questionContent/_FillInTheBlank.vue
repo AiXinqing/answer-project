@@ -1,7 +1,7 @@
 <template>
-<!-- 选择题 -->
+<!-- 填空题 -->
   <div class="question-info">
-      <template v-if="questionData.first" >
+      <template v-if="questionData.first &&  questionData.borderTop == undefined" >
         <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
           <div class="title-span" v-html="cotent"></div>
         </div>
@@ -33,8 +33,12 @@
           <template v-if="row.lgTopic != 0">({{row.lgTopic}})</template>
         </i>
         <i v-else ref="iWidth"></i>
-        <span v-if="row.lgTopic != undefined" :style="{'width':'calc(100% - 23px)'}"/>
-        <span v-else :style="{'width':'calc(100% - 22px)'}"/>
+        <span v-if="row.lgTopic != undefined" :style="{
+          'width':row.lgTopic != 0 ?  'calc(100% - '+ (row.topic.toString().length + row.lgTopic.toString().length + 2) * 9 +'px)':'calc(100% - 23px)'
+          }"/>
+        <span v-else :style="{
+          'width':'calc(100% - 22px)'
+          }"/>
         </a>
       </div>
     </div>

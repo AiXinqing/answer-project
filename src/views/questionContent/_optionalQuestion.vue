@@ -1,13 +1,15 @@
 <template>
   <div class="question-info">
-    <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
-        <div class="title-span" v-html="cotent"></div>
-      </div>
-      <quill-editor
-        v-show="isEditor"
-        :topic-content="TopicContent"
-        @hanlde-close-esitor="hanldeCloseEsitor"
-      />
+    <template v-if="data.first && data.borderTop == undefined">
+      <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
+          <div class="title-span" v-html="cotent"></div>
+        </div>
+        <quill-editor
+          v-show="isEditor"
+          :topic-content="TopicContent"
+          @hanlde-close-esitor="hanldeCloseEsitor"
+        />
+    </template>
     <div class="question_arrays">
       <div class="question_editOrDel">
         <span class="layui-btn layui-btn-xs" @click="currentQuestionAnswerEdit">编辑</span>
@@ -16,21 +18,25 @@
     </div>
     <div class="answer_question_box optional_box"
       :style="{
-        'height':data.height + 'px',
+        'height':data.first ? data.castHeight - data.heightTitle  + 'px':data.castHeight  + 'px',
       }"
     >
-    <div class="topic_number_box">
-      <span class="black_icon"></span>
+      <template v-if="data.first && data.borderTop == undefined">
+        <div class="topic_number_box">
 
-      <span class="digital"
-        v-for="(item,i) in topicData"
-        :key="i"
-      >{{item.topic}}</span>
-      <span class="black_icon"></span>
-    </div>
-    <div class="number-info">
-      <span>我选的题号（1分）</span>
-    </div>
+          <span class="black_icon"></span>
+
+          <span class="digital"
+            v-for="(item,i) in topicData"
+            :key="i"
+          >{{item.topic}}</span>
+          <span class="black_icon"></span>
+        </div>
+        <div class="number-info">
+          <span>我选的题号（1分）</span>
+        </div>
+      </template>
+
     <div v-if="contentData.HorizontalLine">
       <div
         v-for="(item,i) in rowsData"

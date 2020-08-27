@@ -177,57 +177,72 @@ export default {
     preCreateQuestion () {
       // 当前页内容所占高度
       const { rows } = this.data
-      let heights = this.pageHeight[this.pageHeight.length - 1].map(item => item).reduce((accumulator, currentValue) => {
-        return accumulator + currentValue;
-      })
-      let currentPageHeight = this.page_size - heights - 20 - 20 // 20当前大题下移的20，50标题高度 20每页底部余留
-      console.log(currentPageHeight)
-      let rectHeight = rows * 35 + 10 + 40 // 当前内容高度 45(内部高度)
-      let objArr = []
+      // let heights = this.pageHeight[this.pageHeight.length - 1].map(item => item).reduce((accumulator, currentValue) => {
+      //   return accumulator + currentValue;
+      // })
+      // let currentPageHeight = this.page_size - heights - 20 - 20 // 20当前大题下移的20，50标题高度 20每页底部余留
+      // console.log(currentPageHeight)
+      let rectHeight = rows * 35  // 当前内容高度 45(内部高度)
+      let MarginHeight = + 12 + 40
+      let heights = rectHeight + MarginHeight + 54
+
       let obj = {
-        height: rectHeight,
+        MarginHeight: MarginHeight,
+        heightTitle: 54,
+        height: heights,
         id: 'optional' + +new Date(),
         questionType: 'optionalQuestion',
         content: this.data,
-        order: this.orderSort
+        order: this.orderSort,
+        first: true
       }
-      if (currentPageHeight > rectHeight) {
-        objArr.push(obj)
-      } else {
-        // 当页所剩差值
-        let difference = Math.abs(currentPageHeight - rectHeight)
-        let SplitHeight = Math.abs(rectHeight - difference)
+      // let objArr = []
+      // let obj = {
+      //   height: rectHeight,
+      //   id: 'optional' + +new Date(),
+      //   questionType: 'optionalQuestion',
+      //   content: this.data,
+      //   order: this.orderSort
+      // }
+      // if (currentPageHeight > rectHeight) {
+      //   objArr.push(obj)
+      // } else {
+      //   // 当页所剩差值
+      //   let difference = Math.abs(currentPageHeight - rectHeight)
+      //   let SplitHeight = Math.abs(rectHeight - difference)
 
-        if (SplitHeight < 50 && SplitHeight != 50) {
-          objArr.push(obj)
-        } else {
-          // 内容拆分值
+      //   if (SplitHeight < 50 && SplitHeight != 50) {
+      //     objArr.push(obj)
+      //   } else {
+      //     // 内容拆分值
 
-          let preObj = {
-            ...obj,
-            height: SplitHeight,
-            first: true,
+      //     let preObj = {
+      //       ...obj,
+      //       height: SplitHeight,
+      //       first: true,
 
-          }
-          let nextObj = { ...obj, height: difference }
-          objArr.push(preObj)
-          objArr.push(nextObj)
-        }
-      }
+      //     }
+      //     let nextObj = { ...obj, height: difference }
+      //     objArr.push(preObj)
+      //     objArr.push(nextObj)
+      //   }
+      // }
 
       if (this.editQuestionId == null) {
         // 新增
-        objArr.forEach(obj => {
-          this.initPageData(obj)
-        })
+        // objArr.forEach(obj => {
+        //   this.initPageData(obj)
+        // })
+        this.initPageData(obj)
       } else {
         // 编辑
         //清空编辑前数据
         // this.deletePageData(this.dataTopic.pid)
-        objArr.forEach(obj => {
+        // objArr.forEach(obj => {
 
-          this.amendPageData({ ...obj, id: this.editQuestionId })
-        })
+        //   this.amendPageData({ ...obj, id: this.editQuestionId })
+        // })
+        this.amendPageData({ ...obj, id: this.editQuestionId })
       }
       // 大题号修改
       this.set_objectiveData(this.data.number)
