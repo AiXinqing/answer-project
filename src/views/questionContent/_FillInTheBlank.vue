@@ -1,14 +1,16 @@
 <template>
-<!-- 选择题 -->
+<!-- 填空题 -->
   <div class="question-info">
-    <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
-      <div v-html="cotent"></div>
-    </div>
-    <quill-editor
-      v-show="isEditor"
-      :topic-content="TopicContent"
-      @hanlde-close-esitor="hanldeCloseEsitor"
-    />
+      <template v-if="questionData.first &&  questionData.borderTop == undefined" >
+        <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
+          <div class="title-span" v-html="cotent"></div>
+        </div>
+        <quill-editor
+          v-show="isEditor"
+          :topic-content="TopicContent"
+          @hanlde-close-esitor="hanldeCloseEsitor"
+        />
+    </template>
     <div class="question_arrays">
       <div class="question_editOrDel">
         <span class="layui-btn layui-btn-xs" @click="currentQuestionFillEdit(questionData.id)">编辑</span>
@@ -31,8 +33,12 @@
           <template v-if="row.lgTopic != 0">({{row.lgTopic}})</template>
         </i>
         <i v-else ref="iWidth"></i>
-        <span v-if="row.lgTopic != undefined" :style="{'width':'calc(100% - 23px)'}"/>
-        <span v-else :style="{'width':'calc(100% - 22px)'}"/>
+        <span v-if="row.lgTopic != undefined" :style="{
+          'width':row.lgTopic != 0 ?  'calc(100% - '+ (row.topic.toString().length + row.lgTopic.toString().length + 2) * 9 +'px)':'calc(100% - 23px)'
+          }"/>
+        <span v-else :style="{
+          'width':'calc(100% - 22px)'
+          }"/>
         </a>
       </div>
     </div>
@@ -81,52 +87,54 @@ export default {
         : 695
     },
     topicGroupData () {
-      let rows = this.data.rows
-      let array = this.data.group.map(item => {
-        return item.childGroup
-      })
-      if (array.length > 0) {
-        array = array[0]
-        let temporaryArr = []
-        let datas = []
-        array.forEach(ele => {
-          if (ele.childGroup != undefined) {
-            ele.childGroup.forEach((row, index) => {
-              for (let i = 1; i <= row.space; i++) {
-                if (i == 1) {
-                  temporaryArr.push({ ...row, lgTopic: index + 1 }) // 小标题
-                } else {
-                  temporaryArr.push({ ...row })
-                }
-                if (temporaryArr.length >= rows) {
-                  datas.push(temporaryArr)
-                  temporaryArr = []
-                }
-              }
-            })
-          } else {
-            for (let i = 1; i <= ele.space; i++) {
-              if (i == 1) {
-                temporaryArr.push({ ...ele, lgTopic: 0 }) // 小标题
-              } else {
-                temporaryArr.push({ ...ele })
-              }
-              if (temporaryArr.length >= rows) {
-                datas.push(temporaryArr)
-                temporaryArr = []
-              }
-            }
-          }
-          if (temporaryArr.length >= rows) {
-            datas.push(temporaryArr)
-            temporaryArr = []
-          }
-        })
-        if (temporaryArr.length > 0) {
-          datas.push(temporaryArr)
-        }
-        return datas
-      } else { return [] }
+      // let rows = this.data.rows
+      // let array = this.data.group.map(item => {
+      //   return item.childGroup
+      // })
+      // if (array.length > 0) {
+      //   array = array[0]
+      //   let temporaryArr = []
+      //   let datas = []
+      //   array.forEach(ele => {
+      //     if (ele.childGroup != undefined) {
+      //       ele.childGroup.forEach((row, index) => {
+      //         for (let i = 1; i <= row.space; i++) {
+      //           if (i == 1) {
+      //             temporaryArr.push({ ...row, lgTopic: index + 1 }) // 小标题
+      //           } else {
+      //             temporaryArr.push({ ...row })
+      //           }
+      //           if (temporaryArr.length >= rows) {
+      //             datas.push(temporaryArr)
+      //             temporaryArr = []
+      //           }
+      //         }
+      //       })
+      //     } else {
+      //       for (let i = 1; i <= ele.space; i++) {
+      //         if (i == 1) {
+      //           temporaryArr.push({ ...ele, lgTopic: 0 }) // 小标题
+      //         } else {
+      //           temporaryArr.push({ ...ele })
+      //         }
+      //         if (temporaryArr.length >= rows) {
+      //           datas.push(temporaryArr)
+      //           temporaryArr = []
+      //         }
+      //       }
+      //     }
+      //     if (temporaryArr.length >= rows) {
+      //       datas.push(temporaryArr)
+      //       temporaryArr = []
+      //     }
+      //   })
+      //   if (temporaryArr.length > 0) {
+      //     datas.push(temporaryArr)
+      //   }
+      //   // console.log(datas)
+      //   return datas
+      // } else { return [] }
+      return this.questionData.showData
     },
     topicBox () {
       let topicList = []
@@ -143,6 +151,8 @@ export default {
         this.data = {
           ...this.contentData
         }
+        console.log(this.data)
+        console.log(this.questionData)
       }
     },
     TopicContent: {
@@ -153,7 +163,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('pageContent', ['delPageData']),
+    ...mapMutations('pageContent', ['delPageData', 'del_objectiveData']),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
@@ -163,8 +173,10 @@ export default {
       const index = this.pageData.findIndex((itme) => itme.id === id)
       if (index > -1) {
         this.del_determineTopic(this.topicBox)
+        this.del_AlreadyTopics(this.topicBox)
         this.delPageData(index)
         this.set_currentQuestion()
+        this.del_objectiveData() // 删减一个大题号
       }
     },
     currentQuestionFillEdit (id) {
@@ -206,7 +218,7 @@ export default {
     position: absolute;
     right: 0;
     top: -10px;
-    display: block;
+    // display: block;
     z-index: 99;
     span {
       margin-left: 10px;

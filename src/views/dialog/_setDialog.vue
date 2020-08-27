@@ -78,9 +78,14 @@ export default {
   },
   computed: {
     ...mapState('titleSet', ['textVal', 'titleInfo', 'titleRows']),
+    ...mapState('pageContent', ['orderSort']),
   },
   methods: {
-    ...mapMutations('pageContent', ['initPageLayout', 'initPageData', 'amendPageData']),
+    ...mapMutations('pageContent', [
+      'initPageLayout',
+      'initPageData',
+      'amendPageData',
+      'set_orderSort']),
     openRForm (type) {
       if (type === 1) {
         this.createLayout = true
@@ -103,11 +108,15 @@ export default {
         id: 1,
         height: 380,
         questionType: 'AnswerSheetTitle',
+        MarginHeight: 0,
+        heightTitle: 0,
         content: {
           textVal: this.textVal,
           titleInfo: this.titleInfo,
           titleRows: this.titleRows
         },
+        order: this.orderSort,
+        first: true
       }
       //
       if (change == 1) {
@@ -125,6 +134,8 @@ export default {
         // this.initPageData(text)
         // 临时测试题------------------------------
       }
+      // order排序
+      this.set_orderSort()
       this.openedFrame = false
     },
     hanldeTab (item) {

@@ -1,4 +1,5 @@
 <template>
+<!-- 填空题 -->
   <hj-dialog
     class="newAdd-content answer_box"
     :title="title"
@@ -76,6 +77,7 @@ export default {
       dataTopic: {},
       closeData: {},
       title: '新增解答题',
+      editQuestionId: null,
       openedFrame: false,
       isdisabledFn: false,
       errorVal: '',
@@ -108,7 +110,9 @@ export default {
     ...mapState('pageContent', [
       'pageHeight',
       'page_size',
-      'BigQuestion'
+      'BigQuestion',
+      'pageData',
+      'orderSort',
     ]),
     ...mapState('answerQuestion', ['answerQuestionArr',]),
     childGroups () {
@@ -191,38 +195,55 @@ export default {
         this.dataTopic = {
           ...this.questionData
         }
-        if (this.dataTopic != null) {
-          this.dataTopic.number = this.BigQuestion
+
+        if (this.editQuestionId == null) {
+          this.$nextTick(() => {
+            this.dataTopic = {
+              ...this.dataTopic,
+              number: this.BigQuestion
+            }
+          })
         }
       }
-    }
+    },
   },
   methods: {
     ...mapMutations('pageContent', [
       'initPageData',
       'amendPageData',
       'set_objectiveData',
-      'deletePageData'
+      'deletePageData',
+      'set_orderSort'
     ]),
     ...mapMutations('questionType', [
       'set_AlreadyTopics',
       'del_AlreadyTopics',
       'set_currentQuestion',
       'set_closeFrame',
-      'set_determineTopic'
+      'set_determineTopic',
+      'Empty_AlreadyTopics',
+      'Add_AlreadyTopics',
     ]),
     ...mapMutations('answerQuestion', ['set_answerQuestionArr',]),
     opened () {
       // 开打弹框
+      this.questionData.number = this.BigQuestion
+      this.dataTopic.number = this.BigQuestion
+
       this.openedFrame = true
+      this.Empty_AlreadyTopics() // 清空
+      this.Add_AlreadyTopics(this.determineTopic)
     },
     openedEdit (obj) {
       //编辑弹框
+      this.editQuestionId = obj.pid
       this.openedFrame = true
       let index = this.answerQuestionArr.findIndex(itme => itme.pid === obj.pid)
       if (index > -1) {
         this.questionData = JSON.parse(JSON.stringify(this.answerQuestionArr[index]))
       }
+      this.Empty_AlreadyTopics() // 清空
+      this.Add_AlreadyTopics(this.determineTopic)
     },
     closeFrame () {
       // 关闭弹窗
@@ -232,73 +253,93 @@ export default {
     preCreateQuestion () {
       //确定信息
       // 当前页内容所占高度
-      let heights = this.pageHeight[this.pageHeight.length - 1].map(item => item).reduce((accumulator, currentValue) => {
-        return accumulator + currentValue;
-      })
-      let currentPageHeight = this.page_size - heights - 20 - 32 // 20当前大题下移的20，32标题高度
+      // let heights = this.pageHeight[this.pageHeight.length - 1].map(item => item).reduce((accumulator, currentValue) => {
+      //   return accumulator + currentValue;
+      // })
+      // let currentPageHeight = this.page_size - heights - 20 - 20 // 20当前大题下移的20，32标题高度
       let Arr = []
-      let date = +new Date()
-      let rectHeight = this.dataTopic.rows * 35 + 10 // 小题初始高度
+      let objId = `answer_${+new Date()}`
+      let rectHeight = this.dataTopic.rows * 35 + 12 + 20 // 小题初始高度
+      // console.log(this.RefactorData)
+      // console.log(heights)
 
       this.RefactorData.forEach((item, index) => {
-        // 计算解答题生成的答题框，获取当页高度和所占高度，每个答题框
-        // 当前页面剩余高度-当前解答题框
-        currentPageHeight -= rectHeight
         let obj = {
-          height: rectHeight,
-          id: `answer${+new Date()}_${index}`,
-          pid: `answer${date}`,
+          heightTitle: index == 0 ? 32 : 0,
+          height: index == 0 ? rectHeight + 32 : rectHeight,
+          MarginHeight: 12,
+          ...item,
+          content: this.dataTopic,
+          first: index == 0 ? true : false,
           questionType: 'answerQuestion',
-          content: {}
+          objId: objId,
         }
-        if (index == 0) {
-          obj = {
-            ...obj,
-            first: true,
-            content: {
-              ...this.dataTopic,
-              totalScore: this.totalScore,
-              group: { ...item }
-            }
-          }
-        } else {
-          obj = {
-            ...obj,
-            first: false,
-            content: {
-              ...this.dataTopic,
-              group: { ...item }
-            }
-          }
-        }
-
-        // console.log(currentPageHeight)
-        // console.log(item)
-
-        if (currentPageHeight >= rectHeight) {
-          Arr.push(obj)
-        } else {
-          // 超出高度部分拆分成两个对象，分上下部分
-          if (currentPageHeight >= 52) {
-            let difference = rectHeight - currentPageHeight; // 差值
-            let preObj = { // 上半部分
-              ...obj,
-              height: currentPageHeight
-            }
-            let nextObj = { // 下半部分
-              ...obj,
-              height: difference,
-              top: 20,
-              content: { ...obj.content, group: {} }
-            }
-            Arr.push(preObj, nextObj)
-
-            currentPageHeight = this.page_size - difference - 20
-          } else {
-            Arr.push(obj)
-          }
-        }
+        Arr.push(obj)
       })
+      console.log(Arr)
+      // this.RefactorData.forEach((item, index) => {
+      //   // 计算解答题生成的答题框，获取当页高度和所占高度，每个答题框
+      //   // 当前页面剩余高度-当前解答题框
+      //   currentPageHeight -= rectHeight
+      //   let obj = {
+      //     height: rectHeight,
+      //     id: `answer${+new Date()}_${index}`,
+      //     pid: `answer${date}`,
+      //     questionType: 'answerQuestion',
+      //     content: {},
+      //     order: this.orderSort
+      //   }
+      //   if (index == 0) {
+      //     obj = {
+      //       ...obj,
+      //       first: true,
+      //       content: {
+      //         ...this.dataTopic,
+      //         totalScore: this.totalScore,
+      //         group: { ...item }
+      //       },
+      //     }
+      //   } else {
+      //     obj = {
+      //       ...obj,
+      //       first: false,
+      //       content: {
+      //         ...this.dataTopic,
+      //         group: { ...item }
+      //       }
+      //     }
+      //   }
+
+      //   // console.log(currentPageHeight)
+      //   // console.log(item)
+
+      //   if (currentPageHeight >= rectHeight) {
+      //     Arr.push(obj)
+      //   } else {
+      //     // 超出高度部分拆分成两个对象，分上下部分
+      //     if (currentPageHeight >= 52) {
+      //       let difference = Math.abs(rectHeight - currentPageHeight) // 差值
+
+      //       let preObj = { // 上半部分
+      //         ...obj,
+      //         height: currentPageHeight
+      //       }
+      //       this.set_orderSort()
+      //       let nextObj = { // 下半部分
+      //         ...obj,
+      //         height: difference,
+      //         top: 20,
+      //         order: this.orderSort,
+      //         content: { ...obj.content, group: {} }
+      //       }
+      //       Arr.push(preObj, nextObj)
+
+      //       currentPageHeight = this.page_size - difference - 20
+      //     } else {
+      //       Arr.push(obj)
+      //     }
+      //   }
+      // })
       //----------
       if (this.editQuestionId == null) {
         // 新增
@@ -308,23 +349,24 @@ export default {
       } else {
         // 编辑
         //清空编辑前数据
-        this.deletePageData(this.spaceTopic.pid)
-        Arr.forEach(obj => {
-          this.initPageData(obj)
-        })
+        // this.deletePageData(this.dataTopic.pid)
+        // Arr.forEach(obj => {
+        //   this.initPageData(obj)
+        // })
       }
       // 解答题-编辑时使用数据
-      this.set_answerQuestionArr({ ...this.questionData, pid: `answer${date}` })
+      // this.set_answerQuestionArr({ ...this.questionData, pid: `answer${date}` })
       // 大题号修改
       this.set_objectiveData(this.dataTopic.number)
       //------------------------------------
+      this.set_orderSort()
       this.openedFrame = false // 关闭弹窗
-      // 清空弹框数据
-
-      this.questionData = JSON.parse(JSON.stringify(this.closeData))
-      this.set_closeFrame() // 弹窗关闭置空
       this.set_determineTopic(this.topicList)
       this.set_currentQuestion()
+      // 清空弹框数据
+      this.questionData = JSON.parse(JSON.stringify(this.closeData))
+      this.set_closeFrame() // 弹窗关闭置空
+
     },
     hanldeStatus (val) {
       this.errorVal = val

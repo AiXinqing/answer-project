@@ -40,6 +40,14 @@ export default {
       selectVal: this.value
     }
   },
+  watch: {
+    value: {
+      immediate: true,
+      handler () {
+        this.selectVal = this.value
+      }
+    }
+  },
 }
 </script>
 

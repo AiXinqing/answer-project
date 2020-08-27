@@ -1,4 +1,5 @@
 <template>
+  <!-- 选择题 -->
   <hj-dialog
     class="newAdd-content"
     :title="title"
@@ -29,6 +30,7 @@
       <tab-pane-box
         :tab-pane-data="tabData"
         :group-data="objectiveData.group"
+        :edit-id="editQuestionId"
         @hanlde-dels="hanldeDel"
         @hanlde-add-subtopic="hanldeAddSubtopic"
         @hanlde-status="hanldeStatus"
@@ -116,7 +118,11 @@ export default {
       'letterArr',
       'determineTopic'
     ]),
-    ...mapState('pageContent', ['pageData', 'pageLayout','BigQuestion']),
+    ...mapState('pageContent', [
+      'pageData',
+      'pageLayout',
+      'BigQuestion',
+      'pageData', 'orderSort']),
     pageWidth () {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 480
@@ -133,8 +139,13 @@ export default {
         this.objectiveData = {
           ...this.quesctionObj
         }
-        if (this.BigQuestion != null) {
-          this.objectiveData.number = this.BigQuestion
+        if (this.editQuestionId == null) {
+          this.$nextTick(() => {
+            this.objectiveData = {
+              ...this.objectiveData,
+              number: this.BigQuestion
+            }
+          })
         }
       }
     }
@@ -153,7 +164,12 @@ export default {
       'set_determineTopic', // 储存确定题型
       'Empty_AlreadyTopics', // 清空
     ]),
-    ...mapMutations('pageContent', ['initPageData', 'amendPageData', 'set_objectiveData',]),
+    ...mapMutations('pageContent', [
+      'initPageData',
+      'amendPageData',
+      'set_objectiveData',
+      'set_orderSort'
+    ]),
     closeFrame () { // 取消弹框
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
       this.set_closeFrame(this.quesctionObj.startQuestion)
@@ -163,11 +179,44 @@ export default {
       this.Add_AlreadyTopics(this.determineTopic)
     },
     opened () {
+      // this.quesctionObj = JSON.parse(JSON.stringify({ ...this.quesctionObj, group:{}}))
+      this.quesctionObj.number = this.BigQuestion
+      this.objectiveData.number = this.BigQuestion
+
       this.openedFrame = true
       this.set_currentQuestion()
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
     },
+    change (id, num) {
+      let current = this.pageData.filter(item => item.id === id)
+      this.quesctionObj = JSON.parse(JSON.stringify(current[0].content))
+      this.editQuestionId = id
+
+      let rows = this.quesctionObj.rows
+      if (num == 1) { // 1减法 2加法
+
+        if (rows > 1) {
+          rows -= 1
+        } else {
+          rows = 1
+        }
+      } else {
+        if (rows < 10) {
+          rows += 1
+        } else {
+          rows = 10
+        }
+      }
+      this.quesctionObj.rows = rows
+      this.objectiveData.rows = rows
+      this.$nextTick(() => {
+
+        this.preCreateQuestion()
+      })
+      console.log(this.objectiveData)
+    },
+
     openedEdit (id) {
       let current = this.pageData.filter(item => item.id === id)
       this.quesctionObj = JSON.parse(JSON.stringify(current[0].content))
@@ -219,6 +268,7 @@ export default {
         height: heights + 32, // 32标题高度
         questionType: 'ObjectiveQuestion',
         content: this.objectiveData,
+        order: this.orderSort
       }
 
       if (this.editQuestionId == null) {
@@ -227,16 +277,16 @@ export default {
         obj.id = this.editQuestionId
         this.amendPageData(obj)
       }
-      this.set_objectiveData(this.quesctionObj.number) // 大题号修改
+      this.set_objectiveData() // 大题号增加
+      // 小题数组追加数据
+      this.Add_AlreadyTopics(this.topicList)
+      this.set_determineTopic(this.topicList)
       // guan bi - 清楚数据
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
 
       this.set_closeFrame(this.quesctionObj.startQuestion)
-      // 小题数组追加数据
-      this.Add_AlreadyTopics(this.topicList)
-      this.set_determineTopic(this.topicList)
-
       //------------------------------------
+      this.set_orderSort()
       this.openedFrame = false // 关闭弹窗
     },
     hanldeSelect (e) {

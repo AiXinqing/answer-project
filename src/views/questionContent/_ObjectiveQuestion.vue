@@ -1,8 +1,8 @@
 <template>
-<!-- 选这题 -->
+<!-- 选择题 -->
   <div class="question-info">
     <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
-      <div v-html="cotent"></div>
+      <div class="title-span" v-html="cotent"></div>
     </div>
     <quill-editor
       v-show="isEditor"
@@ -11,6 +11,11 @@
     />
     <div class="question_array">
       <div class="question_editOrDel">
+
+        <span  class="btn_addSub_name">每组题数</span>
+        <span class="btn_addSub" @click="hanldeSubtraction(questionData.id,1)">-</span>
+        <span class="btn_addSub_info" >{{data.rows}}</span>
+        <span class="btn_addSub" @click="hanldeSubtraction(questionData.id,2)">+</span>
         <span class="layui-btn layui-btn-xs" @click="currentQuestionHanldeEdit(questionData.id)">编辑</span>
         <span class="layui-btn layui-btn-xs" @click="delHanlde(questionData.id)">删除</span>
       </div>
@@ -111,7 +116,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('pageContent', ['delPageData']),
+    ...mapMutations('pageContent', ['delPageData', 'del_objectiveData']),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
@@ -144,6 +149,7 @@ export default {
         this.del_determineTopic(this.topicBox)
         this.delPageData(index)
         this.set_currentQuestion()
+        this.del_objectiveData() // 删减一个大题号
       }
     },
     currentQuestionHanldeEdit (id) {
@@ -155,6 +161,9 @@ export default {
     hanldeCloseEsitor (content) {
       this.isEditor = false
       this.cotent = content
+    },
+    hanldeSubtraction (id, num) {
+      this.$emit('hanlde-subtraction', id, num)
     }
   },
 }
@@ -225,5 +234,29 @@ export default {
   .question-title:hover{
      div{border-color: @main}
   }
+}
+.btn_addSub,
+.btn_addSub_info{
+  display: inline-block;
+  padding: 0 5px;
+  height: 21px;
+  min-width: 12px;
+  line-height: 20px;
+  border:1px solid  @main;
+  color: @main;
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+  top: 0px;
+  font-size: 12px;
+}
+.btn_addSub_info{
+  min-width: 14px;
+}
+.btn_addSub_name{
+  font-size: 14px;
+  color: @main;
+  position: relative;
+    top: 0px;
 }
 </style>

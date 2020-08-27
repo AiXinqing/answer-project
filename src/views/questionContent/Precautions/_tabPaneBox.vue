@@ -14,6 +14,7 @@
             :key="row.id"
             :item-data="row"
             :active-name-item="activeName"
+            :edit-ids="editId"
             @hanlde-del="handldeDel"
             @hanlde-status="hanldeStatus"
             @hanlde-add-group-question="hanldeAddGroupQuestion"
@@ -25,6 +26,7 @@
             :key="row.id"
             :item-data="row"
             :active-name-item="activeName"
+            :edit-ids="editId"
             @hanlde-del="handldeDel"
             @hanlde-status="hanldeStatus"
             @hanlde-add-group-question="hanldeAddGroupQuestion"
@@ -36,6 +38,7 @@
             :key="row.id"
             :item-data="row"
             :active-name-item="activeName"
+            :edit-ids="editId"
             @hanlde-del="handldeDel"
             @hanlde-status="hanldeStatus"
             @hanlde-add-group-question="hanldeAddGroupQuestion"
@@ -83,7 +86,7 @@
 </template>
 
 <script>
-import {  mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 
 import tabSingleItem from './tabPane/tabSingleItem'
 import tabCheckItem from './tabPane/_tabcheckItem'
@@ -109,6 +112,10 @@ export default {
       type: Object,
       default: () => { },
     },
+    editId: {
+      teyp: Number,
+      default: null
+    }
   },
   data () {
     return {

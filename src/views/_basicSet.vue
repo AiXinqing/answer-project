@@ -10,30 +10,25 @@
       <el-button @click="questionDialog">客观题</el-button>
       <el-button @click="fillInTheBlank">填空题</el-button>
       <el-button @click="answerQuestion">解答题</el-button>
-      <el-button>选做题</el-button>
-      <el-button>作文(英)</el-button>
-      <el-button>作文(语)</el-button>
-      <el-button>非作答</el-button>
+      <el-button @click="optionalQuestion">选做题</el-button>
+      <el-button @click="compositionEnglish">作文(英)</el-button>
+      <el-button @click="compositionLanguage">作文(语)</el-button>
+      <el-button @click="NonRresponseArea">非作答</el-button>
     </div>
     <div class="basis_checkbox basic_btn save-btn">
       <el-button type="primary">预览</el-button>
       <el-button type="primary">保存</el-button>
       <el-button type="primary">下载</el-button>
     </div>
-    <question-dialog ref="questionDialogs" />
-    <fill-in-the-blank-dialog ref="fillInTheBlanks" />
     <public-dialog ref="publicDialog" />
   </div>
 </template>
 
 <script>
-import questionDialog from './dialog/_questionData'
-import FillInTheBlankDialog from './dialog/_FillInTheBlankDialog'
+
 import publicDialog from './dialog/_publicDialog'
 export default {
   components: {
-    questionDialog,
-    FillInTheBlankDialog,
     publicDialog
   },
   data () {
@@ -44,13 +39,25 @@ export default {
   },
   methods: {
     questionDialog () {
-      this.$refs.questionDialogs.opened()
+      this.$refs.publicDialog.opened('questionDialogs')
     },
     fillInTheBlank () {
-      this.$refs.fillInTheBlanks.opened()
+      this.$refs.publicDialog.opened('fillInTheBlanks')
     },
     answerQuestion () {
       this.$refs.publicDialog.opened('answerQuestion')
+    },
+    optionalQuestion () {
+      this.$refs.publicDialog.opened('optionalQuestion')
+    },
+    compositionEnglish () {
+      this.$refs.publicDialog.opened('compositionEnglish')
+    },
+    compositionLanguage () {
+      this.$refs.publicDialog.opened('compositionLanguage')
+    },
+    NonRresponseArea () {
+      this.$refs.publicDialog.opened('NonRresponseArea')
     }
   },
 }

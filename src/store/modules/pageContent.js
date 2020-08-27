@@ -3,9 +3,10 @@ import axios from 'axios'
 const state = {
   pageLayout: {}, // 页面布局
   pageData: [],
-  page_size: 1160 - 20, // 一页高度
+  page_size: 1170 - 60, // 一页高度
   BigQuestion: 1, // 大题题号
   pageHeight: [], // 页面高度
+  orderSort: 0, // 排序
 }
 
 const mutations = {
@@ -14,24 +15,44 @@ const mutations = {
   },
   initPageData: (state, Arr) => {
     state.pageData.push(Arr)
+    state.pageData = state.pageData.sort((a, b) => {
+      return a.order - b.order;
+    })
   },
   amendPageData: (state, ArrItem) => { // 编辑page-data
     const index = state.pageData.findIndex((itme) => itme.id === ArrItem.id)
     if (index > -1) {
       state.pageData.splice(index, 1, ArrItem)
+      // state.pageData = state.pageData.sort((a, b) => {
+      //   return a.order - b.order;
+      // })
     }
   },
   deletePageData: (state, id) => { // 解答题使用
-    const index = state.pageData.findIndex((itme) => itme.pid === id)
-    if (index > -1) {
-      state.pageData.splice(index, 1)
-    }
+    state.pageData = state.pageData.filter((item) => {
+      return ![id].includes(item.pid)
+    }).sort((a, b) => {
+      return a.order - b.order;
+    })
+
+  },
+  Empty_PageData: (state, id) => { // 内容分页
+
+    state.pageData = state.pageData.filter((item) => {
+      return ![id].includes(item.id)
+    }).sort((a, b) => {
+      return a.order - b.order;
+    })
   },
   delPageData: (state, index) => {
     state.pageData.splice(index, 1)
   },
-  set_objectiveData: (state, val) => {
-    state.BigQuestion = val + 1
+
+  set_objectiveData: (state) => {
+    state.BigQuestion = state.BigQuestion + 1
+  },
+  del_objectiveData: (state) => {
+    state.orderSort = state.orderSort - 1
   },
   set_pageHeight: (state, Arr = []) => {
     // 页面高度更新
@@ -56,6 +77,9 @@ const mutations = {
       results.push(currentPage.rects)
     }
     state.pageHeight = results
+  },
+  set_orderSort: (state) => {
+    state.orderSort = state.orderSort + 1
   }
 }
 
