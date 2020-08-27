@@ -253,7 +253,7 @@ export default {
       // 数据编辑完成添加至全局数组中---------------
       // 计算高度
       // console.log(this.topicGroupData)
-      let height = this.topicGroupData.length * 45 + 17 + 32
+      let height = this.topicGroupData.length * 45 + 17 + 32 + 20
       // 此题总分计算
       this.objectiveData.group.forEach((item) => {
         this.topicList.push(...item.childGroup)

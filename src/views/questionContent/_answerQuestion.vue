@@ -1,7 +1,7 @@
 <template>
 <!-- 解答题 -->
   <div class="question-info" :style="{'margin-top':data.top != undefined ? data.top : 0  }">
-    <div v-if="data.first">
+    <template v-if="data.first && data.borderTop == undefined">
       <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
         <div class="title-span" v-html="cotent"></div>
       </div>
@@ -10,7 +10,7 @@
         :topic-content="TopicContent"
         @hanlde-close-esitor="hanldeCloseEsitor"
       />
-    </div>
+    </template>
     <div class="question_arrays">
       <div class="question_editOrDel">
         <span class="layui-btn layui-btn-xs" @click="currentQuestionAnswerEdit">编辑</span>
@@ -19,7 +19,7 @@
     </div>
     <div class="answer_question_box"
       :style="{
-        'height':data.height + 'px',
+        'height':data.first ? data.castHeight - data.heightTitle - 2 + 'px':data.castHeight - 1  + 'px',
         'border-top':data.first || data.borderTop != undefined  ? '1px solid #888':'none',
       }"
     >
@@ -102,6 +102,8 @@ export default {
         this.data = {
           ...this.questionData
         }
+        console.log(this.data)
+        console.log(this.contentData)
       }
     },
     TopicContent: {

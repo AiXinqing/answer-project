@@ -106,14 +106,15 @@ export default {
 
       const TestData = {
         id: 1,
-        height: 380,
+        height: 400,
         questionType: 'AnswerSheetTitle',
         content: {
           textVal: this.textVal,
           titleInfo: this.titleInfo,
           titleRows: this.titleRows
         },
-        order: this.orderSort
+        order: this.orderSort,
+        first: true
       }
       //
       if (change == 1) {

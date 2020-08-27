@@ -13,7 +13,7 @@ var state = {
   pageLayout: {},
   // 页面布局
   pageData: [],
-  page_size: 1160 - 60,
+  page_size: 1170 - 60,
   // 一页高度
   BigQuestion: 1,
   // 大题题号

@@ -109,23 +109,26 @@ export default {
         curPage.rects = []
       }
       rects.forEach(rect => {
+        if (rect.first) { rect.height = rect.height - 20 }
         //rect.height = rect.height + 20
         // avalible 剩余高度
         let avalibleHeight = this.page_size - curPage.height
         let itemObj = JSON.parse(JSON.stringify(rect))
+        let whetherShow = this.shawDataFunc(rect) // 是否显示
         // 高度溢出
         if (rect.height > avalibleHeight) {
 
           let curRect = this.questionType(rect, avalibleHeight)
+          // let mergeObj = {} //
 
-          if (rect.questionType != 'ObjectiveQuestion' && avalibleHeight >= 32) {
+          if (rect.questionType != 'ObjectiveQuestion' && avalibleHeight >= 32 && curRect.height != 0) {
             SplitVal = avalibleHeight - curRect.height
 
             curPage.rects.push({
               ...rect,
               castHeight: curRect.height,
-              showData: itemObj.showData.splice(0, curRect.row),
-              first: true
+              showData: whetherShow ? itemObj.showData.splice(0, curRect.row) : [],
+              first: whetherShow ? true : rect.first,
             })
           }
 
@@ -138,20 +141,19 @@ export default {
           // console.log(itemObj)
           while (height > this.page_size) {
             let content = this.pageShow(rect)
-            // console.log(content)
-            // SplitVal = page_size - content.height
 
             results.push([{
               ...rect,
               castHeight: content.height, // 追加一页高度
-              showData: itemObj.showData.splice(0, content.row),
+              showData: whetherShow ? itemObj.showData.splice(0, content.row) : [],
+              borderTop: 1, // 分页第一个
             }]);
             height -= content.height;
           }
 
           // console.log(height)
 
-          if (rect.questionType != 'ObjectiveQuestion' && avalibleHeight >= 32) {
+          if (rect.questionType != 'ObjectiveQuestion' && avalibleHeight >= 32 && curRect.height != 0) {
             curPage.height = height
           } else {
             curPage.height = rect.height
@@ -163,7 +165,9 @@ export default {
           curPage.rects.push({
             ...rect,
             castHeight: height,
+            heightTitle: 0,
             showData: itemObj.showData,
+            borderTop: 1,
           }) // 追加剩余高度
 
         } else {
@@ -178,19 +182,22 @@ export default {
         // console.log(2)
         results.push(curPage.rects)
       }
+      console.log(JSON.stringify(rects))
       // console.log(results)
       return results
     },
     questionType (obj, rectHeigth) {
       let MarginHeight = obj.MarginHeight + obj.heightTitle
       let contentHeight = rectHeigth - MarginHeight
+      let RowHeight = 45
+      let row = Math.floor(contentHeight / RowHeight)
       switch (obj.questionType) {
         case 'FillInTheBlank':
-
-          var row = Math.floor(contentHeight / 45)
-          return { height: row * 45 + MarginHeight, row: row }
-        case '':
-          break;
+          return { height: row * RowHeight + MarginHeight, row: row }
+        case 'answerQuestion':
+          RowHeight = 35
+          row = Math.floor(contentHeight / RowHeight)
+          return { height: row * RowHeight + MarginHeight, row: row }
         default:
           return { height: 0, row: 0 }
       }
@@ -199,14 +206,27 @@ export default {
     pageShow (obj) {
       let MarginHeight = obj.MarginHeight
       let contentHeight = this.page_size - MarginHeight
+      let RowHeight = 45
+      let row = Math.floor(contentHeight / RowHeight)
       switch (obj.questionType) {
         case 'FillInTheBlank':
-          var row = Math.floor(contentHeight / 45)
-          return { height: row * 45 + MarginHeight, row: row }
-        case '':
-          break;
+          return { height: row * RowHeight + MarginHeight, row: row }
+        case 'answerQuestion':
+          RowHeight = 35
+          row = Math.floor(contentHeight / RowHeight)
+          return { height: row * RowHeight + MarginHeight, row: row }
         default:
           return { height: 0, row: 0 }
+      }
+    },
+    shawDataFunc (obj) {
+      switch (obj.questionType) {
+        case 'FillInTheBlank':
+          return true
+        // case 'answerQuestion':
+        //   return true
+        default:
+          return false
       }
     },
     currentQuestionHanldeEdit (id) {
@@ -247,7 +267,7 @@ export default {
   float: left;
 }
 .page-contents {
-  padding-top: 20px;
+  // padding-top: 20px;
   width: 785px;
   height: 1170px;
   border: 1px solid @font-333;
