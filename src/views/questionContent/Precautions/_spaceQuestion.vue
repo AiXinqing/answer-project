@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import spaceItem from './fillInTheBlank/_item'
 import groupItem from './fillInTheBlank/QuestionGroupDetail/_groupItem'
 export default {
@@ -53,6 +54,9 @@ export default {
     }
   },
   computed: {
+    ...mapState('questionType', [
+      'currentQuestion',
+    ]),
     groupItemData () {
       let arr = []
       this.topicGroup.map(item => {

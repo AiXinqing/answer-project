@@ -401,7 +401,7 @@ export default {
             })
             group.splice(index, 1) // 删除
 
-            this.spaceTopic.group.splice(0,1, ...SplitArray)
+            this.spaceTopic.group.splice(0, 1, ...SplitArray)
 
           }
         }
@@ -508,7 +508,6 @@ export default {
               childGroup: [{ ...subObj }],
             }
           }
-
           questionArr.childGroup.splice(index, 1, changeItem)
         }
       }
