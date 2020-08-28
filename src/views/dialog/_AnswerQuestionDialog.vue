@@ -218,6 +218,7 @@ export default {
       'set_determineTopic',
       'Empty_AlreadyTopics',
       'Add_AlreadyTopics',
+      'set_existBigQuestion',
     ]),
     ...mapMutations('answerQuestion', ['set_answerQuestionArr',]),
     opened () {
@@ -247,16 +248,9 @@ export default {
     },
     preCreateQuestion () {
       //确定信息
-      // 当前页内容所占高度
-      // let heights = this.pageHeight[this.pageHeight.length - 1].map(item => item).reduce((accumulator, currentValue) => {
-      //   return accumulator + currentValue;
-      // })
-      // let currentPageHeight = this.page_size - heights - 20 - 20 // 20当前大题下移的20，32标题高度
       let Arr = []
       let objId = `answer_${+new Date()}`
       let rectHeight = this.dataTopic.rows * 35 + 12 + 20 // 小题初始高度
-      // console.log(this.RefactorData)
-      // console.log(heights)
 
       this.RefactorData.forEach((item, index) => {
         let obj = {
@@ -271,83 +265,23 @@ export default {
         }
         Arr.push(obj)
       })
-      console.log(Arr)
-      // this.RefactorData.forEach((item, index) => {
-      //   // 计算解答题生成的答题框，获取当页高度和所占高度，每个答题框
-      //   // 当前页面剩余高度-当前解答题框
-      //   currentPageHeight -= rectHeight
-      //   let obj = {
-      //     height: rectHeight,
-      //     id: `answer${+new Date()}_${index}`,
-      //     pid: `answer${date}`,
-      //     questionType: 'answerQuestion',
-      //     content: {},
-      //     order: this.orderSort
-      //   }
-      //   if (index == 0) {
-      //     obj = {
-      //       ...obj,
-      //       first: true,
-      //       content: {
-      //         ...this.dataTopic,
-      //         totalScore: this.totalScore,
-      //         group: { ...item }
-      //       },
-      //     }
-      //   } else {
-      //     obj = {
-      //       ...obj,
-      //       first: false,
-      //       content: {
-      //         ...this.dataTopic,
-      //         group: { ...item }
-      //       }
-      //     }
-      //   }
+      //存在大题追加
+      let existBigQuestion = {
+        id: objId,
+        number: this.dataTopic.number,
+        name: this.dataTopic.topic
+      }
 
-      //   // console.log(currentPageHeight)
-      //   // console.log(item)
-
-      //   if (currentPageHeight >= rectHeight) {
-      //     Arr.push(obj)
-      //   } else {
-      //     // 超出高度部分拆分成两个对象，分上下部分
-      //     if (currentPageHeight >= 52) {
-      //       let difference = Math.abs(rectHeight - currentPageHeight) // 差值
-
-      //       let preObj = { // 上半部分
-      //         ...obj,
-      //         height: currentPageHeight
-      //       }
-      //       this.set_orderSort()
-      //       let nextObj = { // 下半部分
-      //         ...obj,
-      //         height: difference,
-      //         top: 20,
-      //         order: this.orderSort,
-      //         content: { ...obj.content, group: {} }
-      //       }
-      //       Arr.push(preObj, nextObj)
-
-      //       currentPageHeight = this.page_size - difference - 20
-      //     } else {
-      //       Arr.push(obj)
-      //     }
-      //   }
-      // })
-      //----------
       if (this.editQuestionId == null) {
         // 新增
         Arr.forEach(obj => {
           this.initPageData(obj)
         })
+        this.set_existBigQuestion(existBigQuestion)
       } else {
         // 编辑
         //清空编辑前数据
-        // this.deletePageData(this.dataTopic.pid)
-        // Arr.forEach(obj => {
-        //   this.initPageData(obj)
-        // })
+        this.set_existBigQuestion({ ...existBigQuestion, id: this.editQuestionId })
       }
       // 解答题-编辑时使用数据
       // this.set_answerQuestionArr({ ...this.questionData, pid: `answer${date}` })

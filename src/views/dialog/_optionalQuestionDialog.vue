@@ -145,6 +145,7 @@ export default {
       'Empty_AlreadyTopics',
       'Add_AlreadyTopics',
       'set_determineTopic',
+      'set_existBigQuestion',
     ]),
     opened () {
       this.questionData.number = this.BigQuestion
@@ -176,21 +177,32 @@ export default {
       let MarginHeight = + 14 + 40
       let heights = rectHeight + MarginHeight + 54
 
+      let objId = `optional_${+new Date()}`
+
       let obj = {
         MarginHeight: MarginHeight,
         heightTitle: 54,
         height: heights,
-        id: 'optional' + +new Date(),
+        id: objId,
         questionType: 'optionalQuestion',
         content: this.data,
         order: this.orderSort,
         first: true
       }
+      //存在大题追加
+      let existBigQuestion = {
+        id: objId,
+        number: this.questionData.number,
+        name: this.questionData.topic
+      }
+
       if (this.editQuestionId == null) {
         this.initPageData(obj)
+        this.set_existBigQuestion(existBigQuestion)
       } else {
         // 编辑
         this.amendPageData({ ...obj, id: this.editQuestionId })
+        this.set_existBigQuestion({ ...existBigQuestion, id: obj.id })
       }
       // 大题号修改
       this.set_objectiveData(this.data.number)

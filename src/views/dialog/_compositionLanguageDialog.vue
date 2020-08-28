@@ -238,6 +238,7 @@ export default {
       'Empty_AlreadyTopics',
       'Add_AlreadyTopics',
       'set_determineTopic',
+      'set_existBigQuestion',
     ]),
     opened () {
       this.questionData.number = this.BigQuestion
@@ -310,12 +311,21 @@ export default {
           BeforeEditing: this.editQuestionId != null ? this.editData.BeforeEditing : this.BeforeEditing
         }
 
+        //存在大题追加
+        let existBigQuestion = {
+          id: objId,
+          number: this.data.number,
+          name: this.data.topic
+        }
+
         if (this.editQuestionId == null) {
           this.initPageData(obj)
           this.Add_AlreadyTopics([this.data])
           this.set_determineTopic([this.data])
+          this.set_existBigQuestion(existBigQuestion)
         } else {
           this.amendPageData({ ...obj, id: this.editQuestionId })
+          this.set_existBigQuestion({ ...existBigQuestion, id: obj.id })
         }
         this.set_currentQuestion()
         this.data = JSON.parse(JSON.stringify(this.closeData))

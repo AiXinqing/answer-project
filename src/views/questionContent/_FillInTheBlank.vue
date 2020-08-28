@@ -51,7 +51,6 @@ import quillEditor from '../../components/quillEditor'
 export default {
   components: {
     quillEditor,
-    // questionDialog,
   },
   props: {
     contentData: {
@@ -87,53 +86,6 @@ export default {
         : 695
     },
     topicGroupData () {
-      // let rows = this.data.rows
-      // let array = this.data.group.map(item => {
-      //   return item.childGroup
-      // })
-      // if (array.length > 0) {
-      //   array = array[0]
-      //   let temporaryArr = []
-      //   let datas = []
-      //   array.forEach(ele => {
-      //     if (ele.childGroup != undefined) {
-      //       ele.childGroup.forEach((row, index) => {
-      //         for (let i = 1; i <= row.space; i++) {
-      //           if (i == 1) {
-      //             temporaryArr.push({ ...row, lgTopic: index + 1 }) // 小标题
-      //           } else {
-      //             temporaryArr.push({ ...row })
-      //           }
-      //           if (temporaryArr.length >= rows) {
-      //             datas.push(temporaryArr)
-      //             temporaryArr = []
-      //           }
-      //         }
-      //       })
-      //     } else {
-      //       for (let i = 1; i <= ele.space; i++) {
-      //         if (i == 1) {
-      //           temporaryArr.push({ ...ele, lgTopic: 0 }) // 小标题
-      //         } else {
-      //           temporaryArr.push({ ...ele })
-      //         }
-      //         if (temporaryArr.length >= rows) {
-      //           datas.push(temporaryArr)
-      //           temporaryArr = []
-      //         }
-      //       }
-      //     }
-      //     if (temporaryArr.length >= rows) {
-      //       datas.push(temporaryArr)
-      //       temporaryArr = []
-      //     }
-      //   })
-      //   if (temporaryArr.length > 0) {
-      //     datas.push(temporaryArr)
-      //   }
-      //   // console.log(datas)
-      //   return datas
-      // } else { return [] }
       return this.questionData.showData
     },
     topicBox () {
@@ -151,8 +103,6 @@ export default {
         this.data = {
           ...this.contentData
         }
-        // console.log(this.data)
-        // console.log(this.questionData)
       }
     },
     TopicContent: {
@@ -167,7 +117,8 @@ export default {
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
-      'del_determineTopic'
+      'del_determineTopic',
+      'del_existBigQuestion'
     ]),
     delHanlde (id) { // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === id)
@@ -177,6 +128,7 @@ export default {
         this.delPageData(index)
         this.set_currentQuestion()
         this.del_objectiveData() // 删减一个大题号
+        this.del_existBigQuestion(this.questionData)
       }
     },
     currentQuestionFillEdit (id) {

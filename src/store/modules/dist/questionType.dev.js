@@ -226,8 +226,9 @@ var mutations = {
     }
   },
   del_existBigQuestion: function del_existBigQuestion(state, obj) {
+    var id = obj.objId != undefined ? obj.objId : obj.id;
     var index = state.existBigQuestion.findIndex(function (row) {
-      return row.id === obj.id;
+      return row.id === id;
     });
 
     if (index > -1) {

@@ -129,7 +129,8 @@ export default {
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
-      'del_determineTopic'
+      'del_determineTopic',
+      'del_existBigQuestion',
     ]),
     hanldeCloseEsitor (content) {
       this.isEditor = false
@@ -149,6 +150,7 @@ export default {
         this.Empty_PageData(this.data.id)
         this.set_currentQuestion()
         this.del_objectiveData() // 删减一个大题号
+        this.del_existBigQuestion(this.questionData)
       }
 
     },

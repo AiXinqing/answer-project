@@ -219,8 +219,9 @@ const mutations = {
     }
   },
   del_existBigQuestion: (state, obj) => {
+    let id = obj.objId != undefined ? obj.objId : obj.id
     const index = state.existBigQuestion.findIndex(
-      (row) => row.id === obj.id
+      (row) => row.id === id
     )
     if (index > -1) {
       state.existBigQuestion.splice(index, 1)
