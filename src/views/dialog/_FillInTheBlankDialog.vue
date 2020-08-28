@@ -122,16 +122,18 @@ export default {
     },
     topicGroupData () {
       let rows = this.objectiveData.rows
-      let array = this.objectiveData.group.map((item) => {
-        return item.childGroup
+      let array = []
+
+      this.objectiveData.group.map((item) => {
+        array.push(...item.childGroup)
       })
 
       if (array.length > 0) {
-        array = array[0]
         let temporaryArr = []
         let datas = []
         array.forEach((ele) => {
-          if (ele.childGroup != undefined) {
+
+          if (ele.childGroup != undefined && ele.childGroup.length > 0) {
             ele.childGroup.forEach((row, index) => {
               for (let i = 1; i <= row.space; i++) {
                 if (temporaryArr.length + 1 > rows) {
@@ -152,6 +154,7 @@ export default {
               }
             })
           } else {
+
             for (let i = 1; i <= ele.space; i++) {
               if (temporaryArr.length + 1 > rows) {
                 datas.push(temporaryArr)
@@ -174,8 +177,10 @@ export default {
         if (temporaryArr.length > 0) {
           datas.push(temporaryArr)
         }
+
         return datas
       } else {
+
         return []
       }
     },
@@ -186,11 +191,8 @@ export default {
       handler () {
         this.objectiveData = {
           ...this.spaceTopic,
-          group: this.spaceTopic.group.sort((a, b) => {
-            return a.start - b.start
-          }),
         }
-        // console.log(this.objectiveData)
+
         if (this.editQuestionId == null) {
           this.$nextTick(() => {
             this.objectiveData.number = this.BigQuestion
@@ -357,7 +359,7 @@ export default {
       // console.log(lastIndex)
       // console.log(arr)
       if (lastIndex > -1) {
-        console.log(obj.topic)
+
         if (obj.topic == arr[0]) {
           // 判断点击的是否是首尾
           this.del_AlreadyTopics([groupObj.childGroup[index]])
@@ -397,23 +399,10 @@ export default {
                 itemArr.push(...item.childGroup)
               }
             })
-            console.log(SplitArray)
-            // // this.set_SubtitleNumber(itemArr)
             group.splice(index, 1) // 删除
-            // let dataObj = JSON.parse(JSON.stringify(this.spaceTopic))
-            SplitArray.forEach((item) => {
-              // dataObj.group.push(item)
-              group.push(item)
-            })
-            this.spaceTopic = JSON.parse(JSON.stringify(dataObj))
-            // dataObj.group = dataObj.group.sort((a, b) => {
-            //   return a.start - b.start
-            // })
-            // dataObj.group.forEach((item) => {
-            //   group.push(item)
-            //   console.log(item)
-            // })
-            // console.log(dataObj.group)
+
+            this.spaceTopic.group.splice(0,1, ...SplitArray)
+
           }
         }
       }
@@ -429,6 +418,7 @@ export default {
         childGroup: [],
       }
       this.spaceTopic.group.push(obj)
+      // console.log(this.objectiveData)
     },
     SplitFunc (index, groupObj, arr) {
       // 删除小题拆分数组 sub

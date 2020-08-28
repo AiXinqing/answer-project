@@ -120,9 +120,9 @@ export default {
         if (curH > avalibleHeight) {
 
           let curRect = this.questionType(rect, avalibleHeight)
-          let sd = this.shawDataFunc(rect, avalibleHeight, curRect.height)
-          console.log(sd)
-          if (sd) {
+          // let sd = this.shawDataFunc(rect, avalibleHeight, curRect.height)
+
+          if (rect.questionType != 'ObjectiveQuestion' && avalibleHeight >= 32 && curRect.height != 0) {
             SplitVal = avalibleHeight - curRect.height
 
             curPage.rects.push({
@@ -183,7 +183,7 @@ export default {
         // console.log(2)
         results.push(curPage.rects)
       }
-      console.log(JSON.stringify(rects))
+      // console.log(JSON.stringify(rects))
       // console.log(results)
       return results
     },
