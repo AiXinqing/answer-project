@@ -48,7 +48,7 @@
           <el-col :span="12" class="select-item">
             <div class="label">作文行数:</div>
             <el-input v-model.number="data.rows" @blur="hanldeVerification" @input="hanldeRowsFunc" size="mini" placeholder="" />
-            <span>分</span>
+            <span>行</span>
           </el-col>
         </el-row>
       </div>
@@ -74,7 +74,6 @@ export default {
       data: {},
       title: '设置',
       openedFrame: false,
-      // isdisabledFn: false,
       closeData: {},
       editQuestionId: null,
       errorVal: '',
@@ -167,32 +166,6 @@ export default {
       }
       return num
     },
-    rowsData () {
-      // 计算内容是否分页
-      const { rows } = this.data
-      let Arr = []
-      let currentPageHeight = this.currentPageHeight
-
-      if (this.editQuestionId != null) { // 编辑
-        currentPageHeight = this.editData.BeforeEditing
-      }
-
-      // 67 = 20 (ivtop值) - 32 (标题高度+边框) - 5(底部) - 10 (容器padding-bottom) 35 行高
-      let AvailableRow = Math.floor((currentPageHeight - 67) / 35) // 向下取整
-      //----------------------------------------------------------------------------------
-      if (AvailableRow > 0) {
-        let Difference = AvailableRow - rows
-        if (Difference > 0) {
-          Arr.push(rows)
-        } else {
-          Arr.push(AvailableRow) // 上部分
-          Arr.push(Math.abs(Difference)) // 下部分
-        }
-      } else {
-        Arr.push(rows)
-      }
-      return Arr
-    }
   },
   watch: {
     questionData: {
@@ -221,6 +194,7 @@ export default {
   methods: {
     ...mapMutations('pageContent', [
       'initPageData',
+      'amendPageData',
       'Empty_PageData',
       'set_orderSort',
     ]),
@@ -256,43 +230,33 @@ export default {
     },
 
     preCreateQuestion () {
+      const { rows } = this.data
       this.errorVal = this.tabStatusVal
+
+      let rectHeight = rows * 35  // 当前内容高度 45(内部高度)
+      let MarginHeight = + 17
+      let heights = rectHeight + MarginHeight + 33
       if (!this.tabStatus) {
         let objId = `compositionEnglish_${+new Date()}`
         //------------------------------------------------------------
-        let obj = {}
-        let ArrData = this.rowsData.map((item, i) => {
-          obj = {
-            height: i == 0 ? item * 35 + 52 : item * 35,
-            id: objId,
-            questionType: 'compositionEnglish',
-            content: this.data,
-            order: this.orderSort,
-            first: i == 0 ? true : false,
-            showRow: item,
-            BeforeEditing: this.editQuestionId != null ? this.editData.BeforeEditing : this.BeforeEditing
-          }
-          return obj
-        })
+        let obj = {
+          heightTitle: 32,
+          MarginHeight: MarginHeight,
+          height: heights,
+          id: objId,
+          questionType: 'compositionEnglish',
+          content: this.data,
+          order: this.orderSort,
+          first: true,
+          BeforeEditing: this.editQuestionId != null ? this.editData.BeforeEditing : this.BeforeEditing
+        }
 
-        //-------------------------------------------------------------------------------------
         if (this.editQuestionId == null) {
-          // 新增
-          ArrData.forEach(obj => {
-            this.initPageData(obj)
-            this.set_orderSort()
-          })
+          this.initPageData(obj)
           this.Add_AlreadyTopics([this.data])
           this.set_determineTopic([this.data])
         } else {
-          // 编辑
-          //清空编辑前数据
-          this.Empty_PageData(this.editData.id)
-
-          ArrData.forEach(obj => {
-            this.initPageData(obj)
-            this.set_orderSort()
-          })
+          this.amendPageData({ ...obj, id: this.editQuestionId })
         }
 
         this.set_currentQuestion()

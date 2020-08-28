@@ -97,6 +97,9 @@ const state = {
 
 const mutations = {
   del_AlreadyTopics(state, Arr) {
+    if (Arr == undefined) {
+      return false
+    }
     // 删除已有小题数组
     Arr.forEach((item) => {
       const index = state.AlreadyTopics.findIndex(
@@ -108,6 +111,9 @@ const mutations = {
     })
   },
   Add_AlreadyTopics(state, Arr) {
+    if (Arr == undefined) {
+      return false
+    }
     //新增小题数组
     Arr.forEach((item) => {
       if (state.AlreadyTopics.length > 0) {
@@ -137,6 +143,9 @@ const mutations = {
     })
   },
   set_AlreadyTopics: (state, Arr) => {
+    if (Arr == undefined) {
+      return false
+    }
     Arr.forEach((item) => {
       const index = state.AlreadyTopics.findIndex(
         (row) => row.topic == item.topic
@@ -163,6 +172,9 @@ const mutations = {
     }
   },
   set_determineTopic: (state, Arr) => {
+    if (Arr == undefined) {
+      return false
+    }
     // 添加确定值
     Arr.forEach((item) => {
       const index = state.determineTopic.findIndex(
@@ -182,6 +194,9 @@ const mutations = {
     })
   },
   del_determineTopic: (state, Arr) => {
+    if (Arr == undefined) {
+      return false
+    }
     Arr.forEach((item) => {
       const index = state.determineTopic.findIndex(
         (row) => row.topic === item.topic

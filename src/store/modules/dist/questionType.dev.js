@@ -83,7 +83,11 @@ var state = {
 };
 var mutations = {
   del_AlreadyTopics: function del_AlreadyTopics(state, Arr) {
-    // 删除已有小题数组
+    if (Arr == undefined) {
+      return false;
+    } // 删除已有小题数组
+
+
     Arr.forEach(function (item) {
       var index = state.AlreadyTopics.findIndex(function (row) {
         return row.topic === item.topic;
@@ -95,7 +99,11 @@ var mutations = {
     });
   },
   Add_AlreadyTopics: function Add_AlreadyTopics(state, Arr) {
-    //新增小题数组
+    if (Arr == undefined) {
+      return false;
+    } //新增小题数组
+
+
     Arr.forEach(function (item) {
       if (state.AlreadyTopics.length > 0) {
         var index = state.AlreadyTopics.findIndex(function (row) {
@@ -125,6 +133,10 @@ var mutations = {
     });
   },
   set_AlreadyTopics: function set_AlreadyTopics(state, Arr) {
+    if (Arr == undefined) {
+      return false;
+    }
+
     Arr.forEach(function (item) {
       var index = state.AlreadyTopics.findIndex(function (row) {
         return row.topic == item.topic;
@@ -161,7 +173,11 @@ var mutations = {
     }
   },
   set_determineTopic: function set_determineTopic(state, Arr) {
-    // 添加确定值
+    if (Arr == undefined) {
+      return false;
+    } // 添加确定值
+
+
     Arr.forEach(function (item) {
       var index = state.determineTopic.findIndex(function (row) {
         return row.topic === item.topic;
@@ -181,6 +197,10 @@ var mutations = {
     });
   },
   del_determineTopic: function del_determineTopic(state, Arr) {
+    if (Arr == undefined) {
+      return false;
+    }
+
     Arr.forEach(function (item) {
       var index = state.determineTopic.findIndex(function (row) {
         return row.topic === item.topic;

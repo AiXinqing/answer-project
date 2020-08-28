@@ -138,6 +138,7 @@ export default {
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
       if (index > -1) {
         this.del_determineTopic(this.topicData)
+        this.del_AlreadyTopics(this.topicData)
         this.delPageData(index)
         this.set_currentQuestion()
         this.del_objectiveData() // 删减一个大题号

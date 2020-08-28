@@ -117,10 +117,15 @@ export default {
         let whetherShow = this.shawDataFunc(rect) // 是否显示
 
         // 高度溢出
-        let curRect = this.questionType(rect, avalibleHeight)
-
+        console.log(rect)
+        console.log(ActualHeight)
+        console.log('--------------------------')
+        console.log(avalibleHeight)
         if (ActualHeight > avalibleHeight) {
 
+          let curRect = this.questionType(rect, avalibleHeight)
+
+          console.log(avalibleHeight)
           if (rect.questionType != 'ObjectiveQuestion' && avalibleHeight >= 32 && !curRect.isPage) {
             SplitVal = avalibleHeight - curRect.height
 
@@ -138,7 +143,6 @@ export default {
           restCutPage()
           // 判罚当前高度能分几页
           let height = rect.height - avalibleHeight + SplitVal;
-          // console.log(itemObj)
           while (height > this.page_size) {
             let content = this.pageShow(rect)
 
@@ -151,16 +155,12 @@ export default {
             height -= content.height;
           }
 
-          // console.log(height)
-
           if (rect.questionType != 'ObjectiveQuestion' && avalibleHeight >= 32 && !curRect.isPage) {
             curPage.height = height
           } else {
             curPage.height = ActualHeight
             height = curPage.height
           }
-
-          // console.log(rect)
 
           curPage.rects.push({
             ...rect,
@@ -179,7 +179,6 @@ export default {
         }
       })
       if (curPage.height) {
-        // console.log(2)
         results.push(curPage.rects)
       }
       // console.log(JSON.stringify(rects))
@@ -201,7 +200,11 @@ export default {
         case 'optionalQuestion':
           RowHeight = 35
           row = Math.floor(contentHeight / RowHeight)
-          return { height: row * RowHeight + MarginHeight, row: row, isPage: row * RowHeight + MarginHeight < 108 ? true : false }
+          return { height: row * RowHeight + MarginHeight, row: row, isPage: row * RowHeight + MarginHeight < MarginHeight ? true : false }
+        case 'compositionEnglish':
+          RowHeight = 35
+          row = Math.floor(contentHeight / RowHeight)
+          return { height: row * RowHeight + MarginHeight, row: row, isPage: row * RowHeight + MarginHeight < MarginHeight ? true : false }
         default:
           return { height: 0, row: 0, isPage: false }
       }
