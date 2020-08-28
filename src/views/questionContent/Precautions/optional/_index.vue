@@ -59,6 +59,7 @@ export default {
     ...mapMutations('questionType', [
       'Add_AlreadyTopics',
       'once_AlreadyTopics',
+      'set_currentQuestion',
     ]),
     groupTopicHanlde () {
       const { choices, start, id, score } = this.data
@@ -92,6 +93,7 @@ export default {
         let objL = JSON.parse(JSON.stringify({ ...this.data, childGroup: [] }))
         this.Add_AlreadyTopics(topicList) // 存数组 totalScore
         this.$emit('pre-optional-data', { ...objL, childGroup: topicList, totalScore: totalScore })
+        this.set_currentQuestion()
       }
     }
   },
