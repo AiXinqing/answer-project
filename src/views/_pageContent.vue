@@ -205,6 +205,10 @@ export default {
           RowHeight = 35
           row = Math.floor(contentHeight / RowHeight)
           return { height: row * RowHeight + MarginHeight, row: row, isPage: row * RowHeight + MarginHeight < MarginHeight ? true : false }
+        case 'compositionLanguage':
+          RowHeight = obj.rowHeight
+          row = Math.floor(contentHeight / RowHeight)
+          return { height: row * RowHeight + MarginHeight, row: row, isPage: row * RowHeight + MarginHeight < MarginHeight ? true : false }
         default:
           return { height: 0, row: 0, isPage: false }
       }

@@ -202,47 +202,6 @@ export default {
       }
       return num
     },
-    rowsData () {
-      // 计算内容是否分页
-      const { totalWordCount, spacing } = this.data
-      let Arr = []
-      let currentPageHeight = this.currentPageHeight
-
-      if (this.editQuestionId != null) { // 编辑
-
-        currentPageHeight = this.editData.BeforeEditing
-      }
-      console.log(currentPageHeight)
-      //内容高度-----------------------------------------------------------------
-      //一行数格子 = 向下取整（总字数/格数）
-      let lattice = Math.floor(this.containerWidth / this.latticeWidth)
-      // 行数 向上取整
-      let row = Math.ceil(totalWordCount / lattice)
-
-      //行数高度 = 格子大小 + 间距（间距同上要求）
-      let rowHeight = this.latticeWidth + spacing
-      // 内容高度 = 行数 * 行数高度 + 内部标题高度 45 + 标题高度 32
-      // let containerHeight = row * rowHeight + 32 + 45
-
-      let AvailableRow = Math.floor((currentPageHeight - 77) / rowHeight) // 向下取整
-      //----------------------------------------------------------------------------------
-
-      let temArr = [row]
-      let i = AvailableRow
-      for (var a = 0; a < row; a++) {
-        var val = temArr[a] - i
-        if (val > 0) {
-          temArr.push(val)
-          Arr.push(i)
-          i = this.pageRow
-        } else {
-          Arr.push(temArr[a])
-          break;
-        }
-      }
-
-      return Arr
-    }
   },
   watch: {
     questionData: {
@@ -316,54 +275,48 @@ export default {
       }
     },
     preCreateQuestion () {
-      const { spacing } = this.data
+      const { spacing, totalWordCount } = this.data
       this.errorVal = this.tabStatusVal
+
       if (!this.tabStatus) {
-        // console.log(this.rowsData)
-        //一行数格子 = 向下取整（总字数/格数）
+
+        // 一行数格子 = 向下取整（总字数/格数）
         let lattice = Math.floor(this.containerWidth / this.latticeWidth)
+
+        // 行数 向上取整
+        let row = Math.ceil(totalWordCount / lattice)
+        console.log(row)
         //行数高度 = 格子大小 + 间距（间距同上要求）
         let rowHeight = this.latticeWidth + spacing
 
+        let rectHeight = row * rowHeight  // 当前内容高度 45(内部高度)
+        let MarginHeight = 45
+        let heights = rectHeight + MarginHeight + 32
+
         let objId = `compositionLanguage_${+new Date()}`
         //------------------------------------------------------------
-        let obj = {}
-        let ArrData = this.rowsData.map((item, i) => {
-          obj = {
-            height: i == 0 ? item * rowHeight + 77 : item * rowHeight,
-            id: objId,
-            questionType: 'compositionLanguage',
-            content: this.data,
-            order: this.orderSort,
-            first: i == 0 ? true : false,
-            lattice: lattice,
-            showRow: item,
-            rowHeight: rowHeight,
-            rowWidth: this.latticeWidth,
-            BeforeEditing: this.editQuestionId != null ? this.editData.BeforeEditing : this.BeforeEditing
-          }
-          return obj
-        })
-        //-------------------------------------------------------------------------------------
+        let obj = {
+          heightTitle: 32,
+          MarginHeight: MarginHeight,
+          height: heights,
+          id: objId,
+          questionType: 'compositionLanguage',
+          content: this.data,
+          order: this.orderSort,
+          first: true,
+          lattice: lattice,
+          rowHeight: rowHeight,
+          rowWidth: this.latticeWidth,
+          BeforeEditing: this.editQuestionId != null ? this.editData.BeforeEditing : this.BeforeEditing
+        }
+
         if (this.editQuestionId == null) {
-          // 新增
-          ArrData.forEach(obj => {
-            this.initPageData(obj)
-            this.set_orderSort()
-          })
+          this.initPageData(obj)
           this.Add_AlreadyTopics([this.data])
           this.set_determineTopic([this.data])
         } else {
-          // 编辑
-          //清空编辑前数据
-          this.Empty_PageData(this.editData.id)
-
-          ArrData.forEach(obj => {
-            this.initPageData(obj)
-            this.set_orderSort()
-          })
+          this.amendPageData({ ...obj, id: this.editQuestionId })
         }
-
         this.set_currentQuestion()
         this.data = JSON.parse(JSON.stringify(this.closeData))
         this.openedFrame = false

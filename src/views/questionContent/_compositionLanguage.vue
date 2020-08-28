@@ -1,6 +1,6 @@
 <template>
   <div class="question-info">
-    <template v-if="data.first">
+    <template v-if="data.first && data.borderTop == undefined">
       <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
         <div class="title-span" v-html="cotent"></div>
       </div>
@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="answer_question_box composition_box">
-      <template v-if="data.first">
+      <template v-if="data.first && data.borderTop == undefined">
         <div class="Language_item_title">
           <span>1.</span>
         </div>
@@ -89,8 +89,15 @@ export default {
       return ''
     },
     rowsData () {
+      const { heightTitle, MarginHeight, castHeight, first, borderTop, rowHeight } = this.data
+      let row = 0
+      if (first && borderTop == undefined) {
+        row = Math.floor((castHeight - MarginHeight - heightTitle) / rowHeight)
+      } else {
+        row = Math.floor(castHeight / rowHeight)
+      }
       let Arr = []
-      for (let i = 1; i <= this.data.showRow; i++) {
+      for (let i = 1; i <= row; i++) {
         Arr.push(i)
       }
       return Arr
@@ -147,6 +154,7 @@ export default {
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
       if (index > -1) {
         this.del_determineTopic([this.contentData])
+        this.del_AlreadyTopics([this.contentData])
         this.Empty_PageData(this.data.id)
         this.set_currentQuestion()
         this.del_objectiveData() // 删减一个大题号
