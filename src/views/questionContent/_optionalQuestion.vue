@@ -1,6 +1,6 @@
 <template>
   <div class="question-info">
-    <template v-if="data.first && data.borderTop == undefined">
+    <template v-if="data.first && data.borderTop == undefined || data.borderTop == 0">
       <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
           <div class="title-span" v-html="cotent"></div>
         </div>

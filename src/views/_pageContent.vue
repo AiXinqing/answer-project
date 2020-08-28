@@ -109,20 +109,19 @@ export default {
         curPage.rects = []
       }
       rects.forEach(rect => {
-        // if (rect.first) { rect.height = rect.height - 20 }
-        let curH = rect.height + 20
+
+        let ActualHeight = rect.height + 20 //
         // avalible 剩余高度
         let avalibleHeight = this.page_size - curPage.height
         let itemObj = JSON.parse(JSON.stringify(rect))
         let whetherShow = this.shawDataFunc(rect) // 是否显示
 
         // 高度溢出
-        if (curH > avalibleHeight) {
+        let curRect = this.questionType(rect, avalibleHeight)
 
-          let curRect = this.questionType(rect, avalibleHeight)
-          // let sd = this.shawDataFunc(rect, avalibleHeight, curRect.height)
+        if (ActualHeight > avalibleHeight) {
 
-          if (rect.questionType != 'ObjectiveQuestion' && avalibleHeight >= 32 && curRect.height != 0) {
+          if (rect.questionType != 'ObjectiveQuestion' && avalibleHeight >= 32 && !curRect.isPage) {
             SplitVal = avalibleHeight - curRect.height
 
             curPage.rects.push({
@@ -147,17 +146,17 @@ export default {
               ...rect,
               castHeight: content.height, // 追加一页高度
               showData: whetherShow ? itemObj.showData.splice(0, content.row) : [],
-              borderTop: 1, // 分页第一个
+              borderTop: !curRect.isPage ? 1 : 0, // 分页第一个
             }]);
             height -= content.height;
           }
 
           // console.log(height)
 
-          if (rect.questionType != 'ObjectiveQuestion' && avalibleHeight >= 32 && curRect.height != 0) {
+          if (rect.questionType != 'ObjectiveQuestion' && avalibleHeight >= 32 && !curRect.isPage) {
             curPage.height = height
           } else {
-            curPage.height = curH
+            curPage.height = ActualHeight
             height = curPage.height
           }
 
@@ -168,11 +167,11 @@ export default {
             castHeight: height,
             heightTitle: 0,
             showData: itemObj.showData,
-            borderTop: 1,
+            borderTop: !curRect.isPage ? 1 : 0,
           }) // 追加剩余高度
 
         } else {
-          curPage.height += curH
+          curPage.height += ActualHeight
           curPage.rects.push({
             ...rect,
             castHeight: rect.height,
@@ -194,17 +193,17 @@ export default {
       let row = Math.floor(contentHeight / RowHeight)
       switch (obj.questionType) {
         case 'FillInTheBlank':
-          return { height: row * RowHeight + MarginHeight, row: row }
+          return { height: row * RowHeight + MarginHeight, row: row, isPage: false }
         case 'answerQuestion':
           RowHeight = 35
           row = Math.floor(contentHeight / RowHeight)
-          return { height: row * RowHeight + MarginHeight, row: row }
+          return { height: row * RowHeight + MarginHeight, row: row, isPage: false }
         case 'optionalQuestion':
           RowHeight = 35
           row = Math.floor(contentHeight / RowHeight)
-          return { height: row * RowHeight + MarginHeight, row: row }
+          return { height: row * RowHeight + MarginHeight, row: row, isPage: row * RowHeight + MarginHeight < 108 ? true : false }
         default:
-          return { height: 0, row: 0 }
+          return { height: 0, row: 0, isPage: false }
       }
       // console.log(obj)
     },
@@ -228,23 +227,10 @@ export default {
           return { height: 0, row: 0 }
       }
     },
-    shawDataFunc (obj, avalibleHeight, Remaini) {
-      if (obj.questionType == 'ObjectiveQuestion') {
-        return false
-      } else if (avalibleHeight < 32) {
-        return false
-      } else if (obj.questionType == 'optionalQuestion' && Remaini < 108) {
-        return false
-      } else {
-        return true
-      }
-    },
-    isToPage (obj, ) {
+    shawDataFunc (obj) {
       switch (obj.questionType) {
         case 'FillInTheBlank':
           return true
-        // case 'optionalQuestion':
-        //   return true
         default:
           return false
       }
