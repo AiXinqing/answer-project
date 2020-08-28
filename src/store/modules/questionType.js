@@ -1,6 +1,5 @@
 const state = {
-  options: [
-    {
+  options: [{
       value: 1,
       label: '一',
     },
@@ -99,8 +98,7 @@ const state = {
 
 const mutations = {
   set_SubtitleNumber: (
-    state,
-    {
+    state, {
       //题组数
       start,
       end,
@@ -217,6 +215,12 @@ const mutations = {
       } else {
         state.determineTopic.push(item)
       }
+    })
+  },
+  delOnce_determineTopic: (state, pid) => {
+    // 一次清除相同pid
+    state.determineTopic = state.determineTopic.filter((item) => {
+      return ![pid].includes(item.pid)
     })
   },
   del_determineTopic: (state, Arr) => {

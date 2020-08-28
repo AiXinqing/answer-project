@@ -220,6 +220,12 @@ var mutations = {
       }
     });
   },
+  delOnce_determineTopic: function delOnce_determineTopic(state, pid) {
+    // 一次清除相同pid
+    state.determineTopic = state.determineTopic.filter(function (item) {
+      return ![pid].includes(item.pid);
+    });
+  },
   del_determineTopic: function del_determineTopic(state, Arr) {
     Arr.forEach(function (item) {
       var index = state.determineTopic.findIndex(function (row) {

@@ -197,6 +197,9 @@ export default {
           this.$nextTick(() => {
             this.objectiveData.number = this.BigQuestion
           })
+          this.objectiveData.group.map(item => {
+            return { ...item, start: item.end == null ? this.currentQuestion : item.start }
+          })
         }
       },
     },
@@ -216,6 +219,7 @@ export default {
       'set_determineTopic', // 储存确定题型
       'Empty_AlreadyTopics', // 清空
       'Fullin_once_AlreadyTopics',
+      'delOnce_determineTopic',
     ]),
     ...mapMutations('pageContent', [
       'initPageData',
@@ -281,7 +285,9 @@ export default {
         // 此题总分
       }
       // 小题数组追加至确定题型
+
       this.Add_AlreadyTopics(this.topicList)
+      this.delOnce_determineTopic(this.topicList[0].pid)
       this.set_determineTopic(this.topicList)
       this.set_currentQuestion()
 

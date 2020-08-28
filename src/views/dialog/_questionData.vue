@@ -146,6 +146,16 @@ export default {
               number: this.BigQuestion
             }
           })
+          // 小题号改变更换小题号
+          this.objectiveData.group.singleBox.map(item => {
+            return { ...item, start: item.end == null ? this.currentQuestion : item.start }
+          })
+          this.objectiveData.group.checkbox.map(item => {
+            return { ...item, start: item.end == null ? this.currentQuestion : item.start }
+          })
+          this.objectiveData.group.judgment.map(item => {
+            return { ...item, start: item.end == null ? this.currentQuestion : item.start }
+          })
         }
       }
     }
@@ -362,6 +372,7 @@ export default {
         let itemTopic = itemObj.data // 当前新增
 
         groupItem.splice(index, 1, itemObj.data) // 替换
+
         // 追曾小题号至数组
         let obj = { start: itemTopic.start, end: itemTopic.end, id: itemTopic.id }
         this.set_SubtitleNumber(obj)
