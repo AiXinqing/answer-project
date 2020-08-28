@@ -52,7 +52,7 @@ const mutations = {
     state.BigQuestion = state.BigQuestion + 1
   },
   del_objectiveData: (state) => {
-    state.orderSort = state.orderSort - 1
+    state.BigQuestion = state.BigQuestion - 1
   },
   set_pageHeight: (state, Arr = []) => {
     // 页面高度更新

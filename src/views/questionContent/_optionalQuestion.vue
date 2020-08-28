@@ -21,7 +21,7 @@
         'height':data.first ? data.castHeight - data.heightTitle  + 'px':data.castHeight  + 'px',
       }"
     >
-      <template v-if="data.first && data.borderTop == undefined">
+      <template v-if="data.first && data.borderTop == undefined || data.borderTop == 0">
         <div class="topic_number_box">
 
           <span class="black_icon"></span>

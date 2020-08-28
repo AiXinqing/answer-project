@@ -67,7 +67,7 @@ var mutations = {
     state.BigQuestion = state.BigQuestion + 1;
   },
   del_objectiveData: function del_objectiveData(state) {
-    state.orderSort = state.orderSort - 1;
+    state.BigQuestion = state.BigQuestion - 1;
   },
   set_pageHeight: function set_pageHeight(state) {
     var Arr = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
