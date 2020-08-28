@@ -101,9 +101,7 @@ export default {
   computed: {
     ...mapState('questionType', [
       'options',
-      'AlreadyTopics',
       'currentQuestion',
-      'letterArr',
       'determineTopic',
     ]),
     ...mapState('pageContent', [
@@ -210,7 +208,6 @@ export default {
   },
   methods: {
     ...mapMutations('questionType', [
-
       'set_currentQuestion',
       'Add_AlreadyTopics', // 小题数组
       'del_AlreadyTopics', // 删除题组-小题

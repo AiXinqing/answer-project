@@ -92,7 +92,6 @@ export default {
   computed: {
     ...mapState('questionType', [
       'options',
-      'AlreadyTopics',
       'currentQuestion',
       'determineTopic'
     ]),
@@ -100,7 +99,6 @@ export default {
       'pageHeight',
       'page_size',
       'BigQuestion',
-      'pageData',
       'orderSort',
     ]),
     errorMessage () {

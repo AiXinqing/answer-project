@@ -102,16 +102,13 @@ export default {
   computed: {
     ...mapState('questionType', [
       'options',
-      'AlreadyTopics',
       'currentQuestion',
-      'letterArr',
       'determineTopic'
     ]),
     ...mapState('pageContent', [
       'pageHeight',
       'page_size',
       'BigQuestion',
-      'pageData',
       'orderSort',
     ]),
     ...mapState('answerQuestion', ['answerQuestionArr',]),
@@ -217,9 +214,7 @@ export default {
     ]),
     ...mapMutations('questionType', [
       'set_AlreadyTopics',
-      'del_AlreadyTopics',
       'set_currentQuestion',
-      'set_closeFrame',
       'set_determineTopic',
       'Empty_AlreadyTopics',
       'Add_AlreadyTopics',
@@ -365,8 +360,6 @@ export default {
       this.set_currentQuestion()
       // 清空弹框数据
       this.questionData = JSON.parse(JSON.stringify(this.closeData))
-      this.set_closeFrame() // 弹窗关闭置空
-
     },
     hanldeStatus (val) {
       this.errorVal = val

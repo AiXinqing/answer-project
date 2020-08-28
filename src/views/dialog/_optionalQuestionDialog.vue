@@ -92,16 +92,11 @@ export default {
   computed: {
     ...mapState('questionType', [
       'options',
-      'AlreadyTopics',
       'currentQuestion',
-      'letterArr',
       'determineTopic'
     ]),
     ...mapState('pageContent', [
-      'pageHeight',
-      'page_size',
       'BigQuestion',
-      'pageData',
       'orderSort',
     ]),
     ...mapState('answerQuestion', ['answerQuestionArr',]),
@@ -126,6 +121,9 @@ export default {
               number: this.BigQuestion
             }
           })
+          this.data.group.map(item => {
+            return { ...item, start: item.end == '' ? this.currentQuestion : item.start }
+          })
         }
 
       }
@@ -147,7 +145,6 @@ export default {
       'Empty_AlreadyTopics',
       'Add_AlreadyTopics',
       'set_determineTopic',
-      'once_AlreadyTopics',
     ]),
     opened () {
       this.questionData.number = this.BigQuestion

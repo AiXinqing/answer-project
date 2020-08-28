@@ -113,13 +113,10 @@ export default {
   computed: {
     ...mapState('questionType', [
       'options',
-      'AlreadyTopics',
       'currentQuestion',
       'letterArr',
-      'determineTopic'
     ]),
     ...mapState('pageContent', [
-      'pageData',
       'pageLayout',
       'BigQuestion',
       'pageData', 'orderSort']),

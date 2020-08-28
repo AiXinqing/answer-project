@@ -115,7 +115,6 @@ export default {
       'pageHeight',
       'page_size',
       'BigQuestion',
-      'pageData',
       'pageLayout',
       'orderSort',
     ]),
