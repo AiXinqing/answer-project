@@ -140,14 +140,12 @@ export default {
       'initPageData',
       'amendPageData',
       'set_objectiveData',
-      'deletePageData',
       'set_orderSort'
     ]),
     ...mapMutations('questionType', [
       'set_currentQuestion',
       'Empty_AlreadyTopics',
       'Add_AlreadyTopics',
-      'set_closeFrame',
       'set_determineTopic',
       'once_AlreadyTopics',
     ]),
@@ -177,13 +175,8 @@ export default {
     preCreateQuestion () {
       // 当前页内容所占高度
       const { rows } = this.data
-      // let heights = this.pageHeight[this.pageHeight.length - 1].map(item => item).reduce((accumulator, currentValue) => {
-      //   return accumulator + currentValue;
-      // })
-      // let currentPageHeight = this.page_size - heights - 20 - 20 // 20当前大题下移的20，50标题高度 20每页底部余留
-      // console.log(currentPageHeight)
       let rectHeight = rows * 35  // 当前内容高度 45(内部高度)
-      let MarginHeight = + 12 + 40
+      let MarginHeight = + 14 + 40
       let heights = rectHeight + MarginHeight + 54
 
       let obj = {
@@ -196,52 +189,10 @@ export default {
         order: this.orderSort,
         first: true
       }
-      // let objArr = []
-      // let obj = {
-      //   height: rectHeight,
-      //   id: 'optional' + +new Date(),
-      //   questionType: 'optionalQuestion',
-      //   content: this.data,
-      //   order: this.orderSort
-      // }
-      // if (currentPageHeight > rectHeight) {
-      //   objArr.push(obj)
-      // } else {
-      //   // 当页所剩差值
-      //   let difference = Math.abs(currentPageHeight - rectHeight)
-      //   let SplitHeight = Math.abs(rectHeight - difference)
-
-      //   if (SplitHeight < 50 && SplitHeight != 50) {
-      //     objArr.push(obj)
-      //   } else {
-      //     // 内容拆分值
-
-      //     let preObj = {
-      //       ...obj,
-      //       height: SplitHeight,
-      //       first: true,
-
-      //     }
-      //     let nextObj = { ...obj, height: difference }
-      //     objArr.push(preObj)
-      //     objArr.push(nextObj)
-      //   }
-      // }
-
       if (this.editQuestionId == null) {
-        // 新增
-        // objArr.forEach(obj => {
-        //   this.initPageData(obj)
-        // })
         this.initPageData(obj)
       } else {
         // 编辑
-        //清空编辑前数据
-        // this.deletePageData(this.dataTopic.pid)
-        // objArr.forEach(obj => {
-
-        //   this.amendPageData({ ...obj, id: this.editQuestionId })
-        // })
         this.amendPageData({ ...obj, id: this.editQuestionId })
       }
       // 大题号修改
@@ -255,7 +206,6 @@ export default {
       this.set_currentQuestion()
 
       this.data = JSON.parse(JSON.stringify(this.closeData))
-      this.set_closeFrame() // 弹窗关闭置空
     },
     hanldeStatus (val) {
       // 报错状态

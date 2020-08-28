@@ -165,10 +165,7 @@ export default {
   },
   methods: {
     ...mapMutations('questionType', [
-      'set_SubtitleNumber',
-      'delete_SubtitleNumber',
       'set_currentQuestion',
-      'set_closeFrame',
       'Add_AlreadyTopics', // 小题数组
       'del_AlreadyTopics', // 删除题组-小题
       'set_determineTopic', // 储存确定题型
@@ -182,7 +179,6 @@ export default {
     ]),
     closeFrame () { // 取消弹框
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
-      this.set_closeFrame(this.quesctionObj.startQuestion)
       this.openedFrame = false
 
       this.Empty_AlreadyTopics() // 清空
@@ -294,7 +290,6 @@ export default {
       // guan bi - 清楚数据
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
 
-      this.set_closeFrame(this.quesctionObj.startQuestion)
       //------------------------------------
       this.set_orderSort()
       this.openedFrame = false // 关闭弹窗
@@ -319,7 +314,6 @@ export default {
 
         this.del_AlreadyTopics(itemTopic.childGroup) // 删除弹框内临时数组
         groupItem.splice(index, 1)
-        this.delete_SubtitleNumber(obj.id)
 
         this.$nextTick(() => {
           this.set_currentQuestion()
@@ -368,14 +362,7 @@ export default {
       const index = groupItem.findIndex(item => item.id === itemObj.data.id)
 
       if (index > -1) {
-
-        let itemTopic = itemObj.data // 当前新增
-
         groupItem.splice(index, 1, itemObj.data) // 替换
-
-        // 追曾小题号至数组
-        let obj = { start: itemTopic.start, end: itemTopic.end, id: itemTopic.id }
-        this.set_SubtitleNumber(obj)
       }
     },
     editTopicFunc (dataItem, type) {

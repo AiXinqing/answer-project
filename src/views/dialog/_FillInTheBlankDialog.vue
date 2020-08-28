@@ -210,10 +210,8 @@ export default {
   },
   methods: {
     ...mapMutations('questionType', [
-      'set_SubtitleNumber',
-      'delete_SubtitleNumber',
+
       'set_currentQuestion',
-      'set_closeFrame',
       'Add_AlreadyTopics', // 小题数组
       'del_AlreadyTopics', // 删除题组-小题
       'set_determineTopic', // 储存确定题型
@@ -230,7 +228,6 @@ export default {
     closeFrame () {
       // 关闭弹框
       this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
-      this.set_closeFrame()
       this.openedFrame = false
       //--------------
       this.Empty_AlreadyTopics() // 清空
@@ -305,7 +302,6 @@ export default {
 
       //------------------------
       this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
-      this.set_closeFrame() // 改变大题号
     },
     hanldeSelect (e) {
       // 选择答题号
@@ -325,8 +321,6 @@ export default {
       if (index > -1) {
         group.splice(index, 1, obj) // 替换
         // 追曾小题号至数组
-        let objs = { start: obj.start, end: obj.end, id: obj.id }
-        this.set_SubtitleNumber(objs)
       }
     },
     hanldeDelGroup (id) {
@@ -339,8 +333,6 @@ export default {
 
         this.del_AlreadyTopics(itemTopic.childGroup) // 删除弹框内临时数组
         group.splice(index, 1) // 删除
-        this.delete_SubtitleNumber(id)
-
         this.$nextTick(() => {
           this.set_currentQuestion()
         })

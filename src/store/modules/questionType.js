@@ -88,7 +88,6 @@ const state = {
       label: '二十二',
     },
   ],
-  SubtitleNumber: [], // 已有的题号数组
   AlreadyTopics: [], // 已有的题组
   currentQuestion: 1,
   letterArr: ['A', 'B', 'C', 'D', 'E', 'G', 'H', 'I', 'J', 'K'],
@@ -97,38 +96,6 @@ const state = {
 }
 
 const mutations = {
-  set_SubtitleNumber: (
-    state, {
-      //题组数
-      start,
-      end,
-      id,
-    }
-  ) => {
-    // 追加生成的题号
-    let index = state.SubtitleNumber.findIndex((item) => item.id === id)
-    let Arr = []
-    for (let i = start; i <= end; i++) {
-      Arr.push(i)
-    }
-
-    let obj = {
-      id: id,
-      data: Arr,
-    }
-    if (index > -1) {
-      state.SubtitleNumber.splice(index, 1, obj)
-    } else {
-      state.SubtitleNumber.push(obj)
-    }
-  },
-  delete_SubtitleNumber: (state, id) => {
-    // 删除生成的题号
-    let index = state.SubtitleNumber.findIndex((item) => item.id === id)
-    if (index > -1) {
-      state.SubtitleNumber.splice(index, 1)
-    }
-  },
   del_AlreadyTopics(state, Arr) {
     // 删除已有小题数组
     Arr.forEach((item) => {
@@ -194,15 +161,6 @@ const mutations = {
         state.currentQuestion = 1
       }
     }
-  },
-  set_closeFrame: (state) => {
-    // 弹窗关闭置空
-    state.SubtitleNumber = []
-    state.AlreadyTopics.forEach((item, i) => {
-      if (item.subtopic != null || item.subtopic != undefined) {
-        state.AlreadyTopics.splice(i, 1)
-      }
-    })
   },
   set_determineTopic: (state, Arr) => {
     // 添加确定值
