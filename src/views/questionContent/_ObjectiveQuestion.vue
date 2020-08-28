@@ -120,7 +120,8 @@ export default {
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
-      'del_determineTopic'
+      'del_determineTopic',
+      'del_existBigQuestion',
     ]),
     traverse (Arr, letterArr) {
       if (Arr.length > 0) {
@@ -150,6 +151,7 @@ export default {
         this.delPageData(index)
         this.set_currentQuestion()
         this.del_objectiveData() // 删减一个大题号
+        this.del_existBigQuestion(this.questionData)
       }
     },
     currentQuestionHanldeEdit (id) {

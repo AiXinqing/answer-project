@@ -93,6 +93,7 @@ const state = {
   letterArr: ['A', 'B', 'C', 'D', 'E', 'G', 'H', 'I', 'J', 'K'],
   maxTopic: 200, // 最大题数
   determineTopic: [], // 确定下的小题
+  existBigQuestion: [], // 存在大题
 }
 
 const mutations = {
@@ -206,6 +207,25 @@ const mutations = {
       }
     })
   },
+  // 存在大题
+  set_existBigQuestion: (state, obj) => {
+    const index = state.existBigQuestion.findIndex(
+      (row) => row.id === obj.id
+    )
+    if (index > -1) {
+      state.determineTopic.splice(index, 1, obj)
+    } else {
+      state.existBigQuestion.push(obj)
+    }
+  },
+  del_existBigQuestion: (state, obj) => {
+    const index = state.existBigQuestion.findIndex(
+      (row) => row.id === obj.id
+    )
+    if (index > -1) {
+      state.existBigQuestion.splice(index, 1)
+    }
+  }
 }
 
 const actions = {}

@@ -167,6 +167,7 @@ export default {
       'del_AlreadyTopics', // 删除题组-小题
       'set_determineTopic', // 储存确定题型
       'Empty_AlreadyTopics', // 清空
+      'set_existBigQuestion', //存大题号信息
     ]),
     ...mapMutations('pageContent', [
       'initPageData',
@@ -217,7 +218,6 @@ export default {
 
         this.preCreateQuestion()
       })
-      console.log(this.objectiveData)
     },
 
     openedEdit (id) {
@@ -266,20 +266,30 @@ export default {
         ...this.objectiveData,
         totalScore: totalScore
       }
+      let objId = `objective_${+new Date()}`
       var obj = {
-        id: 'objective' + +new Date(),
+        id: objId,
         height: heights + 32, // 32标题高度
         questionType: 'ObjectiveQuestion',
         content: this.objectiveData,
         order: this.orderSort
       }
 
+      let existBigQuestion = {
+        id: objId,
+        number: this.objectiveData.number,
+        name: this.objectiveData.topic
+      }
+
       if (this.editQuestionId == null) {
         this.initPageData(obj)
+        this.set_existBigQuestion(existBigQuestion)
       } else {
         obj.id = this.editQuestionId
         this.amendPageData(obj)
+        this.set_existBigQuestion({ ...existBigQuestion, id: obj.id })
       }
+
       this.set_objectiveData() // 大题号增加
       // 小题数组追加数据
       this.Add_AlreadyTopics(this.topicList)
@@ -293,7 +303,8 @@ export default {
     },
     hanldeSelect (e) {
       // 选择答题号
-      window.console.log(e)
+      this.quesctionObj.number = e
+      this.objectiveData.number = e
     },
     hanldeDel (obj) {
       // 删除分段-小题组

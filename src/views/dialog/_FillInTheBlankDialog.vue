@@ -215,6 +215,7 @@ export default {
       'Empty_AlreadyTopics', // 清空
       'Fullin_once_AlreadyTopics',
       'delOnce_determineTopic',
+      'set_existBigQuestion',
     ]),
     ...mapMutations('pageContent', [
       'initPageData',
@@ -264,12 +265,12 @@ export default {
       this.topicList.map((item) => {
         totalScore += item.score
       })
-
+      let objId = `FillInTheBlank_${+new Date()}`
       // 此题总分计算
       let obj = {
         heightTitle: 32,
         MarginHeight: 17,
-        id: 'FillInTheBlank' + +new Date(),
+        id: objId,
         height: height, // 32标题高度
         questionType: 'FillInTheBlank',
         content: { ...this.objectiveData, totalScore: totalScore },
@@ -277,6 +278,12 @@ export default {
         showData: this.topicGroupData,
         first: true,
         // 此题总分
+      }
+      //存在大题追加
+      let existBigQuestion = {
+        id: objId,
+        number: this.objectiveData.number,
+        name: this.objectiveData.topic
       }
       // 小题数组追加至确定题型
 
@@ -287,9 +294,11 @@ export default {
 
       if (this.editQuestionId == null) {
         this.initPageData(obj)
+        this.set_existBigQuestion(existBigQuestion)
       } else {
         obj.id = this.editQuestionId
         this.amendPageData(obj)
+        this.set_existBigQuestion({ ...existBigQuestion, id: obj.id })
       }
       this.set_objectiveData(this.spaceTopic.number) // 大题号修改
       //------------------------------------
@@ -302,7 +311,8 @@ export default {
     },
     hanldeSelect (e) {
       // 选择答题号
-      window.console.log(e)
+      this.spaceTopic.number = e
+      this.objectiveData.number = e
     },
     traverse () { },
     HeightCalculation () {

@@ -117,10 +117,10 @@ export default {
         let whetherShow = this.shawDataFunc(rect) // 是否显示
 
         // 高度溢出
-        console.log(rect)
-        console.log(ActualHeight)
-        console.log('--------------------------')
-        console.log(avalibleHeight)
+        // console.log(rect)
+        // console.log(ActualHeight)
+        // console.log('--------------------------')
+        // console.log(avalibleHeight)
         if (ActualHeight > avalibleHeight) {
 
           let curRect = this.questionType(rect, avalibleHeight)

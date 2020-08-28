@@ -17,7 +17,7 @@
               :items="options"
               size="mini"
               :value="data.number"
-
+              @change="hanldeSelect"
             ></hj-select>
           </el-col>
           <el-col :span="8" class="select-item composition_item">
@@ -277,7 +277,12 @@ export default {
     },
     hanldeVerification () {
       this.errorVal = this.tabStatusVal
-    }
+    },
+    hanldeSelect (e) {
+      // 选择答题号
+      this.questionData.number = e
+      this.data.number = e
+    },
   },
 }
 </script>

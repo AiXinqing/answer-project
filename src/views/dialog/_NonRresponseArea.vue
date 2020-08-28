@@ -49,6 +49,7 @@ export default {
   computed: {
     ...mapState('questionType', [
       'options',
+      'existBigQuestion',
     ]),
   },
   methods: {

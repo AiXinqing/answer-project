@@ -14,7 +14,7 @@
             :items="options"
             size="mini"
             :value="data.number"
-
+            @change="hanldeSelect"
           ></hj-select>
         </el-col>
         <el-col :span="12" class="select-item">
@@ -223,7 +223,12 @@ export default {
         this.errorVal = ''
         this.isdisabledFn = false
       }
-    }
+    },
+    hanldeSelect (e) {
+      // 选择答题号
+      this.questionData.number = e
+      this.data.number = e
+    },
   },
 }
 </script>

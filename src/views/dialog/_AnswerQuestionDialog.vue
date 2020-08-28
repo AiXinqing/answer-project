@@ -15,7 +15,7 @@
             :items="options"
             size="mini"
             :value="dataTopic.number"
-
+            @change="hanldeSelect"
           ></hj-select>
         </el-col>
         <el-col :span="12" class="select-item">
@@ -508,6 +508,11 @@ export default {
         sum += item.score
       })
       return sum
+    },
+    hanldeSelect (e) {
+      // 选择答题号
+      this.questionData.number = e
+      this.dataTopic.number = e
     },
   },
 }
