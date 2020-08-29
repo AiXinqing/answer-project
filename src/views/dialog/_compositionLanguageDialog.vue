@@ -66,6 +66,20 @@
         </el-col>
       </el-row>
     </div>
+    <div class="condition_box Insert_box" v-show="editQuestionId == null">
+      <el-checkbox v-model="data.InsertTitle">插入添加题目</el-checkbox>
+      <div
+        :class="['existBigQuestion_style',{'Fade':!data.InsertTitle}]">
+        <span>插入到第</span>
+        <hj-select
+            :items="existBigQuestion"
+            size="mini"
+            :value="existNumber" />
+        <span>大题后</span>
+      </div>
+      <el-checkbox :class="['Postpone',{'Fade':!data.InsertTitle}]" v-model="data.Postpone">大题号自动顺延</el-checkbox>
+      <div class="Insert_Mask" v-show="!data.InsertTitle"></div>
+    </div>
     <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
   </div>
     <div class="dialog-footer">
@@ -90,6 +104,7 @@ export default {
       closeData: {},
       editQuestionId: null,
       errorVal: '',
+      existNumber: null,
       questionData: {
         number: 1, // 大题号
         name: '作文', // 题目
@@ -100,6 +115,8 @@ export default {
         mark: '1', // 1 ，2
         totalWordCount: 1000,
         spacing: 4, // 间距
+        InsertTitle: false,
+        Postpone: false,
       },
       editData: {},
 
@@ -117,6 +134,7 @@ export default {
       'BigQuestion',
       'pageLayout',
       'orderSort',
+      'existBigQuestion',
     ]),
     containerWidth () {
       // 格子承载宽度

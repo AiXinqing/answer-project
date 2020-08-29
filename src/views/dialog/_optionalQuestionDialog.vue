@@ -44,6 +44,20 @@
           <span class="p-5"> 行 </span>
         </span>
       </div>
+      <div class="condition_box Insert_box" v-show="editQuestionId == null">
+        <el-checkbox v-model="data.InsertTitle">插入添加题目</el-checkbox>
+        <div
+          :class="['existBigQuestion_style',{'Fade':!data.InsertTitle}]">
+          <span>插入到第</span>
+          <hj-select
+              :items="existBigQuestion"
+              size="mini"
+              :value="existNumber" />
+          <span>大题后</span>
+        </div>
+        <el-checkbox :class="['Postpone',{'Fade':!data.InsertTitle}]" v-model="data.Postpone">大题号自动顺延</el-checkbox>
+        <div class="Insert_Mask" v-show="!data.InsertTitle"></div>
+      </div>
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
     <div class="dialog-footer">
@@ -71,12 +85,15 @@ export default {
       closeData: {},
       editQuestionId: null,
       errorVal: '',
+      existNumber: null,
       questionData: {
         number: 1,
         topic: '选作题',
         rows: 6,
         startQuestion: 1,
         HorizontalLine: false, // 横行
+        InsertTitle: false,
+        Postpone: false,
         group: [{
           choices: '', // 几选几
           select: '',
@@ -98,6 +115,7 @@ export default {
     ...mapState('pageContent', [
       'BigQuestion',
       'orderSort',
+      'existBigQuestion',
     ]),
     ...mapState('answerQuestion', ['answerQuestionArr',]),
     errorMessage () {

@@ -48,6 +48,20 @@
         @hanlde-last-topic-del="hanldeLastTopicDel"
         @change-last-sub-topic-score="changeLastSubTopicScore"
       />
+      <div class="condition_box Insert_box" v-show="editQuestionId == null">
+        <el-checkbox v-model="objectiveData.InsertTitle">插入添加题目</el-checkbox>
+        <div
+          :class="['existBigQuestion_style',{'Fade':!objectiveData.InsertTitle}]">
+          <span>插入到第</span>
+          <hj-select
+              :items="existBigQuestion"
+              size="mini"
+              :value="existNumber" />
+          <span>大题后</span>
+        </div>
+        <el-checkbox :class="['Postpone',{'Fade':!objectiveData.InsertTitle}]" v-model="objectiveData.Postpone">大题号自动顺延</el-checkbox>
+        <div class="Insert_Mask" v-show="!objectiveData.InsertTitle"></div>
+      </div>
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
     <div class="dialog-footer">
@@ -74,11 +88,14 @@ export default {
       openedFrame: false,
       isdisabledFn: false,
       title: '新增填空题',
+      existNumber: null,
       spaceTopic: {
         number: 1,
         topic: '填空题',
         rows: 4,
         startQuestion: 1,
+        InsertTitle: false,
+        Postpone: false,
         group: [
           {
             start: 1,
@@ -109,6 +126,7 @@ export default {
       'pageLayout',
       'BigQuestion',
       'orderSort',
+      'existBigQuestion',
     ]),
     pageWidth () {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
