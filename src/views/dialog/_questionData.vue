@@ -129,7 +129,7 @@ export default {
       return this.errorVal != '' ? true : false
     },
     capitalTopicNum () {
-      let index = this.options.findIndex(item => this.data.number == item.value)
+      let index = this.options.findIndex(item => this.objectiveData.number == item.value)
       if (index > -1) {
         return this.options[index].label
       } else {
@@ -285,8 +285,8 @@ export default {
 
       let existBigQuestion = {
         id: objId,
-        label: `${this.capitalTopicNum}.${this.data.topic}`,
-        value: this.data.number,
+        label: `${this.capitalTopicNum}.${this.objectiveData.topic}`,
+        value: this.objectiveData.number,
       }
 
       if (this.editQuestionId == null) {

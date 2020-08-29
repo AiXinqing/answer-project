@@ -12,7 +12,7 @@
         <div class="label_item">位置:</div>
         <div class="label_right">
           <hj-select
-            :items="options"
+            :items="existBigQuestion"
             size="mini"
             :value="data.number" />
           <div class="Comment">注：非作答区将加在选中的大框后</div>
