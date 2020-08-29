@@ -223,7 +223,7 @@ export default {
             this.data = {
               ...this.data,
               number: this.BigQuestion,
-              // topic: this.currentQuestion
+              topic: this.currentQuestion
             }
           })
         }
@@ -249,8 +249,7 @@ export default {
       'set_existBigQuestion',
     ]),
     opened () {
-      this.questionData.number = this.BigQuestion
-      this.data.number = this.BigQuestion
+      this.questionData = JSON.parse(JSON.stringify({ ...this.questionData, number: this.BigQuestion, topic: this.currentQuestion }))
       // 开打弹框
       this.set_currentQuestion()
       this.openedFrame = true
