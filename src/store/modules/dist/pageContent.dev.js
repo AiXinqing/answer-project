@@ -63,6 +63,10 @@ var mutations = {
   delPageData: function delPageData(state, index) {
     state.pageData.splice(index, 1);
   },
+  insert_pageData: function insert_pageData(state, obj, num) {
+    //插入非作答
+    state.pageData.splice(num, 0, obj);
+  },
   set_objectiveData: function set_objectiveData(state) {
     state.BigQuestion = state.BigQuestion + 1;
   },
@@ -105,7 +109,6 @@ var actions = {
   getPageData: function getPageData(context) {
     _axios["default"].get('./pageData.json').then(function (_ref) {
       var data = _ref.data;
-      console.log(data);
 
       if (data) {
         context.commit('initPageLayout', data.pageLayout);

@@ -14,16 +14,18 @@
           <hj-select
             :items="existBigQuestion"
             size="mini"
-            :value="data.number" />
+            @change="hanldeVerification"
+            :value="number" />
           <div class="Comment">注：非作答区将加在选中的大框后</div>
         </div>
       </div>
       <div class="non_box_item">
         <div class="label_item">高度:</div>
         <div class="label_right">
-          <el-input v-model="data.number" size="mini" placeholder="请输入内容" />
+          <el-input v-model="rowHeight" size="mini" @blur="hanldeVerification" @input="hanldeVerification" placeholder="请输入内容" />
         </div>
       </div>
+      <div class="error-message non_box_error" v-if="errorMessage"><i></i>{{ errorVal }}</div>
     </div>
     <div class="dialog-footer">
       <hj-button type="cancel" @click="closeFrame">取 消</hj-button>
@@ -39,11 +41,10 @@ export default {
     return {
       title: '设置',
       openedFrame: false,
-      isdisabledFn: false,
-      data: {
-        name: '',
-        number: 1
-      }
+      errorVal: '',
+      rowHeight: 3,
+      number: null,
+      editQuestionId: null,
     }
   },
   computed: {
@@ -51,20 +52,65 @@ export default {
       'options',
       'existBigQuestion',
     ]),
+    errorMessage () {
+      return this.errorVal != '' ? true : false
+    },
+    isdisabledFn () {
+      return this.errorVal != '' ? true : false
+    },
+    tabStatusVal () {
+      return this.number == null ? '请选择位置' :
+        this.rowHeight < 3 || this.rowHeight == '' ? '行数不能少于3' : ''
+    },
+    tabStatus () {
+      return this.number == null ? true :
+        this.rowHeight < 3 || this.rowHeight == '' ? true : false
+    },
+  },
+  watch: {
+    existBigQuestion: {
+      immediate: true,
+      handler () {
+        if (this.existBigQuestion.length > 0) {
+          this.number = this.existBigQuestion[0].value
+        } else {
+          this.number = null
+        }
+      }
+    }
   },
   methods: {
     closeFrame () {
       this.openedFrame = false
+      this.errorVal = ''
     },
     preCreateQuestion () {
-
+      this.errorVal = this.tabStatusVal
+      if (!this.tabStatus) {
+        let heights = this.rowHeight * 37
+        let obj = {
+          heightTitle: 0,
+          MarginHeight: 7,
+          height: heights,
+          id: `NonRresponseArea_${+new Date()}`,
+          questionType: 'NonRresponseArea',
+          order: this.orderSort,
+          first: true,
+        }
+        if (this.editQuestionId == null) {
+          console.log(obj)
+        }
+      }
     },
     opened () {
       this.openedFrame = true
     },
     openedEdit () {
       this.openedFrame = true
-    }
+    },
+    hanldeVerification () {
+      this.errorVal = this.tabStatusVal
+    },
   },
 }
 </script>
@@ -76,6 +122,11 @@ export default {
   position: relative;
   left: -20px;
   width: 500px;
+}
+.non_box_error {
+  position: absolute;
+  left: 145px;
+  margin-top: 5px;
 }
 .non_box_item {
   margin-top: 10px;

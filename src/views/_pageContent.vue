@@ -43,6 +43,7 @@ import answerQuestion from './questionContent/_answerQuestion' // 解答题
 import optionalQuestion from './questionContent/_optionalQuestion' // 选作题
 import compositionEnglish from './questionContent/_compositionEnglish' // 作文英语
 import compositionLanguage from './questionContent/_compositionLanguage' // 作文语文
+import NonRresponseArea from './questionContent/_NonRresponseAreaContent' // 非作答
 import publicDialog from './dialog/_publicDialog'
 
 export default {
@@ -55,6 +56,7 @@ export default {
     optionalQuestion,
     compositionEnglish,
     compositionLanguage,
+    NonRresponseArea,
   },
   data () {
     return {
@@ -85,7 +87,9 @@ export default {
     }
   },
   mounted () {
-    this.getPageData()
+    this.$nextTick(() => {
+      // this.getPageData()
+    })
   },
   methods: {
     ...mapActions('pageContent', ['getPageData']),

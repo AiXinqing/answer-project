@@ -34,10 +34,8 @@ const mutations = {
     }).sort((a, b) => {
       return a.order - b.order;
     })
-
   },
   Empty_PageData: (state, id) => { // 内容分页
-
     state.pageData = state.pageData.filter((item) => {
       return ![id].includes(item.id)
     }).sort((a, b) => {
@@ -47,7 +45,10 @@ const mutations = {
   delPageData: (state, index) => {
     state.pageData.splice(index, 1)
   },
-
+  insert_pageData: (state, obj, num) => {
+    //插入非作答
+    state.pageData.splice(num, 0, obj)
+  },
   set_objectiveData: (state) => {
     state.BigQuestion = state.BigQuestion + 1
   },
@@ -89,7 +90,6 @@ const actions = {
       .then(({
         data
       }) => {
-        console.log(data)
         if (data) {
           context.commit('initPageLayout', data.pageLayout)
           context.commit('initPageData', data.data)
