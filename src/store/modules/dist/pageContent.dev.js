@@ -108,6 +108,13 @@ var mutations = {
   },
   set_orderSort: function set_orderSort(state) {
     state.orderSort = state.orderSort + 1;
+  },
+  del_orderSort: function del_orderSort(state, order) {
+    console.log(order);
+    state.pageData.map(function (item) {
+      return item.order > order ? item.order - 1 : item.order;
+    });
+    state.orderSort = state.orderSort - 1;
   }
 };
 var actions = {

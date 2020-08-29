@@ -67,7 +67,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('pageContent', ['pageLayout', 'pageData', 'page_size']),
+    ...mapState('pageContent', ['pageLayout', 'pageData', 'page_size', 'orderSort']),
     pageWidth () {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 520

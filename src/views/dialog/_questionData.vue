@@ -191,9 +191,7 @@ export default {
       this.Add_AlreadyTopics(this.determineTopic)
     },
     opened () {
-      // this.quesctionObj = JSON.parse(JSON.stringify({ ...this.quesctionObj, group:{}}))
-      this.quesctionObj.number = this.BigQuestion
-      this.objectiveData.number = this.BigQuestion
+      this.quesctionObj = JSON.parse(JSON.stringify({ ...this.quesctionObj, number: this.BigQuestion }))
 
       this.openedFrame = true
       this.set_currentQuestion()
