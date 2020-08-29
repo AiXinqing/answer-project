@@ -26,6 +26,7 @@
           @current-question-optional-edit="currentQuestionOptionalEdit"
           @composition-english-edit="compositionEnglishEdit"
           @composition-language-edit="compositionLanguageEdit"
+          @cur-edit-non="curEditNon"
         />
       </div>
     </div>
@@ -126,7 +127,6 @@ export default {
         // console.log('--------------------------')
         // console.log(avalibleHeight)
         if (ActualHeight > avalibleHeight) {
-
           let curRect = this.questionType(rect, avalibleHeight)
 
           console.log(avalibleHeight)
@@ -213,6 +213,10 @@ export default {
           RowHeight = obj.rowHeight
           row = Math.floor(contentHeight / RowHeight)
           return { height: row * RowHeight + MarginHeight, row: row, isPage: row * RowHeight + MarginHeight < MarginHeight ? true : false }
+        case 'NonRresponseArea':
+          RowHeight = obj.rowHeight
+          row = Math.floor(contentHeight / RowHeight)
+          return { height: row * RowHeight + MarginHeight, row: row, isPage: row * RowHeight + MarginHeight < 40 ? true : false }
         default:
           return { height: 0, row: 0, isPage: false }
       }
@@ -269,6 +273,10 @@ export default {
     compositionLanguageEdit (obj) {
       this.$refs.publicDialog.openedEdit('compositionLanguage', obj)
     },
+    curEditNon (obj) {
+      console.log(0)
+      this.$refs.publicDialog.openedEdit('NonRresponseArea', obj)
+    }
   },
 }
 </script>

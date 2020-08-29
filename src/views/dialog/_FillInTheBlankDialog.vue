@@ -118,6 +118,14 @@ export default {
     errorMessage () {
       return this.errorVal != '' ? true : false
     },
+    capitalTopicNum () {
+      let index = this.options.findIndex(item => this.objectiveData.number == item.value)
+      if (index > -1) {
+        return this.options[index].label
+      } else {
+        return '一'
+      }
+    },
     topicGroupData () {
       let rows = this.objectiveData.rows
       let array = []
@@ -240,14 +248,6 @@ export default {
       //-------------------打开
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
-    },
-    capitalTopicNum () {
-      let index = this.options.findIndex(item => this.objectiveData.number == item.value)
-      if (index > -1) {
-        return this.options[index].label
-      } else {
-        return '一'
-      }
     },
     openedEdit (id) {
       let current = this.pageData.filter((item) => item.id === id)

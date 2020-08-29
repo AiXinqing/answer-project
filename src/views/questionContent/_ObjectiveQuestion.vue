@@ -11,7 +11,6 @@
     />
     <div class="question_array">
       <div class="question_editOrDel">
-
         <span  class="btn_addSub_name">每组题数</span>
         <span class="btn_addSub" @click="hanldeSubtraction(questionData.id,1)">-</span>
         <span class="btn_addSub_info" >{{data.rows}}</span>

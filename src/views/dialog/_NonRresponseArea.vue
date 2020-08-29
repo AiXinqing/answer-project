@@ -15,14 +15,14 @@
             :items="existBigQuestion"
             size="mini"
             @change="hanldeVerification"
-            :value="number" />
+            :value="data.number" />
           <div class="Comment">注：非作答区将加在选中的大框后</div>
         </div>
       </div>
       <div class="non_box_item">
         <div class="label_item">高度:</div>
         <div class="label_right">
-          <el-input v-model="rowHeight" size="mini" @blur="hanldeVerification" @input="hanldeVerification" placeholder="请输入内容" />
+          <el-input v-model="data.rows" size="mini" @blur="hanldeVerification" @input="hanldeVerification" placeholder="请输入内容" />
         </div>
       </div>
       <div class="error-message non_box_error" v-if="errorMessage"><i></i>{{ errorVal }}</div>
@@ -35,15 +35,18 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
   data () {
     return {
       title: '设置',
       openedFrame: false,
       errorVal: '',
-      rowHeight: 3,
-      number: null,
+      data: {
+        rows: 3,
+        number: null,
+      },
+      closeData: {},
       editQuestionId: null,
     }
   },
@@ -52,6 +55,9 @@ export default {
       'options',
       'existBigQuestion',
     ]),
+    ...mapState('pageContent', [
+      'orderSort'
+    ]),
     errorMessage () {
       return this.errorVal != '' ? true : false
     },
@@ -59,53 +65,86 @@ export default {
       return this.errorVal != '' ? true : false
     },
     tabStatusVal () {
-      return this.number == null ? '请选择位置' :
-        this.rowHeight < 3 || this.rowHeight == '' ? '行数不能少于3' : ''
+      const { rows, number } = this.data
+      console.log(number)
+      return number == null ? '请选择位置' :
+        rows < 3 || rows == '' ? '行数不能少于3' : ''
     },
     tabStatus () {
-      return this.number == null ? true :
-        this.rowHeight < 3 || this.rowHeight == '' ? true : false
+      const { rows, number } = this.data
+      return number == null ? true :
+        rows < 3 || rows == '' ? true : false
+    },
+    orderVal () {
+      const { number } = this.data
+      let index = this.existBigQuestion.findIndex(item => { item.value == number })
+      if (index > -1) {
+        return this.existBigQuestion[index].order + 1
+      } else {
+        return 2
+      }
     },
   },
   watch: {
     existBigQuestion: {
       immediate: true,
       handler () {
-        if (this.existBigQuestion.length > 0) {
-          this.number = this.existBigQuestion[0].value
-        } else {
-          this.number = null
+        if (this.editQuestionId == null) {
+          this.data = {
+            ...this.data,
+            number: this.existBigQuestion.length > 0 ? this.existBigQuestion[0].value : null
+          }
         }
       }
-    }
+    },
+  },
+  mounted () {
+    this.closeData = JSON.parse(JSON.stringify(this.data))
   },
   methods: {
+    ...mapMutations('pageContent', [
+      'insert_pageData',
+      'amendPageData',
+      'set_orderSort',
+    ]),
     closeFrame () {
       this.openedFrame = false
       this.errorVal = ''
+      this.data = JSON.parse(JSON.stringify(this.closeData))
     },
     preCreateQuestion () {
+      const { rows, number } = this.data
       this.errorVal = this.tabStatusVal
+
       if (!this.tabStatus) {
-        let heights = this.rowHeight * 37
+        let heights = rows * 37
         let obj = {
           heightTitle: 0,
           MarginHeight: 7,
           height: heights,
           id: `NonRresponseArea_${+new Date()}`,
           questionType: 'NonRresponseArea',
-          order: this.orderSort,
+          order: this.orderVal,
           first: true,
+          rowHeight: 37,
+          content: this.data
         }
         if (this.editQuestionId == null) {
-          console.log(obj)
+
+          this.insert_pageData(obj, number, this.orderVal)
+        } else {
+          this.amendPageData({ ...obj, id: this.editQuestionId })
         }
+        this.openedFrame = false
+        this.data = JSON.parse(JSON.stringify(this.closeData))
       }
     },
     opened () {
       this.openedFrame = true
     },
-    openedEdit () {
+    openedEdit (obj) {
+      this.editQuestionId = obj.id
+      this.data = JSON.parse(JSON.stringify(obj.content))
       this.openedFrame = true
     },
     hanldeVerification () {

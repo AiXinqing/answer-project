@@ -106,7 +106,7 @@ export default {
           this.$refs.compositionLanguage.openedEdit(obj)
           break
         case 'NonRresponseArea':
-          this.$refs.NonRresponseArea.openedEdit({ ...obj, id: id })
+          this.$refs.NonRresponseArea.openedEdit(obj)
           break
         default:
           break

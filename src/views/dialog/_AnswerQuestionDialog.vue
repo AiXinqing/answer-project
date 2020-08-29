@@ -270,6 +270,7 @@ export default {
           first: index == 0 ? true : false,
           questionType: 'answerQuestion',
           objId: objId,
+          order: this.orderSort,
         }
         Arr.push(obj)
       })
@@ -278,6 +279,7 @@ export default {
         id: objId,
         label: `${this.capitalTopicNum}.${this.dataTopic.topic}`,
         value: this.dataTopic.number,
+        order: this.orderSort,
       }
 
       if (this.editQuestionId == null) {

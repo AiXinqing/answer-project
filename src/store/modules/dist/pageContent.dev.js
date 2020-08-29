@@ -27,10 +27,9 @@ var mutations = {
     state.pageLayout = obj;
   },
   initPageData: function initPageData(state, Arr) {
-    state.pageData.push(Arr);
-    state.pageData = state.pageData.sort(function (a, b) {
-      return a.order - b.order;
-    });
+    state.pageData.push(Arr); // state.pageData = state.pageData.sort((a, b) => {
+    //   return a.order - b.order;
+    // })
   },
   amendPageData: function amendPageData(state, ArrItem) {
     // 编辑page-data
@@ -39,33 +38,39 @@ var mutations = {
     });
 
     if (index > -1) {
-      state.pageData.splice(index, 1, ArrItem); // state.pageData = state.pageData.sort((a, b) => {
-      //   return a.order - b.order;
-      // })
+      state.pageData.splice(index, 1, ArrItem);
     }
   },
   deletePageData: function deletePageData(state, id) {
     // 解答题使用
     state.pageData = state.pageData.filter(function (item) {
       return ![id].includes(item.pid);
-    }).sort(function (a, b) {
-      return a.order - b.order;
-    });
+    }); // .sort((a, b) => {
+    //   return a.order - b.order;
+    // })
   },
   Empty_PageData: function Empty_PageData(state, id) {
     // 内容分页
     state.pageData = state.pageData.filter(function (item) {
       return ![id].includes(item.id);
-    }).sort(function (a, b) {
-      return a.order - b.order;
-    });
+    }); // .sort((a, b) => {
+    //   return a.order - b.order;
+    // })
   },
   delPageData: function delPageData(state, index) {
     state.pageData.splice(index, 1);
   },
-  insert_pageData: function insert_pageData(state, obj, num) {
+  insert_pageData: function insert_pageData(state, obj, num, order) {
     //插入非作答
-    state.pageData.splice(num, 0, obj);
+    state.pageData.map(function (item) {
+      return item.order > order ? item.order + 1 : item.order;
+    });
+    setTimeout(function () {
+      state.pageData.splice(num, 0, obj);
+      state.pageData = state.pageData.sort(function (a, b) {
+        return a.order - b.order;
+      });
+    }, 50);
   },
   set_objectiveData: function set_objectiveData(state) {
     state.BigQuestion = state.BigQuestion + 1;

@@ -15,39 +15,45 @@ const mutations = {
   },
   initPageData: (state, Arr) => {
     state.pageData.push(Arr)
-    state.pageData = state.pageData.sort((a, b) => {
-      return a.order - b.order;
-    })
+    // state.pageData = state.pageData.sort((a, b) => {
+    //   return a.order - b.order;
+    // })
   },
   amendPageData: (state, ArrItem) => { // 编辑page-data
     const index = state.pageData.findIndex((itme) => itme.id === ArrItem.id)
     if (index > -1) {
       state.pageData.splice(index, 1, ArrItem)
-      // state.pageData = state.pageData.sort((a, b) => {
-      //   return a.order - b.order;
-      // })
     }
   },
   deletePageData: (state, id) => { // 解答题使用
     state.pageData = state.pageData.filter((item) => {
       return ![id].includes(item.pid)
-    }).sort((a, b) => {
-      return a.order - b.order;
     })
+    // .sort((a, b) => {
+    //   return a.order - b.order;
+    // })
   },
   Empty_PageData: (state, id) => { // 内容分页
     state.pageData = state.pageData.filter((item) => {
       return ![id].includes(item.id)
-    }).sort((a, b) => {
-      return a.order - b.order;
     })
+    // .sort((a, b) => {
+    //   return a.order - b.order;
+    // })
   },
   delPageData: (state, index) => {
     state.pageData.splice(index, 1)
   },
-  insert_pageData: (state, obj, num) => {
+  insert_pageData: (state, obj, num, order) => {
     //插入非作答
-    state.pageData.splice(num, 0, obj)
+    state.pageData.map(item => item.order > order ? item.order + 1 : item.order)
+
+    setTimeout(() => {
+      state.pageData.splice(num, 0, obj)
+      state.pageData = state.pageData.sort((a, b) => {
+        return a.order - b.order
+      })
+    }, 50);
   },
   set_objectiveData: (state) => {
     state.BigQuestion = state.BigQuestion + 1

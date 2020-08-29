@@ -287,6 +287,7 @@ export default {
         id: objId,
         label: `${this.capitalTopicNum}.${this.objectiveData.topic}`,
         value: this.objectiveData.number,
+        order: this.orderSort,
       }
 
       if (this.editQuestionId == null) {
