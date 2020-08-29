@@ -8,9 +8,9 @@
     <div class="question_array">
       <div class="question_editOrDel">
         <span  class="btn_addSub_name">每组题数</span>
-        <span class="btn_addSub" @click="hanldeSubtraction(questionData.id,1)">-</span>
+        <span class="btn_addSub" @click="hanldeSubtractionNon(questionData,1)">-</span>
         <span class="btn_addSub_info" >{{data.rows}}</span>
-        <span class="btn_addSub" @click="hanldeSubtraction(questionData.id,2)">+</span>
+        <span class="btn_addSub" @click="hanldeSubtractionNon(questionData,2)">+</span>
         <span class="layui-btn layui-btn-xs" @click="curEditNon(questionData)">编辑</span>
         <span class="layui-btn layui-btn-xs" @click="delHanlde(questionData.id)">删除</span>
       </div>
@@ -59,8 +59,10 @@ export default {
       }
     },
     curEditNon (obj) {
-      console.log(obj)
       this.$emit('cur-edit-non', obj)
+    },
+    hanldeSubtractionNon (obj, num) {
+      this.$emit('hanlde-subtraction-non', obj, num)
     }
   },
 }

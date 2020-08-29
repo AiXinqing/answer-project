@@ -27,6 +27,7 @@
           @composition-english-edit="compositionEnglishEdit"
           @composition-language-edit="compositionLanguageEdit"
           @cur-edit-non="curEditNon"
+          @hanlde-subtraction-non="hanldeSubtractionNon"
         />
       </div>
     </div>
@@ -257,6 +258,9 @@ export default {
       // 选择题每组行数加减法
       this.$refs.publicDialog.change('questionDialogs', id, num)
     },
+    hanldeSubtractionNon (obj, num) {
+      this.$refs.publicDialog.change('NonRresponseArea', obj, num)
+    },
     currentQuestionFillEdit (id) {
       this.$refs.publicDialog.openedEdit('fillInTheBlanks', id)
     },
@@ -274,7 +278,6 @@ export default {
       this.$refs.publicDialog.openedEdit('compositionLanguage', obj)
     },
     curEditNon (obj) {
-      console.log(0)
       this.$refs.publicDialog.openedEdit('NonRresponseArea', obj)
     }
   },

@@ -223,7 +223,6 @@ export default {
       this.quesctionObj.rows = rows
       this.objectiveData.rows = rows
       this.$nextTick(() => {
-
         this.preCreateQuestion()
       })
     },

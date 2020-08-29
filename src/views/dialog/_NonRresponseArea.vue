@@ -56,7 +56,8 @@ export default {
       'existBigQuestion',
     ]),
     ...mapState('pageContent', [
-      'orderSort'
+      'orderSort',
+      'pageData'
     ]),
     errorMessage () {
       return this.errorVal != '' ? true : false
@@ -66,7 +67,6 @@ export default {
     },
     tabStatusVal () {
       const { rows, number } = this.data
-      console.log(number)
       return number == null ? '请选择位置' :
         rows < 3 || rows == '' ? '行数不能少于3' : ''
     },
@@ -111,6 +111,29 @@ export default {
       this.openedFrame = false
       this.errorVal = ''
       this.data = JSON.parse(JSON.stringify(this.closeData))
+    },
+    change (obj, num) {
+      let current = this.pageData.filter(item => item.id === obj.id)
+      this.data = JSON.parse(JSON.stringify(current[0].content))
+      this.editQuestionId = obj.id
+      let rows = this.data.rows
+      if (num == 1) { // 1减法 2加法
+        if (rows > 3) {
+          rows -= 1
+        } else {
+          rows = 3
+          this.$message({
+            message: '行数不能少于3',
+            type: 'warning'
+          });
+        }
+      } else {
+        rows += 1
+      }
+      this.data.rows = rows
+      this.$nextTick(() => {
+        this.preCreateQuestion()
+      })
     },
     preCreateQuestion () {
       const { rows, number } = this.data

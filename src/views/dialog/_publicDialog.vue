@@ -117,6 +117,9 @@ export default {
         case 'questionDialogs':
           this.$refs.questionDialogs.change(obj, num)
           break
+        case 'NonRresponseArea':
+          this.$refs.NonRresponseArea.change(obj, num)
+          break
         default:
           break
       }
