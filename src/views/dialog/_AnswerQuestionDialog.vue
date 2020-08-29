@@ -119,6 +119,14 @@ export default {
       })
       return Arr
     },
+    capitalTopicNum () {
+      let index = this.options.findIndex(item => this.data.number == item.value)
+      if (index > -1) {
+        return this.options[index].label
+      } else {
+        return '一'
+      }
+    },
     errorMessage () {
       return this.errorVal != '' ? true : false
     },
@@ -268,8 +276,8 @@ export default {
       //存在大题追加
       let existBigQuestion = {
         id: objId,
-        number: this.dataTopic.number,
-        name: this.dataTopic.topic
+        label: `${this.capitalTopicNum}.${this.data.topic}`,
+        value: this.data.number,
       }
 
       if (this.editQuestionId == null) {

@@ -105,7 +105,15 @@ export default {
     },
     groupItemData () {
       return this.data.group.map(item => item.childGroup)[0]
-    }
+    },
+    capitalTopicNum () {
+      let index = this.options.findIndex(item => this.data.number == item.value)
+      if (index > -1) {
+        return this.options[index].label
+      } else {
+        return '一'
+      }
+    },
   },
   watch: {
     questionData: {
@@ -192,8 +200,8 @@ export default {
       //存在大题追加
       let existBigQuestion = {
         id: objId,
-        number: this.questionData.number,
-        name: this.questionData.topic
+        label: `${this.capitalTopicNum}.${this.data.topic}`,
+        value: this.data.number,
       }
 
       if (this.editQuestionId == null) {

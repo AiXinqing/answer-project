@@ -109,6 +109,14 @@ export default {
     isdisabledFn () {
       return this.errorVal != '' ? true : false
     },
+    capitalTopicNum () {
+      let index = this.options.findIndex(item => this.data.number == item.value)
+      if (index > -1) {
+        return this.options[index].label
+      } else {
+        return '一'
+      }
+    },
     tabStatusVal () {
       const { topic, score, rows } = this.data
       let determineTopic = this.determineTopic
@@ -255,8 +263,8 @@ export default {
         //存在大题追加
         let existBigQuestion = {
           id: objId,
-          number: this.data.number,
-          name: this.data.topic
+          label: `${this.capitalTopicNum}.${this.data.name}`,
+          value: this.data.number,
         }
 
         if (this.editQuestionId == null) {

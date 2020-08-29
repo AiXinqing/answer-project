@@ -128,6 +128,14 @@ export default {
     errorMessage () {
       return this.errorVal != '' ? true : false
     },
+    capitalTopicNum () {
+      let index = this.options.findIndex(item => this.data.number == item.value)
+      if (index > -1) {
+        return this.options[index].label
+      } else {
+        return '一'
+      }
+    },
   },
   watch: {
     quesctionObj: {
@@ -277,8 +285,8 @@ export default {
 
       let existBigQuestion = {
         id: objId,
-        number: this.objectiveData.number,
-        name: this.objectiveData.topic
+        label: `${this.capitalTopicNum}.${this.data.topic}`,
+        value: this.data.number,
       }
 
       if (this.editQuestionId == null) {

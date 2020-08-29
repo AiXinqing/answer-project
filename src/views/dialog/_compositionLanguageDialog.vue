@@ -130,6 +130,14 @@ export default {
         ? 32
         : 30
     },
+    capitalTopicNum () {
+      let index = this.options.findIndex(item => this.data.number == item.value)
+      if (index > -1) {
+        return this.options[index].label
+      } else {
+        return '一'
+      }
+    },
     pageRow () {
       // 一页所占用的行数
       let row = Math.floor((this.page_size - 60) / (this.latticeWidth + this.data.spacing))
@@ -314,8 +322,8 @@ export default {
         //存在大题追加
         let existBigQuestion = {
           id: objId,
-          number: this.data.number,
-          name: this.data.topic
+          label: `${this.capitalTopicNum}.${this.data.name}`,
+          value: this.data.number,
         }
 
         if (this.editQuestionId == null) {

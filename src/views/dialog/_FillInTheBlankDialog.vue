@@ -241,6 +241,14 @@ export default {
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
     },
+    capitalTopicNum () {
+      let index = this.options.findIndex(item => this.data.number == item.value)
+      if (index > -1) {
+        return this.options[index].label
+      } else {
+        return '一'
+      }
+    },
     openedEdit (id) {
       let current = this.pageData.filter((item) => item.id === id)
 
@@ -282,8 +290,8 @@ export default {
       //存在大题追加
       let existBigQuestion = {
         id: objId,
-        number: this.objectiveData.number,
-        name: this.objectiveData.topic
+        label: `${this.capitalTopicNum}.${this.data.topic}`,
+        value: this.data.number,
       }
       // 小题数组追加至确定题型
 
