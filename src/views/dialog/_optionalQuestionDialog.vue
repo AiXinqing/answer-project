@@ -208,6 +208,7 @@ export default {
       if (this.editQuestionId == null) {
         this.initPageData(obj)
         this.set_existBigQuestion(existBigQuestion)
+        this.set_orderSort()
       } else {
         // 编辑
         this.amendPageData({ ...obj, id: this.editQuestionId })
@@ -216,7 +217,6 @@ export default {
       // 大题号修改
       this.set_objectiveData(this.data.number)
       //------------------------------------
-      this.set_orderSort()
       this.openedFrame = false // 关闭弹窗
       // 清空弹框数据
 

@@ -290,6 +290,7 @@ export default {
       if (this.editQuestionId == null) {
         this.initPageData(obj)
         this.set_existBigQuestion(existBigQuestion)
+        this.set_orderSort()
       } else {
         obj.id = this.editQuestionId
         this.amendPageData(obj)
@@ -304,7 +305,6 @@ export default {
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
 
       //------------------------------------
-      this.set_orderSort()
       this.openedFrame = false // 关闭弹窗
     },
     hanldeSelect (e) {

@@ -218,7 +218,8 @@ export default {
       'amendPageData',
       'set_objectiveData',
       'deletePageData',
-      'set_orderSort'
+      'set_orderSort',
+      'del_orderSort'
     ]),
     ...mapMutations('questionType', [
       'set_AlreadyTopics',
@@ -288,6 +289,7 @@ export default {
           this.initPageData(obj)
         })
         this.set_existBigQuestion(existBigQuestion)
+        this.set_orderSort()
       } else {
         // 编辑
         //清空编辑前数据
@@ -298,7 +300,7 @@ export default {
       // 大题号修改
       this.set_objectiveData(this.dataTopic.number)
       //------------------------------------
-      this.set_orderSort()
+
       this.openedFrame = false // 关闭弹窗
       this.set_determineTopic(this.topicList)
       this.set_currentQuestion()

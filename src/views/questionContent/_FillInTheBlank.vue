@@ -113,7 +113,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('pageContent', ['delPageData', 'del_objectiveData']),
+    ...mapMutations('pageContent', ['delPageData', 'del_objectiveData', 'del_orderSort']),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
@@ -125,6 +125,7 @@ export default {
       if (index > -1) {
         this.del_determineTopic(this.topicBox)
         this.del_AlreadyTopics(this.topicBox)
+        this.del_orderSort(this.pageData[index].order + 1)
         this.delPageData(index)
         this.set_currentQuestion()
         this.del_objectiveData() // 删减一个大题号

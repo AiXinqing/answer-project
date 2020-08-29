@@ -125,6 +125,7 @@ export default {
       'delPageData',
       'Empty_PageData',
       'del_objectiveData',
+      'del_orderSort',
     ]),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
@@ -147,6 +148,7 @@ export default {
       if (index > -1) {
         this.del_determineTopic([this.contentData])
         this.del_AlreadyTopics([this.contentData])
+        this.del_orderSort(this.pageData[index].order + 1)
         this.Empty_PageData(this.data.id)
         this.set_currentQuestion()
         this.del_objectiveData() // 删减一个大题号

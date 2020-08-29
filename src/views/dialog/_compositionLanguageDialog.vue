@@ -332,6 +332,7 @@ export default {
           this.Add_AlreadyTopics([this.data])
           this.set_determineTopic([this.data])
           this.set_existBigQuestion(existBigQuestion)
+          this.set_orderSort()
         } else {
           this.amendPageData({ ...obj, id: this.editQuestionId })
           this.set_existBigQuestion({ ...existBigQuestion, id: obj.id })

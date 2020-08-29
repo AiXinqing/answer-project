@@ -117,7 +117,7 @@ export default {
   //   this.$nextTick(()=>)
   // },
   methods: {
-    ...mapMutations('pageContent', ['delPageData', 'del_objectiveData']),
+    ...mapMutations('pageContent', ['delPageData', 'del_objectiveData', 'del_orderSort']),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
@@ -137,7 +137,7 @@ export default {
     delHanlde () { // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
       if (index > -1) {
-        console.log(this.contentData.group)
+        this.del_orderSort(this.pageData[index].order + 1)
         this.delPageData(index)
         this.del_determineTopic(this.topicBox)
         this.set_currentQuestion()
