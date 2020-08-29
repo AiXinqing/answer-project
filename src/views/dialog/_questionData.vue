@@ -37,6 +37,20 @@
         @hanlde-add-group-question="hanldeAddGroupQuestion"
         @edit-topic-func="editTopicFunc"
       />
+      <div class="condition_box Insert_box" v-show="editQuestionId == null">
+        <el-checkbox v-model="objectiveData.InsertTitle">插入添加题目</el-checkbox>
+        <div
+          :class="['existBigQuestion_style',{'Fade':!objectiveData.InsertTitle}]">
+          <span>插入到第</span>
+          <hj-select
+              :items="existBigQuestion"
+              size="mini"
+              :value="existNumber" />
+          <span>大题后</span>
+        </div>
+        <el-checkbox :class="['Postpone',{'Fade':!objectiveData.InsertTitle}]" v-model="objectiveData.Postpone">大题号自动顺延</el-checkbox>
+        <div class="Insert_Mask" v-show="!objectiveData.InsertTitle"></div>
+      </div>
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
     <div class="dialog-footer">
@@ -58,11 +72,14 @@ export default {
       openedFrame: false,
       isdisabledFn: false,
       title: '新增客观题',
+      existNumber: null,
       quesctionObj: {
         number: 1,
         topic: '选择题',
         rows: 5,
         startQuestion: 1,
+        InsertTitle: false,
+        Postpone: false,
         group: {
           singleBox: [
             {
@@ -119,7 +136,9 @@ export default {
     ...mapState('pageContent', [
       'pageLayout',
       'BigQuestion',
-      'pageData', 'orderSort']),
+      'pageData',
+      'orderSort',
+      'existBigQuestion',]),
     pageWidth () {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 480
@@ -495,7 +514,6 @@ export default {
 .error-message {
   color: red;
   font-size: 14px;
-  text-indent: 1em;
 }
 .question-group {
   .group_item:last-child {
@@ -514,5 +532,30 @@ export default {
   > .el-tabs__header
   .el-tabs__item:not(.is-disabled):hover {
   color: #1ab394 !important;
+}
+.Insert_box {
+  margin-top: 10px;
+  position: relative;
+  .Insert_Mask {
+    position: absolute;
+    width: 80%;
+    height: 28px;
+    right: 0;
+    top: 0;
+  }
+}
+.existBigQuestion_style {
+  display: inline-block;
+  .hj-select {
+    display: inline-block;
+    margin: 0 5px;
+  }
+}
+.Postpone {
+  margin-left: 20px;
+}
+.existBigQuestion_style.Fade,
+.Postpone.Fade {
+  color: #999;
 }
 </style>
