@@ -51,13 +51,35 @@ const mutations = {
     SelfO0rder
   }) => {
     //插入非作答
-    state.pageData.map(item => item.order > order ? item.order + 1 : item.order)
-    console.log(SelfO0rder)
+
+    // state.pageData.map(item => item.order > order ? item.order + 1 : item.order)
+    state.pageData.forEach((item, index) => {
+      if (item.order > order) {
+        state.pageData.splice(index, 1, {
+          ...item,
+          order: item.order + 1
+        })
+      }
+    })
+
     setTimeout(() => {
       state.pageData.splice(num, 0, obj)
       state.pageData = state.pageData.sort((a, b) => {
         return a.order - b.order
       })
+      if (SelfO0rder) {
+        state.pageData.forEach((item, index) => {
+          if (item.content.number != undefined) {
+            state.pageData.splice(index, 1, {
+              ...item,
+              content: {
+                ...item.content,
+                number: index
+              }
+            })
+          }
+        })
+      }
     }, 50);
   },
   set_objectiveData: (state) => {

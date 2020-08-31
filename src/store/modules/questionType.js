@@ -222,20 +222,29 @@ const mutations = {
     obj,
     num,
     order,
-
+    SelfO0rder
   }) => {
+    console.log(order)
     state.existBigQuestion.map(function (item) {
       return {
         ...item,
-        order: item.order > order ? item.order + 1 : item.order,
+        order: item.order >= order ? item.order + 1 : item.order,
       }
     });
-    console.log(state.existBigQuestion)
     setTimeout(function () {
       state.existBigQuestion.splice(num, 0, obj);
       state.existBigQuestion = state.existBigQuestion.sort(function (a, b) {
         return a.order - b.order;
       });
+      if (SelfO0rder) {
+        state.existBigQuestion.forEach((item, index) => {
+          // const i = state.options.findIndex(item => item.value == (index + 1))
+          state.existBigQuestion.splice(index, 1, {
+            ...item,
+            label: state.options[index].label + '.' + item.label.split('.')[1]
+          })
+        })
+      }
     }, 50);
   },
   del_existBigQuestion: (state, obj) => {

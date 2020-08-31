@@ -269,7 +269,7 @@ export default {
       this.set_currentQuestion()
     },
     preCreateQuestion () { // 数据编辑完成添加至全局数组中---------------
-      const { group, rows, topic, number, InsertTitle } = this.objectiveData
+      const { group, rows, topic, number, InsertTitle, Postpone } = this.objectiveData
       const singleBox = group.singleBox
       //------------------------------------小题计算
       const singleArr = this.traverse(singleBox, this.letterArr)
@@ -326,19 +326,21 @@ export default {
         if (InsertTitle && this.existBigQuestion.length > 0) {
           let index = this.existBigQuestion.findIndex((item) => item.value === this.existNumber)
           if (index > -1) {
+            //-------------------------------------------------插入数组对象
             let data = {
               obj: {
                 ...obj,
-                order: this.existBigQuestion[index].order,
+                order: this.existBigQuestion[index].order + 1,
               },
               num: this.existNumber + 1,
-              order: this.orderVal,
-              SelfO0rder: false
+              order: this.existBigQuestion[index].order,
+              SelfO0rder: Postpone
             }
             this.insert_pageData(data)
+            //-------------------------------------------------已选大题数组
             this.insert_existBigQuestion({
-              obj: { ...existBigQuestionObj, order: this.existBigQuestion[index].order, },
-              num: this.existNumber, order: this.orderVal, SelfO0rder: false
+              obj: { ...existBigQuestionObj, order: this.existBigQuestion[index].order + 1, },
+              num: this.existNumber, order: this.existBigQuestion[index].order, SelfO0rder: Postpone
             })
           }
         } else {

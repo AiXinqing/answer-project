@@ -9,6 +9,12 @@ var _axios = _interopRequireDefault(require("axios"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var state = {
   pageLayout: {},
   // 页面布局
@@ -66,15 +72,31 @@ var mutations = {
         order = _ref.order,
         SelfO0rder = _ref.SelfO0rder;
     //插入非作答
-    state.pageData.map(function (item) {
-      return item.order > order ? item.order + 1 : item.order;
+    // state.pageData.map(item => item.order > order ? item.order + 1 : item.order)
+    state.pageData.forEach(function (item, index) {
+      if (item.order > order) {
+        state.pageData.splice(index, 1, _objectSpread({}, item, {
+          order: item.order + 1
+        }));
+      }
     });
-    console.log(SelfO0rder);
     setTimeout(function () {
       state.pageData.splice(num, 0, obj);
       state.pageData = state.pageData.sort(function (a, b) {
         return a.order - b.order;
       });
+
+      if (SelfO0rder) {
+        state.pageData.forEach(function (item, index) {
+          if (item.content.number != undefined) {
+            state.pageData.splice(index, 1, _objectSpread({}, item, {
+              content: _objectSpread({}, item.content, {
+                number: index
+              })
+            }));
+          }
+        });
+      }
     }, 50);
   },
   set_objectiveData: function set_objectiveData(state) {

@@ -153,10 +153,16 @@ export default {
           content: this.data
         }
         if (this.editQuestionId == null) {
-          let data = {
-            obj: obj, num: number, order: this.orderVal
+          let index = this.existBigQuestion.findIndex((item) => item.value === number)
+          if (index > -1) {
+            let objIndex = this.pageData.findIndex(item => item.id == this.existBigQuestion[index].id)
+            if (objIndex > -1) {
+              let data = {
+                obj: { ...obj, order: this.pageData[objIndex].order + 1 }, num: number + 1, order: this.pageData[objIndex].order + 1
+              }
+              this.insert_pageData(data)
+            }
           }
-          this.insert_pageData(data)
         } else {
           this.amendPageData({ ...obj, id: this.editQuestionId })
         }
@@ -172,7 +178,8 @@ export default {
       this.data = JSON.parse(JSON.stringify(obj.content))
       this.openedFrame = true
     },
-    hanldeVerification () {
+    hanldeVerification (e) {
+      this.data.number = e
       this.errorVal = this.tabStatusVal
     },
   },
