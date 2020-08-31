@@ -87,11 +87,18 @@ var mutations = {
       });
 
       if (SelfO0rder) {
+        var tig = 0;
         state.pageData.forEach(function (item, index) {
+          if (item.content.positionNum != undefined) {
+            tig += 1;
+          }
+
+          console.log(item);
+
           if (item.content.number != undefined) {
             state.pageData.splice(index, 1, _objectSpread({}, item, {
               content: _objectSpread({}, item.content, {
-                number: index
+                number: index - tig
               })
             }));
           }

@@ -68,13 +68,18 @@ const mutations = {
         return a.order - b.order
       })
       if (SelfO0rder) {
+        let tig = 0
         state.pageData.forEach((item, index) => {
+          if (item.content.positionNum != undefined) {
+            tig += 1
+          }
+          console.log(item)
           if (item.content.number != undefined) {
             state.pageData.splice(index, 1, {
               ...item,
               content: {
                 ...item.content,
-                number: index
+                number: index - tig
               }
             })
           }

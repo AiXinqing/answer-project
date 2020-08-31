@@ -15,7 +15,7 @@
             :items="existBigQuestion"
             size="mini"
             @change="hanldeVerification"
-            :value="data.number" />
+            :value="data.positionNum" />
           <div class="Comment">注：非作答区将加在选中的大框后</div>
         </div>
       </div>
@@ -44,7 +44,7 @@ export default {
       errorVal: '',
       data: {
         rows: 3,
-        number: null,
+        positionNum: null,
       },
       closeData: {},
       editQuestionId: null,
@@ -66,18 +66,18 @@ export default {
       return this.errorVal != '' ? true : false
     },
     tabStatusVal () {
-      const { rows, number } = this.data
-      return number == null ? '请选择位置' :
+      const { rows, positionNum } = this.data
+      return positionNum == null ? '请选择位置' :
         rows < 3 || rows == '' ? '行数不能少于3' : ''
     },
     tabStatus () {
-      const { rows, number } = this.data
-      return number == null ? true :
+      const { rows, positionNum } = this.data
+      return positionNum == null ? true :
         rows < 3 || rows == '' ? true : false
     },
     orderVal () {
-      const { number } = this.data
-      let index = this.existBigQuestion.findIndex(item => { item.value == number })
+      const { positionNum } = this.data
+      let index = this.existBigQuestion.findIndex(item => { item.value == positionNum })
       if (index > -1) {
         return this.existBigQuestion[index].order + 1
       } else {
@@ -92,7 +92,7 @@ export default {
         if (this.editQuestionId == null) {
           this.data = {
             ...this.data,
-            number: this.existBigQuestion.length > 0 ? this.existBigQuestion[0].value : null
+            positionNum: this.existBigQuestion.length > 0 ? this.existBigQuestion[0].value : null
           }
         }
       }
@@ -136,7 +136,7 @@ export default {
       })
     },
     preCreateQuestion () {
-      const { rows, number } = this.data
+      const { rows, positionNum } = this.data
       this.errorVal = this.tabStatusVal
 
       if (!this.tabStatus) {
@@ -153,12 +153,12 @@ export default {
           content: this.data
         }
         if (this.editQuestionId == null) {
-          let index = this.existBigQuestion.findIndex((item) => item.value === number)
+          let index = this.existBigQuestion.findIndex((item) => item.value === positionNum)
           if (index > -1) {
             let objIndex = this.pageData.findIndex(item => item.id == this.existBigQuestion[index].id)
             if (objIndex > -1) {
               let data = {
-                obj: { ...obj, order: this.pageData[objIndex].order + 1 }, num: number + 1, order: this.pageData[objIndex].order + 1
+                obj: { ...obj, order: this.pageData[objIndex].order + 1 }, num: positionNum + 1, order: this.pageData[objIndex].order + 1
               }
               this.insert_pageData(data)
             }
@@ -179,7 +179,7 @@ export default {
       this.openedFrame = true
     },
     hanldeVerification (e) {
-      this.data.number = e
+      this.data.positionNum = e
       this.errorVal = this.tabStatusVal
     },
   },

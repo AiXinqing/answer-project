@@ -326,22 +326,25 @@ export default {
         if (InsertTitle && this.existBigQuestion.length > 0) {
           let index = this.existBigQuestion.findIndex((item) => item.value === this.existNumber)
           if (index > -1) {
-            //-------------------------------------------------插入数组对象
-            let data = {
-              obj: {
-                ...obj,
-                order: this.existBigQuestion[index].order + 1,
-              },
-              num: this.existNumber + 1,
-              order: this.existBigQuestion[index].order,
-              SelfO0rder: Postpone
+            let objIndex = this.pageData.findIndex(item => item.id == this.existBigQuestion[index].id)
+            if (objIndex > -1) {
+              //-------------------------------------------------插入数组对象
+              let data = {
+                obj: {
+                  ...obj,
+                  order: this.pageData[index].order + 1,
+                },
+                num: this.existNumber + 1,
+                order: this.pageData[index].order,
+                SelfO0rder: Postpone
+              }
+              this.insert_pageData(data)
+              //-------------------------------------------------已选大题数组
+              this.insert_existBigQuestion({
+                obj: { ...existBigQuestionObj, order: this.existBigQuestion[index].order + 1, },
+                num: this.existNumber, order: this.existBigQuestion[index].order, SelfO0rder: Postpone
+              })
             }
-            this.insert_pageData(data)
-            //-------------------------------------------------已选大题数组
-            this.insert_existBigQuestion({
-              obj: { ...existBigQuestionObj, order: this.existBigQuestion[index].order + 1, },
-              num: this.existNumber, order: this.existBigQuestion[index].order, SelfO0rder: Postpone
-            })
           }
         } else {
           this.initPageData(obj)
