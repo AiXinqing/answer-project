@@ -60,11 +60,16 @@ var mutations = {
   delPageData: function delPageData(state, index) {
     state.pageData.splice(index, 1);
   },
-  insert_pageData: function insert_pageData(state, obj, num, order) {
+  insert_pageData: function insert_pageData(state, _ref) {
+    var obj = _ref.obj,
+        num = _ref.num,
+        order = _ref.order,
+        SelfO0rder = _ref.SelfO0rder;
     //插入非作答
     state.pageData.map(function (item) {
       return item.order > order ? item.order + 1 : item.order;
     });
+    console.log(SelfO0rder);
     setTimeout(function () {
       state.pageData.splice(num, 0, obj);
       state.pageData = state.pageData.sort(function (a, b) {
@@ -119,8 +124,8 @@ var mutations = {
 };
 var actions = {
   getPageData: function getPageData(context) {
-    _axios["default"].get('./pageData.json').then(function (_ref) {
-      var data = _ref.data;
+    _axios["default"].get('./pageData.json').then(function (_ref2) {
+      var data = _ref2.data;
 
       if (data) {
         context.commit('initPageLayout', data.pageLayout);

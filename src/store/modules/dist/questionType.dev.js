@@ -4,6 +4,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var state = {
   options: [{
     value: 1,
@@ -224,6 +231,23 @@ var mutations = {
     } else {
       state.existBigQuestion.push(obj);
     }
+  },
+  insert_existBigQuestion: function insert_existBigQuestion(state, _ref) {
+    var obj = _ref.obj,
+        num = _ref.num,
+        order = _ref.order;
+    state.existBigQuestion.map(function (item) {
+      return _objectSpread({}, item, {
+        order: item.order > order ? item.order + 1 : item.order
+      });
+    });
+    console.log(state.existBigQuestion);
+    setTimeout(function () {
+      state.existBigQuestion.splice(num, 0, obj);
+      state.existBigQuestion = state.existBigQuestion.sort(function (a, b) {
+        return a.order - b.order;
+      });
+    }, 50);
   },
   del_existBigQuestion: function del_existBigQuestion(state, obj) {
     var id = obj.objId != undefined ? obj.objId : obj.id;

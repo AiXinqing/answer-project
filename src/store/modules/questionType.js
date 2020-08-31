@@ -218,6 +218,26 @@ const mutations = {
       state.existBigQuestion.push(obj)
     }
   },
+  insert_existBigQuestion: (state, {
+    obj,
+    num,
+    order,
+
+  }) => {
+    state.existBigQuestion.map(function (item) {
+      return {
+        ...item,
+        order: item.order > order ? item.order + 1 : item.order,
+      }
+    });
+    console.log(state.existBigQuestion)
+    setTimeout(function () {
+      state.existBigQuestion.splice(num, 0, obj);
+      state.existBigQuestion = state.existBigQuestion.sort(function (a, b) {
+        return a.order - b.order;
+      });
+    }, 50);
+  },
   del_existBigQuestion: (state, obj) => {
     let id = obj.objId != undefined ? obj.objId : obj.id
     const index = state.existBigQuestion.findIndex(

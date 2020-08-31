@@ -153,8 +153,10 @@ export default {
           content: this.data
         }
         if (this.editQuestionId == null) {
-
-          this.insert_pageData(obj, number, this.orderVal)
+          let data = {
+            obj: obj, num: number, order: this.orderVal
+          }
+          this.insert_pageData(data)
         } else {
           this.amendPageData({ ...obj, id: this.editQuestionId })
         }

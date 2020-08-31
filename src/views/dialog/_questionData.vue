@@ -45,7 +45,8 @@
           <hj-select
               :items="existBigQuestion"
               size="mini"
-              :value="existNumber" />
+              :value="existNumber"
+              @change="hanldeSelectexistBig"/>
           <span>大题后</span>
         </div>
         <el-checkbox :class="['Postpone',{'Fade':!objectiveData.InsertTitle}]" v-model="objectiveData.Postpone">大题号自动顺延</el-checkbox>
@@ -132,13 +133,15 @@ export default {
       'options',
       'currentQuestion',
       'letterArr',
+      'AlreadyTopics',
+      'determineTopic',
+      'existBigQuestion',
     ]),
     ...mapState('pageContent', [
       'pageLayout',
       'BigQuestion',
       'pageData',
-      'orderSort',
-      'existBigQuestion',]),
+      'orderSort',]),
     pageWidth () {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 480
@@ -153,6 +156,15 @@ export default {
         return this.options[index].label
       } else {
         return '一'
+      }
+    },
+    orderVal () {
+
+      let index = this.existBigQuestion.findIndex(item => { item.value == this.existNumber })
+      if (index > -1) {
+        return this.existBigQuestion[index].order + 1
+      } else {
+        return 2
       }
     },
   },
@@ -171,15 +183,17 @@ export default {
             }
           })
           // 小题号改变更换小题号
-          this.objectiveData.group.singleBox.map(item => {
+          const { group } = this.objectiveData
+          group.singleBox.map(item => {
             return { ...item, start: item.end == null ? this.currentQuestion : item.start }
           })
-          this.objectiveData.group.checkbox.map(item => {
+          group.checkbox.map(item => {
             return { ...item, start: item.end == null ? this.currentQuestion : item.start }
           })
-          this.objectiveData.group.judgment.map(item => {
+          group.judgment.map(item => {
             return { ...item, start: item.end == null ? this.currentQuestion : item.start }
           })
+          this.existNumber = this.existBigQuestion.length > 0 ? this.existBigQuestion[0].value : null
         }
       }
     }
@@ -195,12 +209,14 @@ export default {
       'set_determineTopic', // 储存确定题型
       'Empty_AlreadyTopics', // 清空
       'set_existBigQuestion', //存大题号信息
+      'insert_existBigQuestion',
     ]),
     ...mapMutations('pageContent', [
       'initPageData',
       'amendPageData',
+      'insert_pageData',
       'set_objectiveData',
-      'set_orderSort'
+      'set_orderSort',
     ]),
     closeFrame () { // 取消弹框
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
@@ -253,7 +269,7 @@ export default {
       this.set_currentQuestion()
     },
     preCreateQuestion () { // 数据编辑完成添加至全局数组中---------------
-      let group = this.objectiveData.group
+      const { group, rows, topic, number, InsertTitle } = this.objectiveData
       const singleBox = group.singleBox
       //------------------------------------小题计算
       const singleArr = this.traverse(singleBox, this.letterArr)
@@ -267,8 +283,8 @@ export default {
 
       //-------------------------------------------
       let result = [];
-      for (var i = 0; i < this.topicList.length; i += this.objectiveData.rows) {
-        result.push(this.topicList.slice(i, i + this.objectiveData.rows));
+      for (var i = 0; i < this.topicList.length; i += rows) {
+        result.push(this.topicList.slice(i, i + rows));
       }
       const maxWidth = []
       result.filter(item => {
@@ -299,21 +315,42 @@ export default {
         order: this.orderSort
       }
 
-      let existBigQuestion = {
+      let existBigQuestionObj = {
         id: objId,
-        label: `${this.capitalTopicNum}.${this.objectiveData.topic}`,
-        value: this.objectiveData.number,
+        label: `${this.capitalTopicNum}.${topic}`,
+        value: number,
         order: this.orderSort,
       }
 
       if (this.editQuestionId == null) {
-        this.initPageData(obj)
-        this.set_existBigQuestion(existBigQuestion)
+        if (InsertTitle && this.existBigQuestion.length > 0) {
+          let index = this.existBigQuestion.findIndex((item) => item.value === this.existNumber)
+          if (index > -1) {
+            let data = {
+              obj: {
+                ...obj,
+                order: this.existBigQuestion[index].order,
+              },
+              num: this.existNumber + 1,
+              order: this.orderVal,
+              SelfO0rder: false
+            }
+            this.insert_pageData(data)
+            this.insert_existBigQuestion({
+              obj: { ...existBigQuestionObj, order: this.existBigQuestion[index].order, },
+              num: this.existNumber, order: this.orderVal, SelfO0rder: false
+            })
+          }
+        } else {
+          this.initPageData(obj)
+          this.set_existBigQuestion(existBigQuestionObj)
+        }
+
         this.set_orderSort()
       } else {
         obj.id = this.editQuestionId
         this.amendPageData(obj)
-        this.set_existBigQuestion({ ...existBigQuestion, id: obj.id })
+        this.set_existBigQuestion({ ...existBigQuestionObj, id: obj.id })
       }
 
       this.set_objectiveData() // 大题号增加
@@ -330,6 +367,9 @@ export default {
       // 选择答题号
       this.quesctionObj.number = e
       this.objectiveData.number = e
+    },
+    hanldeSelectexistBig (e) {
+      this.existNumber = e
     },
     hanldeDel (obj) {
       // 删除分段-小题组
