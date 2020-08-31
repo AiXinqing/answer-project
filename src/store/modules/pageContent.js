@@ -44,10 +44,15 @@ const mutations = {
   delPageData: (state, index) => {
     state.pageData.splice(index, 1)
   },
-  insert_pageData: (state, obj, num, order) => {
+  insert_pageData: (state, {
+    obj,
+    num,
+    order,
+    SelfO0rder
+  }) => {
     //插入非作答
     state.pageData.map(item => item.order > order ? item.order + 1 : item.order)
-
+    console.log(SelfO0rder)
     setTimeout(() => {
       state.pageData.splice(num, 0, obj)
       state.pageData = state.pageData.sort((a, b) => {
