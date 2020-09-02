@@ -26,6 +26,8 @@
           @current-question-optional-edit="currentQuestionOptionalEdit"
           @composition-english-edit="compositionEnglishEdit"
           @composition-language-edit="compositionLanguageEdit"
+          @cur-edit-non="curEditNon"
+          @hanlde-subtraction-non="hanldeSubtractionNon"
         />
       </div>
     </div>
@@ -43,6 +45,7 @@ import answerQuestion from './questionContent/_answerQuestion' // 解答题
 import optionalQuestion from './questionContent/_optionalQuestion' // 选作题
 import compositionEnglish from './questionContent/_compositionEnglish' // 作文英语
 import compositionLanguage from './questionContent/_compositionLanguage' // 作文语文
+import NonRresponseArea from './questionContent/_NonRresponseAreaContent' // 非作答
 import publicDialog from './dialog/_publicDialog'
 
 export default {
@@ -55,6 +58,7 @@ export default {
     optionalQuestion,
     compositionEnglish,
     compositionLanguage,
+    NonRresponseArea,
   },
   data () {
     return {
@@ -63,7 +67,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('pageContent', ['pageLayout', 'pageData', 'page_size']),
+    ...mapState('pageContent', ['pageLayout', 'pageData', 'page_size', 'orderSort']),
     pageWidth () {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 520
@@ -85,7 +89,9 @@ export default {
     }
   },
   mounted () {
-    this.getPageData()
+    this.$nextTick(() => {
+      // this.getPageData()
+    })
   },
   methods: {
     ...mapActions('pageContent', ['getPageData']),
@@ -109,20 +115,23 @@ export default {
         curPage.rects = []
       }
       rects.forEach(rect => {
-        // if (rect.first) { rect.height = rect.height - 20 }
-        let curH = rect.height + 20
+
+        let ActualHeight = rect.height + 20 //
         // avalible 剩余高度
         let avalibleHeight = this.page_size - curPage.height
         let itemObj = JSON.parse(JSON.stringify(rect))
         let whetherShow = this.shawDataFunc(rect) // 是否显示
 
         // 高度溢出
-        if (curH > avalibleHeight) {
-
+        // console.log(rect)
+        // console.log(ActualHeight)
+        // console.log('--------------------------')
+        // console.log(avalibleHeight)
+        if (ActualHeight > avalibleHeight) {
           let curRect = this.questionType(rect, avalibleHeight)
-          // let sd = this.shawDataFunc(rect, avalibleHeight, curRect.height)
 
-          if (rect.questionType != 'ObjectiveQuestion' && avalibleHeight >= 32 && curRect.height != 0) {
+          console.log(avalibleHeight)
+          if (rect.questionType != 'ObjectiveQuestion' && avalibleHeight >= 32 && !curRect.isPage) {
             SplitVal = avalibleHeight - curRect.height
 
             curPage.rects.push({
@@ -139,7 +148,6 @@ export default {
           restCutPage()
           // 判罚当前高度能分几页
           let height = rect.height - avalibleHeight + SplitVal;
-          // console.log(itemObj)
           while (height > this.page_size) {
             let content = this.pageShow(rect)
 
@@ -147,32 +155,28 @@ export default {
               ...rect,
               castHeight: content.height, // 追加一页高度
               showData: whetherShow ? itemObj.showData.splice(0, content.row) : [],
-              borderTop: 1, // 分页第一个
+              borderTop: !curRect.isPage ? 1 : 0, // 分页第一个
             }]);
             height -= content.height;
           }
 
-          // console.log(height)
-
-          if (rect.questionType != 'ObjectiveQuestion' && avalibleHeight >= 32 && curRect.height != 0) {
+          if (rect.questionType != 'ObjectiveQuestion' && avalibleHeight >= 32 && !curRect.isPage) {
             curPage.height = height
           } else {
-            curPage.height = curH
+            curPage.height = ActualHeight
             height = curPage.height
           }
-
-          // console.log(rect)
 
           curPage.rects.push({
             ...rect,
             castHeight: height,
             heightTitle: 0,
             showData: itemObj.showData,
-            borderTop: 1,
+            borderTop: !curRect.isPage ? 1 : 0,
           }) // 追加剩余高度
 
         } else {
-          curPage.height += curH
+          curPage.height += ActualHeight
           curPage.rects.push({
             ...rect,
             castHeight: rect.height,
@@ -180,7 +184,6 @@ export default {
         }
       })
       if (curPage.height) {
-        // console.log(2)
         results.push(curPage.rects)
       }
       // console.log(JSON.stringify(rects))
@@ -194,17 +197,29 @@ export default {
       let row = Math.floor(contentHeight / RowHeight)
       switch (obj.questionType) {
         case 'FillInTheBlank':
-          return { height: row * RowHeight + MarginHeight, row: row }
+          return { height: row * RowHeight + MarginHeight, row: row, isPage: false }
         case 'answerQuestion':
           RowHeight = 35
           row = Math.floor(contentHeight / RowHeight)
-          return { height: row * RowHeight + MarginHeight, row: row }
+          return { height: row * RowHeight + MarginHeight, row: row, isPage: false }
         case 'optionalQuestion':
           RowHeight = 35
           row = Math.floor(contentHeight / RowHeight)
-          return { height: row * RowHeight + MarginHeight, row: row }
+          return { height: row * RowHeight + MarginHeight, row: row, isPage: row * RowHeight + MarginHeight < MarginHeight ? true : false }
+        case 'compositionEnglish':
+          RowHeight = 35
+          row = Math.floor(contentHeight / RowHeight)
+          return { height: row * RowHeight + MarginHeight, row: row, isPage: row * RowHeight + MarginHeight < MarginHeight ? true : false }
+        case 'compositionLanguage':
+          RowHeight = obj.rowHeight
+          row = Math.floor(contentHeight / RowHeight)
+          return { height: row * RowHeight + MarginHeight, row: row, isPage: row * RowHeight + MarginHeight < MarginHeight ? true : false }
+        case 'NonRresponseArea':
+          RowHeight = obj.rowHeight
+          row = Math.floor(contentHeight / RowHeight)
+          return { height: row * RowHeight + MarginHeight, row: row, isPage: row * RowHeight + MarginHeight < 40 ? true : false }
         default:
-          return { height: 0, row: 0 }
+          return { height: 0, row: 0, isPage: false }
       }
       // console.log(obj)
     },
@@ -228,23 +243,10 @@ export default {
           return { height: 0, row: 0 }
       }
     },
-    shawDataFunc (obj, avalibleHeight, Remaini) {
-      if (obj.questionType == 'ObjectiveQuestion') {
-        return false
-      } else if (avalibleHeight < 32) {
-        return false
-      } else if (obj.questionType == 'optionalQuestion' && Remaini < 108) {
-        return false
-      } else {
-        return true
-      }
-    },
-    isToPage (obj, ) {
+    shawDataFunc (obj) {
       switch (obj.questionType) {
         case 'FillInTheBlank':
           return true
-        // case 'optionalQuestion':
-        //   return true
         default:
           return false
       }
@@ -255,6 +257,9 @@ export default {
     hanldeSubtraction (id, num) {
       // 选择题每组行数加减法
       this.$refs.publicDialog.change('questionDialogs', id, num)
+    },
+    hanldeSubtractionNon (obj, num) {
+      this.$refs.publicDialog.change('NonRresponseArea', obj, num)
     },
     currentQuestionFillEdit (id) {
       this.$refs.publicDialog.openedEdit('fillInTheBlanks', id)
@@ -272,6 +277,9 @@ export default {
     compositionLanguageEdit (obj) {
       this.$refs.publicDialog.openedEdit('compositionLanguage', obj)
     },
+    curEditNon (obj) {
+      this.$refs.publicDialog.openedEdit('NonRresponseArea', obj)
+    }
   },
 }
 </script>

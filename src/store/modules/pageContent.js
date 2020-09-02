@@ -15,44 +15,83 @@ const mutations = {
   },
   initPageData: (state, Arr) => {
     state.pageData.push(Arr)
-    state.pageData = state.pageData.sort((a, b) => {
-      return a.order - b.order;
-    })
+    // state.pageData = state.pageData.sort((a, b) => {
+    //   return a.order - b.order;
+    // })
   },
   amendPageData: (state, ArrItem) => { // 编辑page-data
     const index = state.pageData.findIndex((itme) => itme.id === ArrItem.id)
     if (index > -1) {
       state.pageData.splice(index, 1, ArrItem)
-      // state.pageData = state.pageData.sort((a, b) => {
-      //   return a.order - b.order;
-      // })
     }
   },
   deletePageData: (state, id) => { // 解答题使用
     state.pageData = state.pageData.filter((item) => {
       return ![id].includes(item.pid)
-    }).sort((a, b) => {
-      return a.order - b.order;
     })
-
+    // .sort((a, b) => {
+    //   return a.order - b.order;
+    // })
   },
   Empty_PageData: (state, id) => { // 内容分页
-
     state.pageData = state.pageData.filter((item) => {
       return ![id].includes(item.id)
-    }).sort((a, b) => {
-      return a.order - b.order;
     })
+    // .sort((a, b) => {
+    //   return a.order - b.order;
+    // })
   },
   delPageData: (state, index) => {
     state.pageData.splice(index, 1)
   },
+  insert_pageData: (state, {
+    obj,
+    num,
+    order,
+    SelfO0rder
+  }) => {
+    //插入非作答
 
+    // state.pageData.map(item => item.order > order ? item.order + 1 : item.order)
+    state.pageData.forEach((item, index) => {
+      if (item.order > order) {
+        state.pageData.splice(index, 1, {
+          ...item,
+          order: item.order + 1
+        })
+      }
+    })
+
+    setTimeout(() => {
+      state.pageData.splice(num, 0, obj)
+      state.pageData = state.pageData.sort((a, b) => {
+        return a.order - b.order
+      })
+      if (SelfO0rder) {
+        let tig = 0
+        state.pageData.forEach((item, index) => {
+          if (item.content.positionNum != undefined) {
+            tig += 1
+          }
+          console.log(item)
+          if (item.content.number != undefined) {
+            state.pageData.splice(index, 1, {
+              ...item,
+              content: {
+                ...item.content,
+                number: index - tig
+              }
+            })
+          }
+        })
+      }
+    }, 50);
+  },
   set_objectiveData: (state) => {
     state.BigQuestion = state.BigQuestion + 1
   },
   del_objectiveData: (state) => {
-    state.orderSort = state.orderSort - 1
+    state.BigQuestion = state.BigQuestion - 1
   },
   set_pageHeight: (state, Arr = []) => {
     // 页面高度更新
@@ -80,6 +119,11 @@ const mutations = {
   },
   set_orderSort: (state) => {
     state.orderSort = state.orderSort + 1
+  },
+  del_orderSort: (state, order) => {
+    console.log(order)
+    state.pageData.map(item => item.order > order ? item.order - 1 : item.order)
+    state.orderSort = state.orderSort - 1
   }
 }
 
@@ -89,7 +133,6 @@ const actions = {
       .then(({
         data
       }) => {
-        console.log(data)
         if (data) {
           context.commit('initPageLayout', data.pageLayout)
           context.commit('initPageData', data.data)

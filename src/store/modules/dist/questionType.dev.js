@@ -4,6 +4,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var state = {
   options: [{
     value: 1,
@@ -72,55 +79,24 @@ var state = {
     value: 22,
     label: '二十二'
   }],
-  SubtitleNumber: [],
-  // 已有的题号数组
   AlreadyTopics: [],
   // 已有的题组
   currentQuestion: 1,
   letterArr: ['A', 'B', 'C', 'D', 'E', 'G', 'H', 'I', 'J', 'K'],
   maxTopic: 200,
   // 最大题数
-  determineTopic: [] // 确定下的小题
+  determineTopic: [],
+  // 确定下的小题
+  existBigQuestion: [] // 存在大题
 
 };
 var mutations = {
-  set_SubtitleNumber: function set_SubtitleNumber(state, _ref) {
-    var start = _ref.start,
-        end = _ref.end,
-        id = _ref.id;
-    // 追加生成的题号
-    var index = state.SubtitleNumber.findIndex(function (item) {
-      return item.id === id;
-    });
-    var Arr = [];
-
-    for (var i = start; i <= end; i++) {
-      Arr.push(i);
-    }
-
-    var obj = {
-      id: id,
-      data: Arr
-    };
-
-    if (index > -1) {
-      state.SubtitleNumber.splice(index, 1, obj);
-    } else {
-      state.SubtitleNumber.push(obj);
-    }
-  },
-  delete_SubtitleNumber: function delete_SubtitleNumber(state, id) {
-    // 删除生成的题号
-    var index = state.SubtitleNumber.findIndex(function (item) {
-      return item.id === id;
-    });
-
-    if (index > -1) {
-      state.SubtitleNumber.splice(index, 1);
-    }
-  },
   del_AlreadyTopics: function del_AlreadyTopics(state, Arr) {
-    // 删除已有小题数组
+    if (Arr == undefined) {
+      return false;
+    } // 删除已有小题数组
+
+
     Arr.forEach(function (item) {
       var index = state.AlreadyTopics.findIndex(function (row) {
         return row.topic === item.topic;
@@ -132,7 +108,11 @@ var mutations = {
     });
   },
   Add_AlreadyTopics: function Add_AlreadyTopics(state, Arr) {
-    //新增小题数组
+    if (Arr == undefined) {
+      return false;
+    } //新增小题数组
+
+
     Arr.forEach(function (item) {
       if (state.AlreadyTopics.length > 0) {
         var index = state.AlreadyTopics.findIndex(function (row) {
@@ -162,6 +142,10 @@ var mutations = {
     });
   },
   set_AlreadyTopics: function set_AlreadyTopics(state, Arr) {
+    if (Arr == undefined) {
+      return false;
+    }
+
     Arr.forEach(function (item) {
       var index = state.AlreadyTopics.findIndex(function (row) {
         return row.topic == item.topic;
@@ -197,17 +181,12 @@ var mutations = {
       if (_ret === "break") break;
     }
   },
-  set_closeFrame: function set_closeFrame(state) {
-    // 弹窗关闭置空
-    state.SubtitleNumber = [];
-    state.AlreadyTopics.forEach(function (item, i) {
-      if (item.subtopic != null || item.subtopic != undefined) {
-        state.AlreadyTopics.splice(i, 1);
-      }
-    });
-  },
   set_determineTopic: function set_determineTopic(state, Arr) {
-    // 添加确定值
+    if (Arr == undefined) {
+      return false;
+    } // 添加确定值
+
+
     Arr.forEach(function (item) {
       var index = state.determineTopic.findIndex(function (row) {
         return row.topic === item.topic;
@@ -220,7 +199,17 @@ var mutations = {
       }
     });
   },
+  delOnce_determineTopic: function delOnce_determineTopic(state, pid) {
+    // 一次清除相同pid
+    state.determineTopic = state.determineTopic.filter(function (item) {
+      return ![pid].includes(item.pid);
+    });
+  },
   del_determineTopic: function del_determineTopic(state, Arr) {
+    if (Arr == undefined) {
+      return false;
+    }
+
     Arr.forEach(function (item) {
       var index = state.determineTopic.findIndex(function (row) {
         return row.topic === item.topic;
@@ -230,6 +219,55 @@ var mutations = {
         state.determineTopic.splice(index, 1);
       }
     });
+  },
+  // 存在大题
+  set_existBigQuestion: function set_existBigQuestion(state, obj) {
+    var index = state.existBigQuestion.findIndex(function (row) {
+      return row.id === obj.id;
+    });
+
+    if (index > -1) {
+      state.determineTopic.splice(index, 1, obj);
+    } else {
+      state.existBigQuestion.push(obj);
+    }
+  },
+  insert_existBigQuestion: function insert_existBigQuestion(state, _ref) {
+    var obj = _ref.obj,
+        num = _ref.num,
+        order = _ref.order,
+        SelfO0rder = _ref.SelfO0rder;
+    console.log(order);
+    state.existBigQuestion.map(function (item) {
+      return _objectSpread({}, item, {
+        order: item.order >= order ? item.order + 1 : item.order
+      });
+    });
+    setTimeout(function () {
+      state.existBigQuestion.splice(num, 0, obj);
+      state.existBigQuestion = state.existBigQuestion.sort(function (a, b) {
+        return a.order - b.order;
+      });
+
+      if (SelfO0rder) {
+        state.existBigQuestion.forEach(function (item, index) {
+          // const i = state.options.findIndex(item => item.value == (index + 1))
+          state.existBigQuestion.splice(index, 1, _objectSpread({}, item, {
+            label: state.options[index].label + '.' + item.label.split('.')[1]
+          }));
+        });
+      }
+    }, 50);
+  },
+  del_existBigQuestion: function del_existBigQuestion(state, obj) {
+    var id = obj.objId != undefined ? obj.objId : obj.id;
+    var index = state.existBigQuestion.findIndex(function (row) {
+      return row.id === id;
+    });
+
+    if (index > -1) {
+      state.existBigQuestion.splice(index, 1);
+    }
   }
 };
 var actions = {};

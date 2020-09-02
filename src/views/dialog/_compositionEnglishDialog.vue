@@ -17,7 +17,7 @@
               :items="options"
               size="mini"
               :value="data.number"
-
+              @change="hanldeSelect"
             ></hj-select>
           </el-col>
           <el-col :span="8" class="select-item composition_item">
@@ -48,9 +48,23 @@
           <el-col :span="12" class="select-item">
             <div class="label">作文行数:</div>
             <el-input v-model.number="data.rows" @blur="hanldeVerification" @input="hanldeRowsFunc" size="mini" placeholder="" />
-            <span>分</span>
+            <span>行</span>
           </el-col>
         </el-row>
+      </div>
+      <div class="condition_box Insert_box" v-show="editQuestionId == null">
+        <el-checkbox v-model="data.InsertTitle">插入添加题目</el-checkbox>
+        <div
+          :class="['existBigQuestion_style',{'Fade':!data.InsertTitle}]">
+          <span>插入到第</span>
+          <hj-select
+              :items="existBigQuestion"
+              size="mini"
+              :value="existNumber" />
+          <span>大题后</span>
+        </div>
+        <el-checkbox :class="['Postpone',{'Fade':!data.InsertTitle}]" v-model="data.Postpone">大题号自动顺延</el-checkbox>
+        <div class="Insert_Mask" v-show="!data.InsertTitle"></div>
       </div>
       <div class="error-message" v-if="errorMessage"><i></i>{{ errorVal }}</div>
     </div>
@@ -74,10 +88,10 @@ export default {
       data: {},
       title: '设置',
       openedFrame: false,
-      // isdisabledFn: false,
       closeData: {},
       editQuestionId: null,
       errorVal: '',
+      existNumber: null,
       questionData: {
         number: 1, // 大题号
         name: '作文',
@@ -85,6 +99,8 @@ export default {
         topic: 1,
         Attach: false,
         score: '',
+        InsertTitle: false,
+        Postpone: false,
       },
       editData: {}
     }
@@ -92,7 +108,6 @@ export default {
   computed: {
     ...mapState('questionType', [
       'options',
-      'AlreadyTopics',
       'currentQuestion',
       'determineTopic'
     ]),
@@ -100,8 +115,8 @@ export default {
       'pageHeight',
       'page_size',
       'BigQuestion',
-      'pageData',
       'orderSort',
+      'existBigQuestion',
     ]),
     errorMessage () {
       return this.errorVal != '' ? true : false
@@ -111,6 +126,14 @@ export default {
     },
     isdisabledFn () {
       return this.errorVal != '' ? true : false
+    },
+    capitalTopicNum () {
+      let index = this.options.findIndex(item => this.data.number == item.value)
+      if (index > -1) {
+        return this.options[index].label
+      } else {
+        return '一'
+      }
     },
     tabStatusVal () {
       const { topic, score, rows } = this.data
@@ -169,32 +192,6 @@ export default {
       }
       return num
     },
-    rowsData () {
-      // 计算内容是否分页
-      const { rows } = this.data
-      let Arr = []
-      let currentPageHeight = this.currentPageHeight
-
-      if (this.editQuestionId != null) { // 编辑
-        currentPageHeight = this.editData.BeforeEditing
-      }
-
-      // 67 = 20 (ivtop值) - 32 (标题高度+边框) - 5(底部) - 10 (容器padding-bottom) 35 行高
-      let AvailableRow = Math.floor((currentPageHeight - 67) / 35) // 向下取整
-      //----------------------------------------------------------------------------------
-      if (AvailableRow > 0) {
-        let Difference = AvailableRow - rows
-        if (Difference > 0) {
-          Arr.push(rows)
-        } else {
-          Arr.push(AvailableRow) // 上部分
-          Arr.push(Math.abs(Difference)) // 下部分
-        }
-      } else {
-        Arr.push(rows)
-      }
-      return Arr
-    }
   },
   watch: {
     questionData: {
@@ -223,6 +220,7 @@ export default {
   methods: {
     ...mapMutations('pageContent', [
       'initPageData',
+      'amendPageData',
       'Empty_PageData',
       'set_orderSort',
     ]),
@@ -231,10 +229,12 @@ export default {
       'Empty_AlreadyTopics',
       'Add_AlreadyTopics',
       'set_determineTopic',
+      'set_existBigQuestion',
     ]),
     opened () {
-      this.questionData.number = this.BigQuestion
-      this.data.number = this.BigQuestion
+
+      this.questionData = JSON.parse(JSON.stringify({ ...this.questionData, number: this.BigQuestion, topic: this.currentQuestion }))
+
       // 开打弹框
       this.set_currentQuestion()
       this.openedFrame = true
@@ -258,43 +258,44 @@ export default {
     },
 
     preCreateQuestion () {
+      const { rows } = this.data
       this.errorVal = this.tabStatusVal
+
+      let rectHeight = rows * 35  // 当前内容高度 45(内部高度)
+      let MarginHeight = + 17
+      let heights = rectHeight + MarginHeight + 33
       if (!this.tabStatus) {
         let objId = `compositionEnglish_${+new Date()}`
         //------------------------------------------------------------
-        let obj = {}
-        let ArrData = this.rowsData.map((item, i) => {
-          obj = {
-            height: i == 0 ? item * 35 + 52 : item * 35,
-            id: objId,
-            questionType: 'compositionEnglish',
-            content: this.data,
-            order: this.orderSort,
-            first: i == 0 ? true : false,
-            showRow: item,
-            BeforeEditing: this.editQuestionId != null ? this.editData.BeforeEditing : this.BeforeEditing
-          }
-          return obj
-        })
+        let obj = {
+          heightTitle: 32,
+          MarginHeight: MarginHeight,
+          height: heights,
+          id: objId,
+          questionType: 'compositionEnglish',
+          content: this.data,
+          order: this.orderSort,
+          first: true,
+          BeforeEditing: this.editQuestionId != null ? this.editData.BeforeEditing : this.BeforeEditing
+        }
 
-        //-------------------------------------------------------------------------------------
+        //存在大题追加
+        let existBigQuestion = {
+          id: objId,
+          label: `${this.capitalTopicNum}.${this.data.name}`,
+          value: this.data.number,
+          order: this.orderSort,
+        }
+
         if (this.editQuestionId == null) {
-          // 新增
-          ArrData.forEach(obj => {
-            this.initPageData(obj)
-            this.set_orderSort()
-          })
+          this.initPageData(obj)
           this.Add_AlreadyTopics([this.data])
           this.set_determineTopic([this.data])
+          this.set_existBigQuestion(existBigQuestion)
+          this.set_orderSort()
         } else {
-          // 编辑
-          //清空编辑前数据
-          this.Empty_PageData(this.editData.id)
-
-          ArrData.forEach(obj => {
-            this.initPageData(obj)
-            this.set_orderSort()
-          })
+          this.amendPageData({ ...obj, id: this.editQuestionId })
+          this.set_existBigQuestion({ ...existBigQuestion, id: obj.id })
         }
 
         this.set_currentQuestion()
@@ -315,7 +316,12 @@ export default {
     },
     hanldeVerification () {
       this.errorVal = this.tabStatusVal
-    }
+    },
+    hanldeSelect (e) {
+      // 选择答题号
+      this.questionData.number = e
+      this.data.number = e
+    },
   },
 }
 </script>
@@ -324,6 +330,9 @@ export default {
 .composition_box {
   .el-dialog__body {
     padding: 10px 0 15px !important;
+  }
+  .Insert_box {
+    margin-top: 20px;
   }
   .dialog_content {
     border-bottom: 1px solid #eee;

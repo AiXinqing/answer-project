@@ -1,6 +1,6 @@
 <template>
   <div class="question-info">
-    <template v-if="data.first && data.borderTop == undefined">
+    <template v-if="data.first && data.borderTop == undefined || data.borderTop == 0">
       <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
           <div class="title-span" v-html="cotent"></div>
         </div>
@@ -21,7 +21,7 @@
         'height':data.first ? data.castHeight - data.heightTitle  + 'px':data.castHeight  + 'px',
       }"
     >
-      <template v-if="data.first && data.borderTop == undefined">
+      <template v-if="data.first && data.borderTop == undefined || data.borderTop == 0">
         <div class="topic_number_box">
 
           <span class="black_icon"></span>
@@ -118,11 +118,12 @@ export default {
   //   this.$nextTick(()=>)
   // },
   methods: {
-    ...mapMutations('pageContent', ['delPageData', 'del_objectiveData']),
+    ...mapMutations('pageContent', ['delPageData', 'del_objectiveData', 'del_orderSort']),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
-      'del_determineTopic'
+      'del_determineTopic',
+      'del_existBigQuestion',
     ]),
     hanldeCloseEsitor (content) {
       this.isEditor = false
@@ -138,9 +139,12 @@ export default {
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
       if (index > -1) {
         this.del_determineTopic(this.topicData)
+        this.del_AlreadyTopics(this.topicData)
+        this.del_orderSort(this.pageData[index].order + 1)
         this.delPageData(index)
         this.set_currentQuestion()
         this.del_objectiveData() // 删减一个大题号
+        this.del_existBigQuestion(this.questionData)
       }
 
     },

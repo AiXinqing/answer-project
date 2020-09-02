@@ -48,6 +48,20 @@
         @hanlde-last-topic-del="hanldeLastTopicDel"
         @change-last-sub-topic-score="changeLastSubTopicScore"
       />
+      <div class="condition_box Insert_box" v-show="editQuestionId == null">
+        <el-checkbox v-model="objectiveData.InsertTitle">插入添加题目</el-checkbox>
+        <div
+          :class="['existBigQuestion_style',{'Fade':!objectiveData.InsertTitle}]">
+          <span>插入到第</span>
+          <hj-select
+              :items="existBigQuestion"
+              size="mini"
+              :value="existNumber" />
+          <span>大题后</span>
+        </div>
+        <el-checkbox :class="['Postpone',{'Fade':!objectiveData.InsertTitle}]" v-model="objectiveData.Postpone">大题号自动顺延</el-checkbox>
+        <div class="Insert_Mask" v-show="!objectiveData.InsertTitle"></div>
+      </div>
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
     <div class="dialog-footer">
@@ -74,11 +88,14 @@ export default {
       openedFrame: false,
       isdisabledFn: false,
       title: '新增填空题',
+      existNumber: null,
       spaceTopic: {
         number: 1,
         topic: '填空题',
         rows: 4,
         startQuestion: 1,
+        InsertTitle: false,
+        Postpone: false,
         group: [
           {
             start: 1,
@@ -101,9 +118,7 @@ export default {
   computed: {
     ...mapState('questionType', [
       'options',
-      'AlreadyTopics',
       'currentQuestion',
-      'letterArr',
       'determineTopic',
     ]),
     ...mapState('pageContent', [
@@ -111,6 +126,7 @@ export default {
       'pageLayout',
       'BigQuestion',
       'orderSort',
+      'existBigQuestion',
     ]),
     pageWidth () {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
@@ -119,6 +135,14 @@ export default {
     },
     errorMessage () {
       return this.errorVal != '' ? true : false
+    },
+    capitalTopicNum () {
+      let index = this.options.findIndex(item => this.objectiveData.number == item.value)
+      if (index > -1) {
+        return this.options[index].label
+      } else {
+        return '一'
+      }
     },
     topicGroupData () {
       let rows = this.objectiveData.rows
@@ -197,6 +221,9 @@ export default {
           this.$nextTick(() => {
             this.objectiveData.number = this.BigQuestion
           })
+          this.objectiveData.group.map(item => {
+            return { ...item, start: item.end == null ? this.currentQuestion : item.start }
+          })
         }
       },
     },
@@ -207,15 +234,14 @@ export default {
   },
   methods: {
     ...mapMutations('questionType', [
-      'set_SubtitleNumber',
-      'delete_SubtitleNumber',
       'set_currentQuestion',
-      'set_closeFrame',
       'Add_AlreadyTopics', // 小题数组
       'del_AlreadyTopics', // 删除题组-小题
       'set_determineTopic', // 储存确定题型
       'Empty_AlreadyTopics', // 清空
       'Fullin_once_AlreadyTopics',
+      'delOnce_determineTopic',
+      'set_existBigQuestion',
     ]),
     ...mapMutations('pageContent', [
       'initPageData',
@@ -226,7 +252,6 @@ export default {
     closeFrame () {
       // 关闭弹框
       this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
-      this.set_closeFrame()
       this.openedFrame = false
       //--------------
       this.Empty_AlreadyTopics() // 清空
@@ -266,12 +291,12 @@ export default {
       this.topicList.map((item) => {
         totalScore += item.score
       })
-
+      let objId = `FillInTheBlank_${+new Date()}`
       // 此题总分计算
       let obj = {
         heightTitle: 32,
         MarginHeight: 17,
-        id: 'FillInTheBlank' + +new Date(),
+        id: objId,
         height: height, // 32标题高度
         questionType: 'FillInTheBlank',
         content: { ...this.objectiveData, totalScore: totalScore },
@@ -280,16 +305,26 @@ export default {
         first: true,
         // 此题总分
       }
+      //存在大题追加
+      let existBigQuestion = {
+        id: objId,
+        label: `${this.capitalTopicNum}.${this.objectiveData.topic}`,
+        value: this.objectiveData.number,
+      }
       // 小题数组追加至确定题型
+
       this.Add_AlreadyTopics(this.topicList)
+      this.delOnce_determineTopic(this.topicList[0].pid)
       this.set_determineTopic(this.topicList)
       this.set_currentQuestion()
 
       if (this.editQuestionId == null) {
         this.initPageData(obj)
+        this.set_existBigQuestion(existBigQuestion)
       } else {
         obj.id = this.editQuestionId
         this.amendPageData(obj)
+        this.set_existBigQuestion({ ...existBigQuestion, id: obj.id })
       }
       this.set_objectiveData(this.spaceTopic.number) // 大题号修改
       //------------------------------------
@@ -299,11 +334,11 @@ export default {
 
       //------------------------
       this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
-      this.set_closeFrame() // 改变大题号
     },
     hanldeSelect (e) {
       // 选择答题号
-      window.console.log(e)
+      this.spaceTopic.number = e
+      this.objectiveData.number = e
     },
     traverse () { },
     HeightCalculation () {
@@ -319,8 +354,6 @@ export default {
       if (index > -1) {
         group.splice(index, 1, obj) // 替换
         // 追曾小题号至数组
-        let objs = { start: obj.start, end: obj.end, id: obj.id }
-        this.set_SubtitleNumber(objs)
       }
     },
     hanldeDelGroup (id) {
@@ -333,8 +366,6 @@ export default {
 
         this.del_AlreadyTopics(itemTopic.childGroup) // 删除弹框内临时数组
         group.splice(index, 1) // 删除
-        this.delete_SubtitleNumber(id)
-
         this.$nextTick(() => {
           this.set_currentQuestion()
         })
@@ -401,7 +432,7 @@ export default {
             })
             group.splice(index, 1) // 删除
 
-            this.spaceTopic.group.splice(0,1, ...SplitArray)
+            this.spaceTopic.group.splice(0, 1, ...SplitArray)
 
           }
         }
@@ -508,7 +539,6 @@ export default {
               childGroup: [{ ...subObj }],
             }
           }
-
           questionArr.childGroup.splice(index, 1, changeItem)
         }
       }

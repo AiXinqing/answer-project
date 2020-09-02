@@ -17,7 +17,7 @@
             :items="options"
             size="mini"
             :value="data.number"
-
+            @change="hanldeSelect"
           ></hj-select>
         </el-col>
         <el-col :span="8" class="select-item composition_item">
@@ -66,6 +66,20 @@
         </el-col>
       </el-row>
     </div>
+    <div class="condition_box Insert_box" v-show="editQuestionId == null">
+      <el-checkbox v-model="data.InsertTitle">插入添加题目</el-checkbox>
+      <div
+        :class="['existBigQuestion_style',{'Fade':!data.InsertTitle}]">
+        <span>插入到第</span>
+        <hj-select
+            :items="existBigQuestion"
+            size="mini"
+            :value="existNumber" />
+        <span>大题后</span>
+      </div>
+      <el-checkbox :class="['Postpone',{'Fade':!data.InsertTitle}]" v-model="data.Postpone">大题号自动顺延</el-checkbox>
+      <div class="Insert_Mask" v-show="!data.InsertTitle"></div>
+    </div>
     <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
   </div>
     <div class="dialog-footer">
@@ -90,6 +104,7 @@ export default {
       closeData: {},
       editQuestionId: null,
       errorVal: '',
+      existNumber: null,
       questionData: {
         number: 1, // 大题号
         name: '作文', // 题目
@@ -100,6 +115,8 @@ export default {
         mark: '1', // 1 ，2
         totalWordCount: 1000,
         spacing: 4, // 间距
+        InsertTitle: false,
+        Postpone: false,
       },
       editData: {},
 
@@ -115,9 +132,9 @@ export default {
       'pageHeight',
       'page_size',
       'BigQuestion',
-      'pageData',
       'pageLayout',
       'orderSort',
+      'existBigQuestion',
     ]),
     containerWidth () {
       // 格子承载宽度
@@ -130,6 +147,14 @@ export default {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 32
         : 30
+    },
+    capitalTopicNum () {
+      let index = this.options.findIndex(item => this.data.number == item.value)
+      if (index > -1) {
+        return this.options[index].label
+      } else {
+        return '一'
+      }
     },
     pageRow () {
       // 一页所占用的行数
@@ -203,47 +228,6 @@ export default {
       }
       return num
     },
-    rowsData () {
-      // 计算内容是否分页
-      const { totalWordCount, spacing } = this.data
-      let Arr = []
-      let currentPageHeight = this.currentPageHeight
-
-      if (this.editQuestionId != null) { // 编辑
-
-        currentPageHeight = this.editData.BeforeEditing
-      }
-      console.log(currentPageHeight)
-      //内容高度-----------------------------------------------------------------
-      //一行数格子 = 向下取整（总字数/格数）
-      let lattice = Math.floor(this.containerWidth / this.latticeWidth)
-      // 行数 向上取整
-      let row = Math.ceil(totalWordCount / lattice)
-
-      //行数高度 = 格子大小 + 间距（间距同上要求）
-      let rowHeight = this.latticeWidth + spacing
-      // 内容高度 = 行数 * 行数高度 + 内部标题高度 45 + 标题高度 32
-      // let containerHeight = row * rowHeight + 32 + 45
-
-      let AvailableRow = Math.floor((currentPageHeight - 77) / rowHeight) // 向下取整
-      //----------------------------------------------------------------------------------
-
-      let temArr = [row]
-      let i = AvailableRow
-      for (var a = 0; a < row; a++) {
-        var val = temArr[a] - i
-        if (val > 0) {
-          temArr.push(val)
-          Arr.push(i)
-          i = this.pageRow
-        } else {
-          Arr.push(temArr[a])
-          break;
-        }
-      }
-
-      return Arr
-    }
   },
   watch: {
     questionData: {
@@ -257,7 +241,7 @@ export default {
             this.data = {
               ...this.data,
               number: this.BigQuestion,
-              // topic: this.currentQuestion
+              topic: this.currentQuestion
             }
           })
         }
@@ -280,10 +264,10 @@ export default {
       'Empty_AlreadyTopics',
       'Add_AlreadyTopics',
       'set_determineTopic',
+      'set_existBigQuestion',
     ]),
     opened () {
-      this.questionData.number = this.BigQuestion
-      this.data.number = this.BigQuestion
+      this.questionData = JSON.parse(JSON.stringify({ ...this.questionData, number: this.BigQuestion, topic: this.currentQuestion }))
       // 开打弹框
       this.set_currentQuestion()
       this.openedFrame = true
@@ -317,54 +301,59 @@ export default {
       }
     },
     preCreateQuestion () {
-      const { spacing } = this.data
+      const { spacing, totalWordCount } = this.data
       this.errorVal = this.tabStatusVal
+
       if (!this.tabStatus) {
-        // console.log(this.rowsData)
-        //一行数格子 = 向下取整（总字数/格数）
+
+        // 一行数格子 = 向下取整（总字数/格数）
         let lattice = Math.floor(this.containerWidth / this.latticeWidth)
+
+        // 行数 向上取整
+        let row = Math.ceil(totalWordCount / lattice)
+        console.log(row)
         //行数高度 = 格子大小 + 间距（间距同上要求）
         let rowHeight = this.latticeWidth + spacing
 
+        let rectHeight = row * rowHeight  // 当前内容高度 45(内部高度)
+        let MarginHeight = 45
+        let heights = rectHeight + MarginHeight + 32
+
         let objId = `compositionLanguage_${+new Date()}`
         //------------------------------------------------------------
-        let obj = {}
-        let ArrData = this.rowsData.map((item, i) => {
-          obj = {
-            height: i == 0 ? item * rowHeight + 77 : item * rowHeight,
-            id: objId,
-            questionType: 'compositionLanguage',
-            content: this.data,
-            order: this.orderSort,
-            first: i == 0 ? true : false,
-            lattice: lattice,
-            showRow: item,
-            rowHeight: rowHeight,
-            rowWidth: this.latticeWidth,
-            BeforeEditing: this.editQuestionId != null ? this.editData.BeforeEditing : this.BeforeEditing
-          }
-          return obj
-        })
-        //-------------------------------------------------------------------------------------
-        if (this.editQuestionId == null) {
-          // 新增
-          ArrData.forEach(obj => {
-            this.initPageData(obj)
-            this.set_orderSort()
-          })
-          this.Add_AlreadyTopics([this.data])
-          this.set_determineTopic([this.data])
-        } else {
-          // 编辑
-          //清空编辑前数据
-          this.Empty_PageData(this.editData.id)
-
-          ArrData.forEach(obj => {
-            this.initPageData(obj)
-            this.set_orderSort()
-          })
+        let obj = {
+          heightTitle: 32,
+          MarginHeight: MarginHeight,
+          height: heights,
+          id: objId,
+          questionType: 'compositionLanguage',
+          content: this.data,
+          order: this.orderSort,
+          first: true,
+          lattice: lattice,
+          rowHeight: rowHeight,
+          rowWidth: this.latticeWidth,
+          BeforeEditing: this.editQuestionId != null ? this.editData.BeforeEditing : this.BeforeEditing
         }
 
+        //存在大题追加
+        let existBigQuestion = {
+          id: objId,
+          label: `${this.capitalTopicNum}.${this.data.name}`,
+          value: this.data.number,
+          order: this.orderSort,
+        }
+
+        if (this.editQuestionId == null) {
+          this.initPageData(obj)
+          this.Add_AlreadyTopics([this.data])
+          this.set_determineTopic([this.data])
+          this.set_existBigQuestion(existBigQuestion)
+          this.set_orderSort()
+        } else {
+          this.amendPageData({ ...obj, id: this.editQuestionId })
+          this.set_existBigQuestion({ ...existBigQuestion, id: obj.id })
+        }
         this.set_currentQuestion()
         this.data = JSON.parse(JSON.stringify(this.closeData))
         this.openedFrame = false
@@ -384,7 +373,12 @@ export default {
     },
     hanldeVerification () {
       this.errorVal = this.tabStatusVal
-    }
+    },
+    hanldeSelect (e) {
+      // 选择答题号
+      this.questionData.number = e
+      this.data.number = e
+    },
   },
 }
 </script>

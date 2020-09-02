@@ -11,7 +11,6 @@
     />
     <div class="question_array">
       <div class="question_editOrDel">
-
         <span  class="btn_addSub_name">每组题数</span>
         <span class="btn_addSub" @click="hanldeSubtraction(questionData.id,1)">-</span>
         <span class="btn_addSub_info" >{{data.rows}}</span>
@@ -116,11 +115,13 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('pageContent', ['delPageData', 'del_objectiveData']),
+    ...mapMutations('pageContent', ['delPageData', 'del_objectiveData',
+      'del_orderSort',]),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
-      'del_determineTopic'
+      'del_determineTopic',
+      'del_existBigQuestion',
     ]),
     traverse (Arr, letterArr) {
       if (Arr.length > 0) {
@@ -147,9 +148,11 @@ export default {
       if (index > -1) {
         this.del_AlreadyTopics(this.topicBox)
         this.del_determineTopic(this.topicBox)
+        this.del_orderSort(this.pageData[index].order + 1)
         this.delPageData(index)
-        this.set_currentQuestion()
         this.del_objectiveData() // 删减一个大题号
+        this.del_existBigQuestion(this.questionData)
+        this.set_currentQuestion()
       }
     },
     currentQuestionHanldeEdit (id) {

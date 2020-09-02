@@ -1,6 +1,5 @@
 const state = {
-  options: [
-    {
+  options: [{
       value: 1,
       label: '一',
     },
@@ -89,49 +88,19 @@ const state = {
       label: '二十二',
     },
   ],
-  SubtitleNumber: [], // 已有的题号数组
   AlreadyTopics: [], // 已有的题组
   currentQuestion: 1,
   letterArr: ['A', 'B', 'C', 'D', 'E', 'G', 'H', 'I', 'J', 'K'],
   maxTopic: 200, // 最大题数
   determineTopic: [], // 确定下的小题
+  existBigQuestion: [], // 存在大题
 }
 
 const mutations = {
-  set_SubtitleNumber: (
-    state,
-    {
-      //题组数
-      start,
-      end,
-      id,
-    }
-  ) => {
-    // 追加生成的题号
-    let index = state.SubtitleNumber.findIndex((item) => item.id === id)
-    let Arr = []
-    for (let i = start; i <= end; i++) {
-      Arr.push(i)
-    }
-
-    let obj = {
-      id: id,
-      data: Arr,
-    }
-    if (index > -1) {
-      state.SubtitleNumber.splice(index, 1, obj)
-    } else {
-      state.SubtitleNumber.push(obj)
-    }
-  },
-  delete_SubtitleNumber: (state, id) => {
-    // 删除生成的题号
-    let index = state.SubtitleNumber.findIndex((item) => item.id === id)
-    if (index > -1) {
-      state.SubtitleNumber.splice(index, 1)
-    }
-  },
   del_AlreadyTopics(state, Arr) {
+    if (Arr == undefined) {
+      return false
+    }
     // 删除已有小题数组
     Arr.forEach((item) => {
       const index = state.AlreadyTopics.findIndex(
@@ -143,6 +112,9 @@ const mutations = {
     })
   },
   Add_AlreadyTopics(state, Arr) {
+    if (Arr == undefined) {
+      return false
+    }
     //新增小题数组
     Arr.forEach((item) => {
       if (state.AlreadyTopics.length > 0) {
@@ -172,6 +144,9 @@ const mutations = {
     })
   },
   set_AlreadyTopics: (state, Arr) => {
+    if (Arr == undefined) {
+      return false
+    }
     Arr.forEach((item) => {
       const index = state.AlreadyTopics.findIndex(
         (row) => row.topic == item.topic
@@ -197,16 +172,10 @@ const mutations = {
       }
     }
   },
-  set_closeFrame: (state) => {
-    // 弹窗关闭置空
-    state.SubtitleNumber = []
-    state.AlreadyTopics.forEach((item, i) => {
-      if (item.subtopic != null || item.subtopic != undefined) {
-        state.AlreadyTopics.splice(i, 1)
-      }
-    })
-  },
   set_determineTopic: (state, Arr) => {
+    if (Arr == undefined) {
+      return false
+    }
     // 添加确定值
     Arr.forEach((item) => {
       const index = state.determineTopic.findIndex(
@@ -219,7 +188,16 @@ const mutations = {
       }
     })
   },
+  delOnce_determineTopic: (state, pid) => {
+    // 一次清除相同pid
+    state.determineTopic = state.determineTopic.filter((item) => {
+      return ![pid].includes(item.pid)
+    })
+  },
   del_determineTopic: (state, Arr) => {
+    if (Arr == undefined) {
+      return false
+    }
     Arr.forEach((item) => {
       const index = state.determineTopic.findIndex(
         (row) => row.topic === item.topic
@@ -229,6 +207,55 @@ const mutations = {
       }
     })
   },
+  // 存在大题
+  set_existBigQuestion: (state, obj) => {
+    const index = state.existBigQuestion.findIndex(
+      (row) => row.id === obj.id
+    )
+    if (index > -1) {
+      state.determineTopic.splice(index, 1, obj)
+    } else {
+      state.existBigQuestion.push(obj)
+    }
+  },
+  insert_existBigQuestion: (state, {
+    obj,
+    num,
+    order,
+    SelfO0rder
+  }) => {
+    console.log(order)
+    state.existBigQuestion.map(function (item) {
+      return {
+        ...item,
+        order: item.order >= order ? item.order + 1 : item.order,
+      }
+    });
+    setTimeout(function () {
+      state.existBigQuestion.splice(num, 0, obj);
+      state.existBigQuestion = state.existBigQuestion.sort(function (a, b) {
+        return a.order - b.order;
+      });
+      if (SelfO0rder) {
+        state.existBigQuestion.forEach((item, index) => {
+          // const i = state.options.findIndex(item => item.value == (index + 1))
+          state.existBigQuestion.splice(index, 1, {
+            ...item,
+            label: state.options[index].label + '.' + item.label.split('.')[1]
+          })
+        })
+      }
+    }, 50);
+  },
+  del_existBigQuestion: (state, obj) => {
+    let id = obj.objId != undefined ? obj.objId : obj.id
+    const index = state.existBigQuestion.findIndex(
+      (row) => row.id === id
+    )
+    if (index > -1) {
+      state.existBigQuestion.splice(index, 1)
+    }
+  }
 }
 
 const actions = {}

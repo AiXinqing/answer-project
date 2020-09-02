@@ -14,7 +14,7 @@
             :items="options"
             size="mini"
             :value="data.number"
-
+            @change="hanldeSelect"
           ></hj-select>
         </el-col>
         <el-col :span="12" class="select-item">
@@ -44,6 +44,20 @@
           <span class="p-5"> 行 </span>
         </span>
       </div>
+      <div class="condition_box Insert_box" v-show="editQuestionId == null">
+        <el-checkbox v-model="data.InsertTitle">插入添加题目</el-checkbox>
+        <div
+          :class="['existBigQuestion_style',{'Fade':!data.InsertTitle}]">
+          <span>插入到第</span>
+          <hj-select
+              :items="existBigQuestion"
+              size="mini"
+              :value="existNumber" />
+          <span>大题后</span>
+        </div>
+        <el-checkbox :class="['Postpone',{'Fade':!data.InsertTitle}]" v-model="data.Postpone">大题号自动顺延</el-checkbox>
+        <div class="Insert_Mask" v-show="!data.InsertTitle"></div>
+      </div>
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
     <div class="dialog-footer">
@@ -71,12 +85,15 @@ export default {
       closeData: {},
       editQuestionId: null,
       errorVal: '',
+      existNumber: null,
       questionData: {
         number: 1,
         topic: '选作题',
         rows: 6,
         startQuestion: 1,
         HorizontalLine: false, // 横行
+        InsertTitle: false,
+        Postpone: false,
         group: [{
           choices: '', // 几选几
           select: '',
@@ -92,17 +109,13 @@ export default {
   computed: {
     ...mapState('questionType', [
       'options',
-      'AlreadyTopics',
       'currentQuestion',
-      'letterArr',
       'determineTopic'
     ]),
     ...mapState('pageContent', [
-      'pageHeight',
-      'page_size',
       'BigQuestion',
-      'pageData',
       'orderSort',
+      'existBigQuestion',
     ]),
     ...mapState('answerQuestion', ['answerQuestionArr',]),
     errorMessage () {
@@ -110,7 +123,15 @@ export default {
     },
     groupItemData () {
       return this.data.group.map(item => item.childGroup)[0]
-    }
+    },
+    capitalTopicNum () {
+      let index = this.options.findIndex(item => this.data.number == item.value)
+      if (index > -1) {
+        return this.options[index].label
+      } else {
+        return '一'
+      }
+    },
   },
   watch: {
     questionData: {
@@ -126,6 +147,9 @@ export default {
               number: this.BigQuestion
             }
           })
+          this.data.group.map(item => {
+            return { ...item, start: item.end == '' ? this.currentQuestion : item.start }
+          })
         }
 
       }
@@ -140,16 +164,14 @@ export default {
       'initPageData',
       'amendPageData',
       'set_objectiveData',
-      'deletePageData',
       'set_orderSort'
     ]),
     ...mapMutations('questionType', [
       'set_currentQuestion',
       'Empty_AlreadyTopics',
       'Add_AlreadyTopics',
-      'set_closeFrame',
       'set_determineTopic',
-      'once_AlreadyTopics',
+      'set_existBigQuestion',
     ]),
     opened () {
       this.questionData.number = this.BigQuestion
@@ -177,77 +199,42 @@ export default {
     preCreateQuestion () {
       // 当前页内容所占高度
       const { rows } = this.data
-      // let heights = this.pageHeight[this.pageHeight.length - 1].map(item => item).reduce((accumulator, currentValue) => {
-      //   return accumulator + currentValue;
-      // })
-      // let currentPageHeight = this.page_size - heights - 20 - 20 // 20当前大题下移的20，50标题高度 20每页底部余留
-      // console.log(currentPageHeight)
       let rectHeight = rows * 35  // 当前内容高度 45(内部高度)
-      let MarginHeight = + 12 + 40
+      let MarginHeight = + 14 + 40
       let heights = rectHeight + MarginHeight + 54
+
+      let objId = `optional_${+new Date()}`
 
       let obj = {
         MarginHeight: MarginHeight,
         heightTitle: 54,
         height: heights,
-        id: 'optional' + +new Date(),
+        id: objId,
         questionType: 'optionalQuestion',
         content: this.data,
         order: this.orderSort,
         first: true
       }
-      // let objArr = []
-      // let obj = {
-      //   height: rectHeight,
-      //   id: 'optional' + +new Date(),
-      //   questionType: 'optionalQuestion',
-      //   content: this.data,
-      //   order: this.orderSort
-      // }
-      // if (currentPageHeight > rectHeight) {
-      //   objArr.push(obj)
-      // } else {
-      //   // 当页所剩差值
-      //   let difference = Math.abs(currentPageHeight - rectHeight)
-      //   let SplitHeight = Math.abs(rectHeight - difference)
-
-      //   if (SplitHeight < 50 && SplitHeight != 50) {
-      //     objArr.push(obj)
-      //   } else {
-      //     // 内容拆分值
-
-      //     let preObj = {
-      //       ...obj,
-      //       height: SplitHeight,
-      //       first: true,
-
-      //     }
-      //     let nextObj = { ...obj, height: difference }
-      //     objArr.push(preObj)
-      //     objArr.push(nextObj)
-      //   }
-      // }
+      //存在大题追加
+      let existBigQuestion = {
+        id: objId,
+        label: `${this.capitalTopicNum}.${this.data.topic}`,
+        value: this.data.number,
+        order: this.orderSort,
+      }
 
       if (this.editQuestionId == null) {
-        // 新增
-        // objArr.forEach(obj => {
-        //   this.initPageData(obj)
-        // })
         this.initPageData(obj)
+        this.set_existBigQuestion(existBigQuestion)
+        this.set_orderSort()
       } else {
         // 编辑
-        //清空编辑前数据
-        // this.deletePageData(this.dataTopic.pid)
-        // objArr.forEach(obj => {
-
-        //   this.amendPageData({ ...obj, id: this.editQuestionId })
-        // })
         this.amendPageData({ ...obj, id: this.editQuestionId })
+        this.set_existBigQuestion({ ...existBigQuestion, id: obj.id })
       }
       // 大题号修改
       this.set_objectiveData(this.data.number)
       //------------------------------------
-      this.set_orderSort()
       this.openedFrame = false // 关闭弹窗
       // 清空弹框数据
 
@@ -255,7 +242,6 @@ export default {
       this.set_currentQuestion()
 
       this.data = JSON.parse(JSON.stringify(this.closeData))
-      this.set_closeFrame() // 弹窗关闭置空
     },
     hanldeStatus (val) {
       // 报错状态
@@ -276,7 +262,12 @@ export default {
         this.errorVal = ''
         this.isdisabledFn = false
       }
-    }
+    },
+    hanldeSelect (e) {
+      // 选择答题号
+      this.questionData.number = e
+      this.data.number = e
+    },
   },
 }
 </script>

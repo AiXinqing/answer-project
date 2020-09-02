@@ -106,7 +106,7 @@ export default {
           this.$refs.compositionLanguage.openedEdit(obj)
           break
         case 'NonRresponseArea':
-          this.$refs.NonRresponseArea.openedEdit({ ...obj, id: id })
+          this.$refs.NonRresponseArea.openedEdit(obj)
           break
         default:
           break
@@ -114,30 +114,12 @@ export default {
     },
     change (type, obj, num) {
       switch (type) {
-        // case 'studentTitle':
-        //   this.$refs.studentDialog.openedFrameFunc()
-        //   break
         case 'questionDialogs':
           this.$refs.questionDialogs.change(obj, num)
           break
-        // case 'fillInTheBlanks':
-        //   this.$refs.fillInTheBlanks.openedEdit(obj)
-        //   break
-        // case 'answerQuestion':
-        //   this.$refs.AnswerQuestionDialog.openedEdit(obj)
-        //   break
-        // case 'optionalQuestion':
-        //   this.$refs.optionalQuestionDialog.openedEdit({ ...obj, id: id })
-        //   break
-        // case 'compositionEnglish':
-        //   this.$refs.compositionEnglish.openedEdit(obj)
-        //   break
-        // case 'compositionLanguage':
-        //   this.$refs.compositionLanguage.openedEdit(obj)
-        //   break
-        // case 'NonRresponseArea':
-        //   this.$refs.NonRresponseArea.openedEdit({ ...obj, id: id })
-        //   break
+        case 'NonRresponseArea':
+          this.$refs.NonRresponseArea.change(obj, num)
+          break
         default:
           break
       }
