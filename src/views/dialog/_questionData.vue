@@ -335,7 +335,7 @@ export default {
                   order: this.pageData[index].order + 1,
                 },
                 num: this.existNumber + 1,
-                order: this.pageData[index].order,
+                order: this.pageData[index].order + 1,
                 SelfO0rder: Postpone
               }
               this.insert_pageData(data)
