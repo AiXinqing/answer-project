@@ -237,7 +237,6 @@ const mutations = {
       });
       if (SelfO0rder) {
         state.existBigQuestion.forEach((item, index) => {
-          // const i = state.options.findIndex(item => item.value == (index + 1))
           state.existBigQuestion.splice(index, 1, {
             ...item,
             label: state.options[index].label + '.' + item.label.split('.')[1]

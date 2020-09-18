@@ -31,9 +31,6 @@ const mutations = {
     state.pageData = state.pageData.filter((item) => {
       return ![id].includes(item.pid)
     })
-    // .sort((a, b) => {
-    //   return a.order - b.order;
-    // })
   },
   Empty_PageData: (state, id) => {
     // 内容分页
@@ -47,7 +44,12 @@ const mutations = {
   delPageData: (state, index) => {
     state.pageData.splice(index, 1)
   },
-  insert_pageData: (state, { obj, num, order, SelfO0rder }) => {
+  insert_pageData: (state, {
+    obj,
+    num,
+    order,
+    SelfO0rder
+  }) => {
     //插入非作答
     state.pageData.forEach((item, index) => {
       if (item.order > order) {
@@ -58,7 +60,10 @@ const mutations = {
       }
     })
     setTimeout(() => {
-      state.pageData.splice(num, 0, { ...obj, order: obj.order + 1 })
+      state.pageData.splice(num, 0, {
+        ...obj,
+        order: obj.order + 1
+      })
       state.pageData = state.pageData.sort((a, b) => {
         return a.order - b.order
       })
@@ -126,7 +131,9 @@ const mutations = {
 
 const actions = {
   getPageData: (context) => {
-    axios.get('./pageData.json').then(({ data }) => {
+    axios.get('./pageData.json').then(({
+      data
+    }) => {
       if (data) {
         context.commit('initPageLayout', data.pageLayout)
         context.commit('initPageData', data.data)
