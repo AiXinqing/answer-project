@@ -224,7 +224,6 @@ const mutations = {
     order,
     SelfO0rder
   }) => {
-    console.log(order)
     state.existBigQuestion.map(function (item) {
       return {
         ...item,

@@ -19,11 +19,15 @@
         </el-col>
         <el-col :span="12" class="select-item">
           <div class="label">题目:</div>
-          <el-input v-model="data.topic" size="mini" placeholder="请输入内容"></el-input>
+          <el-input
+            v-model="data.topic"
+            size="mini"
+            placeholder="请输入内容"
+          ></el-input>
         </el-col>
       </el-row>
       <add-form
-        v-for="(item,i) in data.group"
+        v-for="(item, i) in data.group"
         :key="i"
         :form-data="item"
         @hanlde-status="hanldeStatus"
@@ -31,7 +35,7 @@
       />
       <div class="question-group">
         <optional-item
-          v-for="(item,i) in groupItemData"
+          v-for="(item, i) in groupItemData"
           :key="i"
           :optional-data="item"
         />
@@ -40,29 +44,44 @@
         <el-checkbox v-model="data.HorizontalLine">生成解答题横线</el-checkbox>
         <span class="answer_rows" v-show="data.HorizontalLine">
           <span>行数：</span>
-          <el-input v-model.number="data.rows" size="mini" @input="rowsFunc"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
+          <el-input
+            v-model.number="data.rows"
+            size="mini"
+            @input="rowsFunc"
+            onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"
+          />
           <span class="p-5"> 行 </span>
         </span>
       </div>
       <div class="condition_box Insert_box" v-show="editQuestionId == null">
         <el-checkbox v-model="data.InsertTitle">插入添加题目</el-checkbox>
-        <div
-          :class="['existBigQuestion_style',{'Fade':!data.InsertTitle}]">
+        <div :class="['existBigQuestion_style', { Fade: !data.InsertTitle }]">
           <span>插入到第</span>
           <hj-select
-              :items="existBigQuestion"
-              size="mini"
-              :value="existNumber" />
+            :items="existBigQuestion"
+            size="mini"
+            :value="existNumber"
+            @change="hanldeSelectexistBig"
+          />
           <span>大题后</span>
         </div>
-        <el-checkbox :class="['Postpone',{'Fade':!data.InsertTitle}]" v-model="data.Postpone">大题号自动顺延</el-checkbox>
+        <el-checkbox
+          :class="['Postpone', { Fade: !data.InsertTitle }]"
+          v-model="data.Postpone"
+          >大题号自动顺延</el-checkbox
+        >
         <div class="Insert_Mask" v-show="!data.InsertTitle"></div>
       </div>
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
     <div class="dialog-footer">
       <hj-button type="cancel" @click="closeFrame">取 消</hj-button>
-      <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateQuestion">确 定</hj-button>
+      <hj-button
+        type="confirm"
+        :disabled="isdisabledFn"
+        @click="preCreateQuestion"
+        >确 定</hj-button
+      >
     </div>
   </hj-dialog>
 </template>
@@ -76,7 +95,7 @@ export default {
     AddForm,
     optionalItem,
   },
-  data () {
+  data() {
     return {
       data: {},
       title: '新增选作题',
@@ -94,38 +113,39 @@ export default {
         HorizontalLine: false, // 横行
         InsertTitle: false,
         Postpone: false,
-        group: [{
-          choices: '', // 几选几
-          select: '',
-          start: 1,
-          end: '',
-          score: '',
-          id: 'optionalTopic',
-          childGroup: [],
-        },]
-      }
+        group: [
+          {
+            choices: '', // 几选几
+            select: '',
+            start: 1,
+            end: '',
+            score: '',
+            id: 'optionalTopic',
+            childGroup: [],
+          },
+        ],
+      },
     }
   },
   computed: {
     ...mapState('questionType', [
       'options',
       'currentQuestion',
-      'determineTopic'
-    ]),
-    ...mapState('pageContent', [
-      'BigQuestion',
-      'orderSort',
+      'determineTopic',
       'existBigQuestion',
     ]),
-    ...mapState('answerQuestion', ['answerQuestionArr',]),
-    errorMessage () {
+    ...mapState('pageContent', ['BigQuestion', 'orderSort', 'pageData']),
+    ...mapState('answerQuestion', ['answerQuestionArr']),
+    errorMessage() {
       return this.errorVal != '' ? true : false
     },
-    groupItemData () {
-      return this.data.group.map(item => item.childGroup)[0]
+    groupItemData() {
+      return this.data.group.map((item) => item.childGroup)[0]
     },
-    capitalTopicNum () {
-      let index = this.options.findIndex(item => this.data.number == item.value)
+    capitalTopicNum() {
+      let index = this.options.findIndex(
+        (item) => this.data.number == item.value
+      )
       if (index > -1) {
         return this.options[index].label
       } else {
@@ -136,26 +156,33 @@ export default {
   watch: {
     questionData: {
       immediate: true,
-      handler () {
+      handler() {
         this.data = {
-          ...this.questionData
+          ...this.questionData,
         }
         if (this.editQuestionId == null) {
           this.$nextTick(() => {
             this.data = {
               ...this.data,
-              number: this.BigQuestion
+              number: this.BigQuestion,
             }
           })
-          this.data.group.map(item => {
-            return { ...item, start: item.end == '' ? this.currentQuestion : item.start }
+          this.data.group.map((item) => {
+            return {
+              ...item,
+              start: item.end == '' ? this.currentQuestion : item.start,
+            }
           })
+          // const { group } = this.data
+          this.existNumber =
+            this.existBigQuestion.length > 0
+              ? this.existBigQuestion[0].value
+              : null
         }
-
-      }
-    }
+      },
+    },
   },
-  mounted () {
+  mounted() {
     this.closeData = JSON.parse(JSON.stringify(this.questionData))
     this.set_currentQuestion()
   },
@@ -163,8 +190,9 @@ export default {
     ...mapMutations('pageContent', [
       'initPageData',
       'amendPageData',
+      'insert_pageData',
       'set_objectiveData',
-      'set_orderSort'
+      'set_orderSort',
     ]),
     ...mapMutations('questionType', [
       'set_currentQuestion',
@@ -172,8 +200,9 @@ export default {
       'Add_AlreadyTopics',
       'set_determineTopic',
       'set_existBigQuestion',
+      'insert_existBigQuestion',
     ]),
-    opened () {
+    opened() {
       this.questionData.number = this.BigQuestion
       this.data.number = this.BigQuestion
       // 开打弹框
@@ -182,7 +211,7 @@ export default {
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
     },
-    openedEdit (obj) {
+    openedEdit(obj) {
       //编辑弹框
       this.set_currentQuestion()
       this.editQuestionId = obj.id
@@ -190,17 +219,18 @@ export default {
       this.data = JSON.parse(JSON.stringify(obj))
       this.title = '编辑选作题'
     },
-    closeFrame () {
+    closeFrame() {
       // 关闭弹窗
       this.set_currentQuestion()
       this.questionData = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
     },
-    preCreateQuestion () {
-      // 当前页内容所占高度
-      const { rows } = this.data
-      let rectHeight = rows * 35  // 当前内容高度 45(内部高度)
-      let MarginHeight = + 14 + 40
+    preCreateQuestion() {
+      // 当前页内容所占高度topic, number,Postpone
+      const { rows, InsertTitle, Postpone } = this.data
+
+      let rectHeight = rows * 35 // 当前内容高度 45(内部高度)
+      let MarginHeight = +14 + 40
       let heights = rectHeight + MarginHeight + 54
 
       let objId = `optional_${+new Date()}`
@@ -213,10 +243,10 @@ export default {
         questionType: 'optionalQuestion',
         content: this.data,
         order: this.orderSort,
-        first: true
+        first: true,
       }
       //存在大题追加
-      let existBigQuestion = {
+      let existBigQuestionObj = {
         id: objId,
         label: `${this.capitalTopicNum}.${this.data.topic}`,
         value: this.data.number,
@@ -224,13 +254,52 @@ export default {
       }
 
       if (this.editQuestionId == null) {
-        this.initPageData(obj)
-        this.set_existBigQuestion(existBigQuestion)
+        if (InsertTitle && this.existBigQuestion.length > 0) {
+          let index = this.existBigQuestion.findIndex(
+            (item) => item.value === this.existNumber
+          )
+          // console.log(this.existBigQuestion)
+          // console.log(index)
+          if (index > -1) {
+            let objIndex = this.pageData.findIndex(
+              (item) => item.id == this.existBigQuestion[index].id
+            )
+            console.log(this.pageData)
+            if (objIndex > -1) {
+              //-------------------------------------------------插入数组对象
+              let data = {
+                obj: {
+                  ...obj,
+                  order: this.pageData[index].order + 1,
+                },
+                num: this.existNumber + 1,
+                order: this.pageData[index].order + 1,
+                SelfO0rder: Postpone,
+              }
+              console.log(data)
+              this.insert_pageData(data)
+              //-------------------------------------------------已选大题数组
+              this.insert_existBigQuestion({
+                obj: {
+                  ...existBigQuestionObj,
+                  order: this.existBigQuestion[index].order + 1,
+                },
+                num: this.existNumber,
+                order: this.existBigQuestion[index].order,
+                SelfO0rder: Postpone,
+              })
+            }
+          }
+        } else {
+          this.initPageData(obj)
+          this.set_existBigQuestion(existBigQuestionObj)
+        }
         this.set_orderSort()
       } else {
         // 编辑
-        this.amendPageData({ ...obj, id: this.editQuestionId })
-        this.set_existBigQuestion({ ...existBigQuestion, id: obj.id })
+        obj.id = this.editQuestionId
+        this.amendPageData(obj)
+        this.set_existBigQuestion({ ...existBigQuestionObj, id: obj.id })
       }
       // 大题号修改
       this.set_objectiveData(this.data.number)
@@ -243,18 +312,21 @@ export default {
 
       this.data = JSON.parse(JSON.stringify(this.closeData))
     },
-    hanldeStatus (val) {
+    hanldeStatus(val) {
       // 报错状态
       this.errorVal = val
     },
-    preOptionalData (obj) {
+    hanldeSelectexistBig(e) {
+      this.existNumber = e
+    },
+    preOptionalData(obj) {
       // 新增题组
-      const index = this.data.group.findIndex(item => item.id === obj.id)
+      const index = this.data.group.findIndex((item) => item.id === obj.id)
       if (index > -1) {
         this.data.group.splice(index, 1, obj)
       }
     },
-    rowsFunc () {
+    rowsFunc() {
       if (this.data.rows <= 0) {
         this.errorVal = '行数必须大于0'
         this.isdisabledFn = true
@@ -263,7 +335,7 @@ export default {
         this.isdisabledFn = false
       }
     },
-    hanldeSelect (e) {
+    hanldeSelect(e) {
       // 选择答题号
       this.questionData.number = e
       this.data.number = e
@@ -272,7 +344,4 @@ export default {
 }
 </script>
 
-<style lang="less" >
-</style>
-
-
+<style lang="less"></style>

@@ -20,11 +20,19 @@
         </el-col>
         <el-col :span="12" class="select-item">
           <div class="label">题目:</div>
-          <el-input v-model="objectiveData.topic" size="mini" placeholder="请输入内容"></el-input>
+          <el-input
+            v-model="objectiveData.topic"
+            size="mini"
+            placeholder="请输入内容"
+          ></el-input>
         </el-col>
         <el-col :span="24" class="select-item">
           <div class="label">每组题数:</div>
-          <el-input v-model.number="objectiveData.rows" size="mini" placeholder="请输入内容"></el-input>
+          <el-input
+            v-model.number="objectiveData.rows"
+            size="mini"
+            placeholder="请输入内容"
+          ></el-input>
         </el-col>
       </el-row>
       <tab-pane-box
@@ -38,25 +46,41 @@
         @edit-topic-func="editTopicFunc"
       />
       <div class="condition_box Insert_box" v-show="editQuestionId == null">
-        <el-checkbox v-model="objectiveData.InsertTitle">插入添加题目</el-checkbox>
+        <el-checkbox v-model="objectiveData.InsertTitle"
+          >插入添加题目</el-checkbox
+        >
         <div
-          :class="['existBigQuestion_style',{'Fade':!objectiveData.InsertTitle}]">
+          :class="[
+            'existBigQuestion_style',
+            { Fade: !objectiveData.InsertTitle },
+          ]"
+        >
           <span>插入到第</span>
           <hj-select
-              :items="existBigQuestion"
-              size="mini"
-              :value="existNumber"
-              @change="hanldeSelectexistBig"/>
+            :items="existBigQuestion"
+            size="mini"
+            :value="existNumber"
+            @change="hanldeSelectexistBig"
+          />
           <span>大题后</span>
         </div>
-        <el-checkbox :class="['Postpone',{'Fade':!objectiveData.InsertTitle}]" v-model="objectiveData.Postpone">大题号自动顺延</el-checkbox>
+        <el-checkbox
+          :class="['Postpone', { Fade: !objectiveData.InsertTitle }]"
+          v-model="objectiveData.Postpone"
+          >大题号自动顺延</el-checkbox
+        >
         <div class="Insert_Mask" v-show="!objectiveData.InsertTitle"></div>
       </div>
     </div>
     <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
     <div class="dialog-footer">
       <hj-button type="cancel" @click="closeFrame">取 消</hj-button>
-      <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateQuestion">确 定</hj-button>
+      <hj-button
+        type="confirm"
+        :disabled="isdisabledFn"
+        @click="preCreateQuestion"
+        >确 定</hj-button
+      >
     </div>
   </hj-dialog>
 </template>
@@ -68,7 +92,7 @@ export default {
   components: {
     tabPaneBox,
   },
-  data () {
+  data() {
     return {
       openedFrame: false,
       isdisabledFn: false,
@@ -141,26 +165,30 @@ export default {
       'pageLayout',
       'BigQuestion',
       'pageData',
-      'orderSort',]),
-    pageWidth () {
+      'orderSort',
+    ]),
+    pageWidth() {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 480
         : 745
     },
-    errorMessage () {
+    errorMessage() {
       return this.errorVal != '' ? true : false
     },
-    capitalTopicNum () {
-      let index = this.options.findIndex(item => this.objectiveData.number == item.value)
+    capitalTopicNum() {
+      let index = this.options.findIndex(
+        (item) => this.objectiveData.number == item.value
+      )
       if (index > -1) {
         return this.options[index].label
       } else {
         return '一'
       }
     },
-    orderVal () {
-
-      let index = this.existBigQuestion.findIndex(item => { item.value == this.existNumber })
+    orderVal() {
+      let index = this.existBigQuestion.findIndex((item) => {
+        item.value == this.existNumber
+      })
       if (index > -1) {
         return this.existBigQuestion[index].order + 1
       } else {
@@ -171,34 +199,46 @@ export default {
   watch: {
     quesctionObj: {
       immediate: true,
-      handler () {
+      handler() {
         this.objectiveData = {
-          ...this.quesctionObj
+          ...this.quesctionObj,
         }
         if (this.editQuestionId == null) {
           this.$nextTick(() => {
             this.objectiveData = {
               ...this.objectiveData,
-              number: this.BigQuestion
+              number: this.BigQuestion,
             }
           })
           // 小题号改变更换小题号
           const { group } = this.objectiveData
-          group.singleBox.map(item => {
-            return { ...item, start: item.end == null ? this.currentQuestion : item.start }
+          group.singleBox.map((item) => {
+            return {
+              ...item,
+              start: item.end == null ? this.currentQuestion : item.start,
+            }
           })
-          group.checkbox.map(item => {
-            return { ...item, start: item.end == null ? this.currentQuestion : item.start }
+          group.checkbox.map((item) => {
+            return {
+              ...item,
+              start: item.end == null ? this.currentQuestion : item.start,
+            }
           })
-          group.judgment.map(item => {
-            return { ...item, start: item.end == null ? this.currentQuestion : item.start }
+          group.judgment.map((item) => {
+            return {
+              ...item,
+              start: item.end == null ? this.currentQuestion : item.start,
+            }
           })
-          this.existNumber = this.existBigQuestion.length > 0 ? this.existBigQuestion[0].value : null
+          this.existNumber =
+            this.existBigQuestion.length > 0
+              ? this.existBigQuestion[0].value
+              : null
         }
-      }
-    }
+      },
+    },
   },
-  mounted () {
+  mounted() {
     this.closeData = JSON.parse(JSON.stringify(this.quesctionObj))
   },
   methods: {
@@ -218,28 +258,32 @@ export default {
       'set_objectiveData',
       'set_orderSort',
     ]),
-    closeFrame () { // 取消弹框
+    closeFrame() {
+      // 取消弹框
       this.quesctionObj = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
 
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
     },
-    opened () {
-      this.quesctionObj = JSON.parse(JSON.stringify({ ...this.quesctionObj, number: this.BigQuestion }))
+    opened() {
+      this.quesctionObj = JSON.parse(
+        JSON.stringify({ ...this.quesctionObj, number: this.BigQuestion })
+      )
 
       this.openedFrame = true
       this.set_currentQuestion()
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
     },
-    change (id, num) {
-      let current = this.pageData.filter(item => item.id === id)
+    change(id, num) {
+      let current = this.pageData.filter((item) => item.id === id)
       this.quesctionObj = JSON.parse(JSON.stringify(current[0].content))
       this.editQuestionId = id
 
       let rows = this.quesctionObj.rows
-      if (num == 1) { // 1减法 2加法
+      if (num == 1) {
+        // 1减法 2加法
 
         if (rows > 1) {
           rows -= 1
@@ -260,16 +304,24 @@ export default {
       })
     },
 
-    openedEdit (id) {
-      let current = this.pageData.filter(item => item.id === id)
+    openedEdit(id) {
+      let current = this.pageData.filter((item) => item.id === id)
       this.quesctionObj = JSON.parse(JSON.stringify(current[0].content))
       this.editQuestionId = id
       this.openedFrame = true
       this.title = '编辑客观题'
       this.set_currentQuestion()
     },
-    preCreateQuestion () { // 数据编辑完成添加至全局数组中---------------
-      const { group, rows, topic, number, InsertTitle, Postpone } = this.objectiveData
+    preCreateQuestion() {
+      // 数据编辑完成添加至全局数组中---------------
+      const {
+        group,
+        rows,
+        topic,
+        number,
+        InsertTitle,
+        Postpone,
+      } = this.objectiveData
       const singleBox = group.singleBox
       //------------------------------------小题计算
       const singleArr = this.traverse(singleBox, this.letterArr)
@@ -282,13 +334,13 @@ export default {
       this.set_determineTopic(this.topicList) // 储存确实题型
 
       //-------------------------------------------
-      let result = [];
+      let result = []
       for (var i = 0; i < this.topicList.length; i += rows) {
-        result.push(this.topicList.slice(i, i + rows));
+        result.push(this.topicList.slice(i, i + rows))
       }
       const maxWidth = []
-      result.filter(item => {
-        let widthS = item.map(row => row.width)
+      result.filter((item) => {
+        let widthS = item.map((row) => row.width)
         maxWidth.push(Math.max.apply(null, widthS))
       })
 
@@ -297,14 +349,14 @@ export default {
       this.ContentHeight = heights // 内容高度
       // 计算出的内容高度值
 
-      let totalScore = 0;
+      let totalScore = 0
 
-      this.topicList.map(item => {
+      this.topicList.map((item) => {
         totalScore += item.score
       })
       this.objectiveData = {
         ...this.objectiveData,
-        totalScore: totalScore
+        totalScore: totalScore,
       }
       let objId = `objective_${+new Date()}`
       var obj = {
@@ -312,7 +364,7 @@ export default {
         height: heights + 32, // 32标题高度
         questionType: 'ObjectiveQuestion',
         content: this.objectiveData,
-        order: this.orderSort
+        order: this.orderSort,
       }
 
       let existBigQuestionObj = {
@@ -324,9 +376,13 @@ export default {
 
       if (this.editQuestionId == null) {
         if (InsertTitle && this.existBigQuestion.length > 0) {
-          let index = this.existBigQuestion.findIndex((item) => item.value === this.existNumber)
+          let index = this.existBigQuestion.findIndex(
+            (item) => item.value === this.existNumber
+          )
           if (index > -1) {
-            let objIndex = this.pageData.findIndex(item => item.id == this.existBigQuestion[index].id)
+            let objIndex = this.pageData.findIndex(
+              (item) => item.id == this.existBigQuestion[index].id
+            )
             if (objIndex > -1) {
               //-------------------------------------------------插入数组对象
               let data = {
@@ -336,13 +392,18 @@ export default {
                 },
                 num: this.existNumber + 1,
                 order: this.pageData[index].order + 1,
-                SelfO0rder: Postpone
+                SelfO0rder: Postpone || false,
               }
               this.insert_pageData(data)
               //-------------------------------------------------已选大题数组
               this.insert_existBigQuestion({
-                obj: { ...existBigQuestionObj, order: this.existBigQuestion[index].order + 1, },
-                num: this.existNumber, order: this.existBigQuestion[index].order, SelfO0rder: Postpone
+                obj: {
+                  ...existBigQuestionObj,
+                  order: this.existBigQuestion[index].order + 1,
+                },
+                num: this.existNumber,
+                order: this.existBigQuestion[index].order,
+                SelfO0rder: Postpone || false,
               })
             }
           }
@@ -368,23 +429,23 @@ export default {
       //------------------------------------
       this.openedFrame = false // 关闭弹窗
     },
-    hanldeSelect (e) {
+    hanldeSelect(e) {
       // 选择答题号
       this.quesctionObj.number = e
       this.objectiveData.number = e
     },
-    hanldeSelectexistBig (e) {
+    hanldeSelectexistBig(e) {
       this.existNumber = e
     },
-    hanldeDel (obj) {
+    hanldeDel(obj) {
       // 删除分段-小题组
       const group = this.quesctionObj.group
       const groupItem =
         obj.type == 'singleBox'
           ? group.singleBox
           : obj.type == 'checkbox'
-            ? group.checkbox
-            : group.judgment
+          ? group.checkbox
+          : group.judgment
       const index = groupItem.findIndex((item) => item.id == obj.id)
       if (index > -1) {
         let itemTopic = groupItem[index]
@@ -398,15 +459,15 @@ export default {
         })
       }
     },
-    hanldeAddSubtopic (type) {
+    hanldeAddSubtopic(type) {
       // 新增小题组-分段添加小题
       const group = this.quesctionObj.group
       const groupItem =
         type == 'singleBox'
           ? group.singleBox
           : type == 'checkbox'
-            ? group.checkbox
-            : group.judgment
+          ? group.checkbox
+          : group.judgment
       const long = +new Date() // 时间戳
       let itemObj = {
         start: this.currentQuestion,
@@ -419,58 +480,62 @@ export default {
       if (type == 'checkbox') {
         itemObj = {
           ...itemObj,
-          lessScore: null
+          lessScore: null,
         }
       }
       groupItem.push(itemObj)
     },
-    hanldeStatus (statusObj) {
+    hanldeStatus(statusObj) {
       this.errorVal = statusObj.val
       // 分段题组增加小题详情状态
     },
-    hanldeAddGroupQuestion (itemObj) {
+    hanldeAddGroupQuestion(itemObj) {
       //题组详情
       const group = this.quesctionObj.group
       const groupItem =
         itemObj.type == 'singleBox'
           ? group.singleBox
           : itemObj.type == 'checkbox'
-            ? group.checkbox
-            : group.judgment
-      const index = groupItem.findIndex(item => item.id === itemObj.data.id)
+          ? group.checkbox
+          : group.judgment
+      const index = groupItem.findIndex((item) => item.id === itemObj.data.id)
 
       if (index > -1) {
         groupItem.splice(index, 1, itemObj.data) // 替换
       }
     },
-    editTopicFunc (dataItem, type) {
+    editTopicFunc(dataItem, type) {
       // 编辑小题详情
       const group = this.quesctionObj.group
       const groupItem =
         type == 'singleBox'
           ? group.singleBox
           : type == 'checkbox'
-            ? group.checkbox
-            : group.judgment
-      const index = groupItem.findIndex(item => item.id === dataItem.pid)
+          ? group.checkbox
+          : group.judgment
+      const index = groupItem.findIndex((item) => item.id === dataItem.pid)
       if (index > -1) {
         let currentGroup = groupItem[index]
-        let currentIndex = currentGroup.childGroup.findIndex(item => item.id === dataItem.id)
+        let currentIndex = currentGroup.childGroup.findIndex(
+          (item) => item.id === dataItem.id
+        )
         if (currentIndex > -1) {
           currentGroup.childGroup.splice(currentIndex, 1, dataItem) // 替换
-
         }
       }
     },
-    traverse (Arr, letterArr) {
+    traverse(Arr, letterArr) {
       if (Arr.length > 0) {
         let data = []
-        Arr.forEach(item => {
-          item.childGroup.forEach(row => {
+        Arr.forEach((item) => {
+          item.childGroup.forEach((row) => {
             let obj = {
               ...row,
-              selectBox: row.select == 2 && row.id.indexOf('judgment') != -1 ? ['T', 'F'] : letterArr.slice(0, row.select),
-              width: row.select * 26 + 42
+              selectBox:
+                row.select == 2 && row.id.indexOf('judgment') != -1
+                  ? ['T', 'F']
+                  : letterArr.slice(0, row.select),
+              width: row.select * 26 + 42,
             }
             data.push(obj)
           })
@@ -481,7 +546,8 @@ export default {
         return []
       }
     },
-    HeightCalculation (maxWidth, result) { // 计算题型内容所占高度
+    HeightCalculation(maxWidth, result) {
+      // 计算题型内容所占高度
       // 计算宽度所占数组长度
       let widths = []
       let sum = 0
@@ -500,7 +566,11 @@ export default {
       if (maxWidth.length > 0) {
         let long = 0
         if (widths.length > 0) {
-          long = maxWidth.length - widths.reduce((accumulator, currentValue) => accumulator + currentValue)
+          long =
+            maxWidth.length -
+            widths.reduce(
+              (accumulator, currentValue) => accumulator + currentValue
+            )
         } else {
           long = maxWidth.length - 0
         }
@@ -508,7 +578,7 @@ export default {
       }
       // let widthsLong = widths.length
       // 计算高度所占数组长度
-      let heights = result.map(item => item.length * 22)
+      let heights = result.map((item) => item.length * 22)
 
       // 根据宽度数组 和 高度数组合成高度二维数组
       let twoDimensional = []
@@ -517,20 +587,25 @@ export default {
         num += widths[i]
         twoDimensional.push(heights.slice(num - widths[i], num))
       }
-      let heightList = twoDimensional.map(item => {
+      let heightList = twoDimensional.map((item) => {
         return Math.max.apply(null, item)
       })
       if (heightList.length > 0) {
-        return heightList.reduce((accumulator, currentValue) => accumulator + currentValue) + heightList.length * 10
+        return (
+          heightList.reduce(
+            (accumulator, currentValue) => accumulator + currentValue
+          ) +
+          heightList.length * 10
+        )
       } else {
         return 0
       }
-    }
+    },
   },
 }
 </script>
 
-<style lang="less" >
+<style lang="less">
 @import '~@/assets/css/variables.less';
 .select-item {
   display: flex;
