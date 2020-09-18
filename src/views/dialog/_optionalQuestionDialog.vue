@@ -57,6 +57,7 @@
         <el-checkbox v-model="data.InsertTitle">插入添加题目</el-checkbox>
         <div :class="['existBigQuestion_style', { Fade: !data.InsertTitle }]">
           <span>插入到第</span>
+
           <hj-select
             :items="existBigQuestion"
             size="mini"
@@ -174,11 +175,11 @@ export default {
             }
           })
           // const { group } = this.data
-          this.existNumber =
-            this.existBigQuestion.length > 0
-              ? this.existBigQuestion[0].value
-              : null
         }
+        this.existNumber =
+          this.existBigQuestion.length > 0
+            ? this.existBigQuestion[0].value
+            : null
       },
     },
   },
@@ -258,13 +259,12 @@ export default {
           let index = this.existBigQuestion.findIndex(
             (item) => item.value === this.existNumber
           )
-          // console.log(this.existBigQuestion)
-          // console.log(index)
+
           if (index > -1) {
             let objIndex = this.pageData.findIndex(
               (item) => item.id == this.existBigQuestion[index].id
             )
-            console.log(this.pageData)
+
             if (objIndex > -1) {
               //-------------------------------------------------插入数组对象
               let data = {
@@ -276,7 +276,7 @@ export default {
                 order: this.pageData[index].order + 1,
                 SelfO0rder: Postpone,
               }
-              console.log(data)
+
               this.insert_pageData(data)
               //-------------------------------------------------已选大题数组
               this.insert_existBigQuestion({

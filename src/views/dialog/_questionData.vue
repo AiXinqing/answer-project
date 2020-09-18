@@ -185,16 +185,6 @@ export default {
         return '一'
       }
     },
-    orderVal() {
-      let index = this.existBigQuestion.findIndex((item) => {
-        item.value == this.existNumber
-      })
-      if (index > -1) {
-        return this.existBigQuestion[index].order + 1
-      } else {
-        return 2
-      }
-    },
   },
   watch: {
     quesctionObj: {

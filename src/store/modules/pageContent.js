@@ -15,9 +15,6 @@ const mutations = {
   },
   initPageData: (state, Arr) => {
     state.pageData.push(Arr)
-    // state.pageData = state.pageData.sort((a, b) => {
-    //   return a.order - b.order;
-    // })
   },
   amendPageData: (state, ArrItem) => {
     // 编辑page-data
@@ -37,9 +34,6 @@ const mutations = {
     state.pageData = state.pageData.filter((item) => {
       return ![id].includes(item.id)
     })
-    // .sort((a, b) => {
-    //   return a.order - b.order;
-    // })
   },
   delPageData: (state, index) => {
     state.pageData.splice(index, 1)
@@ -68,6 +62,7 @@ const mutations = {
         return a.order - b.order
       })
       if (SelfO0rder) {
+        console.log(2)
         let tig = 0
         state.pageData.forEach((item, index) => {
           if (item.content.positionNum != undefined) {
