@@ -13,7 +13,9 @@
 
     <div class="question_arrays">
       <div class="question_editOrDel">
-        <span class="layui-btn layui-btn-xs" @click="compositionLanguagehEdit">编辑</span>
+        <span class="layui-btn layui-btn-xs" @click="compositionLanguagehEdit"
+          >编辑</span
+        >
         <span class="layui-btn layui-btn-xs" @click="delHanlde">删除</span>
       </div>
     </div>
@@ -25,23 +27,32 @@
       </template>
       <div class="compositionLanguage_box">
         <div
-          v-for="(item,i) in rowsData"
+          v-for="(item, i) in rowsData"
           :key="i"
           class="compositionLanguage_item"
-          :style="{'height':i != rowsData.length - 1 ? data.rowHeight + 'px':data.rowHeight - contentData.spacing + 'px'}"
+          :style="{
+            height:
+              i != rowsData.length - 1
+                ? data.rowHeight + 'px'
+                : data.rowHeight - contentData.spacing + 'px',
+          }"
         >
           <span
-            v-for="(item,i) in latticeData"
+            v-for="(item, i) in latticeData"
             :key="i"
+            class="svg_span"
             :style="{
-              'width':data.rowWidth - 1 + 'px',
-              'height':data.rowWidth - 1 + 'px',
+              width: data.rowWidth - 1 + 'px',
+              height: data.rowWidth - 1 + 'px',
             }"
-          />
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+              <text x="0" y="15" style="font-size:6px">100字</text>
+            </svg>
+          </span>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -55,15 +66,14 @@ export default {
   props: {
     questionData: {
       type: Object,
-      default: () => { }
+      default: () => {},
     },
     contentData: {
       type: Object,
-      default: () => { }
+      default: () => {},
     },
-
   },
-  data () {
+  data() {
     return {
       isEditor: false,
       data: {},
@@ -73,23 +83,31 @@ export default {
   computed: {
     ...mapState('questionType', ['options', 'letterArr']),
     ...mapState('pageContent', ['pageData', 'pageLayout']),
-    numberTitle () {
-      let item = this.options.filter(item => item.value === this.contentData.number)
+    numberTitle() {
+      let item = this.options.filter(
+        (item) => item.value === this.contentData.number
+      )
       return item[0].label
     },
-    strLong () {
-
+    strLong() {
       let long = this.contentData.topic.toString().length
       return parseInt(long) * 8 + 1
     },
-    TopicContent () {
+    TopicContent() {
       return `<span>${this.numberTitle}.</span><span>${this.contentData.name}</span><span class='p-5'>(${this.contentData.score})</span>分`
     },
-    topicData () {
+    topicData() {
       return ''
     },
-    rowsData () {
-      const { heightTitle, MarginHeight, castHeight, first, borderTop, rowHeight } = this.data
+    rowsData() {
+      const {
+        heightTitle,
+        MarginHeight,
+        castHeight,
+        first,
+        borderTop,
+        rowHeight,
+      } = this.data
       let row = 0
       if (first && borderTop == undefined) {
         row = Math.floor((castHeight - MarginHeight - heightTitle) / rowHeight)
@@ -102,31 +120,31 @@ export default {
       }
       return Arr
     },
-    latticeData () {
+    latticeData() {
       let Arr = []
       for (let i = 1; i <= this.data.lattice; i++) {
         Arr.push(i)
       }
       return Arr
-    }
+    },
   },
   watch: {
     questionData: {
       immediate: true,
-      handler () {
+      handler() {
         this.data = {
-          ...this.questionData
+          ...this.questionData,
         }
         console.log(this.data)
         console.log(this.contentData)
-      }
+      },
     },
     TopicContent: {
       immediate: true,
-      handler () {
+      handler() {
         this.cotent = this.TopicContent
-      }
-    }
+      },
+    },
   },
 
   methods: {
@@ -134,25 +152,26 @@ export default {
       'delPageData',
       'Empty_PageData',
       'del_objectiveData',
-      'del_orderSort'
+      'del_orderSort',
     ]),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
       'del_determineTopic',
-      'del_existBigQuestion'
+      'del_existBigQuestion',
     ]),
-    hanldeCloseEsitor (content) {
+    hanldeCloseEsitor(content) {
       this.isEditor = false
       this.cotent = content
     },
-    hanldeEditor () {
+    hanldeEditor() {
       this.isEditor = true
     },
-    compositionLanguagehEdit () {
+    compositionLanguagehEdit() {
       this.$emit('composition-language-edit', this.data)
     },
-    delHanlde () { // 删除大题-小题数
+    delHanlde() {
+      // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
       if (index > -1) {
         this.del_determineTopic([this.contentData])
@@ -163,14 +182,12 @@ export default {
         this.del_objectiveData() // 删减一个大题号
         this.del_existBigQuestion(this.questionData)
       }
-
     },
   },
 }
 </script>
 
-
-<style lang="less" >
+<style lang="less">
 .answer_question_box.composition_box {
   padding-top: 10px;
 }
@@ -199,6 +216,15 @@ export default {
     span {
       border-top: none;
     }
+  }
+}
+.svg_span {
+  position: relative;
+  svg {
+    position: absolute;
+    top: 20px;
+    left: 0px;
+    z-index: 9999;
   }
 }
 </style>

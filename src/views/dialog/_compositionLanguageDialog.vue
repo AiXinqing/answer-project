@@ -382,9 +382,9 @@ export default {
 
         // 行数 向上取整
         let row = Math.ceil(totalWordCount / lattice)
-        console.log(row)
+
         //行数高度 = 格子大小 + 间距（间距同上要求）
-        let rowHeight = this.latticeWidth + spacing
+        let rowHeight = this.latticeWidth + 2 + spacing
 
         let rectHeight = row * rowHeight // 当前内容高度 45(内部高度)
         let MarginHeight = 45
