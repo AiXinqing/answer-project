@@ -16,7 +16,10 @@
       <el-button @click="NonRresponseArea">非作答</el-button>
     </div>
     <div class="basis_checkbox basic_btn save-btn">
-      <el-button type="primary">预览</el-button>
+      <el-button type="primary" @click="previewLinkFunc">预览</el-button>
+      <!-- <el-button type="primary">
+        <router-link to="/preview">预览</router-link>
+      </el-button> -->
       <el-button type="primary">保存</el-button>
       <el-button type="primary">下载</el-button>
     </div>
@@ -25,40 +28,49 @@
 </template>
 
 <script>
-
 import publicDialog from './dialog/_publicDialog'
 export default {
   components: {
-    publicDialog
+    publicDialog,
   },
-  data () {
+  data() {
     return {
       checked: false,
-      openedFrame: true
+      openedFrame: true,
     }
   },
   methods: {
-    questionDialog () {
+    questionDialog() {
       this.$refs.publicDialog.opened('questionDialogs')
     },
-    fillInTheBlank () {
+    fillInTheBlank() {
       this.$refs.publicDialog.opened('fillInTheBlanks')
     },
-    answerQuestion () {
+    answerQuestion() {
       this.$refs.publicDialog.opened('answerQuestion')
     },
-    optionalQuestion () {
+    optionalQuestion() {
       this.$refs.publicDialog.opened('optionalQuestion')
     },
-    compositionEnglish () {
+    compositionEnglish() {
       this.$refs.publicDialog.opened('compositionEnglish')
     },
-    compositionLanguage () {
+    compositionLanguage() {
       this.$refs.publicDialog.opened('compositionLanguage')
     },
-    NonRresponseArea () {
+    NonRresponseArea() {
       this.$refs.publicDialog.opened('NonRresponseArea')
-    }
+    },
+    previewLinkFunc() {
+      // 跳转至预览页面
+      let routeTwo = this.$router.resolve({
+        name: 'preview',
+        // query: {
+        //   id: 1,
+        // },
+      })
+      window.open(routeTwo.href, '_blank')
+    },
   },
 }
 </script>
