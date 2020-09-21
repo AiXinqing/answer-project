@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import publicDialog from './dialog/_publicDialog'
 export default {
   components: {
@@ -38,6 +39,9 @@ export default {
       checked: false,
       openedFrame: true,
     }
+  },
+  computed: {
+    ...mapState('pageContent', ['pageLayout', 'pageData', 'page_size']),
   },
   methods: {
     questionDialog() {
@@ -63,13 +67,17 @@ export default {
     },
     previewLinkFunc() {
       // 跳转至预览页面
-      let routeTwo = this.$router.resolve({
+      //let routeTwo =
+      this.$router.push({
         name: 'preview',
-        // query: {
-        //   id: 1,
-        // },
+        params: {
+          layout: this.pageLayout,
+          size: this.page_size,
+          content: this.pageData,
+        },
       })
-      window.open(routeTwo.href, '_blank')
+      // window.open(routeTwo.href, '_blank')
+      // console.log(data)
     },
   },
 }
