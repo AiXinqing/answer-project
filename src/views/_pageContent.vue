@@ -1,25 +1,25 @@
 <template>
   <div class="container-card">
     <div
-      v-for="(item, i) in contentData"
+      v-for="(pageList, i) in contentData"
       :key="i"
       class="page-contents"
       :style="{ width: pageWidth + 'px' }"
     >
       <div
-        v-for="(row, a) in item"
-        :key="a"
+        v-for="topice in pageList"
+        :key="topice.id"
         :class="[
           'footer',
-          { answer: row.first != undefined && row.first == false },
+          { answer: topice.first != undefined && topice.first == false },
         ]"
         ref="box"
-        :style="{ minHeight: row.castHeight + 'px' }"
+        :style="{ minHeight: topice.castHeight + 'px' }"
       >
         <component
-          :is="row.questionType"
-          :content-data="row.content"
-          :question-data="row"
+          :is="topice.questionType"
+          :content-data="topice.content"
+          :question-data="topice"
           @hanldeStudent="hanldeStudent"
           @edit-admission-number="editAdmissionNumber"
           @current-question-hanlde-edit="currentQuestionHanldeEdit"
@@ -127,15 +127,12 @@ export default {
         let ActualHeight = rect.height + 20 //
         // avalible 剩余高度
         let avalibleHeight = this.page_size - curPage.height
+        // 用于填空题数组切割
         let itemObj = JSON.parse(JSON.stringify(rect))
-        let whetherShow = this.shawDataFunc(rect) // 是否显示
 
         // 高度溢出
-        // console.log(rect)
-        // console.log(ActualHeight)
-        // console.log('--------------------------')
-        // console.log(avalibleHeight)
         if (ActualHeight > avalibleHeight) {
+          // 返回计算行数及最低高度
           let curRect = this.questionType(rect, avalibleHeight)
 
           if (
@@ -148,10 +145,10 @@ export default {
             curPage.rects.push({
               ...rect,
               castHeight: curRect.height,
-              showData: whetherShow
+              showData: curRect.isArray
                 ? itemObj.showData.splice(0, curRect.row)
                 : [],
-              first: whetherShow ? true : rect.first,
+              first: curRect.isArray ? true : rect.first,
             })
           }
 
@@ -162,19 +159,18 @@ export default {
           // 判罚当前高度能分几页
           let height = rect.height - avalibleHeight + SplitVal
           while (height > this.page_size) {
-            let content = this.pageShow(rect)
-
+            let curRects = this.questionType(rect, this.page_size)
             results.push([
               {
                 ...rect,
-                castHeight: content.height, // 追加一页高度
-                showData: whetherShow
-                  ? itemObj.showData.splice(0, content.row)
+                castHeight: curRects.height, // 追加一页高度
+                showData: curRect.isArray
+                  ? itemObj.showData.splice(0, curRects.row)
                   : [],
-                borderTop: !curRect.isPage ? 1 : 0, // 分页第一个
+                borderTop: !curRects.isPage ? 1 : 0, // 分页第一个
               },
             ])
-            height -= content.height
+            height -= curRects.height
           }
 
           if (
@@ -206,98 +202,46 @@ export default {
       if (curPage.height) {
         results.push(curPage.rects)
       }
-      // console.log(JSON.stringify(rects))
-      // console.log(results)
+
       return results
     },
     questionType(obj, rectHeigth) {
       let MarginHeight = obj.MarginHeight + obj.heightTitle
       let contentHeight = rectHeigth - MarginHeight
-      let RowHeight = 45
+      //-----------当前高度可占多少行
+      let RowHeight = obj.rowHeight
       let row = Math.floor(contentHeight / RowHeight)
+      let rectObj = {
+        height: row * RowHeight + MarginHeight,
+        row: row,
+        isArray: false,
+        isPage: row * RowHeight + MarginHeight < MarginHeight ? true : false,
+      }
       switch (obj.questionType) {
         case 'FillInTheBlank':
           return {
-            height: row * RowHeight + MarginHeight,
-            row: row,
+            ...rectObj,
             isPage: false,
+            isArray: true,
           }
         case 'answerQuestion':
-          RowHeight = 35
-          row = Math.floor(contentHeight / RowHeight)
           return {
-            height: row * RowHeight + MarginHeight,
-            row: row,
+            ...rectObj,
             isPage: false,
           }
         case 'optionalQuestion':
-          RowHeight = 35
-          row = Math.floor(contentHeight / RowHeight)
-          return {
-            height: row * RowHeight + MarginHeight,
-            row: row,
-            isPage:
-              row * RowHeight + MarginHeight < MarginHeight ? true : false,
-          }
+          return rectObj
         case 'compositionEnglish':
-          RowHeight = 35
-          row = Math.floor(contentHeight / RowHeight)
-          return {
-            height: row * RowHeight + MarginHeight,
-            row: row,
-            isPage:
-              row * RowHeight + MarginHeight < MarginHeight ? true : false,
-          }
+          return rectObj
         case 'compositionLanguage':
-          RowHeight = obj.rowHeight
-          row = Math.floor(contentHeight / RowHeight)
-          return {
-            height: row * RowHeight + MarginHeight,
-            row: row,
-            isPage:
-              row * RowHeight + MarginHeight < MarginHeight ? true : false,
-          }
+          return rectObj
         case 'NonRresponseArea':
-          RowHeight = obj.rowHeight
-          row = Math.floor(contentHeight / RowHeight)
-          return {
-            height: row * RowHeight + MarginHeight,
-            row: row,
-            isPage: row * RowHeight + MarginHeight < 40 ? true : false,
-          }
+          return rectObj
         default:
-          return { height: 0, row: 0, isPage: false }
-      }
-      // console.log(obj)
-    },
-    pageShow(obj) {
-      let MarginHeight = obj.MarginHeight
-      let contentHeight = this.page_size - MarginHeight
-      let RowHeight = 45
-      let row = Math.floor(contentHeight / RowHeight)
-      switch (obj.questionType) {
-        case 'FillInTheBlank':
-          return { height: row * RowHeight + MarginHeight, row: row }
-        case 'answerQuestion':
-          RowHeight = 35
-          row = Math.floor(contentHeight / RowHeight)
-          return { height: row * RowHeight + MarginHeight, row: row }
-        case 'optionalQuestion':
-          RowHeight = 35
-          row = Math.floor(contentHeight / RowHeight)
-          return { height: row * RowHeight + MarginHeight, row: row }
-        default:
-          return { height: 0, row: 0 }
+          return { height: 0, row: 0, isPage: false, isArray: false }
       }
     },
-    shawDataFunc(obj) {
-      switch (obj.questionType) {
-        case 'FillInTheBlank':
-          return true
-        default:
-          return false
-      }
-    },
+
     currentQuestionHanldeEdit(id) {
       this.$refs.publicDialog.openedEdit('questionDialogs', id)
     },

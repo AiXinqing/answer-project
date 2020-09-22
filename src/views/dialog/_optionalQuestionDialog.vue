@@ -240,6 +240,7 @@ export default {
         MarginHeight: MarginHeight,
         heightTitle: 54,
         height: heights,
+        rowHeight: 35,
         id: objId,
         questionType: 'optionalQuestion',
         content: this.data,

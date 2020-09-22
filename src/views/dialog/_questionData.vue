@@ -352,6 +352,7 @@ export default {
       var obj = {
         id: objId,
         height: heights + 32, // 32标题高度
+        rowHeight: 35,
         questionType: 'ObjectiveQuestion',
         content: this.objectiveData,
         order: this.orderSort,

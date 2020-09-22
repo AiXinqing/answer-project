@@ -322,6 +322,7 @@ export default {
           heightTitle: 32,
           MarginHeight: MarginHeight,
           height: heights,
+          rowHeight: 36,
           id: objId,
           questionType: 'compositionEnglish',
           content: this.data,

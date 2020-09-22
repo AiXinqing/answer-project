@@ -1,44 +1,60 @@
 <template>
-<!-- 填空题 -->
+  <!-- 填空题 -->
   <div class="question-info">
-      <template v-if="questionData.first &&  questionData.borderTop == undefined" >
-        <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
-          <div class="title-span" v-html="cotent"></div>
-        </div>
-        <quill-editor
-          v-show="isEditor"
-          :topic-content="TopicContent"
-          @hanlde-close-esitor="hanldeCloseEsitor"
-        />
+    <template v-if="questionData.first && questionData.borderTop == undefined">
+      <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
+        <div class="title-span" v-html="cotent"></div>
+      </div>
+      <quill-editor
+        v-show="isEditor"
+        :topic-content="TopicContent"
+        @hanlde-close-esitor="hanldeCloseEsitor"
+      />
     </template>
     <div class="question_arrays">
       <div class="question_editOrDel">
-        <span class="layui-btn layui-btn-xs" @click="currentQuestionFillEdit(questionData.id)">编辑</span>
-        <span class="layui-btn layui-btn-xs" @click="delHanlde(questionData.id)">删除</span>
+        <span
+          class="layui-btn layui-btn-xs"
+          @click="currentQuestionFillEdit(questionData.id)"
+          >编辑</span
+        >
+        <span class="layui-btn layui-btn-xs" @click="delHanlde(questionData.id)"
+          >删除</span
+        >
       </div>
     </div>
     <div class="content-info">
-      <div
-        class="content-row"
-        v-for="(item,i) in topicGroupData"
-        :key="i"
-      >
+      <div class="content-row" v-for="(item, i) in topicGroupData" :key="i">
         <a
-          v-for="(row,a) in item"
-          :key="a"
-          :style="{'width':pageWidth / data.rows + 'px'}"
+          v-for="row in item"
+          :key="row.id"
+          :style="{ width: pageWidth / data.rows + 'px' }"
         >
-        <i v-if="row.lgTopic != undefined" ref="iWidth">
-          <template v-if="row.lgTopic < 2 ">{{row.topic}}</template>
-          <template v-if="row.lgTopic != 0">({{row.lgTopic}})</template>
-        </i>
-        <i v-else ref="iWidth"></i>
-        <span v-if="row.lgTopic != undefined" :style="{
-          'width':row.lgTopic != 0 ?  'calc(100% - '+ (row.topic.toString().length + row.lgTopic.toString().length + 2) * 9 +'px)':'calc(100% - 23px)'
-          }"/>
-        <span v-else :style="{
-          'width':'calc(100% - 22px)'
-          }"/>
+          <i v-if="row.lgTopic != undefined" ref="iWidth">
+            <template v-if="row.lgTopic < 2">{{ row.topic }}</template>
+            <template v-if="row.lgTopic != 0">({{ row.lgTopic }})</template>
+          </i>
+          <i v-else ref="iWidth"></i>
+          <span
+            v-if="row.lgTopic != undefined"
+            :style="{
+              width:
+                row.lgTopic != 0
+                  ? 'calc(100% - ' +
+                    (row.topic.toString().length +
+                      row.lgTopic.toString().length +
+                      2) *
+                      9 +
+                    'px)'
+                  : 'calc(100% - 23px)',
+            }"
+          />
+          <span
+            v-else
+            :style="{
+              width: 'calc(100% - 22px)',
+            }"
+          />
         </a>
       </div>
     </div>
@@ -55,72 +71,77 @@ export default {
   props: {
     contentData: {
       type: Object,
-      default: () => { }
+      default: () => {},
     },
     questionData: {
       type: Object,
-      default: () => { }
-    }
+      default: () => {},
+    },
   },
-  data () {
+  data() {
     return {
       data: {},
       isEditor: false,
-      cotent: ''
+      cotent: '',
     }
   },
   computed: {
     ...mapState('questionType', ['options', 'letterArr']),
     ...mapState('pageContent', ['pageData', 'pageLayout']),
-    numberTitle () {
-      let item = this.options.filter(item => item.value === this.data.number)
+    numberTitle() {
+      let item = this.options.filter((item) => item.value === this.data.number)
       return item[0].label
     },
 
-    TopicContent () {
+    TopicContent() {
       return `<span>${this.numberTitle}.</span><span>${this.data.topic}</span><span>(${this.data.totalScore})分</span>`
     },
-    pageWidth () {
+    pageWidth() {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 440
         : 695
     },
-    topicGroupData () {
+    topicGroupData() {
       return this.questionData.showData
     },
-    topicBox () {
+    topicBox() {
       let topicList = []
-      this.data.group.forEach(item => {
+      this.data.group.forEach((item) => {
         topicList.push(...item.childGroup)
       })
       return topicList
-    }
+    },
   },
   watch: {
     contentData: {
       immediate: true,
-      handler () {
+      handler() {
         this.data = {
-          ...this.contentData
+          ...this.contentData,
         }
-      }
+      },
     },
     TopicContent: {
       immediate: true,
-      handler () {
+      handler() {
         this.cotent = this.TopicContent
-      }
-    }
+      },
+    },
   },
   methods: {
-    ...mapMutations('pageContent', ['delPageData', 'del_objectiveData', 'del_orderSort']),
+    ...mapMutations('pageContent', [
+      'delPageData',
+      'del_objectiveData',
+      'del_orderSort',
+    ]),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
       'del_determineTopic',
-      'del_existBigQuestion'
+      'del_existBigQuestion',
     ]),
-    delHanlde (id) { // 删除大题-小题数
+    delHanlde(id) {
+      // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === id)
       if (index > -1) {
         this.del_determineTopic(this.topicBox)
@@ -132,16 +153,16 @@ export default {
         this.del_existBigQuestion(this.questionData)
       }
     },
-    currentQuestionFillEdit (id) {
+    currentQuestionFillEdit(id) {
       this.$emit('current-question-fill-edit', id)
     },
-    hanldeEditor () {
+    hanldeEditor() {
       this.isEditor = true
     },
-    hanldeCloseEsitor (content) {
+    hanldeCloseEsitor(content) {
       this.isEditor = false
       this.cotent = content
-    }
+    },
   },
 }
 </script>
@@ -218,5 +239,4 @@ export default {
   }
   margin-bottom: 10px;
 }
-
 </style>

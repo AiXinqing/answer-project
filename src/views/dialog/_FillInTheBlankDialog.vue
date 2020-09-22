@@ -49,18 +49,29 @@
         @change-last-sub-topic-score="changeLastSubTopicScore"
       />
       <div class="condition_box Insert_box" v-show="editQuestionId == null">
-        <el-checkbox v-model="objectiveData.InsertTitle">插入添加题目</el-checkbox>
+        <el-checkbox v-model="objectiveData.InsertTitle"
+          >插入添加题目</el-checkbox
+        >
         <div
-          :class="['existBigQuestion_style',{'Fade':!objectiveData.InsertTitle}]">
+          :class="[
+            'existBigQuestion_style',
+            { Fade: !objectiveData.InsertTitle },
+          ]"
+        >
           <span>插入到第</span>
           <hj-select
-              :items="existBigQuestion"
-              size="mini"
-              :value="existNumber"
-              @change="hanldeSelectexistBig"/>
+            :items="existBigQuestion"
+            size="mini"
+            :value="existNumber"
+            @change="hanldeSelectexistBig"
+          />
           <span>大题后</span>
         </div>
-        <el-checkbox :class="['Postpone',{'Fade':!objectiveData.InsertTitle}]" v-model="objectiveData.Postpone">大题号自动顺延</el-checkbox>
+        <el-checkbox
+          :class="['Postpone', { Fade: !objectiveData.InsertTitle }]"
+          v-model="objectiveData.Postpone"
+          >大题号自动顺延</el-checkbox
+        >
         <div class="Insert_Mask" v-show="!objectiveData.InsertTitle"></div>
       </div>
     </div>
@@ -84,7 +95,7 @@ export default {
   components: {
     spaceQuestion,
   },
-  data () {
+  data() {
     return {
       openedFrame: false,
       isdisabledFn: false,
@@ -129,23 +140,25 @@ export default {
       'BigQuestion',
       'orderSort',
     ]),
-    pageWidth () {
+    pageWidth() {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 480
         : 745
     },
-    errorMessage () {
+    errorMessage() {
       return this.errorVal != '' ? true : false
     },
-    capitalTopicNum () {
-      let index = this.options.findIndex(item => this.objectiveData.number == item.value)
+    capitalTopicNum() {
+      let index = this.options.findIndex(
+        (item) => this.objectiveData.number == item.value
+      )
       if (index > -1) {
         return this.options[index].label
       } else {
         return '一'
       }
     },
-    topicGroupData () {
+    topicGroupData() {
       let rows = this.objectiveData.rows
       let array = []
 
@@ -157,7 +170,6 @@ export default {
         let temporaryArr = []
         let datas = []
         array.forEach((ele) => {
-
           if (ele.childGroup != undefined && ele.childGroup.length > 0) {
             ele.childGroup.forEach((row, index) => {
               for (let i = 1; i <= row.space; i++) {
@@ -179,7 +191,6 @@ export default {
               }
             })
           } else {
-
             for (let i = 1; i <= ele.space; i++) {
               if (temporaryArr.length + 1 > rows) {
                 datas.push(temporaryArr)
@@ -205,7 +216,6 @@ export default {
 
         return datas
       } else {
-
         return []
       }
     },
@@ -213,7 +223,7 @@ export default {
   watch: {
     spaceTopic: {
       immediate: true,
-      handler () {
+      handler() {
         this.objectiveData = {
           ...this.spaceTopic,
         }
@@ -222,15 +232,21 @@ export default {
           this.$nextTick(() => {
             this.objectiveData.number = this.BigQuestion
           })
-          this.objectiveData.group.map(item => {
-            return { ...item, start: item.end == null ? this.currentQuestion : item.start }
+          this.objectiveData.group.map((item) => {
+            return {
+              ...item,
+              start: item.end == null ? this.currentQuestion : item.start,
+            }
           })
-          this.existNumber = this.existBigQuestion.length > 0 ? this.existBigQuestion[0].value : null
+          this.existNumber =
+            this.existBigQuestion.length > 0
+              ? this.existBigQuestion[0].value
+              : null
         }
       },
     },
   },
-  mounted () {
+  mounted() {
     this.closeData = JSON.parse(JSON.stringify(this.spaceTopic))
     this.set_currentQuestion()
   },
@@ -253,7 +269,7 @@ export default {
       'set_objectiveData',
       'set_orderSort',
     ]),
-    closeFrame () {
+    closeFrame() {
       // 关闭弹框
       this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
@@ -261,8 +277,10 @@ export default {
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
     },
-    opened () {
-      this.spaceTopic = JSON.parse(JSON.stringify({ ...this.spaceTopic, start: this.currentQuestion }))
+    opened() {
+      this.spaceTopic = JSON.parse(
+        JSON.stringify({ ...this.spaceTopic, start: this.currentQuestion })
+      )
       this.spaceTopic.number = this.BigQuestion
       this.objectiveData.number = this.BigQuestion
       this.openedFrame = true
@@ -271,7 +289,7 @@ export default {
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
     },
-    openedEdit (id) {
+    openedEdit(id) {
       let current = this.pageData.filter((item) => item.id === id)
 
       this.spaceTopic = JSON.parse(JSON.stringify(current[0].content))
@@ -280,13 +298,13 @@ export default {
       this.title = '编辑填空题'
       this.set_currentQuestion()
     },
-    preCreateQuestion () {
+    preCreateQuestion() {
       // 数据编辑完成添加至全局数组中---------------
       // 计算高度
       // console.log(this.topicGroupData)
       let height = this.topicGroupData.length * 45 + 17 + 32
       // 此题总分计算
-      const {group,topic,number,InsertTitle,Postpone} = this.objectiveData
+      const { group, topic, number, InsertTitle, Postpone } = this.objectiveData
       group.forEach((item) => {
         this.topicList.push(...item.childGroup)
       })
@@ -303,6 +321,7 @@ export default {
         MarginHeight: 17,
         id: objId,
         height: height, // 32标题高度
+        rowHeight: 45,
         questionType: 'FillInTheBlank',
         content: { ...this.objectiveData, totalScore: totalScore },
         order: this.orderSort,
@@ -325,29 +344,35 @@ export default {
 
       if (this.editQuestionId == null) {
         if (InsertTitle && this.existBigQuestion.length > 0) {
-          let index = this.existBigQuestion.findIndex((item) => item.value === this.existNumber)
-           if (index > -1) {
-             let data = {
-                obj: {
-                  ...obj,
-                  order: this.pageData[index].order + 1,
-                },
-                num: this.existNumber + 1,
+          let index = this.existBigQuestion.findIndex(
+            (item) => item.value === this.existNumber
+          )
+          if (index > -1) {
+            let data = {
+              obj: {
+                ...obj,
                 order: this.pageData[index].order + 1,
-                SelfO0rder: Postpone
-              }
-              this.insert_pageData(data)
+              },
+              num: this.existNumber + 1,
+              order: this.pageData[index].order + 1,
+              SelfO0rder: Postpone,
+            }
+            this.insert_pageData(data)
 
-              this.insert_existBigQuestion({
-                obj: { ...existBigQuestionObj, order: this.existBigQuestion[index].order + 1, },
-                num: this.existNumber, order: this.existBigQuestion[index].order, SelfO0rder: Postpone
-              })
-           }
-        }else{
+            this.insert_existBigQuestion({
+              obj: {
+                ...existBigQuestionObj,
+                order: this.existBigQuestion[index].order + 1,
+              },
+              num: this.existNumber,
+              order: this.existBigQuestion[index].order,
+              SelfO0rder: Postpone,
+            })
+          }
+        } else {
           this.initPageData(obj)
           this.set_existBigQuestion(existBigQuestionObj)
         }
-
       } else {
         obj.id = this.editQuestionId
         this.amendPageData(obj)
@@ -358,26 +383,25 @@ export default {
       this.set_orderSort()
       this.openedFrame = false // 关闭弹窗
 
-
       //------------------------
       this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
     },
-    hanldeSelect (e) {
+    hanldeSelect(e) {
       // 选择答题号
       this.spaceTopic.number = e
       this.objectiveData.number = e
     },
-    hanldeSelectexistBig (e) {
+    hanldeSelectexistBig(e) {
       this.existNumber = e
     },
-    traverse () { },
-    HeightCalculation () {
+    traverse() {},
+    HeightCalculation() {
       // 计算题型内容所占高度
     },
-    hanldeStatus (val) {
+    hanldeStatus(val) {
       this.errorVal = val
     },
-    hanldeAddGroupQuestion (obj) {
+    hanldeAddGroupQuestion(obj) {
       //添加题组
       let group = this.spaceTopic.group
       const index = group.findIndex((item) => item.id === obj.id)
@@ -386,7 +410,7 @@ export default {
         // 追曾小题号至数组
       }
     },
-    hanldeDelGroup (id) {
+    hanldeDelGroup(id) {
       //删除题组
       let group = this.spaceTopic.group
       const index = group.findIndex((item) => item.id === id)
@@ -401,7 +425,7 @@ export default {
         })
       }
     },
-    hanldeSubtopicDel (obj) {
+    hanldeSubtopicDel(obj) {
       // 删除小题
       let dataObj = JSON.parse(JSON.stringify(this.spaceTopic))
       let group = dataObj.group
@@ -420,7 +444,6 @@ export default {
       // console.log(lastIndex)
       // console.log(arr)
       if (lastIndex > -1) {
-
         if (obj.topic == arr[0]) {
           // 判断点击的是否是首尾
           this.del_AlreadyTopics([groupObj.childGroup[index]])
@@ -463,12 +486,11 @@ export default {
             group.splice(index, 1) // 删除
 
             this.spaceTopic.group.splice(0, 1, ...SplitArray)
-
           }
         }
       }
     },
-    hanldeAddSubtopic () {
+    hanldeAddSubtopic() {
       //添加分段题组
       let obj = {
         start: this.currentQuestion,
@@ -481,7 +503,7 @@ export default {
       this.spaceTopic.group.push(obj)
       // console.log(this.objectiveData)
     },
-    SplitFunc (index, groupObj, arr) {
+    SplitFunc(index, groupObj, arr) {
       // 删除小题拆分数组 sub
       let arrObj = JSON.parse(JSON.stringify(arr)) // 赋值操作
 
@@ -496,7 +518,7 @@ export default {
         return a.start - b.start
       })
     },
-    SplitArrObject (arrParameter, groupObj) {
+    SplitArrObject(arrParameter, groupObj) {
       // 生成数组对象
       if (arrParameter.length > 0) {
         let arr = []
@@ -530,7 +552,7 @@ export default {
         return {}
       }
     },
-    topicDetailAdd (obj) {
+    topicDetailAdd(obj) {
       // 添加小题
       let group = this.spaceTopic.group
       const i = group.findIndex((item) => item.id === obj.pid)
@@ -573,7 +595,7 @@ export default {
         }
       }
     },
-    ChangeSpaceValue (obj) {
+    ChangeSpaceValue(obj) {
       // 分值分数修改
       // 添加小题空格数
       let group = this.spaceTopic.group
@@ -593,7 +615,7 @@ export default {
         }
       }
     },
-    hanldeLastTopicDel (obj) {
+    hanldeLastTopicDel(obj) {
       // 删除小题last题组item
       let group = this.spaceTopic.group // 找到题组
       const i = group.findIndex((item) => item.id === obj.fid)
@@ -626,7 +648,7 @@ export default {
         }
       }
     },
-    changeLastSubTopicScore (obj, oldObj) {
+    changeLastSubTopicScore(obj, oldObj) {
       // last-sub分值改变
 
       let group = this.spaceTopic.group

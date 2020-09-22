@@ -27,7 +27,7 @@
       </template>
       <div class="compositionLanguage_box">
         <div
-          v-for="(item, i) in rowsData"
+          v-for="(rowsList, i) in rowsData"
           :key="i"
           class="compositionLanguage_item"
           :style="{
@@ -38,16 +38,22 @@
           }"
         >
           <span
-            v-for="(item, i) in latticeData"
-            :key="i"
+            v-for="(lattices, a) in latticeData"
+            :key="a"
             class="svg_span"
             :style="{
               width: data.rowWidth - 1 + 'px',
               height: data.rowWidth - 1 + 'px',
             }"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-              <text x="0" y="15" style="font-size:6px">100字</text>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              version="1.1"
+              v-show="/(^[1-9]\d*$)/.test((i * 24 + (a += 1)) / 100)"
+            >
+              <text x="0" y="15" style="font-size:6px">
+                {{ i * 24 + (a += 1) - 1 }}字
+              </text>
             </svg>
           </span>
         </div>
@@ -135,8 +141,8 @@ export default {
         this.data = {
           ...this.questionData,
         }
-        console.log(this.data)
-        console.log(this.contentData)
+        // console.log(this.data)
+        // console.log(this.contentData)
       },
     },
     TopicContent: {
@@ -223,7 +229,7 @@ export default {
   svg {
     position: absolute;
     top: 20px;
-    left: 0px;
+    left: 5px;
     z-index: 9999;
   }
 }
