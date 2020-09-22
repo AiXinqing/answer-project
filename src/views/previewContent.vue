@@ -1,41 +1,40 @@
 <template>
-  <div class="container-card">
-    <div
-      v-for="(pageList, i) in contentData"
-      :key="i"
-      class="page-contents"
-      :style="{ width: pageWidth + 'px' }"
-    >
-      <div
-        v-for="topice in pageList"
-        :key="topice.id"
-        :class="[
-          'footer',
-          { answer: topice.first != undefined && topice.first == false },
-        ]"
-        ref="box"
-        :style="{ minHeight: topice.castHeight + 'px' }"
-      >
-        <component
-          :is="topice.questionType"
-          :content-data="topice.content"
-          :question-data="topice"
-          @hanldeStudent="hanldeStudent"
-          @edit-admission-number="editAdmissionNumber"
-          @current-question-hanlde-edit="currentQuestionHanldeEdit"
-          @current-question-fill-edit="currentQuestionFillEdit"
-          @hanlde-subtraction="hanldeSubtraction"
-          @current-question-answer-edit="currentQuestionAnswerEdit"
-          @current-question-optional-edit="currentQuestionOptionalEdit"
-          @composition-english-edit="compositionEnglishEdit"
-          @composition-language-edit="compositionLanguageEdit"
-          @cur-edit-non="curEditNon"
-          @hanlde-subtraction-non="hanldeSubtractionNon"
-        />
+  <div class="page-content">
+    <div class="main-info">
+      <div v-for="(pages, i) in contentData" :key="i" class="page_card">
+        <div
+          v-for="(pagesCrad, a) in pages"
+          :key="a"
+          :style="{
+            width: pageWidth + 'px',
+            marginLeft: pageWidth == 520 ? '25px' : '38px',
+          }"
+          :class="[
+            'page_info_itme',
+            {
+              answer: pagesCrad.first != undefined && pagesCrad.first == false,
+            },
+          ]"
+        >
+          <div
+            v-for="(question, index) in pagesCrad"
+            :key="index"
+            class="footer"
+            :style="{ minHeight: question.castHeight + 'px' }"
+          >
+            <component
+              :is="question.questionType"
+              :content-data="question.content"
+              :question-data="question"
+              :preview-is="true"
+            />
+          </div>
+        </div>
+        <div class="card_footer">
+          第 {{ i + 1 }} 页 共 {{ contentData.length }} 页
+        </div>
       </div>
     </div>
-    <!-- 公有弹框组件 -->
-    <public-dialog ref="publicDialog" />
   </div>
 </template>
 
@@ -49,15 +48,12 @@ import optionalQuestion from './questionContent/_optionalQuestion' // 选作题
 import compositionEnglish from './questionContent/_compositionEnglish' // 作文英语
 import compositionLanguage from './questionContent/_compositionLanguage' // 作文语文
 import NonRresponseArea from './questionContent/_NonRresponseAreaContent' // 非作答
-import publicDialog from './dialog/_publicDialog'
-
 export default {
   components: {
     AnswerSheetTitle,
     ObjectiveQuestion,
     FillInTheBlank,
     answerQuestion,
-    publicDialog,
     optionalQuestion,
     compositionEnglish,
     compositionLanguage,
@@ -66,52 +62,46 @@ export default {
   data() {
     return {
       contentData: [],
-      heightArray: [],
+      ces: '',
     }
   },
   computed: {
-    ...mapState('pageContent', [
-      'pageLayout',
-      'pageData',
-      'page_size',
-      'orderSort',
-    ]),
+    ...mapState('pageContent', ['pageLayout', 'pageData', 'page_size']),
     pageWidth() {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 520
         : 785
+    },
+    pageNum() {
+      return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
+        ? 3
+        : 2
     },
   },
   watch: {
     pageData: {
       immediate: true,
       handler() {
-        this.contentData = this.pageContentFunc(this.pageData)
-        if (this.contentData.length > 0) {
-          this.$nextTick(() => {
-            this.heightArray = this.$refs['box'].map(
-              (item) => item.clientHeight
-            )
-            this.set_pageHeight(this.heightArray)
-          })
+        let data = this.pageContentFunc(this.pageData)
+        let index = 0
+        let newArray = []
+        while (index < data.length) {
+          newArray.push(data.slice(index, (index += this.pageNum)))
         }
+        this.contentData = newArray
+
+        console.log(this.contentData)
       },
     },
   },
   mounted() {
     this.$nextTick(() => {
-      // this.getPageData()
+      console.log(this.pageData)
     })
   },
   methods: {
     ...mapActions('pageContent', ['getPageData']),
     ...mapMutations('pageContent', ['set_pageHeight']),
-    hanldeStudent(Arr) {
-      this.$refs.publicDialog.opened('studentTitle', Arr)
-    },
-    editAdmissionNumber() {
-      this.$refs.publicDialog.opened('AdmissionNumber')
-    },
     pageContentFunc(rects = []) {
       let results = []
       let SplitVal = 0 // 拆分所用
@@ -241,72 +231,49 @@ export default {
           return { height: 0, row: 0, isPage: false, isArray: false }
       }
     },
-
-    currentQuestionHanldeEdit(id) {
-      this.$refs.publicDialog.openedEdit('questionDialogs', id)
-    },
-    hanldeSubtraction(id, num) {
-      // 选择题每组行数加减法
-      this.$refs.publicDialog.change('questionDialogs', id, num)
-    },
-    hanldeSubtractionNon(obj, num) {
-      this.$refs.publicDialog.change('NonRresponseArea', obj, num)
-    },
-    currentQuestionFillEdit(id) {
-      this.$refs.publicDialog.openedEdit('fillInTheBlanks', id)
-    },
-    currentQuestionAnswerEdit(obj) {
-      this.$refs.publicDialog.openedEdit('answerQuestion', obj)
-    },
-    currentQuestionOptionalEdit(obj, id) {
-      this.$refs.publicDialog.openedEdit('optionalQuestion', obj, id)
-    },
-    compositionEnglishEdit(obj) {
-      this.$refs.publicDialog.openedEdit('compositionEnglish', obj)
-    },
-    compositionLanguageEdit(obj) {
-      this.$refs.publicDialog.openedEdit('compositionLanguage', obj)
-    },
-    curEditNon(obj) {
-      this.$refs.publicDialog.openedEdit('NonRresponseArea', obj)
-    },
   },
 }
 </script>
 
-<style lang="less">
-@import '~@/assets/css/variables.less';
-.container-card {
-  position: relative;
-  padding-top: 30px;
-  width: calc(100% - 330px);
-  height: calc(100% - 20px);
-  overflow: auto;
-  float: left;
+<style lang="less" scoped>
+html {
+  background: #ffffff;
 }
-.page-contents {
-  // padding-top: 20px;
+#app,
+.page-content,
+.main-info {
+  background: #ffffff;
+}
+.page-content {
+  margin-top: 50px;
+  .page_card {
+    display: flex;
+    flex-wrap: wrap;
+    width: 1650px;
+    justify-content: left;
+  }
+}
+.page_info_itme .footer {
+  position: relative;
+  left: 20px;
+  width: calc(100% - 40px);
+  margin-top: 20px;
+}
+.page_info_itme {
   width: 785px;
   height: 1170px;
-  border: 1px solid @font-333;
-  overflow: hidden;
-  background: @white;
+  border: 1px solid #888;
   border-radius: 3px;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-  .footer {
-    position: relative;
-    width: calc(100% - 40px);
-    padding-top: 20px;
-    left: 20px;
-    &.answer {
-      padding-top: 0px;
-    }
-  }
+  margin-left: 38px;
+  margin-top: 50px;
+  // padding-top: 20px;
+}
+.card_footer {
+  width: 100%;
+  text-align: center;
+  margin-top: 30px;
+  font-size: 14px;
+  text-indent: 35px;
   margin-bottom: 20px;
-  &:last-child {
-    margin-bottom: 0;
-  }
 }
 </style>

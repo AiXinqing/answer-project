@@ -1,5 +1,5 @@
 <template>
-<!-- 非作答区 -->
+  <!-- 非作答区 -->
   <hj-dialog
     class="newAdd-content"
     :title="title"
@@ -8,28 +8,42 @@
     :before-close="closeFrame"
   >
     <div class="non_box">
-      <div  class="non_box_item">
+      <div class="non_box_item">
         <div class="label_item">位置:</div>
         <div class="label_right">
           <hj-select
             :items="existBigQuestion"
             size="mini"
             @change="hanldeVerification"
-            :value="data.positionNum" />
+            :value="data.positionNum"
+          />
           <div class="Comment">注：非作答区将加在选中的大框后</div>
         </div>
       </div>
       <div class="non_box_item">
         <div class="label_item">高度:</div>
         <div class="label_right">
-          <el-input v-model="data.rows" size="mini" @blur="hanldeVerification" @input="hanldeVerification" placeholder="请输入内容" />
+          <el-input
+            v-model="data.rows"
+            size="mini"
+            @blur="hanldeVerification"
+            @input="hanldeVerification"
+            placeholder="请输入内容"
+          />
         </div>
       </div>
-      <div class="error-message non_box_error" v-if="errorMessage"><i></i>{{ errorVal }}</div>
+      <div class="error-message non_box_error" v-if="errorMessage">
+        <i></i>{{ errorVal }}
+      </div>
     </div>
     <div class="dialog-footer">
       <hj-button type="cancel" @click="closeFrame">取 消</hj-button>
-      <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateQuestion">确 定</hj-button>
+      <hj-button
+        type="confirm"
+        :disabled="isdisabledFn"
+        @click="preCreateQuestion"
+        >确 定</hj-button
+      >
     </div>
   </hj-dialog>
 </template>
@@ -37,7 +51,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 export default {
-  data () {
+  data() {
     return {
       title: '设置',
       openedFrame: false,
@@ -51,33 +65,31 @@ export default {
     }
   },
   computed: {
-    ...mapState('questionType', [
-      'options',
-      'existBigQuestion',
-    ]),
-    ...mapState('pageContent', [
-      'orderSort',
-      'pageData'
-    ]),
-    errorMessage () {
+    ...mapState('questionType', ['options', 'existBigQuestion']),
+    ...mapState('pageContent', ['orderSort', 'pageData']),
+    errorMessage() {
       return this.errorVal != '' ? true : false
     },
-    isdisabledFn () {
+    isdisabledFn() {
       return this.errorVal != '' ? true : false
     },
-    tabStatusVal () {
+    tabStatusVal() {
       const { rows, positionNum } = this.data
-      return positionNum == null ? '请选择位置' :
-        rows < 3 || rows == '' ? '行数不能少于3' : ''
+      return positionNum == null
+        ? '请选择位置'
+        : rows < 3 || rows == ''
+        ? '行数不能少于3'
+        : ''
     },
-    tabStatus () {
+    tabStatus() {
       const { rows, positionNum } = this.data
-      return positionNum == null ? true :
-        rows < 3 || rows == '' ? true : false
+      return positionNum == null ? true : rows < 3 || rows == '' ? true : false
     },
-    orderVal () {
+    orderVal() {
       const { positionNum } = this.data
-      let index = this.existBigQuestion.findIndex(item => { item.value == positionNum })
+      let index = this.existBigQuestion.findIndex((item) => {
+        item.value == positionNum
+      })
       if (index > -1) {
         return this.existBigQuestion[index].order + 1
       } else {
@@ -88,17 +100,20 @@ export default {
   watch: {
     existBigQuestion: {
       immediate: true,
-      handler () {
+      handler() {
         if (this.editQuestionId == null) {
           this.data = {
             ...this.data,
-            positionNum: this.existBigQuestion.length > 0 ? this.existBigQuestion[0].value : null
+            positionNum:
+              this.existBigQuestion.length > 0
+                ? this.existBigQuestion[0].value
+                : null,
           }
         }
-      }
+      },
     },
   },
-  mounted () {
+  mounted() {
     this.closeData = JSON.parse(JSON.stringify(this.data))
   },
   methods: {
@@ -107,25 +122,26 @@ export default {
       'amendPageData',
       'set_orderSort',
     ]),
-    closeFrame () {
+    closeFrame() {
       this.openedFrame = false
       this.errorVal = ''
       this.data = JSON.parse(JSON.stringify(this.closeData))
     },
-    change (obj, num) {
-      let current = this.pageData.filter(item => item.id === obj.id)
+    change(obj, num) {
+      let current = this.pageData.filter((item) => item.id === obj.id)
       this.data = JSON.parse(JSON.stringify(current[0].content))
       this.editQuestionId = obj.id
       let rows = this.data.rows
-      if (num == 1) { // 1减法 2加法
+      if (num == 1) {
+        // 1减法 2加法
         if (rows > 3) {
           rows -= 1
         } else {
           rows = 3
           this.$message({
             message: '行数不能少于3',
-            type: 'warning'
-          });
+            type: 'warning',
+          })
         }
       } else {
         rows += 1
@@ -135,7 +151,7 @@ export default {
         this.preCreateQuestion()
       })
     },
-    preCreateQuestion () {
+    preCreateQuestion() {
       const { rows, positionNum } = this.data
       this.errorVal = this.tabStatusVal
 
@@ -150,16 +166,24 @@ export default {
           order: this.orderVal,
           first: true,
           rowHeight: 37,
-          content: this.data
+          content: this.data,
         }
         if (this.editQuestionId == null) {
-          let index = this.existBigQuestion.findIndex((item) => item.value === positionNum)
+          let index = this.existBigQuestion.findIndex(
+            (item) => item.value === positionNum
+          )
           if (index > -1) {
-            let objIndex = this.pageData.findIndex(item => item.id == this.existBigQuestion[index].id)
+            let objIndex = this.pageData.findIndex(
+              (item) => item.id == this.existBigQuestion[index].id
+            )
             if (objIndex > -1) {
               let data = {
-                obj: { ...obj, order: this.pageData[objIndex].order + 1 }, num: positionNum + 1, order: this.pageData[objIndex].order + 1
+                obj: { ...obj, order: this.pageData[objIndex].order },
+                num: positionNum,
+                order: this.pageData[objIndex].order,
+                SelfO0rder: false,
               }
+
               this.insert_pageData(data)
             }
           }
@@ -170,15 +194,15 @@ export default {
         this.data = JSON.parse(JSON.stringify(this.closeData))
       }
     },
-    opened () {
+    opened() {
       this.openedFrame = true
     },
-    openedEdit (obj) {
+    openedEdit(obj) {
       this.editQuestionId = obj.id
       this.data = JSON.parse(JSON.stringify(obj.content))
       this.openedFrame = true
     },
-    hanldeVerification (e) {
+    hanldeVerification(e) {
       this.data.positionNum = e
       this.errorVal = this.tabStatusVal
     },
@@ -186,7 +210,7 @@ export default {
 }
 </script>
 
-<style lang="less" >
+<style lang="less">
 .non_box {
   border-bottom: 1px solid #eee;
   padding-bottom: 40px;

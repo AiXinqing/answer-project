@@ -1,5 +1,5 @@
 <template>
-<!-- 作文英 -->
+  <!-- 作文英 -->
   <hj-dialog
     class="newAdd-content composition_box"
     :title="title"
@@ -8,7 +8,6 @@
     :before-close="closeFrame"
   >
     <div class="dialog_content">
-
       <div class="item-box ">
         <el-row>
           <el-col :span="10" class="select-item">
@@ -33,57 +32,81 @@
         <el-row>
           <el-col :span="12" class="select-item composition_topic">
             <div class="label">小题题号:</div>
-            <el-input v-model.number="data.topic" @blur="hanldeVerification" size="mini" placeholder="" />
+            <el-input
+              v-model.number="data.topic"
+              @blur="hanldeVerification"
+              size="mini"
+              placeholder=""
+            />
             <span>题</span>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12" class="select-item">
             <div class="label">分数:</div>
-            <el-input v-model.number="data.score" @blur="hanldeVerification" @input="hanldeRowsFunc" size="mini" placeholder="" />
+            <el-input
+              v-model.number="data.score"
+              @blur="hanldeVerification"
+              @input="hanldeRowsFunc"
+              size="mini"
+              placeholder=""
+            />
             <span>分</span>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12" class="select-item">
             <div class="label">作文行数:</div>
-            <el-input v-model.number="data.rows" @blur="hanldeVerification" @input="hanldeRowsFunc" size="mini" placeholder="" />
+            <el-input
+              v-model.number="data.rows"
+              @blur="hanldeVerification"
+              @input="hanldeRowsFunc"
+              size="mini"
+              placeholder=""
+            />
             <span>行</span>
           </el-col>
         </el-row>
       </div>
       <div class="condition_box Insert_box" v-show="editQuestionId == null">
         <el-checkbox v-model="data.InsertTitle">插入添加题目</el-checkbox>
-        <div
-          :class="['existBigQuestion_style',{'Fade':!data.InsertTitle}]">
+        <div :class="['existBigQuestion_style', { Fade: !data.InsertTitle }]">
           <span>插入到第</span>
           <hj-select
-              :items="existBigQuestion"
-              size="mini"
-              :value="existNumber" />
+            :items="existBigQuestion"
+            size="mini"
+            :value="existNumber"
+            @change="hanldeSelectexistBig"
+          />
           <span>大题后</span>
         </div>
-        <el-checkbox :class="['Postpone',{'Fade':!data.InsertTitle}]" v-model="data.Postpone">大题号自动顺延</el-checkbox>
+        <el-checkbox
+          :class="['Postpone', { Fade: !data.InsertTitle }]"
+          v-model="data.Postpone"
+          >大题号自动顺延</el-checkbox
+        >
         <div class="Insert_Mask" v-show="!data.InsertTitle"></div>
       </div>
       <div class="error-message" v-if="errorMessage"><i></i>{{ errorVal }}</div>
     </div>
     <div class="dialog-footer">
       <hj-button type="cancel" @click="closeFrame">取 消</hj-button>
-      <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateQuestion">确 定</hj-button>
+      <hj-button
+        type="confirm"
+        :disabled="isdisabledFn"
+        @click="preCreateQuestion"
+        >确 定</hj-button
+      >
     </div>
   </hj-dialog>
 </template>
 
 <script>
-
 import { mapState, mapMutations } from 'vuex'
 
 export default {
-  components: {
-
-  },
-  data () {
+  components: {},
+  data() {
     return {
       data: {},
       title: '设置',
@@ -102,90 +125,108 @@ export default {
         InsertTitle: false,
         Postpone: false,
       },
-      editData: {}
+      editData: {},
     }
   },
   computed: {
     ...mapState('questionType', [
       'options',
       'currentQuestion',
-      'determineTopic'
+      'determineTopic',
+      'existBigQuestion',
     ]),
     ...mapState('pageContent', [
       'pageHeight',
       'page_size',
       'BigQuestion',
       'orderSort',
-      'existBigQuestion',
+      'pageData',
     ]),
-    errorMessage () {
+    errorMessage() {
       return this.errorVal != '' ? true : false
     },
-    groupItemData () {
-      return this.data.group.map(item => item.childGroup)[0]
+    groupItemData() {
+      return this.data.group.map((item) => item.childGroup)[0]
     },
-    isdisabledFn () {
+    isdisabledFn() {
       return this.errorVal != '' ? true : false
     },
-    capitalTopicNum () {
-      let index = this.options.findIndex(item => this.data.number == item.value)
+    capitalTopicNum() {
+      let index = this.options.findIndex(
+        (item) => this.data.number == item.value
+      )
       if (index > -1) {
         return this.options[index].label
       } else {
         return '一'
       }
     },
-    tabStatusVal () {
+    tabStatusVal() {
       const { topic, score, rows } = this.data
       let determineTopic = this.determineTopic
       let str = ''
       if (determineTopic.length > 0) {
-
-        let index = determineTopic.findIndex(item => item.topic == topic)
+        let index = determineTopic.findIndex((item) => item.topic == topic)
         if (index > -1) {
-          if (this.editQuestionId != null && this.editData.content.topic == this.data.topic) {
+          if (
+            this.editQuestionId != null &&
+            this.editData.content.topic == this.data.topic
+          ) {
             str = ''
           } else {
             str = `${topic}题已经存在，请勿重复添加`
           }
         }
       }
-      return score == '' ? '分数不能为空' :
-        rows == '' ? '作文行数不能为空' :
-          topic == '' ? '小题题号不能为空' :
-            str != '' ? str : ''
+      return score == ''
+        ? '分数不能为空'
+        : rows == ''
+        ? '作文行数不能为空'
+        : topic == ''
+        ? '小题题号不能为空'
+        : str != ''
+        ? str
+        : ''
     },
-    tabStatus () {
+    tabStatus() {
       const { topic, score, rows } = this.data
       let determineTopic = this.determineTopic
 
       let str = ''
       if (determineTopic.length > 0) {
-
-        let index = determineTopic.findIndex(item => item.topic == topic)
+        let index = determineTopic.findIndex((item) => item.topic == topic)
         if (index > -1) {
-          if (this.editQuestionId != null && this.editData.content.topic == this.data.topic) {
+          if (
+            this.editQuestionId != null &&
+            this.editData.content.topic == this.data.topic
+          ) {
             str = ''
           } else {
             str = `${topic}题已经存在，请勿重复添加`
           }
         }
       }
-      return score == '' ? true :
-        rows == '' ? true :
-          topic == '' ? true :
-            str != '' ? true : false
+      return score == ''
+        ? true
+        : rows == ''
+        ? true
+        : topic == ''
+        ? true
+        : str != ''
+        ? true
+        : false
     },
-    currentPageHeight () {
-
-      let heights = this.pageHeight[this.pageHeight.length - 1].map(item => item).reduce((accumulator, currentValue) => {
-        return accumulator + currentValue;
-      })
+    currentPageHeight() {
+      let heights = this.pageHeight[this.pageHeight.length - 1]
+        .map((item) => item)
+        .reduce((accumulator, currentValue) => {
+          return accumulator + currentValue
+        })
 
       let currentPageHeight = this.page_size - heights - 32 // 当前页剩余可用高度
       return currentPageHeight
     },
-    BeforeEditing () {
+    BeforeEditing() {
       let num = 0
       if (this.editQuestionId == null) {
         num = this.currentPageHeight
@@ -196,24 +237,27 @@ export default {
   watch: {
     questionData: {
       immediate: true,
-      handler () {
+      handler() {
         this.data = {
-          ...this.questionData
+          ...this.questionData,
         }
         if (this.editQuestionId == null) {
           this.$nextTick(() => {
             this.data = {
               ...this.data,
               number: this.BigQuestion,
-              topic: this.currentQuestion
+              topic: this.currentQuestion,
             }
           })
         }
-
-      }
-    }
+        this.existNumber =
+          this.existBigQuestion.length > 0
+            ? this.existBigQuestion[0].value
+            : null
+      },
+    },
   },
-  mounted () {
+  mounted() {
     this.closeData = JSON.parse(JSON.stringify(this.questionData))
     this.set_currentQuestion()
   },
@@ -221,6 +265,7 @@ export default {
     ...mapMutations('pageContent', [
       'initPageData',
       'amendPageData',
+      'insert_pageData',
       'Empty_PageData',
       'set_orderSort',
     ]),
@@ -230,10 +275,16 @@ export default {
       'Add_AlreadyTopics',
       'set_determineTopic',
       'set_existBigQuestion',
+      'insert_existBigQuestion',
     ]),
-    opened () {
-
-      this.questionData = JSON.parse(JSON.stringify({ ...this.questionData, number: this.BigQuestion, topic: this.currentQuestion }))
+    opened() {
+      this.questionData = JSON.parse(
+        JSON.stringify({
+          ...this.questionData,
+          number: this.BigQuestion,
+          topic: this.currentQuestion,
+        })
+      )
 
       // 开打弹框
       this.set_currentQuestion()
@@ -241,7 +292,7 @@ export default {
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
     },
-    openedEdit (obj) {
+    openedEdit(obj) {
       this.editData = JSON.parse(JSON.stringify(obj))
       //编辑弹框
       this.set_currentQuestion()
@@ -250,19 +301,19 @@ export default {
       this.data = JSON.parse(JSON.stringify(obj.content))
       this.title = '编辑作文'
     },
-    closeFrame () {
+    closeFrame() {
       // 关闭弹窗
       this.set_currentQuestion()
       this.questionData = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
     },
 
-    preCreateQuestion () {
-      const { rows } = this.data
+    preCreateQuestion() {
+      const { rows, InsertTitle, Postpone } = this.data
       this.errorVal = this.tabStatusVal
 
-      let rectHeight = rows * 35  // 当前内容高度 45(内部高度)
-      let MarginHeight = + 17
+      let rectHeight = rows * 35 // 当前内容高度 45(内部高度)
+      let MarginHeight = +17
       let heights = rectHeight + MarginHeight + 33
       if (!this.tabStatus) {
         let objId = `compositionEnglish_${+new Date()}`
@@ -271,16 +322,20 @@ export default {
           heightTitle: 32,
           MarginHeight: MarginHeight,
           height: heights,
+          rowHeight: 36,
           id: objId,
           questionType: 'compositionEnglish',
           content: this.data,
           order: this.orderSort,
           first: true,
-          BeforeEditing: this.editQuestionId != null ? this.editData.BeforeEditing : this.BeforeEditing
+          BeforeEditing:
+            this.editQuestionId != null
+              ? this.editData.BeforeEditing
+              : this.BeforeEditing,
         }
 
         //存在大题追加
-        let existBigQuestion = {
+        let existBigQuestionObj = {
           id: objId,
           label: `${this.capitalTopicNum}.${this.data.name}`,
           value: this.data.number,
@@ -288,23 +343,55 @@ export default {
         }
 
         if (this.editQuestionId == null) {
-          this.initPageData(obj)
+          if (InsertTitle && this.existBigQuestion.length > 0) {
+            let index = this.existBigQuestion.findIndex(
+              (item) => item.value === this.existNumber
+            )
+            if (index > -1) {
+              let objIndex = this.pageData.findIndex(
+                (item) => item.id == this.existBigQuestion[index].id
+              )
+              if (objIndex > -1) {
+                let data = {
+                  obj: {
+                    ...obj,
+                    order: this.pageData[index].order + 1,
+                  },
+                  num: this.existNumber + 1,
+                  order: this.pageData[index].order + 1,
+                  SelfO0rder: Postpone,
+                }
+                this.insert_pageData(data)
+                //-------------------------------------------------已选大题数组
+                this.insert_existBigQuestion({
+                  obj: {
+                    ...existBigQuestionObj,
+                    order: this.existBigQuestion[index].order + 1,
+                  },
+                  num: this.existNumber,
+                  order: this.existBigQuestion[index].order,
+                  SelfO0rder: Postpone,
+                })
+              }
+            }
+          } else {
+            this.initPageData(obj)
+            this.set_existBigQuestion(existBigQuestionObj)
+          }
           this.Add_AlreadyTopics([this.data])
           this.set_determineTopic([this.data])
-          this.set_existBigQuestion(existBigQuestion)
           this.set_orderSort()
         } else {
           this.amendPageData({ ...obj, id: this.editQuestionId })
-          this.set_existBigQuestion({ ...existBigQuestion, id: obj.id })
+          this.set_existBigQuestion({ ...existBigQuestionObj, id: obj.id })
         }
 
         this.set_currentQuestion()
         this.data = JSON.parse(JSON.stringify(this.closeData))
         this.openedFrame = false
       }
-
     },
-    hanldeRowsFunc () {
+    hanldeRowsFunc() {
       const { rows, score } = this.data
       if (rows <= 0) {
         this.errorVal = '作文行数必须大于0'
@@ -314,19 +401,22 @@ export default {
         this.errorVal = ''
       }
     },
-    hanldeVerification () {
+    hanldeVerification() {
       this.errorVal = this.tabStatusVal
     },
-    hanldeSelect (e) {
+    hanldeSelect(e) {
       // 选择答题号
       this.questionData.number = e
       this.data.number = e
+    },
+    hanldeSelectexistBig(e) {
+      this.existNumber = e
     },
   },
 }
 </script>
 
-<style lang="less" >
+<style lang="less">
 .composition_box {
   .el-dialog__body {
     padding: 10px 0 15px !important;
@@ -396,5 +486,3 @@ export default {
   }
 }
 </style>
-
-

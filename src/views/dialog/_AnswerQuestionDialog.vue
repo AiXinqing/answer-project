@@ -61,7 +61,8 @@
           <hj-select
               :items="existBigQuestion"
               size="mini"
-              :value="existNumber" />
+              :value="existNumber"
+              @change="hanldeSelectexistBig" />
           <span>大题后</span>
         </div>
         <el-checkbox :class="['Postpone',{'Fade':!dataTopic.InsertTitle}]" v-model="dataTopic.Postpone">大题号自动顺延</el-checkbox>
@@ -120,14 +121,14 @@ export default {
     ...mapState('questionType', [
       'options',
       'currentQuestion',
-      'determineTopic'
+      'determineTopic',
+      'existBigQuestion',
     ]),
     ...mapState('pageContent', [
       'pageHeight',
       'page_size',
       'BigQuestion',
       'orderSort',
-      'existBigQuestion',
     ]),
     ...mapState('answerQuestion', ['answerQuestionArr',]),
     childGroups () {
@@ -226,6 +227,7 @@ export default {
               number: this.BigQuestion
             }
           })
+          this.existNumber = this.existBigQuestion.length > 0 ? this.existBigQuestion[0].value : null
         }
       }
     },
@@ -234,6 +236,7 @@ export default {
     ...mapMutations('pageContent', [
       'initPageData',
       'amendPageData',
+      'insert_pageData',
       'set_objectiveData',
       'deletePageData',
       'set_orderSort',
@@ -246,6 +249,7 @@ export default {
       'Empty_AlreadyTopics',
       'Add_AlreadyTopics',
       'set_existBigQuestion',
+      'insert_existBigQuestion',
     ]),
     ...mapMutations('answerQuestion', ['set_answerQuestionArr',]),
     opened () {
@@ -477,6 +481,9 @@ export default {
       // 选择答题号
       this.questionData.number = e
       this.dataTopic.number = e
+    },
+    hanldeSelectexistBig (e) {
+      this.existNumber = e
     },
   },
 }

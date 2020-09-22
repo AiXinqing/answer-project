@@ -15,31 +15,25 @@ const mutations = {
   },
   initPageData: (state, Arr) => {
     state.pageData.push(Arr)
-    // state.pageData = state.pageData.sort((a, b) => {
-    //   return a.order - b.order;
-    // })
   },
-  amendPageData: (state, ArrItem) => { // 编辑page-data
+  amendPageData: (state, ArrItem) => {
+    // 编辑page-data
     const index = state.pageData.findIndex((itme) => itme.id === ArrItem.id)
     if (index > -1) {
       state.pageData.splice(index, 1, ArrItem)
     }
   },
-  deletePageData: (state, id) => { // 解答题使用
+  deletePageData: (state, id) => {
+    // 解答题使用
     state.pageData = state.pageData.filter((item) => {
       return ![id].includes(item.pid)
     })
-    // .sort((a, b) => {
-    //   return a.order - b.order;
-    // })
   },
-  Empty_PageData: (state, id) => { // 内容分页
+  Empty_PageData: (state, id) => {
+    // 内容分页
     state.pageData = state.pageData.filter((item) => {
       return ![id].includes(item.id)
     })
-    // .sort((a, b) => {
-    //   return a.order - b.order;
-    // })
   },
   delPageData: (state, index) => {
     state.pageData.splice(index, 1)
@@ -51,47 +45,51 @@ const mutations = {
     SelfO0rder
   }) => {
     //插入非作答
-
-    // state.pageData.map(item => item.order > order ? item.order + 1 : item.order)
     state.pageData.forEach((item, index) => {
       if (item.order > order) {
         state.pageData.splice(index, 1, {
           ...item,
-          order: item.order + 1
+          order: item.order == item.order + 1 ? item.order + 2 : item.order + 1,
         })
       }
     })
-
     setTimeout(() => {
-      state.pageData.splice(num, 0, obj)
+      state.pageData.splice(num, 0, {
+        ...obj,
+        order: obj.order + 1
+      })
       state.pageData = state.pageData.sort((a, b) => {
         return a.order - b.order
       })
       if (SelfO0rder) {
+        console.log(2)
         let tig = 0
         state.pageData.forEach((item, index) => {
           if (item.content.positionNum != undefined) {
             tig += 1
           }
-          console.log(item)
+
           if (item.content.number != undefined) {
             state.pageData.splice(index, 1, {
               ...item,
               content: {
                 ...item.content,
-                number: index - tig
-              }
+                number: index - tig,
+              },
             })
           }
         })
       }
-    }, 50);
+    }, 100)
   },
   set_objectiveData: (state) => {
     state.BigQuestion = state.BigQuestion + 1
   },
   del_objectiveData: (state) => {
     state.BigQuestion = state.BigQuestion - 1
+    if (state.BigQuestion <= 0) {
+      state.BigQuestion = 1
+    }
   },
   set_pageHeight: (state, Arr = []) => {
     // 页面高度更新
@@ -122,29 +120,30 @@ const mutations = {
   },
   del_orderSort: (state, order) => {
     console.log(order)
-    state.pageData.map(item => item.order > order ? item.order - 1 : item.order)
+    state.pageData.map((item) =>
+      item.order > order ? item.order - 1 : item.order
+    )
     state.orderSort = state.orderSort - 1
-  }
+  },
 }
 
 const actions = {
   getPageData: (context) => {
-    axios.get('./pageData.json')
-      .then(({
-        data
-      }) => {
-        if (data) {
-          context.commit('initPageLayout', data.pageLayout)
-          context.commit('initPageData', data.data)
-        }
-      })
-  }
+    axios.get('./pageData.json').then(({
+      data
+    }) => {
+      if (data) {
+        context.commit('initPageLayout', data.pageLayout)
+        context.commit('initPageData', data.data)
+      }
+    })
+  },
 }
 
 const getters = {
   dataLayout: (state) => {
     return state.pageLayout
-  }
+  },
 }
 
 export default {
@@ -152,5 +151,5 @@ export default {
   state,
   mutations,
   actions,
-  getters
+  getters,
 }
