@@ -1,11 +1,6 @@
 <template>
   <div class="page-content">
     <div class="main-info">
-      <!-- <div class="page_card">
-        <div class="page_info_itme" :style="{ width: pageWidth + 'px' }"></div>
-        <div class="page_info_itme"></div>
-        <div class="card_footer">第 1 页 共 2 页</div>
-      </div> -->
       <div v-for="(pages, i) in contentData" :key="i" class="page_card">
         <div
           v-for="(pagesCrad, a) in pages"
@@ -19,13 +14,21 @@
           ref="box"
           :style="{ minHeight: pagesCrad.castHeight + 'px' }"
         >
-          <div v-for="(question, index) in pagesCrad" :key="index">
+          <div
+            v-for="(question, index) in pagesCrad"
+            :key="index"
+            class="footer"
+          >
             <component
               :is="question.questionType"
               :content-data="question.content"
               :question-data="question"
+              :preview-is="true"
             />
           </div>
+        </div>
+        <div class="card_footer">
+          第 {{ i + 1 }} 页 共 {{ contentData.length }} 页
         </div>
       </div>
     </div>
@@ -115,10 +118,7 @@ export default {
         let whetherShow = this.shawDataFunc(rect) // 是否显示
 
         // 高度溢出
-        // console.log(rect)
-        // console.log(ActualHeight)
-        // console.log('--------------------------')
-        // console.log(avalibleHeight)
+
         if (ActualHeight > avalibleHeight) {
           let curRect = this.questionType(rect, avalibleHeight)
 
@@ -300,18 +300,22 @@ html {
     flex-wrap: wrap;
     width: 1650px;
     justify-content: left;
-    // position: relative;
-    // left: 50%;
-    // transform: translateX(-50%);
   }
 }
+.page_info_itme .footer {
+  position: relative;
+  left: 20px;
+  width: calc(100% - 40px);
+  margin-top: 20px;
+}
 .page_info_itme {
-  width: 780px;
+  width: 785px;
   height: 1170px;
   border: 1px solid #888;
   border-radius: 3px;
-  margin-left: 40px;
+  margin-left: 38px;
   margin-top: 50px;
+  // padding-top: 20px;
 }
 .card_footer {
   width: 100%;

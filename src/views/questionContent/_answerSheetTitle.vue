@@ -1,7 +1,10 @@
 <template>
   <div>
-    <hj-textarea :textarea-data="textVal" />
-    <student-info @hanldeStudent="hanldeStudent" />
+    <div class="textVal-style" v-if="previewIs">
+      {{ textVal == '' ? '请输入答题卡标题' : textVal }}
+    </div>
+    <hj-textarea v-else :textarea-data="textVal" />
+    <student-info @hanldeStudent="hanldeStudent" :preview-is="previewIs" />
     <el-row class="precautions_box">
       <el-col
         :span="12"
@@ -81,6 +84,7 @@
         <div class="ticket_number">
           准考证号
           <span
+            v-show="!previewIs"
             class="precautions_edit layui-btn layui-btn-xs"
             @click="editAdmissionNumber"
             >编辑</span
@@ -124,6 +128,10 @@ export default {
       default() {
         return []
       },
+    },
+    previewIs: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -344,5 +352,11 @@ table tr td div:last-child {
 }
 .table_box td:first-child {
   height: 186px;
+}
+.textVal-style {
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 </style>
