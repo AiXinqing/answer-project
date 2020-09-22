@@ -87,6 +87,9 @@ const mutations = {
   },
   del_objectiveData: (state) => {
     state.BigQuestion = state.BigQuestion - 1
+    if (state.BigQuestion <= 0) {
+      state.BigQuestion = 1
+    }
   },
   set_pageHeight: (state, Arr = []) => {
     // 页面高度更新
