@@ -357,6 +357,7 @@ table tr td div:last-child {
   text-align: center;
   font-size: 22px;
   font-weight: bold;
-  margin-bottom: 10px;
+  height: 65px;
+  line-height: 65px;
 }
 </style>

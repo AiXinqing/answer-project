@@ -5,19 +5,22 @@
         <div
           v-for="(pagesCrad, a) in pages"
           :key="a"
+          :style="{
+            width: pageWidth + 'px',
+            marginLeft: pageWidth == 520 ? '25px' : '38px',
+          }"
           :class="[
             'page_info_itme',
             {
               answer: pagesCrad.first != undefined && pagesCrad.first == false,
             },
           ]"
-          ref="box"
-          :style="{ minHeight: pagesCrad.castHeight + 'px' }"
         >
           <div
             v-for="(question, index) in pagesCrad"
             :key="index"
             class="footer"
+            :style="{ minHeight: question.castHeight + 'px' }"
           >
             <component
               :is="question.questionType"
