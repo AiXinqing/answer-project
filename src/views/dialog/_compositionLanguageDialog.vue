@@ -182,7 +182,7 @@ export default {
     latticeWidth() {
       // 格子宽度
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
-        ? 32
+        ? 32.5
         : 30
     },
     capitalTopicNum() {

@@ -39,7 +39,7 @@
         >
           <span
             v-for="(lattices, a) in latticeData"
-            :key="a"
+            :key="'id_' + (i * data.lattice + (a += 1))"
             class="svg_span"
             :style="{
               width: data.rowWidth - 1 + 'px',
@@ -49,10 +49,13 @@
             <svg
               xmlns="http://www.w3.org/2000/svg"
               version="1.1"
-              v-show="/(^[1-9]\d*$)/.test((i * 24 + (a += 1)) / 100)"
+              v-show="
+                /(^[1-9]\d*$)/.test((i * data.lattice + (a += 1)) / 100) &&
+                  contentData.mark == '2'
+              "
             >
               <text x="0" y="15" style="font-size:6px">
-                {{ i * 24 + (a += 1) - 1 }}字
+                {{ i * data.lattice + (a += 1) - 1 }}字
               </text>
             </svg>
           </span>
