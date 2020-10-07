@@ -19,16 +19,16 @@
           <div>4. 必须在题号对应的答题区域内作答,超出答题区域书写无效。</div>
           <div>5. 保持答卷清洁完整。</div>
         </div>
-        <div v-if="!svg" class="precautions_mark">
+        <div class="precautions_mark">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="100%"
             height="100%"
             version="1.1"
           >
-            <text x="10" y="30" style="font-size: 18px;">正确填涂</text>
+            <text x="10" y="30" :style="{fontSize: !svg ? 18 + 'px' : 16 + 'px'}">正确填涂</text>
             <rect
-              x="110"
+              :x="!svg ? 110:80"
               y="19"
               width="17"
               height="10"
@@ -36,37 +36,12 @@
               fill="#000000"
               style="fill-opacity: 1"
             />
-            <text x="175" y="30" style="font-size: 18px;">缺考标记</text>
+            <text
+              :x="!svg ? 175 : 120"
+              y="30"
+              :style="{fontSize: !svg ? 18 + 'px' : 16 + 'px'}">缺考标记</text>
             <rect
-              x="278"
-              y="19"
-              width="17"
-              height="10"
-              stroke="#000000"
-              style="fill-opacity: 0"
-            />
-          </svg>
-        </div>
-        <div v-else class="precautions_mark">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="100%"
-            height="100%"
-            version="1.1"
-          >
-            <text x="10" y="30" style="font-size: 16px;">正确填涂</text>
-            <rect
-              x="80"
-              y="19"
-              width="17"
-              height="10"
-              stroke="#000000"
-              fill="#000000"
-              style="fill-opacity: 1"
-            />
-            <text x="120" y="30" style="font-size: 16px;">缺考标记</text>
-            <rect
-              x="190"
+              :x="!svg ? 278 : 190"
               y="19"
               width="17"
               height="10"
