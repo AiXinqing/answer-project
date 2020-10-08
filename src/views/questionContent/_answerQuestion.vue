@@ -30,21 +30,23 @@
           : data.castHeight - 1 + 'px',
         'border-top':
           data.first || data.borderTop != undefined ? '1px solid #888' : 'none',
+        'margin-top':
+          data.first || data.borderTop != undefined ? '20px' : '0',
       }"
     >
       <div class="question_box_title" v-if="!contentData.HorizontalLine">
         <span class="title">
-          {{ topicData.topic }}
-          <span v-if="contentData.ShowScore && topicData.score != undefined"
-            >({{ topicData.score }})分</span
+          {{ data.topic }}
+          <span v-if="contentData.ShowScore && data.score != undefined"
+            >({{ data.score }})分</span
           >
         </span>
       </div>
       <div v-else v-for="(item, i) in rowsData" :key="i" class="question_line">
         <span class="title" v-if="i == 0">
-          {{ topicData.topic }}
-          <span v-if="contentData.ShowScore && topicData.score != undefined"
-            >({{ topicData.score }})分</span
+          {{ data.topic }}
+          <span v-if="contentData.ShowScore && data.score != undefined"
+            >({{ data.score }})分</span
           >
         </span>
         <span
@@ -92,7 +94,7 @@ export default {
     },
 
     TopicContent() {
-      return `<span>${this.numberTitle}.</span><span>${this.contentData.topic}</span><span>(${this.contentData.totalScore})分</span>`
+      return `<span>${this.numberTitle}.</span><span>${this.contentData.topic}</span><span>(${this.data.totalScore})分</span>`
     },
     topicData() {
       return this.contentData.group
@@ -112,8 +114,8 @@ export default {
         this.data = {
           ...this.questionData,
         }
-        // console.log(this.data)
-        // console.log(this.contentData)
+        console.log(this.data)
+        console.log(this.contentData)
       },
     },
     TopicContent: {
@@ -123,9 +125,6 @@ export default {
       },
     },
   },
-  // mounted () {
-  //   this.$nextTick(()=>)
-  // },
   methods: {
     ...mapMutations('pageContent', [
       'delPageData',

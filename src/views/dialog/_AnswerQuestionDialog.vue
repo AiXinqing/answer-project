@@ -196,6 +196,7 @@ export default {
           itemArr.push(item)
         }
       })
+      console.log(itemArr)
       return itemArr
     },
     topicList () {
@@ -296,6 +297,7 @@ export default {
           row:this.dataTopic.rows,
           rowHeight:35,
           order: this.orderSort,
+          totalScore:++item.score
         }
         Arr.push(obj)
       })
