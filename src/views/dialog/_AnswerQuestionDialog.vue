@@ -293,6 +293,8 @@ export default {
           first: index == 0 ? true : false,
           questionType: 'answerQuestion',
           objId: objId,
+          row:this.dataTopic.rows,
+          rowHeight:35,
           order: this.orderSort,
         }
         Arr.push(obj)
