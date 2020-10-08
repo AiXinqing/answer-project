@@ -11,9 +11,9 @@
           <span class="layout-edit" @click="modifyLayoutFunc">修改</span>
         </div>
         <div class="layout-bottom">
-          <div>A3/B4/8K纸</div>
-          <div>两栏</div>
-          <div>线上阅卷</div>
+          <div>{{size}}</div>
+          <div>{{column}}</div>
+          <!-- <div>线上阅卷</div> -->
         </div>
       </div>
     </div>
@@ -45,9 +45,20 @@ export default {
     }
   },
   computed: {
-    ...mapState('pageContent', ['pageLayout']),
+    ...mapState('pageContent', ['pageLayout','page_size']),
+    testPaper() {
+      return 'A3/B4/8K纸'
+    },
+    column(){
+      return this.pageLayout.column == 3 ? '三栏' : this.pageLayout.column == 1 ? '一栏' :  '两栏'
+    },
+    size() {
+
+      return this.pageLayout.column == 1 ? 'A4/B5纸': 'A3/B4/8K纸'
+    }
   },
   mounted () {
+    console.log(this.pageLayout)
     this.$refs.editorLayout.openRForm(1)
   },
   methods: {
