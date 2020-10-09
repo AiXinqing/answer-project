@@ -25,7 +25,7 @@
     </div>
     <height-edit
       :question="questionContetn"
-      @height-resize="handleResize($event, question)"
+      @height-resize="handleResize($event)"
     >
       <div class="content-info">
         <div class="content-row" v-for="(item, i) in topicGroupData" :key="i">
@@ -155,6 +155,7 @@ export default {
       'delPageData',
       'del_objectiveData',
       'del_orderSort',
+      'amendPageData',
     ]),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
@@ -185,10 +186,11 @@ export default {
       this.isEditor = false
       this.cotent = content
     },
-    handleResize (height, question) {
-      console.log(height)
-      console.log(question)
-      this.questionContetn.height = height
+    handleResize (height,questionContetn) {
+      this.amendPageData({
+        ...this.questionData,
+        height:height > 4 ? height:45
+      })
     }
   },
 }

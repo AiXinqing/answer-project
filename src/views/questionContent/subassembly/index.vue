@@ -60,7 +60,7 @@ export default {
 
   methods: {
     handleResizeStart (event) {
-      console.log('dragstart')
+      // console.log('dragstart')
       this.startPos = event.clientY
 
       document.body.addEventListener('mousemove', this.handleResizeFunc, false)
@@ -71,7 +71,7 @@ export default {
       this.moved = true
       const deltaY = event.clientY - this.startPos
       // 最小高度为40，可以修改这个最小值
-      this.height = Math.max(this.question.height + deltaY, 40)
+      this.height = Math.max(this.question.height + deltaY, this.question.height)
     },
 
     handleResizeEnd (event) {
@@ -81,6 +81,7 @@ export default {
       if (!this.moved) return
       this.moved = false
       this.$emit('height-resize', this.height)
+      console.log(event)
     }
   }
 }
@@ -108,6 +109,7 @@ export default {
     width: 18px;
     height: 18px;
     background-color: transparent;
+    cursor: move;
 
     svg{
       width: 120%;
