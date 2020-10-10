@@ -19,6 +19,7 @@
     <height-edit
       :question="questionContetn"
       @height-resize="handleResize($event)"
+      :min-height="minHeight"
       :style="{
         'height':data.first ? data.castHeight - data.heightTitle  + 'px':data.castHeight  + 'px',
       }"
@@ -90,11 +91,16 @@ export default {
     },
 
     heightContetn(){
-      const {height, heightTitle} = this.questionData
+      const {borderTop,heightTitle,castHeight} = this.questionData
       let obj = {
-        height: height - heightTitle - 1
+        height: !borderTop  ? castHeight - heightTitle - 3 : castHeight
       }
       return obj
+    },
+
+    minHeight(){
+      const {rowHeight,MarginHeight,height,content,castHeight} = this.questionData
+      return  castHeight >= height ? rowHeight * content.rows + MarginHeight - 3 : 0
     },
 
     TopicContent () {
@@ -169,11 +175,22 @@ export default {
       }
 
     },
-    handleResize (height) {
-      this.amendPageData({
-        ...this.questionData,
-        height:height > 4 ? height:45
-      })
+    handleResize (rectHeight) {
+      const {castHeight,height} = this.questionData
+      let crrHeight = rectHeight
+
+      const index = this.pageData.findIndex(obj => this.questionData.id === obj.id)
+      if(index > -1){
+        let questionObj = this.pageData[index]
+        if(castHeight < height){
+          crrHeight = (height - castHeight) + rectHeight
+        }
+        this.amendPageData({
+            ...questionObj,
+            height:crrHeight >= this.minHeight ? crrHeight + questionObj.heightTitle + 3:this.minHeight,
+          })
+
+      }
     }
   },
 }

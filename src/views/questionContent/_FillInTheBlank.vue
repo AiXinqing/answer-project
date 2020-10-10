@@ -194,9 +194,7 @@ export default {
     handleResize (rectHeight) {
 
       const {castHeight,height} = this.questionData
-
       let crrHeight = rectHeight
-
 
       const index = this.pageData.findIndex(obj => this.questionData.id === obj.id)
       if(index > -1){

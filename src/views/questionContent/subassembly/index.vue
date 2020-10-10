@@ -66,7 +66,6 @@ export default {
 
   methods: {
     handleResizeStart (event) {
-      // console.log('dragstart')
       this.startPos = event.clientY
 
       document.body.addEventListener('mousemove', this.handleResizeFunc, false)
@@ -80,14 +79,14 @@ export default {
       this.height = Math.max(this.question.height + deltaY, this.minHeight)
     },
 
-    handleResizeEnd (event) {
+    handleResizeEnd () {
       document.body.removeEventListener('mouseup', this.handleResizeEndFunc, false)
       document.body.removeEventListener('mousemove', this.handleResizeFunc, false)
       this.startPos = null
       if (!this.moved) return
       this.moved = false
       this.$emit('height-resize', this.height)
-      console.log(event)
+      // console.log(event)
     }
   }
 }
