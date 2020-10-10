@@ -129,8 +129,6 @@ export default {
         this.data = {
           ...this.questionData,
         }
-        console.log(this.data)
-        console.log(this.contentData)
       },
     },
     TopicContent: {
