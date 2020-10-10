@@ -102,17 +102,16 @@ export default {
     },
 
     heightContetn(){
-      console.log(this.questionData)
       const {castHeight,heightTitle,height} = this.questionData
       let obj = {
-        height: castHeight < height  ? castHeight - heightTitle - 3 : castHeight
+        height: castHeight >= height  ? castHeight - heightTitle - 3 : castHeight
       }
       return obj
     },
 
     minHeight(){
       const {rowHeight, showData,MarginHeight,height,castHeight} = this.questionData
-      return  castHeight < height ? rowHeight * showData.length + MarginHeight - 3 : 0
+      return  castHeight >= height ? rowHeight * showData.length + MarginHeight - 3 : 0
     },
 
     TopicContent() {
