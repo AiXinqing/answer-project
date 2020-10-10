@@ -25,10 +25,7 @@
     <height-edit
       :question="questionContetn"
       @height-resize="handleResize($event)"
-    >
-      <div
-        class="answer_question_box"
-        :style="{
+      :style="{
           height: data.first
             ? data.castHeight - data.heightTitle - 2 + 'px'
             : data.castHeight - 1 + 'px',
@@ -37,6 +34,9 @@
           'margin-top':
             data.first || data.borderTop != undefined ? '20px' : '0',
         }"
+    >
+      <div
+        class="answer_question_box"
       >
         <div class="question_box_title" v-if="!contentData.HorizontalLine">
           <span class="title">
@@ -204,7 +204,7 @@ export default {
 }
 .answer_question_box {
   padding: 0 10px;
-  border: 1px solid @font-888;
+  // border: 1px solid @font-888;
   border-top: none;
   overflow: hidden;
   .question_box_title {
