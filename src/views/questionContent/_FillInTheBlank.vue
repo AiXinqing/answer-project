@@ -23,50 +23,57 @@
         >
       </div>
     </div>
-    <div class="content-info">
-      <div class="content-row" v-for="(item, i) in topicGroupData" :key="i">
-        <a
-          v-for="row in item"
-          :key="row.id"
-          :style="{ width: pageWidth / data.rows + 'px' }"
-        >
-          <i v-if="row.lgTopic != undefined" ref="iWidth">
-            <template v-if="row.lgTopic < 2">{{ row.topic }}</template>
-            <template v-if="row.lgTopic != 0">({{ row.lgTopic }})</template>
-          </i>
-          <i v-else ref="iWidth"></i>
-          <span
-            v-if="row.lgTopic != undefined"
-            :style="{
-              width:
-                row.lgTopic != 0
-                  ? 'calc(100% - ' +
-                    (row.topic.toString().length +
-                      row.lgTopic.toString().length +
-                      2) *
-                      9 +
-                    'px)'
-                  : 'calc(100% - 23px)',
-            }"
-          />
-          <span
-            v-else
-            :style="{
-              width: 'calc(100% - 22px)',
-            }"
-          />
-        </a>
+    <height-edit
+      :question="questionContetn"
+      @height-resize="handleResize($event)"
+    >
+      <div class="content-info">
+        <div class="content-row" v-for="(item, i) in topicGroupData" :key="i">
+          <a
+            v-for="row in item"
+            :key="row.id"
+            :style="{ width: pageWidth / data.rows + 'px' }"
+          >
+            <i v-if="row.lgTopic != undefined" ref="iWidth">
+              <template v-if="row.lgTopic < 2">{{ row.topic }}</template>
+              <template v-if="row.lgTopic != 0">({{ row.lgTopic }})</template>
+            </i>
+            <i v-else ref="iWidth"></i>
+            <span
+              v-if="row.lgTopic != undefined"
+              :style="{
+                width:
+                  row.lgTopic != 0
+                    ? 'calc(100% - ' +
+                      (row.topic.toString().length +
+                        row.lgTopic.toString().length +
+                        2) *
+                        9 +
+                      'px)'
+                    : 'calc(100% - 23px)',
+              }"
+            />
+            <span
+              v-else
+              :style="{
+                width: 'calc(100% - 22px)',
+              }"
+            />
+          </a>
+        </div>
       </div>
-    </div>
+    </height-edit>
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex'
 import quillEditor from '../../components/quillEditor'
+import heightEdit from '../questionContent/subassembly'
 export default {
   components: {
     quillEditor,
+    heightEdit
   },
   props: {
     contentData: {
@@ -91,6 +98,14 @@ export default {
     numberTitle() {
       let item = this.options.filter((item) => item.value === this.data.number)
       return item[0].label
+    },
+
+    heightContetn(){
+      const {height, heightTitle} = this.questionData
+      let obj = {
+        height: height - heightTitle - 1
+      }
+      return obj
     },
 
     TopicContent() {
@@ -119,6 +134,7 @@ export default {
         this.data = {
           ...this.contentData,
         }
+        console.log(this.questionData)
       },
     },
     TopicContent: {
@@ -127,12 +143,19 @@ export default {
         this.cotent = this.TopicContent
       },
     },
+    heightContetn:{
+      immediate: true,
+      handler() {
+        this.questionContetn = this.heightContetn
+      },
+    }
   },
   methods: {
     ...mapMutations('pageContent', [
       'delPageData',
       'del_objectiveData',
       'del_orderSort',
+      'amendPageData',
     ]),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
@@ -163,6 +186,12 @@ export default {
       this.isEditor = false
       this.cotent = content
     },
+    handleResize (height) {
+      this.amendPageData({
+        ...this.questionData,
+        height:height > 4 ? height:45
+      })
+    }
   },
 }
 </script>
@@ -211,7 +240,7 @@ export default {
   }
 }
 .content-info{
-  border:1px solid @font-888;
+  // border:1px solid @font-888;
   padding-bottom: 15px;
 }
 .content-row  {

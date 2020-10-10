@@ -130,11 +130,13 @@ export default {
         // 用于填空题数组切割
         let itemObj = JSON.parse(JSON.stringify(rect))
 
+        console.log(avalibleHeight)
         // 高度溢出
         if (ActualHeight > avalibleHeight) {
           // 返回计算行数及最低高度
           let curRect = this.questionType(rect, avalibleHeight)
-
+          console.log(curRect)
+          console.log(avalibleHeight)
           if (
             rect.questionType != 'ObjectiveQuestion' &&
             avalibleHeight >= 32 &&
@@ -206,11 +208,13 @@ export default {
       return results
     },
     questionType(obj, rectHeigth) {
+
       let MarginHeight = obj.MarginHeight + obj.heightTitle
       let contentHeight = rectHeigth - MarginHeight
       //-----------当前高度可占多少行
       let RowHeight = obj.rowHeight
       let row = Math.floor(contentHeight / RowHeight)
+
       let rectObj = {
         height: row * RowHeight + MarginHeight,
         row: row,
@@ -225,10 +229,7 @@ export default {
             isArray: true,
           }
         case 'answerQuestion':
-          return {
-            ...rectObj,
-            isPage: false,
-          }
+          return rectObj
         case 'optionalQuestion':
           return rectObj
         case 'compositionEnglish':

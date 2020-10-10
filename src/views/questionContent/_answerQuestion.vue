@@ -22,46 +22,55 @@
         <span class="layui-btn layui-btn-xs" @click="delHanlde">删除</span>
       </div>
     </div>
-    <div
-      class="answer_question_box"
-      :style="{
-        height: data.first
-          ? data.castHeight - data.heightTitle - 2 + 'px'
-          : data.castHeight - 1 + 'px',
-        'border-top':
-          data.first || data.borderTop != undefined ? '1px solid #888' : 'none',
-      }"
+    <height-edit
+      :question="questionContetn"
+      @height-resize="handleResize($event)"
     >
-      <div class="question_box_title" v-if="!contentData.HorizontalLine">
-        <span class="title">
-          {{ topicData.topic }}
-          <span v-if="contentData.ShowScore && topicData.score != undefined"
-            >({{ topicData.score }})分</span
-          >
-        </span>
+      <div
+        class="answer_question_box"
+        :style="{
+          height: data.first
+            ? data.castHeight - data.heightTitle - 2 + 'px'
+            : data.castHeight - 1 + 'px',
+          'border-top':
+            data.first || data.borderTop != undefined ? '1px solid #888' : 'none',
+          'margin-top':
+            data.first || data.borderTop != undefined ? '20px' : '0',
+        }"
+      >
+        <div class="question_box_title" v-if="!contentData.HorizontalLine">
+          <span class="title">
+            {{ data.topic }}
+            <span v-if="contentData.ShowScore && data.score != undefined"
+              >({{ data.score }})分</span
+            >
+          </span>
+        </div>
+        <div v-else v-for="(item, i) in rowsData" :key="i" class="question_line">
+          <span class="title" v-if="i == 0">
+            {{ data.topic }}
+            <span v-if="contentData.ShowScore && data.score != undefined"
+              >({{ data.score }})分</span
+            >
+          </span>
+          <span
+            class="line-style"
+            :style="{ width: i == 0 ? 'calc(100% - 60px)' : '100%' }"
+          ></span>
+        </div>
       </div>
-      <div v-else v-for="(item, i) in rowsData" :key="i" class="question_line">
-        <span class="title" v-if="i == 0">
-          {{ topicData.topic }}
-          <span v-if="contentData.ShowScore && topicData.score != undefined"
-            >({{ topicData.score }})分</span
-          >
-        </span>
-        <span
-          class="line-style"
-          :style="{ width: i == 0 ? 'calc(100% - 60px)' : '100%' }"
-        ></span>
-      </div>
-    </div>
+    </height-edit>
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex'
 import quillEditor from '../../components/quillEditor'
+import heightEdit from '../questionContent/subassembly'
 export default {
   components: {
     quillEditor,
+    heightEdit,
     // questionDialog,
   },
   props: {
@@ -91,8 +100,16 @@ export default {
       return item[0].label
     },
 
+    heightContetn(){
+      const {height, heightTitle} = this.questionData
+      let obj = {
+        height: height - heightTitle - 1
+      }
+      return obj
+    },
+
     TopicContent() {
-      return `<span>${this.numberTitle}.</span><span>${this.contentData.topic}</span><span>(${this.contentData.totalScore})分</span>`
+      return `<span>${this.numberTitle}.</span><span>${this.contentData.topic}</span><span>(${this.data.totalScore})分</span>`
     },
     topicData() {
       return this.contentData.group
@@ -112,8 +129,8 @@ export default {
         this.data = {
           ...this.questionData,
         }
-        // console.log(this.data)
-        // console.log(this.contentData)
+        console.log(this.data)
+        console.log(this.contentData)
       },
     },
     TopicContent: {
@@ -122,15 +139,20 @@ export default {
         this.cotent = this.TopicContent
       },
     },
+
+    heightContetn:{
+      immediate: true,
+      handler() {
+        this.questionContetn = this.heightContetn
+      },
+    }
   },
-  // mounted () {
-  //   this.$nextTick(()=>)
-  // },
   methods: {
     ...mapMutations('pageContent', [
       'delPageData',
       'del_objectiveData',
       'del_orderSort',
+      'amendPageData',
     ]),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
@@ -161,6 +183,12 @@ export default {
         this.del_existBigQuestion(this.data, this.data.objId)
       }
     },
+    handleResize (height) {
+      this.amendPageData({
+        ...this.questionData,
+        height:height > 4 ? height:45
+      })
+    }
   },
 }
 </script>
