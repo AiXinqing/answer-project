@@ -130,13 +130,12 @@ export default {
         // 用于填空题数组切割
         let itemObj = JSON.parse(JSON.stringify(rect))
 
-        console.log(avalibleHeight)
+
         // 高度溢出
         if (ActualHeight > avalibleHeight) {
           // 返回计算行数及最低高度
           let curRect = this.questionType(rect, avalibleHeight)
-          console.log(curRect)
-          console.log(avalibleHeight)
+
           if (
             rect.questionType != 'ObjectiveQuestion' &&
             avalibleHeight >= 32 &&

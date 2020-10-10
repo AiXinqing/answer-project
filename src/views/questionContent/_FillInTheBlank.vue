@@ -26,6 +26,7 @@
     <height-edit
       :question="questionContetn"
       @height-resize="handleResize($event)"
+      :min-height="minHeight"
     >
       <div class="content-info">
         <div class="content-row" v-for="(item, i) in topicGroupData" :key="i">
@@ -101,11 +102,17 @@ export default {
     },
 
     heightContetn(){
-      const {height, heightTitle} = this.questionData
+      console.log(this.questionData)
+      const {castHeight,heightTitle,height} = this.questionData
       let obj = {
-        height: height - heightTitle - 1
+        height: castHeight < height  ? castHeight - heightTitle - 3 : castHeight
       }
       return obj
+    },
+
+    minHeight(){
+      const {rowHeight, showData,MarginHeight,height,castHeight} = this.questionData
+      return  castHeight < height ? rowHeight * showData.length + MarginHeight - 3 : 0
     },
 
     TopicContent() {
@@ -134,7 +141,6 @@ export default {
         this.data = {
           ...this.contentData,
         }
-        console.log(this.questionData)
       },
     },
     TopicContent: {
@@ -186,11 +192,26 @@ export default {
       this.isEditor = false
       this.cotent = content
     },
-    handleResize (height) {
-      this.amendPageData({
-        ...this.questionData,
-        height:height > 4 ? height:45
-      })
+    handleResize (rectHeight) {
+
+      const {castHeight,height} = this.questionData
+
+      let crrHeight = rectHeight
+
+
+      const index = this.pageData.findIndex(obj => this.questionData.id === obj.id)
+      if(index > -1){
+        let questionObj = this.pageData[index]
+        if(castHeight < height){
+          crrHeight = (height - castHeight) + rectHeight
+        }
+        this.amendPageData({
+            ...questionObj,
+            height:crrHeight >= this.minHeight ? crrHeight + questionObj.heightTitle + 3:this.minHeight,
+          })
+
+      }
+
     }
   },
 }

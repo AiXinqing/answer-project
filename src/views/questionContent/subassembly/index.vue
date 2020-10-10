@@ -18,7 +18,7 @@
     <div
       class="question-handler"
       :style="{
-        top: (height - 23) + 'px'
+        top: question.height - 23 + 'px'
       }"
       ref="resizeHandler"
       @mousedown="handleResizeStart"
@@ -34,12 +34,18 @@ export default {
     question: {
       type: Object,
       required: true
+    },
+
+    minHeight:{
+      type:Number,
+      default:40
     }
   },
 
   data () {
     return {
       height: this.question.height,
+      iconHeight: 23,
       startPos: null,
       moved: false
     }
@@ -71,7 +77,7 @@ export default {
       this.moved = true
       const deltaY = event.clientY - this.startPos
       // 最小高度为40，可以修改这个最小值
-      this.height = Math.max(this.question.height + deltaY, this.question.height)
+      this.height = Math.max(this.question.height + deltaY, this.minHeight)
     },
 
     handleResizeEnd (event) {
