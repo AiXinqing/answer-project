@@ -62,7 +62,6 @@ const mutations = {
         return a.order - b.order
       })
       if (SelfO0rder) {
-        console.log(2)
         let tig = 0
         state.pageData.forEach((item, index) => {
           if (item.content.positionNum != undefined) {

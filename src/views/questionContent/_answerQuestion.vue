@@ -22,48 +22,56 @@
         <span class="layui-btn layui-btn-xs" @click="delHanlde">删除</span>
       </div>
     </div>
-    <div
-      class="answer_question_box"
+    <height-edit
+      :question="questionContetn"
+      @height-resize="handleResize($event)"
+      :min-height="minHeight"
       :style="{
-        height: data.first
-          ? data.castHeight - data.heightTitle - 2 + 'px'
-          : data.castHeight - 1 + 'px',
-        'border-top':
-          data.first || data.borderTop != undefined ? '1px solid #888' : 'none',
-        'margin-top':
-          data.first || data.borderTop != undefined ? '20px' : '0',
-      }"
+          height: data.first
+            ? data.castHeight - data.heightTitle - 2 + 'px'
+            : data.castHeight - 1 + 'px',
+          'border-top':
+            data.first || data.borderTop != undefined ? '1px solid #888' : 'none',
+          'margin-top':
+            data.first || data.borderTop != undefined ? '20px' : '0',
+        }"
     >
-      <div class="question_box_title" v-if="!contentData.HorizontalLine">
-        <span class="title">
-          {{ data.topic }}
-          <span v-if="contentData.ShowScore && data.score != undefined"
-            >({{ data.score }})分</span
-          >
-        </span>
+      <div
+        class="answer_question_box"
+      >
+        <div class="question_box_title" v-if="!contentData.HorizontalLine">
+          <span class="title">
+            {{ data.topic }}
+            <span v-if="contentData.ShowScore && data.score != undefined"
+              >({{ data.score }})分</span
+            >
+          </span>
+        </div>
+        <div v-else v-for="(item, i) in rowsData" :key="i" class="question_line">
+          <span class="title" v-if="i == 0">
+            {{ data.topic }}
+            <span v-if="contentData.ShowScore && data.score != undefined"
+              >({{ data.score }})分</span
+            >
+          </span>
+          <span
+            class="line-style"
+            :style="{ width: i == 0 ? 'calc(100% - 60px)' : '100%' }"
+          ></span>
+        </div>
       </div>
-      <div v-else v-for="(item, i) in rowsData" :key="i" class="question_line">
-        <span class="title" v-if="i == 0">
-          {{ data.topic }}
-          <span v-if="contentData.ShowScore && data.score != undefined"
-            >({{ data.score }})分</span
-          >
-        </span>
-        <span
-          class="line-style"
-          :style="{ width: i == 0 ? 'calc(100% - 60px)' : '100%' }"
-        ></span>
-      </div>
-    </div>
+    </height-edit>
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex'
 import quillEditor from '../../components/quillEditor'
+import heightEdit from '../questionContent/subassembly'
 export default {
   components: {
     quillEditor,
+    heightEdit,
     // questionDialog,
   },
   props: {
@@ -93,6 +101,19 @@ export default {
       return item[0].label
     },
 
+    heightContetn(){
+      const {castHeight,heightTitle,height} = this.questionData
+      let obj = {
+        height: castHeight >= height  ? castHeight - heightTitle - 3 : castHeight
+      }
+      return obj
+    },
+
+    minHeight(){
+      const {rowHeight, row,MarginHeight,height,castHeight} = this.questionData
+      return  castHeight >= height ? rowHeight * row + MarginHeight - 3 : 0
+    },
+
     TopicContent() {
       return `<span>${this.numberTitle}.</span><span>${this.contentData.topic}</span><span>(${this.data.totalScore})分</span>`
     },
@@ -114,8 +135,6 @@ export default {
         this.data = {
           ...this.questionData,
         }
-        console.log(this.data)
-        console.log(this.contentData)
       },
     },
     TopicContent: {
@@ -124,12 +143,20 @@ export default {
         this.cotent = this.TopicContent
       },
     },
+
+    heightContetn:{
+      immediate: true,
+      handler() {
+        this.questionContetn = this.heightContetn
+      },
+    }
   },
   methods: {
     ...mapMutations('pageContent', [
       'delPageData',
       'del_objectiveData',
       'del_orderSort',
+      'amendPageData',
     ]),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
@@ -160,6 +187,23 @@ export default {
         this.del_existBigQuestion(this.data, this.data.objId)
       }
     },
+    handleResize (rectHeight) {
+      const {castHeight,height} = this.questionData
+      let crrHeight = rectHeight
+
+      const index = this.pageData.findIndex(obj => this.questionData.id === obj.id)
+      if(index > -1){
+        let questionObj = this.pageData[index]
+        if(castHeight < height){
+          crrHeight = (height - castHeight) + rectHeight
+        }
+        this.amendPageData({
+            ...questionObj,
+            height:crrHeight >= this.minHeight ? crrHeight + questionObj.heightTitle + 3:this.minHeight,
+          })
+
+      }
+    }
   },
 }
 </script>
@@ -175,7 +219,7 @@ export default {
 }
 .answer_question_box {
   padding: 0 10px;
-  border: 1px solid @font-888;
+  // border: 1px solid @font-888;
   border-top: none;
   overflow: hidden;
   .question_box_title {

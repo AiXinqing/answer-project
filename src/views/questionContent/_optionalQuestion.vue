@@ -16,35 +16,40 @@
         <span class="layui-btn layui-btn-xs" @click="delHanlde">删除</span>
       </div>
     </div>
-    <div class="answer_question_box optional_box"
+    <height-edit
+      :question="questionContetn"
+      @height-resize="handleResize($event)"
+      :min-height="minHeight"
       :style="{
         'height':data.first ? data.castHeight - data.heightTitle  + 'px':data.castHeight  + 'px',
       }"
     >
-      <template v-if="data.first && data.borderTop == undefined || data.borderTop == 0">
-        <div class="topic_number_box">
+      <div class="answer_question_box optional_box">
+        <template v-if="data.first && data.borderTop == undefined || data.borderTop == 0">
+          <div class="topic_number_box">
 
-          <span class="black_icon"></span>
+            <span class="black_icon"></span>
 
-          <span class="digital"
-            v-for="(item,i) in topicData"
+            <span class="digital"
+              v-for="(item,i) in topicData"
+              :key="i"
+            >{{item.topic}}</span>
+            <span class="black_icon"></span>
+          </div>
+          <div class="number-info">
+            <span>我选的题号（1分）</span>
+          </div>
+        </template>
+
+        <div v-if="contentData.HorizontalLine">
+          <div
+            v-for="(item,i) in rowsData"
             :key="i"
-          >{{item.topic}}</span>
-          <span class="black_icon"></span>
+            class="optional-item-list"
+          ></div>
         </div>
-        <div class="number-info">
-          <span>我选的题号（1分）</span>
-        </div>
-      </template>
-
-    <div v-if="contentData.HorizontalLine">
-      <div
-        v-for="(item,i) in rowsData"
-        :key="i"
-        class="optional-item-list"
-      ></div>
-    </div>
-    </div>
+      </div>
+    </height-edit>
 
   </div>
 </template>
@@ -52,9 +57,11 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import quillEditor from '../../components/quillEditor'
+import heightEdit from '../questionContent/subassembly'
 export default {
   components: {
     quillEditor,
+    heightEdit
   },
   props: {
     questionData: {
@@ -81,6 +88,19 @@ export default {
     numberTitle () {
       let item = this.options.filter(item => item.value === this.contentData.number)
       return item[0].label
+    },
+
+    heightContetn(){
+      const {borderTop,heightTitle,castHeight} = this.questionData
+      let obj = {
+        height: !borderTop  ? castHeight - heightTitle - 3 : castHeight
+      }
+      return obj
+    },
+
+    minHeight(){
+      const {rowHeight,MarginHeight,height,content,castHeight} = this.questionData
+      return  castHeight >= height ? rowHeight * content.rows + MarginHeight - 3 : 0
     },
 
     TopicContent () {
@@ -112,13 +132,20 @@ export default {
       handler () {
         this.cotent = this.TopicContent
       }
+    },
+
+    heightContetn:{
+      immediate: true,
+      handler() {
+        this.questionContetn = this.heightContetn
+      },
     }
   },
   // mounted () {
   //   this.$nextTick(()=>)
   // },
   methods: {
-    ...mapMutations('pageContent', ['delPageData', 'del_objectiveData', 'del_orderSort']),
+    ...mapMutations('pageContent', ['delPageData', 'del_objectiveData', 'del_orderSort','amendPageData']),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
@@ -148,6 +175,23 @@ export default {
       }
 
     },
+    handleResize (rectHeight) {
+      const {castHeight,height} = this.questionData
+      let crrHeight = rectHeight
+
+      const index = this.pageData.findIndex(obj => this.questionData.id === obj.id)
+      if(index > -1){
+        let questionObj = this.pageData[index]
+        if(castHeight < height){
+          crrHeight = (height - castHeight) + rectHeight
+        }
+        this.amendPageData({
+            ...questionObj,
+            height:crrHeight >= this.minHeight ? crrHeight + questionObj.heightTitle + 3:this.minHeight,
+          })
+
+      }
+    }
   },
 }
 </script>
