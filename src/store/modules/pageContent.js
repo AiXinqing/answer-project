@@ -23,10 +23,15 @@ const mutations = {
       state.pageData.splice(index, 1, ArrItem)
     }
   },
-  deletePageData: (state, id) => {
-    // 解答题使用
-    state.pageData = state.pageData.filter((item) => {
-      return ![id].includes(item.pid)
+  deletePageData: (state, obj) => {
+    // 解答题使用objId
+    state.pageData.map((question,index) =>{
+      if(question.objId && question.objId === obj.objId){
+        state.pageData.splice(index, 1, {
+          ...question,
+          group:[obj.group]
+        })
+      }
     })
   },
   Empty_PageData: (state, id) => {

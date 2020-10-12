@@ -128,6 +128,7 @@ export default {
       'page_size',
       'BigQuestion',
       'orderSort',
+      'pageData'
     ]),
     ...mapState('answerQuestion', ['answerQuestionArr',]),
 
@@ -200,7 +201,6 @@ export default {
           itemArr.push(item)
         }
       })
-      console.log(itemArr)
       return itemArr
     },
     topicList () {
@@ -243,9 +243,9 @@ export default {
       'amendPageData',
       'insert_pageData',
       'set_objectiveData',
-      'deletePageData',
       'set_orderSort',
-      'del_orderSort'
+      'del_orderSort',
+      'delPageData'
     ]),
     ...mapMutations('questionType', [
       'set_AlreadyTopics',
@@ -268,7 +268,8 @@ export default {
     },
     openedEdit (obj) {
       //编辑弹框
-      this.editQuestionId = obj.id
+      console.log(obj)
+      this.editQuestionId = obj.objId
       this.openedFrame = true
       this.questionData = JSON.parse(JSON.stringify(obj.content))
       this.set_currentQuestion()
@@ -279,50 +280,111 @@ export default {
       this.openedFrame = false
     },
     preCreateQuestion () {
+      const { InsertTitle, Postpone } = this.dataTopic
       //确定信息
       let Arr = []
       let objId = `answer_${+new Date()}`
       let rectHeight = this.dataTopic.rows * 35 + 12 + 20 // 小题初始高度
-
+      let orders = this.orderSort - 1 // 题型排序序列号
       this.RefactorData.forEach((item, index) => {
+        orders += 1
         let obj = {
           heightTitle: index == 0 ? 32 : 0,
           height: index == 0 ? rectHeight + 32 : rectHeight,
           MarginHeight: 12,
           ...item,
           content: this.dataTopic,
-          first: index == 0 ? true : false,
+          first: index === 0 ? true : false,
           questionType: 'answerQuestion',
           objId: objId,
           row:this.dataTopic.rows,
           rowHeight:35,
-          order: this.orderSort + index,
-          totalScore:++item.score
+          order: orders,
+          totalScore:++item.score,
+          previousOrder:this.orderSort - 1 // 解答题插入前的序列号
         }
         Arr.push(obj)
-         this.set_orderSort()
+        this.set_orderSort()
       })
+
       //存在大题追加
-      let existBigQuestion = {
+      let existBigQuestionObj = {
         id: objId,
         label: `${this.capitalTopicNum}.${this.dataTopic.topic}`,
-        value: this.dataTopic.number,
-        order: this.orderSort,
+        value: this.dataTopic.number
       }
 
       if (this.editQuestionId == null) {
         // 新增
-        Arr.forEach(obj => {
-          this.initPageData(obj)
-        })
-        this.set_existBigQuestion(existBigQuestion)
+        if(InsertTitle && this.existBigQuestion.length > 0){
+
+          let index = this.existBigQuestion.findIndex(
+            (item) => item.value === this.existNumber
+          )
+
+
+          if(index > -1){
+            let existNum = this.existNumber - 1
+            let orders = this.existBigQuestion[index].order - 1
+            Arr.forEach((obj,index) => {
+              existNum += 1
+              orders += 1
+              let data = {
+                obj: {
+                  ...obj,
+                  order: orders,
+                },
+                num: existNum,
+                order: orders,
+                SelfO0rder: Postpone,
+              }
+              this.insert_pageData(data)
+
+              if(index === 0){
+                this.insert_existBigQuestion({
+                  obj: {
+                    ...existBigQuestionObj,
+                    order: orders,
+                  },
+                  num: existNum,
+                  order: this.existBigQuestion[index].order,
+                  SelfO0rder: Postpone,
+                })
+              }
+
+            })
+          }
+        } else {
+          Arr.forEach(obj => {
+            this.initPageData(obj)
+          })
+          this.set_existBigQuestion(existBigQuestionObj)
+        }
+
       } else {
         // 编辑
-        //清空编辑前数据
-        // this.set_existBigQuestion({ ...existBigQuestion, id: this.editQuestionId })
+        this.pageData.map((obj,index) => {
+          if(this.editQuestionId == obj.objId){
+            this.delPageData(index)
+          }
+        })
+
+        Arr.forEach(question => {
+          let data = {
+            obj: {
+              ...question,
+              order: question.previousOrder++,
+              objId:this.editQuestionId
+            },
+            num: 1,
+            order: question.previousOrder++,
+            SelfO0rder: Postpone,
+          }
+          console.log(data)
+          this.insert_pageData(data)
+        })
       }
-      // 解答题-编辑时使用数据
-      // this.set_answerQuestionArr({ ...this.questionData, pid: `answer${date}` })
+
       // 大题号修改
       this.set_objectiveData(this.dataTopic.number)
       //------------------------------------
@@ -400,7 +462,7 @@ export default {
     preEditPointsAnswerGroup (obj, isDel = false) {
       // 添加小题下的小题
 
-      let group = this.dataTopic.group
+      let {group} = this.dataTopic
       let index = group.findIndex(item => item.id == obj.sid)
       if (index > -1) {
         let items = group[index]
@@ -425,8 +487,6 @@ export default {
                   subItems.score = this.calculateTheScore(subItems)
                 })
               }
-
-
               this.set_AlreadyTopics([subItems]) // 更新临时数组
             }
 
@@ -436,7 +496,7 @@ export default {
     },
     preEditPointsItem (obj, isDel = false) {
       // 末尾题
-      let group = this.dataTopic.group
+      let {group} = this.dataTopic
       let index = group.findIndex(item => item.id == obj.spId)
       if (index > -1) {
         let items = group[index]
@@ -474,6 +534,7 @@ export default {
         }
       }
     },
+
     calculateTheScore (obj) {
       let sum = 0
       obj.childGroup.forEach(item => {

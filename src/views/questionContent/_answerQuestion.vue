@@ -157,6 +157,7 @@ export default {
       'del_objectiveData',
       'del_orderSort',
       'amendPageData',
+      'deletePageData'
     ]),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
@@ -172,20 +173,68 @@ export default {
       this.isEditor = true
     },
     currentQuestionAnswerEdit() {
+
       this.$emit('current-question-answer-edit', this.data)
     },
     delHanlde() {
+
+      let {group} = this.data.content
+      let questionGroup = group[0]
+
+      const {sid,fid,pid,id,objId} = this.data
+
+      if(sid){
+        //三节
+
+        let index = questionGroup.childGroup.findIndex(question => question.id === fid)
+        if(index > -1){
+          let levelTwo = questionGroup.childGroup[index]
+          let twoIndex = levelTwo.childGroup.findIndex(question => question.id === pid)
+          if(twoIndex > -1){
+            let levelThree = levelTwo.childGroup[twoIndex]
+            let threeIndex = levelThree.childGroup.findIndex(question => question.id === id)
+            if(threeIndex > -1){
+              if(levelTwo.childGroup.length <= 1){
+                questionGroup.childGroup.splice(index,1)
+              }else if(levelThree.childGroup.length <= 1){
+                levelTwo.childGroup.splice(twoIndex,1)
+              }else{
+                levelThree.childGroup.splice(threeIndex,1)
+              }
+            }
+          }
+        }
+      }else if(fid && !sid){
+        //二节
+        let index = questionGroup.childGroup.findIndex(question => question.id === pid)
+        if(index > -1){
+          let levelTwo = questionGroup.childGroup[index]
+          let twoIndex = levelTwo.childGroup.findIndex(question => question.id === id)
+          if(twoIndex > -1){
+
+            if(levelTwo.childGroup.length <= 1){
+              questionGroup.childGroup.splice(index,1)
+            }else{
+              levelTwo.childGroup.splice(twoIndex,1)
+            }
+          }
+        }
+      }else if(id && !fid && !sid){
+        //一节
+        let index = questionGroup.childGroup.findIndex(question => question.id === id)
+        if(index > -1){
+          questionGroup.childGroup.splice(index,1)
+        }
+      }
       // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
       if (index > -1) {
-        this.del_orderSort(this.pageData[index].order + 1)
         this.delPageData(index)
-        this.del_determineTopic(this.topicBox)
-        this.set_currentQuestion()
-        this.del_objectiveData() // 删减一个大题号
-        console.log(this.data)
-        this.del_existBigQuestion(this.data, this.data.objId)
+        setTimeout(function(){
+          this.deletePageData({group:questionGroup,objId:objId})
+        },500)
       }
+
     },
     handleResize (rectHeight) {
       const {castHeight,height} = this.questionData
