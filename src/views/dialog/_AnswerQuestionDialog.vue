@@ -200,7 +200,6 @@ export default {
           itemArr.push(item)
         }
       })
-      console.log(itemArr)
       return itemArr
     },
     topicList () {
@@ -243,7 +242,6 @@ export default {
       'amendPageData',
       'insert_pageData',
       'set_objectiveData',
-      'deletePageData',
       'set_orderSort',
       'del_orderSort'
     ]),
