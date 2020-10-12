@@ -180,8 +180,6 @@ export default {
 
       let {group} = this.data.content
       let questionGroup = group[0]
-      console.log(group)
-      console.log(this.data)
 
       const {sid,fid,pid,id,objId} = this.data
 
@@ -228,7 +226,6 @@ export default {
           questionGroup.childGroup.splice(index,1)
         }
       }
-      console.log(questionGroup)
       // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
       if (index > -1) {
