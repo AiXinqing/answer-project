@@ -126,6 +126,10 @@ export default {
     },
     hanldeCurQuestion () {
       this.$refs.fillInTheBlanks.hanldeCurQuestion()
+    },
+    answerDel(obj){
+      // 解答题删除
+      this.$refs.AnswerQuestionDialog.answerDel(obj)
     }
   },
 }
