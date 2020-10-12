@@ -296,10 +296,11 @@ export default {
           objId: objId,
           row:this.dataTopic.rows,
           rowHeight:35,
-          order: this.orderSort,
+          order: this.orderSort + index,
           totalScore:++item.score
         }
         Arr.push(obj)
+         this.set_orderSort()
       })
       //存在大题追加
       let existBigQuestion = {
@@ -315,11 +316,10 @@ export default {
           this.initPageData(obj)
         })
         this.set_existBigQuestion(existBigQuestion)
-        this.set_orderSort()
       } else {
         // 编辑
         //清空编辑前数据
-        this.set_existBigQuestion({ ...existBigQuestion, id: this.editQuestionId })
+        // this.set_existBigQuestion({ ...existBigQuestion, id: this.editQuestionId })
       }
       // 解答题-编辑时使用数据
       // this.set_answerQuestionArr({ ...this.questionData, pid: `answer${date}` })
