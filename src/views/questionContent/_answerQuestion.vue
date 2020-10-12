@@ -172,20 +172,22 @@ export default {
       this.isEditor = true
     },
     currentQuestionAnswerEdit() {
+
       this.$emit('current-question-answer-edit', this.data)
     },
     delHanlde() {
-      // 删除大题-小题数
-      const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
-      if (index > -1) {
-        this.del_orderSort(this.pageData[index].order + 1)
-        this.delPageData(index)
-        this.del_determineTopic(this.topicBox)
-        this.set_currentQuestion()
-        this.del_objectiveData() // 删减一个大题号
-        console.log(this.data)
-        this.del_existBigQuestion(this.data, this.data.objId)
-      }
+      // // 删除大题-小题数
+      // const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
+      // if (index > -1) {
+      //   this.del_orderSort(this.pageData[index].order + 1)
+      //   this.delPageData(index)
+      //   this.del_determineTopic(this.topicBox)
+      //   this.set_currentQuestion()
+      //   this.del_objectiveData() // 删减一个大题号
+
+      //   this.del_existBigQuestion(this.data, this.data.objId)
+      // }
+      this.$emit('answer-delete',this.data)
     },
     handleResize (rectHeight) {
       const {castHeight,height} = this.questionData

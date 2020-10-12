@@ -441,7 +441,7 @@ export default {
     preEditPointsAnswerGroup (obj, isDel = false) {
       // 添加小题下的小题
 
-      let group = this.dataTopic.group
+      let {group} = this.dataTopic
       let index = group.findIndex(item => item.id == obj.sid)
       if (index > -1) {
         let items = group[index]
@@ -466,8 +466,6 @@ export default {
                   subItems.score = this.calculateTheScore(subItems)
                 })
               }
-
-
               this.set_AlreadyTopics([subItems]) // 更新临时数组
             }
 
@@ -477,7 +475,7 @@ export default {
     },
     preEditPointsItem (obj, isDel = false) {
       // 末尾题
-      let group = this.dataTopic.group
+      let {group} = this.dataTopic
       let index = group.findIndex(item => item.id == obj.spId)
       if (index > -1) {
         let items = group[index]
@@ -515,6 +513,7 @@ export default {
         }
       }
     },
+
     calculateTheScore (obj) {
       let sum = 0
       obj.childGroup.forEach(item => {

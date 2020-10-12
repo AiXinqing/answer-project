@@ -26,7 +26,6 @@
           @current-question-fill-edit="currentQuestionFillEdit"
           @hanlde-subtraction="hanldeSubtraction"
           @current-question-answer-edit="currentQuestionAnswerEdit"
-          @answer-delete="answerDelete"
           @current-question-optional-edit="currentQuestionOptionalEdit"
           @composition-english-edit="compositionEnglishEdit"
           @composition-language-edit="compositionLanguageEdit"
@@ -258,9 +257,6 @@ export default {
     },
     currentQuestionAnswerEdit(obj) {
       this.$refs.publicDialog.openedEdit('answerQuestion', obj)
-    },
-    answerDelete(obj){ // 解答题删除
-      this.$refs.publicDialog.answerDel(obj)
     },
     currentQuestionOptionalEdit(obj, id) {
       this.$refs.publicDialog.openedEdit('optionalQuestion', obj, id)
