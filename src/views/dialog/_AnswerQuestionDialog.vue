@@ -128,6 +128,7 @@ export default {
       'page_size',
       'BigQuestion',
       'orderSort',
+      'pageData'
     ]),
     ...mapState('answerQuestion', ['answerQuestionArr',]),
 
@@ -243,7 +244,8 @@ export default {
       'insert_pageData',
       'set_objectiveData',
       'set_orderSort',
-      'del_orderSort'
+      'del_orderSort',
+      'delPageData'
     ]),
     ...mapMutations('questionType', [
       'set_AlreadyTopics',
@@ -266,7 +268,8 @@ export default {
     },
     openedEdit (obj) {
       //编辑弹框
-      this.editQuestionId = obj.id
+      console.log(obj)
+      this.editQuestionId = obj.objId
       this.openedFrame = true
       this.questionData = JSON.parse(JSON.stringify(obj.content))
       this.set_currentQuestion()
@@ -297,7 +300,8 @@ export default {
           row:this.dataTopic.rows,
           rowHeight:35,
           order: orders,
-          totalScore:++item.score
+          totalScore:++item.score,
+          previousOrder:this.orderSort - 1 // 解答题插入前的序列号
         }
         Arr.push(obj)
         this.set_orderSort()
@@ -359,7 +363,26 @@ export default {
 
       } else {
         // 编辑
+        this.pageData.map((obj,index) => {
+          if(this.editQuestionId == obj.objId){
+            this.delPageData(index)
+          }
+        })
 
+        Arr.forEach(question => {
+          let data = {
+            obj: {
+              ...question,
+              order: question.previousOrder++,
+              objId:this.editQuestionId
+            },
+            num: 1,
+            order: question.previousOrder++,
+            SelfO0rder: Postpone,
+          }
+          console.log(data)
+          this.insert_pageData(data)
+        })
       }
 
       // 大题号修改
