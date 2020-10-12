@@ -111,6 +111,7 @@ const mutations = {
       }
     })
   },
+
   Add_AlreadyTopics(state, Arr) {
     if (Arr == undefined) {
       return false
@@ -131,18 +132,21 @@ const mutations = {
       }
     })
   },
+
   once_AlreadyTopics: (state, id) => {
     // 一次清除
     state.AlreadyTopics = state.AlreadyTopics.filter((item) => {
       return ![id].includes(item.id)
     })
   },
+
   Fullin_once_AlreadyTopics: (state, pid) => {
     // 解答一次清除
     state.AlreadyTopics = state.AlreadyTopics.filter((item) => {
       return ![pid].includes(item.pid)
     })
   },
+
   set_AlreadyTopics: (state, Arr) => {
     if (Arr == undefined) {
       return false
@@ -156,10 +160,12 @@ const mutations = {
       }
     })
   },
+
   Empty_AlreadyTopics: (state) => {
     // 清空数据
     state.AlreadyTopics = []
   },
+
   set_currentQuestion: (state) => {
     for (let i = 1; i < state.maxTopic; i++) {
       //
@@ -172,6 +178,7 @@ const mutations = {
       }
     }
   },
+
   set_determineTopic: (state, Arr) => {
     if (Arr == undefined) {
       return false
@@ -188,12 +195,14 @@ const mutations = {
       }
     })
   },
+
   delOnce_determineTopic: (state, pid) => {
     // 一次清除相同pid
     state.determineTopic = state.determineTopic.filter((item) => {
       return ![pid].includes(item.pid)
     })
   },
+
   del_determineTopic: (state, Arr) => {
     if (Arr == undefined) {
       return false
@@ -218,6 +227,7 @@ const mutations = {
       state.existBigQuestion.push(obj)
     }
   },
+
   insert_existBigQuestion: (state, {
     obj,
     num,
@@ -245,6 +255,7 @@ const mutations = {
       }
     }, 50);
   },
+
   del_existBigQuestion: (state, obj) => {
     let id = obj.objId != undefined ? obj.objId : obj.id
     const index = state.existBigQuestion.findIndex(
@@ -253,7 +264,8 @@ const mutations = {
     if (index > -1) {
       state.existBigQuestion.splice(index, 1)
     }
-  }
+  },
+
 }
 
 const actions = {}

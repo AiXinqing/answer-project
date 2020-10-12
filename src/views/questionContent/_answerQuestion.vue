@@ -22,7 +22,7 @@
         <span class="layui-btn layui-btn-xs" @click="delHanlde">删除</span>
       </div>
     </div>
-    <height-edit
+    <drag-change-height
       :question="questionContetn"
       @height-resize="handleResize($event)"
       :min-height="minHeight"
@@ -60,18 +60,18 @@
           ></span>
         </div>
       </div>
-    </height-edit>
+    </drag-change-height>
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex'
 import quillEditor from '../../components/quillEditor'
-import heightEdit from '../questionContent/subassembly'
+import dragChangeHeight from '../questionContent/drag'
 export default {
   components: {
     quillEditor,
-    heightEdit,
+    dragChangeHeight,
     // questionDialog,
   },
   props: {

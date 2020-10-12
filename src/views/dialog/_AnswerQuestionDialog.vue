@@ -91,7 +91,6 @@ export default {
     return {
       dataTopic: {},
       closeData: {},
-      title: '新增解答题',
       editQuestionId: null,
       openedFrame: false,
       isdisabledFn: false,
@@ -131,6 +130,11 @@ export default {
       'orderSort',
     ]),
     ...mapState('answerQuestion', ['answerQuestionArr',]),
+
+    title(){
+      return !this.editQuestionId ? '编辑解答题': '新增解答题'
+    },
+
     childGroups () {
       let Arr = []
       this.dataTopic.group.forEach(item => {
@@ -264,14 +268,10 @@ export default {
     },
     openedEdit (obj) {
       //编辑弹框
-      this.editQuestionId = obj.pid
+      this.editQuestionId = obj.id
       this.openedFrame = true
-      let index = this.answerQuestionArr.findIndex(itme => itme.pid === obj.pid)
-      if (index > -1) {
-        this.questionData = JSON.parse(JSON.stringify(this.answerQuestionArr[index]))
-      }
-      this.Empty_AlreadyTopics() // 清空
-      this.Add_AlreadyTopics(this.determineTopic)
+      this.questionData = JSON.parse(JSON.stringify(obj.content))
+      this.set_currentQuestion()
     },
     closeFrame () {
       // 关闭弹窗
@@ -296,10 +296,11 @@ export default {
           objId: objId,
           row:this.dataTopic.rows,
           rowHeight:35,
-          order: this.orderSort,
+          order: this.orderSort + index,
           totalScore:++item.score
         }
         Arr.push(obj)
+         this.set_orderSort()
       })
       //存在大题追加
       let existBigQuestion = {
@@ -315,11 +316,10 @@ export default {
           this.initPageData(obj)
         })
         this.set_existBigQuestion(existBigQuestion)
-        this.set_orderSort()
       } else {
         // 编辑
         //清空编辑前数据
-        this.set_existBigQuestion({ ...existBigQuestion, id: this.editQuestionId })
+        // this.set_existBigQuestion({ ...existBigQuestion, id: this.editQuestionId })
       }
       // 解答题-编辑时使用数据
       // this.set_answerQuestionArr({ ...this.questionData, pid: `answer${date}` })
