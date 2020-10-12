@@ -279,50 +279,91 @@ export default {
       this.openedFrame = false
     },
     preCreateQuestion () {
+      const { InsertTitle, Postpone } = this.dataTopic
       //确定信息
       let Arr = []
       let objId = `answer_${+new Date()}`
       let rectHeight = this.dataTopic.rows * 35 + 12 + 20 // 小题初始高度
-
+      let orders = this.orderSort - 1 // 题型排序序列号
       this.RefactorData.forEach((item, index) => {
+        orders += 1
         let obj = {
           heightTitle: index == 0 ? 32 : 0,
           height: index == 0 ? rectHeight + 32 : rectHeight,
           MarginHeight: 12,
           ...item,
           content: this.dataTopic,
-          first: index == 0 ? true : false,
+          first: index === 0 ? true : false,
           questionType: 'answerQuestion',
           objId: objId,
           row:this.dataTopic.rows,
           rowHeight:35,
-          order: this.orderSort + index,
+          order: orders,
           totalScore:++item.score
         }
         Arr.push(obj)
-         this.set_orderSort()
+        this.set_orderSort()
       })
+
       //存在大题追加
-      let existBigQuestion = {
+      let existBigQuestionObj = {
         id: objId,
         label: `${this.capitalTopicNum}.${this.dataTopic.topic}`,
-        value: this.dataTopic.number,
-        order: this.orderSort,
+        value: this.dataTopic.number
       }
 
       if (this.editQuestionId == null) {
         // 新增
-        Arr.forEach(obj => {
-          this.initPageData(obj)
-        })
-        this.set_existBigQuestion(existBigQuestion)
+        if(InsertTitle && this.existBigQuestion.length > 0){
+
+          let index = this.existBigQuestion.findIndex(
+            (item) => item.value === this.existNumber
+          )
+
+
+          if(index > -1){
+            let existNum = this.existNumber - 1
+            let orders = this.existBigQuestion[index].order - 1
+            Arr.forEach((obj,index) => {
+              existNum += 1
+              orders += 1
+              let data = {
+                obj: {
+                  ...obj,
+                  order: orders,
+                },
+                num: existNum,
+                order: orders,
+                SelfO0rder: Postpone,
+              }
+              this.insert_pageData(data)
+
+              if(index === 0){
+                this.insert_existBigQuestion({
+                  obj: {
+                    ...existBigQuestionObj,
+                    order: orders,
+                  },
+                  num: existNum,
+                  order: this.existBigQuestion[index].order,
+                  SelfO0rder: Postpone,
+                })
+              }
+
+            })
+          }
+        } else {
+          Arr.forEach(obj => {
+            this.initPageData(obj)
+          })
+          this.set_existBigQuestion(existBigQuestionObj)
+        }
+
       } else {
         // 编辑
-        //清空编辑前数据
-        // this.set_existBigQuestion({ ...existBigQuestion, id: this.editQuestionId })
+
       }
-      // 解答题-编辑时使用数据
-      // this.set_answerQuestionArr({ ...this.questionData, pid: `answer${date}` })
+
       // 大题号修改
       this.set_objectiveData(this.dataTopic.number)
       //------------------------------------
