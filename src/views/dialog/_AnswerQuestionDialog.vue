@@ -372,9 +372,17 @@ export default {
         //   }
         // })
         this.answerFilter_pageData(this.editQuestionId)
-        // if(Arr.length > 0){
+        // if(Arr.length > 0){ && pageObj.questionType ==="NonRresponseArea"
 
           let previous = this.previous
+          let previousTig = this.previous
+          let pageObj = this.pageData[previous + 1]
+
+          if(pageObj){
+            if(pageObj.questionType ==="NonRresponseArea"){
+              previous = pageObj.order
+            }
+          }
           Arr.forEach((question) => {
             previous += 1
             let data = {
@@ -382,7 +390,7 @@ export default {
                 ...question,
                 order: previous,
                 objId:this.editQuestionId,
-                previousOrder:this.previous,
+                previousOrder:  pageObj && pageObj.questionType ==="NonRresponseArea" ? pageObj.order :previousTig,
               },
               num: previous,
             }

@@ -44,6 +44,15 @@ const mutations = {
     state.pageData.splice(data.num, 0, data.obj)
   },
 
+  answer_editPageOrder: (state, data) => {
+    // 解答题
+    state.pageData.forEach((question,index) => {
+      if(question.objId === data.objId){
+        state.pageData.splice(index, 1, {...question,previousOrder:data.num})
+      }
+    })
+  },
+
   Empty_PageData: (state, id) => {
     // 内容分页
     state.pageData = state.pageData.filter((item) => {
