@@ -31,18 +31,15 @@
         @add-answer-topic-group="addAnswerTopicGroup"
       />
       <div class="question-group">
-        <el-collapse >
-
-          <answer-item
-            v-for="(item,i) in childGroups"
-            :key="i"
-            :child-data="item"
-            @pre-edit-sub-answer-item="preEditSubAnswerItem"
-            @pre-edit-last-answer-item="preEditLastAnswerItem"
-            @pre-edit-points-answer-group="preEditPointsAnswerGroup"
-            @pre-edit-points-item="preEditPointsItem"
-          />
-        </el-collapse>
+        <answer-item
+          v-for="(item,i) in childGroups"
+          :key="i"
+          :child-data="item"
+          @pre-edit-sub-answer-item="preEditSubAnswerItem"
+          @pre-edit-last-answer-item="preEditLastAnswerItem"
+          @pre-edit-points-answer-group="preEditPointsAnswerGroup"
+          @pre-edit-points-item="preEditPointsItem"
+        />
       </div>
       <div class="condition_box">
         <el-checkbox v-model="dataTopic.ShowScore">小题显示分数</el-checkbox>

@@ -1,6 +1,5 @@
 <template>
-<el-collapse-item>
-  <template slot="title">
+<div class="answer-last-group">
   <div class="space_group_list">
       <span class="space_group_title">{{lastData.topic}}</span>
       <el-input v-model.number="lastData.score" size="mini" class="space_group_items"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
@@ -8,16 +7,15 @@
       <span class="add_groupTopic" @click="pointsAnswerGroup">+ 添加小题</span>
       <i class="el-icon-del " @click="delLastItem">-</i>
   </div>
-  </template>
-  <el-collapse v-show="pointsData.length > 0">
+  <div class="points-item">
     <points-item
       v-for="(item,i) in pointsData"
       :key="i"
       :points-item-data="item"
       @pre-edit-points-item="preEditPointsItem"
     />
-  </el-collapse>
-</el-collapse-item>
+  </div>
+</div>
 </template>
 
 <script>
@@ -98,10 +96,18 @@ export default {
   position: relative;
   width: 100px;
   display: inline-block;
+  text-indent: 1em;
 }
 </style>
 <style lang="less" scoped>
 .space_group_items {
   margin-left: 36%;
+}
+.answer-last-group{
+  width:100%;
+}
+.space_group_title{
+  position: relative;
+  left: 1em;
 }
 </style>
