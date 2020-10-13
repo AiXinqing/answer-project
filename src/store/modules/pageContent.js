@@ -25,15 +25,25 @@ const mutations = {
   },
   deletePageData: (state, obj) => {
     // 解答题使用objId
-    state.pageData.map((question,index) =>{
-      if(question.objId && question.objId === obj.objId){
+    state.pageData.map((question, index) => {
+      if (question.objId && question.objId === obj.objId) {
         state.pageData.splice(index, 1, {
           ...question,
-          group:[obj.group]
+          group: [obj.group]
         })
       }
     })
   },
+  answerFilter_pageData: (state, objId) => {
+    // 解答题
+    state.pageData = state.pageData.filter(question => !question.objId && question.objId != objId)
+  },
+
+  answer_insertPageData: (state, data) => {
+    // 解答题插入
+    state.pageData.splice(data.num, 0, data.obj)
+  },
+
   Empty_PageData: (state, id) => {
     // 内容分页
     state.pageData = state.pageData.filter((item) => {
@@ -63,9 +73,11 @@ const mutations = {
         ...obj,
         order: obj.order + 1
       })
+
       state.pageData = state.pageData.sort((a, b) => {
         return a.order - b.order
       })
+
       if (SelfO0rder) {
         let tig = 0
         state.pageData.forEach((item, index) => {

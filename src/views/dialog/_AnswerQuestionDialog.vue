@@ -96,6 +96,7 @@ export default {
       isdisabledFn: false,
       errorVal: '',
       existNumber: null,
+      previous:null,
       questionData: {
         number: 1,
         topic: '解答题',
@@ -245,7 +246,8 @@ export default {
       'set_objectiveData',
       'set_orderSort',
       'del_orderSort',
-      'delPageData'
+      'answerFilter_pageData',
+      'answer_insertPageData'
     ]),
     ...mapMutations('questionType', [
       'set_AlreadyTopics',
@@ -270,6 +272,7 @@ export default {
       //编辑弹框
       console.log(obj)
       this.editQuestionId = obj.objId
+      this.previous = obj.previousOrder
       this.openedFrame = true
       this.questionData = JSON.parse(JSON.stringify(obj.content))
       this.set_currentQuestion()
@@ -363,26 +366,30 @@ export default {
 
       } else {
         // 编辑
-        this.pageData.map((obj,index) => {
-          if(this.editQuestionId == obj.objId){
-            this.delPageData(index)
-          }
-        })
+        // this.pageData.map((obj,index) => {
+        //   if(this.editQuestionId == obj.objId){
+        //     this.delPageData(index)
+        //   }
+        // })
+        this.answerFilter_pageData(this.editQuestionId)
+        // if(Arr.length > 0){
 
-        Arr.forEach(question => {
-          let data = {
-            obj: {
-              ...question,
-              order: question.previousOrder++,
-              objId:this.editQuestionId
-            },
-            num: 1,
-            order: question.previousOrder++,
-            SelfO0rder: Postpone,
-          }
-          console.log(data)
-          this.insert_pageData(data)
-        })
+          let previous = this.previous
+          Arr.forEach((question) => {
+            previous += 1
+            let data = {
+              obj: {
+                ...question,
+                order: previous,
+                objId:this.editQuestionId,
+                previousOrder:this.previous,
+              },
+              num: previous,
+            }
+
+            this.answer_insertPageData(data)
+          })
+        // }
       }
 
       // 大题号修改
