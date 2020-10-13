@@ -281,6 +281,7 @@ export default {
       this.spaceTopic = JSON.parse(
         JSON.stringify({ ...this.spaceTopic, start: this.currentQuestion })
       )
+
       this.spaceTopic.number = this.BigQuestion
       this.objectiveData.number = this.BigQuestion
       this.openedFrame = true
@@ -439,10 +440,6 @@ export default {
       let lastIndex = groupObj.childGroup.findIndex(
         (item) => item.id === obj.id
       )
-      // console.log(obj)
-      // console.log(index)
-      // console.log(lastIndex)
-      // console.log(arr)
       if (lastIndex > -1) {
         if (obj.topic == arr[0]) {
           // 判断点击的是否是首尾

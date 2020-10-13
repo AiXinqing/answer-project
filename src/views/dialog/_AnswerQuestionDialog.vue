@@ -104,7 +104,7 @@ export default {
         InsertTitle: false,
         Postpone: false,
         group: [{
-          start: 1,
+          start: this.currentQuestion,
           end: null,
           score: 1,
           space: 1,
@@ -131,7 +131,7 @@ export default {
     ...mapState('answerQuestion', ['answerQuestionArr',]),
 
     title(){
-      return !this.editQuestionId ? '编辑解答题': '新增解答题'
+      return !this.editQuestionId ? '新增解答题': '编辑解答题'
     },
 
     childGroups () {
@@ -257,6 +257,13 @@ export default {
     ]),
     ...mapMutations('answerQuestion', ['set_answerQuestionArr',]),
     opened () {
+
+      this.questionData = JSON.parse(JSON.stringify({
+        ...this.questionData,
+        start:this.currentQuestion
+      }))
+      console.log(this.questionData)
+
       // 开打弹框
       this.questionData.number = this.BigQuestion
       this.dataTopic.number = this.BigQuestion
@@ -267,7 +274,6 @@ export default {
     },
     openedEdit (obj) {
       //编辑弹框
-      console.log(obj)
       this.editQuestionId = obj.objId
       this.previous = obj.previousOrder
       this.openedFrame = true
