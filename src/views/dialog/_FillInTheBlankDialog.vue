@@ -158,8 +158,9 @@ export default {
         let temporaryArr = []
         let datas = []
         array.forEach((ele) => {
-          if (ele.childGroup != undefined && ele.childGroup.length > 0) {
-            ele.childGroup.forEach((row, index) => {
+          let { childGroup } = ele
+          if (childGroup && childGroup.length > 0) {
+            childGroup.forEach((row, index) => {
               for (let i = 1; i <= row.space; i++) {
                 if (temporaryArr.length + 1 > rows) {
                   datas.push(temporaryArr)
@@ -566,7 +567,7 @@ export default {
           let subObj = {
             fid: childItem.pid,
             pid: childItem.id,
-            id: 'subLastTopic_' + +new Date(),
+            id: 'subLastTopic_' + +new Date() + '_' + childItem.topic,
             space: 1,
             sum: 1,
             score: 1,
@@ -579,7 +580,7 @@ export default {
               sum: childItem.score * (childItem.space + 1),
               childGroup: [
                 ...childItem.childGroup,
-                { ...subObj, id: 'subLastTopic_' + +new Date() },
+                { ...subObj, id: 'subLastTopic_' + +new Date() + '_' + childItem.topic },
               ],
             }
           } else {
