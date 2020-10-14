@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import AnswerSheetTitle from './questionContent/_answerSheetTitle' // 答题卡标题
 import ObjectiveQuestion from './questionContent/_ObjectiveQuestion' // 客观题
 import FillInTheBlank from './questionContent/_FillInTheBlank' // 填空题
@@ -98,14 +98,8 @@ export default {
       },
     },
   },
-  mounted() {
-    this.$nextTick(() => {
-      // this.getPageData()
-    })
-  },
   methods: {
-    ...mapActions('pageContent', ['getPageData']),
-    ...mapMutations('pageContent', ['set_pageHeight']),
+    ...mapMutations('pageContent', ['set_pageHeight','resetScore','overlayScore']),
     hanldeStudent(Arr) {
       this.$refs.publicDialog.opened('studentTitle', Arr)
     },
@@ -113,6 +107,8 @@ export default {
       this.$refs.publicDialog.opened('AdmissionNumber')
     },
     pageContentFunc(rects = []) {
+      this.resetScore() // 试卷总分清零
+
       let results = []
       let SplitVal = 0 // 拆分所用
       let curPage = {
@@ -124,6 +120,10 @@ export default {
         curPage.rects = []
       }
       rects.forEach((rect) => {
+        if(rect.content.totalScore){
+          // 试卷总分叠加
+          this.overlayScore(rect.content.totalScore)
+        }
         let ActualHeight = rect.height + 20 //
         // avalible 剩余高度
         let avalibleHeight = this.page_size - curPage.height

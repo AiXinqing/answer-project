@@ -11,6 +11,12 @@ const state = {
 }
 
 const mutations = {
+  resetScore:(state)=>{
+    state.paperTotalScore = 0
+  },
+  overlayScore: (state,score) =>{
+    state.paperTotalScore += score
+  }, // 试卷总分
   initPageLayout: (state, obj) => {
     state.pageLayout = obj
   },
