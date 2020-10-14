@@ -650,37 +650,43 @@ export default {
     },
     changeLastSubTopicScore(obj, oldObj) {
       // last-sub分值改变
-
+      console.log(obj)
+      console.log(oldObj)
+      const {fid} = obj // ,pid,id
       let {group} = this.spaceTopic
-
-      let gid = obj.fid == undefined ? obj.pid : obj.fid
-      let sid = obj.fid == undefined ? obj.id : obj.pid
-
-      const i = group.findIndex((item) => item.id === gid)
-      let questionArr = group[i]
-
-      if (i > -1) {
-        const a = questionArr.childGroup.findIndex((row) => row.id === sid)
-        let subObj = questionArr.childGroup[a]
-        if (a > -1) {
-          if (obj.fid == undefined) {
-            let sums = subObj.sum - oldObj.score + obj.score
-            let last = { ...subObj, sum: sums }
-            questionArr.childGroup.splice(a, 1, last)
-          } else {
-            const index = subObj.childGroup.findIndex(
-              (row) => row.id === obj.id
-            )
-            let subLast = subObj.childGroup[index]
-            if (index > -1) {
-              let subLastSum = subLast.sum - oldObj.score + obj.score
-
-              let subLastItem = { ...subLast, sum: subLastSum }
-              subObj.childGroup.splice(a, 1, subLastItem)
-            }
-          }
-        }
+      console.log(group)
+      if(fid){
+        console.log(1)
       }
+
+      // let gid = obj.fid == undefined ? obj.pid : obj.fid
+      // let sid = obj.fid == undefined ? obj.id : obj.pid
+
+      // const i = group.findIndex((item) => item.id === gid)
+      // let questionArr = group[i]
+
+      // if (i > -1) {
+      //   const a = questionArr.childGroup.findIndex((row) => row.id === sid)
+      //   let subObj = questionArr.childGroup[a]
+      //   if (a > -1) {
+      //     if (obj.fid == undefined) {
+      //       let sums = subObj.sum - oldObj.score + obj.score
+      //       let last = { ...subObj, sum: sums }
+      //       questionArr.childGroup.splice(a, 1, last)
+      //     } else {
+      //       const index = subObj.childGroup.findIndex(
+      //         (row) => row.id === obj.id
+      //       )
+      //       let subLast = subObj.childGroup[index]
+      //       if (index > -1) {
+      //         let subLastSum = subLast.sum - oldObj.score + obj.score
+
+      //         let subLastItem = { ...subLast, sum: subLastSum }
+      //         subObj.childGroup.splice(a, 1, subLastItem)
+      //       }
+      //     }
+      //   }
+      // }
     },
   },
 }
