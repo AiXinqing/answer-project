@@ -148,11 +148,12 @@ export default {
       objectiveData: {},
       editQuestionId: null,
       ContentHeight: 0, // 内容高度
+      options:[],
     }
   },
   computed: {
     ...mapState('questionType', [
-      'options',
+      'questionNumber',
       'currentQuestion',
       'letterArr',
       'AlreadyTopics',
@@ -173,17 +174,6 @@ export default {
     errorMessage() {
       return this.errorVal != '' ? true : false
     },
-    capitalTopicNum() {
-      let index = this.options.findIndex(
-        (item) => this.objectiveData.number == item.value
-      )
-      if (index > -1) {
-        return this.options[index].label
-      } else {
-        return '一'
-      }
-    },
-
     title(){
       return  !this.editQuestionId ? '新增客观题' : '编辑客观题'
     },
@@ -239,6 +229,7 @@ export default {
               ? this.existBigQuestion[0].value
               : null
         }
+        this.options = this.questionNumber.map((label,value)=>({label,value}))
       },
     },
   },
@@ -362,7 +353,7 @@ export default {
 
       let existBigQuestionObj = {
         id: objId,
-        label: `${this.capitalTopicNum}.${topic}`,
+        label: `${this.options[number].label}.${topic}`,
         value: number,
         order: this.orderSort,
       }

@@ -79,16 +79,13 @@ export default {
       isEditor: false,
       data: {},
       cotent: '',
-      promptTitle: '请考生用2B铅笔将所选题目对应题号涂黑，答题区域只允许选择一题，如果多做，则按所选做的前一题计分。'
+      promptTitle: '请考生用2B铅笔将所选题目对应题号涂黑，答题区域只允许选择一题，如果多做，则按所选做的前一题计分。',
+      options:[]
     }
   },
   computed: {
-    ...mapState('questionType', ['options', 'letterArr']),
+    ...mapState('questionType', ['questionNumber', 'letterArr']),
     ...mapState('pageContent', ['pageData', 'pageLayout']),
-    numberTitle () {
-      let item = this.options.filter(item => item.value === this.contentData.number)
-      return item[0].label
-    },
 
     heightContetn(){
       const {borderTop,heightTitle,castHeight} = this.questionData
@@ -104,8 +101,9 @@ export default {
     },
 
     TopicContent () {
-      let totalScore = this.contentData.group[0].totalScore
-      return `<span>${this.numberTitle}.</span><span>${this.contentData.topic}</span><span class='p-5'>(${totalScore})</span>分<span class='optional-prompt'>${this.promptTitle}</span>`
+      const {group,topic,number} = this.contentData
+      let totalScore = group[0].totalScore
+      return `<span>${this.options[number].label}.</span><span>${topic}</span><span class='p-5'>(${totalScore})</span>分<span class='optional-prompt'>${this.promptTitle}</span>`
     },
     topicData () {
       return this.contentData.group[0].childGroup
@@ -125,6 +123,7 @@ export default {
         this.data = {
           ...this.questionData
         }
+        this.options = this.questionNumber.map((label,value)=>({label,value}))
       }
     },
     TopicContent: {

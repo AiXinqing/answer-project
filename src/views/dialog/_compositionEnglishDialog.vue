@@ -126,11 +126,12 @@ export default {
         Postpone: false,
       },
       editData: {},
+      options:[]
     }
   },
   computed: {
     ...mapState('questionType', [
-      'options',
+      'questionNumber',
       'currentQuestion',
       'determineTopic',
       'existBigQuestion',
@@ -150,16 +151,6 @@ export default {
     },
     isdisabledFn() {
       return this.errorVal != '' ? true : false
-    },
-    capitalTopicNum() {
-      let index = this.options.findIndex(
-        (item) => this.data.number == item.value
-      )
-      if (index > -1) {
-        return this.options[index].label
-      } else {
-        return '一'
-      }
     },
     tabStatusVal() {
       const { topic, score, rows } = this.data
@@ -206,15 +197,10 @@ export default {
           }
         }
       }
-      return score == ''
-        ? true
-        : rows == ''
-        ? true
-        : topic == ''
-        ? true
-        : str != ''
-        ? true
-        : false
+      return score == ''? true :
+              rows == ''? true :
+                topic == ''? true:
+                str != ''? true: false
     },
     currentPageHeight() {
       let heights = this.pageHeight[this.pageHeight.length - 1]
@@ -254,6 +240,7 @@ export default {
           this.existBigQuestion.length > 0
             ? this.existBigQuestion[0].value
             : null
+        this.options = this.questionNumber.map((label,value)=>({label,value}))
       },
     },
   },
@@ -309,7 +296,7 @@ export default {
     },
 
     preCreateQuestion() {
-      const { rows, InsertTitle, Postpone } = this.data
+      const { rows, InsertTitle, Postpone,number,name } = this.data
       this.errorVal = this.tabStatusVal
 
       let rectHeight = rows * 35 // 当前内容高度 45(内部高度)
@@ -337,8 +324,8 @@ export default {
         //存在大题追加
         let existBigQuestionObj = {
           id: objId,
-          label: `${this.capitalTopicNum}.${this.data.name}`,
-          value: this.data.number,
+          label: `${this.options[number].label}.${name}`,
+          value: number,
           order: this.orderSort,
         }
 

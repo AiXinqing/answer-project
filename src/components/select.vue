@@ -28,7 +28,7 @@ export default {
     },
     value: {
       type: Number,
-      default: 1
+      default: 0
     }
   },
   components: {

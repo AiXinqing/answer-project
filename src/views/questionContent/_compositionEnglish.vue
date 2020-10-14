@@ -66,22 +66,20 @@ export default {
       isEditor: false,
       data: {},
       cotent: '',
+      options:[]
     }
   },
   computed: {
-    ...mapState('questionType', ['options', 'letterArr']),
+    ...mapState('questionType', ['questionNumber', 'letterArr']),
     ...mapState('pageContent', ['pageData', 'pageLayout']),
-    numberTitle () {
-      let item = this.options.filter(item => item.value === this.contentData.number)
-      return item[0].label
-    },
     strLong () {
 
       let long = this.contentData.topic.toString().length
       return parseInt(long) * 8 + 1
     },
     TopicContent () {
-      return `<span>${this.numberTitle}.</span><span>${this.contentData.name}</span><span class='p-5'>(${this.contentData.score})</span>分`
+      const {name,number,score} = this.contentData
+      return `<span>${this.options[number].label}.</span><span>${name}</span><span class='p-5'>(${score})</span>分`
     },
     topicData () {
       return ''
@@ -109,7 +107,7 @@ export default {
         this.data = {
           ...this.questionData
         }
-        console.log(this.data)
+        this.options = this.questionNumber.map((label,value)=>({label,value}))
       }
     },
     TopicContent: {
@@ -186,4 +184,9 @@ export default {
     flex-basis: auto;
   }
 }
+</style>
+<style lang="less" scoped>
+  .composition_box{
+    border: 1px solid #888;
+  }
 </style>

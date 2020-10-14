@@ -94,7 +94,7 @@ export default {
       existNumber: null,
       previous:null,
       questionData: {
-        number: 1,
+        number: 0,
         topic: '解答题',
         rows: 6,
         startQuestion: 1,
@@ -110,12 +110,13 @@ export default {
           id: 'answerTopic',
           childGroup: [],
         },]
-      }
+      },
+      options:[]
     }
   },
   computed: {
     ...mapState('questionType', [
-      'options',
+      'questionNumber',
       'currentQuestion',
       'determineTopic',
       'existBigQuestion',
@@ -135,14 +136,6 @@ export default {
 
     childGroups () {
       return this.dataTopic.group.map(item => item.childGroup).flat()
-    },
-    capitalTopicNum () {
-      let index = this.options.findIndex(item => this.dataTopic.number == item.value)
-      if (index > -1) {
-        return this.options[index].label
-      } else {
-        return '一'
-      }
     },
     errorMessage () {
       return this.errorVal != '' ? true : false
@@ -216,7 +209,6 @@ export default {
         this.dataTopic = {
           ...this.questionData
         }
-
         if (this.editQuestionId == null) {
           this.$nextTick(() => {
             this.dataTopic = {
@@ -226,6 +218,7 @@ export default {
           })
           this.existNumber = this.existBigQuestion.length > 0 ? this.existBigQuestion[0].value : null
         }
+        this.options = this.questionNumber.map((label,value)=>({label,value}))
       }
     },
   },
@@ -256,7 +249,6 @@ export default {
         ...this.questionData,
         start:this.currentQuestion
       }))
-      console.log(this.questionData)
 
       // 开打弹框
       this.questionData.number = this.BigQuestion
@@ -280,7 +272,7 @@ export default {
       this.openedFrame = false
     },
     preCreateQuestion () {
-      const { InsertTitle, Postpone } = this.dataTopic
+      const { InsertTitle, Postpone,number } = this.dataTopic
       //确定信息
       let Arr = []
       let objId = `answer_${+new Date()}`
@@ -310,8 +302,8 @@ export default {
       //存在大题追加
       let existBigQuestionObj = {
         id: objId,
-        label: `${this.capitalTopicNum}.${this.dataTopic.topic}`,
-        value: this.dataTopic.number
+        label: `${this.options[number].label}.${this.dataTopic.topic}`,
+        value:number
       }
 
       if (this.editQuestionId == null) {
@@ -391,7 +383,7 @@ export default {
       }
 
       // 大题号修改
-      this.set_objectiveData(this.dataTopic.number)
+      this.set_objectiveData(number)
       //------------------------------------
 
       this.openedFrame = false // 关闭弹窗

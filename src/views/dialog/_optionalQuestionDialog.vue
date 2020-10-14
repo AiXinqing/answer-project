@@ -124,11 +124,12 @@ export default {
           },
         ],
       },
+      options:[],
     }
   },
   computed: {
     ...mapState('questionType', [
-      'options',
+      'questionNumber',
       'currentQuestion',
       'determineTopic',
       'existBigQuestion',
@@ -140,16 +141,6 @@ export default {
     },
     groupItemData() {
       return this.data.group.map((item) => item.childGroup)[0]
-    },
-    capitalTopicNum() {
-      let index = this.options.findIndex(
-        (item) => this.data.number == item.value
-      )
-      if (index > -1) {
-        return this.options[index].label
-      } else {
-        return '一'
-      }
     },
 
     title(){
@@ -181,6 +172,7 @@ export default {
             }
           })
         }
+        this.options = this.questionNumber.map((label,value)=>({label,value}))
         this.existNumber =
           this.existBigQuestion.length > 0
             ? this.existBigQuestion[0].value
@@ -232,7 +224,7 @@ export default {
     },
     preCreateQuestion() {
       // 当前页内容所占高度topic, number,Postpone
-      const { rows, InsertTitle, Postpone } = this.data
+      const { rows, InsertTitle, Postpone,number,topic } = this.data
 
       let rectHeight = rows * 35 // 当前内容高度 45(内部高度)
       let MarginHeight = +14 + 40
@@ -254,8 +246,8 @@ export default {
       //存在大题追加
       let existBigQuestionObj = {
         id: objId,
-        label: `${this.capitalTopicNum}.${this.data.topic}`,
-        value: this.data.number,
+        label: `${this.options[number].label}.${topic}`,
+        value: number,
         order: this.orderSort,
       }
 
@@ -307,7 +299,7 @@ export default {
         this.set_existBigQuestion({ ...existBigQuestionObj, id: obj.id })
       }
       // 大题号修改
-      this.set_objectiveData(this.data.number)
+      this.set_objectiveData(number)
       //------------------------------------
       this.openedFrame = false // 关闭弹窗
       // 清空弹框数据

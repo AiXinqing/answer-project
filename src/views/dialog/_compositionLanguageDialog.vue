@@ -156,11 +156,12 @@ export default {
         Postpone: false,
       },
       editData: {},
+      options:[]
     }
   },
   computed: {
     ...mapState('questionType', [
-      'options',
+      'questionNumber',
       'currentQuestion',
       'determineTopic',
       'existBigQuestion',
@@ -184,16 +185,6 @@ export default {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 32.5
         : 30
-    },
-    capitalTopicNum() {
-      let index = this.options.findIndex(
-        (item) => this.data.number == item.value
-      )
-      if (index > -1) {
-        return this.options[index].label
-      } else {
-        return '一'
-      }
     },
     pageRow() {
       // 一页所占用的行数
@@ -225,19 +216,11 @@ export default {
           }
         }
       }
-      return topic == ''
-        ? '小题题号不能为空'
-        : score == ''
-        ? '分数不能为空'
-        : minWordCount == ''
-        ? '最少字数不能为空'
-        : totalWordCount == ''
-        ? '总字数不能为空'
-        : minWordCount > totalWordCount
-        ? '最少字数不能大于总字数'
-        : str != ''
-        ? str
-        : ''
+      return topic == ''? '小题题号不能为空':
+              score == ''? '分数不能为空':
+                minWordCount == ''? '最少字数不能为空':
+                  totalWordCount == ''? '总字数不能为空':
+                    minWordCount > totalWordCount? '最少字数不能大于总字数': str != ''? str: ''
     },
     tabStatus() {
       const { topic, score, minWordCount, totalWordCount } = this.data
@@ -257,19 +240,12 @@ export default {
           }
         }
       }
-      return topic == ''
-        ? true
-        : score == ''
-        ? true
-        : minWordCount == ''
-        ? true
-        : totalWordCount == ''
-        ? true
-        : minWordCount > totalWordCount
-        ? true
-        : str != ''
-        ? true
-        : false
+      return topic == ''? true:
+              score == ''? true:
+              minWordCount == ''? true:
+              totalWordCount == ''? true:
+              minWordCount > totalWordCount? true:
+              str != ''? true: false
     },
     currentPageHeight() {
       let heights = this.pageHeight[this.pageHeight.length - 1]
@@ -309,6 +285,7 @@ export default {
           this.existBigQuestion.length > 0
             ? this.existBigQuestion[0].value
             : null
+        this.options = this.questionNumber.map((label,value)=>({label,value}))
       },
     },
   },
@@ -373,7 +350,7 @@ export default {
       }
     },
     preCreateQuestion() {
-      const { spacing, totalWordCount, InsertTitle, Postpone } = this.data
+      const { spacing, totalWordCount, InsertTitle, Postpone,name,number } = this.data
       this.errorVal = this.tabStatusVal
 
       if (!this.tabStatus) {
@@ -413,8 +390,8 @@ export default {
         //存在大题追加
         let existBigQuestionObj = {
           id: objId,
-          label: `${this.capitalTopicNum}.${this.data.name}`,
-          value: this.data.number,
+          label: `${this.options[number].label}.${name}`,
+          value: number,
           order: this.orderSort,
         }
 

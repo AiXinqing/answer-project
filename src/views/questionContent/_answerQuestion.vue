@@ -89,18 +89,12 @@ export default {
       isEditor: false,
       data: {},
       cotent: '',
+      options:[],
     }
   },
   computed: {
-    ...mapState('questionType', ['options', 'letterArr']),
+    ...mapState('questionType', ['questionNumber', 'letterArr']),
     ...mapState('pageContent', ['pageData', 'pageLayout']),
-    numberTitle() {
-      let item = this.options.filter(
-        (item) => item.value === this.contentData.number
-      )
-      return item[0].label
-    },
-
     heightContetn(){
       const {castHeight,heightTitle,height} = this.questionData
       let obj = {
@@ -115,7 +109,8 @@ export default {
     },
 
     TopicContent() {
-      return `<span>${this.numberTitle}.</span><span>${this.contentData.topic}</span><span>(${this.data.totalScore})分</span>`
+      const {number,topic} = this.contentData
+      return `<span>${this.options[number].label}.</span><span>${topic}</span><span>(${this.data.totalScore})分</span>`
     },
     topicData() {
       return this.contentData.group
@@ -135,6 +130,7 @@ export default {
         this.data = {
           ...this.questionData,
         }
+        this.options = this.questionNumber.map((label,value)=>({label,value}))
       },
     },
     TopicContent: {
@@ -149,7 +145,7 @@ export default {
       handler() {
         this.questionContetn = this.heightContetn
       },
-    }
+    },
   },
   methods: {
     ...mapMutations('pageContent', [

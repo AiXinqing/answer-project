@@ -62,18 +62,15 @@ export default {
   data () {
     return {
       data: {},
-      //TopicContent:'',
       isEditor: false,
-      cotent: ''
+      cotent: '',
+      options:[]
     }
   },
   computed: {
-    ...mapState('questionType', ['options', 'letterArr']),
+    ...mapState('questionType', ['questionNumber', 'letterArr']),
     ...mapState('pageContent', ['pageData']),
-    numberTitle () {
-      let item = this.options.filter(item => item.value === this.data.number)
-      return item[0].label
-    },
+
     topicBox () {
       let group = this.data.group
       const singleBox = group.singleBox
@@ -95,7 +92,8 @@ export default {
       return result
     },
     TopicContent () {
-      return `<span>${this.numberTitle}.</span><span>${this.data.topic}</span><span>(${this.data.totalScore})分</span>`
+      const {number,topic,totalScore} = this.data
+      return `<span>${this.options[number].label}.</span><span>${topic}</span><span>(${totalScore})分</span>`
     }
   },
   watch: {
@@ -105,6 +103,7 @@ export default {
         this.data = {
           ...this.contentData
         }
+        this.options = this.questionNumber.map((label,value)=>({label,value}))
       }
     },
     TopicContent: {

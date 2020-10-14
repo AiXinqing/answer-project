@@ -4,7 +4,7 @@ const state = {
   pageLayout: {}, // 页面布局
   pageData: [],
   page_size: 1170 - 60, // 一页高度
-  BigQuestion: 1, // 大题题号
+  BigQuestion: 0, // 大题题号
   pageHeight: [], // 页面高度
   orderSort: 0, // 排序
 }
@@ -112,8 +112,8 @@ const mutations = {
   },
   del_objectiveData: (state) => {
     state.BigQuestion = state.BigQuestion - 1
-    if (state.BigQuestion <= 0) {
-      state.BigQuestion = 1
+    if (state.BigQuestion < 0) {
+      state.BigQuestion = 0
     }
   },
   set_pageHeight: (state, Arr = []) => {

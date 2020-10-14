@@ -62,10 +62,11 @@ export default {
       },
       closeData: {},
       editQuestionId: null,
+      options:[]
     }
   },
   computed: {
-    ...mapState('questionType', ['options', 'existBigQuestion']),
+    ...mapState('questionType', ['questionNumber', 'existBigQuestion']),
     ...mapState('pageContent', ['orderSort', 'pageData']),
     errorMessage() {
       return this.errorVal != '' ? true : false
@@ -110,6 +111,7 @@ export default {
                 : null,
           }
         }
+        this.options = this.questionNumber.map((label,value)=>({label,value}))
       },
     },
   },
