@@ -511,4 +511,9 @@ export default {
 .el-input__inner:focus {
   border-color: @main !important;
 }
+.dialog_content{
+  .error-message{
+    margin-left: 15px;
+  }
+}
 </style>

@@ -90,7 +90,6 @@ export default {
       closeData: {},
       editQuestionId: null,
       openedFrame: false,
-      isdisabledFn: false,
       errorVal: '',
       existNumber: null,
       previous:null,
@@ -135,11 +134,7 @@ export default {
     },
 
     childGroups () {
-      let Arr = []
-      this.dataTopic.group.forEach(item => {
-        Arr.push(...item.childGroup)
-      })
-      return Arr
+      return this.dataTopic.group.map(item => item.childGroup).flat()
     },
     capitalTopicNum () {
       let index = this.options.findIndex(item => this.dataTopic.number == item.value)
@@ -153,7 +148,7 @@ export default {
       return this.errorVal != '' ? true : false
     },
     RefactorData () {
-      let group = this.questionData.group
+      let {group} = this.questionData
       let itemArr = []
       group.forEach(item => {
         if (item.childGroup.length > 0) {
@@ -201,15 +196,14 @@ export default {
       })
       return itemArr
     },
-    topicList () {
-      let Arr = [...this.dataTopic.group.map(item => item.childGroup)]
-      return Arr
-    },
     totalScore () {
-      return this.topicList[0].map(item => item.score).reduce((accumulator, currentValue) => {
+      return this.childGroups.map(item => item.score).reduce((accumulator, currentValue) => {
         return accumulator + currentValue
       })
-    }
+    },
+    isdisabledFn(){
+      return this.childGroups.length > 0 && !this.errorMessage ? false:true
+    },
   },
   mounted () {
     this.closeData = JSON.parse(JSON.stringify(this.questionData))
@@ -368,14 +362,7 @@ export default {
         }
 
       } else {
-        // 编辑
-        // this.pageData.map((obj,index) => {
-        //   if(this.editQuestionId == obj.objId){
-        //     this.delPageData(index)
-        //   }
-        // })
         this.answerFilter_pageData(this.editQuestionId)
-        // if(Arr.length > 0){ && pageObj.questionType ==="NonRresponseArea"
 
           let previous = this.previous
           let previousTig = this.previous
@@ -408,7 +395,7 @@ export default {
       //------------------------------------
 
       this.openedFrame = false // 关闭弹窗
-      this.set_determineTopic(this.topicList)
+      this.set_determineTopic(this.childGroups)
       this.set_currentQuestion()
       // 清空弹框数据
       this.questionData = JSON.parse(JSON.stringify(this.closeData))

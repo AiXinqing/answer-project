@@ -99,9 +99,7 @@ export default {
   data() {
     return {
       data: {},
-      title: '新增选作题',
       openedFrame: false,
-      isdisabledFn: false,
       closeData: {},
       editQuestionId: null,
       errorVal: '',
@@ -153,6 +151,14 @@ export default {
         return '一'
       }
     },
+
+    title(){
+      return !this.editQuestionId ? '新增选作题' : '编辑选作题'
+    },
+
+    isdisabledFn(){
+      return  this.groupItemData.length > 0 && !this.errorMessage ? false:true
+    }
   },
   watch: {
     questionData: {
@@ -174,7 +180,6 @@ export default {
               start: item.end == '' ? this.currentQuestion : item.start,
             }
           })
-          // const { group } = this.data
         }
         this.existNumber =
           this.existBigQuestion.length > 0
@@ -218,7 +223,6 @@ export default {
       this.editQuestionId = obj.id
       this.openedFrame = true
       this.data = JSON.parse(JSON.stringify(obj))
-      this.title = '编辑选作题'
     },
     closeFrame() {
       // 关闭弹窗
@@ -345,4 +349,3 @@ export default {
 }
 </script>
 
-<style lang="less"></style>

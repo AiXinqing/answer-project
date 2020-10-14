@@ -95,8 +95,7 @@ export default {
   data() {
     return {
       openedFrame: false,
-      isdisabledFn: false,
-      title: '新增客观题',
+      // isdisabledFn: true,
       existNumber: null,
       quesctionObj: {
         number: 1,
@@ -147,7 +146,6 @@ export default {
       closeData: {},
       errorVal: '',
       objectiveData: {},
-      topicList: [],
       editQuestionId: null,
       ContentHeight: 0, // 内容高度
     }
@@ -184,6 +182,22 @@ export default {
       } else {
         return '一'
       }
+    },
+
+    title(){
+      return  !this.editQuestionId ? '新增客观题' : '编辑客观题'
+    },
+    topicList(){
+      const {group} = this.objectiveData
+      const{singleBox,checkbox,judgment} = group
+      const singleArr = this.traverse(singleBox, this.letterArr)
+      const checkArr = this.traverse(checkbox, this.letterArr)
+      const judgmentArr = this.traverse(judgment, this.letterArr)
+      return [...singleArr, ...checkArr, ...judgmentArr]
+    },
+
+    isdisabledFn(){
+      return this.topicList.length > 0 && !this.errorMessage ? false :true
     },
   },
   watch: {
@@ -299,31 +313,19 @@ export default {
       this.quesctionObj = JSON.parse(JSON.stringify(current[0].content))
       this.editQuestionId = id
       this.openedFrame = true
-      this.title = '编辑客观题'
       this.set_currentQuestion()
     },
     preCreateQuestion() {
       // 数据编辑完成添加至全局数组中---------------
       const {
-        group,
         rows,
         topic,
         number,
         InsertTitle,
         Postpone,
       } = this.objectiveData
-      const singleBox = group.singleBox
-      //------------------------------------小题计算
-      const singleArr = this.traverse(singleBox, this.letterArr)
-      const checkbox = group.checkbox
-      const checkArr = this.traverse(checkbox, this.letterArr)
-      const judgment = group.judgment
-      const judgmentArr = this.traverse(judgment, this.letterArr)
-      //------------------xiao题号数组-------------------------
-      this.topicList = [...singleArr, ...checkArr, ...judgmentArr]
       this.set_determineTopic(this.topicList) // 储存确实题型
 
-      //-------------------------------------------
       let result = []
       for (var i = 0; i < this.topicList.length; i += rows) {
         result.push(this.topicList.slice(i, i + rows))
