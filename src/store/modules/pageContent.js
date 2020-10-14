@@ -7,6 +7,7 @@ const state = {
   BigQuestion: 0, // 大题题号
   pageHeight: [], // 页面高度
   orderSort: 0, // 排序
+  paperTotalScore:0, // 试卷总分
 }
 
 const mutations = {

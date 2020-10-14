@@ -3,7 +3,7 @@
     <div class="Guide_bar">
       <div class="allscore">
         当前总分：
-        <span>0</span> 分
+        <span>{{paperTotalScore}}</span> 分
       </div>
       <div class="layout-box">
         <div class="layout-top">
@@ -45,7 +45,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('pageContent', ['pageLayout','page_size']),
+    ...mapState('pageContent', ['pageLayout','page_size','paperTotalScore']),
     testPaper() {
       return 'A3/B4/8K纸'
     },
