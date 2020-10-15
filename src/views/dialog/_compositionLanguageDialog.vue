@@ -320,10 +320,10 @@ export default {
         })
       )
       // 开打弹框
-      this.set_currentQuestion()
       this.openedFrame = true
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
+      this.set_currentQuestion()
     },
     openedEdit(obj) {
       this.editData = JSON.parse(JSON.stringify(obj))
@@ -339,6 +339,7 @@ export default {
       this.set_currentQuestion()
       this.questionData = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
+      this.Empty_AlreadyTopics() // 清空
     },
     hanldeStatus(val) {
       // 报错状态
@@ -388,6 +389,7 @@ export default {
               ? this.editData.BeforeEditing
               : this.BeforeEditing,
         }
+        this.Add_AlreadyTopics([this.data])
 
         //存在大题追加
         let existBigQuestionObj = {
@@ -434,8 +436,6 @@ export default {
             this.initPageData(obj)
             this.set_existBigQuestion(existBigQuestionObj)
           }
-
-          this.Add_AlreadyTopics([this.data])
           this.set_determineTopic([this.data])
           this.set_orderSort()
         } else {

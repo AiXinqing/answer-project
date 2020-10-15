@@ -204,17 +204,17 @@ export default {
       this.questionData.number = this.BigQuestion
       this.data.number = this.BigQuestion
       // 开打弹框
-      this.set_currentQuestion()
       this.openedFrame = true
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
+      this.set_currentQuestion()
     },
     openedEdit(obj) {
       //编辑弹框
-      this.set_currentQuestion()
       this.editQuestionId = obj.id
       this.openedFrame = true
       this.data = JSON.parse(JSON.stringify(obj))
+      this.set_currentQuestion()
     },
     closeFrame() {
       // 关闭弹窗

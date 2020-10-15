@@ -267,9 +267,9 @@ export default {
       )
 
       this.openedFrame = true
-      this.set_currentQuestion()
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
+       this.set_currentQuestion()
     },
     change(id, num) {
       let current = this.pageData.filter((item) => item.id === id)

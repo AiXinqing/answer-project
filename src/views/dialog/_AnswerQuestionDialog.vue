@@ -257,6 +257,7 @@ export default {
       this.openedFrame = true
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
+      this.set_currentQuestion()
     },
     openedEdit (obj) {
       //编辑弹框
