@@ -316,7 +316,7 @@ export default {
       let totalScore = 0
 
       this.childGroups.map((item) => {
-        totalScore += item.score
+        totalScore += item.sum
       })
       let objId = `FillInTheBlank_${+new Date()}`
       // 此题总分计算
@@ -598,10 +598,10 @@ export default {
     ChangeSpaceValue(obj) {
       // 分值分数修改
       // 添加小题空格数
+
       let {group} = this.spaceTopic
       const i = group.findIndex((item) => item.id === obj.pid)
       let questionArr = group[i]
-
       if (i > -1) {
         const index = questionArr.childGroup.findIndex(
           (row) => row.id === obj.id
@@ -648,45 +648,39 @@ export default {
         }
       }
     },
-    changeLastSubTopicScore(obj, oldObj) {
+    changeLastSubTopicScore(obj, oldObj) { // 改变分值
       // last-sub分值改变
-      console.log(obj)
-      console.log(oldObj)
       const {fid} = obj // ,pid,id
       let {group} = this.spaceTopic
-      console.log(group)
       if(fid){
-        console.log(1)
+
+        let index = group.findIndex(group => group.id === obj.fid)
+        if(index > -1){
+          let subGroup = group[index].childGroup
+          let subIndex = subGroup.findIndex(subObj => subObj.id === obj.pid)
+          if(subIndex > -1){
+            let lastGrop = subGroup[subIndex].childGroup
+            let lastIndex = lastGrop.findIndex(lastObj => lastObj.id === obj.id)
+            if(lastIndex > -1){
+              lastGrop.splice(lastIndex, 1, {...obj,sum:obj.score,score:oldObj.score})
+              // 计算小题下所有总分值
+              const groupSum = lastGrop.reduce((acc,cur) => acc.sum + cur.sum)
+              subGroup.splice(subIndex, 1, {...subGroup[index],sum:groupSum})
+
+            }
+          }
+        }
+      }else{
+        let index = group.findIndex(group => group.id === obj.pid)
+        if(index > -1){
+          let subGroup = group[index].childGroup
+          let subIndex = subGroup.findIndex(subObj => subObj.id === obj.id)
+          if(subIndex > -1) {
+            let iss = subGroup[subIndex].sum - oldObj.score + obj.score
+            subGroup.splice(subIndex, 1, {...obj,sum:iss})
+          }
+        }
       }
-
-      // let gid = obj.fid == undefined ? obj.pid : obj.fid
-      // let sid = obj.fid == undefined ? obj.id : obj.pid
-
-      // const i = group.findIndex((item) => item.id === gid)
-      // let questionArr = group[i]
-
-      // if (i > -1) {
-      //   const a = questionArr.childGroup.findIndex((row) => row.id === sid)
-      //   let subObj = questionArr.childGroup[a]
-      //   if (a > -1) {
-      //     if (obj.fid == undefined) {
-      //       let sums = subObj.sum - oldObj.score + obj.score
-      //       let last = { ...subObj, sum: sums }
-      //       questionArr.childGroup.splice(a, 1, last)
-      //     } else {
-      //       const index = subObj.childGroup.findIndex(
-      //         (row) => row.id === obj.id
-      //       )
-      //       let subLast = subObj.childGroup[index]
-      //       if (index > -1) {
-      //         let subLastSum = subLast.sum - oldObj.score + obj.score
-
-      //         let subLastItem = { ...subLast, sum: subLastSum }
-      //         subObj.childGroup.splice(a, 1, subLastItem)
-      //       }
-      //     }
-      //   }
-      // }
     },
   },
 }
