@@ -350,7 +350,7 @@ export default {
       }
     },
     preCreateQuestion() {
-      const { spacing, totalWordCount, InsertTitle, Postpone,name,number } = this.data
+      const { spacing, totalWordCount, InsertTitle, Postpone,name,number,score } = this.data
       this.errorVal = this.tabStatusVal
 
       if (!this.tabStatus) {
@@ -375,7 +375,7 @@ export default {
           height: heights,
           id: objId,
           questionType: 'compositionLanguage',
-          content: this.data,
+          content: {...this.data,totalScore:score},
           order: this.orderSort,
           first: true,
           lattice: lattice,

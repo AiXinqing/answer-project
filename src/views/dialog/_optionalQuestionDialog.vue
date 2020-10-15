@@ -224,7 +224,7 @@ export default {
     },
     preCreateQuestion() {
       // 当前页内容所占高度topic, number,Postpone
-      const { rows, InsertTitle, Postpone,number,topic } = this.data
+      const { rows, InsertTitle, Postpone,number,topic,group } = this.data
 
       let rectHeight = rows * 35 // 当前内容高度 45(内部高度)
       let MarginHeight = +14 + 40
@@ -239,7 +239,7 @@ export default {
         rowHeight: 35,
         id: objId,
         questionType: 'optionalQuestion',
-        content: this.data,
+        content:{...this.data,totalScore:group[0].totalScore},
         order: this.orderSort,
         first: true,
       }

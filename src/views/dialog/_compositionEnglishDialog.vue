@@ -296,7 +296,7 @@ export default {
     },
 
     preCreateQuestion() {
-      const { rows, InsertTitle, Postpone,number,name } = this.data
+      const { rows, InsertTitle, Postpone,number,name ,score} = this.data
       this.errorVal = this.tabStatusVal
 
       let rectHeight = rows * 35 // 当前内容高度 45(内部高度)
@@ -312,7 +312,7 @@ export default {
           rowHeight: 36,
           id: objId,
           questionType: 'compositionEnglish',
-          content: this.data,
+          content: {...this.data,totalScore:score},
           order: this.orderSort,
           first: true,
           BeforeEditing:
