@@ -491,7 +491,7 @@ export default {
         }
       }
     },
-    preEditPointsItem (obj, isDel = false) {
+    preEditPointsItem (obj, isDel = false) { // 编辑及删除 isDel 删除
       // 末尾题
       let {group} = this.dataTopic
       let index = group.findIndex(item => item.id == obj.spId)
@@ -511,6 +511,7 @@ export default {
               if (pointsIndex > -1) {
                 if (isDel) {
                   pointsItem.childGroup.splice(pointsIndex, 1)
+
                 } else {
                   pointsItem.childGroup.splice(pointsIndex, 1, obj)
 
