@@ -126,7 +126,8 @@ export default {
         Postpone: false,
       },
       editData: {},
-      options:[]
+      options:[],
+      changeClick:false,
     }
   },
   computed: {
@@ -150,7 +151,8 @@ export default {
       return this.data.group.map((item) => item.childGroup)[0]
     },
     isdisabledFn() {
-      return this.errorVal != '' ? true : false
+      return !this.editQuestionId && !this.changeClick ?  true :
+              this.changeClick && this.errorVal != '' ?  true :false
     },
     tabStatusVal() {
       const { topic, score, rows } = this.data
@@ -389,6 +391,7 @@ export default {
       }
     },
     hanldeVerification() {
+      this.changeClick = true
       this.errorVal = this.tabStatusVal
     },
     hanldeSelect(e) {

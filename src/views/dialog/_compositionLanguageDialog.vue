@@ -156,7 +156,8 @@ export default {
         Postpone: false,
       },
       editData: {},
-      options:[]
+      options:[],
+      changeClick:false
     }
   },
   computed: {
@@ -197,7 +198,8 @@ export default {
       return this.errorVal != '' ? true : false
     },
     isdisabledFn() {
-      return this.errorVal != '' ? true : false
+      return !this.editQuestionId && !this.changeClick ?  true :
+              this.changeClick && this.errorVal != '' ?  true :false
     },
     tabStatusVal() {
       const { topic, score, minWordCount, totalWordCount } = this.data
@@ -458,6 +460,7 @@ export default {
       }
     },
     hanldeVerification() {
+      this.changeClick = true
       this.errorVal = this.tabStatusVal
     },
     hanldeSelect(e) {
