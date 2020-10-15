@@ -1,9 +1,13 @@
 <template>
-  <div class="page-content">
+  <div class="page-content"
+    @click.stop="isPopEditor"
+  >
     <answer-sheet-layout />
     <div class="main-info">
       <answer-sheet-set />
-      <answer-sheet-content />
+      <answer-sheet-content
+        ref="answerContent"
+      />
     </div>
   </div>
 </template>
@@ -17,6 +21,11 @@ export default {
     answerSheetLayout,
     answerSheetSet,
     answerSheetContent,
+  },
+  methods: {
+    isPopEditor() {
+      this.$refs.answerContent.isPopEditor()
+    }
   },
 }
 </script>

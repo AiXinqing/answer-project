@@ -17,6 +17,7 @@
         :style="{ minHeight: topice.castHeight + 'px' }"
       >
         <component
+          ref="answerComponent"
           :is="topice.questionType"
           :content-data="topice.content"
           :question-data="topice"
@@ -270,6 +271,9 @@ export default {
     curEditNon(obj) {
       this.$refs.publicDialog.openedEdit('NonRresponseArea', obj)
     },
+    isPopEditor(){
+     // this.$refs.answerComponent.hanldeCloseEsitor()
+    }
   },
 }
 </script>
