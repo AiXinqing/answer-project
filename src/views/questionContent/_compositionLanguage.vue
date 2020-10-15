@@ -1,7 +1,7 @@
 <template>
   <div class="question-info">
     <template v-if="data.first && data.borderTop == undefined">
-      <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
+      <div class="question-title" :style="{height: data.heightTitle - 10 + 'px'}" v-if="!isEditor" @click="hanldeEditor">
         <div class="title-span" v-html="cotent"></div>
       </div>
       <quill-editor
