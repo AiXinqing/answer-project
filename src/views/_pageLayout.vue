@@ -58,7 +58,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.pageLayout)
     this.$refs.editorLayout.openRForm(1)
   },
   methods: {
