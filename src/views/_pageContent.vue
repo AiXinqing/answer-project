@@ -7,8 +7,8 @@
       :style="{ width: pageWidth + 'px' }"
     >
       <div
-        v-for="(topice,i) in pageList"
-        :key="topice.id + '_' + i"
+        v-for="(topice,index) in pageList"
+        :key="topice.id + '_' + i + '_' + index"
         :class="[
           'footer',
           { answer: topice.first != undefined && topice.first == false },
