@@ -58,7 +58,7 @@ export default {
       errorVal: '',
       data: {
         rows: 3,
-        positionNum: null,
+        positionNum: 0,
       },
       closeData: {},
       editQuestionId: null,

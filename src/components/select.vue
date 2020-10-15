@@ -57,4 +57,11 @@ export default {
   line-height: 28px !important;
   text-align: center;
 }
+.el-select-dropdown__item.selected{
+  color:#1ab394
+}
+.el-select .el-input.is-focus .el-input__inner{
+  border-color: #1ab394;
+}
+
 </style>
