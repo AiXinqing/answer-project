@@ -282,16 +282,14 @@ export default {
       this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
       //--------------
-      this.Empty_AlreadyTopics() // 清空
+      this.Empty_AlreadyTopics() // 清空临时小题group
       this.Add_AlreadyTopics(this.determineTopic)
     },
     opened() {
       this.spaceTopic = JSON.parse(
-        JSON.stringify({ ...this.spaceTopic, start: this.currentQuestion })
+        JSON.stringify({ ...this.spaceTopic, number: this.BigQuestion })
       )
 
-      this.spaceTopic.number = this.BigQuestion
-      this.objectiveData.number = this.BigQuestion
       this.openedFrame = true
       this.set_currentQuestion()
       //-------------------打开

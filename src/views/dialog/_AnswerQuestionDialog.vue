@@ -270,6 +270,7 @@ export default {
       // 关闭弹窗
       this.questionData = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
+      this.Empty_AlreadyTopics() // 清空临时小题group
     },
     preCreateQuestion () {
       const { InsertTitle, Postpone,number } = this.dataTopic

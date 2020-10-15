@@ -221,6 +221,7 @@ export default {
       this.set_currentQuestion()
       this.questionData = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
+      this.Empty_AlreadyTopics() // 清空临时小题group
     },
     preCreateQuestion() {
       // 当前页内容所占高度topic, number,Postpone
