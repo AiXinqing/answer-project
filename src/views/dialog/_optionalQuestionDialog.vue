@@ -105,7 +105,7 @@ export default {
       errorVal: '',
       existNumber: null,
       questionData: {
-        number: 1,
+        number: 0,
         topic: '选作题',
         rows: 6,
         startQuestion: 1,
