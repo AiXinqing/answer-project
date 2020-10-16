@@ -6,10 +6,11 @@
     </div>
     <quill-editor
       v-show="isEditor"
+      ref="quillEditor"
       :topic-content="TopicContent"
       @hanlde-close-esitor="hanldeCloseEsitor"
     />
-    <div class="question_array">
+    <div class="question_array" ref="questionArray">
       <div class="question_editOrDel">
         <span  class="btn_addSub_name">每组题数</span>
         <span class="btn_addSub" @click="hanldeSubtraction(questionData.id,1)">-</span>
@@ -158,7 +159,10 @@ export default {
       this.$emit('current-question-hanlde-edit', id)
     },
     hanldeEditor () {
+      console.log(this.$refs.questionArray.replace(/&lt;/g,'<'))
+      // this.cotent =  this.$refs.questionArray
       this.isEditor = true
+      this.$refs.quillEditor.focus()
     },
     hanldeCloseEsitor (content) {
       this.isEditor = false
@@ -173,6 +177,9 @@ export default {
 
 <style lang="less">
 @import '~@/assets/css/variables.less';
+.ql-toolbar.ql-snow{
+  padding: 0 8px;
+}
 .question-title {
   margin-bottom: 10px;
   span {

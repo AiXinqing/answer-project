@@ -3,8 +3,10 @@
       v-model="content"
       ref="myQuillEditor"
       :options="editorOption"
-      @blur="onEditorBlur($event)" @focus="onEditorFocus($event)"
-      @change="onEditorChange($event)" >
+      @blur="onEditorBlur($event)"
+      @focus="onEditorFocus($event)"
+      @change="onEditorChange($event)"
+      @ready="onEditorReady($event)" >
     </quill-editor>
 </template>
 <script>
@@ -46,12 +48,17 @@
       },
       methods:{
           onEditorBlur(){//失去焦点事件
-            // console.log(this.content)
             this.$emit('hanlde-close-esitor',this.content)
           },
           onEditorFocus(){//获得焦点事件
+            console.log(12)
+            // this.$emit('hanlde-close-esitor',this.content)
           },
           onEditorChange(){//内容改变事件
+            // this.$emit('hanlde-close-esitor',this.content)
+          },
+          onEditorReady(){
+             // 富文本准备时的事件
           }
       }
     }
