@@ -16,12 +16,7 @@ const mutations = {
     }
     // 删除已有小题数组
     Arr.forEach((item) => {
-      const index = state.AlreadyTopics.findIndex(
-        (row) => row.topic === item.topic
-      )
-      if (index > -1) {
-        state.AlreadyTopics.splice(index, 1)
-      }
+      state.AlreadyTopics = state.AlreadyTopics.filter(row => row.topic != item.topic)
     })
   },
 

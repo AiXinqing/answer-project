@@ -232,6 +232,14 @@ export default {
         this.options = this.questionNumber.map((label,value)=>({label,value}))
       },
     },
+    topicList:{
+      immediate: true,
+      handler(){
+        this.Empty_AlreadyTopics()
+        this.Add_AlreadyTopics(this.topicList)
+        this.set_currentQuestion()
+      }
+    }
   },
   mounted() {
     this.closeData = JSON.parse(JSON.stringify(this.quesctionObj))
@@ -269,7 +277,7 @@ export default {
       this.openedFrame = true
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
-       this.set_currentQuestion()
+      this.set_currentQuestion()
     },
     change(id, num) {
       let current = this.pageData.filter((item) => item.id === id)
