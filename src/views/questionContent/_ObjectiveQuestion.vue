@@ -1,15 +1,19 @@
 <template>
 <!-- 选择题 -->
   <div class="question-info">
-    <div class="question-title" :style="{height: data.heightTitle - 10 + 'px'}" v-if="!isEditor" @click="hanldeEditor">
-      <div class="title-span" v-html="cotent"></div>
-    </div>
-    <quill-editor
-      v-show="isEditor"
-      ref="quillEditor"
-      :topic-content="TopicContent"
-      @hanlde-close-esitor="hanldeCloseEsitor"
-    />
+    <template v-if="questionData.first && questionData.borderTop == undefined">
+      <div
+        class="question-title"
+        :style="{height: data.heightTitle - 10 + 'px'}" v-if="!isEditor" @click="hanldeEditor">
+        <div class="title-span" v-html="cotent"></div>
+      </div>
+      <quill-editor
+        v-show="isEditor"
+        ref="quillEditor"
+        :topic-content="TopicContent"
+        @hanlde-close-esitor="hanldeCloseEsitor"
+      />
+    </template>
     <div class="question_array" ref="questionArray">
       <div class="question_editOrDel">
         <span  class="btn_addSub_name">每组题数</span>
@@ -85,13 +89,17 @@ export default {
       //--------------------------------------------------------
       return topicList
     },
-    groupData () {
+    groupDataa () {
       let result = [];
       for (var i = 0; i < this.topicBox.length; i += this.data.rows) {
         result.push(this.topicBox.slice(i, i + this.data.rows));
       }
       return result
     },
+
+      groupData () {
+        return this.questionData.showData.flat()
+      },
     TopicContent () {
       const {number,topic,totalScore} = this.data
       return `<span>${this.options[number].label}.</span><span>${topic}</span><span>(${totalScore})分</span>`

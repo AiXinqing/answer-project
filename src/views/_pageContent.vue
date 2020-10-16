@@ -137,11 +137,7 @@ export default {
           // 返回计算行数及最低高度
           let curRect = this.questionType(rect, avalibleHeight)
 
-          if (
-            rect.questionType != 'ObjectiveQuestion' &&
-            avalibleHeight >= 32 &&
-            !curRect.isPage
-          ) {
+          if (avalibleHeight >= 32 &&!curRect.isPage) {
             SplitVal = avalibleHeight - curRect.height
 
             curPage.rects.push({
@@ -175,11 +171,7 @@ export default {
             height -= curRects.height
           }
 
-          if (
-            rect.questionType != 'ObjectiveQuestion' &&
-            avalibleHeight >= 32 &&
-            !curRect.isPage
-          ) {
+          if (avalibleHeight >= 32 &&!curRect.isPage) {
             curPage.height = height
           } else {
             curPage.height = ActualHeight
@@ -223,6 +215,12 @@ export default {
       }
       switch (obj.questionType) {
         case 'FillInTheBlank':
+          return {
+            ...rectObj,
+            isPage: false,
+            isArray: true,
+          }
+        case 'ObjectiveQuestion':
           return {
             ...rectObj,
             isPage: false,

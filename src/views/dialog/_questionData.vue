@@ -186,6 +186,39 @@ export default {
       return [...singleArr, ...checkArr, ...judgmentArr]
     },
 
+    groupData () {
+      let result = [];
+      for (var i = 0; i < this.topicList.length; i += this.quesctionObj.rows) {
+        result.push(this.topicList.slice(i, i + this.quesctionObj.rows));
+      }
+      return result
+    },
+
+    topicGroupData(){
+      let RowArr = []
+      let columnArr = []
+      let widthSum = 0
+      this.groupData.forEach(item => {
+        let maxWidth = Math.max.apply(Math, item.map(function(o) {return o.width}))
+        widthSum += maxWidth
+
+        if(widthSum < 745 ){
+          columnArr.push(item)
+        }else{
+          RowArr.push(columnArr)
+          widthSum = maxWidth
+          columnArr = []
+          columnArr.push(item)
+        }
+
+      })
+
+      if(columnArr.length > 0){
+        RowArr.push(columnArr)
+      }
+      return RowArr
+    },
+
     isdisabledFn(){
       return this.topicList.length > 0 && !this.errorMessage ? false :true
     },
@@ -236,7 +269,11 @@ export default {
       immediate: true,
       handler(){
         this.Empty_AlreadyTopics()
-        this.Add_AlreadyTopics(this.topicList)
+        if(this.topicList.length > 0){
+          this.Add_AlreadyTopics(this.topicList)
+        }else{
+          this.Add_AlreadyTopics(this.determineTopic)
+        }
         this.set_currentQuestion()
       }
     }
@@ -351,12 +388,16 @@ export default {
       }
       let objId = `objective_${+new Date()}`
       var obj = {
+        heightTitle: 23,
+        MarginHeight: 10,
+        rowHeight: 21 * rows,
         id: objId,
         height: heights + 32, // 32标题高度
-        rowHeight: 35,
         questionType: 'ObjectiveQuestion',
         content: this.objectiveData,
         order: this.orderSort,
+        showData:this.topicGroupData,
+        first: true,
       }
 
       let existBigQuestionObj = {
@@ -401,17 +442,15 @@ export default {
           }
         } else {
           this.initPageData(obj)
-          this.set_existBigQuestion(existBigQuestionObj)
         }
 
         this.set_orderSort()
+        this.set_existBigQuestion({ ...existBigQuestionObj, id: obj.id })
+        this.set_objectiveData() // 大题号增加
       } else {
         obj.id = this.editQuestionId
         this.amendPageData(obj)
-        this.set_existBigQuestion({ ...existBigQuestionObj, id: obj.id })
       }
-
-      this.set_objectiveData() // 大题号增加
       // 小题数组追加数据
       this.Add_AlreadyTopics(this.topicList)
       this.set_determineTopic(this.topicList)
