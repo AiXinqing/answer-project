@@ -271,9 +271,6 @@ export default {
     curEditNon(obj) {
       this.$refs.publicDialog.openedEdit('NonRresponseArea', obj)
     },
-    isPopEditor(){
-     // this.$refs.answerComponent.hanldeCloseEsitor()
-    }
   },
 }
 </script>
