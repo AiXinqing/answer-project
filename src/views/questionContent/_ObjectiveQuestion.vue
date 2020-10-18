@@ -1,15 +1,20 @@
 <template>
 <!-- 选择题 -->
   <div class="question-info">
-    <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
-      <div class="title-span" v-html="cotent"></div>
-    </div>
-    <quill-editor
-      v-show="isEditor"
-      :topic-content="TopicContent"
-      @hanlde-close-esitor="hanldeCloseEsitor"
-    />
-    <div class="question_array">
+    <template v-if="questionData.first && questionData.borderTop == undefined">
+      <div
+        class="question-title"
+        :style="{height: data.heightTitle - 10 + 'px'}" v-if="!isEditor" @click="hanldeEditor">
+        <div class="title-span" v-html="cotent"></div>
+      </div>
+      <quill-editor
+        v-show="isEditor"
+        ref="quillEditor"
+        :topic-content="TopicContent"
+        @hanlde-close-esitor="hanldeCloseEsitor"
+      />
+    </template>
+    <div class="question_array" ref="questionArray">
       <div class="question_editOrDel">
         <span  class="btn_addSub_name">每组题数</span>
         <span class="btn_addSub" @click="hanldeSubtraction(questionData.id,1)">-</span>
@@ -62,18 +67,15 @@ export default {
   data () {
     return {
       data: {},
-      //TopicContent:'',
       isEditor: false,
-      cotent: ''
+      cotent: '',
+      options:[]
     }
   },
   computed: {
-    ...mapState('questionType', ['options', 'letterArr']),
+    ...mapState('questionType', ['questionNumber', 'letterArr']),
     ...mapState('pageContent', ['pageData']),
-    numberTitle () {
-      let item = this.options.filter(item => item.value === this.data.number)
-      return item[0].label
-    },
+
     topicBox () {
       let group = this.data.group
       const singleBox = group.singleBox
@@ -87,15 +89,20 @@ export default {
       //--------------------------------------------------------
       return topicList
     },
-    groupData () {
+    groupDataa () {
       let result = [];
       for (var i = 0; i < this.topicBox.length; i += this.data.rows) {
         result.push(this.topicBox.slice(i, i + this.data.rows));
       }
       return result
     },
+
+      groupData () {
+        return this.questionData.showData.flat()
+      },
     TopicContent () {
-      return `<span>${this.numberTitle}.</span><span>${this.data.topic}</span><span>(${this.data.totalScore})分</span>`
+      const {number,topic,totalScore} = this.data
+      return `<span>${this.options[number].label}.</span><span>${topic}</span><span>(${totalScore})分</span>`
     }
   },
   watch: {
@@ -105,6 +112,7 @@ export default {
         this.data = {
           ...this.contentData
         }
+        this.options = this.questionNumber.map((label,value)=>({label,value}))
       }
     },
     TopicContent: {
@@ -159,7 +167,10 @@ export default {
       this.$emit('current-question-hanlde-edit', id)
     },
     hanldeEditor () {
+      console.log(this.$refs.questionArray.replace(/&lt;/g,'<'))
+      // this.cotent =  this.$refs.questionArray
       this.isEditor = true
+      this.$refs.quillEditor.focus()
     },
     hanldeCloseEsitor (content) {
       this.isEditor = false
@@ -174,6 +185,9 @@ export default {
 
 <style lang="less">
 @import '~@/assets/css/variables.less';
+.ql-toolbar.ql-snow{
+  padding: 0 8px;
+}
 .question-title {
   margin-bottom: 10px;
   span {

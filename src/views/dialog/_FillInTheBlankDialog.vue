@@ -98,11 +98,9 @@ export default {
   data() {
     return {
       openedFrame: false,
-      isdisabledFn: false,
-      title: '新增填空题',
       existNumber: null,
       spaceTopic: {
-        number: 1,
+        number: 0,
         topic: '填空题',
         rows: 4,
         startQuestion: 1,
@@ -122,14 +120,14 @@ export default {
       closeData: {},
       errorVal: '',
       objectiveData: {},
-      topicList: [],
       editQuestionId: null,
       ContentHeight: 0, // 内容高度
+      options:[],
     }
   },
   computed: {
     ...mapState('questionType', [
-      'options',
+      'questionNumber',
       'currentQuestion',
       'determineTopic',
       'existBigQuestion',
@@ -148,21 +146,11 @@ export default {
     errorMessage() {
       return this.errorVal != '' ? true : false
     },
-    capitalTopicNum() {
-      let index = this.options.findIndex(
-        (item) => this.objectiveData.number == item.value
-      )
-      if (index > -1) {
-        return this.options[index].label
-      } else {
-        return '一'
-      }
-    },
     topicGroupData() {
-      let rows = this.objectiveData.rows
+      let {rows,group} = this.objectiveData
       let array = []
 
-      this.objectiveData.group.map((item) => {
+      group.map((item) => {
         array.push(...item.childGroup)
       })
 
@@ -170,8 +158,9 @@ export default {
         let temporaryArr = []
         let datas = []
         array.forEach((ele) => {
-          if (ele.childGroup != undefined && ele.childGroup.length > 0) {
-            ele.childGroup.forEach((row, index) => {
+          let { childGroup } = ele
+          if (childGroup && childGroup.length > 0) {
+            childGroup.forEach((row, index) => {
               for (let i = 1; i <= row.space; i++) {
                 if (temporaryArr.length + 1 > rows) {
                   datas.push(temporaryArr)
@@ -219,6 +208,18 @@ export default {
         return []
       }
     },
+
+    childGroups(){
+      return this.objectiveData.group.map(item => item.childGroup).flat()
+    },
+
+    isdisabledFn(){
+      return  this.childGroups.length > 0 && !this.errorMessage ? false:true
+    },
+
+    title(){
+      return !this.editQuestionId ? '新增填空题' : '编辑填空题'
+    }
   },
   watch: {
     spaceTopic: {
@@ -245,6 +246,13 @@ export default {
         }
       },
     },
+
+    questionNumber: {
+      immediate: true,
+      handler() {
+        this.options = this.questionNumber.map((label,value)=>({label,value}))
+      }
+    }
   },
   mounted() {
     this.closeData = JSON.parse(JSON.stringify(this.spaceTopic))
@@ -274,20 +282,19 @@ export default {
       this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
       //--------------
-      this.Empty_AlreadyTopics() // 清空
+      this.Empty_AlreadyTopics() // 清空临时小题group
       this.Add_AlreadyTopics(this.determineTopic)
     },
     opened() {
       this.spaceTopic = JSON.parse(
-        JSON.stringify({ ...this.spaceTopic, start: this.currentQuestion })
+        JSON.stringify({ ...this.spaceTopic, number: this.BigQuestion })
       )
-      this.spaceTopic.number = this.BigQuestion
-      this.objectiveData.number = this.BigQuestion
+
       this.openedFrame = true
-      this.set_currentQuestion()
       //-------------------打开
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
+      this.set_currentQuestion()
     },
     openedEdit(id) {
       let current = this.pageData.filter((item) => item.id === id)
@@ -295,24 +302,19 @@ export default {
       this.spaceTopic = JSON.parse(JSON.stringify(current[0].content))
       this.editQuestionId = id
       this.openedFrame = true
-      this.title = '编辑填空题'
       this.set_currentQuestion()
     },
     preCreateQuestion() {
       // 数据编辑完成添加至全局数组中---------------
       // 计算高度
-      // console.log(this.topicGroupData)
       let height = this.topicGroupData.length * 45 + 17 + 32
       // 此题总分计算
-      const { group, topic, number, InsertTitle, Postpone } = this.objectiveData
-      group.forEach((item) => {
-        this.topicList.push(...item.childGroup)
-      })
+      const { topic, number, InsertTitle, Postpone } = this.objectiveData
 
       let totalScore = 0
 
-      this.topicList.map((item) => {
-        totalScore += item.score
+      this.childGroups.map((item) => {
+        totalScore += item.sum
       })
       let objId = `FillInTheBlank_${+new Date()}`
       // 此题总分计算
@@ -332,14 +334,14 @@ export default {
       //存在大题追加
       let existBigQuestionObj = {
         id: objId,
-        label: `${this.capitalTopicNum}.${topic}`,
+        label: `${this.options[number].label}.${topic}`,
         value: number,
       }
       // 小题数组追加至确定题型
 
-      this.Add_AlreadyTopics(this.topicList)
-      this.delOnce_determineTopic(this.topicList[0].pid)
-      this.set_determineTopic(this.topicList)
+      this.Add_AlreadyTopics(this.childGroups)
+      this.delOnce_determineTopic(this.childGroups[0].pid)
+      this.set_determineTopic(this.childGroups)
       this.set_currentQuestion()
 
       if (this.editQuestionId == null) {
@@ -403,7 +405,7 @@ export default {
     },
     hanldeAddGroupQuestion(obj) {
       //添加题组
-      let group = this.spaceTopic.group
+      let {group} = this.spaceTopic
       const index = group.findIndex((item) => item.id === obj.id)
       if (index > -1) {
         group.splice(index, 1, obj) // 替换
@@ -412,7 +414,7 @@ export default {
     },
     hanldeDelGroup(id) {
       //删除题组
-      let group = this.spaceTopic.group
+      let {group} = this.spaceTopic
       const index = group.findIndex((item) => item.id === id)
       if (index > -1) {
         let itemTopic = group[index]
@@ -423,12 +425,13 @@ export default {
         this.$nextTick(() => {
           this.set_currentQuestion()
         })
+        this.errorVal = ''
       }
     },
     hanldeSubtopicDel(obj) {
       // 删除小题
       let dataObj = JSON.parse(JSON.stringify(this.spaceTopic))
-      let group = dataObj.group
+      let {group} = dataObj
       const index = group.findIndex((item) => item.id === obj.pid)
       let groupObj = group[index]
 
@@ -439,10 +442,6 @@ export default {
       let lastIndex = groupObj.childGroup.findIndex(
         (item) => item.id === obj.id
       )
-      // console.log(obj)
-      // console.log(index)
-      // console.log(lastIndex)
-      // console.log(arr)
       if (lastIndex > -1) {
         if (obj.topic == arr[0]) {
           // 判断点击的是否是首尾
@@ -501,7 +500,6 @@ export default {
         childGroup: [],
       }
       this.spaceTopic.group.push(obj)
-      // console.log(this.objectiveData)
     },
     SplitFunc(index, groupObj, arr) {
       // 删除小题拆分数组 sub
@@ -513,7 +511,7 @@ export default {
       let SplitCombine = []
       SplitCombine.push(this.SplitArrObject(FirstHalf, groupObj))
       SplitCombine.push(this.SplitArrObject(SecondHalf, groupObj))
-      // console.log(SplitCombine)
+
       return SplitCombine.sort((a, b) => {
         return a.start - b.start
       })
@@ -554,7 +552,7 @@ export default {
     },
     topicDetailAdd(obj) {
       // 添加小题
-      let group = this.spaceTopic.group
+      let {group} = this.spaceTopic
       const i = group.findIndex((item) => item.id === obj.pid)
       let questionArr = group[i]
       if (i > -1) {
@@ -567,7 +565,7 @@ export default {
           let subObj = {
             fid: childItem.pid,
             pid: childItem.id,
-            id: 'subLastTopic_' + +new Date(),
+            id: 'subLastTopic_' + +new Date() + '_' + childItem.topic,
             space: 1,
             sum: 1,
             score: 1,
@@ -580,7 +578,7 @@ export default {
               sum: childItem.score * (childItem.space + 1),
               childGroup: [
                 ...childItem.childGroup,
-                { ...subObj, id: 'subLastTopic_' + +new Date() },
+                { ...subObj, id: 'subLastTopic_' + +new Date() + '_' + childItem.topic },
               ],
             }
           } else {
@@ -598,10 +596,10 @@ export default {
     ChangeSpaceValue(obj) {
       // 分值分数修改
       // 添加小题空格数
-      let group = this.spaceTopic.group
+
+      let {group} = this.spaceTopic
       const i = group.findIndex((item) => item.id === obj.pid)
       let questionArr = group[i]
-
       if (i > -1) {
         const index = questionArr.childGroup.findIndex(
           (row) => row.id === obj.id
@@ -617,7 +615,7 @@ export default {
     },
     hanldeLastTopicDel(obj) {
       // 删除小题last题组item
-      let group = this.spaceTopic.group // 找到题组
+      let {group} = this.spaceTopic // 找到题组
       const i = group.findIndex((item) => item.id === obj.fid)
       let questionArr = group[i]
       if (i > -1) {
@@ -648,36 +646,36 @@ export default {
         }
       }
     },
-    changeLastSubTopicScore(obj, oldObj) {
+    changeLastSubTopicScore(obj, oldObj) { // 改变分值
       // last-sub分值改变
+      const {fid} = obj // ,pid,id
+      let {group} = this.spaceTopic
+      if(fid){
 
-      let group = this.spaceTopic.group
+        let index = group.findIndex(group => group.id === obj.fid)
+        if(index > -1){
+          let subGroup = group[index].childGroup
+          let subIndex = subGroup.findIndex(subObj => subObj.id === obj.pid)
+          if(subIndex > -1){
+            let lastGrop = subGroup[subIndex].childGroup
+            let lastIndex = lastGrop.findIndex(lastObj => lastObj.id === obj.id)
+            if(lastIndex > -1){
+              lastGrop.splice(lastIndex, 1, {...obj,sum:obj.score,score:oldObj.score})
+              // 计算小题下所有总分值
+              const groupSum = lastGrop.reduce((acc,cur) => acc.sum + cur.sum)
+              subGroup.splice(subIndex, 1, {...subGroup[index],sum:groupSum})
 
-      let gid = obj.fid == undefined ? obj.pid : obj.fid
-      let sid = obj.fid == undefined ? obj.id : obj.pid
-
-      const i = group.findIndex((item) => item.id === gid)
-      let questionArr = group[i]
-
-      if (i > -1) {
-        const a = questionArr.childGroup.findIndex((row) => row.id === sid)
-        let subObj = questionArr.childGroup[a]
-        if (a > -1) {
-          if (obj.fid == undefined) {
-            let sums = subObj.sum - oldObj.score + obj.score
-            let last = { ...subObj, sum: sums }
-            questionArr.childGroup.splice(a, 1, last)
-          } else {
-            const index = subObj.childGroup.findIndex(
-              (row) => row.id === obj.id
-            )
-            let subLast = subObj.childGroup[index]
-            if (index > -1) {
-              let subLastSum = subLast.sum - oldObj.score + obj.score
-
-              let subLastItem = { ...subLast, sum: subLastSum }
-              subObj.childGroup.splice(a, 1, subLastItem)
             }
+          }
+        }
+      }else{
+        let index = group.findIndex(group => group.id === obj.pid)
+        if(index > -1){
+          let subGroup = group[index].childGroup
+          let subIndex = subGroup.findIndex(subObj => subObj.id === obj.id)
+          if(subIndex > -1) {
+            let iss = subGroup[subIndex].sum - oldObj.score + obj.score
+            subGroup.splice(subIndex, 1, {...obj,sum:iss})
           }
         }
       }

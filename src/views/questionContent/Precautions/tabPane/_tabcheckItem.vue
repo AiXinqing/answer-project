@@ -175,8 +175,7 @@ export default {
   },
   methods: {
     ...mapMutations('questionType', [
-      'set_currentQuestion',
-      'Add_AlreadyTopics'
+      'set_currentQuestion'
     ]),
     hanldeDel (id, type) {
       // 删除分段题组
@@ -223,9 +222,6 @@ export default {
             childGroup: subtopicArr
           }
         }
-        // 弹框临时小题数
-        const temporaryArr = subtopicArr.map(item => ({ ...item, subtopic: 1 }))
-        this.Add_AlreadyTopics(temporaryArr)
         // temporaryArr
         this.$emit('hanlde-add-group-question', itemObj)
         this.set_currentQuestion()

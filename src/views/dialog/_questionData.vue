@@ -95,8 +95,7 @@ export default {
   data() {
     return {
       openedFrame: false,
-      isdisabledFn: false,
-      title: '新增客观题',
+      // isdisabledFn: true,
       existNumber: null,
       quesctionObj: {
         number: 1,
@@ -147,14 +146,14 @@ export default {
       closeData: {},
       errorVal: '',
       objectiveData: {},
-      topicList: [],
       editQuestionId: null,
       ContentHeight: 0, // 内容高度
+      options:[],
     }
   },
   computed: {
     ...mapState('questionType', [
-      'options',
+      'questionNumber',
       'currentQuestion',
       'letterArr',
       'AlreadyTopics',
@@ -175,15 +174,53 @@ export default {
     errorMessage() {
       return this.errorVal != '' ? true : false
     },
-    capitalTopicNum() {
-      let index = this.options.findIndex(
-        (item) => this.objectiveData.number == item.value
-      )
-      if (index > -1) {
-        return this.options[index].label
-      } else {
-        return '一'
+    title(){
+      return  !this.editQuestionId ? '新增客观题' : '编辑客观题'
+    },
+    topicList(){
+      const {group} = this.objectiveData
+      const{singleBox,checkbox,judgment} = group
+      const singleArr = this.traverse(singleBox, this.letterArr)
+      const checkArr = this.traverse(checkbox, this.letterArr)
+      const judgmentArr = this.traverse(judgment, this.letterArr)
+      return [...singleArr, ...checkArr, ...judgmentArr]
+    },
+
+    groupData () {
+      let result = [];
+      for (var i = 0; i < this.topicList.length; i += this.quesctionObj.rows) {
+        result.push(this.topicList.slice(i, i + this.quesctionObj.rows));
       }
+      return result
+    },
+
+    topicGroupData(){
+      let RowArr = []
+      let columnArr = []
+      let widthSum = 0
+      this.groupData.forEach(item => {
+        let maxWidth = Math.max.apply(Math, item.map(function(o) {return o.width}))
+        widthSum += maxWidth
+
+        if(widthSum < 745 ){
+          columnArr.push(item)
+        }else{
+          RowArr.push(columnArr)
+          widthSum = maxWidth
+          columnArr = []
+          columnArr.push(item)
+        }
+
+      })
+
+      if(columnArr.length > 0){
+        RowArr.push(columnArr)
+      }
+      return RowArr
+    },
+
+    isdisabledFn(){
+      return this.topicList.length > 0 && !this.errorMessage ? false :true
     },
   },
   watch: {
@@ -225,8 +262,21 @@ export default {
               ? this.existBigQuestion[0].value
               : null
         }
+        this.options = this.questionNumber.map((label,value)=>({label,value}))
       },
     },
+    topicList:{
+      immediate: true,
+      handler(){
+        this.Empty_AlreadyTopics()
+        if(this.topicList.length > 0){
+          this.Add_AlreadyTopics(this.topicList)
+        }else{
+          this.Add_AlreadyTopics(this.determineTopic)
+        }
+        this.set_currentQuestion()
+      }
+    }
   },
   mounted() {
     this.closeData = JSON.parse(JSON.stringify(this.quesctionObj))
@@ -262,9 +312,9 @@ export default {
       )
 
       this.openedFrame = true
-      this.set_currentQuestion()
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
+      this.set_currentQuestion()
     },
     change(id, num) {
       let current = this.pageData.filter((item) => item.id === id)
@@ -299,31 +349,19 @@ export default {
       this.quesctionObj = JSON.parse(JSON.stringify(current[0].content))
       this.editQuestionId = id
       this.openedFrame = true
-      this.title = '编辑客观题'
       this.set_currentQuestion()
     },
     preCreateQuestion() {
       // 数据编辑完成添加至全局数组中---------------
       const {
-        group,
         rows,
         topic,
         number,
         InsertTitle,
         Postpone,
       } = this.objectiveData
-      const singleBox = group.singleBox
-      //------------------------------------小题计算
-      const singleArr = this.traverse(singleBox, this.letterArr)
-      const checkbox = group.checkbox
-      const checkArr = this.traverse(checkbox, this.letterArr)
-      const judgment = group.judgment
-      const judgmentArr = this.traverse(judgment, this.letterArr)
-      //------------------xiao题号数组-------------------------
-      this.topicList = [...singleArr, ...checkArr, ...judgmentArr]
       this.set_determineTopic(this.topicList) // 储存确实题型
 
-      //-------------------------------------------
       let result = []
       for (var i = 0; i < this.topicList.length; i += rows) {
         result.push(this.topicList.slice(i, i + rows))
@@ -350,17 +388,21 @@ export default {
       }
       let objId = `objective_${+new Date()}`
       var obj = {
+        heightTitle: 23,
+        MarginHeight: 10,
+        rowHeight: 21 * rows,
         id: objId,
         height: heights + 32, // 32标题高度
-        rowHeight: 35,
         questionType: 'ObjectiveQuestion',
         content: this.objectiveData,
         order: this.orderSort,
+        showData:this.topicGroupData,
+        first: true,
       }
 
       let existBigQuestionObj = {
         id: objId,
-        label: `${this.capitalTopicNum}.${topic}`,
+        label: `${this.options[number].label}.${topic}`,
         value: number,
         order: this.orderSort,
       }
@@ -400,17 +442,15 @@ export default {
           }
         } else {
           this.initPageData(obj)
-          this.set_existBigQuestion(existBigQuestionObj)
         }
 
         this.set_orderSort()
+        this.set_existBigQuestion({ ...existBigQuestionObj, id: obj.id })
+        this.set_objectiveData() // 大题号增加
       } else {
         obj.id = this.editQuestionId
         this.amendPageData(obj)
-        this.set_existBigQuestion({ ...existBigQuestionObj, id: obj.id })
       }
-
-      this.set_objectiveData() // 大题号增加
       // 小题数组追加数据
       this.Add_AlreadyTopics(this.topicList)
       this.set_determineTopic(this.topicList)

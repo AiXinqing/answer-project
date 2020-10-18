@@ -1,93 +1,6 @@
 const state = {
-  options: [{
-      value: 1,
-      label: '一',
-    },
-    {
-      value: 2,
-      label: '二',
-    },
-    {
-      value: 3,
-      label: '三',
-    },
-    {
-      value: 4,
-      label: '四',
-    },
-    {
-      value: 5,
-      label: '五',
-    },
-    {
-      value: 6,
-      label: '六',
-    },
-    {
-      value: 7,
-      label: '七',
-    },
-    {
-      value: 8,
-      label: '八',
-    },
-    {
-      value: 9,
-      label: '九',
-    },
-    {
-      value: 10,
-      label: '十',
-    },
-    {
-      value: 11,
-      label: '十一',
-    },
-    {
-      value: 12,
-      label: '十二',
-    },
-    {
-      value: 13,
-      label: '十三',
-    },
-    {
-      value: 14,
-      label: '十四',
-    },
-    {
-      value: 15,
-      label: '十五',
-    },
-    {
-      value: 16,
-      label: '十六',
-    },
-    {
-      value: 17,
-      label: '十七',
-    },
-    {
-      value: 18,
-      label: '十八',
-    },
-    {
-      value: 19,
-      label: '十九',
-    },
-    {
-      value: 20,
-      label: '二十',
-    },
-    {
-      value: 21,
-      label: '二十一',
-    },
-    {
-      value: 22,
-      label: '二十二',
-    },
-  ],
+  questionNumber: ['一','二','三','四','五','六','七','八','九','十','十一','十二','十三','十四','十五',
+  '十六','十七','十八','十九','二十','二十一','二十二','二十三','二十四'],
   AlreadyTopics: [], // 已有的题组
   currentQuestion: 1,
   letterArr: ['A', 'B', 'C', 'D', 'E', 'G', 'H', 'I', 'J', 'K'],
@@ -103,12 +16,7 @@ const mutations = {
     }
     // 删除已有小题数组
     Arr.forEach((item) => {
-      const index = state.AlreadyTopics.findIndex(
-        (row) => row.topic === item.topic
-      )
-      if (index > -1) {
-        state.AlreadyTopics.splice(index, 1)
-      }
+      state.AlreadyTopics = state.AlreadyTopics.filter(row => row.topic != item.topic)
     })
   },
 

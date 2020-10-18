@@ -1,7 +1,7 @@
 <template>
 <!-- 分值item -->
   <div class="points_list">
-    <span >{{pointsData.topic}} </span>
+    <span class="points-em">{{pointsData.topic}} </span>
     <el-input v-model.number="pointsData.score" size="mini" class="points_list_input"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
     <span > 分  </span>
     <i class="el-icon-del list-del" @click="delPointsItem">-</i>
@@ -41,9 +41,11 @@ export default {
 
 <style lang="less" >
 .points_list {
-  width: 94%;
-  margin-left: 3%;
-  padding: 8px 0;
+  width: 100%;
+  .points-em{
+    position: relative;
+    left: 3em;
+  }
   .el-input--mini {
     width: 48px;
     margin: 0 10px;

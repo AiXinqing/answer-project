@@ -2,7 +2,7 @@
   <!-- 填空题 -->
   <div class="question-info">
     <template v-if="questionData.first && questionData.borderTop == undefined">
-      <div class="question-title" v-if="!isEditor" @click="hanldeEditor">
+      <div class="question-title" :style="{height: data.heightTitle - 10 + 'px'}" v-if="!isEditor" @click="hanldeEditor">
         <div class="title-span" v-html="cotent"></div>
       </div>
       <quill-editor
@@ -91,16 +91,12 @@ export default {
       data: {},
       isEditor: false,
       cotent: '',
+      options:[],
     }
   },
   computed: {
-    ...mapState('questionType', ['options', 'letterArr']),
+    ...mapState('questionType', ['questionNumber', 'letterArr']),
     ...mapState('pageContent', ['pageData', 'pageLayout']),
-    numberTitle() {
-      let item = this.options.filter((item) => item.value === this.data.number)
-      return item[0].label
-    },
-
     heightContetn(){
       const {castHeight,heightTitle,height} = this.questionData
       let obj = {
@@ -115,7 +111,8 @@ export default {
     },
 
     TopicContent() {
-      return `<span>${this.numberTitle}.</span><span>${this.data.topic}</span><span>(${this.data.totalScore})分</span>`
+      const {number,topic,totalScore} = this.data
+      return `<span>${this.options[number].label}.</span><span>${topic}</span><span>(${totalScore})分</span>`
     },
     pageWidth() {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
@@ -140,6 +137,7 @@ export default {
         this.data = {
           ...this.contentData,
         }
+        this.options = this.questionNumber.map((label,value)=>({label,value}))
       },
     },
     TopicContent: {

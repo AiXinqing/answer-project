@@ -31,18 +31,15 @@
         @add-answer-topic-group="addAnswerTopicGroup"
       />
       <div class="question-group">
-        <el-collapse >
-
-          <answer-item
-            v-for="(item,i) in childGroups"
-            :key="i"
-            :child-data="item"
-            @pre-edit-sub-answer-item="preEditSubAnswerItem"
-            @pre-edit-last-answer-item="preEditLastAnswerItem"
-            @pre-edit-points-answer-group="preEditPointsAnswerGroup"
-            @pre-edit-points-item="preEditPointsItem"
-          />
-        </el-collapse>
+        <answer-item
+          v-for="(item,i) in childGroups"
+          :key="i"
+          :child-data="item"
+          @pre-edit-sub-answer-item="preEditSubAnswerItem"
+          @pre-edit-last-answer-item="preEditLastAnswerItem"
+          @pre-edit-points-answer-group="preEditPointsAnswerGroup"
+          @pre-edit-points-item="preEditPointsItem"
+        />
       </div>
       <div class="condition_box">
         <el-checkbox v-model="dataTopic.ShowScore">小题显示分数</el-checkbox>
@@ -93,12 +90,11 @@ export default {
       closeData: {},
       editQuestionId: null,
       openedFrame: false,
-      isdisabledFn: false,
       errorVal: '',
       existNumber: null,
       previous:null,
       questionData: {
-        number: 1,
+        number: 0,
         topic: '解答题',
         rows: 6,
         startQuestion: 1,
@@ -107,19 +103,20 @@ export default {
         InsertTitle: false,
         Postpone: false,
         group: [{
-          start: 1,
+          start: this.currentQuestion,
           end: null,
           score: 1,
           space: 1,
           id: 'answerTopic',
           childGroup: [],
         },]
-      }
+      },
+      options:[]
     }
   },
   computed: {
     ...mapState('questionType', [
-      'options',
+      'questionNumber',
       'currentQuestion',
       'determineTopic',
       'existBigQuestion',
@@ -134,29 +131,17 @@ export default {
     ...mapState('answerQuestion', ['answerQuestionArr',]),
 
     title(){
-      return !this.editQuestionId ? '编辑解答题': '新增解答题'
+      return !this.editQuestionId ? '新增解答题': '编辑解答题'
     },
 
     childGroups () {
-      let Arr = []
-      this.dataTopic.group.forEach(item => {
-        Arr.push(...item.childGroup)
-      })
-      return Arr
-    },
-    capitalTopicNum () {
-      let index = this.options.findIndex(item => this.dataTopic.number == item.value)
-      if (index > -1) {
-        return this.options[index].label
-      } else {
-        return '一'
-      }
+      return this.dataTopic.group.map(item => item.childGroup).flat()
     },
     errorMessage () {
       return this.errorVal != '' ? true : false
     },
     RefactorData () {
-      let group = this.questionData.group
+      let {group} = this.questionData
       let itemArr = []
       group.forEach(item => {
         if (item.childGroup.length > 0) {
@@ -204,15 +189,14 @@ export default {
       })
       return itemArr
     },
-    topicList () {
-      let Arr = [...this.dataTopic.group.map(item => item.childGroup)]
-      return Arr
-    },
     totalScore () {
-      return this.topicList[0].map(item => item.score).reduce((accumulator, currentValue) => {
+      return this.childGroups.map(item => item.score).reduce((accumulator, currentValue) => {
         return accumulator + currentValue
       })
-    }
+    },
+    isdisabledFn(){
+      return this.childGroups.length > 0 && !this.errorMessage ? false:true
+    },
   },
   mounted () {
     this.closeData = JSON.parse(JSON.stringify(this.questionData))
@@ -225,7 +209,6 @@ export default {
         this.dataTopic = {
           ...this.questionData
         }
-
         if (this.editQuestionId == null) {
           this.$nextTick(() => {
             this.dataTopic = {
@@ -235,6 +218,7 @@ export default {
           })
           this.existNumber = this.existBigQuestion.length > 0 ? this.existBigQuestion[0].value : null
         }
+        this.options = this.questionNumber.map((label,value)=>({label,value}))
       }
     },
   },
@@ -260,6 +244,12 @@ export default {
     ]),
     ...mapMutations('answerQuestion', ['set_answerQuestionArr',]),
     opened () {
+
+      this.questionData = JSON.parse(JSON.stringify({
+        ...this.questionData,
+        start:this.currentQuestion
+      }))
+
       // 开打弹框
       this.questionData.number = this.BigQuestion
       this.dataTopic.number = this.BigQuestion
@@ -267,10 +257,10 @@ export default {
       this.openedFrame = true
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
+      this.set_currentQuestion()
     },
     openedEdit (obj) {
       //编辑弹框
-      console.log(obj)
       this.editQuestionId = obj.objId
       this.previous = obj.previousOrder
       this.openedFrame = true
@@ -281,9 +271,10 @@ export default {
       // 关闭弹窗
       this.questionData = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
+      this.Empty_AlreadyTopics() // 清空临时小题group
     },
     preCreateQuestion () {
-      const { InsertTitle, Postpone } = this.dataTopic
+      const { InsertTitle, Postpone,number } = this.dataTopic
       //确定信息
       let Arr = []
       let objId = `answer_${+new Date()}`
@@ -313,8 +304,8 @@ export default {
       //存在大题追加
       let existBigQuestionObj = {
         id: objId,
-        label: `${this.capitalTopicNum}.${this.dataTopic.topic}`,
-        value: this.dataTopic.number
+        label: `${this.options[number].label}.${this.dataTopic.topic}`,
+        value:number
       }
 
       if (this.editQuestionId == null) {
@@ -365,16 +356,17 @@ export default {
         }
 
       } else {
-        // 编辑
-        // this.pageData.map((obj,index) => {
-        //   if(this.editQuestionId == obj.objId){
-        //     this.delPageData(index)
-        //   }
-        // })
         this.answerFilter_pageData(this.editQuestionId)
-        // if(Arr.length > 0){
 
           let previous = this.previous
+          let previousTig = this.previous
+          let pageObj = this.pageData[previous + 1]
+
+          if(pageObj){
+            if(pageObj.questionType ==="NonRresponseArea"){
+              previous = pageObj.order
+            }
+          }
           Arr.forEach((question) => {
             previous += 1
             let data = {
@@ -382,7 +374,7 @@ export default {
                 ...question,
                 order: previous,
                 objId:this.editQuestionId,
-                previousOrder:this.previous,
+                previousOrder:  pageObj && pageObj.questionType ==="NonRresponseArea" ? pageObj.order :previousTig,
               },
               num: previous,
             }
@@ -393,11 +385,11 @@ export default {
       }
 
       // 大题号修改
-      this.set_objectiveData(this.dataTopic.number)
+      this.set_objectiveData(number)
       //------------------------------------
 
       this.openedFrame = false // 关闭弹窗
-      this.set_determineTopic(this.topicList)
+      this.set_determineTopic(this.childGroups)
       this.set_currentQuestion()
       // 清空弹框数据
       this.questionData = JSON.parse(JSON.stringify(this.closeData))
@@ -501,7 +493,7 @@ export default {
         }
       }
     },
-    preEditPointsItem (obj, isDel = false) {
+    preEditPointsItem (obj, isDel = false) { // 编辑及删除 isDel 删除
       // 末尾题
       let {group} = this.dataTopic
       let index = group.findIndex(item => item.id == obj.spId)
@@ -521,6 +513,7 @@ export default {
               if (pointsIndex > -1) {
                 if (isDel) {
                   pointsItem.childGroup.splice(pointsIndex, 1)
+
                 } else {
                   pointsItem.childGroup.splice(pointsIndex, 1, obj)
 

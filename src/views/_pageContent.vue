@@ -7,8 +7,8 @@
       :style="{ width: pageWidth + 'px' }"
     >
       <div
-        v-for="topice in pageList"
-        :key="topice.id"
+        v-for="(topice,index) in pageList"
+        :key="topice.id + '_' + i + '_' + index"
         :class="[
           'footer',
           { answer: topice.first != undefined && topice.first == false },
@@ -17,6 +17,7 @@
         :style="{ minHeight: topice.castHeight + 'px' }"
       >
         <component
+          ref="answerComponent"
           :is="topice.questionType"
           :content-data="topice.content"
           :question-data="topice"
@@ -40,7 +41,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import AnswerSheetTitle from './questionContent/_answerSheetTitle' // 答题卡标题
 import ObjectiveQuestion from './questionContent/_ObjectiveQuestion' // 客观题
 import FillInTheBlank from './questionContent/_FillInTheBlank' // 填空题
@@ -98,14 +99,8 @@ export default {
       },
     },
   },
-  mounted() {
-    this.$nextTick(() => {
-      // this.getPageData()
-    })
-  },
   methods: {
-    ...mapActions('pageContent', ['getPageData']),
-    ...mapMutations('pageContent', ['set_pageHeight']),
+    ...mapMutations('pageContent', ['set_pageHeight','resetScore','overlayScore']),
     hanldeStudent(Arr) {
       this.$refs.publicDialog.opened('studentTitle', Arr)
     },
@@ -113,6 +108,8 @@ export default {
       this.$refs.publicDialog.opened('AdmissionNumber')
     },
     pageContentFunc(rects = []) {
+      this.resetScore() // 试卷总分清零
+
       let results = []
       let SplitVal = 0 // 拆分所用
       let curPage = {
@@ -124,6 +121,10 @@ export default {
         curPage.rects = []
       }
       rects.forEach((rect) => {
+        if(rect.content.totalScore){
+          // 试卷总分叠加
+          this.overlayScore(rect.content.totalScore)
+        }
         let ActualHeight = rect.height + 20 //
         // avalible 剩余高度
         let avalibleHeight = this.page_size - curPage.height
@@ -136,11 +137,7 @@ export default {
           // 返回计算行数及最低高度
           let curRect = this.questionType(rect, avalibleHeight)
 
-          if (
-            rect.questionType != 'ObjectiveQuestion' &&
-            avalibleHeight >= 32 &&
-            !curRect.isPage
-          ) {
+          if (avalibleHeight >= 32 &&!curRect.isPage) {
             SplitVal = avalibleHeight - curRect.height
 
             curPage.rects.push({
@@ -174,11 +171,7 @@ export default {
             height -= curRects.height
           }
 
-          if (
-            rect.questionType != 'ObjectiveQuestion' &&
-            avalibleHeight >= 32 &&
-            !curRect.isPage
-          ) {
+          if (avalibleHeight >= 32 &&!curRect.isPage) {
             curPage.height = height
           } else {
             curPage.height = ActualHeight
@@ -222,6 +215,12 @@ export default {
       }
       switch (obj.questionType) {
         case 'FillInTheBlank':
+          return {
+            ...rectObj,
+            isPage: false,
+            isArray: true,
+          }
+        case 'ObjectiveQuestion':
           return {
             ...rectObj,
             isPage: false,

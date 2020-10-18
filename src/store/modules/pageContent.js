@@ -4,12 +4,19 @@ const state = {
   pageLayout: {}, // 页面布局
   pageData: [],
   page_size: 1170 - 60, // 一页高度
-  BigQuestion: 1, // 大题题号
+  BigQuestion: 0, // 大题题号
   pageHeight: [], // 页面高度
   orderSort: 0, // 排序
+  paperTotalScore:0, // 试卷总分
 }
 
 const mutations = {
+  resetScore:(state)=>{
+    state.paperTotalScore = 0
+  },
+  overlayScore: (state,score) =>{
+    state.paperTotalScore += score
+  }, // 试卷总分
   initPageLayout: (state, obj) => {
     state.pageLayout = obj
   },
@@ -44,6 +51,15 @@ const mutations = {
     state.pageData.splice(data.num, 0, data.obj)
   },
 
+  answer_editPageOrder: (state, data) => {
+    // 解答题
+    state.pageData.forEach((question,index) => {
+      if(question.objId === data.objId){
+        state.pageData.splice(index, 1, {...question,previousOrder:data.num})
+      }
+    })
+  },
+
   Empty_PageData: (state, id) => {
     // 内容分页
     state.pageData = state.pageData.filter((item) => {
@@ -69,7 +85,7 @@ const mutations = {
       }
     })
     setTimeout(() => {
-      state.pageData.splice(num, 0, {
+      state.pageData.splice(num + 1, 0, {
         ...obj,
         order: obj.order + 1
       })
@@ -103,8 +119,8 @@ const mutations = {
   },
   del_objectiveData: (state) => {
     state.BigQuestion = state.BigQuestion - 1
-    if (state.BigQuestion <= 0) {
-      state.BigQuestion = 1
+    if (state.BigQuestion < 0) {
+      state.BigQuestion = 0
     }
   },
   set_pageHeight: (state, Arr = []) => {

@@ -51,10 +51,14 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('pageContent', ['delPageData', 'del_objectiveData']),
+    ...mapMutations('pageContent', ['delPageData', 'del_objectiveData','answer_editPageOrder']),
     delHanlde (id) {
       const index = this.pageData.findIndex((itme) => itme.id === id)
       if (index > -1) {
+        let question = this.pageData[index + 1]
+        if(question && question.questionType ==="answerQuestion"){
+          this.answer_editPageOrder({objId:question.objId,num:index - 1})
+        }
         this.delPageData(index)
       }
     },

@@ -3,7 +3,7 @@
   <el-collapse-item>
     <template slot="title">
       <div class="space_group_list">
-        <span @click.stop="clickFun">题 {{data.topic}} 共 </span>
+        <span class="space-em" @click.stop="clickFun">题 {{data.topic}} 共 </span>
         <span v-if=" data.childGroup == undefined || data.childGroup.length <= 0">
           <el-input v-model.number="data.space" size="mini" @click.stop.native="clickFun" @blur="ChangeSpaceValue"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
           <span @click.stop="clickFun"> 空 每空 </span>
@@ -108,22 +108,20 @@ export default {
   width: 48px;
   margin: 0 10px;
 }
-.space_group_list {
-  padding-left: 1em;
-}
+
 .space_group_list .el-input--mini {
   width: 48px;
 }
 .add_groupTopic {
   font-size: 16px;
-  margin-left: 50px;
   color: @main;
   position: absolute;
-  right: 80px;
+  right: 60px;
+  min-width: 90px;
 }
 i.el-icon-del {
   position: absolute;
-  right: 50px;
+  right: 30px;
   font-size: 18px;
   color: @main;
   height: 100%;
@@ -137,5 +135,8 @@ i.el-icon-del {
 .el-collapse-item__header {
   position: relative;
   min-height: 48px;
+}
+.space-em{
+  margin-left: 1em;
 }
 </style>

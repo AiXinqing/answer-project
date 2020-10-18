@@ -156,11 +156,13 @@ export default {
         Postpone: false,
       },
       editData: {},
+      options:[],
+      changeClick:false
     }
   },
   computed: {
     ...mapState('questionType', [
-      'options',
+      'questionNumber',
       'currentQuestion',
       'determineTopic',
       'existBigQuestion',
@@ -185,16 +187,6 @@ export default {
         ? 32.5
         : 30
     },
-    capitalTopicNum() {
-      let index = this.options.findIndex(
-        (item) => this.data.number == item.value
-      )
-      if (index > -1) {
-        return this.options[index].label
-      } else {
-        return '一'
-      }
-    },
     pageRow() {
       // 一页所占用的行数
       let row = Math.floor(
@@ -206,7 +198,8 @@ export default {
       return this.errorVal != '' ? true : false
     },
     isdisabledFn() {
-      return this.errorVal != '' ? true : false
+      return !this.editQuestionId && !this.changeClick ?  true :
+              this.changeClick && this.errorVal != '' ?  true :false
     },
     tabStatusVal() {
       const { topic, score, minWordCount, totalWordCount } = this.data
@@ -225,19 +218,11 @@ export default {
           }
         }
       }
-      return topic == ''
-        ? '小题题号不能为空'
-        : score == ''
-        ? '分数不能为空'
-        : minWordCount == ''
-        ? '最少字数不能为空'
-        : totalWordCount == ''
-        ? '总字数不能为空'
-        : minWordCount > totalWordCount
-        ? '最少字数不能大于总字数'
-        : str != ''
-        ? str
-        : ''
+      return topic == ''? '小题题号不能为空':
+              score == ''? '分数不能为空':
+                minWordCount == ''? '最少字数不能为空':
+                  totalWordCount == ''? '总字数不能为空':
+                    minWordCount > totalWordCount? '最少字数不能大于总字数': str != ''? str: ''
     },
     tabStatus() {
       const { topic, score, minWordCount, totalWordCount } = this.data
@@ -257,19 +242,12 @@ export default {
           }
         }
       }
-      return topic == ''
-        ? true
-        : score == ''
-        ? true
-        : minWordCount == ''
-        ? true
-        : totalWordCount == ''
-        ? true
-        : minWordCount > totalWordCount
-        ? true
-        : str != ''
-        ? true
-        : false
+      return topic == ''? true:
+              score == ''? true:
+              minWordCount == ''? true:
+              totalWordCount == ''? true:
+              minWordCount > totalWordCount? true:
+              str != ''? true: false
     },
     currentPageHeight() {
       let heights = this.pageHeight[this.pageHeight.length - 1]
@@ -309,6 +287,7 @@ export default {
           this.existBigQuestion.length > 0
             ? this.existBigQuestion[0].value
             : null
+        this.options = this.questionNumber.map((label,value)=>({label,value}))
       },
     },
   },
@@ -341,10 +320,10 @@ export default {
         })
       )
       // 开打弹框
-      this.set_currentQuestion()
       this.openedFrame = true
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
+      this.set_currentQuestion()
     },
     openedEdit(obj) {
       this.editData = JSON.parse(JSON.stringify(obj))
@@ -360,6 +339,7 @@ export default {
       this.set_currentQuestion()
       this.questionData = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
+      this.Empty_AlreadyTopics() // 清空
     },
     hanldeStatus(val) {
       // 报错状态
@@ -373,7 +353,7 @@ export default {
       }
     },
     preCreateQuestion() {
-      const { spacing, totalWordCount, InsertTitle, Postpone } = this.data
+      const { spacing, totalWordCount, InsertTitle, Postpone,name,number,score } = this.data
       this.errorVal = this.tabStatusVal
 
       if (!this.tabStatus) {
@@ -398,7 +378,7 @@ export default {
           height: heights,
           id: objId,
           questionType: 'compositionLanguage',
-          content: this.data,
+          content: {...this.data,totalScore:score},
           order: this.orderSort,
           first: true,
           lattice: lattice,
@@ -409,12 +389,13 @@ export default {
               ? this.editData.BeforeEditing
               : this.BeforeEditing,
         }
+        this.Add_AlreadyTopics([this.data])
 
         //存在大题追加
         let existBigQuestionObj = {
           id: objId,
-          label: `${this.capitalTopicNum}.${this.data.name}`,
-          value: this.data.number,
+          label: `${this.options[number].label}.${name}`,
+          value: number,
           order: this.orderSort,
         }
 
@@ -455,8 +436,6 @@ export default {
             this.initPageData(obj)
             this.set_existBigQuestion(existBigQuestionObj)
           }
-
-          this.Add_AlreadyTopics([this.data])
           this.set_determineTopic([this.data])
           this.set_orderSort()
         } else {
@@ -481,6 +460,7 @@ export default {
       }
     },
     hanldeVerification() {
+      this.changeClick = true
       this.errorVal = this.tabStatusVal
     },
     hanldeSelect(e) {
@@ -510,5 +490,10 @@ export default {
 .el-input.is-active .el-input__inner,
 .el-input__inner:focus {
   border-color: @main !important;
+}
+.dialog_content{
+  .error-message{
+    margin-left: 15px;
+  }
 }
 </style>

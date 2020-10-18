@@ -28,7 +28,7 @@ export default {
     },
     value: {
       type: Number,
-      default: 1
+      default: 0
     }
   },
   components: {
@@ -56,5 +56,18 @@ export default {
   height: 28px !important;
   line-height: 28px !important;
   text-align: center;
+}
+.el-select-dropdown__item.selected{
+  color:#1ab394
+}
+.el-select .el-input.is-focus .el-input__inner{
+  border-color: #1ab394;
+}
+.el-button.is-disabled, .el-button.is-disabled:focus, .el-button.is-disabled:hover {
+    color: #c0c4cc !important;
+    cursor: not-allowed;
+    background-image: none;
+    background-color: #fff !important;
+    border-color: #ebeef5 !important;
 }
 </style>

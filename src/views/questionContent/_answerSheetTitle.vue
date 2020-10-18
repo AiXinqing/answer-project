@@ -161,6 +161,8 @@ export default {
     editAdmissionNumber() {
       this.$emit('edit-admission-number')
     },
+    hanldeCloseEsitor(){
+    }
   },
 }
 </script>

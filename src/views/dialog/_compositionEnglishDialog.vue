@@ -126,11 +126,13 @@ export default {
         Postpone: false,
       },
       editData: {},
+      options:[],
+      changeClick:false,
     }
   },
   computed: {
     ...mapState('questionType', [
-      'options',
+      'questionNumber',
       'currentQuestion',
       'determineTopic',
       'existBigQuestion',
@@ -149,17 +151,8 @@ export default {
       return this.data.group.map((item) => item.childGroup)[0]
     },
     isdisabledFn() {
-      return this.errorVal != '' ? true : false
-    },
-    capitalTopicNum() {
-      let index = this.options.findIndex(
-        (item) => this.data.number == item.value
-      )
-      if (index > -1) {
-        return this.options[index].label
-      } else {
-        return '一'
-      }
+      return !this.editQuestionId && !this.changeClick ?  true :
+              this.changeClick && this.errorVal != '' ?  true :false
     },
     tabStatusVal() {
       const { topic, score, rows } = this.data
@@ -206,15 +199,10 @@ export default {
           }
         }
       }
-      return score == ''
-        ? true
-        : rows == ''
-        ? true
-        : topic == ''
-        ? true
-        : str != ''
-        ? true
-        : false
+      return score == ''? true :
+              rows == ''? true :
+                topic == ''? true:
+                str != ''? true: false
     },
     currentPageHeight() {
       let heights = this.pageHeight[this.pageHeight.length - 1]
@@ -254,6 +242,7 @@ export default {
           this.existBigQuestion.length > 0
             ? this.existBigQuestion[0].value
             : null
+        this.options = this.questionNumber.map((label,value)=>({label,value}))
       },
     },
   },
@@ -287,10 +276,10 @@ export default {
       )
 
       // 开打弹框
-      this.set_currentQuestion()
       this.openedFrame = true
       this.Empty_AlreadyTopics() // 清空
       this.Add_AlreadyTopics(this.determineTopic)
+      this.set_currentQuestion()
     },
     openedEdit(obj) {
       this.editData = JSON.parse(JSON.stringify(obj))
@@ -306,10 +295,11 @@ export default {
       this.set_currentQuestion()
       this.questionData = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
+      this.Empty_AlreadyTopics() // 清空
     },
 
     preCreateQuestion() {
-      const { rows, InsertTitle, Postpone } = this.data
+      const { rows, InsertTitle, Postpone,number,name ,score} = this.data
       this.errorVal = this.tabStatusVal
 
       let rectHeight = rows * 35 // 当前内容高度 45(内部高度)
@@ -325,7 +315,7 @@ export default {
           rowHeight: 36,
           id: objId,
           questionType: 'compositionEnglish',
-          content: this.data,
+          content: {...this.data,totalScore:score},
           order: this.orderSort,
           first: true,
           BeforeEditing:
@@ -333,12 +323,12 @@ export default {
               ? this.editData.BeforeEditing
               : this.BeforeEditing,
         }
-
+        this.Add_AlreadyTopics([this.data])
         //存在大题追加
         let existBigQuestionObj = {
           id: objId,
-          label: `${this.capitalTopicNum}.${this.data.name}`,
-          value: this.data.number,
+          label: `${this.options[number].label}.${name}`,
+          value: number,
           order: this.orderSort,
         }
 
@@ -378,7 +368,6 @@ export default {
             this.initPageData(obj)
             this.set_existBigQuestion(existBigQuestionObj)
           }
-          this.Add_AlreadyTopics([this.data])
           this.set_determineTopic([this.data])
           this.set_orderSort()
         } else {
@@ -402,6 +391,7 @@ export default {
       }
     },
     hanldeVerification() {
+      this.changeClick = true
       this.errorVal = this.tabStatusVal
     },
     hanldeSelect(e) {

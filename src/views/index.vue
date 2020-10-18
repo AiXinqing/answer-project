@@ -3,7 +3,9 @@
     <answer-sheet-layout />
     <div class="main-info">
       <answer-sheet-set />
-      <answer-sheet-content />
+      <answer-sheet-content
+        ref="answerContent"
+      />
     </div>
   </div>
 </template>

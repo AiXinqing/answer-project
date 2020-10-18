@@ -58,20 +58,21 @@ export default {
       errorVal: '',
       data: {
         rows: 3,
-        positionNum: null,
+        positionNum: 0,
       },
       closeData: {},
       editQuestionId: null,
+      options:[]
     }
   },
   computed: {
-    ...mapState('questionType', ['options', 'existBigQuestion']),
+    ...mapState('questionType', ['questionNumber', 'existBigQuestion']),
     ...mapState('pageContent', ['orderSort', 'pageData']),
     errorMessage() {
       return this.errorVal != '' ? true : false
     },
     isdisabledFn() {
-      return this.errorVal != '' ? true : false
+      return  this.existBigQuestion.length > 0 && !this.errorMessage ? false:true
     },
     tabStatusVal() {
       const { rows, positionNum } = this.data
@@ -110,6 +111,7 @@ export default {
                 : null,
           }
         }
+        this.options = this.questionNumber.map((label,value)=>({label,value}))
       },
     },
   },
@@ -258,5 +260,8 @@ export default {
   position: absolute;
   color: #999;
   margin-top: 2px;
+}
+.error-message.non_box_error {
+  margin-left: 15px;
 }
 </style>
