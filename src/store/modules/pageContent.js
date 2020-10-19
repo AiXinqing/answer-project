@@ -30,6 +30,10 @@ const mutations = {
       state.pageData.splice(index, 1, ArrItem)
     }
   },
+  Filter_pageData: (state, id) => {
+    // 解答题
+    state.pageData = state.pageData.filter(question =>  question.id != id)
+  },
   deletePageData: (state, obj) => {
     // 解答题使用objId
     state.pageData.map((question, index) => {
@@ -69,7 +73,7 @@ const mutations = {
   delPageData: (state, index) => {
     state.pageData.splice(index, 1)
   },
-  
+
   insert_pageData: (state, {
     obj,
     num,
