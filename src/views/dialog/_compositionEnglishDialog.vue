@@ -460,6 +460,7 @@ export default {
   }
   .el-input--mini .el-input__inner {
     text-align: center;
+    padding: 0 0;
   }
   .el-radio__inner {
     margin-left: -10px;

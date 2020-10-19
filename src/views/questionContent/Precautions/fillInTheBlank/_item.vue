@@ -6,7 +6,7 @@
     <span>题到</span>
     <el-input v-model.number="data.end" size="mini" @blur="groupTopicHanlde"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
     <span>题,每空</span>
-    <el-input v-model.number="data.score" size="mini" @blur="groupTopicHanlde"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
+    <el-input v-model="data.score" size="mini" @blur="groupTopicHanlde"  onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />
     <span>分,每题</span>
     <el-input v-model.number="data.space" size="mini" @blur="groupTopicHanlde"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
     <span>空</span>
@@ -39,9 +39,10 @@ export default {
       'determineTopic', // 确定小题数值
     ]),
     tabStatusVal () {
-      let itemStart = this.data.start || 0
-      let itemEnd = this.data.end || null
-      let itemScore = this.data.score || 0
+      let {start,end,score} = this.data
+      let itemStart = start || 0
+      let itemEnd = end || null
+      let itemScore = score || 0
       let determineTopic = this.determineTopic
       let strStart = ''
       let strEnd = ''
@@ -99,9 +100,10 @@ export default {
                   strEnd != '' ? strStart : ''
     },
     tabStatus () {
-      let itemStart = this.data.start || 0
-      let itemEnd = this.data.end || null
-      let itemScore = this.data.score || 0
+      let {start,end,score} = this.data
+      let itemStart = start || 0
+      let itemEnd = end || null
+      let itemScore = score || 0
       let determineTopic = this.determineTopic
       let AlreadyTopics = this.AlreadyTopics
       let strStart = ''
@@ -180,16 +182,17 @@ export default {
       this.$emit('hanlde-status', this.tabStatusVal)
       if (!this.tabStatus) {
         let subtopicArr = []
+        const {score,end,space,start,id} = this.data
         for (let index = this.data.start; index <= this.data.end; index++) {
           subtopicArr.push({
-            score: this.data.score,
-            end: this.data.end,
-            space: this.data.space,
-            start: this.data.start,
-            pid: this.data.id,
-            id: `${this.data.id}_${+new Date()}_${index}`,
+            score: score,
+            end: end,
+            space: space,
+            start: start,
+            pid: id,
+            id: `${id}_${+new Date()}_${index}`,
             topic: index,
-            sum: this.data.score * this.data.space,
+            sum: score * space,
           })
         }
         let obj = {
@@ -213,5 +216,9 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less">
+  .el-input--mini .el-input__inner{
+    padding: 0 0;
+    text-align: center;
+  }
 </style>
