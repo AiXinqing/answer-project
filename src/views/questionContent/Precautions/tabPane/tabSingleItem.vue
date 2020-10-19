@@ -1,12 +1,11 @@
 <template>
   <div class="big-item">
     <span>从</span>
-    <!-- @keyup.native.stop="isVerifi" -->
     <el-input v-model.number="data.start" size="mini" @blur="singleBoxHanlde" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
     <span>题到</span>
     <el-input v-model.number="data.end" size="mini" @blur="singleBoxHanlde" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
     <span>题,每题</span>
-    <el-input v-model.number="data.score" size="mini" @blur="singleBoxHanlde" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
+    <el-input v-model="data.score" size="mini" @blur="singleBoxHanlde" onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />
     <span>分,每题</span>
     <el-input v-model.number="data.select" size="mini" @blur="singleBoxHanlde"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
     <span>个选项</span>
@@ -43,117 +42,115 @@ export default {
       'determineTopic'
     ]),
     tabStatusVal () {
-      let itemStart = this.data.start || 0
-      let itemEnd = this.data.end
-      let itemScore = this.data.score || 0
+      let {start,end,score} = this.data
+      let itemScore = parseFloat(score) || null
       let determineTopic = this.determineTopic
       let AlreadyTopics = this.AlreadyTopics
       let strStart = ''
       let strEnd = ''
       if (determineTopic.length > 0 || AlreadyTopics.length > 0) {
-        let numStart = determineTopic.findIndex(item => item.topic == itemStart)
-        let index = AlreadyTopics.findIndex(item => item.topic == itemStart)
-        let numEnd = determineTopic.findIndex(item => item.topic == itemEnd)
-        let endIndex = AlreadyTopics.findIndex(item => item.topic == itemStart)
+        let numStart = determineTopic.findIndex(item => item.topic == start)
+        let index = AlreadyTopics.findIndex(item => item.topic == start)
+        let numEnd = determineTopic.findIndex(item => item.topic == end)
+        let endIndex = AlreadyTopics.findIndex(item => item.topic == start)
 
         if (this.editId != null) { // 编辑
           if (index > -1) {
             if (AlreadyTopics[index].pid != this.data.id) {
-              strStart = `${itemStart}题已经存在，请勿重复添加`
+              strStart = `${start}题已经存在，请勿重复添加`
             }
           } else { strStart = '' }
         } else {
           if (numStart > -1 || index > -1) {
             if (index > -1) {
               if (AlreadyTopics[index].pid != this.data.id) {
-                strStart = `${itemStart}题已经存在，请勿重复添加`
+                strStart = `${start}题已经存在，请勿重复添加`
               } else { strStart = '' }
             } else {
-              strStart = `${itemStart}题已经存在，请勿重复添加`
+              strStart = `${start}题已经存在，请勿重复添加`
             }
           } else { strStart = '' }
         }
         if (this.editId != null) { // 编辑
           if (endIndex > -1) {
             if (AlreadyTopics[endIndex].pid != this.data.id) {
-              strEnd = `${itemEnd}题已经存在，请勿重复添加`
+              strEnd = `${end}题已经存在，请勿重复添加`
             }
           } else { strStart = '' }
         } else {
           if (numEnd > -1 || endIndex > -1) {
             if (endIndex > -1) {
               if (AlreadyTopics[endIndex].pid != this.data.id) {
-                strEnd = `${itemEnd}题已经存在，请勿重复添加`
+                strEnd = `${end}题已经存在，请勿重复添加`
               } else { strStart = '' }
             } else {
-              strEnd = `${itemEnd}题已经存在，请勿重复添加`
+              strEnd = `${end}题已经存在，请勿重复添加`
             }
           } else { strStart = '' }
         }
       }
 
-      return itemStart == 0 ? '开始题号必须大于0' :
-        itemEnd == 0 ? '结束题号必须大于0' :
-          itemStart == 0 && itemEnd != null ? '开始题号不能大于结束题号' :
-            itemStart > itemEnd && itemEnd != null ? '开始题号不能大于结束题号' :
-              itemStart != 0 && itemEnd != null && itemScore == 0 ? '分数不能为空' :
+      return start == 0 ? '开始题号必须大于0' :
+        end == 0 ? '结束题号必须大于0' :
+          start == 0 && end != null ? '开始题号不能大于结束题号' :
+            start > end && end != null ? '开始题号不能大于结束题号' :
+              start != 0 && end != null && itemScore == null ? '分数不能为空' :
                 strStart.length > 0 ? strStart :
                   strEnd.length > 0 ? strEnd : ''
     },
     tabStatus () {
-      let itemStart = this.data.start || 0
-      let itemEnd = this.data.end
-      let itemScore = this.data.score || 0
+      let {start,end,score} = this.data
+      let itemScore = parseFloat(score) || null
       let AlreadyTopics = this.AlreadyTopics
       let determineTopic = this.determineTopic
       let strStart = ''
       let strEnd = ''
 
       if (determineTopic.length > 0 || AlreadyTopics.length > 0) {
-        let numStart = determineTopic.findIndex(item => item.topic == itemStart)
-        let index = AlreadyTopics.findIndex(item => item.topic == itemStart)
-        let numEnd = determineTopic.findIndex(item => item.topic == itemEnd)
-        let endIndex = AlreadyTopics.findIndex(item => item.topic == itemStart)
+        let numStart = determineTopic.findIndex(item => item.topic == start)
+        let index = AlreadyTopics.findIndex(item => item.topic == start)
+        let numEnd = determineTopic.findIndex(item => item.topic == end)
+        let endIndex = AlreadyTopics.findIndex(item => item.topic == start)
 
         if (this.editId != null) { // 编辑
           if (index > -1) {
             if (AlreadyTopics[index].pid != this.data.id) {
-              strStart = `${itemStart}题已经存在，请勿重复添加`
+              strStart = `${start}题已经存在，请勿重复添加`
             }
           } else { strStart = '' }
         } else {
           if (numStart > -1 || index > -1) {
             if (index > -1) {
               if (AlreadyTopics[index].pid != this.data.id) {
-                strStart = `${itemStart}题已经存在，请勿重复添加`
+                strStart = `${start}题已经存在，请勿重复添加`
               } else { strStart = '' }
             } else {
-              strStart = `${itemStart}题已经存在，请勿重复添加`
+              strStart = `${start}题已经存在，请勿重复添加`
             }
           } else { strStart = '' }
         }
         if (this.editId != null) { // 编辑
           if (endIndex > -1) {
             if (AlreadyTopics[endIndex].pid != this.data.id) {
-              strEnd = `${itemEnd}题已经存在，请勿重复添加`
+              strEnd = `${end}题已经存在，请勿重复添加`
             }
           } else { strStart = '' }
         } else {
           if (numEnd > -1 || endIndex > -1) {
             if (endIndex > -1) {
               if (AlreadyTopics[endIndex].pid != this.data.id) {
-                strEnd = `${itemEnd}题已经存在，请勿重复添加`
+                strEnd = `${end}题已经存在，请勿重复添加`
               } else { strStart = '' }
             } else {
-              strEnd = `${itemEnd}题已经存在，请勿重复添加`
+              strEnd = `${end}题已经存在，请勿重复添加`
             }
           } else { strStart = '' }
         }
       }
-      return itemStart == 0 && itemEnd != null ? true :
-        itemEnd < itemStart && itemEnd != null ? true :
-          itemEnd != null && itemScore == 0 ? true :
-            itemStart != 0 && itemEnd != null && itemScore == 0 ? true :
+      return start == 0 && end != null ? true :
+        end < start && end != null ? true :
+          end != null && itemScore == 0 ? true :
+            start != 0 && end != null && itemScore == null ? true :
               strStart != '' ? true :
                 strEnd != '' ? true : false;
     },
@@ -198,6 +195,7 @@ export default {
         for (let index = this.data.start; index <= this.data.end; index++) {
           let subtopic = {
             ...this.data,
+            score:Number(this.data.score.toString().match(/^\d+(?:\.\d{0,1})?/)),
             pid: this.data.id,
             id: 'single_' + index,
             topic: index
@@ -208,6 +206,8 @@ export default {
           type: 'singleBox',
           data: {
             ...this.data,
+            score:Number(this.data.score.toString().match(/^\d+(?:\.\d{0,1})?/)),
+            select: typeof(this.data.select)=='string' ? 4 : this.data.select,
             start: parseInt(this.data.start),
             id: this.data.id,
             childGroup: subtopicArr
@@ -221,14 +221,6 @@ export default {
         this.$emit('hanlde-add-group-question', itemObj)
         this.set_currentQuestion()
       }
-    },
-    isVerifi (e) {
-      let val = e.target.value
-      val = val.replace(/[^\d.]/g, '');  //清除“数字”和“.”以外的字符
-      val = val.replace(/^\./g, '');  //验证第一个字符是数字而不是.
-      val = val.replace(/\.{2,}/g, '.'); //只保留第一个. 清除多余的.
-      val = val.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.');
-      e.target.value = val
     }
   },
 }
