@@ -69,6 +69,7 @@ const mutations = {
   delPageData: (state, index) => {
     state.pageData.splice(index, 1)
   },
+  
   insert_pageData: (state, {
     obj,
     num,
@@ -85,7 +86,7 @@ const mutations = {
       }
     })
     setTimeout(() => {
-      state.pageData.splice(num + 1, 0, {
+      state.pageData.splice(num, 0, {
         ...obj,
         order: obj.order + 1
       })

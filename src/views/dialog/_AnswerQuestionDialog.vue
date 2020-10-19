@@ -354,6 +354,8 @@ export default {
           })
           this.set_existBigQuestion(existBigQuestionObj)
         }
+        // 大题号修改
+        this.set_objectiveData(number)
 
       } else {
         this.answerFilter_pageData(this.editQuestionId)
@@ -384,8 +386,6 @@ export default {
         // }
       }
 
-      // 大题号修改
-      this.set_objectiveData(number)
       //------------------------------------
 
       this.openedFrame = false // 关闭弹窗

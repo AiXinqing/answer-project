@@ -375,14 +375,15 @@ export default {
           this.initPageData(obj)
           this.set_existBigQuestion(existBigQuestionObj)
         }
+        this.set_orderSort()
+        this.set_objectiveData(this.spaceTopic.number) // 大题号修改
       } else {
         obj.id = this.editQuestionId
         this.amendPageData(obj)
         this.set_existBigQuestion({ ...existBigQuestionObj, id: obj.id })
       }
-      this.set_objectiveData(this.spaceTopic.number) // 大题号修改
+
       //------------------------------------
-      this.set_orderSort()
       this.openedFrame = false // 关闭弹窗
 
       //------------------------

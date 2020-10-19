@@ -293,14 +293,14 @@ export default {
           this.set_existBigQuestion(existBigQuestionObj)
         }
         this.set_orderSort()
+        // 大题号修改
+        this.set_objectiveData(number)
       } else {
         // 编辑
         obj.id = this.editQuestionId
         this.amendPageData(obj)
         this.set_existBigQuestion({ ...existBigQuestionObj, id: obj.id })
       }
-      // 大题号修改
-      this.set_objectiveData(number)
       //------------------------------------
       this.openedFrame = false // 关闭弹窗
       // 清空弹框数据
