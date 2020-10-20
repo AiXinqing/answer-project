@@ -29,51 +29,114 @@ export default {
       'determineTopic', // 确定小题数值
     ]),
     tabStatusVal () {
-      let itemStart = this.data.start || 0
-      let itemEnd = this.data.end
+      let {start,end} = this.data
 
       let determineTopic = this.determineTopic
+      let AlreadyTopics = this.AlreadyTopics
+
       let strStart = ''
       let strEnd = ''
 
-      if (determineTopic.length > 0) {
-        let numStart = determineTopic.findIndex(item => item.topic == itemStart)
-        let numEnd = determineTopic.findIndex(item => item.topic == itemEnd)
-        if (numStart > -1) {
-          strStart = `${itemStart}题已经存在，请勿重复添加`
+      if (determineTopic.length > 0 || AlreadyTopics.length > 0) {
+        let numStart = determineTopic.findIndex(item => item.topic == start)
+        let numEnd = determineTopic.findIndex(item => item.topic == end)
+        let index = AlreadyTopics.findIndex(item => item.topic == start)
+        let endIndex = AlreadyTopics.findIndex(item => item.topic == start)
+        if (this.editId != null) { // 编辑
+          if (index > -1) {
+            if (AlreadyTopics[index].pid != this.data.id) {
+              strStart = `${start}题已经存在，请勿重复添加`
+            }
+          } else { strStart = '' }
+        } else {
+          if (numStart > -1 || index > -1) {
+            if (index > -1) {
+              if (AlreadyTopics[index].pid != this.data.id) {
+                strStart = `${start}题已经存在，请勿重复添加`
+              } else { strStart = '' }
+            } else {
+              strStart = `${start}题已经存在，请勿重复添加`
+            }
+          } else { strStart = '' }
         }
-        if (numEnd > -1) {
-          strEnd = `${itemEnd}题已经存在，请勿重复添加`
+        if (this.editId != null) { // 编辑
+          if (endIndex > -1) {
+            if (AlreadyTopics[endIndex].pid != this.data.id) {
+              strEnd = `${end}题已经存在，请勿重复添加`
+            }
+          } else { strStart = '' }
+        } else {
+          if (numEnd > -1 || endIndex > -1) {
+            if (endIndex > -1) {
+              if (AlreadyTopics[endIndex].pid != this.data.id) {
+                strEnd = `${end}题已经存在，请勿重复添加`
+              } else { strStart = '' }
+            } else {
+              strEnd = `${end}题已经存在，请勿重复添加`
+            }
+          } else { strStart = '' }
         }
       }
-      return itemStart == 0 ? '开始题号必须大于0' :
-        itemEnd == 0 ? '开始题号必须大于0' :
-          itemStart == 0 && itemEnd != null ? '开始题号不能大于结束题号' :
-            itemStart > itemEnd && itemEnd != null ? '开始题号不能大于结束题号' :
+      return start == 0 ? '开始题号必须大于0' :
+        end == 0 ? '开始题号必须大于0' :
+          start == 0 && end != null ? '开始题号不能大于结束题号' :
+            start > end && end != null ? '开始题号不能大于结束题号' :
               strStart != '' ? strStart :
                 strEnd != '' ? strStart : ''
     },
     tabStatus () {
-      let itemStart = this.data.start || 0
-      let itemEnd = this.data.end
+      let {start,end} = this.data
 
       let determineTopic = this.determineTopic
+      let AlreadyTopics = this.AlreadyTopics
+
       let strStart = ''
       let strEnd = ''
-      if (determineTopic.length > 0) {
-        let numStart = determineTopic.findIndex(item => item.topic == itemStart)
-        let numEnd = determineTopic.findIndex(item => item.topic == itemEnd)
-        if (numStart > -1) {
-          strStart = `${itemStart}题已经存在，请勿重复添加`
+
+      if (determineTopic.length > 0 || AlreadyTopics.length > 0) {
+        let numStart = determineTopic.findIndex(item => item.topic == start)
+        let numEnd = determineTopic.findIndex(item => item.topic == end)
+        let index = AlreadyTopics.findIndex(item => item.topic == start)
+        let endIndex = AlreadyTopics.findIndex(item => item.topic == start)
+        if (this.editId != null) { // 编辑
+          if (index > -1) {
+            if (AlreadyTopics[index].pid != this.data.id) {
+              strStart = `${start}题已经存在，请勿重复添加`
+            }
+          } else { strStart = '' }
+        } else {
+          if (numStart > -1 || index > -1) {
+            if (index > -1) {
+              if (AlreadyTopics[index].pid != this.data.id) {
+                strStart = `${start}题已经存在，请勿重复添加`
+              } else { strStart = '' }
+            } else {
+              strStart = `${start}题已经存在，请勿重复添加`
+            }
+          } else { strStart = '' }
         }
-        if (numEnd > -1) {
-          strEnd = `${itemEnd}题已经存在，请勿重复添加`
+        if (this.editId != null) { // 编辑
+          if (endIndex > -1) {
+            if (AlreadyTopics[endIndex].pid != this.data.id) {
+              strEnd = `${end}题已经存在，请勿重复添加`
+            }
+          } else { strStart = '' }
+        } else {
+          if (numEnd > -1 || endIndex > -1) {
+            if (endIndex > -1) {
+              if (AlreadyTopics[endIndex].pid != this.data.id) {
+                strEnd = `${end}题已经存在，请勿重复添加`
+              } else { strStart = '' }
+            } else {
+              strEnd = `${end}题已经存在，请勿重复添加`
+            }
+          } else { strStart = '' }
         }
       }
-      return itemStart == 0 ? true :
-        itemEnd == 0 ? true :
-          itemStart == 0 && itemEnd != null ? true :
-            itemStart > itemEnd && itemEnd != null ? true :
+      return start == 0 ? true :
+        end == 0 ? true :
+          start == 0 && end != null ? true :
+            start > end && end != null ? true :
               strStart != '' ? true :
                 strEnd != '' ? true : false
     },

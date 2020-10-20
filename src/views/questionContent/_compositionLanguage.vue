@@ -22,7 +22,7 @@
     <div class="answer_question_box composition_box">
       <template v-if="data.first && data.borderTop == undefined">
         <div class="Language_item_title">
-          <span>1.</span>
+          <span>{{contentData.topic}}.</span>
         </div>
       </template>
       <div class="compositionLanguage_box">
