@@ -43,9 +43,8 @@
       @height-resize="handleResize($event)"
       :min-height="minHeight"
     >
-      <div ref="questionChange">
 
-      <div class="content-info" >
+      <div class="content-info" ref="questionChange" >
         <div class="content-row" v-for="(item, i) in topicGroupData" :key="i">
           <a
             v-for="row in item"
@@ -79,7 +78,16 @@
             />
           </a>
         </div>
-      </div>
+        <!-- <p v-for="(item, i) in topicGroupData" :key="i">
+          <span
+            v-for="row in item"
+            :key="row.id"
+            :style="{ width: pageWidth / data.rows + 'px' }"
+          >
+            {{ row.topic }}&nbsp;&nbsp;&nbsp;
+            <a>&nbsp;&nbsp;&nbsp;——————————</a>
+          </span>
+        </p> -->
       </div>
     </drag-change-height>
   </div>

@@ -287,7 +287,7 @@ export default {
 .question-info{
   position: relative;
   .ql-editor{
-    padding: 0 15px;
+    padding: 0 0;
     position: relative;
   }
   .ql-toolbar{

@@ -24,10 +24,5 @@
   font-size: 16px;
   top: 0;
 }
-.quill-editor[style="display: none;"]{
-  .ql-editor{
-    padding: 0 15px
-  }
-}
 
 </style>
