@@ -41,7 +41,8 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations} from 'vuex'
+import axios from 'axios'
 import AnswerSheetTitle from './questionContent/_answerSheetTitle' // 答题卡标题
 import ObjectiveQuestion from './questionContent/_ObjectiveQuestion' // 客观题
 import FillInTheBlank from './questionContent/_FillInTheBlank' // 填空题
@@ -77,6 +78,7 @@ export default {
       'page_size',
       'orderSort',
     ]),
+
     pageWidth() {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 520
@@ -98,6 +100,15 @@ export default {
         }
       },
     },
+  },
+  mounted () {
+    axios.get('/public/pageData.json').then(({
+      data
+    }) => {
+      if (data) {
+        console.log(data)
+      }
+    })
   },
   methods: {
     ...mapMutations('pageContent', ['set_pageHeight','resetScore','overlayScore']),

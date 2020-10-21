@@ -221,6 +221,19 @@ export default {
         this.options = this.questionNumber.map((label,value)=>({label,value}))
       }
     },
+
+    childGroups:{
+      immediate: true,
+      handler(){
+        this.Empty_AlreadyTopics()
+        if(this.childGroups.length > 0){
+          this.Add_AlreadyTopics(this.childGroups)
+        }else{
+          this.Add_AlreadyTopics(this.determineTopic)
+        }
+        this.set_currentQuestion()
+      }
+    }
   },
   methods: {
     ...mapMutations('pageContent', [
@@ -241,6 +254,7 @@ export default {
       'Add_AlreadyTopics',
       'set_existBigQuestion',
       'insert_existBigQuestion',
+      'delOnce_determineTopic',
     ]),
     ...mapMutations('answerQuestion', ['set_answerQuestionArr',]),
     opened () {
@@ -265,6 +279,8 @@ export default {
       this.previous = obj.previousOrder
       this.openedFrame = true
       this.questionData = JSON.parse(JSON.stringify(obj.content))
+      this.Empty_AlreadyTopics() // 清空
+      this.Add_AlreadyTopics(this.determineTopic)
       this.set_currentQuestion()
     },
     closeFrame () {
@@ -354,10 +370,11 @@ export default {
           })
           this.set_existBigQuestion(existBigQuestionObj)
         }
+        // 大题号修改
+        this.set_objectiveData(number)
 
       } else {
         this.answerFilter_pageData(this.editQuestionId)
-
           let previous = this.previous
           let previousTig = this.previous
           let pageObj = this.pageData[previous + 1]
@@ -381,14 +398,13 @@ export default {
 
             this.answer_insertPageData(data)
           })
-        // }
+        this.delOnce_determineTopic(this.childGroups[0].pid)
       }
 
-      // 大题号修改
-      this.set_objectiveData(number)
       //------------------------------------
 
       this.openedFrame = false // 关闭弹窗
+      this.Add_AlreadyTopics(this.childGroups)
       this.set_determineTopic(this.childGroups)
       this.set_currentQuestion()
       // 清空弹框数据

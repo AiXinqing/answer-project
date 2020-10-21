@@ -7,7 +7,7 @@
         <span v-if=" data.childGroup == undefined || data.childGroup.length <= 0">
           <el-input v-model.number="data.space" size="mini" @click.stop.native="clickFun" @blur="ChangeSpaceValue"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
           <span @click.stop="clickFun"> 空 每空 </span>
-          <el-input v-model.number="data.score" size="mini" @click.stop.native="clickFun" @blur="ChangeSpaceValue"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+          <el-input v-model="data.score" size="mini" @click.stop.native="clickFun" @blur="ChangeSpaceValue"  onkeyup.stop.native="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />
           <span @click.stop="clickFun"> 分 共 {{data.sum}} 分 </span>
         </span>
         <span v-else>{{data.sum}} 分</span>
@@ -73,11 +73,11 @@ export default {
   methods: {
     hanldeSubtopicDel (obj) {
       // 删除小题号
-      this.$emit('hanlde-subtopic-del', obj)
+      this.$emit('hanlde-subtopic-del', {...obj,score:Number(obj.score.toString().match(/^\d+(?:\.\d{0,1})?/))})
     },
     topicDetailAdd (obj) {
       // 添加小题空格数
-      this.$emit('topic-detail-add', obj)
+      this.$emit('topic-detail-add', {...obj,score:Number(obj.score.toString().match(/^\d+(?:\.\d{0,1})?/))})
     },
     ChangeSpaceValue () {
       this.$emit('change-space-value', this.data)
@@ -85,11 +85,11 @@ export default {
     clickFun () { },
     hanldeLastTopicDel (obj) {
       // 删除小题last题组item
-      this.$emit('hanlde-last-topic-del', obj)
+      this.$emit('hanlde-last-topic-del', {...obj,score:Number(obj.score.toString().match(/^\d+(?:\.\d{0,1})?/))})
     },
     changeLastSubTopicScore (obj, oldObj) {
       // last-sub分值改变
-      this.$emit('change-last-sub-topic-score', obj, oldObj)
+      this.$emit('change-last-sub-topic-score', {...obj,score:Number(obj.score.toString().match(/^\d+(?:\.\d{0,1})?/))}, oldObj)
     }
   },
 

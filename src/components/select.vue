@@ -7,7 +7,7 @@
       v-on="$listeners"
       popper-class="hj-select-dropdown"
     >
-      <el-option v-for="item in items" :key="item.value" :label="item.label" :value="item.value"></el-option>
+      <el-option v-for="(item,index) in items" :key="index" :label="item.label" :value="item.value"></el-option>
     </el-select>
   </div>
 </template>

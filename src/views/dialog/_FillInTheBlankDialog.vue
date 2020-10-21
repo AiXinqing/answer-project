@@ -252,6 +252,19 @@ export default {
       handler() {
         this.options = this.questionNumber.map((label,value)=>({label,value}))
       }
+    },
+
+    childGroups:{
+      immediate: true,
+      handler(){
+        this.Empty_AlreadyTopics()
+        if(this.childGroups.length > 0){
+          this.Add_AlreadyTopics(this.childGroups)
+        }else{
+          this.Add_AlreadyTopics(this.determineTopic)
+        }
+        this.set_currentQuestion()
+      }
     }
   },
   mounted() {
@@ -338,10 +351,6 @@ export default {
         value: number,
       }
       // 小题数组追加至确定题型
-
-      this.Add_AlreadyTopics(this.childGroups)
-      this.delOnce_determineTopic(this.childGroups[0].pid)
-      this.set_determineTopic(this.childGroups)
       this.set_currentQuestion()
 
       if (this.editQuestionId == null) {
@@ -375,14 +384,17 @@ export default {
           this.initPageData(obj)
           this.set_existBigQuestion(existBigQuestionObj)
         }
+        this.set_orderSort()
+        this.set_objectiveData(this.spaceTopic.number) // 大题号修改
       } else {
+        this.delOnce_determineTopic(this.childGroups[0].pid)
         obj.id = this.editQuestionId
         this.amendPageData(obj)
         this.set_existBigQuestion({ ...existBigQuestionObj, id: obj.id })
       }
-      this.set_objectiveData(this.spaceTopic.number) // 大题号修改
+      this.Add_AlreadyTopics(this.childGroups)
+      this.set_determineTopic(this.childGroups)
       //------------------------------------
-      this.set_orderSort()
       this.openedFrame = false // 关闭弹窗
 
       //------------------------

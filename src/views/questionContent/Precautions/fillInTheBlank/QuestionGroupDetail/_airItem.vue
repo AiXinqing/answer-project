@@ -3,7 +3,7 @@
       <span>第</span>
       <span> {{ number }} </span>
       <span> 空 </span>
-      <el-input v-model.number="score" size="mini" @blur="changeLastSubTopicScore(SmallTopic)" @click.stop.native="clickFun"  onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+      <el-input v-model="score" size="mini" @blur="changeLastSubTopicScore(SmallTopic)" @click.stop.native="clickFun"  onkeyup.stop.native="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />
       <span>分</span>
     </div>
 </template>
@@ -24,7 +24,7 @@ export default {
   data () {
     return {
       SmallTopic: {},
-      score: this.GroupSmallTopic.score
+      score: Number(this.GroupSmallTopic.score.toString().match(/^\d+(?:\.\d{0,1})?/))
     }
   },
   watch: {

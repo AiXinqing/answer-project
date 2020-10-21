@@ -143,6 +143,10 @@ export default {
       return this.data.group.map((item) => item.childGroup)[0]
     },
 
+    childGroups(){
+      return this.data.group.map(item => item.childGroup).flat()
+    },
+
     title(){
       return !this.editQuestionId ? '新增选作题' : '编辑选作题'
     },
@@ -179,6 +183,19 @@ export default {
             : null
       },
     },
+
+    childGroups:{
+      immediate: true,
+      handler(){
+        this.Empty_AlreadyTopics()
+        if(this.childGroups.length > 0){
+          this.Add_AlreadyTopics(this.childGroups)
+        }else{
+          this.Add_AlreadyTopics(this.determineTopic)
+        }
+        this.set_currentQuestion()
+      }
+    }
   },
   mounted() {
     this.closeData = JSON.parse(JSON.stringify(this.questionData))
@@ -199,6 +216,7 @@ export default {
       'set_determineTopic',
       'set_existBigQuestion',
       'insert_existBigQuestion',
+      'delOnce_determineTopic',
     ]),
     opened() {
       this.questionData.number = this.BigQuestion
@@ -293,19 +311,21 @@ export default {
           this.set_existBigQuestion(existBigQuestionObj)
         }
         this.set_orderSort()
+        // 大题号修改
+        this.set_objectiveData(number)
       } else {
         // 编辑
+        this.delOnce_determineTopic(this.childGroups[0].pid)
         obj.id = this.editQuestionId
         this.amendPageData(obj)
         this.set_existBigQuestion({ ...existBigQuestionObj, id: obj.id })
       }
-      // 大题号修改
-      this.set_objectiveData(number)
       //------------------------------------
       this.openedFrame = false // 关闭弹窗
       // 清空弹框数据
 
-      this.set_determineTopic(this.data.group[0].childGroup)
+      this.Add_AlreadyTopics(this.childGroups)
+      this.set_determineTopic(this.childGroups)
       this.set_currentQuestion()
 
       this.data = JSON.parse(JSON.stringify(this.closeData))

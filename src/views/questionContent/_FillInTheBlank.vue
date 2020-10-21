@@ -2,12 +2,27 @@
   <!-- 填空题 -->
   <div class="question-info">
     <template v-if="questionData.first && questionData.borderTop == undefined">
-      <div class="question-title" :style="{height: data.heightTitle - 10 + 'px'}" v-if="!isEditor" @click="hanldeEditor">
-        <div class="title-span" v-html="cotent"></div>
+      <div
+        class="question-title"
+        ref="questionTitle"
+        :style="{height: data.heightTitle - 10 + 'px'}" v-if="!isEditor" @click="hanldeEditor">
+        <template v-if="!quilleditor">
+          <div class="title-span">
+            <span>{{options[data.number].label}}.</span>
+            <span>{{data.topic}}</span>
+            <span>({{data.totalScore}})分</span>
+          </div>
+        </template>
+        <template
+          v-else
+        >
+          <div class="title-span" v-html="cotent"></div>
+        </template>
       </div>
       <quill-editor
-        v-show="isEditor"
-        :topic-content="TopicContent"
+        v-if="isEditor"
+        ref="quillEditor"
+        :topic-content="cotent"
         @hanlde-close-esitor="hanldeCloseEsitor"
       />
     </template>
@@ -28,7 +43,8 @@
       @height-resize="handleResize($event)"
       :min-height="minHeight"
     >
-      <div class="content-info">
+
+      <div class="content-info" ref="questionChange" >
         <div class="content-row" v-for="(item, i) in topicGroupData" :key="i">
           <a
             v-for="row in item"
@@ -62,6 +78,28 @@
             />
           </a>
         </div>
+        <!-- <p v-for="(item, i) in topicGroupData" :key="i">
+          <span
+            v-for="row in item"
+            :key="row.id"
+            :style="{ width: pageWidth / data.rows + 'px',display:'inline-block' }"
+          >
+            {{ row.topic }}&nbsp;&nbsp;&nbsp;
+            <a
+              :style="{
+                width:
+                  row.lgTopic != 0
+                    ? 'calc(100% - ' +
+                      (row.topic.toString().length +
+                        row.lgTopic.toString().length +
+                        2) *
+                        9 +
+                      'px)'
+                    : 'calc(100% - 23px)',
+              }"
+            ></a>
+          </span>
+        </p> -->
       </div>
     </drag-change-height>
   </div>
@@ -92,6 +130,7 @@ export default {
       isEditor: false,
       cotent: '',
       options:[],
+      quilleditor:false,
     }
   },
   computed: {
@@ -110,10 +149,6 @@ export default {
       return  castHeight >= height ? rowHeight * showData.length + MarginHeight - 3 : 0
     },
 
-    TopicContent() {
-      const {number,topic,totalScore} = this.data
-      return `<span>${this.options[number].label}.</span><span>${topic}</span><span>(${totalScore})分</span>`
-    },
     pageWidth() {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 440
@@ -140,18 +175,17 @@ export default {
         this.options = this.questionNumber.map((label,value)=>({label,value}))
       },
     },
-    TopicContent: {
-      immediate: true,
-      handler() {
-        this.cotent = this.TopicContent
-      },
-    },
     heightContetn:{
       immediate: true,
       handler() {
         this.questionContetn = this.heightContetn
       },
     }
+  },
+  mounted () {
+    this.$nextTick(()=>{
+      this.cotent = this.$refs.questionChange.innerHTML
+    })
   },
   methods: {
     ...mapMutations('pageContent', [

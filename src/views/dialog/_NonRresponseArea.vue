@@ -121,7 +121,8 @@ export default {
   methods: {
     ...mapMutations('pageContent', [
       'insert_pageData',
-      'amendPageData',
+      'answer_insertPageData',
+      'Filter_pageData',
       'set_orderSort',
     ]),
     closeFrame() {
@@ -190,7 +191,12 @@ export default {
             }
           }
         } else {
-          this.amendPageData({ ...obj, id: this.editQuestionId })
+          this.Filter_pageData(this.editQuestionId)
+          let data = {
+            obj:{ ...obj, id: this.editQuestionId },
+            num:this.data.positionNum + 2
+          }
+          this.answer_insertPageData(data)
         }
         this.openedFrame = false
         this.data = JSON.parse(JSON.stringify(this.closeData))

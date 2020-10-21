@@ -290,6 +290,7 @@ export default {
       'Empty_AlreadyTopics', // 清空
       'set_existBigQuestion', //存大题号信息
       'insert_existBigQuestion',
+      'delOnce_determineTopic',
     ]),
     ...mapMutations('pageContent', [
       'initPageData',
@@ -304,7 +305,6 @@ export default {
       this.openedFrame = false
 
       this.Empty_AlreadyTopics() // 清空
-      this.Add_AlreadyTopics(this.determineTopic)
     },
     opened() {
       this.quesctionObj = JSON.parse(
@@ -448,6 +448,7 @@ export default {
         this.set_existBigQuestion({ ...existBigQuestionObj, id: obj.id })
         this.set_objectiveData() // 大题号增加
       } else {
+        this.delOnce_determineTopic(this.topicList[0].pid)
         obj.id = this.editQuestionId
         this.amendPageData(obj)
       }

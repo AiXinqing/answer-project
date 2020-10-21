@@ -302,6 +302,7 @@ export default {
       'insert_pageData',
       'Empty_PageData',
       'set_orderSort',
+      'set_objectiveData'
     ]),
     ...mapMutations('questionType', [
       'set_currentQuestion',
@@ -378,7 +379,7 @@ export default {
           height: heights,
           id: objId,
           questionType: 'compositionLanguage',
-          content: {...this.data,totalScore:score},
+          content: {...this.data,totalScore:parseFloat(score)},
           order: this.orderSort,
           first: true,
           lattice: lattice,
@@ -438,6 +439,8 @@ export default {
           }
           this.set_determineTopic([this.data])
           this.set_orderSort()
+           // 大题号修改
+          this.set_objectiveData(number)
         } else {
           this.amendPageData({ ...obj, id: this.editQuestionId })
           this.set_existBigQuestion({ ...existBigQuestionObj, id: obj.id })

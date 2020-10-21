@@ -3,9 +3,9 @@
     <el-col :span="4" class="question_tabtitle">{{childItem.topic}}</el-col>
     <el-col :span="20" class="group_item_right">
       <div>
-        <el-input v-model.number="data.score" size="mini" @blur="editHanldeVal" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
+        <el-input v-model="data.score" size="mini" @blur="editHanldeVal" onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})"/>
         <span>分,少选得</span>
-        <el-input v-model.number="data.lessScore" size="mini" @blur="editHanldeVal" :max="data.score" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
+        <el-input v-model="data.lessScore" size="mini" @blur="editHanldeVal" :max="data.score" onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />
         <span>分</span>
         <el-input v-model="data.select" size="mini" @blur="editHanldeVal" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
         <span>个选项</span>
@@ -31,8 +31,12 @@ export default {
     childItem: {
       immediate: true,
       handler () {
+        const {score,select,lessScore} = this.childItem
         this.data = {
-          ...this.childItem
+          ...this.childItem,
+          score:Number(score.toString().match(/^\d+(?:\.\d{0,1})?/)),
+          lessScore:Number(lessScore.toString().match(/^\d+(?:\.\d{0,1})?/)),
+          select: typeof(select)=='string' ? 4 : select,
         }
       }
     }

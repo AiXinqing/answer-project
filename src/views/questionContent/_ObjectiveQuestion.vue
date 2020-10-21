@@ -1,20 +1,34 @@
 <template>
 <!-- 选择题 -->
   <div class="question-info">
+    
     <template v-if="questionData.first && questionData.borderTop == undefined">
       <div
         class="question-title"
+        ref="questionTitle"
         :style="{height: data.heightTitle - 10 + 'px'}" v-if="!isEditor" @click="hanldeEditor">
-        <div class="title-span" v-html="cotent"></div>
+        <template v-if="!quilleditor">
+          <div class="title-span">
+            <span>{{options[data.number].label}}.</span>
+            <span>{{data.topic}}</span>
+            <span>({{data.totalScore}})分</span>
+          </div>
+        </template>
+        <template
+          v-else
+        >
+          <div class="title-span" v-html="cotent"></div>
+        </template>
       </div>
       <quill-editor
-        v-show="isEditor"
+        v-if="isEditor"
         ref="quillEditor"
-        :topic-content="TopicContent"
+        :topic-content="cotent"
         @hanlde-close-esitor="hanldeCloseEsitor"
       />
     </template>
-    <div class="question_array" ref="questionArray">
+    <vue-ueditor></vue-ueditor>
+    <div class="question_array">
       <div class="question_editOrDel">
         <span  class="btn_addSub_name">每组题数</span>
         <span class="btn_addSub" @click="hanldeSubtraction(questionData.id,1)">-</span>
@@ -49,10 +63,12 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import quillEditor from '../../components/quillEditor'
+import VueUeditor from '../../components/VueUeditor'
+
 export default {
   components: {
     quillEditor,
-    // questionDialog,
+    VueUeditor
   },
   props: {
     contentData: {
@@ -69,7 +85,8 @@ export default {
       data: {},
       isEditor: false,
       cotent: '',
-      options:[]
+      options:[],
+      quilleditor:false,
     }
   },
   computed: {
@@ -100,10 +117,6 @@ export default {
       groupData () {
         return this.questionData.showData.flat()
       },
-    TopicContent () {
-      const {number,topic,totalScore} = this.data
-      return `<span>${this.options[number].label}.</span><span>${topic}</span><span>(${totalScore})分</span>`
-    }
   },
   watch: {
     contentData: {
@@ -114,13 +127,12 @@ export default {
         }
         this.options = this.questionNumber.map((label,value)=>({label,value}))
       }
-    },
-    TopicContent: {
-      immediate: true,
-      handler () {
-        this.cotent = this.TopicContent
-      }
     }
+  },
+  mounted () {
+    this.$nextTick(()=>{
+      this.cotent = this.$refs.questionTitle.innerHTML
+    })
   },
   methods: {
     ...mapMutations('pageContent', ['delPageData', 'del_objectiveData',
@@ -167,14 +179,13 @@ export default {
       this.$emit('current-question-hanlde-edit', id)
     },
     hanldeEditor () {
-      console.log(this.$refs.questionArray.replace(/&lt;/g,'<'))
-      // this.cotent =  this.$refs.questionArray
       this.isEditor = true
-      this.$refs.quillEditor.focus()
+      this.quilleditor = true
     },
     hanldeCloseEsitor (content) {
       this.isEditor = false
       this.cotent = content
+      console.log(content)
     },
     hanldeSubtraction (id, num) {
       this.$emit('hanlde-subtraction', id, num)
@@ -249,7 +260,7 @@ export default {
     p{margin: 0 0}
 }
   .question-title:hover{
-     div{border-color: @main}
+    div{border-color: @main}
   }
 }
 .btn_addSub,
@@ -275,5 +286,26 @@ export default {
   color: @main;
   position: relative;
     top: 0px;
+}
+.question-info{
+  position: relative;
+  .ql-editor{
+    padding: 0 0;
+    position: relative;
+  }
+  .ql-toolbar{
+    &.ql-snow{
+      padding: 0;
+      position: absolute;
+      top: -26px;
+      z-index: 99;
+      background: #fff;
+      width: 100%;
+    }
+  }
+}
+
+.title-span{
+  p{padding: 0;margin: 0;}
 }
 </style>
