@@ -17,7 +17,7 @@ import VueUeditorWrap from 'vue-ueditor-wrap'
           // 编辑器不自动被内容撑高
           autoHeightEnabled: false,
           // 初始容器高度
-          initialFrameHeight: 240,
+          initialFrameHeight: 100,
           // 初始容器宽度
           initialFrameWidth: '100%',
           // 上传文件接口（这个地址是我为了方便各位体验文件上传功能搭建的临时接口，请勿在生产环境使用！！！部署在国外的服务器，如果无法访问，请自备梯子）

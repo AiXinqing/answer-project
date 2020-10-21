@@ -82,10 +82,22 @@
           <span
             v-for="row in item"
             :key="row.id"
-            :style="{ width: pageWidth / data.rows + 'px' }"
+            :style="{ width: pageWidth / data.rows + 'px',display:'inline-block' }"
           >
             {{ row.topic }}&nbsp;&nbsp;&nbsp;
-            <a>&nbsp;&nbsp;&nbsp;——————————</a>
+            <a
+              :style="{
+                width:
+                  row.lgTopic != 0
+                    ? 'calc(100% - ' +
+                      (row.topic.toString().length +
+                        row.lgTopic.toString().length +
+                        2) *
+                        9 +
+                      'px)'
+                    : 'calc(100% - 23px)',
+              }"
+            ></a>
           </span>
         </p> -->
       </div>
