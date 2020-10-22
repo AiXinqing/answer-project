@@ -93,7 +93,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import hjTextarea from './Precautions/_textarea'
 import studentInfo from './Precautions/_studentInfo'
 export default {
@@ -122,12 +121,11 @@ export default {
       trDiv: 9,
       studentInfoList: [],
       data:{},
-      titleRows:this.questionData.content.titleRows
+      titleRows:this.questionData.content.titleRows,
+      dataLayout:this.questionData.content.pageLayout
     }
   },
   computed: {
-    ...mapGetters('pageContent', ['dataLayout']),
-
     cardData() {
       return this.contentData[0]
     },
@@ -169,6 +167,7 @@ export default {
         this.data = {
           ...this.questionData.content
         }
+        this.dataLayout = this.questionData.content.pageLayout
         this.titleRows = this.questionData.content.titleRows
       }
     }

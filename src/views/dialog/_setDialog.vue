@@ -78,7 +78,7 @@ export default {
   },
   computed: {
     ...mapState('titleSet', ['textVal', 'titleInfo', 'titleRows']),
-    ...mapState('pageContent', ['orderSort']),
+    ...mapState('pageContent', ['orderSort','pageLayout']),
   },
   methods: {
     ...mapMutations('pageContent', [
@@ -113,7 +113,8 @@ export default {
         content: {
           textVal: this.textVal,
           titleInfo: this.titleInfo,
-          titleRows: this.titleRows
+          titleRows: this.titleRows,
+          pageLayout:this.pageLayout
         },
         order: this.orderSort,
         first: true
