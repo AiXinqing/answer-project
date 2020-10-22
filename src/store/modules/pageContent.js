@@ -20,6 +20,15 @@ const mutations = {
   initPageLayout: (state, obj) => {
     state.pageLayout = obj
   },
+  layout_pageData: (state,layout) => {
+    state.pageData = state.pageData.map(question => ({
+      ...question,
+      content:{
+        ...question.content,
+        pageLayout:layout
+      },
+    }))
+  },
   initPageData: (state, Arr) => {
     state.pageData.push(Arr)
   },

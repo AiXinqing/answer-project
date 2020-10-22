@@ -85,6 +85,7 @@ export default {
       'initPageLayout',
       'initPageData',
       'amendPageData',
+      'layout_pageData',
       'set_orderSort']),
     openRForm (type) {
       if (type === 1) {
@@ -122,6 +123,7 @@ export default {
       //
       if (change == 1) {
         this.amendPageData(TestData)
+        this.layout_pageData(this.pageLayout)
       } else {
         // 新增值
         this.initPageData(TestData)
