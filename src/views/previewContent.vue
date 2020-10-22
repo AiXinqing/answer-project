@@ -19,7 +19,10 @@
           <div
             v-for="(question, index) in pagesCrad"
             :key="index"
-            class="footer"
+            :class="[
+              'footer',
+              { answer: question.first != undefined && question.first == false },
+            ]"
             :style="{ minHeight: question.castHeight + 'px' }"
           >
             <component
@@ -80,7 +83,6 @@ export default {
         let newArray = []
         if(this.pageNum == 1){
           this.contentData = data.map(obj => ([obj]))
-          console.log(data)
         }else{
           while (index < data.length) {
             newArray.push(data.slice(index, (index += this.pageNum)))
@@ -88,15 +90,12 @@ export default {
           this.contentData = newArray
         }
 
-        console.log(this.pageNum)
       },
     },
 
   },
   mounted() {
-    this.$nextTick(() => {
-      console.log(this.pageData)
-    })
+
   },
   methods: {
     ...mapActions('pageContent', ['getPageData']),
@@ -251,11 +250,16 @@ html {
     justify-content: left;
   }
 }
-.page_info_itme .footer {
-  position: relative;
-  left: 20px;
-  width: calc(100% - 40px);
-  margin-top: 20px;
+.page_info_itme{
+  .footer {
+    position: relative;
+    left: 20px;
+    width: calc(100% - 40px);
+    margin-top: 20px;
+    &.answer{
+      margin-top:0;
+    }
+  }
 }
 .page_info_itme {
   width: 785px;

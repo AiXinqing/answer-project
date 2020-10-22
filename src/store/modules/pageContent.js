@@ -21,13 +21,38 @@ const mutations = {
     state.pageLayout = obj
   },
   layout_pageData: (state,layout) => {
-    state.pageData = state.pageData.map(question => ({
-      ...question,
-      content:{
-        ...question.content,
-        pageLayout:layout
-      },
-    }))
+    let containerWidth = layout.column === 3 && layout.size == 'A3'? 456 : 720
+    let latticeWidth = layout.column === 3 && layout.size == 'A3'? 32.5 : 30
+    let lattice = Math.floor(containerWidth / latticeWidth)
+
+    state.pageData = state.pageData.map(question => {
+
+      let row = Math.ceil(question.content.totalWordCount / lattice)
+      //行数高度 = 格子大小 + 间距（间距同上要求）
+      let rowHeight = latticeWidth + 2 + question.content.spacing
+
+      let rectHeight = row * rowHeight // 当前内容高度 45(内部高度)
+      let MarginHeight = 45
+      const heights = rectHeight + MarginHeight + 32
+      let tem = {}
+      if(question.questionType == 'compositionLanguage'){
+        tem ={
+          height:heights,
+          rowWidth:latticeWidth,
+          rowHeight:rowHeight,
+          lattice:lattice
+        }
+      }
+
+      return {
+        ...question,
+        content:{
+          ...question.content,
+          pageLayout:layout
+        },
+        ...tem
+      }
+    })
   },
   initPageData: (state, Arr) => {
     state.pageData.push(Arr)

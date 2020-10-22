@@ -171,7 +171,6 @@ export default {
       'pageHeight',
       'page_size',
       'BigQuestion',
-      'pageLayout',
       'orderSort',
       'pageData',
       'pageLayout',
