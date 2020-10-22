@@ -1,5 +1,5 @@
 <template>
-  <div class="page-content">
+  <div class="page-content preview-content">
     <div class="main-info">
       <div v-for="(pages, i) in contentData" :key="i" class="page_card">
         <div
@@ -63,20 +63,27 @@ export default {
     return {
       contentData: [],
       ces: '',
+      pageData:JSON.parse(localStorage.getItem('accessToken')),
+      pageWidth:this.$route.query.pageWidth,
+      pageNum:this.$route.query.pageNum,
     }
   },
+  created() {
+    let id = this.$route.query.pageWidth;
+    console.log(id)
+  },
   computed: {
-    ...mapState('pageContent', ['pageLayout', 'pageData', 'page_size']),
-    pageWidth() {
-      return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
-        ? 520
-        : 785
-    },
-    pageNum() {
-      return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
-        ? 3
-        : 2
-    },
+    ...mapState('pageContent', ['pageLayout',  'page_size']),
+    // pageWidth() {
+    //   return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
+    //     ? 520
+    //     : 785
+    // },
+    // pageNum() {
+    //   return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
+    //     ? 3
+    //     : 2
+    // },
   },
   watch: {
     pageData: {
@@ -93,6 +100,7 @@ export default {
         console.log(this.contentData)
       },
     },
+
   },
   mounted() {
     this.$nextTick(() => {
@@ -276,4 +284,30 @@ html {
   text-indent: 35px;
   margin-bottom: 20px;
 }
+
 </style>
+
+<style lang="less">
+  .preview-content{
+    .question-info{
+      &:hover{
+        .question_arrays{
+          display: none !important;
+        }
+        .question_editOrDel{
+          display: none !important;
+        }
+      }
+    }
+    .question-handler{
+      svg{display: none !important}
+    }
+
+    .question-title{
+      &:hover{
+        border-color: #fff;
+      }
+    }
+}
+</style>
+

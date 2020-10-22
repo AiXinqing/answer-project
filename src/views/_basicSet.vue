@@ -42,7 +42,19 @@ export default {
   },
   computed: {
     ...mapState('pageContent', ['pageLayout', 'pageData', 'page_size']),
+    pageWidth() {
+      const {column,size} = this.pageLayout
+      return column === 3 && size == 'A3'
+        ? 520
+        : 785
+    },
+    pageNum() {
+      const {column,size} = this.pageLayout
+      return column === 3 && size == 'A3' ? 3 :
+      column === 1 && size == 'A4' ? 1 :2
+    },
   },
+
   methods: {
     questionDialog() {
       this.$refs.publicDialog.opened('questionDialogs')
@@ -67,17 +79,13 @@ export default {
     },
     previewLinkFunc() {
       // 跳转至预览页面
-      //let routeTwo =
-      this.$router.push({
-        name: 'preview',
-        params: {
-          layout: this.pageLayout,
-          size: this.page_size,
-          content: this.pageData,
-        },
-      })
-      // window.open(routeTwo.href, '_blank')
-      // console.log(data)
+      let routeTwo = this.$router.resolve(
+        {
+          name: 'preview',
+          query: {pageWidth: this.pageWidth,pageNum:this.pageNum}
+        }
+      )
+      window.open(routeTwo.href, '_blank')
     },
   },
 }

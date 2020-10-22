@@ -71,6 +71,19 @@ export default {
       heightArray: [],
     }
   },
+  beforeRouteLeave(to, from, next) {
+    this.$confirm('正在离开本页面，本页面内所有未保存数据都会丢失', '警告', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+       // 正常跳转
+       next()
+     }).catch(() => {
+       // 如果取消跳转地址栏会变化，这时保持地址栏不变
+       window.history.go(1)
+     })
+  },
   computed: {
     ...mapState('pageContent', [
       'pageLayout',
@@ -98,17 +111,9 @@ export default {
             this.set_pageHeight(this.heightArray)
           })
         }
+        localStorage.setItem('accessToken', JSON.stringify(this.pageData))
       },
     },
-  },
-  mounted () {
-    axios.get('/public/pageData.json').then(({
-      data
-    }) => {
-      if (data) {
-        console.log(data)
-      }
-    })
   },
   methods: {
     ...mapMutations('pageContent', ['set_pageHeight','resetScore','overlayScore']),

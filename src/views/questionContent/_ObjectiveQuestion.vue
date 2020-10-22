@@ -1,7 +1,7 @@
 <template>
 <!-- 选择题 -->
   <div class="question-info">
-    
+
     <template v-if="questionData.first && questionData.borderTop == undefined">
       <div
         class="question-title"
@@ -27,7 +27,7 @@
         @hanlde-close-esitor="hanldeCloseEsitor"
       />
     </template>
-    <vue-ueditor></vue-ueditor>
+    <!-- <vue-ueditor></vue-ueditor> -->
     <div class="question_array">
       <div class="question_editOrDel">
         <span  class="btn_addSub_name">每组题数</span>
