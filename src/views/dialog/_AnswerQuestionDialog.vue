@@ -126,7 +126,8 @@ export default {
       'page_size',
       'BigQuestion',
       'orderSort',
-      'pageData'
+      'pageData',
+      'pageLayout',
     ]),
     ...mapState('answerQuestion', ['answerQuestionArr',]),
 
@@ -303,7 +304,10 @@ export default {
           height: index == 0 ? rectHeight + 32 : rectHeight,
           MarginHeight: 12,
           ...item,
-          content: this.dataTopic,
+          content: {
+            ...this.dataTopic,
+            pageLayout:this.pageLayout,
+          },
           first: index === 0 ? true : false,
           questionType: 'answerQuestion',
           objId: objId,

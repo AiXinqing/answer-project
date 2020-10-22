@@ -91,7 +91,7 @@ export default {
   },
   computed: {
     ...mapState('questionType', ['questionNumber', 'letterArr']),
-    ...mapState('pageContent', ['pageData', 'pageLayout']),
+    ...mapState('pageContent', ['pageData']),
     strLong() {
       let long = this.contentData.topic.toString().length
       return parseInt(long) * 8 + 1

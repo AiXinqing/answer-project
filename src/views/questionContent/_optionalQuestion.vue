@@ -85,7 +85,7 @@ export default {
   },
   computed: {
     ...mapState('questionType', ['questionNumber', 'letterArr']),
-    ...mapState('pageContent', ['pageData', 'pageLayout']),
+    ...mapState('pageContent', ['pageData']),
 
     heightContetn(){
       const {borderTop,heightTitle,castHeight} = this.questionData

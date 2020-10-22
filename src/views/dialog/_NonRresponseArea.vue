@@ -67,7 +67,7 @@ export default {
   },
   computed: {
     ...mapState('questionType', ['questionNumber', 'existBigQuestion']),
-    ...mapState('pageContent', ['orderSort', 'pageData']),
+    ...mapState('pageContent', ['orderSort', 'pageData','pageLayout']),
     errorMessage() {
       return this.errorVal != '' ? true : false
     },
@@ -169,7 +169,10 @@ export default {
           order: this.orderVal,
           first: true,
           rowHeight: 37,
-          content: this.data,
+          content: {
+            ...this.data,
+            pageLayout:this.pageLayout
+          },
         }
         if (this.editQuestionId == null) {
           let index = this.existBigQuestion.findIndex(

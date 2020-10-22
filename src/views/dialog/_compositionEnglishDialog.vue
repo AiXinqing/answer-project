@@ -143,6 +143,7 @@ export default {
       'BigQuestion',
       'orderSort',
       'pageData',
+      'pageLayout',
     ]),
     errorMessage() {
       return this.errorVal != '' ? true : false
@@ -316,7 +317,11 @@ export default {
           rowHeight: 36,
           id: objId,
           questionType: 'compositionEnglish',
-          content: {...this.data,totalScore:parseFloat(score)},
+          content: {
+            ...this.data,
+            totalScore:parseFloat(score),
+            pageLayout:this.pageLayout,
+          },
           order: this.orderSort,
           first: true,
           BeforeEditing:

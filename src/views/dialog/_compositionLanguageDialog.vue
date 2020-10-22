@@ -174,6 +174,7 @@ export default {
       'pageLayout',
       'orderSort',
       'pageData',
+      'pageLayout',
     ]),
     containerWidth() {
       // 格子承载宽度
@@ -379,7 +380,11 @@ export default {
           height: heights,
           id: objId,
           questionType: 'compositionLanguage',
-          content: {...this.data,totalScore:parseFloat(score)},
+          content: {
+            ...this.data,
+            totalScore:parseFloat(score),
+            pageLayout:this.pageLayout
+          },
           order: this.orderSort,
           first: true,
           lattice: lattice,

@@ -134,7 +134,7 @@ export default {
       'determineTopic',
       'existBigQuestion',
     ]),
-    ...mapState('pageContent', ['BigQuestion', 'orderSort', 'pageData']),
+    ...mapState('pageContent', ['BigQuestion', 'orderSort', 'pageData','pageLayout']),
     ...mapState('answerQuestion', ['answerQuestionArr']),
     errorMessage() {
       return this.errorVal != '' ? true : false
@@ -258,7 +258,11 @@ export default {
         rowHeight: 35,
         id: objId,
         questionType: 'optionalQuestion',
-        content:{...this.data,totalScore:group[0].totalScore},
+        content:{
+          ...this.data,
+          totalScore:group[0].totalScore,
+          pageLayout:this.pageLayout
+        },
         order: this.orderSort,
         first: true,
       }
