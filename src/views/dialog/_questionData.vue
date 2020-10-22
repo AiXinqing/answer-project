@@ -394,7 +394,10 @@ export default {
         id: objId,
         height: heights + 32, // 32标题高度
         questionType: 'ObjectiveQuestion',
-        content: this.objectiveData,
+        content: {
+          ...this.objectiveData,
+          pageLayout:this.pageLayout
+        },
         order: this.orderSort,
         showData:this.topicGroupData,
         first: true,

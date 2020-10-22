@@ -87,6 +87,7 @@ export default {
       cotent: '',
       options:[],
       quilleditor:false,
+      pageLayout:this.contentData.pageLayout,
     }
   },
   computed: {
@@ -126,6 +127,7 @@ export default {
           ...this.contentData
         }
         this.options = this.questionNumber.map((label,value)=>({label,value}))
+        this.pageLayout = this.contentData.pageLayout
       }
     }
   },

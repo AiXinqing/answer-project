@@ -37,7 +37,6 @@ export default {
   },
   methods: {
     ...mapMutations('titleSet', ['editTitleInfo']),
-    ...mapMutations('pageContent', ['amendPageData']),
     closeFrame () {
       this.openedFrame = false
     },
@@ -49,13 +48,6 @@ export default {
 
     },
     preCreateTitle () {
-      let answerTitle = this.pageData[0]
-      this.amendPageData({
-        ...answerTitle,
-        content:{
-          ...answerTitle.content,
-          titleInfo:this.studentTitle}
-      })
       this.editTitleInfo(this.studentTitle)
       this.closeFrame()
     },
