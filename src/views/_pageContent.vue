@@ -42,7 +42,7 @@
 
 <script>
 import { mapState, mapMutations} from 'vuex'
-import axios from 'axios'
+
 import AnswerSheetTitle from './questionContent/_answerSheetTitle' // 答题卡标题
 import ObjectiveQuestion from './questionContent/_ObjectiveQuestion' // 客观题
 import FillInTheBlank from './questionContent/_FillInTheBlank' // 填空题
@@ -77,12 +77,12 @@ export default {
       cancelButtonText: '取消',
       type: 'warning'
     }).then(() => {
-       // 正常跳转
-       next()
-     }).catch(() => {
-       // 如果取消跳转地址栏会变化，这时保持地址栏不变
-       window.history.go(1)
-     })
+      // 正常跳转
+      next()
+    }).catch(() => {
+      // 如果取消跳转地址栏会变化，这时保持地址栏不变
+      window.history.go(1)
+    })
   },
   computed: {
     ...mapState('pageContent', [

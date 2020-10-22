@@ -1,10 +1,14 @@
 <template>
   <div>
     <div class="textVal-style" v-if="previewIs">
-      {{ textVal == '' ? '请输入答题卡标题' : textVal }}
+      {{ data.textVal == '' ? '请输入答题卡标题' : data.textVal }}
     </div>
-    <hj-textarea v-else :textarea-data="textVal" />
-    <student-info @hanldeStudent="hanldeStudent" :preview-is="previewIs" />
+    <hj-textarea v-else :textarea-data="data.textVal" @change="textareaChange" />
+    <student-info
+      @hanldeStudent="hanldeStudent"
+      :title-info= "data.titleInfo"
+      :preview-is="previewIs"
+    />
     <el-row class="precautions_box">
       <el-col
         :span="12"
@@ -108,11 +112,16 @@ export default {
       type: Boolean,
       default: false,
     },
+    questionData: {
+      type: Object,
+      default: () => { }
+    }
   },
   data() {
     return {
       trDiv: 9,
       studentInfoList: [],
+      data:{}
     }
   },
   computed: {
@@ -153,7 +162,21 @@ export default {
         : this.Rows - 1
     },
   },
-  mounted() {},
+  watch: {
+    questionData: {
+      immediate: true,
+      handler () {
+        this.data = {
+          ...this.questionData.content
+        }
+        console.log(this.data)
+      }
+    }
+  },
+  mounted() {
+    console.log(this.previewIs)
+    console.log(this.questionData)
+  },
   methods: {
     hanldeStudent(Arr) {
       this.$emit('hanldeStudent', Arr)
@@ -162,6 +185,9 @@ export default {
       this.$emit('edit-admission-number')
     },
     hanldeCloseEsitor(){
+    },
+    textareaChange(){
+      console.log(1)
     }
   },
 }

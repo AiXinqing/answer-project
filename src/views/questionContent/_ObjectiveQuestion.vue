@@ -63,12 +63,12 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import quillEditor from '../../components/quillEditor'
-import VueUeditor from '../../components/VueUeditor'
+// import VueUeditor from '../../components/VueUeditor'
 
 export default {
   components: {
     quillEditor,
-    VueUeditor
+    // VueUeditor
   },
   props: {
     contentData: {

@@ -156,7 +156,6 @@ const mutations = {
     state.orderSort = state.orderSort + 1
   },
   del_orderSort: (state, order) => {
-    console.log(order)
     state.pageData.map((item) =>
       item.order > order ? item.order - 1 : item.order
     )
