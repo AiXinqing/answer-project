@@ -45,12 +45,17 @@
       <hj-button type="cancel" @click="closeFrame">取 消</hj-button>
       <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateTitle(1)">确 定</hj-button>
     </div>
+    <question-dialog ref="questionDialogs" />
   </hj-dialog>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex'
+import questionDialog from '../dialog/_questionData'
 export default {
+  components: {
+    questionDialog,
+  },
   props: {
     propLayout: {
       type: Object,
@@ -78,7 +83,7 @@ export default {
   },
   computed: {
     ...mapState('titleSet', ['textVal', 'titleInfo', 'titleRows']),
-    ...mapState('pageContent', ['orderSort','pageLayout']),
+    ...mapState('pageContent', ['orderSort','pageLayout','pageData']),
   },
   methods: {
     ...mapMutations('pageContent', [
@@ -122,20 +127,16 @@ export default {
       }
       //
       if (change == 1) {
+        this.openedFrame = false
         this.amendPageData(TestData)
-        this.layout_pageData(this.pageLayout)
+
+        this.pageData.filter(obj => obj.questionType == 'ObjectiveQuestion').forEach(element => {
+          this.$refs.questionDialogs.layoutEdit(element)
+        })
+        setTimeout(function() { this.layout_pageData(this.pageLayout) }, 500)
       } else {
         // 新增值
         this.initPageData(TestData)
-        // 临时测试题-----------------------------
-        // let text = {
-        //   id: 2,
-        //   height: 380,
-        //   questionType: 'ObjectiveQuestion',
-        //   content: '',
-        // }
-        // this.initPageData(text)
-        // 临时测试题------------------------------
       }
       // order排序
       this.set_orderSort()

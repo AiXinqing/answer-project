@@ -351,6 +351,59 @@ export default {
       this.openedFrame = true
       this.set_currentQuestion()
     },
+
+    layoutEdit(obj){
+      // 改变页面布局使用
+
+      const {group,rows} = obj.content
+      const{singleBox,checkbox,judgment} = group
+      const singleArr = this.traverse(singleBox, this.letterArr)
+      const checkArr = this.traverse(checkbox, this.letterArr)
+      const judgmentArr = this.traverse(judgment, this.letterArr)
+      let topicList = [...singleArr, ...checkArr, ...judgmentArr]
+
+      let result = []
+      for (var i = 0; i < topicList.length; i += rows) {
+        result.push(topicList.slice(i, i + rows))
+      }
+
+      const maxWidth = []
+      result.filter((item) => {
+        let widthS = item.map((row) => row.width)
+        maxWidth.push(Math.max.apply(null, widthS))
+      })
+      let heights = this.HeightCalculation(maxWidth, result)
+
+      let RowArr = []
+      let columnArr = []
+      let widthSum = 0
+      result.forEach(item => {
+        let maxWidth = Math.max.apply(Math, item.map(function(o) {return o.width}))
+        widthSum += maxWidth
+
+        if(widthSum < 745 ){
+          columnArr.push(item)
+        }else{
+          RowArr.push(columnArr)
+          widthSum = maxWidth
+          columnArr = []
+          columnArr.push(item)
+        }
+
+      })
+
+      if(columnArr.length > 0){
+        RowArr.push(columnArr)
+      }
+
+      this.amendPageData({
+        ...obj,
+        height: heights + 32,
+        showData:RowArr
+      })
+
+      return heights
+    },
     preCreateQuestion() {
       // 数据编辑完成添加至全局数组中---------------
       const {
