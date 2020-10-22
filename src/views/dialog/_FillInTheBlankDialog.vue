@@ -338,7 +338,11 @@ export default {
         height: height, // 32标题高度
         rowHeight: 45,
         questionType: 'FillInTheBlank',
-        content: { ...this.objectiveData, totalScore: totalScore },
+        content: {
+          ...this.objectiveData,
+          totalScore: totalScore,
+          pageLayout:this.pageLayout
+        },
         order: this.orderSort,
         showData: this.topicGroupData,
         first: true,

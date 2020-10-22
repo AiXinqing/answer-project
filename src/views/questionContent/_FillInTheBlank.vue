@@ -131,11 +131,12 @@ export default {
       cotent: '',
       options:[],
       quilleditor:false,
+      pageLayout:this.contentData.pageLayout,
     }
   },
   computed: {
     ...mapState('questionType', ['questionNumber', 'letterArr']),
-    ...mapState('pageContent', ['pageData', 'pageLayout']),
+    ...mapState('pageContent', ['pageData']),
     heightContetn(){
       const {castHeight,heightTitle,height} = this.questionData
       let obj = {
@@ -173,6 +174,7 @@ export default {
           ...this.contentData,
         }
         this.options = this.questionNumber.map((label,value)=>({label,value}))
+        this.pageLayout = this.contentData.pageLayout
       },
     },
     heightContetn:{
