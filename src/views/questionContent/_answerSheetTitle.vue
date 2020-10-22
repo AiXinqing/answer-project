@@ -3,7 +3,7 @@
     <div class="textVal-style" v-if="previewIs">
       {{ data.textVal == '' ? '请输入答题卡标题' : data.textVal }}
     </div>
-    <hj-textarea v-else :textarea-data="data.textVal" @change="textareaChange" />
+    <hj-textarea v-else :textarea-data="data.textVal" />
     <student-info
       @hanldeStudent="hanldeStudent"
       :title-info= "data.titleInfo"
@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import hjTextarea from './Precautions/_textarea'
 import studentInfo from './Precautions/_studentInfo'
 export default {
@@ -121,11 +121,11 @@ export default {
     return {
       trDiv: 9,
       studentInfoList: [],
-      data:{}
+      data:{},
+      titleRows:this.questionData.content.titleRows
     }
   },
   computed: {
-    ...mapState('titleSet', ['textVal', 'titleInfo', 'titleRows']),
     ...mapGetters('pageContent', ['dataLayout']),
 
     cardData() {
@@ -137,7 +137,7 @@ export default {
         : 745
     },
     Rows() {
-      return this.titleRows == 9 && this.rectWidth == 480 ? 26 : 28
+      return this.data.titleRows == 9 && this.rectWidth == 480 ? 26 : 28
     },
     svg() {
       return this.rectWidth == 480 ? true : false
@@ -169,13 +169,12 @@ export default {
         this.data = {
           ...this.questionData.content
         }
-        console.log(this.data)
+        this.titleRows = this.questionData.content.titleRows
       }
     }
   },
   mounted() {
-    console.log(this.previewIs)
-    console.log(this.questionData)
+
   },
   methods: {
     hanldeStudent(Arr) {
@@ -185,9 +184,6 @@ export default {
       this.$emit('edit-admission-number')
     },
     hanldeCloseEsitor(){
-    },
-    textareaChange(){
-      console.log(1)
     }
   },
 }
@@ -308,6 +304,7 @@ export default {
   font-size: 23px;
   border-color: @font-888;
   color: @font-666;
+  max-height: 65px;
 }
 table tr td div:last-child {
   margin-bottom: 6px;
