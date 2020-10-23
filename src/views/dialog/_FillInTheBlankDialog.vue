@@ -101,7 +101,7 @@ export default {
       existNumber: null,
       spaceTopic: {
         number: 0,
-        topic: '填空题',
+        topicName: '填空题',
         rows: 4,
         startQuestion: 1,
         InsertTitle: false,

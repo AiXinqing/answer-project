@@ -106,7 +106,7 @@ export default {
       existNumber: null,
       questionData: {
         number: 0,
-        topic: '选作题',
+        topicName: '选作题',
         rows: 6,
         startQuestion: 1,
         HorizontalLine: false, // 横行

@@ -95,7 +95,7 @@ export default {
       previous:null,
       questionData: {
         number: 0,
-        topic: '解答题',
+        topicName: '解答题',
         rows: 6,
         startQuestion: 1,
         HorizontalLine: false, // 横行

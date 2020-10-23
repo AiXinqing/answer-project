@@ -99,7 +99,7 @@ export default {
       existNumber: null,
       quesctionObj: {
         number: 1,
-        topic: '选择题',
+        topicName: '选择题',
         rows: 5,
         startQuestion: 1,
         InsertTitle: false,

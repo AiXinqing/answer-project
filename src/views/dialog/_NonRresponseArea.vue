@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations,mapGetters } from 'vuex'
 export default {
   data() {
     return {
@@ -66,8 +66,9 @@ export default {
     }
   },
   computed: {
-    ...mapState('questionType', ['questionNumber', 'questionNumber_big_exist']),
+    ...mapState('questionType', ['questionNumber']),
     ...mapState('pageContent', ['questionOrder', 'pageData','pageLayout']),
+    ...mapGetters('pageContent', ['questionNumber_big_exist']),
     errorMessage() {
       return this.errorVal != '' ? true : false
     },

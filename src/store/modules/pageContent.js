@@ -1,6 +1,8 @@
-import axios from 'axios'
 
 const state = {
+  questionNumber: ['一','二','三','四','五','六','七','八',
+  '九','十','十一','十二','十三','十四','十五','十六','十七',
+  '十八','十九','二十','二十一','二十二','二十三','二十四'],
   pageLayout: {}, // 页面布局
   pageData: [],
   page_size: 1170 - 60, // 一页高度
@@ -207,23 +209,31 @@ const mutations = {
   },
 }
 
-const actions = {
-  // getPageData: (context) => {
-  //   axios.get('./pageData.json').then(({
-  //     data
-  //   }) => {
-  //     if (data) {
-  //       context.commit('pageLayout_change', data.pageLayout)
-  //       context.commit('pageData_add', data.data)
-  //     }
-  //   })
-  // },
-}
+const actions = {}
 
 const getters = {
   dataLayout: (state) => {
     return state.pageLayout
   },
+  questionNumber_big_exist:(state) => {
+    // 大题号
+    let obj = {}
+    return state.pageData.filter(question => question.content.number != undefined)
+          .map((question,index) => {
+            let {number,topicName} = question.content
+            return {
+              id:question.id,
+              label:state.questionNumber[number]+'.'+ topicName,
+              order:question.order,
+              value:index
+            }
+          }).reduce((acc,cur) => {
+            obj[cur.label] ? '' : obj[cur.label] = true && acc.push(cur)
+            return acc.map(question => {
+              return question.label == cur.label ? cur : question
+            })
+          },[])
+  }
 }
 
 export default {

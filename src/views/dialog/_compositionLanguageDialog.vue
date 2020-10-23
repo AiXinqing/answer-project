@@ -130,13 +130,12 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations,mapGetters } from 'vuex'
 export default {
   components: {},
   data() {
     return {
       data: {},
-      title: '设置',
       openedFrame: false,
       closeData: {},
       editQuestionId: null,
@@ -144,7 +143,7 @@ export default {
       existNumber: null,
       questionData: {
         number: 1, // 大题号
-        name: '作文', // 题目
+        topicName: '作文', // 题目
         Attach: false,
         topic: 1,
         score: '',
@@ -165,16 +164,18 @@ export default {
       'questionNumber',
       'subTopic_number',
       'subTopic_number_determine',
-      'questionNumber_big_exist',
     ]),
     ...mapState('pageContent', [
       'pageHeight',
       'page_size',
-      'questionNumber_big',
       'questionOrder',
       'pageData',
       'pageLayout',
     ]),
+    ...mapGetters('pageContent', ['questionNumber_big_exist']),
+    questionNumber_big(){
+      return this.questionNumber_big_exist.length
+    },
     containerWidth() {
       // 格子承载宽度
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
@@ -186,6 +187,9 @@ export default {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 32.5
         : 30
+    },
+    title(){
+      return this.editQuestionId ? '编辑作文' : '设置'
     },
     pageRow() {
       // 一页所占用的行数
@@ -301,16 +305,13 @@ export default {
       'pageData_edit',
       'pageData_insert',
       'pageData_id_clean',
-      'questionOrder_add',
-      'questionNumber_big_add'
+      'questionOrder_add'
     ]),
     ...mapMutations('questionType', [
       'subTopic_number_calculate',
       'subTopic_already_reset',
       'subTopic_already_add',
       'subTopic_calculate_determine',
-      'questionNumber_big_exist_edit',
-      'questionNumber_big_exist_insert',
     ]),
     opened() {
       this.questionData = JSON.parse(
@@ -333,7 +334,6 @@ export default {
       this.editQuestionId = obj.id
       this.openedFrame = true
       this.data = JSON.parse(JSON.stringify(obj.content))
-      this.title = '编辑作文'
     },
     closeFrame() {
       // 关闭弹窗
@@ -354,7 +354,7 @@ export default {
       }
     },
     preCreateQuestion() {
-      const { spacing, totalWordCount, InsertTitle, Postpone,name,number,score } = this.data
+      const { spacing, totalWordCount, InsertTitle, Postpone,score } = this.data
       this.errorVal = this.tabStatusVal
 
       if (!this.tabStatus) {
@@ -396,14 +396,6 @@ export default {
         }
         this.subTopic_already_add([this.data])
 
-        //存在大题追加
-        let questionNumber_big_existObj = {
-          id: objId,
-          label: `${this.options[number].label}.${name}`,
-          value: number,
-          order: this.questionOrder,
-        }
-
         if (this.editQuestionId == null) {
           if (InsertTitle && this.questionNumber_big_exist.length > 0) {
             let index = this.questionNumber_big_exist.findIndex(
@@ -425,29 +417,16 @@ export default {
                   SelfOrder: Postpone,
                 }
                 this.pageData_insert(data)
-                //-------------------------------------------------已选大题数组
-                this.questionNumber_big_exist_insert({
-                  obj: {
-                    ...questionNumber_big_existObj,
-                    order: this.questionNumber_big_exist[index].order + 1,
-                  },
-                  num: this.existNumber,
-                  order: this.questionNumber_big_exist[index].order,
-                  SelfOrder: Postpone,
-                })
               }
             }
           } else {
             this.pageData_add(obj)
-            this.questionNumber_big_exist_edit(questionNumber_big_existObj)
           }
           this.subTopic_calculate_determine([this.data])
           this.questionOrder_add()
-           // 大题号修改
-          this.questionNumber_big_add(number)
+
         } else {
           this.pageData_edit({ ...obj, id: this.editQuestionId })
-          this.questionNumber_big_exist_edit({ ...questionNumber_big_existObj, id: obj.id })
         }
         this.subTopic_number_calculate()
         this.data = JSON.parse(JSON.stringify(this.closeData))
