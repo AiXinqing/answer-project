@@ -136,7 +136,7 @@ export default {
       'pageData',
       'pageLayout',
       'BigQuestion',
-      'orderSort',
+      'questionOrder',
     ]),
     pageWidth() {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
@@ -288,7 +288,7 @@ export default {
       'pageData_edit',
       'pageData_insert',
       'set_objectiveData',
-      'set_orderSort',
+      'set_questionOrder',
     ]),
     closeFrame() {
       // 关闭弹框
@@ -343,7 +343,7 @@ export default {
           scoreTotal: scoreTotal,
           pageLayout:this.pageLayout
         },
-        order: this.orderSort,
+        order: this.questionOrder,
         showData: this.topicGroupData,
         first: true,
         // 此题总分
@@ -388,7 +388,7 @@ export default {
           this.pageData_add(obj)
           this.set_existBigQuestion(existBigQuestionObj)
         }
-        this.set_orderSort()
+        this.set_questionOrder()
         this.set_objectiveData(this.spaceTopic.number) // 大题号修改
       } else {
         this.delOnce_determineTopic(this.childGroups[0].pid)

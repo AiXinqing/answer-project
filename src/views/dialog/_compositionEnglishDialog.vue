@@ -141,7 +141,7 @@ export default {
       'pageHeight',
       'page_size',
       'BigQuestion',
-      'orderSort',
+      'questionOrder',
       'pageData',
       'pageLayout',
     ]),
@@ -257,7 +257,7 @@ export default {
       'pageData_edit',
       'pageData_insert',
       'pageData_id_clean',
-      'set_orderSort',
+      'set_questionOrder',
       'set_objectiveData'
     ]),
     ...mapMutations('questionType', [
@@ -322,7 +322,7 @@ export default {
             scoreTotal:parseFloat(score),
             pageLayout:this.pageLayout,
           },
-          order: this.orderSort,
+          order: this.questionOrder,
           first: true,
           BeforeEditing:
             this.editQuestionId != null
@@ -335,7 +335,7 @@ export default {
           id: objId,
           label: `${this.options[number].label}.${name}`,
           value: number,
-          order: this.orderSort,
+          order: this.questionOrder,
         }
 
         if (this.editQuestionId == null) {
@@ -375,7 +375,7 @@ export default {
             this.set_existBigQuestion(existBigQuestionObj)
           }
           this.set_determineTopic([this.data])
-          this.set_orderSort()
+          this.set_questionOrder()
           // 大题号修改
           this.set_objectiveData(number)
         } else {

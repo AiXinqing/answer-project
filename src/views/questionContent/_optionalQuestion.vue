@@ -144,7 +144,7 @@ export default {
   //   this.$nextTick(()=>)
   // },
   methods: {
-    ...mapMutations('pageContent', ['pageData_del', 'del_objectiveData', 'del_orderSort','pageData_edit']),
+    ...mapMutations('pageContent', ['pageData_del', 'del_objectiveData', 'del_questionOrder','pageData_edit']),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
@@ -166,7 +166,7 @@ export default {
       if (index > -1) {
         this.del_determineTopic(this.topicData)
         this.del_AlreadyTopics(this.topicData)
-        this.del_orderSort(this.pageData[index].order + 1)
+        this.del_questionOrder(this.pageData[index].order + 1)
         this.pageData_del(index)
         this.set_currentQuestion()
         this.del_objectiveData() // 删减一个大题号

@@ -83,7 +83,7 @@ export default {
   },
   computed: {
     ...mapState('titleSet', ['textVal', 'titleInfo', 'titleRows']),
-    ...mapState('pageContent', ['orderSort','pageLayout','pageData']),
+    ...mapState('pageContent', ['questionOrder','pageLayout','pageData']),
   },
   methods: {
     ...mapMutations('pageContent', [
@@ -91,7 +91,7 @@ export default {
       'pageData_add',
       'pageData_edit',
       'layout_pageData',
-      'set_orderSort']),
+      'set_questionOrder']),
     openRForm (type) {
       if (type === 1) {
         this.createLayout = true
@@ -122,7 +122,7 @@ export default {
           titleRows: this.titleRows,
           pageLayout:this.pageLayout
         },
-        order: this.orderSort,
+        order: this.questionOrder,
         first: true
       }
       //
@@ -139,7 +139,7 @@ export default {
         this.pageData_add(TestData)
       }
       // order排序
-      this.set_orderSort()
+      this.set_questionOrder()
       this.openedFrame = false
     },
     hanldeTab (item) {

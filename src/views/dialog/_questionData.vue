@@ -164,7 +164,7 @@ export default {
       'pageLayout',
       'BigQuestion',
       'pageData',
-      'orderSort',
+      'questionOrder',
     ]),
     pageWidth() {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
@@ -297,7 +297,7 @@ export default {
       'pageData_edit',
       'pageData_insert',
       'set_objectiveData',
-      'set_orderSort',
+      'set_questionOrder',
     ]),
     closeFrame() {
       // 取消弹框
@@ -451,7 +451,7 @@ export default {
           ...this.objectiveData,
           pageLayout:this.pageLayout
         },
-        order: this.orderSort,
+        order: this.questionOrder,
         showData:this.topicGroupData,
         first: true,
       }
@@ -460,7 +460,7 @@ export default {
         id: objId,
         label: `${this.options[number].label}.${topic}`,
         value: number,
-        order: this.orderSort,
+        order: this.questionOrder,
       }
 
       if (this.editQuestionId == null) {
@@ -500,7 +500,7 @@ export default {
           this.pageData_add(obj)
         }
 
-        this.set_orderSort()
+        this.set_questionOrder()
         this.set_existBigQuestion({ ...existBigQuestionObj, id: obj.id })
         this.set_objectiveData() // 大题号增加
       } else {

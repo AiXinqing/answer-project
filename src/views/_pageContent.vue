@@ -89,7 +89,7 @@ export default {
       'pageLayout',
       'pageData',
       'page_size',
-      'orderSort',
+      'questionOrder',
     ]),
 
     pageWidth() {

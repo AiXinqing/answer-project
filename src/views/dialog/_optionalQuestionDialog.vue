@@ -134,7 +134,7 @@ export default {
       'determineTopic',
       'existBigQuestion',
     ]),
-    ...mapState('pageContent', ['BigQuestion', 'orderSort', 'pageData','pageLayout']),
+    ...mapState('pageContent', ['BigQuestion', 'questionOrder', 'pageData','pageLayout']),
     ...mapState('answerQuestion', ['answerQuestionArr']),
     errorMessage() {
       return this.errorVal != '' ? true : false
@@ -207,7 +207,7 @@ export default {
       'pageData_edit',
       'pageData_insert',
       'set_objectiveData',
-      'set_orderSort',
+      'set_questionOrder',
     ]),
     ...mapMutations('questionType', [
       'set_currentQuestion',
@@ -263,7 +263,7 @@ export default {
           scoreTotal:group[0].scoreTotal,
           pageLayout:this.pageLayout
         },
-        order: this.orderSort,
+        order: this.questionOrder,
         first: true,
       }
       //存在大题追加
@@ -271,7 +271,7 @@ export default {
         id: objId,
         label: `${this.options[number].label}.${topic}`,
         value: number,
-        order: this.orderSort,
+        order: this.questionOrder,
       }
 
       if (this.editQuestionId == null) {
@@ -314,7 +314,7 @@ export default {
           this.pageData_add(obj)
           this.set_existBigQuestion(existBigQuestionObj)
         }
-        this.set_orderSort()
+        this.set_questionOrder()
         // 大题号修改
         this.set_objectiveData(number)
       } else {

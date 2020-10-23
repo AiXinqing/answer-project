@@ -6,7 +6,7 @@ const state = {
   page_size: 1170 - 60, // 一页高度
   BigQuestion: 0, // 大题题号
   pageHeight: [], // 页面高度
-  orderSort: 0, // 排序
+  questionOrder: 0, // 题序
   scoreTotal:0, // 试卷总分
 }
 
@@ -110,20 +110,18 @@ const mutations = {
       }
     }, 100)
   },
-
-  answer_editPageOrder: (state, data) => {
-    // 解答题
-    state.pageData.forEach((question,index) => {
-      if(question.objId === data.objId){
-        state.pageData.splice(index, 1, {...question,previousOrder:data.num})
-      }
-    })
-  },
-
-  answer_insertPageData: (state, data) => {
+  pageData_simple_insert: (state, data) => {
     // 解答题插入
     state.pageData.splice(data.num, 0, data.obj)
   },
+  pageData_order_edit: (state, data) => {
+    // 解答题
+    state.pageData = state.pageData.map(question => ({
+      ...question,
+      previousOrder:question.objId === data.objId ? data.num : question.previousOrder
+    }))
+  },
+
 
 
   set_objectiveData: (state) => {
@@ -159,14 +157,14 @@ const mutations = {
     }
     state.pageHeight = results
   },
-  set_orderSort: (state) => {
-    state.orderSort = state.orderSort + 1
+  set_questionOrder: (state) => {
+    state.questionOrder = state.questionOrder + 1
   },
-  del_orderSort: (state, order) => {
+  del_questionOrder: (state, order) => {
     state.pageData.map((item) =>
       item.order > order ? item.order - 1 : item.order
     )
-    state.orderSort = state.orderSort - 1
+    state.questionOrder = state.questionOrder - 1
   },
   layout_pageData: (state,layout) => {
     let containerWidth = layout.column === 3 && layout.size == 'A3'? 456 : 720

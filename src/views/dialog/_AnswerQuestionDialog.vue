@@ -125,7 +125,7 @@ export default {
       'pageHeight',
       'page_size',
       'BigQuestion',
-      'orderSort',
+      'questionOrder',
       'pageData',
       'pageLayout',
     ]),
@@ -242,10 +242,10 @@ export default {
       'pageData_edit',
       'pageData_insert',
       'set_objectiveData',
-      'set_orderSort',
-      'del_orderSort',
+      'set_questionOrder',
+      'del_questionOrder',
       'pageData_objId_filter',
-      'answer_insertPageData'
+      'pageData_simple_insert'
     ]),
     ...mapMutations('questionType', [
       'set_AlreadyTopics',
@@ -296,7 +296,7 @@ export default {
       let Arr = []
       let objId = `answer_${+new Date()}`
       let rectHeight = this.dataTopic.rows * 35 + 12 + 20 // 小题初始高度
-      let orders = this.orderSort - 1 // 题型排序序列号
+      let orders = this.questionOrder - 1 // 题型排序序列号
       this.RefactorData.forEach((item, index) => {
         orders += 1
         let obj = {
@@ -315,10 +315,10 @@ export default {
           rowHeight:35,
           order: orders,
           scoreTotal:++item.score,
-          previousOrder:this.orderSort - 1 // 解答题插入前的序列号
+          previousOrder:this.questionOrder - 1 // 解答题插入前的序列号
         }
         Arr.push(obj)
-        this.set_orderSort()
+        this.set_questionOrder()
       })
 
       //存在大题追加
@@ -400,7 +400,7 @@ export default {
               num: previous,
             }
 
-            this.answer_insertPageData(data)
+            this.pageData_simple_insert(data)
           })
         this.delOnce_determineTopic(this.childGroups[0].pid)
       }

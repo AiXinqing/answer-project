@@ -67,7 +67,7 @@ export default {
   },
   computed: {
     ...mapState('questionType', ['questionNumber', 'existBigQuestion']),
-    ...mapState('pageContent', ['orderSort', 'pageData','pageLayout']),
+    ...mapState('pageContent', ['questionOrder', 'pageData','pageLayout']),
     errorMessage() {
       return this.errorVal != '' ? true : false
     },
@@ -121,9 +121,9 @@ export default {
   methods: {
     ...mapMutations('pageContent', [
       'pageData_insert',
-      'answer_insertPageData',
+      'pageData_simple_insert',
       'pageData_id_filter',
-      'set_orderSort',
+      'set_questionOrder',
     ]),
     closeFrame() {
       this.openedFrame = false
@@ -199,7 +199,7 @@ export default {
             obj:{ ...obj, id: this.editQuestionId },
             num:this.data.positionNum + 2
           }
-          this.answer_insertPageData(data)
+          this.pageData_simple_insert(data)
         }
         this.openedFrame = false
         this.data = JSON.parse(JSON.stringify(this.closeData))

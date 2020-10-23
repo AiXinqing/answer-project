@@ -151,7 +151,7 @@ export default {
     ...mapMutations('pageContent', [
       'pageData_del',
       'del_objectiveData',
-      'del_orderSort',
+      'del_questionOrder',
       'pageData_edit',
       'pageData_objId_del'
     ]),

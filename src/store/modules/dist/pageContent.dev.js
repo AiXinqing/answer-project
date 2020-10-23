@@ -25,7 +25,7 @@ var state = {
   // 大题题号
   pageHeight: [],
   // 页面高度
-  orderSort: 0 // 排序
+  questionOrder: 0 // 排序
 
 };
 var mutations = {
@@ -140,15 +140,15 @@ var mutations = {
 
     state.pageHeight = results;
   },
-  set_orderSort: function set_orderSort(state) {
-    state.orderSort = state.orderSort + 1;
+  set_questionOrder: function set_questionOrder(state) {
+    state.questionOrder = state.questionOrder + 1;
   },
-  del_orderSort: function del_orderSort(state, order) {
+  del_questionOrder: function del_questionOrder(state, order) {
     console.log(order);
     state.pageData.map(function (item) {
       return item.order > order ? item.order - 1 : item.order;
     });
-    state.orderSort = state.orderSort - 1;
+    state.questionOrder = state.questionOrder - 1;
   }
 };
 var actions = {
