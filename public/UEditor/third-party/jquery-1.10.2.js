@@ -5232,7 +5232,7 @@ jQuery.event = {
 				button = original.button,
 				fromElement = original.fromElement;
 
-			// Calculate pageX/Y if missing and clientX/Y available
+			// count pageX/Y if missing and clientX/Y available
 			if ( event.pageX == null && original.clientX != null ) {
 				eventDoc = event.target.ownerDocument || document;
 				doc = eventDoc.documentElement;
@@ -9594,11 +9594,11 @@ jQuery.offset = {
 			curOffset = curElem.offset(),
 			curCSSTop = jQuery.css( elem, "top" ),
 			curCSSLeft = jQuery.css( elem, "left" ),
-			calculatePosition = ( position === "absolute" || position === "fixed" ) && jQuery.inArray("auto", [curCSSTop, curCSSLeft]) > -1,
+			countPosition = ( position === "absolute" || position === "fixed" ) && jQuery.inArray("auto", [curCSSTop, curCSSLeft]) > -1,
 			props = {}, curPosition = {}, curTop, curLeft;
 
-		// need to be able to calculate position if either top or left is auto and position is either absolute or fixed
-		if ( calculatePosition ) {
+		// need to be able to count position if either top or left is auto and position is either absolute or fixed
+		if ( countPosition ) {
 			curPosition = curElem.position();
 			curTop = curPosition.top;
 			curLeft = curPosition.left;

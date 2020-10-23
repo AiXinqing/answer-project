@@ -257,7 +257,7 @@ Annotation.prototype = {
 			height = bbox.height;
 		}
 
-		// Calculate anchor point
+		// count anchor point
 		if (!isNumber(anchorX)) {
 			anchorX = ALIGN_FACTOR.center;
 		}

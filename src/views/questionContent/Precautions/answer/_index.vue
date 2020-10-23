@@ -24,34 +24,34 @@ export default {
   },
   computed: {
     ...mapState('questionType', [
-      'currentQuestion',
-      'AlreadyTopics',
-      'determineTopic', // 确定小题数值
+      'subTopic_number',
+      'subTopic_number_already',
+      'subTopic_number_determine', // 确定小题数值
     ]),
     tabStatusVal () {
       let {start,end} = this.data
 
-      let determineTopic = this.determineTopic
-      let AlreadyTopics = this.AlreadyTopics
+      let subTopic_number_determine = this.subTopic_number_determine
+      let subTopic_number_already = this.subTopic_number_already
 
       let strStart = ''
       let strEnd = ''
 
-      if (determineTopic.length > 0 || AlreadyTopics.length > 0) {
-        let numStart = determineTopic.findIndex(item => item.topic == start)
-        let numEnd = determineTopic.findIndex(item => item.topic == end)
-        let index = AlreadyTopics.findIndex(item => item.topic == start)
-        let endIndex = AlreadyTopics.findIndex(item => item.topic == start)
+      if (subTopic_number_determine.length > 0 || subTopic_number_already.length > 0) {
+        let numStart = subTopic_number_determine.findIndex(item => item.topic == start)
+        let numEnd = subTopic_number_determine.findIndex(item => item.topic == end)
+        let index = subTopic_number_already.findIndex(item => item.topic == start)
+        let endIndex = subTopic_number_already.findIndex(item => item.topic == start)
         if (this.editId != null) { // 编辑
           if (index > -1) {
-            if (AlreadyTopics[index].pid != this.data.id) {
+            if (subTopic_number_already[index].pid != this.data.id) {
               strStart = `${start}题已经存在，请勿重复添加`
             }
           } else { strStart = '' }
         } else {
           if (numStart > -1 || index > -1) {
             if (index > -1) {
-              if (AlreadyTopics[index].pid != this.data.id) {
+              if (subTopic_number_already[index].pid != this.data.id) {
                 strStart = `${start}题已经存在，请勿重复添加`
               } else { strStart = '' }
             } else {
@@ -61,14 +61,14 @@ export default {
         }
         if (this.editId != null) { // 编辑
           if (endIndex > -1) {
-            if (AlreadyTopics[endIndex].pid != this.data.id) {
+            if (subTopic_number_already[endIndex].pid != this.data.id) {
               strEnd = `${end}题已经存在，请勿重复添加`
             }
           } else { strStart = '' }
         } else {
           if (numEnd > -1 || endIndex > -1) {
             if (endIndex > -1) {
-              if (AlreadyTopics[endIndex].pid != this.data.id) {
+              if (subTopic_number_already[endIndex].pid != this.data.id) {
                 strEnd = `${end}题已经存在，请勿重复添加`
               } else { strStart = '' }
             } else {
@@ -87,27 +87,27 @@ export default {
     tabStatus () {
       let {start,end} = this.data
 
-      let determineTopic = this.determineTopic
-      let AlreadyTopics = this.AlreadyTopics
+      let subTopic_number_determine = this.subTopic_number_determine
+      let subTopic_number_already = this.subTopic_number_already
 
       let strStart = ''
       let strEnd = ''
 
-      if (determineTopic.length > 0 || AlreadyTopics.length > 0) {
-        let numStart = determineTopic.findIndex(item => item.topic == start)
-        let numEnd = determineTopic.findIndex(item => item.topic == end)
-        let index = AlreadyTopics.findIndex(item => item.topic == start)
-        let endIndex = AlreadyTopics.findIndex(item => item.topic == start)
+      if (subTopic_number_determine.length > 0 || subTopic_number_already.length > 0) {
+        let numStart = subTopic_number_determine.findIndex(item => item.topic == start)
+        let numEnd = subTopic_number_determine.findIndex(item => item.topic == end)
+        let index = subTopic_number_already.findIndex(item => item.topic == start)
+        let endIndex = subTopic_number_already.findIndex(item => item.topic == start)
         if (this.editId != null) { // 编辑
           if (index > -1) {
-            if (AlreadyTopics[index].pid != this.data.id) {
+            if (subTopic_number_already[index].pid != this.data.id) {
               strStart = `${start}题已经存在，请勿重复添加`
             }
           } else { strStart = '' }
         } else {
           if (numStart > -1 || index > -1) {
             if (index > -1) {
-              if (AlreadyTopics[index].pid != this.data.id) {
+              if (subTopic_number_already[index].pid != this.data.id) {
                 strStart = `${start}题已经存在，请勿重复添加`
               } else { strStart = '' }
             } else {
@@ -117,14 +117,14 @@ export default {
         }
         if (this.editId != null) { // 编辑
           if (endIndex > -1) {
-            if (AlreadyTopics[endIndex].pid != this.data.id) {
+            if (subTopic_number_already[endIndex].pid != this.data.id) {
               strEnd = `${end}题已经存在，请勿重复添加`
             }
           } else { strStart = '' }
         } else {
           if (numEnd > -1 || endIndex > -1) {
             if (endIndex > -1) {
-              if (AlreadyTopics[endIndex].pid != this.data.id) {
+              if (subTopic_number_already[endIndex].pid != this.data.id) {
                 strEnd = `${end}题已经存在，请勿重复添加`
               } else { strStart = '' }
             } else {
@@ -149,14 +149,14 @@ export default {
           ...this.formData
         }
         if (this.data.end == '' || this.data.end == null) {
-          this.data.start = this.currentQuestion
+          this.data.start = this.subTopic_number
         }
       }
     }
   },
   methods: {
     ...mapMutations('questionType', [
-      'Add_AlreadyTopics', // 删除题组-小题
+      'subTopic_already_add', // 删除题组-小题
     ]),
     groupTopicHanlde () {
       this.$emit('hanlde-status', this.tabStatusVal)
@@ -179,7 +179,7 @@ export default {
         }
 
         //追加近临时题组
-        this.Add_AlreadyTopics(topicList)
+        this.subTopic_already_add(topicList)
         // 抛向父级追加近数组
         this.$emit('add-answer-topic-group', { ...datas, childGroup: topicList })
       }

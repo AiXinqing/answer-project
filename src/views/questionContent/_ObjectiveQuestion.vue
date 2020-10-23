@@ -34,7 +34,7 @@
         <span class="btn_addSub" @click="hanldeSubtraction(questionData.id,1)">-</span>
         <span class="btn_addSub_info" >{{data.rows}}</span>
         <span class="btn_addSub" @click="hanldeSubtraction(questionData.id,2)">+</span>
-        <span class="layui-btn layui-btn-xs" @click="currentQuestionHanldeEdit(questionData.id)">编辑</span>
+        <span class="layui-btn layui-btn-xs" @click="subTopic_numberHanldeEdit(questionData.id)">编辑</span>
         <span class="layui-btn layui-btn-xs" @click="delHanlde(questionData.id)">删除</span>
       </div>
       <div class="question-groups"
@@ -91,18 +91,18 @@ export default {
     }
   },
   computed: {
-    ...mapState('questionType', ['questionNumber', 'letterArr']),
+    ...mapState('questionType', ['questionNumber', 'letterList']),
     ...mapState('pageContent', ['pageData']),
 
     topicBox () {
       let group = this.data.group
       const singleBox = group.singleBox
       //---------------------------------小题计算
-      const singleArr = this.traverse(singleBox, this.letterArr)
+      const singleArr = this.traverse(singleBox, this.letterList)
       const checkbox = group.checkbox
-      const checkArr = this.traverse(checkbox, this.letterArr)
+      const checkArr = this.traverse(checkbox, this.letterList)
       const judgment = group.judgment
-      const judgmentArr = this.traverse(judgment, this.letterArr)
+      const judgmentArr = this.traverse(judgment, this.letterList)
       let topicList = [...singleArr, ...checkArr, ...judgmentArr]
       //--------------------------------------------------------
       return topicList
@@ -140,12 +140,12 @@ export default {
     ...mapMutations('pageContent', ['pageData_del', 'questionNumber_big_subtract',
       'questionOrder_subtract',]),
     ...mapMutations('questionType', [
-      'del_AlreadyTopics',
-      'set_currentQuestion',
-      'del_determineTopic',
-      'del_existquestionNumber_big',
+      'subTopic_already_del',
+      'subTopic_number_calculate',
+      'subTopic_determine_del',
+      'questionNumber_big_exist_del',
     ]),
-    traverse (Arr, letterArr) {
+    traverse (Arr, letterList) {
       if (Arr.length > 0) {
         let data = []
         Arr.forEach(item => {
@@ -153,7 +153,7 @@ export default {
           item.childGroup.forEach(row => {
             let obj = {
               ...row,
-              selectBox: row.select == 2 && row.id.indexOf('judgment') != -1 ? ['T', 'F'] : letterArr.slice(0, row.select),
+              selectBox: row.select == 2 && row.id.indexOf('judgment') != -1 ? ['T', 'F'] : letterList.slice(0, row.select),
               width: row.select * 26 + 42
             }
             data.push(obj)
@@ -168,16 +168,16 @@ export default {
     delHanlde (id) { // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === id)
       if (index > -1) {
-        this.del_AlreadyTopics(this.topicBox)
-        this.del_determineTopic(this.topicBox)
+        this.subTopic_already_del(this.topicBox)
+        this.subTopic_determine_del(this.topicBox)
         this.questionOrder_subtract(this.pageData[index].order + 1)
         this.pageData_del(index)
         this.questionNumber_big_subtract() // 删减一个大题号
-        this.del_existquestionNumber_big(this.questionData)
-        this.set_currentQuestion()
+        this.questionNumber_big_exist_del(this.questionData)
+        this.subTopic_number_calculate()
       }
     },
-    currentQuestionHanldeEdit (id) {
+    subTopic_numberHanldeEdit (id) {
       this.$emit('current-question-hanlde-edit', id)
     },
     hanldeEditor () {

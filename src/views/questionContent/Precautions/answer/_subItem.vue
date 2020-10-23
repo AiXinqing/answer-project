@@ -75,7 +75,7 @@ export default {
       temporaryArr.push({ ...subObj, childGroup: [] })
 
       this.$emit('pre-edit-last-answer-item', { ...datas, childGroup: temporaryArr })
-      // this.set_AlreadyTopics([{ ...datas, childGroup: temporaryArr }]) // 更新此题数据
+      // this.subTopic_number_calculate_already([{ ...datas, childGroup: temporaryArr }]) // 更新此题数据
     },
     preEditPointsAnswerGroup (obj, isDel = false) {
       // 添加小题下的小题

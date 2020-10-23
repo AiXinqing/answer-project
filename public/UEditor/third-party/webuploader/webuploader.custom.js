@@ -5233,7 +5233,7 @@
                     }
                     //Encode ACs
                     var end0pos = 63; // was const... which is crazy
-                    for (; (end0pos>0)&&(DU[end0pos]==0); end0pos--) {};
+                    for (; (end0pos>0)&&(DU[end0pos]==0); end0pos--) {}
                     //end0pos = first element in reverse order !=0
                     if ( end0pos == 0) {
                         writeBits(EOB);
@@ -5336,7 +5336,7 @@
                             b = imageData[ p++ ];
     
     
-                            /* // calculate YUV values dynamically
+                            /* // count YUV values dynamically
                             YDU[pos]=((( 0.29900)*r+( 0.58700)*g+( 0.11400)*b))-128; //-0x80
                             UDU[pos]=(((-0.16874)*r+(-0.33126)*g+( 0.50000)*b));
                             VDU[pos]=((( 0.50000)*r+(-0.41869)*g+(-0.08131)*b));
@@ -5420,7 +5420,7 @@
     
             init();
     
-        };
+        }
     
         JPEGEncoder.encode = function( data, quality ) {
             var encoder = new JPEGEncoder( quality );

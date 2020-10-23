@@ -54,13 +54,13 @@
         >
         <div
           :class="[
-            'existquestionNumber_big_style',
+            'questionNumber_big_exist_style',
             { Fade: !objectiveData.InsertTitle },
           ]"
         >
           <span>插入到第</span>
           <hj-select
-            :items="existquestionNumber_big"
+            :items="questionNumber_big_exist"
             size="mini"
             :value="existNumber"
             @change="hanldeSelectexistBig"
@@ -128,9 +128,9 @@ export default {
   computed: {
     ...mapState('questionType', [
       'questionNumber',
-      'currentQuestion',
-      'determineTopic',
-      'existquestionNumber_big',
+      'subTopic_number',
+      'subTopic_number_determine',
+      'questionNumber_big_exist',
     ]),
     ...mapState('pageContent', [
       'pageData',
@@ -236,12 +236,12 @@ export default {
           this.objectiveData.group.map((item) => {
             return {
               ...item,
-              start: item.end == null ? this.currentQuestion : item.start,
+              start: item.end == null ? this.subTopic_number : item.start,
             }
           })
           this.existNumber =
-            this.existquestionNumber_big.length > 0
-              ? this.existquestionNumber_big[0].value
+            this.questionNumber_big_exist.length > 0
+              ? this.questionNumber_big_exist[0].value
               : null
         }
       },
@@ -257,31 +257,31 @@ export default {
     childGroups:{
       immediate: true,
       handler(){
-        this.Empty_AlreadyTopics()
+        this.subTopic_already_reset()
         if(this.childGroups.length > 0){
-          this.Add_AlreadyTopics(this.childGroups)
+          this.subTopic_already_add(this.childGroups)
         }else{
-          this.Add_AlreadyTopics(this.determineTopic)
+          this.subTopic_already_add(this.subTopic_number_determine)
         }
-        this.set_currentQuestion()
+        this.subTopic_number_calculate()
       }
     }
   },
   mounted() {
     this.closeData = JSON.parse(JSON.stringify(this.spaceTopic))
-    this.set_currentQuestion()
+    this.subTopic_number_calculate()
   },
   methods: {
     ...mapMutations('questionType', [
-      'set_currentQuestion',
-      'Add_AlreadyTopics', // 小题数组
-      'del_AlreadyTopics', // 删除题组-小题
-      'set_determineTopic', // 储存确定题型
-      'Empty_AlreadyTopics', // 清空
-      'Fullin_once_AlreadyTopics',
-      'delOnce_determineTopic',
-      'set_existquestionNumber_big',
-      'insert_existquestionNumber_big',
+      'subTopic_number_calculate',
+      'subTopic_already_add', // 小题数组
+      'subTopic_already_del', // 删除题组-小题
+      'subTopic_calculate_determine', // 储存确定题型
+      'subTopic_already_reset', // 清空
+      'subTopic_already_pid_clean',
+      'subTopic_determine_pid_clean',
+      'questionNumber_big_exist_edit',
+      'questionNumber_big_exist_insert',
     ]),
     ...mapMutations('pageContent', [
       'pageData_add',
@@ -295,8 +295,8 @@ export default {
       this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
       //--------------
-      this.Empty_AlreadyTopics() // 清空临时小题group
-      this.Add_AlreadyTopics(this.determineTopic)
+      this.subTopic_already_reset() // 清空临时小题group
+      this.subTopic_already_add(this.subTopic_number_determine)
     },
     opened() {
       this.spaceTopic = JSON.parse(
@@ -305,9 +305,9 @@ export default {
 
       this.openedFrame = true
       //-------------------打开
-      this.Empty_AlreadyTopics() // 清空
-      this.Add_AlreadyTopics(this.determineTopic)
-      this.set_currentQuestion()
+      this.subTopic_already_reset() // 清空
+      this.subTopic_already_add(this.subTopic_number_determine)
+      this.subTopic_number_calculate()
     },
     openedEdit(id) {
       let current = this.pageData.filter((item) => item.id === id)
@@ -315,7 +315,7 @@ export default {
       this.spaceTopic = JSON.parse(JSON.stringify(current[0].content))
       this.editQuestionId = id
       this.openedFrame = true
-      this.set_currentQuestion()
+      this.subTopic_number_calculate()
     },
     preCreateQuestion() {
       // 数据编辑完成添加至全局数组中---------------
@@ -349,17 +349,17 @@ export default {
         // 此题总分
       }
       //存在大题追加
-      let existquestionNumber_bigObj = {
+      let questionNumber_big_existObj = {
         id: objId,
         label: `${this.options[number].label}.${topic}`,
         value: number,
       }
       // 小题数组追加至确定题型
-      this.set_currentQuestion()
+      this.subTopic_number_calculate()
 
       if (this.editQuestionId == null) {
-        if (InsertTitle && this.existquestionNumber_big.length > 0) {
-          let index = this.existquestionNumber_big.findIndex(
+        if (InsertTitle && this.questionNumber_big_exist.length > 0) {
+          let index = this.questionNumber_big_exist.findIndex(
             (item) => item.value === this.existNumber
           )
           if (index > -1) {
@@ -374,30 +374,30 @@ export default {
             }
             this.pageData_insert(data)
 
-            this.insert_existquestionNumber_big({
+            this.questionNumber_big_exist_insert({
               obj: {
-                ...existquestionNumber_bigObj,
-                order: this.existquestionNumber_big[index].order + 1,
+                ...questionNumber_big_existObj,
+                order: this.questionNumber_big_exist[index].order + 1,
               },
               num: this.existNumber,
-              order: this.existquestionNumber_big[index].order,
+              order: this.questionNumber_big_exist[index].order,
               SelfOrder: Postpone,
             })
           }
         } else {
           this.pageData_add(obj)
-          this.set_existquestionNumber_big(existquestionNumber_bigObj)
+          this.questionNumber_big_exist_edit(questionNumber_big_existObj)
         }
         this.questionOrder_add()
         this.questionNumber_big_add(this.spaceTopic.number) // 大题号修改
       } else {
-        this.delOnce_determineTopic(this.childGroups[0].pid)
+        this.subTopic_determine_pid_clean(this.childGroups[0].pid)
         obj.id = this.editQuestionId
         this.pageData_edit(obj)
-        this.set_existquestionNumber_big({ ...existquestionNumber_bigObj, id: obj.id })
+        this.questionNumber_big_exist_edit({ ...questionNumber_big_existObj, id: obj.id })
       }
-      this.Add_AlreadyTopics(this.childGroups)
-      this.set_determineTopic(this.childGroups)
+      this.subTopic_already_add(this.childGroups)
+      this.subTopic_calculate_determine(this.childGroups)
       //------------------------------------
       this.openedFrame = false // 关闭弹窗
 
@@ -436,10 +436,10 @@ export default {
         let itemTopic = group[index]
         // 更改题型状态值
 
-        this.del_AlreadyTopics(itemTopic.childGroup) // 删除弹框内临时数组
+        this.subTopic_already_del(itemTopic.childGroup) // 删除弹框内临时数组
         group.splice(index, 1) // 删除
         this.$nextTick(() => {
-          this.set_currentQuestion()
+          this.subTopic_number_calculate()
         })
         this.errorVal = ''
       }
@@ -461,7 +461,7 @@ export default {
       if (lastIndex > -1) {
         if (obj.topic == arr[0]) {
           // 判断点击的是否是首尾
-          this.del_AlreadyTopics([groupObj.childGroup[index]])
+          this.subTopic_already_del([groupObj.childGroup[index]])
           groupObj.childGroup.splice(lastIndex, 1)
           let objItem = {
             ...groupObj,
@@ -475,7 +475,7 @@ export default {
           }
           this.spaceTopic = JSON.parse(JSON.stringify(dataObj))
         } else if (obj.topic == arr[arr.length - 1]) {
-          this.del_AlreadyTopics([groupObj.childGroup[index]])
+          this.subTopic_already_del([groupObj.childGroup[index]])
           groupObj.childGroup.splice(lastIndex, 1)
           let objItem = {
             ...groupObj,
@@ -488,7 +488,7 @@ export default {
           }
           this.spaceTopic = JSON.parse(JSON.stringify(dataObj))
         } else {
-          this.Fullin_once_AlreadyTopics(obj.pid) // 删除全部小题
+          this.subTopic_already_pid_clean(obj.pid) // 删除全部小题
 
           let SplitArray = this.SplitFunc(lastIndex, groupObj, arr)
           if (SplitArray.length > 0) {
@@ -508,7 +508,7 @@ export default {
     hanldeAddSubtopic() {
       //添加分段题组
       let obj = {
-        start: this.currentQuestion,
+        start: this.subTopic_number,
         end: null,
         score: null,
         space: 1,
@@ -560,7 +560,7 @@ export default {
           childGroup: arr,
         }
         // 弹框临时小题数
-        this.Add_AlreadyTopics(arr)
+        this.subTopic_already_add(arr)
         return obj
       } else {
         return {}

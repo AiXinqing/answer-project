@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     ...mapState('questionType', [
-      'currentQuestion',
+      'subTopic_number',
     ]),
     tabStatusVal () {
       const { choices, select } = this.data
@@ -50,16 +50,16 @@ export default {
           ...this.formData
         }
         if (this.data.end == '' || this.data.end == null) {
-          this.data.start = this.currentQuestion
+          this.data.start = this.subTopic_number
         }
       }
     }
   },
   methods: {
     ...mapMutations('questionType', [
-      'Add_AlreadyTopics',
-      'once_AlreadyTopics',
-      'set_currentQuestion',
+      'subTopic_already_add',
+      'subTopic_already_clean',
+      'subTopic_number_calculate',
     ]),
     groupTopicHanlde () {
       const { choices, start, id, score } = this.data
@@ -86,14 +86,14 @@ export default {
         if (this.data.childGroup.length > 0) {
           console.log(this.data.childGroup)
           this.data.childGroup.forEach(item => {
-            this.once_AlreadyTopics(item.id)
+            this.subTopic_already_clean(item.id)
           })
           //
         }
         let objL = JSON.parse(JSON.stringify({ ...this.data, childGroup: [] }))
-        this.Add_AlreadyTopics(topicList) // 存数组 scoreTotal
+        this.subTopic_already_add(topicList) // 存数组 scoreTotal
         this.$emit('pre-optional-data', { ...objL, childGroup: topicList, scoreTotal: scoreTotal })
-        this.set_currentQuestion()
+        this.subTopic_number_calculate()
       }
     }
   },

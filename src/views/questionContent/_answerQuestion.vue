@@ -16,7 +16,7 @@
     </template>
     <div class="question_arrays">
       <div class="question_editOrDel">
-        <span class="layui-btn layui-btn-xs" @click="currentQuestionAnswerEdit"
+        <span class="layui-btn layui-btn-xs" @click="subTopic_numberAnswerEdit"
           >编辑</span
         >
         <span class="layui-btn layui-btn-xs" @click="delHanlde">删除</span>
@@ -93,7 +93,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('questionType', ['questionNumber', 'letterArr']),
+    ...mapState('questionType', ['questionNumber', 'letterList']),
     ...mapState('pageContent', ['pageData']),
     heightContetn(){
       const {castHeight,heightTitle,height} = this.questionData
@@ -156,10 +156,10 @@ export default {
       'pageData_objId_del'
     ]),
     ...mapMutations('questionType', [
-      'del_AlreadyTopics',
-      'set_currentQuestion',
-      'del_determineTopic',
-      'del_existquestionNumber_big',
+      'subTopic_already_del',
+      'subTopic_number_calculate',
+      'subTopic_determine_del',
+      'questionNumber_big_exist_del',
     ]),
     hanldeCloseEsitor(content) {
       this.isEditor = false
@@ -168,7 +168,7 @@ export default {
     hanldeEditor() {
       this.isEditor = true
     },
-    currentQuestionAnswerEdit() {
+    subTopic_numberAnswerEdit() {
 
       this.$emit('current-question-answer-edit', this.data)
     },

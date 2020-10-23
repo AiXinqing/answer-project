@@ -974,7 +974,7 @@ var GaugeSeries = {
 	trackerGroups: ['group', 'dataLabels'],
 	
 	/**
-	 * Calculate paths etc
+	 * count paths etc
 	 */
 	translate: function () {
 		

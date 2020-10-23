@@ -1,161 +1,155 @@
 const state = {
-  questionNumber: ['一','二','三','四','五','六','七','八','九','十','十一','十二','十三','十四','十五',
-  '十六','十七','十八','十九','二十','二十一','二十二','二十三','二十四'],
-  AlreadyTopics: [], // 已有的题组
-  currentQuestion: 1,
-  letterArr: ['A', 'B', 'C', 'D', 'E', 'G', 'H', 'I', 'J', 'K'],
-  maxTopic: 200, // 最大题数
-  determineTopic: [], // 确定下的小题
-  existquestionNumber_big: [], // 存在大题
+  questionNumber: ['一','二','三','四','五','六','七','八',
+  '九','十','十一','十二','十三','十四','十五','十六','十七',
+  '十八','十九','二十','二十一','二十二','二十三','二十四'],
+  questionNumber_big_exist: [], // 存在大题
+  subTopic_number: 1,
+  subTopic_number_already: [], // 已有的题组
+  subTopic_number_determine: [], // 确定下的小题
+
+  letterList: ['A', 'B', 'C', 'D', 'E', 'G', 'H', 'I', 'J', 'K'],
+  largest_questionNum: 200, // 最大题数
 }
 
 const mutations = {
-  del_AlreadyTopics(state, Arr) {
+  subTopic_already_del(state, Arr) {
     if (Arr == undefined) {
       return false
     }
     // 删除已有小题数组
     Arr.forEach((item) => {
-      state.AlreadyTopics = state.AlreadyTopics.filter(row => row.topic != item.topic)
+      state.subTopic_number_already = state.subTopic_number_already.filter(row => row.topic != item.topic)
     })
   },
 
-  Add_AlreadyTopics(state, Arr) {
+  subTopic_already_add(state, Arr) {
     if (Arr == undefined) {
       return false
     }
     //新增小题数组
     Arr.forEach((item) => {
-      if (state.AlreadyTopics.length > 0) {
-        const index = state.AlreadyTopics.findIndex(
-          (row) => row.topic === item.topic
-        )
-        if (index > -1) {
-          state.AlreadyTopics.splice(index, 1, item)
-        } else {
-          state.AlreadyTopics.push(item)
-        }
+      const index = state.subTopic_number_already.findIndex(
+        (row) => row.topic === item.topic
+      )
+      if (index > -1) {
+        state.subTopic_number_already.splice(index, 1, item)
       } else {
-        state.AlreadyTopics.push(item)
+        state.subTopic_number_already.push(item)
       }
+
     })
   },
 
-  once_AlreadyTopics: (state, id) => {
+  subTopic_already_clean: (state, id) => {
     // 一次清除
-    state.AlreadyTopics = state.AlreadyTopics.filter((item) => {
+    state.subTopic_number_already = state.subTopic_number_already.filter((item) => {
       return ![id].includes(item.id)
     })
   },
 
-  Fullin_once_AlreadyTopics: (state, pid) => {
+  subTopic_already_pid_clean: (state, pid) => {
     // 解答一次清除
-    state.AlreadyTopics = state.AlreadyTopics.filter((item) => {
+    state.subTopic_number_already = state.subTopic_number_already.filter((item) => {
       return ![pid].includes(item.pid)
     })
   },
 
-  set_AlreadyTopics: (state, Arr) => {
-    if (Arr == undefined) {
+  subTopic_number_calculate_already: (state, Arr) => {
+    if (Arr.length <= 0) {
       return false
     }
-    Arr.forEach((item) => {
-      const index = state.AlreadyTopics.findIndex(
-        (row) => row.topic == item.topic
-      )
-      if (index > -1) {
-        state.AlreadyTopics.splice(index, 1, item)
-      }
+    Arr.forEach((newTopic) => {
+      state.subTopic_number_already = state.subTopic_number_already.map(subTopic => {
+        return subTopic.topic == newTopic.topic ? newTopic : subTopic
+      })
     })
   },
 
-  Empty_AlreadyTopics: (state) => {
-    // 清空数据
-    state.AlreadyTopics = []
+  subTopic_already_reset: (state) => {
+    // 重置
+    state.subTopic_number_already = []
   },
 
-  set_currentQuestion: (state) => {
-    for (let i = 1; i < state.maxTopic; i++) {
+  subTopic_number_calculate: (state) => {
+    // 计算小题题号
+    for (let i = 1; i < state.largest_questionNum; i++) {
       //
-      const index = state.AlreadyTopics.findIndex((item) => item.topic === i)
+      const index = state.subTopic_number_already.findIndex((item) => item.topic === i)
       if (index <= -1) {
-        state.currentQuestion = i
+        state.subTopic_number = i
         break
       } else {
-        state.currentQuestion = 1
+        state.subTopic_number = 1
       }
     }
   },
 
-  set_determineTopic: (state, Arr) => {
-    if (Arr == undefined) {
+  subTopic_calculate_determine: (state, Arr) => {
+    if (Arr.length <= 0) {
       return false
     }
     // 添加确定值
     Arr.forEach((item) => {
-      const index = state.determineTopic.findIndex(
+      const index = state.subTopic_number_determine.findIndex(
         (row) => row.topic === item.topic
       )
       if (index > -1) {
-        state.determineTopic.splice(index, 1, item)
+        state.subTopic_number_determine.splice(index, 1, item)
       } else {
-        state.determineTopic.push(item)
+        state.subTopic_number_determine.push(item)
       }
     })
   },
 
-  delOnce_determineTopic: (state, pid) => {
-    // 一次清除相同pid
-    state.determineTopic = state.determineTopic.filter((item) => {
+  subTopic_determine_pid_clean: (state, pid) => {
+    // 清除相同pid
+    state.subTopic_number_determine = state.subTopic_number_determine.filter((item) => {
       return ![pid].includes(item.pid)
     })
   },
 
-  del_determineTopic: (state, Arr) => {
-    if (Arr == undefined) {
+  subTopic_determine_del: (state, Arr) => {
+    if (Arr.length <= 0) {
       return false
     }
-    Arr.forEach((item) => {
-      const index = state.determineTopic.findIndex(
-        (row) => row.topic === item.topic
-      )
-      if (index > -1) {
-        state.determineTopic.splice(index, 1)
-      }
+    Arr.forEach((newTopic) => {
+      state.subTopic_number_determine = state.subTopic_number_determine.map(subTopic => {
+        return subTopic.topic == newTopic.topic ? newTopic : subTopic
+      })
     })
   },
-  // 存在大题
-  set_existquestionNumber_big: (state, obj) => {
-    const index = state.existquestionNumber_big.findIndex(
+  // 编辑存在大题
+  questionNumber_big_exist_edit: (state, obj) => {
+    const index = state.questionNumber_big_exist.findIndex(
       (row) => row.id === obj.id
     )
     if (index > -1) {
-      state.determineTopic.splice(index, 1, obj)
+      state.subTopic_number_determine.splice(index, 1, obj)
     } else {
-      state.existquestionNumber_big.push(obj)
+      state.questionNumber_big_exist.push(obj)
     }
   },
 
-  insert_existquestionNumber_big: (state, {
+  questionNumber_big_exist_insert: (state, {
     obj,
     num,
     order,
     SelfOrder
   }) => {
-    state.existquestionNumber_big.map(function (item) {
+    state.questionNumber_big_exist.map(function (item) {
       return {
         ...item,
         order: item.order >= order ? item.order + 1 : item.order,
       }
     });
     setTimeout(function () {
-      state.existquestionNumber_big.splice(num, 0, obj);
-      state.existquestionNumber_big = state.existquestionNumber_big.sort(function (a, b) {
+      state.questionNumber_big_exist.splice(num, 0, obj);
+      state.questionNumber_big_exist = state.questionNumber_big_exist.sort(function (a, b) {
         return a.order - b.order;
       });
       if (SelfOrder) {
-        state.existquestionNumber_big.forEach((item, index) => {
-          state.existquestionNumber_big.splice(index, 1, {
+        state.questionNumber_big_exist.forEach((item, index) => {
+          state.questionNumber_big_exist.splice(index, 1, {
             ...item,
             label: state.options[index].label + '.' + item.label.split('.')[1]
           })
@@ -164,13 +158,13 @@ const mutations = {
     }, 50);
   },
 
-  del_existquestionNumber_big: (state, obj) => {
+  questionNumber_big_exist_del: (state, obj) => {
     let id = obj.objId != undefined ? obj.objId : obj.id
-    const index = state.existquestionNumber_big.findIndex(
+    const index = state.questionNumber_big_exist.findIndex(
       (row) => row.id === id
     )
     if (index > -1) {
-      state.existquestionNumber_big.splice(index, 1)
+      state.questionNumber_big_exist.splice(index, 1)
     }
   },
 

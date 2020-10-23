@@ -12,7 +12,7 @@
     </template>
     <div class="question_arrays">
       <div class="question_editOrDel">
-        <span class="layui-btn layui-btn-xs" @click="currentQuestionAnswerEdit">编辑</span>
+        <span class="layui-btn layui-btn-xs" @click="subTopic_numberAnswerEdit">编辑</span>
         <span class="layui-btn layui-btn-xs" @click="delHanlde">删除</span>
       </div>
     </div>
@@ -84,7 +84,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('questionType', ['questionNumber', 'letterArr']),
+    ...mapState('questionType', ['questionNumber', 'letterList']),
     ...mapState('pageContent', ['pageData']),
 
     heightContetn(){
@@ -146,10 +146,10 @@ export default {
   methods: {
     ...mapMutations('pageContent', ['pageData_del', 'questionNumber_big_subtract', 'questionOrder_subtract','pageData_edit']),
     ...mapMutations('questionType', [
-      'del_AlreadyTopics',
-      'set_currentQuestion',
-      'del_determineTopic',
-      'del_existquestionNumber_big',
+      'subTopic_already_del',
+      'subTopic_number_calculate',
+      'subTopic_determine_del',
+      'questionNumber_big_exist_del',
     ]),
     hanldeCloseEsitor (content) {
       this.isEditor = false
@@ -158,19 +158,19 @@ export default {
     hanldeEditor () {
       this.isEditor = true
     },
-    currentQuestionAnswerEdit () {
+    subTopic_numberAnswerEdit () {
       this.$emit('current-question-optional-edit', this.contentData, this.data.id)
     },
     delHanlde () { // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
       if (index > -1) {
-        this.del_determineTopic(this.topicData)
-        this.del_AlreadyTopics(this.topicData)
+        this.subTopic_determine_del(this.topicData)
+        this.subTopic_already_del(this.topicData)
         this.questionOrder_subtract(this.pageData[index].order + 1)
         this.pageData_del(index)
-        this.set_currentQuestion()
+        this.subTopic_number_calculate()
         this.questionNumber_big_subtract() // 删减一个大题号
-        this.del_existquestionNumber_big(this.questionData)
+        this.questionNumber_big_exist_del(this.questionData)
       }
 
     },

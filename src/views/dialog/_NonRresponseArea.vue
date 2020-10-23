@@ -12,7 +12,7 @@
         <div class="label_item">位置:</div>
         <div class="label_right">
           <hj-select
-            :items="existquestionNumber_big"
+            :items="questionNumber_big_exist"
             size="mini"
             @change="hanldeVerification"
             :value="data.positionNum"
@@ -66,13 +66,13 @@ export default {
     }
   },
   computed: {
-    ...mapState('questionType', ['questionNumber', 'existquestionNumber_big']),
+    ...mapState('questionType', ['questionNumber', 'questionNumber_big_exist']),
     ...mapState('pageContent', ['questionOrder', 'pageData','pageLayout']),
     errorMessage() {
       return this.errorVal != '' ? true : false
     },
     isdisabledFn() {
-      return  this.existquestionNumber_big.length > 0 && !this.errorMessage ? false:true
+      return  this.questionNumber_big_exist.length > 0 && !this.errorMessage ? false:true
     },
     tabStatusVal() {
       const { rows, positionNum } = this.data
@@ -88,26 +88,26 @@ export default {
     },
     orderVal() {
       const { positionNum } = this.data
-      let index = this.existquestionNumber_big.findIndex((item) => {
+      let index = this.questionNumber_big_exist.findIndex((item) => {
         item.value == positionNum
       })
       if (index > -1) {
-        return this.existquestionNumber_big[index].order + 1
+        return this.questionNumber_big_exist[index].order + 1
       } else {
         return 2
       }
     },
   },
   watch: {
-    existquestionNumber_big: {
+    questionNumber_big_exist: {
       immediate: true,
       handler() {
         if (this.editQuestionId == null) {
           this.data = {
             ...this.data,
             positionNum:
-              this.existquestionNumber_big.length > 0
-                ? this.existquestionNumber_big[0].value
+              this.questionNumber_big_exist.length > 0
+                ? this.questionNumber_big_exist[0].value
                 : null,
           }
         }
@@ -175,12 +175,12 @@ export default {
           },
         }
         if (this.editQuestionId == null) {
-          let index = this.existquestionNumber_big.findIndex(
+          let index = this.questionNumber_big_exist.findIndex(
             (item) => item.value === positionNum
           )
           if (index > -1) {
             let objIndex = this.pageData.findIndex(
-              (item) => item.id == this.existquestionNumber_big[index].id
+              (item) => item.id == this.questionNumber_big_exist[index].id
             )
             if (objIndex > -1) {
               let data = {

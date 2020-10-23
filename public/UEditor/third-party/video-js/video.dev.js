@@ -2353,7 +2353,7 @@ vjs.Slider.prototype.update = function(){
   bar.el().style.width = vjs.round(barProgress * 100, 2) + '%';
 };
 
-vjs.Slider.prototype.calculateDistance = function(event){
+vjs.Slider.prototype.countDistance = function(event){
   var el, box, boxX, boxY, boxW, boxH, handle, pageX, pageY;
 
   el = this.el_;
@@ -3360,7 +3360,7 @@ vjs.Player.prototype.duration = function(seconds){
   return this.cache_.duration;
 };
 
-// Calculates how much time is left. Not in spec, but useful.
+// counts how much time is left. Not in spec, but useful.
 vjs.Player.prototype.remainingTime = function(){
   return this.duration() - this.currentTime();
 };
@@ -4404,7 +4404,7 @@ vjs.SeekBar.prototype.onMouseDown = function(event){
 };
 
 vjs.SeekBar.prototype.onMouseMove = function(event){
-  var newTime = this.calculateDistance(event) * this.player_.duration();
+  var newTime = this.countDistance(event) * this.player_.duration();
 
   // Don't let video end while scrubbing.
   if (newTime == this.player_.duration()) { newTime = newTime - 0.1; }
@@ -4589,7 +4589,7 @@ vjs.VolumeBar.prototype.onMouseMove = function(event) {
     this.player_.muted(false);
   }
 
-  this.player_.volume(this.calculateDistance(event));
+  this.player_.volume(this.countDistance(event));
 };
 
 vjs.VolumeBar.prototype.getPercent = function(){

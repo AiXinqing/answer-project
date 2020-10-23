@@ -2338,8 +2338,8 @@ SVGElement.prototype = {
 	},
 
 	/**
-	 * Calculate the coordinates needed for drawing a rectangle crisply and return the
-	 * calculated attributes
+	 * count the coordinates needed for drawing a rectangle crisply and return the
+	 * countd attributes
 	 * @param {Number} strokeWidth
 	 * @param {Number} x
 	 * @param {Number} y
@@ -7680,19 +7680,19 @@ Axis.prototype = {
 
 		if (maxTicks && maxTicks[key] && !axis.isDatetimeAxis && !axis.categories && !axis.isLinked && axis.options.alignTicks !== false) { // only apply to linear scale
 			var oldTickAmount = axis.tickAmount,
-				calculatedTickAmount = tickPositions.length,
+				countdTickAmount = tickPositions.length,
 				tickAmount;
 
 			// set the axis-level tickAmount to use below
 			axis.tickAmount = tickAmount = maxTicks[key];
 
-			if (calculatedTickAmount < tickAmount) {
+			if (countdTickAmount < tickAmount) {
 				while (tickPositions.length < tickAmount) {
 					tickPositions.push(correctFloat(
 						tickPositions[tickPositions.length - 1] + axis.tickInterval
 					));
 				}
-				axis.transA *= (calculatedTickAmount - 1) / (tickAmount - 1);
+				axis.transA *= (countdTickAmount - 1) / (tickAmount - 1);
 				axis.max = tickPositions[tickPositions.length - 1];
 
 			}
@@ -10156,7 +10156,7 @@ Legend.prototype = {
 			}
 		}
 
-		// calculate the positions for the next line
+		// count the positions for the next line
 		bBox = li.getBBox();
 
 		itemWidth = item.legendItemWidth =
@@ -11042,7 +11042,7 @@ Chart.prototype = {
 	},
 
 	/**
-	 * Generate stacks for each series and calculate stacks total values
+	 * Generate stacks for each series and count stacks total values
 	 */
 	getStacks: function () {
 		var chart = this;
@@ -11408,7 +11408,7 @@ Chart.prototype = {
 	},
 
 	/**
-	 * Calculate margins by rendering axis labels in a preliminary position. Title,
+	 * count margins by rendering axis labels in a preliminary position. Title,
 	 * subtitle and legend have already been rendered at this stage, but will be
 	 * moved into their final positions
 	 */
@@ -13586,7 +13586,7 @@ Series.prototype = {
 	},
 
 	/**
-	 * Calculate Y extremes for visible data
+	 * count Y extremes for visible data
 	 */
 	getExtremes: function () {
 		var xAxis = this.xAxis,
@@ -13680,7 +13680,7 @@ Series.prototype = {
 			point.plotX = xAxis.translate(xValue, 0, 0, 0, 1, pointPlacement, this.type === 'flags'); // Math.round fixes #591
 			
 
-			// Calculate the bottom y value for stacked series
+			// count the bottom y value for stacked series
 			if (stacking && series.visible && stack && stack[xValue]) {
 
 				pointStack = stack[xValue];
@@ -15369,7 +15369,7 @@ var AreaSeries = extendClass(Series, {
 	
 	/**
 	 * Draw the graph and the underlying area. This method calls the Series base
-	 * function and adds the area. The areaPath is calculated in the getSegmentPath
+	 * function and adds the area. The areaPath is countd in the getSegmentPath
 	 * method called from Series.prototype.drawGraph.
 	 */
 	drawGraph: function () {
@@ -16381,7 +16381,7 @@ var PieSeries = {
 				(mathCos(angle) * (positions[2] / 2 + labelDistance));
 		};
 
-		// Calculate the geometry for each point
+		// count the geometry for each point
 		for (i = 0; i < len; i++) {
 			
 			point = points[i];

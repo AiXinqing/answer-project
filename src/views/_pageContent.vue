@@ -23,11 +23,11 @@
           :question-data="topice"
           @hanldeStudent="hanldeStudent"
           @edit-admission-number="editAdmissionNumber"
-          @current-question-hanlde-edit="currentQuestionHanldeEdit"
-          @current-question-fill-edit="currentQuestionFillEdit"
+          @current-question-hanlde-edit="subTopic_numberHanldeEdit"
+          @current-question-fill-edit="subTopic_numberFillEdit"
           @hanlde-subtraction="hanldeSubtraction"
-          @current-question-answer-edit="currentQuestionAnswerEdit"
-          @current-question-optional-edit="currentQuestionOptionalEdit"
+          @current-question-answer-edit="subTopic_numberAnswerEdit"
+          @current-question-optional-edit="subTopic_numberOptionalEdit"
           @composition-english-edit="compositionEnglishEdit"
           @composition-language-edit="compositionLanguageEdit"
           @cur-edit-non="curEditNon"
@@ -257,7 +257,7 @@ export default {
       }
     },
 
-    currentQuestionHanldeEdit(id) {
+    subTopic_numberHanldeEdit(id) {
       this.$refs.publicDialog.openedEdit('questionDialogs', id)
     },
     hanldeSubtraction(id, num) {
@@ -267,13 +267,13 @@ export default {
     hanldeSubtractionNon(obj, num) {
       this.$refs.publicDialog.change('NonRresponseArea', obj, num)
     },
-    currentQuestionFillEdit(id) {
+    subTopic_numberFillEdit(id) {
       this.$refs.publicDialog.openedEdit('fillInTheBlanks', id)
     },
-    currentQuestionAnswerEdit(obj) {
+    subTopic_numberAnswerEdit(obj) {
       this.$refs.publicDialog.openedEdit('answerQuestion', obj)
     },
-    currentQuestionOptionalEdit(obj, id) {
+    subTopic_numberOptionalEdit(obj, id) {
       this.$refs.publicDialog.openedEdit('optionalQuestion', obj, id)
     },
     compositionEnglishEdit(obj) {
