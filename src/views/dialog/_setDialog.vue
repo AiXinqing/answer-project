@@ -87,9 +87,9 @@ export default {
   },
   methods: {
     ...mapMutations('pageContent', [
-      'initPageLayout',
-      'initPageData',
-      'amendPageData',
+      'pageLayout_change',
+      'pageData_add',
+      'pageData_edit',
       'layout_pageData',
       'set_orderSort']),
     openRForm (type) {
@@ -108,7 +108,7 @@ export default {
         size: this.size,
         column: this.layout,
       }
-      this.initPageLayout(obj)
+      this.pageLayout_change(obj)
 
       const TestData = {
         id: 1,
@@ -128,7 +128,7 @@ export default {
       //
       if (change == 1) {
         this.openedFrame = false
-        this.amendPageData(TestData)
+        this.pageData_edit(TestData)
 
         this.pageData.filter(obj => obj.questionType == 'ObjectiveQuestion').forEach(element => {
           this.$refs.questionDialogs.layoutEdit(element)
@@ -136,7 +136,7 @@ export default {
         setTimeout(function() { this.layout_pageData(this.pageLayout) }, 500)
       } else {
         // 新增值
-        this.initPageData(TestData)
+        this.pageData_add(TestData)
       }
       // order排序
       this.set_orderSort()

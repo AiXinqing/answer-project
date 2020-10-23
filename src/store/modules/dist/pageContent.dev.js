@@ -29,15 +29,15 @@ var state = {
 
 };
 var mutations = {
-  initPageLayout: function initPageLayout(state, obj) {
+  pageLayout_change: function pageLayout_change(state, obj) {
     state.pageLayout = obj;
   },
-  initPageData: function initPageData(state, Arr) {
+  pageData_add: function pageData_add(state, Arr) {
     state.pageData.push(Arr); // state.pageData = state.pageData.sort((a, b) => {
     //   return a.order - b.order;
     // })
   },
-  amendPageData: function amendPageData(state, ArrItem) {
+  pageData_edit: function pageData_edit(state, ArrItem) {
     // 编辑page-data
     var index = state.pageData.findIndex(function (itme) {
       return itme.id === ArrItem.id;
@@ -47,7 +47,7 @@ var mutations = {
       state.pageData.splice(index, 1, ArrItem);
     }
   },
-  deletePageData: function deletePageData(state, id) {
+  pageData_objId_del: function pageData_objId_del(state, id) {
     // 解答题使用
     state.pageData = state.pageData.filter(function (item) {
       return ![id].includes(item.pid);
@@ -55,7 +55,7 @@ var mutations = {
     //   return a.order - b.order;
     // })
   },
-  Empty_PageData: function Empty_PageData(state, id) {
+  pageData_id_clean: function pageData_id_clean(state, id) {
     // 内容分页
     state.pageData = state.pageData.filter(function (item) {
       return ![id].includes(item.id);
@@ -63,14 +63,14 @@ var mutations = {
     //   return a.order - b.order;
     // })
   },
-  delPageData: function delPageData(state, index) {
+  pageData_del: function pageData_del(state, index) {
     state.pageData.splice(index, 1);
   },
-  insert_pageData: function insert_pageData(state, _ref) {
+  pageData_insert: function pageData_insert(state, _ref) {
     var obj = _ref.obj,
         num = _ref.num,
         order = _ref.order,
-        SelfO0rder = _ref.SelfO0rder;
+        SelfOrder = _ref.SelfOrder;
     //插入非作答
     // state.pageData.map(item => item.order > order ? item.order + 1 : item.order)
     state.pageData.forEach(function (item, index) {
@@ -86,7 +86,7 @@ var mutations = {
         return a.order - b.order;
       });
 
-      if (SelfO0rder) {
+      if (SelfOrder) {
         var tig = 0;
         state.pageData.forEach(function (item, index) {
           if (item.content.positionNum != undefined) {
@@ -157,8 +157,8 @@ var actions = {
       var data = _ref2.data;
 
       if (data) {
-        context.commit('initPageLayout', data.pageLayout);
-        context.commit('initPageData', data.data);
+        context.commit('pageLayout_change', data.pageLayout);
+        context.commit('pageData_add', data.data);
       }
     });
   }

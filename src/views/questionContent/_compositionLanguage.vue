@@ -152,8 +152,8 @@ export default {
 
   methods: {
     ...mapMutations('pageContent', [
-      'delPageData',
-      'Empty_PageData',
+      'pageData_del',
+      'pageData_id_clean',
       'del_objectiveData',
       'del_orderSort',
     ]),
@@ -180,7 +180,7 @@ export default {
         this.del_determineTopic([this.contentData])
         this.del_AlreadyTopics([this.contentData])
         this.del_orderSort(this.pageData[index].order + 1)
-        this.Empty_PageData(this.data.id)
+        this.pageData_id_clean(this.data.id)
         this.set_currentQuestion()
         this.del_objectiveData() // 删减一个大题号
         this.del_existBigQuestion(this.questionData)

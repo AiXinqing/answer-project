@@ -10,7 +10,7 @@
           <div class="title-span">
             <span>{{options[data.number].label}}.</span>
             <span>{{data.topic}}</span>
-            <span>({{data.totalScore}})分</span>
+            <span>({{data.scoreTotal}})分</span>
           </div>
         </template>
         <template
@@ -191,10 +191,10 @@ export default {
   },
   methods: {
     ...mapMutations('pageContent', [
-      'delPageData',
+      'pageData_del',
       'del_objectiveData',
       'del_orderSort',
-      'amendPageData',
+      'pageData_edit',
     ]),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
@@ -209,7 +209,7 @@ export default {
         this.del_determineTopic(this.topicBox)
         this.del_AlreadyTopics(this.topicBox)
         this.del_orderSort(this.pageData[index].order + 1)
-        this.delPageData(index)
+        this.pageData_del(index)
         this.set_currentQuestion()
         this.del_objectiveData() // 删减一个大题号
         this.del_existBigQuestion(this.questionData)
@@ -236,7 +236,7 @@ export default {
         if(castHeight < height){
           crrHeight = (height - castHeight) + rectHeight
         }
-        this.amendPageData({
+        this.pageData_edit({
             ...questionObj,
             height:crrHeight >= this.minHeight ? crrHeight + questionObj.heightTitle + 3:this.minHeight,
           })

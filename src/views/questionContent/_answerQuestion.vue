@@ -110,7 +110,7 @@ export default {
 
     TopicContent() {
       const {number,topic} = this.contentData
-      return `<span>${this.options[number].label}.</span><span>${topic}</span><span>(${this.data.totalScore})分</span>`
+      return `<span>${this.options[number].label}.</span><span>${topic}</span><span>(${this.data.scoreTotal})分</span>`
     },
     topicData() {
       return this.contentData.group
@@ -149,11 +149,11 @@ export default {
   },
   methods: {
     ...mapMutations('pageContent', [
-      'delPageData',
+      'pageData_del',
       'del_objectiveData',
       'del_orderSort',
-      'amendPageData',
-      'deletePageData'
+      'pageData_edit',
+      'pageData_objId_del'
     ]),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
@@ -225,10 +225,10 @@ export default {
       // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
       if (index > -1) {
-        this.delPageData(index)
-        setTimeout(function(){
-          this.deletePageData({group:questionGroup,objId:objId})
-        },500)
+        this.pageData_del(index)
+        this.$nextTick(()=>{
+          this.pageData_objId_del({group:questionGroup,objId:objId})
+        })
       }
 
     },
@@ -242,7 +242,7 @@ export default {
         if(castHeight < height){
           crrHeight = (height - castHeight) + rectHeight
         }
-        this.amendPageData({
+        this.pageData_edit({
             ...questionObj,
             height:crrHeight >= this.minHeight ? crrHeight + questionObj.heightTitle + 3:this.minHeight,
           })

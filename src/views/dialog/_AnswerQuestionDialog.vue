@@ -190,7 +190,7 @@ export default {
       })
       return itemArr
     },
-    totalScore () {
+    scoreTotal () {
       return this.childGroups.map(item => item.score).reduce((accumulator, currentValue) => {
         return accumulator + currentValue
       })
@@ -238,13 +238,13 @@ export default {
   },
   methods: {
     ...mapMutations('pageContent', [
-      'initPageData',
-      'amendPageData',
-      'insert_pageData',
+      'pageData_add',
+      'pageData_edit',
+      'pageData_insert',
       'set_objectiveData',
       'set_orderSort',
       'del_orderSort',
-      'answerFilter_pageData',
+      'pageData_objId_filter',
       'answer_insertPageData'
     ]),
     ...mapMutations('questionType', [
@@ -314,7 +314,7 @@ export default {
           row:this.dataTopic.rows,
           rowHeight:35,
           order: orders,
-          totalScore:++item.score,
+          scoreTotal:++item.score,
           previousOrder:this.orderSort - 1 // 解答题插入前的序列号
         }
         Arr.push(obj)
@@ -350,9 +350,9 @@ export default {
                 },
                 num: existNum,
                 order: orders,
-                SelfO0rder: Postpone,
+                SelfOrder: Postpone,
               }
-              this.insert_pageData(data)
+              this.pageData_insert(data)
 
               if(index === 0){
                 this.insert_existBigQuestion({
@@ -362,7 +362,7 @@ export default {
                   },
                   num: existNum,
                   order: this.existBigQuestion[index].order,
-                  SelfO0rder: Postpone,
+                  SelfOrder: Postpone,
                 })
               }
 
@@ -370,7 +370,7 @@ export default {
           }
         } else {
           Arr.forEach(obj => {
-            this.initPageData(obj)
+            this.pageData_add(obj)
           })
           this.set_existBigQuestion(existBigQuestionObj)
         }
@@ -378,7 +378,7 @@ export default {
         this.set_objectiveData(number)
 
       } else {
-        this.answerFilter_pageData(this.editQuestionId)
+        this.pageData_objId_filter(this.editQuestionId)
           let previous = this.previous
           let previousTig = this.previous
           let pageObj = this.pageData[previous + 1]

@@ -102,8 +102,8 @@ export default {
 
     TopicContent () {
       const {group,topic,number} = this.contentData
-      let totalScore = group[0].totalScore
-      return `<span>${this.options[number].label}.</span><span>${topic}</span><span class='p-5'>(${totalScore})</span>分<span class='optional-prompt'>${this.promptTitle}</span>`
+      let scoreTotal = group[0].scoreTotal
+      return `<span>${this.options[number].label}.</span><span>${topic}</span><span class='p-5'>(${scoreTotal})</span>分<span class='optional-prompt'>${this.promptTitle}</span>`
     },
     topicData () {
       return this.contentData.group[0].childGroup
@@ -144,7 +144,7 @@ export default {
   //   this.$nextTick(()=>)
   // },
   methods: {
-    ...mapMutations('pageContent', ['delPageData', 'del_objectiveData', 'del_orderSort','amendPageData']),
+    ...mapMutations('pageContent', ['pageData_del', 'del_objectiveData', 'del_orderSort','pageData_edit']),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
@@ -167,7 +167,7 @@ export default {
         this.del_determineTopic(this.topicData)
         this.del_AlreadyTopics(this.topicData)
         this.del_orderSort(this.pageData[index].order + 1)
-        this.delPageData(index)
+        this.pageData_del(index)
         this.set_currentQuestion()
         this.del_objectiveData() // 删减一个大题号
         this.del_existBigQuestion(this.questionData)
@@ -184,7 +184,7 @@ export default {
         if(castHeight < height){
           crrHeight = (height - castHeight) + rectHeight
         }
-        this.amendPageData({
+        this.pageData_edit({
             ...questionObj,
             height:crrHeight >= this.minHeight ? crrHeight + questionObj.heightTitle + 3:this.minHeight,
           })

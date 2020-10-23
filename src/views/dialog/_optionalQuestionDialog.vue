@@ -203,9 +203,9 @@ export default {
   },
   methods: {
     ...mapMutations('pageContent', [
-      'initPageData',
-      'amendPageData',
-      'insert_pageData',
+      'pageData_add',
+      'pageData_edit',
+      'pageData_insert',
       'set_objectiveData',
       'set_orderSort',
     ]),
@@ -260,7 +260,7 @@ export default {
         questionType: 'optionalQuestion',
         content:{
           ...this.data,
-          totalScore:group[0].totalScore,
+          scoreTotal:group[0].scoreTotal,
           pageLayout:this.pageLayout
         },
         order: this.orderSort,
@@ -294,10 +294,10 @@ export default {
                 },
                 num: this.existNumber + 1,
                 order: this.pageData[index].order + 1,
-                SelfO0rder: Postpone,
+                SelfOrder: Postpone,
               }
 
-              this.insert_pageData(data)
+              this.pageData_insert(data)
               //-------------------------------------------------已选大题数组
               this.insert_existBigQuestion({
                 obj: {
@@ -306,12 +306,12 @@ export default {
                 },
                 num: this.existNumber,
                 order: this.existBigQuestion[index].order,
-                SelfO0rder: Postpone,
+                SelfOrder: Postpone,
               })
             }
           }
         } else {
-          this.initPageData(obj)
+          this.pageData_add(obj)
           this.set_existBigQuestion(existBigQuestionObj)
         }
         this.set_orderSort()
@@ -321,7 +321,7 @@ export default {
         // 编辑
         this.delOnce_determineTopic(this.childGroups[0].pid)
         obj.id = this.editQuestionId
-        this.amendPageData(obj)
+        this.pageData_edit(obj)
         this.set_existBigQuestion({ ...existBigQuestionObj, id: obj.id })
       }
       //------------------------------------

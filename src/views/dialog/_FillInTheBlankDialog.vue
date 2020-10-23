@@ -284,9 +284,9 @@ export default {
       'insert_existBigQuestion',
     ]),
     ...mapMutations('pageContent', [
-      'initPageData',
-      'amendPageData',
-      'insert_pageData',
+      'pageData_add',
+      'pageData_edit',
+      'pageData_insert',
       'set_objectiveData',
       'set_orderSort',
     ]),
@@ -324,10 +324,10 @@ export default {
       // 此题总分计算
       const { topic, number, InsertTitle, Postpone } = this.objectiveData
 
-      let totalScore = 0
+      let scoreTotal = 0
 
       this.childGroups.map((item) => {
-        totalScore += item.sum
+        scoreTotal += item.sum
       })
       let objId = `FillInTheBlank_${+new Date()}`
       // 此题总分计算
@@ -340,7 +340,7 @@ export default {
         questionType: 'FillInTheBlank',
         content: {
           ...this.objectiveData,
-          totalScore: totalScore,
+          scoreTotal: scoreTotal,
           pageLayout:this.pageLayout
         },
         order: this.orderSort,
@@ -370,9 +370,9 @@ export default {
               },
               num: this.existNumber + 1,
               order: this.pageData[index].order + 1,
-              SelfO0rder: Postpone,
+              SelfOrder: Postpone,
             }
-            this.insert_pageData(data)
+            this.pageData_insert(data)
 
             this.insert_existBigQuestion({
               obj: {
@@ -381,11 +381,11 @@ export default {
               },
               num: this.existNumber,
               order: this.existBigQuestion[index].order,
-              SelfO0rder: Postpone,
+              SelfOrder: Postpone,
             })
           }
         } else {
-          this.initPageData(obj)
+          this.pageData_add(obj)
           this.set_existBigQuestion(existBigQuestionObj)
         }
         this.set_orderSort()
@@ -393,7 +393,7 @@ export default {
       } else {
         this.delOnce_determineTopic(this.childGroups[0].pid)
         obj.id = this.editQuestionId
-        this.amendPageData(obj)
+        this.pageData_edit(obj)
         this.set_existBigQuestion({ ...existBigQuestionObj, id: obj.id })
       }
       this.Add_AlreadyTopics(this.childGroups)

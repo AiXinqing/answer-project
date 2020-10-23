@@ -140,7 +140,7 @@ const mutations = {
     obj,
     num,
     order,
-    SelfO0rder
+    SelfOrder
   }) => {
     state.existBigQuestion.map(function (item) {
       return {
@@ -153,7 +153,7 @@ const mutations = {
       state.existBigQuestion = state.existBigQuestion.sort(function (a, b) {
         return a.order - b.order;
       });
-      if (SelfO0rder) {
+      if (SelfOrder) {
         state.existBigQuestion.forEach((item, index) => {
           state.existBigQuestion.splice(index, 1, {
             ...item,

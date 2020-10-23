@@ -253,10 +253,10 @@ export default {
   },
   methods: {
     ...mapMutations('pageContent', [
-      'initPageData',
-      'amendPageData',
-      'insert_pageData',
-      'Empty_PageData',
+      'pageData_add',
+      'pageData_edit',
+      'pageData_insert',
+      'pageData_id_clean',
       'set_orderSort',
       'set_objectiveData'
     ]),
@@ -319,7 +319,7 @@ export default {
           questionType: 'compositionEnglish',
           content: {
             ...this.data,
-            totalScore:parseFloat(score),
+            scoreTotal:parseFloat(score),
             pageLayout:this.pageLayout,
           },
           order: this.orderSort,
@@ -355,9 +355,9 @@ export default {
                   },
                   num: this.existNumber + 1,
                   order: this.pageData[index].order + 1,
-                  SelfO0rder: Postpone,
+                  SelfOrder: Postpone,
                 }
-                this.insert_pageData(data)
+                this.pageData_insert(data)
                 //-------------------------------------------------已选大题数组
                 this.insert_existBigQuestion({
                   obj: {
@@ -366,12 +366,12 @@ export default {
                   },
                   num: this.existNumber,
                   order: this.existBigQuestion[index].order,
-                  SelfO0rder: Postpone,
+                  SelfOrder: Postpone,
                 })
               }
             }
           } else {
-            this.initPageData(obj)
+            this.pageData_add(obj)
             this.set_existBigQuestion(existBigQuestionObj)
           }
           this.set_determineTopic([this.data])
@@ -379,7 +379,7 @@ export default {
           // 大题号修改
           this.set_objectiveData(number)
         } else {
-          this.amendPageData({ ...obj, id: this.editQuestionId })
+          this.pageData_edit({ ...obj, id: this.editQuestionId })
           this.set_existBigQuestion({ ...existBigQuestionObj, id: obj.id })
         }
 

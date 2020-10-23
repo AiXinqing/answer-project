@@ -116,7 +116,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('pageContent', ['set_pageHeight','resetScore','overlayScore']),
+    ...mapMutations('pageContent', ['set_pageHeight','scoreTotal_reset','scoreTotal_sum']),
     hanldeStudent(Arr) {
       this.$refs.publicDialog.opened('studentTitle', Arr)
     },
@@ -124,7 +124,7 @@ export default {
       this.$refs.publicDialog.opened('AdmissionNumber')
     },
     pageContentFunc(rects = []) {
-      this.resetScore() // 试卷总分清零
+      this.scoreTotal_reset() // 试卷总分清零
 
       let results = []
       let SplitVal = 0 // 拆分所用
@@ -137,9 +137,9 @@ export default {
         curPage.rects = []
       }
       rects.forEach((rect) => {
-        if(rect.content.totalScore){
+        if(rect.content.scoreTotal){
           // 试卷总分叠加
-          this.overlayScore(rect.content.totalScore)
+          this.scoreTotal_sum(rect.content.scoreTotal)
         }
         let ActualHeight = rect.height + 20 //
         // avalible 剩余高度

@@ -236,7 +236,7 @@ var mutations = {
     var obj = _ref.obj,
         num = _ref.num,
         order = _ref.order,
-        SelfO0rder = _ref.SelfO0rder;
+        SelfOrder = _ref.SelfOrder;
     console.log(order);
     state.existBigQuestion.map(function (item) {
       return _objectSpread({}, item, {
@@ -249,7 +249,7 @@ var mutations = {
         return a.order - b.order;
       });
 
-      if (SelfO0rder) {
+      if (SelfOrder) {
         state.existBigQuestion.forEach(function (item, index) {
           // const i = state.options.findIndex(item => item.value == (index + 1))
           state.existBigQuestion.splice(index, 1, _objectSpread({}, item, {

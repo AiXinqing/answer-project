@@ -67,7 +67,7 @@ export default {
       this.$emit('hanlde-status', this.tabStatusVal)
       let topicList = []
       this.data.end = choices + start - 1
-      let totalScore = 0
+      let scoreTotal = 0
 
       for (let i = start; i <= this.data.end; i++) {
         let obj = {
@@ -76,7 +76,7 @@ export default {
           topic: i,
           score: score,
         }
-        totalScore += score // 此题总分
+        scoreTotal += score // 此题总分
         topicList.push(obj)
       }
 
@@ -91,8 +91,8 @@ export default {
           //
         }
         let objL = JSON.parse(JSON.stringify({ ...this.data, childGroup: [] }))
-        this.Add_AlreadyTopics(topicList) // 存数组 totalScore
-        this.$emit('pre-optional-data', { ...objL, childGroup: topicList, totalScore: totalScore })
+        this.Add_AlreadyTopics(topicList) // 存数组 scoreTotal
+        this.$emit('pre-optional-data', { ...objL, childGroup: topicList, scoreTotal: scoreTotal })
         this.set_currentQuestion()
       }
     }

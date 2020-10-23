@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     ...mapMutations('titleSet', ['editTitleRows']),
-    ...mapMutations('pageContent', ['amendPageData']),
+    ...mapMutations('pageContent', ['pageData_edit']),
     closeFrame () {
       this.openedFrame = false
     },
@@ -71,7 +71,7 @@ export default {
     preCreateTitle () {
       let answerTitle = this.pageData[0]
       this.editTitleRows(parseInt(this.AdmissionTicket))
-      this.amendPageData({
+      this.pageData_edit({
         ...answerTitle,
         content:{
           ...answerTitle.content,

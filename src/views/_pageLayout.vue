@@ -3,7 +3,7 @@
     <div class="Guide_bar">
       <div class="allscore">
         当前总分：
-        <span>{{paperTotalScore}}</span> 分
+        <span>{{scoreTotal}}</span> 分
       </div>
       <div class="layout-box">
         <div class="layout-top">
@@ -45,7 +45,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('pageContent', ['pageLayout','page_size','paperTotalScore','pageData']),
+    ...mapState('pageContent', ['pageLayout','page_size','scoreTotal','pageData']),
     testPaper() {
       return 'A3/B4/8K纸'
     },
@@ -61,7 +61,7 @@ export default {
     this.$refs.editorLayout.openRForm(1)
   },
   methods: {
-    ...mapMutations('pageContent', ['amendPageData']),
+    ...mapMutations('pageContent', ['pageData_edit']),
     closePrompt () {
       this.openedPrompt = false
     },

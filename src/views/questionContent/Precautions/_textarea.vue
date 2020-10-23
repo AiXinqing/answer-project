@@ -27,10 +27,10 @@ export default {
     ...mapState('pageContent', ['pageData']),
   },
   methods: {
-    ...mapMutations('pageContent', ['amendPageData']),
+    ...mapMutations('pageContent', ['pageData_edit']),
     editPrecautionsTitile (e) {
       let answerTitle = this.pageData[0]
-      this.amendPageData({
+      this.pageData_edit({
         ...answerTitle,
         content:{
           ...answerTitle.content,

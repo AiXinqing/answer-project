@@ -120,9 +120,9 @@ export default {
   },
   methods: {
     ...mapMutations('pageContent', [
-      'insert_pageData',
+      'pageData_insert',
       'answer_insertPageData',
-      'Filter_pageData',
+      'pageData_id_filter',
       'set_orderSort',
     ]),
     closeFrame() {
@@ -187,14 +187,14 @@ export default {
                 obj: { ...obj, order: this.pageData[objIndex].order },
                 num: positionNum,
                 order: this.pageData[objIndex].order,
-                SelfO0rder: false,
+                SelfOrder: false,
               }
 
-              this.insert_pageData(data)
+              this.pageData_insert(data)
             }
           }
         } else {
-          this.Filter_pageData(this.editQuestionId)
+          this.pageData_id_filter(this.editQuestionId)
           let data = {
             obj:{ ...obj, id: this.editQuestionId },
             num:this.data.positionNum + 2

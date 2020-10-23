@@ -293,9 +293,9 @@ export default {
       'delOnce_determineTopic',
     ]),
     ...mapMutations('pageContent', [
-      'initPageData',
-      'amendPageData',
-      'insert_pageData',
+      'pageData_add',
+      'pageData_edit',
+      'pageData_insert',
       'set_objectiveData',
       'set_orderSort',
     ]),
@@ -396,7 +396,7 @@ export default {
         RowArr.push(columnArr)
       }
 
-      this.amendPageData({
+      this.pageData_edit({
         ...obj,
         height: heights + 32,
         showData:RowArr
@@ -430,14 +430,14 @@ export default {
       this.ContentHeight = heights // 内容高度
       // 计算出的内容高度值
 
-      let totalScore = 0
+      let scoreTotal = 0
 
       this.topicList.map((item) => {
-        totalScore += item.score
+        scoreTotal += item.score
       })
       this.objectiveData = {
         ...this.objectiveData,
-        totalScore: totalScore,
+        scoreTotal: scoreTotal,
       }
       let objId = `objective_${+new Date()}`
       var obj = {
@@ -481,9 +481,9 @@ export default {
                 },
                 num: this.existNumber + 1,
                 order: this.pageData[index].order + 1,
-                SelfO0rder: Postpone || false,
+                SelfOrder: Postpone || false,
               }
-              this.insert_pageData(data)
+              this.pageData_insert(data)
               //-------------------------------------------------已选大题数组
               this.insert_existBigQuestion({
                 obj: {
@@ -492,12 +492,12 @@ export default {
                 },
                 num: this.existNumber,
                 order: this.existBigQuestion[index].order,
-                SelfO0rder: Postpone || false,
+                SelfOrder: Postpone || false,
               })
             }
           }
         } else {
-          this.initPageData(obj)
+          this.pageData_add(obj)
         }
 
         this.set_orderSort()
@@ -506,7 +506,7 @@ export default {
       } else {
         this.delOnce_determineTopic(this.topicList[0].pid)
         obj.id = this.editQuestionId
-        this.amendPageData(obj)
+        this.pageData_edit(obj)
       }
       // 小题数组追加数据
       this.Add_AlreadyTopics(this.topicList)
