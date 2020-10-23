@@ -101,9 +101,9 @@ export default {
     },
 
     TopicContent () {
-      const {group,topic,number} = this.contentData
+      const {group,topicName,number} = this.contentData
       let scoreTotal = group[0].scoreTotal
-      return `<span>${this.options[number].label}.</span><span>${topic}</span><span class='p-5'>(${scoreTotal})</span>分<span class='optional-prompt'>${this.promptTitle}</span>`
+      return `<span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${scoreTotal})</span>分<span class='optional-prompt'>${this.promptTitle}</span>`
     },
     topicData () {
       return this.contentData.group[0].childGroup

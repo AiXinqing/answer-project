@@ -10,7 +10,7 @@
         <template v-if="!quilleditor">
           <div class="title-span">
             <span>{{options[data.number].label}}.</span>
-            <span>{{data.topic}}</span>
+            <span>{{data.topicName}}</span>
             <span>({{data.scoreTotal}})分</span>
           </div>
         </template>

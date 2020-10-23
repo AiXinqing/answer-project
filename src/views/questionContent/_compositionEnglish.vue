@@ -78,8 +78,8 @@ export default {
       return parseInt(long) * 8 + 1
     },
     TopicContent () {
-      const {name,number,score} = this.contentData
-      return `<span>${this.options[number].label}.</span><span>${name}</span><span class='p-5'>(${score})</span>分`
+      const {topicName,number,score} = this.contentData
+      return `<span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${score})</span>分`
     },
     topicData () {
       return ''
