@@ -21,7 +21,7 @@ var state = {
   pageData: [],
   page_size: 1170 - 60,
   // 一页高度
-  BigQuestion: 1,
+  questionNumber_big: 1,
   // 大题题号
   pageHeight: [],
   // 页面高度
@@ -106,13 +106,13 @@ var mutations = {
       }
     }, 50);
   },
-  set_objectiveData: function set_objectiveData(state) {
-    state.BigQuestion = state.BigQuestion + 1;
+  questionNumber_big_add: function questionNumber_big_add(state) {
+    state.questionNumber_big = state.questionNumber_big + 1;
   },
-  del_objectiveData: function del_objectiveData(state) {
-    state.BigQuestion = state.BigQuestion - 1;
+  questionNumber_big_subtract: function questionNumber_big_subtract(state) {
+    state.questionNumber_big = state.questionNumber_big - 1;
   },
-  set_pageHeight: function set_pageHeight(state) {
+  pageHeight_set: function pageHeight_set(state) {
     var Arr = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
     // 页面高度更新
     var results = []; // currentPage.height 总高度
@@ -140,10 +140,10 @@ var mutations = {
 
     state.pageHeight = results;
   },
-  set_questionOrder: function set_questionOrder(state) {
+  questionOrder_add: function questionOrder_add(state) {
     state.questionOrder = state.questionOrder + 1;
   },
-  del_questionOrder: function del_questionOrder(state, order) {
+  questionOrder_subtract: function questionOrder_subtract(state, order) {
     console.log(order);
     state.pageData.map(function (item) {
       return item.order > order ? item.order - 1 : item.order;

@@ -108,7 +108,7 @@ export default {
             this.heightArray = this.$refs['box'].map(
               (item) => item.clientHeight
             )
-            this.set_pageHeight(this.heightArray)
+            this.pageHeight_set(this.heightArray)
           })
         }
         localStorage.setItem('accessToken', JSON.stringify(this.pageData))
@@ -116,7 +116,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('pageContent', ['set_pageHeight','scoreTotal_reset','scoreTotal_sum']),
+    ...mapMutations('pageContent', ['pageHeight_set','scoreTotal_reset','scoreTotal_sum']),
     hanldeStudent(Arr) {
       this.$refs.publicDialog.opened('studentTitle', Arr)
     },

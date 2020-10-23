@@ -12,7 +12,7 @@
         <div class="label_item">位置:</div>
         <div class="label_right">
           <hj-select
-            :items="existBigQuestion"
+            :items="existquestionNumber_big"
             size="mini"
             @change="hanldeVerification"
             :value="data.positionNum"
@@ -66,13 +66,13 @@ export default {
     }
   },
   computed: {
-    ...mapState('questionType', ['questionNumber', 'existBigQuestion']),
+    ...mapState('questionType', ['questionNumber', 'existquestionNumber_big']),
     ...mapState('pageContent', ['questionOrder', 'pageData','pageLayout']),
     errorMessage() {
       return this.errorVal != '' ? true : false
     },
     isdisabledFn() {
-      return  this.existBigQuestion.length > 0 && !this.errorMessage ? false:true
+      return  this.existquestionNumber_big.length > 0 && !this.errorMessage ? false:true
     },
     tabStatusVal() {
       const { rows, positionNum } = this.data
@@ -88,26 +88,26 @@ export default {
     },
     orderVal() {
       const { positionNum } = this.data
-      let index = this.existBigQuestion.findIndex((item) => {
+      let index = this.existquestionNumber_big.findIndex((item) => {
         item.value == positionNum
       })
       if (index > -1) {
-        return this.existBigQuestion[index].order + 1
+        return this.existquestionNumber_big[index].order + 1
       } else {
         return 2
       }
     },
   },
   watch: {
-    existBigQuestion: {
+    existquestionNumber_big: {
       immediate: true,
       handler() {
         if (this.editQuestionId == null) {
           this.data = {
             ...this.data,
             positionNum:
-              this.existBigQuestion.length > 0
-                ? this.existBigQuestion[0].value
+              this.existquestionNumber_big.length > 0
+                ? this.existquestionNumber_big[0].value
                 : null,
           }
         }
@@ -123,7 +123,7 @@ export default {
       'pageData_insert',
       'pageData_simple_insert',
       'pageData_id_filter',
-      'set_questionOrder',
+      'questionOrder_add',
     ]),
     closeFrame() {
       this.openedFrame = false
@@ -175,12 +175,12 @@ export default {
           },
         }
         if (this.editQuestionId == null) {
-          let index = this.existBigQuestion.findIndex(
+          let index = this.existquestionNumber_big.findIndex(
             (item) => item.value === positionNum
           )
           if (index > -1) {
             let objIndex = this.pageData.findIndex(
-              (item) => item.id == this.existBigQuestion[index].id
+              (item) => item.id == this.existquestionNumber_big[index].id
             )
             if (objIndex > -1) {
               let data = {

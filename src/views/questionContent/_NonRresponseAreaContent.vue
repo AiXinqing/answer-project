@@ -51,7 +51,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('pageContent', ['pageData_del', 'del_objectiveData','pageData_order_edit']),
+    ...mapMutations('pageContent', ['pageData_del', 'questionNumber_big_subtract','pageData_order_edit']),
     delHanlde (id) {
       const index = this.pageData.findIndex((itme) => itme.id === id)
       if (index > -1) {

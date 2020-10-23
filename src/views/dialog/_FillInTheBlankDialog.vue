@@ -54,13 +54,13 @@
         >
         <div
           :class="[
-            'existBigQuestion_style',
+            'existquestionNumber_big_style',
             { Fade: !objectiveData.InsertTitle },
           ]"
         >
           <span>插入到第</span>
           <hj-select
-            :items="existBigQuestion"
+            :items="existquestionNumber_big"
             size="mini"
             :value="existNumber"
             @change="hanldeSelectexistBig"
@@ -130,12 +130,12 @@ export default {
       'questionNumber',
       'currentQuestion',
       'determineTopic',
-      'existBigQuestion',
+      'existquestionNumber_big',
     ]),
     ...mapState('pageContent', [
       'pageData',
       'pageLayout',
-      'BigQuestion',
+      'questionNumber_big',
       'questionOrder',
     ]),
     pageWidth() {
@@ -231,7 +231,7 @@ export default {
 
         if (this.editQuestionId == null) {
           this.$nextTick(() => {
-            this.objectiveData.number = this.BigQuestion
+            this.objectiveData.number = this.questionNumber_big
           })
           this.objectiveData.group.map((item) => {
             return {
@@ -240,8 +240,8 @@ export default {
             }
           })
           this.existNumber =
-            this.existBigQuestion.length > 0
-              ? this.existBigQuestion[0].value
+            this.existquestionNumber_big.length > 0
+              ? this.existquestionNumber_big[0].value
               : null
         }
       },
@@ -280,15 +280,15 @@ export default {
       'Empty_AlreadyTopics', // 清空
       'Fullin_once_AlreadyTopics',
       'delOnce_determineTopic',
-      'set_existBigQuestion',
-      'insert_existBigQuestion',
+      'set_existquestionNumber_big',
+      'insert_existquestionNumber_big',
     ]),
     ...mapMutations('pageContent', [
       'pageData_add',
       'pageData_edit',
       'pageData_insert',
-      'set_objectiveData',
-      'set_questionOrder',
+      'questionNumber_big_add',
+      'questionOrder_add',
     ]),
     closeFrame() {
       // 关闭弹框
@@ -300,7 +300,7 @@ export default {
     },
     opened() {
       this.spaceTopic = JSON.parse(
-        JSON.stringify({ ...this.spaceTopic, number: this.BigQuestion })
+        JSON.stringify({ ...this.spaceTopic, number: this.questionNumber_big })
       )
 
       this.openedFrame = true
@@ -349,7 +349,7 @@ export default {
         // 此题总分
       }
       //存在大题追加
-      let existBigQuestionObj = {
+      let existquestionNumber_bigObj = {
         id: objId,
         label: `${this.options[number].label}.${topic}`,
         value: number,
@@ -358,8 +358,8 @@ export default {
       this.set_currentQuestion()
 
       if (this.editQuestionId == null) {
-        if (InsertTitle && this.existBigQuestion.length > 0) {
-          let index = this.existBigQuestion.findIndex(
+        if (InsertTitle && this.existquestionNumber_big.length > 0) {
+          let index = this.existquestionNumber_big.findIndex(
             (item) => item.value === this.existNumber
           )
           if (index > -1) {
@@ -374,27 +374,27 @@ export default {
             }
             this.pageData_insert(data)
 
-            this.insert_existBigQuestion({
+            this.insert_existquestionNumber_big({
               obj: {
-                ...existBigQuestionObj,
-                order: this.existBigQuestion[index].order + 1,
+                ...existquestionNumber_bigObj,
+                order: this.existquestionNumber_big[index].order + 1,
               },
               num: this.existNumber,
-              order: this.existBigQuestion[index].order,
+              order: this.existquestionNumber_big[index].order,
               SelfOrder: Postpone,
             })
           }
         } else {
           this.pageData_add(obj)
-          this.set_existBigQuestion(existBigQuestionObj)
+          this.set_existquestionNumber_big(existquestionNumber_bigObj)
         }
-        this.set_questionOrder()
-        this.set_objectiveData(this.spaceTopic.number) // 大题号修改
+        this.questionOrder_add()
+        this.questionNumber_big_add(this.spaceTopic.number) // 大题号修改
       } else {
         this.delOnce_determineTopic(this.childGroups[0].pid)
         obj.id = this.editQuestionId
         this.pageData_edit(obj)
-        this.set_existBigQuestion({ ...existBigQuestionObj, id: obj.id })
+        this.set_existquestionNumber_big({ ...existquestionNumber_bigObj, id: obj.id })
       }
       this.Add_AlreadyTopics(this.childGroups)
       this.set_determineTopic(this.childGroups)

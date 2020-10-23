@@ -98,8 +98,7 @@ export default {
 
   },
   methods: {
-    ...mapActions('pageContent', ['getPageData']),
-    ...mapMutations('pageContent', ['set_pageHeight']),
+    ...mapMutations('pageContent', ['pageHeight_set']),
     pageContentFunc(rects = []) {
 
       let results = []

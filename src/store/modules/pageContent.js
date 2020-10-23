@@ -4,9 +4,11 @@ const state = {
   pageLayout: {}, // 页面布局
   pageData: [],
   page_size: 1170 - 60, // 一页高度
-  BigQuestion: 0, // 大题题号
   pageHeight: [], // 页面高度
+
   questionOrder: 0, // 题序
+  questionNumber_big: 0, // 大题题号
+
   scoreTotal:0, // 试卷总分
 }
 
@@ -124,16 +126,17 @@ const mutations = {
 
 
 
-  set_objectiveData: (state) => {
-    state.BigQuestion = state.BigQuestion + 1
+  questionNumber_big_add: (state) => {
+    state.questionNumber_big +=  1
   },
-  del_objectiveData: (state) => {
-    state.BigQuestion = state.BigQuestion - 1
-    if (state.BigQuestion < 0) {
-      state.BigQuestion = 0
+  questionNumber_big_subtract: (state) => {
+    state.questionNumber_big -= 1
+    if (state.questionNumber_big < 0) {
+      state.questionNumber_big = 0
     }
   },
-  set_pageHeight: (state, Arr = []) => {
+
+  pageHeight_set: (state, Arr = []) => {
     // 页面高度更新
     const results = []
     // currentPage.height 总高度
@@ -157,16 +160,18 @@ const mutations = {
     }
     state.pageHeight = results
   },
-  set_questionOrder: (state) => {
-    state.questionOrder = state.questionOrder + 1
+
+  questionOrder_add: (state) => {
+    state.questionOrder += 1
   },
-  del_questionOrder: (state, order) => {
+  questionOrder_subtract: (state, order) => {
     state.pageData.map((item) =>
       item.order > order ? item.order - 1 : item.order
     )
     state.questionOrder = state.questionOrder - 1
   },
-  layout_pageData: (state,layout) => {
+
+  pageLayout_launch_page: (state,layout) => {
     let containerWidth = layout.column === 3 && layout.size == 'A3'? 456 : 720
     let latticeWidth = layout.column === 3 && layout.size == 'A3'? 32.5 : 30
     let lattice = Math.floor(containerWidth / latticeWidth)
@@ -203,16 +208,16 @@ const mutations = {
 }
 
 const actions = {
-  getPageData: (context) => {
-    axios.get('./pageData.json').then(({
-      data
-    }) => {
-      if (data) {
-        context.commit('pageLayout_change', data.pageLayout)
-        context.commit('pageData_add', data.data)
-      }
-    })
-  },
+  // getPageData: (context) => {
+  //   axios.get('./pageData.json').then(({
+  //     data
+  //   }) => {
+  //     if (data) {
+  //       context.commit('pageLayout_change', data.pageLayout)
+  //       context.commit('pageData_add', data.data)
+  //     }
+  //   })
+  // },
 }
 
 const getters = {

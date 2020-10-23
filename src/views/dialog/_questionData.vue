@@ -51,13 +51,13 @@
         >
         <div
           :class="[
-            'existBigQuestion_style',
+            'existquestionNumber_big_style',
             { Fade: !objectiveData.InsertTitle },
           ]"
         >
           <span>插入到第</span>
           <hj-select
-            :items="existBigQuestion"
+            :items="existquestionNumber_big"
             size="mini"
             :value="existNumber"
             @change="hanldeSelectexistBig"
@@ -158,11 +158,11 @@ export default {
       'letterArr',
       'AlreadyTopics',
       'determineTopic',
-      'existBigQuestion',
+      'existquestionNumber_big',
     ]),
     ...mapState('pageContent', [
       'pageLayout',
-      'BigQuestion',
+      'questionNumber_big',
       'pageData',
       'questionOrder',
     ]),
@@ -234,7 +234,7 @@ export default {
           this.$nextTick(() => {
             this.objectiveData = {
               ...this.objectiveData,
-              number: this.BigQuestion,
+              number: this.questionNumber_big,
             }
           })
           // 小题号改变更换小题号
@@ -258,8 +258,8 @@ export default {
             }
           })
           this.existNumber =
-            this.existBigQuestion.length > 0
-              ? this.existBigQuestion[0].value
+            this.existquestionNumber_big.length > 0
+              ? this.existquestionNumber_big[0].value
               : null
         }
         this.options = this.questionNumber.map((label,value)=>({label,value}))
@@ -288,16 +288,16 @@ export default {
       'del_AlreadyTopics', // 删除题组-小题
       'set_determineTopic', // 储存确定题型
       'Empty_AlreadyTopics', // 清空
-      'set_existBigQuestion', //存大题号信息
-      'insert_existBigQuestion',
+      'set_existquestionNumber_big', //存大题号信息
+      'insert_existquestionNumber_big',
       'delOnce_determineTopic',
     ]),
     ...mapMutations('pageContent', [
       'pageData_add',
       'pageData_edit',
       'pageData_insert',
-      'set_objectiveData',
-      'set_questionOrder',
+      'questionNumber_big_add',
+      'questionOrder_add',
     ]),
     closeFrame() {
       // 取消弹框
@@ -308,7 +308,7 @@ export default {
     },
     opened() {
       this.quesctionObj = JSON.parse(
-        JSON.stringify({ ...this.quesctionObj, number: this.BigQuestion })
+        JSON.stringify({ ...this.quesctionObj, number: this.questionNumber_big })
       )
 
       this.openedFrame = true
@@ -456,7 +456,7 @@ export default {
         first: true,
       }
 
-      let existBigQuestionObj = {
+      let existquestionNumber_bigObj = {
         id: objId,
         label: `${this.options[number].label}.${topic}`,
         value: number,
@@ -464,13 +464,13 @@ export default {
       }
 
       if (this.editQuestionId == null) {
-        if (InsertTitle && this.existBigQuestion.length > 0) {
-          let index = this.existBigQuestion.findIndex(
+        if (InsertTitle && this.existquestionNumber_big.length > 0) {
+          let index = this.existquestionNumber_big.findIndex(
             (item) => item.value === this.existNumber
           )
           if (index > -1) {
             let objIndex = this.pageData.findIndex(
-              (item) => item.id == this.existBigQuestion[index].id
+              (item) => item.id == this.existquestionNumber_big[index].id
             )
             if (objIndex > -1) {
               //-------------------------------------------------插入数组对象
@@ -485,13 +485,13 @@ export default {
               }
               this.pageData_insert(data)
               //-------------------------------------------------已选大题数组
-              this.insert_existBigQuestion({
+              this.insert_existquestionNumber_big({
                 obj: {
-                  ...existBigQuestionObj,
-                  order: this.existBigQuestion[index].order + 1,
+                  ...existquestionNumber_bigObj,
+                  order: this.existquestionNumber_big[index].order + 1,
                 },
                 num: this.existNumber,
-                order: this.existBigQuestion[index].order,
+                order: this.existquestionNumber_big[index].order,
                 SelfOrder: Postpone || false,
               })
             }
@@ -500,9 +500,9 @@ export default {
           this.pageData_add(obj)
         }
 
-        this.set_questionOrder()
-        this.set_existBigQuestion({ ...existBigQuestionObj, id: obj.id })
-        this.set_objectiveData() // 大题号增加
+        this.questionOrder_add()
+        this.set_existquestionNumber_big({ ...existquestionNumber_bigObj, id: obj.id })
+        this.questionNumber_big_add() // 大题号增加
       } else {
         this.delOnce_determineTopic(this.topicList[0].pid)
         obj.id = this.editQuestionId
@@ -752,7 +752,7 @@ export default {
     top: 0;
   }
 }
-.existBigQuestion_style {
+.existquestionNumber_big_style {
   display: inline-block;
   .hj-select {
     display: inline-block;
@@ -762,7 +762,7 @@ export default {
 .Postpone {
   margin-left: 20px;
 }
-.existBigQuestion_style.Fade,
+.existquestionNumber_big_style.Fade,
 .Postpone.Fade {
   color: #999;
 }

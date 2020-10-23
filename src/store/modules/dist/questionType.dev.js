@@ -87,7 +87,7 @@ var state = {
   // 最大题数
   determineTopic: [],
   // 确定下的小题
-  existBigQuestion: [] // 存在大题
+  existquestionNumber_big: [] // 存在大题
 
 };
 var mutations = {
@@ -221,52 +221,52 @@ var mutations = {
     });
   },
   // 存在大题
-  set_existBigQuestion: function set_existBigQuestion(state, obj) {
-    var index = state.existBigQuestion.findIndex(function (row) {
+  set_existquestionNumber_big: function set_existquestionNumber_big(state, obj) {
+    var index = state.existquestionNumber_big.findIndex(function (row) {
       return row.id === obj.id;
     });
 
     if (index > -1) {
       state.determineTopic.splice(index, 1, obj);
     } else {
-      state.existBigQuestion.push(obj);
+      state.existquestionNumber_big.push(obj);
     }
   },
-  insert_existBigQuestion: function insert_existBigQuestion(state, _ref) {
+  insert_existquestionNumber_big: function insert_existquestionNumber_big(state, _ref) {
     var obj = _ref.obj,
         num = _ref.num,
         order = _ref.order,
         SelfOrder = _ref.SelfOrder;
     console.log(order);
-    state.existBigQuestion.map(function (item) {
+    state.existquestionNumber_big.map(function (item) {
       return _objectSpread({}, item, {
         order: item.order >= order ? item.order + 1 : item.order
       });
     });
     setTimeout(function () {
-      state.existBigQuestion.splice(num, 0, obj);
-      state.existBigQuestion = state.existBigQuestion.sort(function (a, b) {
+      state.existquestionNumber_big.splice(num, 0, obj);
+      state.existquestionNumber_big = state.existquestionNumber_big.sort(function (a, b) {
         return a.order - b.order;
       });
 
       if (SelfOrder) {
-        state.existBigQuestion.forEach(function (item, index) {
+        state.existquestionNumber_big.forEach(function (item, index) {
           // const i = state.options.findIndex(item => item.value == (index + 1))
-          state.existBigQuestion.splice(index, 1, _objectSpread({}, item, {
+          state.existquestionNumber_big.splice(index, 1, _objectSpread({}, item, {
             label: state.options[index].label + '.' + item.label.split('.')[1]
           }));
         });
       }
     }, 50);
   },
-  del_existBigQuestion: function del_existBigQuestion(state, obj) {
+  del_existquestionNumber_big: function del_existquestionNumber_big(state, obj) {
     var id = obj.objId != undefined ? obj.objId : obj.id;
-    var index = state.existBigQuestion.findIndex(function (row) {
+    var index = state.existquestionNumber_big.findIndex(function (row) {
       return row.id === id;
     });
 
     if (index > -1) {
-      state.existBigQuestion.splice(index, 1);
+      state.existquestionNumber_big.splice(index, 1);
     }
   }
 };

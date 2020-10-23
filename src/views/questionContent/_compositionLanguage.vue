@@ -154,14 +154,14 @@ export default {
     ...mapMutations('pageContent', [
       'pageData_del',
       'pageData_id_clean',
-      'del_objectiveData',
-      'del_questionOrder',
+      'questionNumber_big_subtract',
+      'questionOrder_subtract',
     ]),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
       'del_determineTopic',
-      'del_existBigQuestion',
+      'del_existquestionNumber_big',
     ]),
     hanldeCloseEsitor(content) {
       this.isEditor = false
@@ -179,11 +179,11 @@ export default {
       if (index > -1) {
         this.del_determineTopic([this.contentData])
         this.del_AlreadyTopics([this.contentData])
-        this.del_questionOrder(this.pageData[index].order + 1)
+        this.questionOrder_subtract(this.pageData[index].order + 1)
         this.pageData_id_clean(this.data.id)
         this.set_currentQuestion()
-        this.del_objectiveData() // 删减一个大题号
-        this.del_existBigQuestion(this.questionData)
+        this.questionNumber_big_subtract() // 删减一个大题号
+        this.del_existquestionNumber_big(this.questionData)
       }
     },
   },

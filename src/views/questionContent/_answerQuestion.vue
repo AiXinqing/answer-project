@@ -150,8 +150,8 @@ export default {
   methods: {
     ...mapMutations('pageContent', [
       'pageData_del',
-      'del_objectiveData',
-      'del_questionOrder',
+      'questionNumber_big_subtract',
+      'questionOrder_subtract',
       'pageData_edit',
       'pageData_objId_del'
     ]),
@@ -159,7 +159,7 @@ export default {
       'del_AlreadyTopics',
       'set_currentQuestion',
       'del_determineTopic',
-      'del_existBigQuestion',
+      'del_existquestionNumber_big',
     ]),
     hanldeCloseEsitor(content) {
       this.isEditor = false

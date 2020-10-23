@@ -53,10 +53,10 @@
       <div class="condition_box Insert_box" v-show="editQuestionId == null">
         <el-checkbox v-model="dataTopic.InsertTitle">插入添加题目</el-checkbox>
         <div
-          :class="['existBigQuestion_style',{'Fade':!dataTopic.InsertTitle}]">
+          :class="['existquestionNumber_big_style',{'Fade':!dataTopic.InsertTitle}]">
           <span>插入到第</span>
           <hj-select
-              :items="existBigQuestion"
+              :items="existquestionNumber_big"
               size="mini"
               :value="existNumber"
               @change="hanldeSelectexistBig" />
@@ -119,12 +119,12 @@ export default {
       'questionNumber',
       'currentQuestion',
       'determineTopic',
-      'existBigQuestion',
+      'existquestionNumber_big',
     ]),
     ...mapState('pageContent', [
       'pageHeight',
       'page_size',
-      'BigQuestion',
+      'questionNumber_big',
       'questionOrder',
       'pageData',
       'pageLayout',
@@ -214,10 +214,10 @@ export default {
           this.$nextTick(() => {
             this.dataTopic = {
               ...this.dataTopic,
-              number: this.BigQuestion
+              number: this.questionNumber_big
             }
           })
-          this.existNumber = this.existBigQuestion.length > 0 ? this.existBigQuestion[0].value : null
+          this.existNumber = this.existquestionNumber_big.length > 0 ? this.existquestionNumber_big[0].value : null
         }
         this.options = this.questionNumber.map((label,value)=>({label,value}))
       }
@@ -241,9 +241,9 @@ export default {
       'pageData_add',
       'pageData_edit',
       'pageData_insert',
-      'set_objectiveData',
-      'set_questionOrder',
-      'del_questionOrder',
+      'questionNumber_big_add',
+      'questionOrder_add',
+      'questionOrder_subtract',
       'pageData_objId_filter',
       'pageData_simple_insert'
     ]),
@@ -253,8 +253,8 @@ export default {
       'set_determineTopic',
       'Empty_AlreadyTopics',
       'Add_AlreadyTopics',
-      'set_existBigQuestion',
-      'insert_existBigQuestion',
+      'set_existquestionNumber_big',
+      'insert_existquestionNumber_big',
       'delOnce_determineTopic',
     ]),
     ...mapMutations('answerQuestion', ['set_answerQuestionArr',]),
@@ -266,8 +266,8 @@ export default {
       }))
 
       // 开打弹框
-      this.questionData.number = this.BigQuestion
-      this.dataTopic.number = this.BigQuestion
+      this.questionData.number = this.questionNumber_big
+      this.dataTopic.number = this.questionNumber_big
 
       this.openedFrame = true
       this.Empty_AlreadyTopics() // 清空
@@ -318,11 +318,11 @@ export default {
           previousOrder:this.questionOrder - 1 // 解答题插入前的序列号
         }
         Arr.push(obj)
-        this.set_questionOrder()
+        this.questionOrder_add()
       })
 
       //存在大题追加
-      let existBigQuestionObj = {
+      let existquestionNumber_bigObj = {
         id: objId,
         label: `${this.options[number].label}.${this.dataTopic.topic}`,
         value:number
@@ -330,16 +330,16 @@ export default {
 
       if (this.editQuestionId == null) {
         // 新增
-        if(InsertTitle && this.existBigQuestion.length > 0){
+        if(InsertTitle && this.existquestionNumber_big.length > 0){
 
-          let index = this.existBigQuestion.findIndex(
+          let index = this.existquestionNumber_big.findIndex(
             (item) => item.value === this.existNumber
           )
 
 
           if(index > -1){
             let existNum = this.existNumber - 1
-            let orders = this.existBigQuestion[index].order - 1
+            let orders = this.existquestionNumber_big[index].order - 1
             Arr.forEach((obj,index) => {
               existNum += 1
               orders += 1
@@ -355,13 +355,13 @@ export default {
               this.pageData_insert(data)
 
               if(index === 0){
-                this.insert_existBigQuestion({
+                this.insert_existquestionNumber_big({
                   obj: {
-                    ...existBigQuestionObj,
+                    ...existquestionNumber_bigObj,
                     order: orders,
                   },
                   num: existNum,
-                  order: this.existBigQuestion[index].order,
+                  order: this.existquestionNumber_big[index].order,
                   SelfOrder: Postpone,
                 })
               }
@@ -372,10 +372,10 @@ export default {
           Arr.forEach(obj => {
             this.pageData_add(obj)
           })
-          this.set_existBigQuestion(existBigQuestionObj)
+          this.set_existquestionNumber_big(existquestionNumber_bigObj)
         }
         // 大题号修改
-        this.set_objectiveData(number)
+        this.questionNumber_big_add(number)
 
       } else {
         this.pageData_objId_filter(this.editQuestionId)

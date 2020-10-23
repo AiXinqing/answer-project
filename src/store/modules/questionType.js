@@ -6,7 +6,7 @@ const state = {
   letterArr: ['A', 'B', 'C', 'D', 'E', 'G', 'H', 'I', 'J', 'K'],
   maxTopic: 200, // 最大题数
   determineTopic: [], // 确定下的小题
-  existBigQuestion: [], // 存在大题
+  existquestionNumber_big: [], // 存在大题
 }
 
 const mutations = {
@@ -125,37 +125,37 @@ const mutations = {
     })
   },
   // 存在大题
-  set_existBigQuestion: (state, obj) => {
-    const index = state.existBigQuestion.findIndex(
+  set_existquestionNumber_big: (state, obj) => {
+    const index = state.existquestionNumber_big.findIndex(
       (row) => row.id === obj.id
     )
     if (index > -1) {
       state.determineTopic.splice(index, 1, obj)
     } else {
-      state.existBigQuestion.push(obj)
+      state.existquestionNumber_big.push(obj)
     }
   },
 
-  insert_existBigQuestion: (state, {
+  insert_existquestionNumber_big: (state, {
     obj,
     num,
     order,
     SelfOrder
   }) => {
-    state.existBigQuestion.map(function (item) {
+    state.existquestionNumber_big.map(function (item) {
       return {
         ...item,
         order: item.order >= order ? item.order + 1 : item.order,
       }
     });
     setTimeout(function () {
-      state.existBigQuestion.splice(num, 0, obj);
-      state.existBigQuestion = state.existBigQuestion.sort(function (a, b) {
+      state.existquestionNumber_big.splice(num, 0, obj);
+      state.existquestionNumber_big = state.existquestionNumber_big.sort(function (a, b) {
         return a.order - b.order;
       });
       if (SelfOrder) {
-        state.existBigQuestion.forEach((item, index) => {
-          state.existBigQuestion.splice(index, 1, {
+        state.existquestionNumber_big.forEach((item, index) => {
+          state.existquestionNumber_big.splice(index, 1, {
             ...item,
             label: state.options[index].label + '.' + item.label.split('.')[1]
           })
@@ -164,13 +164,13 @@ const mutations = {
     }, 50);
   },
 
-  del_existBigQuestion: (state, obj) => {
+  del_existquestionNumber_big: (state, obj) => {
     let id = obj.objId != undefined ? obj.objId : obj.id
-    const index = state.existBigQuestion.findIndex(
+    const index = state.existquestionNumber_big.findIndex(
       (row) => row.id === id
     )
     if (index > -1) {
-      state.existBigQuestion.splice(index, 1)
+      state.existquestionNumber_big.splice(index, 1)
     }
   },
 

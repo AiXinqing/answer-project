@@ -192,15 +192,15 @@ export default {
   methods: {
     ...mapMutations('pageContent', [
       'pageData_del',
-      'del_objectiveData',
-      'del_questionOrder',
+      'questionNumber_big_subtract',
+      'questionOrder_subtract',
       'pageData_edit',
     ]),
     ...mapMutations('questionType', [
       'del_AlreadyTopics',
       'set_currentQuestion',
       'del_determineTopic',
-      'del_existBigQuestion',
+      'del_existquestionNumber_big',
     ]),
     delHanlde(id) {
       // 删除大题-小题数
@@ -208,11 +208,11 @@ export default {
       if (index > -1) {
         this.del_determineTopic(this.topicBox)
         this.del_AlreadyTopics(this.topicBox)
-        this.del_questionOrder(this.pageData[index].order + 1)
+        this.questionOrder_subtract(this.pageData[index].order + 1)
         this.pageData_del(index)
         this.set_currentQuestion()
-        this.del_objectiveData() // 删减一个大题号
-        this.del_existBigQuestion(this.questionData)
+        this.questionNumber_big_subtract() // 删减一个大题号
+        this.del_existquestionNumber_big(this.questionData)
       }
     },
     currentQuestionFillEdit(id) {

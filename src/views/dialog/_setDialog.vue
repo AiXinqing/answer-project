@@ -90,8 +90,8 @@ export default {
       'pageLayout_change',
       'pageData_add',
       'pageData_edit',
-      'layout_pageData',
-      'set_questionOrder']),
+      'pageLayout_launch_page',
+      'questionOrder_add']),
     openRForm (type) {
       if (type === 1) {
         this.createLayout = true
@@ -133,13 +133,13 @@ export default {
         this.pageData.filter(obj => obj.questionType == 'ObjectiveQuestion').forEach(element => {
           this.$refs.questionDialogs.layoutEdit(element)
         })
-        setTimeout(function() { this.layout_pageData(this.pageLayout) }, 500)
+        setTimeout(function() { this.pageLayout_launch_page(this.pageLayout) }, 500)
       } else {
         // 新增值
         this.pageData_add(TestData)
       }
       // order排序
-      this.set_questionOrder()
+      this.questionOrder_add()
       this.openedFrame = false
     },
     hanldeTab (item) {
