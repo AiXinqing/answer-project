@@ -78,7 +78,7 @@
 <script>
 import AddForm from '../questionContent/Precautions/answer/_index'
 import answerItem from '../questionContent/Precautions/answer/_item'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations,mapGetters } from 'vuex'
 export default {
   components: {
     AddForm,
@@ -119,17 +119,19 @@ export default {
       'questionNumber',
       'subTopic_number',
       'subTopic_number_determine',
-      'questionNumber_big_exist',
     ]),
     ...mapState('pageContent', [
       'pageHeight',
       'page_size',
-      'questionNumber_big',
       'questionOrder',
       'pageData',
       'pageLayout',
     ]),
     ...mapState('answerQuestion', ['answerQuestionArr',]),
+    ...mapGetters('pageContent', ['questionNumber_big_exist']),
+    questionNumber_big(){
+      return this.questionNumber_big_exist.length
+    },
 
     title(){
       return !this.editQuestionId ? '新增解答题': '编辑解答题'
@@ -241,7 +243,6 @@ export default {
       'pageData_add',
       'pageData_edit',
       'pageData_insert',
-      'questionNumber_big_add',
       'questionOrder_add',
       'questionOrder_subtract',
       'pageData_objId_filter',
@@ -253,8 +254,6 @@ export default {
       'subTopic_calculate_determine',
       'subTopic_already_reset',
       'subTopic_already_add',
-      'questionNumber_big_exist_edit',
-      'questionNumber_big_exist_insert',
       'subTopic_determine_pid_clean',
     ]),
     ...mapMutations('answerQuestion', ['set_answerQuestionArr',]),
@@ -291,7 +290,7 @@ export default {
       this.subTopic_already_reset() // 清空临时小题group
     },
     preCreateQuestion () {
-      const { InsertTitle, Postpone,number } = this.dataTopic
+      const { InsertTitle, Postpone} = this.dataTopic
       //确定信息
       let Arr = []
       let objId = `answer_${+new Date()}`
@@ -321,13 +320,6 @@ export default {
         this.questionOrder_add()
       })
 
-      //存在大题追加
-      let questionNumber_big_existObj = {
-        id: objId,
-        label: `${this.options[number].label}.${this.dataTopic.topic}`,
-        value:number
-      }
-
       if (this.editQuestionId == null) {
         // 新增
         if(InsertTitle && this.questionNumber_big_exist.length > 0){
@@ -336,11 +328,10 @@ export default {
             (item) => item.value === this.existNumber
           )
 
-
           if(index > -1){
             let existNum = this.existNumber - 1
-            let orders = this.questionNumber_big_exist[index].order - 1
-            Arr.forEach((obj,index) => {
+
+            Arr.forEach((obj) => {
               existNum += 1
               orders += 1
               let data = {
@@ -354,28 +345,13 @@ export default {
               }
               this.pageData_insert(data)
 
-              if(index === 0){
-                this.questionNumber_big_exist_insert({
-                  obj: {
-                    ...questionNumber_big_existObj,
-                    order: orders,
-                  },
-                  num: existNum,
-                  order: this.questionNumber_big_exist[index].order,
-                  SelfOrder: Postpone,
-                })
-              }
-
             })
           }
         } else {
           Arr.forEach(obj => {
             this.pageData_add(obj)
           })
-          this.questionNumber_big_exist_edit(questionNumber_big_existObj)
         }
-        // 大题号修改
-        this.questionNumber_big_add(number)
 
       } else {
         this.pageData_objId_filter(this.editQuestionId)

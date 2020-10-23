@@ -90,7 +90,7 @@
 
 <script>
 import spaceQuestion from '../questionContent/Precautions/_spaceQuestion'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations,mapGetters } from 'vuex'
 export default {
   components: {
     spaceQuestion,
@@ -130,14 +130,16 @@ export default {
       'questionNumber',
       'subTopic_number',
       'subTopic_number_determine',
-      'questionNumber_big_exist',
     ]),
     ...mapState('pageContent', [
       'pageData',
       'pageLayout',
-      'questionNumber_big',
       'questionOrder',
     ]),
+    ...mapGetters('pageContent', ['questionNumber_big_exist']),
+    questionNumber_big(){
+      return this.questionNumber_big_exist.length
+    },
     pageWidth() {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 480
@@ -280,14 +282,11 @@ export default {
       'subTopic_already_reset', // 清空
       'subTopic_already_pid_clean',
       'subTopic_determine_pid_clean',
-      'questionNumber_big_exist_edit',
-      'questionNumber_big_exist_insert',
     ]),
     ...mapMutations('pageContent', [
       'pageData_add',
       'pageData_edit',
       'pageData_insert',
-      'questionNumber_big_add',
       'questionOrder_add',
     ]),
     closeFrame() {
@@ -322,7 +321,7 @@ export default {
       // 计算高度
       let height = this.topicGroupData.length * 45 + 17 + 32
       // 此题总分计算
-      const { topic, number, InsertTitle, Postpone } = this.objectiveData
+      const {InsertTitle, Postpone } = this.objectiveData
 
       let scoreTotal = 0
 
@@ -348,12 +347,7 @@ export default {
         first: true,
         // 此题总分
       }
-      //存在大题追加
-      let questionNumber_big_existObj = {
-        id: objId,
-        label: `${this.options[number].label}.${topic}`,
-        value: number,
-      }
+
       // 小题数组追加至确定题型
       this.subTopic_number_calculate()
 
@@ -374,27 +368,16 @@ export default {
             }
             this.pageData_insert(data)
 
-            this.questionNumber_big_exist_insert({
-              obj: {
-                ...questionNumber_big_existObj,
-                order: this.questionNumber_big_exist[index].order + 1,
-              },
-              num: this.existNumber,
-              order: this.questionNumber_big_exist[index].order,
-              SelfOrder: Postpone,
-            })
           }
         } else {
           this.pageData_add(obj)
-          this.questionNumber_big_exist_edit(questionNumber_big_existObj)
         }
         this.questionOrder_add()
-        this.questionNumber_big_add(this.spaceTopic.number) // 大题号修改
+
       } else {
         this.subTopic_determine_pid_clean(this.childGroups[0].pid)
         obj.id = this.editQuestionId
         this.pageData_edit(obj)
-        this.questionNumber_big_exist_edit({ ...questionNumber_big_existObj, id: obj.id })
       }
       this.subTopic_already_add(this.childGroups)
       this.subTopic_calculate_determine(this.childGroups)

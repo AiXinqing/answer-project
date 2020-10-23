@@ -90,7 +90,7 @@
 <script>
 import AddForm from '../questionContent/Precautions/optional/_index'
 import optionalItem from '../questionContent/Precautions/optional/_item'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations,mapGetters} from 'vuex'
 export default {
   components: {
     AddForm,
@@ -132,10 +132,13 @@ export default {
       'questionNumber',
       'subTopic_number',
       'subTopic_number_determine',
-      'questionNumber_big_exist',
     ]),
-    ...mapState('pageContent', ['questionNumber_big', 'questionOrder', 'pageData','pageLayout']),
+    ...mapState('pageContent', ['questionOrder', 'pageData','pageLayout']),
     ...mapState('answerQuestion', ['answerQuestionArr']),
+    ...mapGetters('pageContent', ['questionNumber_big_exist']),
+    questionNumber_big(){
+      return this.questionNumber_big_exist.length
+    },
     errorMessage() {
       return this.errorVal != '' ? true : false
     },
@@ -206,7 +209,6 @@ export default {
       'pageData_add',
       'pageData_edit',
       'pageData_insert',
-      'questionNumber_big_add',
       'questionOrder_add',
     ]),
     ...mapMutations('questionType', [
@@ -214,8 +216,6 @@ export default {
       'subTopic_already_reset',
       'subTopic_already_add',
       'subTopic_calculate_determine',
-      'questionNumber_big_exist_edit',
-      'questionNumber_big_exist_insert',
       'subTopic_determine_pid_clean',
     ]),
     opened() {
@@ -243,7 +243,7 @@ export default {
     },
     preCreateQuestion() {
       // 当前页内容所占高度topic, number,Postpone
-      const { rows, InsertTitle, Postpone,number,topic,group } = this.data
+      const { rows, InsertTitle, Postpone,group } = this.data
 
       let rectHeight = rows * 35 // 当前内容高度 45(内部高度)
       let MarginHeight = +14 + 40
@@ -265,13 +265,6 @@ export default {
         },
         order: this.questionOrder,
         first: true,
-      }
-      //存在大题追加
-      let questionNumber_big_existObj = {
-        id: objId,
-        label: `${this.options[number].label}.${topic}`,
-        value: number,
-        order: this.questionOrder,
       }
 
       if (this.editQuestionId == null) {
@@ -298,31 +291,19 @@ export default {
               }
 
               this.pageData_insert(data)
-              //-------------------------------------------------已选大题数组
-              this.questionNumber_big_exist_insert({
-                obj: {
-                  ...questionNumber_big_existObj,
-                  order: this.questionNumber_big_exist[index].order + 1,
-                },
-                num: this.existNumber,
-                order: this.questionNumber_big_exist[index].order,
-                SelfOrder: Postpone,
-              })
             }
           }
         } else {
           this.pageData_add(obj)
-          this.questionNumber_big_exist_edit(questionNumber_big_existObj)
+
         }
         this.questionOrder_add()
-        // 大题号修改
-        this.questionNumber_big_add(number)
+
       } else {
         // 编辑
         this.subTopic_determine_pid_clean(this.childGroups[0].pid)
         obj.id = this.editQuestionId
         this.pageData_edit(obj)
-        this.questionNumber_big_exist_edit({ ...questionNumber_big_existObj, id: obj.id })
       }
       //------------------------------------
       this.openedFrame = false // 关闭弹窗

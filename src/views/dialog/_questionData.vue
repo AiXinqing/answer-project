@@ -87,7 +87,7 @@
 
 <script>
 import tabPaneBox from '../questionContent/Precautions/_tabPaneBox'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations,mapGetters } from 'vuex'
 export default {
   components: {
     tabPaneBox,
@@ -158,14 +158,16 @@ export default {
       'letterList',
       'subTopic_number_already',
       'subTopic_number_determine',
-      'questionNumber_big_exist',
     ]),
     ...mapState('pageContent', [
       'pageLayout',
-      'questionNumber_big',
       'pageData',
       'questionOrder',
     ]),
+    ...mapGetters('pageContent', ['questionNumber_big_exist']),
+    questionNumber_big(){
+      return this.questionNumber_big_exist.length
+    },
     pageWidth() {
       return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
         ? 480
@@ -288,15 +290,12 @@ export default {
       'subTopic_already_del', // 删除题组-小题
       'subTopic_calculate_determine', // 储存确定题型
       'subTopic_already_reset', // 清空
-      'questionNumber_big_exist_edit', //存大题号信息
-      'questionNumber_big_exist_insert',
       'subTopic_determine_pid_clean',
     ]),
     ...mapMutations('pageContent', [
       'pageData_add',
       'pageData_edit',
       'pageData_insert',
-      'questionNumber_big_add',
       'questionOrder_add',
     ]),
     closeFrame() {
@@ -408,8 +407,6 @@ export default {
       // 数据编辑完成添加至全局数组中---------------
       const {
         rows,
-        topic,
-        number,
         InsertTitle,
         Postpone,
       } = this.objectiveData
@@ -456,13 +453,6 @@ export default {
         first: true,
       }
 
-      let questionNumber_big_existObj = {
-        id: objId,
-        label: `${this.options[number].label}.${topic}`,
-        value: number,
-        order: this.questionOrder,
-      }
-
       if (this.editQuestionId == null) {
         if (InsertTitle && this.questionNumber_big_exist.length > 0) {
           let index = this.questionNumber_big_exist.findIndex(
@@ -484,16 +474,6 @@ export default {
                 SelfOrder: Postpone || false,
               }
               this.pageData_insert(data)
-              //-------------------------------------------------已选大题数组
-              this.questionNumber_big_exist_insert({
-                obj: {
-                  ...questionNumber_big_existObj,
-                  order: this.questionNumber_big_exist[index].order + 1,
-                },
-                num: this.existNumber,
-                order: this.questionNumber_big_exist[index].order,
-                SelfOrder: Postpone || false,
-              })
             }
           }
         } else {
@@ -501,8 +481,7 @@ export default {
         }
 
         this.questionOrder_add()
-        this.questionNumber_big_exist_edit({ ...questionNumber_big_existObj, id: obj.id })
-        this.questionNumber_big_add() // 大题号增加
+
       } else {
         this.subTopic_determine_pid_clean(this.topicList[0].pid)
         obj.id = this.editQuestionId
