@@ -12,7 +12,7 @@
         <div class="label_item">位置:</div>
         <div class="label_right">
           <hj-select
-            :items="existBigQuestion"
+            :items="questionNumber_big_exist"
             size="mini"
             @change="hanldeVerification"
             :value="data.positionNum"
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations,mapGetters } from 'vuex'
 export default {
   data() {
     return {
@@ -66,13 +66,14 @@ export default {
     }
   },
   computed: {
-    ...mapState('questionType', ['questionNumber', 'existBigQuestion']),
-    ...mapState('pageContent', ['orderSort', 'pageData']),
+    ...mapState('questionType', ['questionNumber']),
+    ...mapState('pageContent', ['questionOrder', 'pageData','pageLayout']),
+    ...mapGetters('pageContent', ['questionNumber_big_exist']),
     errorMessage() {
       return this.errorVal != '' ? true : false
     },
     isdisabledFn() {
-      return  this.existBigQuestion.length > 0 && !this.errorMessage ? false:true
+      return  this.questionNumber_big_exist.length > 0 && !this.errorMessage ? false:true
     },
     tabStatusVal() {
       const { rows, positionNum } = this.data
@@ -88,26 +89,26 @@ export default {
     },
     orderVal() {
       const { positionNum } = this.data
-      let index = this.existBigQuestion.findIndex((item) => {
+      let index = this.questionNumber_big_exist.findIndex((item) => {
         item.value == positionNum
       })
       if (index > -1) {
-        return this.existBigQuestion[index].order + 1
+        return this.questionNumber_big_exist[index].order + 1
       } else {
         return 2
       }
     },
   },
   watch: {
-    existBigQuestion: {
+    questionNumber_big_exist: {
       immediate: true,
       handler() {
         if (this.editQuestionId == null) {
           this.data = {
             ...this.data,
             positionNum:
-              this.existBigQuestion.length > 0
-                ? this.existBigQuestion[0].value
+              this.questionNumber_big_exist.length > 0
+                ? this.questionNumber_big_exist[0].value
                 : null,
           }
         }
@@ -120,10 +121,10 @@ export default {
   },
   methods: {
     ...mapMutations('pageContent', [
-      'insert_pageData',
-      'answer_insertPageData',
-      'Filter_pageData',
-      'set_orderSort',
+      'pageData_insert',
+      'pageData_simple_insert',
+      'pageData_id_filter',
+      'questionOrder_add',
     ]),
     closeFrame() {
       this.openedFrame = false
@@ -169,34 +170,37 @@ export default {
           order: this.orderVal,
           first: true,
           rowHeight: 37,
-          content: this.data,
+          content: {
+            ...this.data,
+            pageLayout:this.pageLayout
+          },
         }
         if (this.editQuestionId == null) {
-          let index = this.existBigQuestion.findIndex(
+          let index = this.questionNumber_big_exist.findIndex(
             (item) => item.value === positionNum
           )
           if (index > -1) {
             let objIndex = this.pageData.findIndex(
-              (item) => item.id == this.existBigQuestion[index].id
+              (item) => item.id == this.questionNumber_big_exist[index].id
             )
             if (objIndex > -1) {
               let data = {
                 obj: { ...obj, order: this.pageData[objIndex].order },
                 num: positionNum,
                 order: this.pageData[objIndex].order,
-                SelfO0rder: false,
+                SelfOrder: false,
               }
 
-              this.insert_pageData(data)
+              this.pageData_insert(data)
             }
           }
         } else {
-          this.Filter_pageData(this.editQuestionId)
+          this.pageData_id_filter(this.editQuestionId)
           let data = {
             obj:{ ...obj, id: this.editQuestionId },
             num:this.data.positionNum + 2
           }
-          this.answer_insertPageData(data)
+          this.pageData_simple_insert(data)
         }
         this.openedFrame = false
         this.data = JSON.parse(JSON.stringify(this.closeData))

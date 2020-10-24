@@ -9,8 +9,8 @@
         <template v-if="!quilleditor">
           <div class="title-span">
             <span>{{options[data.number].label}}.</span>
-            <span>{{data.topic}}</span>
-            <span>({{data.totalScore}})分</span>
+            <span>{{data.topicName}}</span>
+            <span>({{data.scoreTotal}})分</span>
           </div>
         </template>
         <template
@@ -30,7 +30,7 @@
       <div class="question_editOrDel">
         <span
           class="layui-btn layui-btn-xs"
-          @click="currentQuestionFillEdit(questionData.id)"
+          @click="subTopic_numberFillEdit(questionData.id)"
           >编辑</span
         >
         <span class="layui-btn layui-btn-xs" @click="delHanlde(questionData.id)"
@@ -131,11 +131,12 @@ export default {
       cotent: '',
       options:[],
       quilleditor:false,
+      pageLayout:this.contentData.pageLayout,
     }
   },
   computed: {
-    ...mapState('questionType', ['questionNumber', 'letterArr']),
-    ...mapState('pageContent', ['pageData', 'pageLayout']),
+    ...mapState('questionType', ['questionNumber', 'letterList']),
+    ...mapState('pageContent', ['pageData']),
     heightContetn(){
       const {castHeight,heightTitle,height} = this.questionData
       let obj = {
@@ -173,6 +174,7 @@ export default {
           ...this.contentData,
         }
         this.options = this.questionNumber.map((label,value)=>({label,value}))
+        this.pageLayout = this.contentData.pageLayout
       },
     },
     heightContetn:{
@@ -189,31 +191,31 @@ export default {
   },
   methods: {
     ...mapMutations('pageContent', [
-      'delPageData',
-      'del_objectiveData',
-      'del_orderSort',
-      'amendPageData',
+      'pageData_del',
+      'questionNumber_big_subtract',
+      'questionOrder_subtract',
+      'pageData_edit',
     ]),
     ...mapMutations('questionType', [
-      'del_AlreadyTopics',
-      'set_currentQuestion',
-      'del_determineTopic',
-      'del_existBigQuestion',
+      'subTopic_already_del',
+      'subTopic_number_calculate',
+      'subTopic_determine_del',
+      'questionNumber_big_exist_del',
     ]),
     delHanlde(id) {
       // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === id)
       if (index > -1) {
-        this.del_determineTopic(this.topicBox)
-        this.del_AlreadyTopics(this.topicBox)
-        this.del_orderSort(this.pageData[index].order + 1)
-        this.delPageData(index)
-        this.set_currentQuestion()
-        this.del_objectiveData() // 删减一个大题号
-        this.del_existBigQuestion(this.questionData)
+        this.subTopic_determine_del(this.topicBox)
+        this.subTopic_already_del(this.topicBox)
+        this.questionOrder_subtract(this.pageData[index].order + 1)
+        this.pageData_del(index)
+        this.subTopic_number_calculate()
+        this.questionNumber_big_subtract() // 删减一个大题号
+        this.questionNumber_big_exist_del(this.questionData)
       }
     },
-    currentQuestionFillEdit(id) {
+    subTopic_numberFillEdit(id) {
       this.$emit('current-question-fill-edit', id)
     },
     hanldeEditor() {
@@ -234,7 +236,7 @@ export default {
         if(castHeight < height){
           crrHeight = (height - castHeight) + rectHeight
         }
-        this.amendPageData({
+        this.pageData_edit({
             ...questionObj,
             height:crrHeight >= this.minHeight ? crrHeight + questionObj.heightTitle + 3:this.minHeight,
           })

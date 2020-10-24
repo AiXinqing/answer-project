@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 export default {
   components: {},
   props: {
@@ -29,6 +28,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    titleInfo:{
+      type:Array,
+      default: () => []
+    }
   },
   data() {
     return {
@@ -36,7 +39,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('titleSet', ['titleInfo']),
     studentInfoArr() {
       return this.titleInfo.filter((item) => item.checked == true)
     },

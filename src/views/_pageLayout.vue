@@ -3,7 +3,7 @@
     <div class="Guide_bar">
       <div class="allscore">
         当前总分：
-        <span>{{paperTotalScore}}</span> 分
+        <span>{{scoreTotal}}</span> 分
       </div>
       <div class="layout-box">
         <div class="layout-top">
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState,mapMutations } from 'vuex'
 import setDialog from './dialog/_setDialog'
 export default {
   components: {
@@ -45,7 +45,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('pageContent', ['pageLayout','page_size','paperTotalScore']),
+    ...mapState('pageContent', ['pageLayout','page_size','scoreTotal','pageData']),
     testPaper() {
       return 'A3/B4/8K纸'
     },
@@ -61,6 +61,7 @@ export default {
     this.$refs.editorLayout.openRForm(1)
   },
   methods: {
+    ...mapMutations('pageContent', ['pageData_edit']),
     closePrompt () {
       this.openedPrompt = false
     },

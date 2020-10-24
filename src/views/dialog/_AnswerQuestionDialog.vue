@@ -53,10 +53,10 @@
       <div class="condition_box Insert_box" v-show="editQuestionId == null">
         <el-checkbox v-model="dataTopic.InsertTitle">插入添加题目</el-checkbox>
         <div
-          :class="['existBigQuestion_style',{'Fade':!dataTopic.InsertTitle}]">
+          :class="['questionNumber_big_exist_style',{'Fade':!dataTopic.InsertTitle}]">
           <span>插入到第</span>
           <hj-select
-              :items="existBigQuestion"
+              :items="questionNumber_big_exist"
               size="mini"
               :value="existNumber"
               @change="hanldeSelectexistBig" />
@@ -78,7 +78,7 @@
 <script>
 import AddForm from '../questionContent/Precautions/answer/_index'
 import answerItem from '../questionContent/Precautions/answer/_item'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations,mapGetters } from 'vuex'
 export default {
   components: {
     AddForm,
@@ -95,7 +95,7 @@ export default {
       previous:null,
       questionData: {
         number: 0,
-        topic: '解答题',
+        topicName: '解答题',
         rows: 6,
         startQuestion: 1,
         HorizontalLine: false, // 横行
@@ -103,7 +103,7 @@ export default {
         InsertTitle: false,
         Postpone: false,
         group: [{
-          start: this.currentQuestion,
+          start: this.subTopic_number,
           end: null,
           score: 1,
           space: 1,
@@ -117,18 +117,21 @@ export default {
   computed: {
     ...mapState('questionType', [
       'questionNumber',
-      'currentQuestion',
-      'determineTopic',
-      'existBigQuestion',
+      'subTopic_number',
+      'subTopic_number_determine',
     ]),
     ...mapState('pageContent', [
       'pageHeight',
       'page_size',
-      'BigQuestion',
-      'orderSort',
-      'pageData'
+      'questionOrder',
+      'pageData',
+      'pageLayout',
     ]),
     ...mapState('answerQuestion', ['answerQuestionArr',]),
+    ...mapGetters('pageContent', ['questionNumber_big_exist']),
+    questionNumber_big(){
+      return this.questionNumber_big_exist.length
+    },
 
     title(){
       return !this.editQuestionId ? '新增解答题': '编辑解答题'
@@ -189,7 +192,7 @@ export default {
       })
       return itemArr
     },
-    totalScore () {
+    scoreTotal () {
       return this.childGroups.map(item => item.score).reduce((accumulator, currentValue) => {
         return accumulator + currentValue
       })
@@ -200,7 +203,7 @@ export default {
   },
   mounted () {
     this.closeData = JSON.parse(JSON.stringify(this.questionData))
-    this.set_currentQuestion()
+    this.subTopic_number_calculate()
   },
   watch: {
     questionData: {
@@ -213,10 +216,10 @@ export default {
           this.$nextTick(() => {
             this.dataTopic = {
               ...this.dataTopic,
-              number: this.BigQuestion
+              number: this.questionNumber_big
             }
           })
-          this.existNumber = this.existBigQuestion.length > 0 ? this.existBigQuestion[0].value : null
+          this.existNumber = this.questionNumber_big_exist.length > 0 ? this.questionNumber_big_exist[0].value : null
         }
         this.options = this.questionNumber.map((label,value)=>({label,value}))
       }
@@ -225,53 +228,50 @@ export default {
     childGroups:{
       immediate: true,
       handler(){
-        this.Empty_AlreadyTopics()
+        this.subTopic_already_reset()
         if(this.childGroups.length > 0){
-          this.Add_AlreadyTopics(this.childGroups)
+          this.subTopic_already_add(this.childGroups)
         }else{
-          this.Add_AlreadyTopics(this.determineTopic)
+          this.subTopic_already_add(this.subTopic_number_determine)
         }
-        this.set_currentQuestion()
+        this.subTopic_number_calculate()
       }
     }
   },
   methods: {
     ...mapMutations('pageContent', [
-      'initPageData',
-      'amendPageData',
-      'insert_pageData',
-      'set_objectiveData',
-      'set_orderSort',
-      'del_orderSort',
-      'answerFilter_pageData',
-      'answer_insertPageData'
+      'pageData_add',
+      'pageData_edit',
+      'pageData_insert',
+      'questionOrder_add',
+      'questionOrder_subtract',
+      'pageData_objId_filter',
+      'pageData_simple_insert'
     ]),
     ...mapMutations('questionType', [
-      'set_AlreadyTopics',
-      'set_currentQuestion',
-      'set_determineTopic',
-      'Empty_AlreadyTopics',
-      'Add_AlreadyTopics',
-      'set_existBigQuestion',
-      'insert_existBigQuestion',
-      'delOnce_determineTopic',
+      'subTopic_number_calculate_already',
+      'subTopic_number_calculate',
+      'subTopic_calculate_determine',
+      'subTopic_already_reset',
+      'subTopic_already_add',
+      'subTopic_determine_pid_clean',
     ]),
     ...mapMutations('answerQuestion', ['set_answerQuestionArr',]),
     opened () {
 
       this.questionData = JSON.parse(JSON.stringify({
         ...this.questionData,
-        start:this.currentQuestion
+        start:this.subTopic_number
       }))
 
       // 开打弹框
-      this.questionData.number = this.BigQuestion
-      this.dataTopic.number = this.BigQuestion
+      this.questionData.number = this.questionNumber_big
+      this.dataTopic.number = this.questionNumber_big
 
       this.openedFrame = true
-      this.Empty_AlreadyTopics() // 清空
-      this.Add_AlreadyTopics(this.determineTopic)
-      this.set_currentQuestion()
+      this.subTopic_already_reset() // 清空
+      this.subTopic_already_add(this.subTopic_number_determine)
+      this.subTopic_number_calculate()
     },
     openedEdit (obj) {
       //编辑弹框
@@ -279,23 +279,23 @@ export default {
       this.previous = obj.previousOrder
       this.openedFrame = true
       this.questionData = JSON.parse(JSON.stringify(obj.content))
-      this.Empty_AlreadyTopics() // 清空
-      this.Add_AlreadyTopics(this.determineTopic)
-      this.set_currentQuestion()
+      this.subTopic_already_reset() // 清空
+      this.subTopic_already_add(this.subTopic_number_determine)
+      this.subTopic_number_calculate()
     },
     closeFrame () {
       // 关闭弹窗
       this.questionData = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
-      this.Empty_AlreadyTopics() // 清空临时小题group
+      this.subTopic_already_reset() // 清空临时小题group
     },
     preCreateQuestion () {
-      const { InsertTitle, Postpone,number } = this.dataTopic
+      const { InsertTitle, Postpone} = this.dataTopic
       //确定信息
       let Arr = []
       let objId = `answer_${+new Date()}`
       let rectHeight = this.dataTopic.rows * 35 + 12 + 20 // 小题初始高度
-      let orders = this.orderSort - 1 // 题型排序序列号
+      let orders = this.questionOrder - 1 // 题型排序序列号
       this.RefactorData.forEach((item, index) => {
         orders += 1
         let obj = {
@@ -303,40 +303,35 @@ export default {
           height: index == 0 ? rectHeight + 32 : rectHeight,
           MarginHeight: 12,
           ...item,
-          content: this.dataTopic,
+          content: {
+            ...this.dataTopic,
+            pageLayout:this.pageLayout,
+          },
           first: index === 0 ? true : false,
           questionType: 'answerQuestion',
           objId: objId,
           row:this.dataTopic.rows,
           rowHeight:35,
           order: orders,
-          totalScore:++item.score,
-          previousOrder:this.orderSort - 1 // 解答题插入前的序列号
+          scoreTotal:++item.score,
+          previousOrder:this.questionOrder - 1 // 解答题插入前的序列号
         }
         Arr.push(obj)
-        this.set_orderSort()
+        this.questionOrder_add()
       })
-
-      //存在大题追加
-      let existBigQuestionObj = {
-        id: objId,
-        label: `${this.options[number].label}.${this.dataTopic.topic}`,
-        value:number
-      }
 
       if (this.editQuestionId == null) {
         // 新增
-        if(InsertTitle && this.existBigQuestion.length > 0){
+        if(InsertTitle && this.questionNumber_big_exist.length > 0){
 
-          let index = this.existBigQuestion.findIndex(
+          let index = this.questionNumber_big_exist.findIndex(
             (item) => item.value === this.existNumber
           )
 
-
           if(index > -1){
             let existNum = this.existNumber - 1
-            let orders = this.existBigQuestion[index].order - 1
-            Arr.forEach((obj,index) => {
+
+            Arr.forEach((obj) => {
               existNum += 1
               orders += 1
               let data = {
@@ -346,35 +341,20 @@ export default {
                 },
                 num: existNum,
                 order: orders,
-                SelfO0rder: Postpone,
+                SelfOrder: Postpone,
               }
-              this.insert_pageData(data)
-
-              if(index === 0){
-                this.insert_existBigQuestion({
-                  obj: {
-                    ...existBigQuestionObj,
-                    order: orders,
-                  },
-                  num: existNum,
-                  order: this.existBigQuestion[index].order,
-                  SelfO0rder: Postpone,
-                })
-              }
+              this.pageData_insert(data)
 
             })
           }
         } else {
           Arr.forEach(obj => {
-            this.initPageData(obj)
+            this.pageData_add(obj)
           })
-          this.set_existBigQuestion(existBigQuestionObj)
         }
-        // 大题号修改
-        this.set_objectiveData(number)
 
       } else {
-        this.answerFilter_pageData(this.editQuestionId)
+        this.pageData_objId_filter(this.editQuestionId)
           let previous = this.previous
           let previousTig = this.previous
           let pageObj = this.pageData[previous + 1]
@@ -396,17 +376,17 @@ export default {
               num: previous,
             }
 
-            this.answer_insertPageData(data)
+            this.pageData_simple_insert(data)
           })
-        this.delOnce_determineTopic(this.childGroups[0].pid)
+        this.subTopic_determine_pid_clean(this.childGroups[0].pid)
       }
 
       //------------------------------------
 
       this.openedFrame = false // 关闭弹窗
-      this.Add_AlreadyTopics(this.childGroups)
-      this.set_determineTopic(this.childGroups)
-      this.set_currentQuestion()
+      this.subTopic_already_add(this.childGroups)
+      this.subTopic_calculate_determine(this.childGroups)
+      this.subTopic_number_calculate()
       // 清空弹框数据
       this.questionData = JSON.parse(JSON.stringify(this.closeData))
     },
@@ -436,7 +416,7 @@ export default {
           } else {
             subItem.childGroup.splice(itemIndex, 1, obj)
             // 改变分数值
-            subItem.childGroup[itemIndex].score = this.calculateTheScore(subItem.childGroup[itemIndex])
+            subItem.childGroup[itemIndex].score = this.countTheScore(subItem.childGroup[itemIndex])
           }
 
         }
@@ -463,12 +443,12 @@ export default {
 
               let lastItem = subItems.childGroup[index]
               // 更改分值
-              lastItem.score = this.calculateTheScore(lastItem)
+              lastItem.score = this.countTheScore(lastItem)
               this.$nextTick(() => {
-                subItems.score = this.calculateTheScore(subItems)
+                subItems.score = this.countTheScore(subItems)
               })
             }
-            this.set_AlreadyTopics([subItems]) // 更新临时数组
+            this.subTopic_number_calculate_already([subItems]) // 更新临时数组
 
           }
         }
@@ -496,13 +476,13 @@ export default {
                 lastItem.childGroup.splice(lastIndex, 1, obj)
 
                 // 更改分值
-                subItems.score = this.calculateTheScore(subItems)
-                lastItem.score = this.calculateTheScore(lastItem)
+                subItems.score = this.countTheScore(subItems)
+                lastItem.score = this.countTheScore(lastItem)
                 this.$nextTick(() => {
-                  subItems.score = this.calculateTheScore(subItems)
+                  subItems.score = this.countTheScore(subItems)
                 })
               }
-              this.set_AlreadyTopics([subItems]) // 更新临时数组
+              this.subTopic_number_calculate_already([subItems]) // 更新临时数组
             }
 
           }
@@ -534,14 +514,14 @@ export default {
                   pointsItem.childGroup.splice(pointsIndex, 1, obj)
 
                   // 更改分值
-                  pointsItem.score = this.calculateTheScore(pointsItem)
-                  subItems.score = this.calculateTheScore(subItems)
-                  lastItem.score = this.calculateTheScore(lastItem)
+                  pointsItem.score = this.countTheScore(pointsItem)
+                  subItems.score = this.countTheScore(subItems)
+                  lastItem.score = this.countTheScore(lastItem)
                   this.$nextTick(() => {
-                    subItems.score = this.calculateTheScore(subItems)
+                    subItems.score = this.countTheScore(subItems)
                   })
                 }
-                this.set_AlreadyTopics([subItems]) // 更新临时数组
+                this.subTopic_number_calculate_already([subItems]) // 更新临时数组
               }
 
             }
@@ -551,7 +531,7 @@ export default {
       }
     },
 
-    calculateTheScore (obj) {
+    countTheScore (obj) {
       let sum = 0
       obj.childGroup.forEach(item => {
         sum += item.score

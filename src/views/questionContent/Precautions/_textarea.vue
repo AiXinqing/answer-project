@@ -4,13 +4,13 @@
     :rows="2"
     placeholder="请输入答题卡标题"
     v-model="textareaVal"
-    @input="editPrecautionsTitile"
+    @change="editPrecautionsTitile"
     resize="none"
   />
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations,mapState } from 'vuex'
 export default {
   props: {
     textareaData: {
@@ -23,13 +23,22 @@ export default {
       textareaVal: this.textareaData,
     }
   },
+  computed: {
+    ...mapState('pageContent', ['pageData']),
+  },
   methods: {
-    ...mapMutations('titleSet', ['editTextarea']),
+    ...mapMutations('pageContent', ['pageData_edit']),
     editPrecautionsTitile (e) {
-      this.editTextarea(e)
+      let answerTitle = this.pageData[0]
+      this.pageData_edit({
+        ...answerTitle,
+        content:{
+          ...answerTitle.content,
+          textVal:e
+        }
+      })
     },
   },
 }
 </script>
 
-<style lang="scss" scoped></style>

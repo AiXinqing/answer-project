@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
   data () {
     return {
@@ -33,7 +33,7 @@ export default {
     }
   },
   computed: {
-
+    ...mapState('pageContent', ['pageData']),
   },
   methods: {
     ...mapMutations('titleSet', ['editTitleInfo']),

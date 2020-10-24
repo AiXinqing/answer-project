@@ -42,7 +42,7 @@ export default {
   },
   computed: {
     ...mapState('titleSet', ['titleRows']),
-    ...mapState('pageContent', ['pageLayout']),
+    ...mapState('pageContent', ['pageLayout','pageData']),
 
     maxAdmission () {
       // 最大数
@@ -61,6 +61,7 @@ export default {
   },
   methods: {
     ...mapMutations('titleSet', ['editTitleRows']),
+    ...mapMutations('pageContent', ['pageData_edit']),
     closeFrame () {
       this.openedFrame = false
     },
@@ -68,7 +69,14 @@ export default {
       this.openedFrame = true
     },
     preCreateTitle () {
+      let answerTitle = this.pageData[0]
       this.editTitleRows(parseInt(this.AdmissionTicket))
+      this.pageData_edit({
+        ...answerTitle,
+        content:{
+          ...answerTitle.content,
+          titleRows:parseInt(this.AdmissionTicket)}
+      })
       this.closeFrame()
     },
     changeValueFunc (e) {

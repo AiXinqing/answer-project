@@ -45,12 +45,17 @@
       <hj-button type="cancel" @click="closeFrame">取 消</hj-button>
       <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateTitle(1)">确 定</hj-button>
     </div>
+    <question-dialog ref="questionDialogs" />
   </hj-dialog>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex'
+import questionDialog from '../dialog/_questionData'
 export default {
+  components: {
+    questionDialog,
+  },
   props: {
     propLayout: {
       type: Object,
@@ -78,14 +83,15 @@ export default {
   },
   computed: {
     ...mapState('titleSet', ['textVal', 'titleInfo', 'titleRows']),
-    ...mapState('pageContent', ['orderSort']),
+    ...mapState('pageContent', ['questionOrder','pageLayout','pageData']),
   },
   methods: {
     ...mapMutations('pageContent', [
-      'initPageLayout',
-      'initPageData',
-      'amendPageData',
-      'set_orderSort']),
+      'pageLayout_change',
+      'pageData_add',
+      'pageData_edit',
+      'pageLayout_launch_page',
+      'questionOrder_add']),
     openRForm (type) {
       if (type === 1) {
         this.createLayout = true
@@ -102,7 +108,7 @@ export default {
         size: this.size,
         column: this.layout,
       }
-      this.initPageLayout(obj)
+      this.pageLayout_change(obj)
 
       const TestData = {
         id: 1,
@@ -113,29 +119,27 @@ export default {
         content: {
           textVal: this.textVal,
           titleInfo: this.titleInfo,
-          titleRows: this.titleRows
+          titleRows: this.titleRows,
+          pageLayout:this.pageLayout
         },
-        order: this.orderSort,
+        order: this.questionOrder,
         first: true
       }
       //
       if (change == 1) {
-        this.amendPageData(TestData)
+        this.openedFrame = false
+        this.pageData_edit(TestData)
+
+        this.pageData.filter(obj => obj.questionType == 'ObjectiveQuestion').forEach(element => {
+          this.$refs.questionDialogs.layoutEdit(element)
+        })
+        setTimeout(function() { this.pageLayout_launch_page(this.pageLayout) }, 500)
       } else {
         // 新增值
-        this.initPageData(TestData)
-        // 临时测试题-----------------------------
-        // let text = {
-        //   id: 2,
-        //   height: 380,
-        //   questionType: 'ObjectiveQuestion',
-        //   content: '',
-        // }
-        // this.initPageData(text)
-        // 临时测试题------------------------------
+        this.pageData_add(TestData)
       }
       // order排序
-      this.set_orderSort()
+      this.questionOrder_add()
       this.openedFrame = false
     },
     hanldeTab (item) {

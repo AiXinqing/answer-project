@@ -1,5 +1,5 @@
 <template>
-  <div class="page-content">
+  <div class="page-content preview-content">
     <div class="main-info">
       <div v-for="(pages, i) in contentData" :key="i" class="page_card">
         <div
@@ -19,7 +19,10 @@
           <div
             v-for="(question, index) in pagesCrad"
             :key="index"
-            class="footer"
+            :class="[
+              'footer',
+              { answer: question.first != undefined && question.first == false },
+            ]"
             :style="{ minHeight: question.castHeight + 'px' }"
           >
             <component
@@ -30,7 +33,7 @@
             />
           </div>
         </div>
-        <div class="card_footer">
+        <div class="card_footer" :style="{width:pageNum == 1 ? '826px' : '100%'}">
           第 {{ i + 1 }} 页 共 {{ contentData.length }} 页
         </div>
       </div>
@@ -63,20 +66,13 @@ export default {
     return {
       contentData: [],
       ces: '',
+      pageData:JSON.parse(localStorage.getItem('accessToken')),
+      pageWidth:this.$route.query.pageWidth,
+      pageNum:this.$route.query.pageNum,
     }
   },
   computed: {
-    ...mapState('pageContent', ['pageLayout', 'pageData', 'page_size']),
-    pageWidth() {
-      return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
-        ? 520
-        : 785
-    },
-    pageNum() {
-      return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
-        ? 3
-        : 2
-    },
+    ...mapState('pageContent', ['page_size']),
   },
   watch: {
     pageData: {
@@ -85,24 +81,26 @@ export default {
         let data = this.pageContentFunc(this.pageData)
         let index = 0
         let newArray = []
-        while (index < data.length) {
-          newArray.push(data.slice(index, (index += this.pageNum)))
+        if(this.pageNum == 1){
+          this.contentData = data.map(obj => ([obj]))
+        }else{
+          while (index < data.length) {
+            newArray.push(data.slice(index, (index += this.pageNum)))
+          }
+          this.contentData = newArray
         }
-        this.contentData = newArray
 
-        console.log(this.contentData)
       },
     },
+
   },
   mounted() {
-    this.$nextTick(() => {
-      console.log(this.pageData)
-    })
+
   },
   methods: {
-    ...mapActions('pageContent', ['getPageData']),
-    ...mapMutations('pageContent', ['set_pageHeight']),
+    ...mapMutations('pageContent', ['pageHeight_set']),
     pageContentFunc(rects = []) {
+
       let results = []
       let SplitVal = 0 // 拆分所用
       let curPage = {
@@ -120,16 +118,13 @@ export default {
         // 用于填空题数组切割
         let itemObj = JSON.parse(JSON.stringify(rect))
 
+
         // 高度溢出
         if (ActualHeight > avalibleHeight) {
           // 返回计算行数及最低高度
           let curRect = this.questionType(rect, avalibleHeight)
 
-          if (
-            rect.questionType != 'ObjectiveQuestion' &&
-            avalibleHeight >= 32 &&
-            !curRect.isPage
-          ) {
+          if (avalibleHeight >= 32 &&!curRect.isPage) {
             SplitVal = avalibleHeight - curRect.height
 
             curPage.rects.push({
@@ -163,11 +158,7 @@ export default {
             height -= curRects.height
           }
 
-          if (
-            rect.questionType != 'ObjectiveQuestion' &&
-            avalibleHeight >= 32 &&
-            !curRect.isPage
-          ) {
+          if (avalibleHeight >= 32 &&!curRect.isPage) {
             curPage.height = height
           } else {
             curPage.height = ActualHeight
@@ -196,11 +187,13 @@ export default {
       return results
     },
     questionType(obj, rectHeigth) {
+
       let MarginHeight = obj.MarginHeight + obj.heightTitle
       let contentHeight = rectHeigth - MarginHeight
       //-----------当前高度可占多少行
       let RowHeight = obj.rowHeight
       let row = Math.floor(contentHeight / RowHeight)
+
       let rectObj = {
         height: row * RowHeight + MarginHeight,
         row: row,
@@ -214,11 +207,14 @@ export default {
             isPage: false,
             isArray: true,
           }
-        case 'answerQuestion':
+        case 'ObjectiveQuestion':
           return {
             ...rectObj,
             isPage: false,
+            isArray: true,
           }
+        case 'answerQuestion':
+          return rectObj
         case 'optionalQuestion':
           return rectObj
         case 'compositionEnglish':
@@ -253,11 +249,16 @@ html {
     justify-content: left;
   }
 }
-.page_info_itme .footer {
-  position: relative;
-  left: 20px;
-  width: calc(100% - 40px);
-  margin-top: 20px;
+.page_info_itme{
+  .footer {
+    position: relative;
+    left: 20px;
+    width: calc(100% - 40px);
+    margin-top: 20px;
+    &.answer{
+      margin-top:0;
+    }
+  }
 }
 .page_info_itme {
   width: 785px;
@@ -276,4 +277,30 @@ html {
   text-indent: 35px;
   margin-bottom: 20px;
 }
+
 </style>
+
+<style lang="less">
+  .preview-content{
+    .question-info{
+      &:hover{
+        .question_arrays{
+          display: none !important;
+        }
+        .question_editOrDel{
+          display: none !important;
+        }
+      }
+    }
+    .question-handler{
+      svg{display: none !important}
+    }
+
+    .question-title{
+      &:hover{
+        border-color: #fff;
+      }
+    }
+}
+</style>
+

@@ -55,7 +55,7 @@ export default {
   },
   computed: {
     ...mapState('questionType', [
-      'currentQuestion',
+      'subTopic_number',
     ]),
     groupItemData () {
       let arr = []

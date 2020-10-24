@@ -23,11 +23,11 @@
           :question-data="topice"
           @hanldeStudent="hanldeStudent"
           @edit-admission-number="editAdmissionNumber"
-          @current-question-hanlde-edit="currentQuestionHanldeEdit"
-          @current-question-fill-edit="currentQuestionFillEdit"
+          @current-question-hanlde-edit="subTopic_numberHanldeEdit"
+          @current-question-fill-edit="subTopic_numberFillEdit"
           @hanlde-subtraction="hanldeSubtraction"
-          @current-question-answer-edit="currentQuestionAnswerEdit"
-          @current-question-optional-edit="currentQuestionOptionalEdit"
+          @current-question-answer-edit="subTopic_numberAnswerEdit"
+          @current-question-optional-edit="subTopic_numberOptionalEdit"
           @composition-english-edit="compositionEnglishEdit"
           @composition-language-edit="compositionLanguageEdit"
           @cur-edit-non="curEditNon"
@@ -42,7 +42,7 @@
 
 <script>
 import { mapState, mapMutations} from 'vuex'
-import axios from 'axios'
+
 import AnswerSheetTitle from './questionContent/_answerSheetTitle' // 答题卡标题
 import ObjectiveQuestion from './questionContent/_ObjectiveQuestion' // 客观题
 import FillInTheBlank from './questionContent/_FillInTheBlank' // 填空题
@@ -71,12 +71,25 @@ export default {
       heightArray: [],
     }
   },
+  beforeRouteLeave(to, from, next) {
+    this.$confirm('正在离开本页面，本页面内所有未保存数据都会丢失', '警告', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      // 正常跳转
+      next()
+    }).catch(() => {
+      // 如果取消跳转地址栏会变化，这时保持地址栏不变
+      window.history.go(1)
+    })
+  },
   computed: {
     ...mapState('pageContent', [
       'pageLayout',
       'pageData',
       'page_size',
-      'orderSort',
+      'questionOrder',
     ]),
 
     pageWidth() {
@@ -95,23 +108,15 @@ export default {
             this.heightArray = this.$refs['box'].map(
               (item) => item.clientHeight
             )
-            this.set_pageHeight(this.heightArray)
+            this.pageHeight_set(this.heightArray)
           })
         }
+        localStorage.setItem('accessToken', JSON.stringify(this.pageData))
       },
     },
   },
-  mounted () {
-    axios.get('/public/pageData.json').then(({
-      data
-    }) => {
-      if (data) {
-        console.log(data)
-      }
-    })
-  },
   methods: {
-    ...mapMutations('pageContent', ['set_pageHeight','resetScore','overlayScore']),
+    ...mapMutations('pageContent', ['pageHeight_set','scoreTotal_reset','scoreTotal_sum']),
     hanldeStudent(Arr) {
       this.$refs.publicDialog.opened('studentTitle', Arr)
     },
@@ -119,7 +124,7 @@ export default {
       this.$refs.publicDialog.opened('AdmissionNumber')
     },
     pageContentFunc(rects = []) {
-      this.resetScore() // 试卷总分清零
+      this.scoreTotal_reset() // 试卷总分清零
 
       let results = []
       let SplitVal = 0 // 拆分所用
@@ -132,9 +137,9 @@ export default {
         curPage.rects = []
       }
       rects.forEach((rect) => {
-        if(rect.content.totalScore){
+        if(rect.content.scoreTotal){
           // 试卷总分叠加
-          this.overlayScore(rect.content.totalScore)
+          this.scoreTotal_sum(rect.content.scoreTotal)
         }
         let ActualHeight = rect.height + 20 //
         // avalible 剩余高度
@@ -252,7 +257,7 @@ export default {
       }
     },
 
-    currentQuestionHanldeEdit(id) {
+    subTopic_numberHanldeEdit(id) {
       this.$refs.publicDialog.openedEdit('questionDialogs', id)
     },
     hanldeSubtraction(id, num) {
@@ -262,13 +267,13 @@ export default {
     hanldeSubtractionNon(obj, num) {
       this.$refs.publicDialog.change('NonRresponseArea', obj, num)
     },
-    currentQuestionFillEdit(id) {
+    subTopic_numberFillEdit(id) {
       this.$refs.publicDialog.openedEdit('fillInTheBlanks', id)
     },
-    currentQuestionAnswerEdit(obj) {
+    subTopic_numberAnswerEdit(obj) {
       this.$refs.publicDialog.openedEdit('answerQuestion', obj)
     },
-    currentQuestionOptionalEdit(obj, id) {
+    subTopic_numberOptionalEdit(obj, id) {
       this.$refs.publicDialog.openedEdit('optionalQuestion', obj, id)
     },
     compositionEnglishEdit(obj) {

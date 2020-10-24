@@ -63,8 +63,8 @@ export default {
   },
   methods: {
     ...mapMutations('questionType', [
-      'set_AlreadyTopics',
-      'del_AlreadyTopics'
+      'subTopic_number_calculate_already',
+      'subTopic_already_del'
     ]),
     addSubAnswerItem () {
       let temporaryArr = JSON.parse(JSON.stringify(this.data.childGroup)) || []
@@ -82,7 +82,7 @@ export default {
 
 
       this.$emit('pre-edit-sub-answer-item', { ...datas, childGroup: temporaryArr })
-      this.set_AlreadyTopics([{ ...datas, childGroup: temporaryArr }]) // 更新此题数据
+      this.subTopic_number_calculate_already([{ ...datas, childGroup: temporaryArr }]) // 更新此题数据
     },
     preEditLastAnswerItem (obj, isDel) {
       // 新增小题下小题
@@ -94,7 +94,7 @@ export default {
     },
     delAnswerItem () {
       this.$emit('pre-edit-sub-answer-item', this.data, true)
-      this.del_AlreadyTopics([this.data])
+      this.subTopic_already_del([this.data])
     },
     preEditPointsItem (obj, isDel = false) {
       // 末尾题

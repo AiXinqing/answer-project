@@ -16,7 +16,7 @@
     </template>
     <div class="question_arrays">
       <div class="question_editOrDel">
-        <span class="layui-btn layui-btn-xs" @click="currentQuestionAnswerEdit"
+        <span class="layui-btn layui-btn-xs" @click="subTopic_numberAnswerEdit"
           >编辑</span
         >
         <span class="layui-btn layui-btn-xs" @click="delHanlde">删除</span>
@@ -93,8 +93,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('questionType', ['questionNumber', 'letterArr']),
-    ...mapState('pageContent', ['pageData', 'pageLayout']),
+    ...mapState('questionType', ['questionNumber', 'letterList']),
+    ...mapState('pageContent', ['pageData']),
     heightContetn(){
       const {castHeight,heightTitle,height} = this.questionData
       let obj = {
@@ -109,8 +109,8 @@ export default {
     },
 
     TopicContent() {
-      const {number,topic} = this.contentData
-      return `<span>${this.options[number].label}.</span><span>${topic}</span><span>(${this.data.totalScore})分</span>`
+      const {number,topicName} = this.contentData
+      return `<span>${this.options[number].label}.</span><span>${topicName}</span><span>(${this.data.scoreTotal})分</span>`
     },
     topicData() {
       return this.contentData.group
@@ -149,17 +149,17 @@ export default {
   },
   methods: {
     ...mapMutations('pageContent', [
-      'delPageData',
-      'del_objectiveData',
-      'del_orderSort',
-      'amendPageData',
-      'deletePageData'
+      'pageData_del',
+      'questionNumber_big_subtract',
+      'questionOrder_subtract',
+      'pageData_edit',
+      'pageData_objId_del'
     ]),
     ...mapMutations('questionType', [
-      'del_AlreadyTopics',
-      'set_currentQuestion',
-      'del_determineTopic',
-      'del_existBigQuestion',
+      'subTopic_already_del',
+      'subTopic_number_calculate',
+      'subTopic_determine_del',
+      'questionNumber_big_exist_del',
     ]),
     hanldeCloseEsitor(content) {
       this.isEditor = false
@@ -168,7 +168,7 @@ export default {
     hanldeEditor() {
       this.isEditor = true
     },
-    currentQuestionAnswerEdit() {
+    subTopic_numberAnswerEdit() {
 
       this.$emit('current-question-answer-edit', this.data)
     },
@@ -225,10 +225,10 @@ export default {
       // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
       if (index > -1) {
-        this.delPageData(index)
-        setTimeout(function(){
-          this.deletePageData({group:questionGroup,objId:objId})
-        },500)
+        this.pageData_del(index)
+        this.$nextTick(()=>{
+          this.pageData_objId_del({group:questionGroup,objId:objId})
+        })
       }
 
     },
@@ -242,7 +242,7 @@ export default {
         if(castHeight < height){
           crrHeight = (height - castHeight) + rectHeight
         }
-        this.amendPageData({
+        this.pageData_edit({
             ...questionObj,
             height:crrHeight >= this.minHeight ? crrHeight + questionObj.heightTitle + 3:this.minHeight,
           })

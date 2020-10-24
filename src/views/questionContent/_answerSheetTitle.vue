@@ -1,10 +1,14 @@
 <template>
   <div>
     <div class="textVal-style" v-if="previewIs">
-      {{ textVal == '' ? '请输入答题卡标题' : textVal }}
+      {{ data.textVal == '' ? '请输入答题卡标题' : data.textVal }}
     </div>
-    <hj-textarea v-else :textarea-data="textVal" />
-    <student-info @hanldeStudent="hanldeStudent" :preview-is="previewIs" />
+    <hj-textarea v-else :textarea-data="data.textVal" />
+    <student-info
+      @hanldeStudent="hanldeStudent"
+      :title-info= "data.titleInfo"
+      :preview-is="previewIs"
+    />
     <el-row class="precautions_box">
       <el-col
         :span="12"
@@ -89,7 +93,6 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
 import hjTextarea from './Precautions/_textarea'
 import studentInfo from './Precautions/_studentInfo'
 export default {
@@ -108,17 +111,21 @@ export default {
       type: Boolean,
       default: false,
     },
+    questionData: {
+      type: Object,
+      default: () => { }
+    }
   },
   data() {
     return {
       trDiv: 9,
       studentInfoList: [],
+      data:{},
+      titleRows:this.questionData.content.titleRows,
+      dataLayout:this.questionData.content.pageLayout
     }
   },
   computed: {
-    ...mapState('titleSet', ['textVal', 'titleInfo', 'titleRows']),
-    ...mapGetters('pageContent', ['dataLayout']),
-
     cardData() {
       return this.contentData[0]
     },
@@ -128,7 +135,7 @@ export default {
         : 745
     },
     Rows() {
-      return this.titleRows == 9 && this.rectWidth == 480 ? 26 : 28
+      return this.data.titleRows == 9 && this.rectWidth == 480 ? 26 : 28
     },
     svg() {
       return this.rectWidth == 480 ? true : false
@@ -153,7 +160,21 @@ export default {
         : this.Rows - 1
     },
   },
-  mounted() {},
+  watch: {
+    questionData: {
+      immediate: true,
+      handler () {
+        this.data = {
+          ...this.questionData.content
+        }
+        this.dataLayout = this.questionData.content.pageLayout
+        this.titleRows = this.questionData.content.titleRows
+      }
+    }
+  },
+  mounted() {
+
+  },
   methods: {
     hanldeStudent(Arr) {
       this.$emit('hanldeStudent', Arr)
@@ -282,6 +303,7 @@ export default {
   font-size: 23px;
   border-color: @font-888;
   color: @font-666;
+  max-height: 65px;
 }
 table tr td div:last-child {
   margin-bottom: 6px;

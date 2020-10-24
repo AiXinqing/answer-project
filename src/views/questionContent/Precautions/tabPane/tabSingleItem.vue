@@ -37,33 +37,33 @@ export default {
   },
   computed: {
     ...mapState('questionType', [
-      'currentQuestion',
-      'AlreadyTopics',
-      'determineTopic'
+      'subTopic_number',
+      'subTopic_number_already',
+      'subTopic_number_determine'
     ]),
     tabStatusVal () {
       let {start,end,score} = this.data
       let itemScore = parseFloat(score) || null
-      let determineTopic = this.determineTopic
-      let AlreadyTopics = this.AlreadyTopics
+      let subTopic_number_determine = this.subTopic_number_determine
+      let subTopic_number_already = this.subTopic_number_already
       let strStart = ''
       let strEnd = ''
-      if (determineTopic.length > 0 || AlreadyTopics.length > 0) {
-        let numStart = determineTopic.findIndex(item => item.topic == start)
-        let index = AlreadyTopics.findIndex(item => item.topic == start)
-        let numEnd = determineTopic.findIndex(item => item.topic == end)
-        let endIndex = AlreadyTopics.findIndex(item => item.topic == start)
+      if (subTopic_number_determine.length > 0 || subTopic_number_already.length > 0) {
+        let numStart = subTopic_number_determine.findIndex(item => item.topic == start)
+        let index = subTopic_number_already.findIndex(item => item.topic == start)
+        let numEnd = subTopic_number_determine.findIndex(item => item.topic == end)
+        let endIndex = subTopic_number_already.findIndex(item => item.topic == start)
 
         if (this.editId != null) { // 编辑
           if (index > -1) {
-            if (AlreadyTopics[index].pid != this.data.id) {
+            if (subTopic_number_already[index].pid != this.data.id) {
               strStart = `${start}题已经存在，请勿重复添加`
             }
           } else { strStart = '' }
         } else {
           if (numStart > -1 || index > -1) {
             if (index > -1) {
-              if (AlreadyTopics[index].pid != this.data.id) {
+              if (subTopic_number_already[index].pid != this.data.id) {
                 strStart = `${start}题已经存在，请勿重复添加`
               } else { strStart = '' }
             } else {
@@ -73,14 +73,14 @@ export default {
         }
         if (this.editId != null) { // 编辑
           if (endIndex > -1) {
-            if (AlreadyTopics[endIndex].pid != this.data.id) {
+            if (subTopic_number_already[endIndex].pid != this.data.id) {
               strEnd = `${end}题已经存在，请勿重复添加`
             }
           } else { strStart = '' }
         } else {
           if (numEnd > -1 || endIndex > -1) {
             if (endIndex > -1) {
-              if (AlreadyTopics[endIndex].pid != this.data.id) {
+              if (subTopic_number_already[endIndex].pid != this.data.id) {
                 strEnd = `${end}题已经存在，请勿重复添加`
               } else { strStart = '' }
             } else {
@@ -101,27 +101,27 @@ export default {
     tabStatus () {
       let {start,end,score} = this.data
       let itemScore = parseFloat(score) || null
-      let AlreadyTopics = this.AlreadyTopics
-      let determineTopic = this.determineTopic
+      let subTopic_number_already = this.subTopic_number_already
+      let subTopic_number_determine = this.subTopic_number_determine
       let strStart = ''
       let strEnd = ''
 
-      if (determineTopic.length > 0 || AlreadyTopics.length > 0) {
-        let numStart = determineTopic.findIndex(item => item.topic == start)
-        let index = AlreadyTopics.findIndex(item => item.topic == start)
-        let numEnd = determineTopic.findIndex(item => item.topic == end)
-        let endIndex = AlreadyTopics.findIndex(item => item.topic == start)
+      if (subTopic_number_determine.length > 0 || subTopic_number_already.length > 0) {
+        let numStart = subTopic_number_determine.findIndex(item => item.topic == start)
+        let index = subTopic_number_already.findIndex(item => item.topic == start)
+        let numEnd = subTopic_number_determine.findIndex(item => item.topic == end)
+        let endIndex = subTopic_number_already.findIndex(item => item.topic == start)
 
         if (this.editId != null) { // 编辑
           if (index > -1) {
-            if (AlreadyTopics[index].pid != this.data.id) {
+            if (subTopic_number_already[index].pid != this.data.id) {
               strStart = `${start}题已经存在，请勿重复添加`
             }
           } else { strStart = '' }
         } else {
           if (numStart > -1 || index > -1) {
             if (index > -1) {
-              if (AlreadyTopics[index].pid != this.data.id) {
+              if (subTopic_number_already[index].pid != this.data.id) {
                 strStart = `${start}题已经存在，请勿重复添加`
               } else { strStart = '' }
             } else {
@@ -131,14 +131,14 @@ export default {
         }
         if (this.editId != null) { // 编辑
           if (endIndex > -1) {
-            if (AlreadyTopics[endIndex].pid != this.data.id) {
+            if (subTopic_number_already[endIndex].pid != this.data.id) {
               strEnd = `${end}题已经存在，请勿重复添加`
             }
           } else { strStart = '' }
         } else {
           if (numEnd > -1 || endIndex > -1) {
             if (endIndex > -1) {
-              if (AlreadyTopics[endIndex].pid != this.data.id) {
+              if (subTopic_number_already[endIndex].pid != this.data.id) {
                 strEnd = `${end}题已经存在，请勿重复添加`
               } else { strStart = '' }
             } else {
@@ -163,7 +163,7 @@ export default {
           ...this.itemData
         }
         if (this.data.end == '' || this.data.end == null) {
-          this.data.start = this.currentQuestion
+          this.data.start = this.subTopic_number
         }
       }
     }
@@ -173,7 +173,7 @@ export default {
   },
   methods: {
     ...mapMutations('questionType', [
-      'set_currentQuestion',
+      'subTopic_number_calculate',
     ]),
     hanldeDel (id, type) {
       // 删除分段题组
@@ -219,7 +219,7 @@ export default {
         const temporaryArr = subtopicArr.map(item => ({ ...item, subtopic: 1 }))
         this.temporary = temporaryArr
         this.$emit('hanlde-add-group-question', itemObj)
-        this.set_currentQuestion()
+        this.subTopic_number_calculate()
       }
     }
   },

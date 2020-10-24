@@ -137,10 +137,10 @@ export default {
   },
   methods: {
     ...mapMutations('questionType', [
-      'set_currentQuestion',
+      'subTopic_number_calculate',
     ]),
     hanldeClick () {
-      this.set_currentQuestion()
+      this.subTopic_number_calculate()
     },
     handldeDel (obj) {
       this.$emit('hanlde-dels', obj)

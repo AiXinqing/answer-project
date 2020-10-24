@@ -12,7 +12,7 @@
     </template>
     <div class="question_arrays">
       <div class="question_editOrDel">
-        <span class="layui-btn layui-btn-xs" @click="currentQuestionAnswerEdit">编辑</span>
+        <span class="layui-btn layui-btn-xs" @click="subTopic_numberAnswerEdit">编辑</span>
         <span class="layui-btn layui-btn-xs" @click="delHanlde">删除</span>
       </div>
     </div>
@@ -84,8 +84,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('questionType', ['questionNumber', 'letterArr']),
-    ...mapState('pageContent', ['pageData', 'pageLayout']),
+    ...mapState('questionType', ['questionNumber', 'letterList']),
+    ...mapState('pageContent', ['pageData']),
 
     heightContetn(){
       const {borderTop,heightTitle,castHeight} = this.questionData
@@ -101,9 +101,9 @@ export default {
     },
 
     TopicContent () {
-      const {group,topic,number} = this.contentData
-      let totalScore = group[0].totalScore
-      return `<span>${this.options[number].label}.</span><span>${topic}</span><span class='p-5'>(${totalScore})</span>分<span class='optional-prompt'>${this.promptTitle}</span>`
+      const {group,topicName,number} = this.contentData
+      let scoreTotal = group[0].scoreTotal
+      return `<span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${scoreTotal})</span>分<span class='optional-prompt'>${this.promptTitle}</span>`
     },
     topicData () {
       return this.contentData.group[0].childGroup
@@ -144,12 +144,12 @@ export default {
   //   this.$nextTick(()=>)
   // },
   methods: {
-    ...mapMutations('pageContent', ['delPageData', 'del_objectiveData', 'del_orderSort','amendPageData']),
+    ...mapMutations('pageContent', ['pageData_del', 'questionNumber_big_subtract', 'questionOrder_subtract','pageData_edit']),
     ...mapMutations('questionType', [
-      'del_AlreadyTopics',
-      'set_currentQuestion',
-      'del_determineTopic',
-      'del_existBigQuestion',
+      'subTopic_already_del',
+      'subTopic_number_calculate',
+      'subTopic_determine_del',
+      'questionNumber_big_exist_del',
     ]),
     hanldeCloseEsitor (content) {
       this.isEditor = false
@@ -158,19 +158,19 @@ export default {
     hanldeEditor () {
       this.isEditor = true
     },
-    currentQuestionAnswerEdit () {
+    subTopic_numberAnswerEdit () {
       this.$emit('current-question-optional-edit', this.contentData, this.data.id)
     },
     delHanlde () { // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
       if (index > -1) {
-        this.del_determineTopic(this.topicData)
-        this.del_AlreadyTopics(this.topicData)
-        this.del_orderSort(this.pageData[index].order + 1)
-        this.delPageData(index)
-        this.set_currentQuestion()
-        this.del_objectiveData() // 删减一个大题号
-        this.del_existBigQuestion(this.questionData)
+        this.subTopic_determine_del(this.topicData)
+        this.subTopic_already_del(this.topicData)
+        this.questionOrder_subtract(this.pageData[index].order + 1)
+        this.pageData_del(index)
+        this.subTopic_number_calculate()
+        this.questionNumber_big_subtract() // 删减一个大题号
+        this.questionNumber_big_exist_del(this.questionData)
       }
 
     },
@@ -184,7 +184,7 @@ export default {
         if(castHeight < height){
           crrHeight = (height - castHeight) + rectHeight
         }
-        this.amendPageData({
+        this.pageData_edit({
             ...questionObj,
             height:crrHeight >= this.minHeight ? crrHeight + questionObj.heightTitle + 3:this.minHeight,
           })

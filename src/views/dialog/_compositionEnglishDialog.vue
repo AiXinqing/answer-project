@@ -70,10 +70,10 @@
       </div>
       <div class="condition_box Insert_box" v-show="editQuestionId == null">
         <el-checkbox v-model="data.InsertTitle">插入添加题目</el-checkbox>
-        <div :class="['existBigQuestion_style', { Fade: !data.InsertTitle }]">
+        <div :class="['questionNumber_big_exist_style', { Fade: !data.InsertTitle }]">
           <span>插入到第</span>
           <hj-select
-            :items="existBigQuestion"
+            :items="questionNumber_big_exist"
             size="mini"
             :value="existNumber"
             @change="hanldeSelectexistBig"
@@ -102,14 +102,13 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations,mapGetters } from 'vuex'
 
 export default {
   components: {},
   data() {
     return {
       data: {},
-      title: '设置',
       openedFrame: false,
       closeData: {},
       editQuestionId: null,
@@ -117,7 +116,7 @@ export default {
       existNumber: null,
       questionData: {
         number: 1, // 大题号
-        name: '作文',
+        topicName: '作文',
         rows: 10,
         topic: 1,
         Attach: false,
@@ -133,17 +132,23 @@ export default {
   computed: {
     ...mapState('questionType', [
       'questionNumber',
-      'currentQuestion',
-      'determineTopic',
-      'existBigQuestion',
+      'subTopic_number',
+      'subTopic_number_determine',
     ]),
     ...mapState('pageContent', [
       'pageHeight',
       'page_size',
-      'BigQuestion',
-      'orderSort',
+      'questionOrder',
       'pageData',
+      'pageLayout',
     ]),
+    title(){
+      return this.editQuestionId ? '编辑作文' : '设置'
+    },
+    ...mapGetters('pageContent', ['questionNumber_big_exist']),
+    questionNumber_big(){
+      return this.questionNumber_big_exist.length
+    },
     errorMessage() {
       return this.errorVal != '' ? true : false
     },
@@ -156,10 +161,10 @@ export default {
     },
     tabStatusVal() {
       const { topic, score, rows } = this.data
-      let determineTopic = this.determineTopic
+      let subTopic_number_determine = this.subTopic_number_determine
       let str = ''
-      if (determineTopic.length > 0) {
-        let index = determineTopic.findIndex((item) => item.topic == topic)
+      if (subTopic_number_determine.length > 0) {
+        let index = subTopic_number_determine.findIndex((item) => item.topic == topic)
         if (index > -1) {
           if (
             this.editQuestionId != null &&
@@ -183,11 +188,11 @@ export default {
     },
     tabStatus() {
       const { topic, score, rows } = this.data
-      let determineTopic = this.determineTopic
+      let subTopic_number_determine = this.subTopic_number_determine
 
       let str = ''
-      if (determineTopic.length > 0) {
-        let index = determineTopic.findIndex((item) => item.topic == topic)
+      if (subTopic_number_determine.length > 0) {
+        let index = subTopic_number_determine.findIndex((item) => item.topic == topic)
         if (index > -1) {
           if (
             this.editQuestionId != null &&
@@ -233,14 +238,14 @@ export default {
           this.$nextTick(() => {
             this.data = {
               ...this.data,
-              number: this.BigQuestion,
-              topic: this.currentQuestion,
+              number: this.questionNumber_big,
+              topic: this.subTopic_number,
             }
           })
         }
         this.existNumber =
-          this.existBigQuestion.length > 0
-            ? this.existBigQuestion[0].value
+          this.questionNumber_big_exist.length > 0
+            ? this.questionNumber_big_exist[0].value
             : null
         this.options = this.questionNumber.map((label,value)=>({label,value}))
       },
@@ -248,59 +253,55 @@ export default {
   },
   mounted() {
     this.closeData = JSON.parse(JSON.stringify(this.questionData))
-    this.set_currentQuestion()
+    this.subTopic_number_calculate()
   },
   methods: {
     ...mapMutations('pageContent', [
-      'initPageData',
-      'amendPageData',
-      'insert_pageData',
-      'Empty_PageData',
-      'set_orderSort',
-      'set_objectiveData'
+      'pageData_add',
+      'pageData_edit',
+      'pageData_insert',
+      'pageData_id_clean',
+      'questionOrder_add'
     ]),
     ...mapMutations('questionType', [
-      'set_currentQuestion',
-      'Empty_AlreadyTopics',
-      'Add_AlreadyTopics',
-      'set_determineTopic',
-      'set_existBigQuestion',
-      'insert_existBigQuestion',
+      'subTopic_number_calculate',
+      'subTopic_already_reset',
+      'subTopic_already_add',
+      'subTopic_calculate_determine',
     ]),
     opened() {
       this.questionData = JSON.parse(
         JSON.stringify({
           ...this.questionData,
-          number: this.BigQuestion,
-          topic: this.currentQuestion,
+          number: this.questionNumber_big,
+          topic: this.subTopic_number,
         })
       )
 
       // 开打弹框
       this.openedFrame = true
-      this.Empty_AlreadyTopics() // 清空
-      this.Add_AlreadyTopics(this.determineTopic)
-      this.set_currentQuestion()
+      this.subTopic_already_reset() // 清空
+      this.subTopic_already_add(this.subTopic_number_determine)
+      this.subTopic_number_calculate()
     },
     openedEdit(obj) {
       this.editData = JSON.parse(JSON.stringify(obj))
       //编辑弹框
-      this.set_currentQuestion()
+      this.subTopic_number_calculate()
       this.editQuestionId = obj.id
       this.openedFrame = true
       this.data = JSON.parse(JSON.stringify(obj.content))
-      this.title = '编辑作文'
     },
     closeFrame() {
       // 关闭弹窗
-      this.set_currentQuestion()
+      this.subTopic_number_calculate()
       this.questionData = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
-      this.Empty_AlreadyTopics() // 清空
+      this.subTopic_already_reset() // 清空
     },
 
     preCreateQuestion() {
-      const { rows, InsertTitle, Postpone,number,name ,score} = this.data
+      const { rows, InsertTitle, Postpone,score} = this.data
       this.errorVal = this.tabStatusVal
 
       let rectHeight = rows * 35 // 当前内容高度 45(内部高度)
@@ -316,31 +317,28 @@ export default {
           rowHeight: 36,
           id: objId,
           questionType: 'compositionEnglish',
-          content: {...this.data,totalScore:parseFloat(score)},
-          order: this.orderSort,
+          content: {
+            ...this.data,
+            scoreTotal:parseFloat(score),
+            pageLayout:this.pageLayout,
+          },
+          order: this.questionOrder,
           first: true,
           BeforeEditing:
             this.editQuestionId != null
               ? this.editData.BeforeEditing
               : this.BeforeEditing,
         }
-        this.Add_AlreadyTopics([this.data])
-        //存在大题追加
-        let existBigQuestionObj = {
-          id: objId,
-          label: `${this.options[number].label}.${name}`,
-          value: number,
-          order: this.orderSort,
-        }
+        this.subTopic_already_add([this.data])
 
         if (this.editQuestionId == null) {
-          if (InsertTitle && this.existBigQuestion.length > 0) {
-            let index = this.existBigQuestion.findIndex(
+          if (InsertTitle && this.questionNumber_big_exist.length > 0) {
+            let index = this.questionNumber_big_exist.findIndex(
               (item) => item.value === this.existNumber
             )
             if (index > -1) {
               let objIndex = this.pageData.findIndex(
-                (item) => item.id == this.existBigQuestion[index].id
+                (item) => item.id == this.questionNumber_big_exist[index].id
               )
               if (objIndex > -1) {
                 let data = {
@@ -350,35 +348,23 @@ export default {
                   },
                   num: this.existNumber + 1,
                   order: this.pageData[index].order + 1,
-                  SelfO0rder: Postpone,
+                  SelfOrder: Postpone,
                 }
-                this.insert_pageData(data)
-                //-------------------------------------------------已选大题数组
-                this.insert_existBigQuestion({
-                  obj: {
-                    ...existBigQuestionObj,
-                    order: this.existBigQuestion[index].order + 1,
-                  },
-                  num: this.existNumber,
-                  order: this.existBigQuestion[index].order,
-                  SelfO0rder: Postpone,
-                })
+                this.pageData_insert(data)
+
               }
             }
           } else {
-            this.initPageData(obj)
-            this.set_existBigQuestion(existBigQuestionObj)
+            this.pageData_add(obj)
           }
-          this.set_determineTopic([this.data])
-          this.set_orderSort()
-          // 大题号修改
-          this.set_objectiveData(number)
+          this.subTopic_calculate_determine([this.data])
+          this.questionOrder_add()
+
         } else {
-          this.amendPageData({ ...obj, id: this.editQuestionId })
-          this.set_existBigQuestion({ ...existBigQuestionObj, id: obj.id })
+          this.pageData_edit({ ...obj, id: this.editQuestionId })
         }
 
-        this.set_currentQuestion()
+        this.subTopic_number_calculate()
         this.data = JSON.parse(JSON.stringify(this.closeData))
         this.openedFrame = false
       }
