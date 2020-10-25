@@ -86,17 +86,6 @@ export default {
       const { rows, positionNum } = this.data
       return positionNum == null ? true : rows < 3 || rows == '' ? true : false
     },
-    // orderVal() {
-    //   const { positionNum } = this.data
-    //   let index = this.questionNumber_big_exist.findIndex((item) => {
-    //     item.value == positionNum
-    //   })
-    //   if (index > -1) {
-    //     return this.questionNumber_big_exist[index].order + 1
-    //   } else {
-    //     return 2
-    //   }
-    // },
   },
   watch: {
     questionNumber_big_exist: {
@@ -174,20 +163,15 @@ export default {
           },
         }
         if (this.editQuestionId == null) {
+          let select = this.questionNumber_big_exist[this.data.positionNum]
           let data = {
             obj: obj,
-            num: positionNum + 1,
+            bigId: select.id,
             SelfOrder: false,
           }
             this.pageData_insert(data)
           // }
         } else {
-          // this.pageData_id_filter(this.editQuestionId)
-          // let data = {
-          //   obj:{ ...obj, id: this.editQuestionId },
-          //   num:this.data.positionNum + 2
-          // }
-          // this.pageData_simple_insert(data)
           this.pageData_edit({
             ...obj,
             id:this.editQuestionId,

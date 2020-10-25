@@ -456,12 +456,13 @@ export default {
 
       if (this.editQuestionId == null) {
         if (InsertTitle && this.questionNumber_big_exist.length > 0) {
+            let select = this.questionNumber_big_exist[this.existNumber]
             let data = {
               obj: {
                 ...obj,
                 order: this.question_order,
               },
-              num: this.existNumber + 1,
+              bigId: select.id,
               SelfOrder: Postpone || false,
             }
             this.pageData_insert(data)

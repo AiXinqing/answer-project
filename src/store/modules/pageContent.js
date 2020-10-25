@@ -66,19 +66,37 @@ const mutations = {
 
   pageData_insert: (state, {
     obj,
-    num,
+    bigId,
     SelfOrder
   }) => {
-    let nums = num + 1
-    state.pageData.splice(nums, 0, obj)
+    let nums = 0
+    const index = state.pageData.findIndex((itme) => itme.id == bigId)
+    if (index > -1) {
+      nums = index + 1
+      state.pageData.splice(nums, 0, obj)
+    }
     if (SelfOrder) {
-      state.pageData = state.pageData.map((question, index) => ({
-        ...question,
-        content: {
-          ...question.content,
-          number: index - 1
+      console.log()
+      let order = 0
+      state.pageData = state.pageData.map((question) => {
+        if (!question.questionType !== "NonRresponseArea") {
+          order += 1
         }
-      }))
+        let num = {}
+        if (!question.questionType !== "AnswerSheetTitle") {
+          num = {
+            number: order - 2
+          }
+        }
+        return {
+          ...question,
+          content: {
+            ...question.content,
+            ...num
+          }
+        }
+      })
+
     }
   },
   pageData_simple_insert: (state, data) => {
@@ -185,7 +203,8 @@ const getters = {
   questionNumber_big_exist: (state) => {
     // 大题号
     let obj = {}
-    return state.pageData.filter(question => question.content.number != undefined)
+    return state.pageData.filter(question => question.questionType !== 'AnswerSheetTitle')
+      .filter(question => question.questionType !== 'NonRresponseArea')
       .map((question, index) => {
         let {
           number,
@@ -205,7 +224,7 @@ const getters = {
       }, [])
   },
   question_order: (state) => {
-    return state.pageData.length
+    return state.pageData.filter(question => question.questionType !== 'NonRresponseArea').length
   }
 }
 
