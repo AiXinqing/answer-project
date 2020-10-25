@@ -69,47 +69,17 @@ const mutations = {
     num,
     SelfOrder
   }) => {
-    console.log(obj)
-    console.log(num)
-    console.log(SelfOrder)
-
     let nums = num + 1
     state.pageData.splice(nums, 0, obj)
-
-    // 插入题型
-    // setTimeout(() => {
-    //   state.pageData.splice(num, 0, {
-    //     ...obj,
-    //     order: obj.order + 1
-    //   })
-
-    //   state.pageData = state.pageData.sort((a, b) => {
-    //     return a.order - b.order
-    //   })
-
-    //   if (SelfOrder) {
-    //     state.pageData = state.pageData.map((question, index) => {
-    //       let tig = 0
-    //       let content = {}
-    //       if (question.content.positionNum != undefined) {
-    //         tig += 1
-    //       }
-    //       if (!question.content.number) {
-    //         content = {
-    //           content: {
-    //             ...question.content,
-    //             number: index - tig,
-    //           }
-    //         }
-    //       }
-    //       return {
-    //         ...question,
-    //         ...content
-    //       }
-    //     })
-
-    //   }
-    // }, 100)
+    if (SelfOrder) {
+      state.pageData = state.pageData.map((question, index) => ({
+        ...question,
+        content: {
+          ...question.content,
+          number: index - 1
+        }
+      }))
+    }
   },
   pageData_simple_insert: (state, data) => {
     // 解答题插入
@@ -233,6 +203,9 @@ const getters = {
           return question.label == cur.label ? cur : question
         })
       }, [])
+  },
+  question_order: (state) => {
+    return state.pageData.length
   }
 }
 
