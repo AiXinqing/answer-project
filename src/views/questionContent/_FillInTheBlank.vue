@@ -192,27 +192,25 @@ export default {
   methods: {
     ...mapMutations('pageContent', [
       'pageData_del',
-      'questionNumber_big_subtract',
       'questionOrder_subtract',
       'pageData_edit',
     ]),
     ...mapMutations('questionType', [
       'subTopic_already_del',
       'subTopic_number_calculate',
-      'subTopic_determine_del',
-      'questionNumber_big_exist_del',
+      'subTopic_determine_clean',
     ]),
     delHanlde(id) {
       // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === id)
       if (index > -1) {
-        this.subTopic_determine_del(this.topicBox)
         this.subTopic_already_del(this.topicBox)
-        this.questionOrder_subtract(this.pageData[index].order + 1)
+        this.topicBox.forEach(question => {
+          this.subTopic_determine_clean(question.topic)
+        })
+
         this.pageData_del(index)
         this.subTopic_number_calculate()
-        this.questionNumber_big_subtract() // 删减一个大题号
-        this.questionNumber_big_exist_del(this.questionData)
       }
     },
     subTopic_numberFillEdit(id) {

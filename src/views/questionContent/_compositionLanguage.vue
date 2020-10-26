@@ -154,14 +154,11 @@ export default {
     ...mapMutations('pageContent', [
       'pageData_del',
       'pageData_id_clean',
-      'questionNumber_big_subtract',
-      'questionOrder_subtract',
     ]),
     ...mapMutations('questionType', [
       'subTopic_already_del',
       'subTopic_number_calculate',
-      'subTopic_determine_del',
-      'questionNumber_big_exist_del',
+      'subTopic_determine_clean',
     ]),
     hanldeCloseEsitor(content) {
       this.isEditor = false
@@ -177,13 +174,11 @@ export default {
       // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
       if (index > -1) {
-        this.subTopic_determine_del([this.contentData])
         this.subTopic_already_del([this.contentData])
-        this.questionOrder_subtract(this.pageData[index].order + 1)
+        this.subTopic_determine_clean(this.contentData.topic)
+
         this.pageData_id_clean(this.data.id)
         this.subTopic_number_calculate()
-        this.questionNumber_big_subtract() // 删减一个大题号
-        this.questionNumber_big_exist_del(this.questionData)
       }
     },
   },

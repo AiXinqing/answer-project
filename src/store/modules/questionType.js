@@ -13,12 +13,12 @@ const state = {
 
 const mutations = {
   subTopic_already_del(state, Arr) {
-    if (Arr == undefined) {
+    if (Arr.length <= 0) {
       return false
     }
     // 删除已有小题数组
     Arr.forEach((item) => {
-      state.subTopic_number_already = state.subTopic_number_already.filter(row => row.topic != item.topic)
+      state.subTopic_number_already = state.subTopic_number_already.filter(question => question.topic != item.topic)
     })
   },
 
@@ -105,6 +105,13 @@ const mutations = {
     // 清除相同pid
     state.subTopic_number_determine = state.subTopic_number_determine.filter((item) => {
       return ![pid].includes(item.pid)
+    })
+  },
+
+  subTopic_determine_clean: (state, topic) => {
+    // 清除相同pid
+    state.subTopic_number_determine = state.subTopic_number_determine.filter((item) => {
+      return ![topic].includes(item.topic)
     })
   },
 
