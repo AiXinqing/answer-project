@@ -49,6 +49,14 @@ export default {
     },
     preCreateTitle () {
       this.editTitleInfo(this.studentTitle)
+      let cur = this.pageData[0]
+      this.pageData.splice(0,1,{
+        ...cur,
+        content:{
+          ...cur.content,
+          titleInfo:this.studentTitle
+        }
+      })
       this.closeFrame()
     },
   },
