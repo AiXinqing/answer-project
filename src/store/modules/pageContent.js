@@ -228,6 +228,9 @@ const getters = {
   },
   question_order: (state) => {
     return state.pageData.filter(question => question.questionType !== 'NonRresponseArea').length
+  },
+  options:()=>{
+    return state.questionNumber.map((label,value)=>({label,value}))
   }
 }
 

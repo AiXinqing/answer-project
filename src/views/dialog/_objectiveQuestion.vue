@@ -1,0 +1,174 @@
+<template>
+  <hj-dialog
+    class="newAdd-content"
+    :title="title"
+    :visible.sync="openedFrame"
+    :width="'600px'"
+    :before-close="closeFrame"
+  >
+    <div class="item-box">
+      <el-row>
+        <el-col :span="12" class="select-item">
+          <div class="label">大题题号:</div>
+          <hj-select
+            :items="options"
+            size="mini"
+            :value="editingData.number"
+            @change="changeQuestionBig"
+          ></hj-select>
+        </el-col>
+        <el-col :span="12" class="select-item">
+          <div class="label">题目:</div>
+          <el-input
+            v-model="editingData.topicName"
+            size="mini"
+            placeholder="请输入内容"
+          ></el-input>
+        </el-col>
+        <el-col :span="24" class="select-item">
+          <div class="label">每组题数:</div>
+          <el-input
+            v-model.number="editingData.rows"
+            size="mini"
+            placeholder="请输入内容"
+          ></el-input>
+        </el-col>
+      </el-row>
+      <!-- <tab-pane-box
+        :tab-pane-data="tabData"
+        :group-data="editingData.group"
+        :edit-id="editQuestionId"
+        @hanlde-dels="hanldeDel"
+        @hanlde-add-subtopic="hanldeAddSubtopic"
+        @hanlde-status="hanldeStatus"
+        @hanlde-add-group-question="hanldeAddGroupQuestion"
+        @edit-topic-func="editTopicFunc"
+      /> -->
+      <div class="condition_box Insert_box" v-show="editQuestionId == null">
+        <el-checkbox v-model="editingData.InsertTitle"
+          >插入添加题目</el-checkbox
+        >
+        <div
+          :class="[
+            'questionNumber_big_exist_style',
+            { Fade: !editingData.InsertTitle },
+          ]"
+        >
+          <span>插入到第</span>
+          <hj-select
+            :items="questionNumber_big_exist"
+            size="mini"
+            :value="existNumber"
+            @change="hanldeSelectexistBig"
+          />
+          <span>大题后</span>
+        </div>
+        <el-checkbox
+          :class="['Postpone', { Fade: !editingData.InsertTitle }]"
+          v-model="editingData.Postpone"
+          >大题号自动顺延</el-checkbox
+        >
+        <div class="Insert_Mask" v-show="!editingData.InsertTitle"></div>
+      </div>
+    </div>
+    <div class="error-message" v-if="errorMessage">{{ errorVal }}</div>
+    <div class="dialog-footer">
+      <hj-button type="cancel" @click="closeFrame">取 消</hj-button>
+      <hj-button
+        type="confirm"
+        :disabled="isdisabledFn"
+        @click="preCreateQuestion"
+        >确 定</hj-button
+      >
+    </div>
+  </hj-dialog>
+</template>
+
+<script>
+  import { mapGetters } from 'vuex' //mapState, mapMutations,
+  export default {
+    data() {
+      return {
+        openedFrame: false,
+        existNumber: null,
+        preEditData:{
+          number: 1,
+          topicName: '选择题',
+          rows: 5,
+          startQuestion: 1,
+          InsertTitle: false,
+          Postpone: false,
+          group:{}
+        },
+        tabData: [
+          { label: '单选框', name: 'singleBox' },
+          { label: '多选框', name: 'checkbox' },
+          { label: '判断题', name: 'judgment' },
+        ],
+        editingData:{},
+        editQuestionId: null,
+        orders:0,
+        errorVal: '',
+        ContentHeight: 0, // 内容高度
+      }
+    },
+    computed: {
+      ...mapGetters('pageContent', ['questionNumber_big_exist','question_order','options']),
+      questionNumber_big(){
+        return this.questionNumber_big_exist.length
+      },
+      name() {
+        return this.data
+      },
+      title(){
+        return  !this.editQuestionId ? '新增客观题' : '编辑客观题'
+      },
+      questionGroup(){
+        return []
+      },
+      isdisabledFn(){
+        return this.questionGroup.length > 0 && !this.errorMessage ? false :true
+      },
+      errorMessage() {
+        return this.errorVal != '' ? true : false
+      },
+    },
+    watch: {
+      preEditData: {
+        immediate: true,
+        handler() {
+          this.editingData = {
+            ...this.preEditData
+          }
+        }
+      }
+    },
+    methods: {
+      opened() {
+        this.openedFrame = true
+      },
+      openedEdit(){
+        this.openedFrame = true
+      },
+      closeFrame() {
+        // 取消弹框
+        this.preEditQuestion = JSON.parse(JSON.stringify(this.closeData))
+        this.openedFrame = false
+      },
+      changeQuestionBig(num){
+        this.preEditData = {
+          ...this.preEditData,
+          number:num
+        }
+      },
+      hanldeSelectexistBig(){},
+      preCreateQuestion(){
+        // 保存题型
+      }
+    },
+  }
+</script>
+
+<style lang="less">
+
+</style>
