@@ -9,7 +9,7 @@ const state = {
   pageHeight: [], // 页面高度
 
   questionOrder: 0, // 题序
-  questionNumber_big: 0, // 大题题号
+  // questionNumber_big: 0, // 大题题号
 
   scoreTotal: 0, // 试卷总分
 }
@@ -116,15 +116,15 @@ const mutations = {
 
 
 
-  questionNumber_big_add: (state) => {
-    state.questionNumber_big += 1
-  },
-  questionNumber_big_subtract: (state) => {
-    state.questionNumber_big -= 1
-    if (state.questionNumber_big < 0) {
-      state.questionNumber_big = 0
-    }
-  },
+  // questionNumber_big_add: (state) => {
+  //   state.questionNumber_big += 1
+  // },
+  // questionNumber_big_subtract: (state) => {
+  //   state.questionNumber_big -= 1
+  //   if (state.questionNumber_big < 0) {
+  //     state.questionNumber_big = 0
+  //   }
+  // },
 
   pageHeight_set: (state, Arr = []) => {
     // 页面高度更新
