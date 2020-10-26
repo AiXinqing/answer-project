@@ -35,6 +35,7 @@
         'subTopic_number_already',
         'subTopic_number_determine'
       ]),
+      
       verify(){
         const {start,end,score,id} = this.data
         let scoreVal = score ? parseFloat(score) : score
@@ -42,7 +43,6 @@
         let already = this.subTopic_number_already // 临
         let startStr = ''
         let endStr = ''
-  
 
         if(determine.length > 0 || already.length > 0){
           let M_startIndex = determine.findIndex(subTopic => subTopic.topice == start)
@@ -97,9 +97,11 @@
                   startStr.length > 0 ? startStr :
                   endStr.length > 0 ? endStr : ''
       },
+
       verifyStatus(){
         return !this.verify ? false : true
       },
+
       subTopicList(){
         const {start,end,score} = this.data
         let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
@@ -117,6 +119,7 @@
         return group
       }
     },
+
     watch: {
       group: {
         immediate: true,
@@ -126,7 +129,8 @@
           }
         }
       }
-  },
+    },
+
     methods: {
     ...mapMutations('questionType', [
       'subTopic_already_add',
@@ -150,7 +154,7 @@
             type: 'singleChoice',
             data: {
               ...this.data,
-              score:scoreVal,
+              score:Number(scoreVal),
               select: typeof(select)=='string' ? 4 :select,
               start: parseInt(this.data.start),
               childGroup: this.subTopicList
