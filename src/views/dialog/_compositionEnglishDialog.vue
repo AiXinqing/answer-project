@@ -21,7 +21,7 @@
           </el-col>
           <el-col :span="8" class="select-item composition_item">
             <div class="label">题目:</div>
-            <el-input v-model="data.name" size="mini" placeholder=""></el-input>
+            <el-input v-model="data.topicName" size="mini" placeholder=""></el-input>
           </el-col>
           <el-col :span="4" class="select-item composition_item_5">
             <el-checkbox v-model="data.Attach">附加题</el-checkbox>

@@ -22,7 +22,7 @@
           <el-col :span="8" class="select-item composition_item">
             <div class="label">题目:</div>
             <el-input
-              v-model="data.topic"
+              v-model="data.topicName"
               size="mini"
               placeholder=""
             ></el-input>

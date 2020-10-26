@@ -20,7 +20,7 @@
         </el-col>
         <el-col :span="12" class="select-item">
           <div class="label">题目:</div>
-          <el-input v-model="dataTopic.topic" size="mini" placeholder="请输入内容"></el-input>
+          <el-input v-model="dataTopic.topicName" size="mini" placeholder="请输入内容"></el-input>
         </el-col>
       </el-row>
       <add-form
