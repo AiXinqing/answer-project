@@ -1,17 +1,21 @@
 <template>
   <el-tabs v-model="activeName" type="border-card" @tab-click="hanldeClick" class="card_top">
 
-    <el-tab-pane
-      v-for="(item, i) in tabPaneData"
-      :key="i"
-      :label="item.label"
-      :name="item.name"
-      :disabled="isdisabled"
-    >
-      <component
-        :is="item.name"
-      />
-    </el-tab-pane>
+    <template  v-for="(item, i) in tabPaneData">
+      <el-tab-pane
+        :key="i"
+        :label="item.label"
+        :name="item.name"
+        :disabled="isdisabled"
+      >
+        <component
+          :is="item.name"
+          :group-data="groupData[item.name]"
+          @group-verify-status="groupVerifyStatus"
+          @update-group-subTopic="updateGroupSubTopic"
+        />
+      </el-tab-pane>
+    </template>
   </el-tabs>
 </template>
 
@@ -58,6 +62,13 @@
     methods: {
       hanldeClick() {
 
+      },
+      groupVerifyStatus(verify){
+        this.isdisabled = verify.status
+        this.$emit('group-verify-status', verify)
+      },
+      updateGroupSubTopic(group){
+        this.$emit('update-group-subTopic',group)
       }
     },
   }

@@ -1,14 +1,29 @@
 <template>
-  <el-tab-pane>
+  <div>
     <div class="big-question-box">
-      <choice-tabs/>
+      <choice-tabs
+        v-for="group in groupData"
+        :key="group.id"
+        :group="group"
+        @group-verify-status="groupVerifyStatus"
+        @update-group-subTopic="updateGroupSubTopic"
+      />
     </div>
-    <div class="add_question" @click="hanldeAddSubtopic(activeName)">+ 分段添加小题</div>
+    <div class="add_question" @click="addGroupQuestion(activeName)">+ 分段添加小题</div>
     <div class="question-group">
-      <choice-group/>
+      <template v-for="group in groupData">
+        <div :key="group.id" class="group_item">
+          <choice-group
+            v-for="item in group.childGroup"
+            :key="item.topice"
+            :child-item="item"
+            @edit-topic-func="editTopicFunc"
+          />
+        </div>
+      </template>
     </div>
 
-  </el-tab-pane>
+  </div>
 </template>
 
 <script>
@@ -20,13 +35,9 @@
       choiceGroup
     },
     props: {
-      tabPaneData: {
+      groupData: {
         type: Array,
         default: () => [],
-      },
-      groupData: {
-        type: Object,
-        default: () => { },
       },
       editId: {
         teyp: Number,
@@ -60,7 +71,14 @@
       hanldeClick() {
 
       },
-      hanldeAddSubtopic(){}
+      addGroupQuestion(){},
+      editTopicFunc(){},
+      groupVerifyStatus(verify){
+        this.$emit('group-verify-status', verify)
+      },
+      updateGroupSubTopic(group){
+        this.$emit('update-group-subTopic',group)
+      }
     },
   }
 </script>

@@ -38,6 +38,8 @@
       <tab-pane-box
         :tab-pane-data="tabPaneData"
         :group-data="editingData.group"
+        @group-verify-status="groupVerifyStatus"
+        @update-group-subTopic="updateGroupSubTopic"
       />
       <!-- 题型编辑区 -->
       <div class="condition_box Insert_box" v-show="editQuestionId == null">
@@ -107,8 +109,8 @@
               id: 'singleBox0',
               childGroup: [],
             },],
-            // checkChoice:[],
-            // judgmentChoice:[],
+            checkChoice:[],
+            judgmentChoice:[],
           }
         },
         editingData:{},
@@ -171,6 +173,19 @@
       hanldeSelectexistBig(){},
       preCreateQuestion(){
         // 保存题型
+      },
+      groupVerifyStatus(verify){
+        this.errorVal = verify.str
+      },
+      updateGroupSubTopic(groupObj){
+        let {group} = this.preEditData
+        let curGroup = group[groupObj.type]
+        let index = curGroup.findIndex(group => group.id == groupObj.data.id)
+
+        if(index > -1){
+          this.preEditData.group[groupObj.type].splice(index,1,groupObj.data)
+        }
+
       }
     },
   }

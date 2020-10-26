@@ -59,6 +59,10 @@ const mutations = {
     })
   },
 
+  already_pid_clean:(state, pid) => {
+    state.subTopic_number_already = state.subTopic_number_already.filter((item) => item.pid == pid)
+  },
+
   subTopic_number_calculate_already: (state, Arr) => {
     if (Arr.length <= 0) {
       return false
