@@ -3,9 +3,9 @@ const state = {
   '九','十','十一','十二','十三','十四','十五','十六','十七',
   '十八','十九','二十','二十一','二十二','二十三','二十四'],
   tabPaneData:[
-    { label: '单选框', name: 'singleBox' },
-    { label: '多选框', name: 'checkbox' },
-    { label: '判断题', name: 'judgment' },
+    { label: '单选框', name: 'singleChoice' },
+    // { label: '多选框', name: 'checkChoice' },
+    // { label: '判断题', name: 'judgmentChoice' },
   ],
   questionNumber_big_exist: [], // 存在大题
   subTopic_number: 1,

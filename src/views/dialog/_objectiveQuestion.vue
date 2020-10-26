@@ -36,7 +36,8 @@
       </el-row>
       <!-- 题型编辑区 -->
       <tab-pane-box
-        :tab-pane-data="tabData"
+        :tab-pane-data="tabPaneData"
+        :group-data="editingData.group"
       />
       <!-- 题型编辑区 -->
       <div class="condition_box Insert_box" v-show="editQuestionId == null">
@@ -97,13 +98,19 @@
           startQuestion: 1,
           InsertTitle: false,
           Postpone: false,
-          group:{}
+          group:{
+            singleChoice:[{
+              start: 1,
+              end: null,
+              score: null,
+              select: 4,
+              id: 'singleBox0',
+              childGroup: [],
+            },],
+            // checkChoice:[],
+            // judgmentChoice:[],
+          }
         },
-        tabData: [
-          { label: '单选框', name: 'singleBox' },
-          { label: '多选框', name: 'checkbox' },
-          { label: '判断题', name: 'judgment' },
-        ],
         editingData:{},
         editQuestionId: null,
         orders:0,

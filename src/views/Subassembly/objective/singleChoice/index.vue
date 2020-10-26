@@ -1,25 +1,23 @@
 <template>
-  <el-tabs v-model="activeName" type="border-card" @tab-click="hanldeClick" class="card_top">
+  <el-tab-pane>
+    <div class="big-question-box">
+      <choice-tabs/>
+    </div>
+    <div class="add_question" @click="hanldeAddSubtopic(activeName)">+ 分段添加小题</div>
+    <div class="question-group">
+      <choice-group/>
+    </div>
 
-    <el-tab-pane
-      v-for="(item, i) in tabPaneData"
-      :key="i"
-      :label="item.label"
-      :name="item.name"
-      :disabled="isdisabled"
-    >
-      <component
-        :is="item.name"
-      />
-    </el-tab-pane>
-  </el-tabs>
+  </el-tab-pane>
 </template>
 
 <script>
-  import singleChoice from '../objective/singleChoice'
+  import choiceTabs from '../singleChoice/tabs'
+  import choiceGroup from '../singleChoice/groupItem'
   export default {
     components: {
-      singleChoice,
+      choiceTabs,
+      choiceGroup
     },
     props: {
       tabPaneData: {
@@ -44,6 +42,9 @@
       }
     },
     computed: {
+      choice() {
+        return ''
+      }
     },
     watch: {
       groupData: {
@@ -58,7 +59,8 @@
     methods: {
       hanldeClick() {
 
-      }
+      },
+      hanldeAddSubtopic(){}
     },
   }
 </script>
