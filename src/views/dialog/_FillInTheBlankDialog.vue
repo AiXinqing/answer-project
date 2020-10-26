@@ -121,6 +121,7 @@ export default {
       errorVal: '',
       objectiveData: {},
       editQuestionId: null,
+      orders:0,
       ContentHeight: 0, // 内容高度
       options:[],
     }
@@ -313,6 +314,7 @@ export default {
 
       this.spaceTopic = JSON.parse(JSON.stringify(current[0].content))
       this.editQuestionId = id
+      this.orders = current.order
       this.openedFrame = true
       this.subTopic_number_calculate()
     },
@@ -342,7 +344,6 @@ export default {
           scoreTotal: scoreTotal,
           pageLayout:this.pageLayout
         },
-        order: this.questionOrder,
         showData: this.topicGroupData,
         first: true,
         // 此题总分
@@ -353,22 +354,17 @@ export default {
 
       if (this.editQuestionId == null) {
         if (InsertTitle && this.questionNumber_big_exist.length > 0) {
-          let index = this.questionNumber_big_exist.findIndex(
-            (item) => item.value === this.existNumber
-          )
-          if (index > -1) {
-            let data = {
+          let select = this.questionNumber_big_exist[this.existNumber]
+          console.log(select)
+          let data = {
               obj: {
                 ...obj,
-                order: this.pageData[index].order + 1,
+                order: this.question_order,
               },
-              num: this.existNumber + 1,
-              order: this.pageData[index].order + 1,
+              bigId: select.id,
               SelfOrder: Postpone,
             }
             this.pageData_insert(data)
-
-          }
         } else {
           this.pageData_add(obj)
         }
@@ -377,7 +373,7 @@ export default {
       } else {
         this.subTopic_determine_pid_clean(this.childGroups[0].pid)
         obj.id = this.editQuestionId
-        this.pageData_edit(obj)
+        this.pageData_edit({...obj,order:this.orders})
       }
       this.subTopic_already_add(this.childGroups)
       this.subTopic_calculate_determine(this.childGroups)

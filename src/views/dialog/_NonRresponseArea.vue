@@ -24,10 +24,9 @@
         <div class="label_item">高度:</div>
         <div class="label_right">
           <el-input
-            v-model="data.rows"
+            v-model.number="data.rows"
             size="mini"
-            @blur="hanldeVerification"
-            @input="hanldeVerification"
+            @blur="changRow"
             placeholder="请输入内容"
           />
         </div>
@@ -87,17 +86,6 @@ export default {
       const { rows, positionNum } = this.data
       return positionNum == null ? true : rows < 3 || rows == '' ? true : false
     },
-    orderVal() {
-      const { positionNum } = this.data
-      let index = this.questionNumber_big_exist.findIndex((item) => {
-        item.value == positionNum
-      })
-      if (index > -1) {
-        return this.questionNumber_big_exist[index].order + 1
-      } else {
-        return 2
-      }
-    },
   },
   watch: {
     questionNumber_big_exist: {
@@ -122,7 +110,7 @@ export default {
   methods: {
     ...mapMutations('pageContent', [
       'pageData_insert',
-      'pageData_simple_insert',
+      'pageData_edit',
       'pageData_id_filter',
       'questionOrder_add',
     ]),
@@ -167,7 +155,6 @@ export default {
           height: heights,
           id: `NonRresponseArea_${+new Date()}`,
           questionType: 'NonRresponseArea',
-          order: this.orderVal,
           first: true,
           rowHeight: 37,
           content: {
@@ -176,31 +163,20 @@ export default {
           },
         }
         if (this.editQuestionId == null) {
-          let index = this.questionNumber_big_exist.findIndex(
-            (item) => item.value === positionNum
-          )
-          if (index > -1) {
-            let objIndex = this.pageData.findIndex(
-              (item) => item.id == this.questionNumber_big_exist[index].id
-            )
-            if (objIndex > -1) {
-              let data = {
-                obj: { ...obj, order: this.pageData[objIndex].order },
-                num: positionNum,
-                order: this.pageData[objIndex].order,
-                SelfOrder: false,
-              }
-
-              this.pageData_insert(data)
-            }
-          }
-        } else {
-          this.pageData_id_filter(this.editQuestionId)
+          let select = this.questionNumber_big_exist[this.data.positionNum]
           let data = {
-            obj:{ ...obj, id: this.editQuestionId },
-            num:this.data.positionNum + 2
+            obj: obj,
+            bigId: select.id,
+            SelfOrder: false,
           }
-          this.pageData_simple_insert(data)
+            this.pageData_insert(data)
+          // }
+        } else {
+          this.pageData_edit({
+            ...obj,
+            id:this.editQuestionId,
+            changeOrder:positionNum + 2
+          })
         }
         this.openedFrame = false
         this.data = JSON.parse(JSON.stringify(this.closeData))
@@ -218,6 +194,9 @@ export default {
       this.data.positionNum = e
       this.errorVal = this.tabStatusVal
     },
+    changRow() {
+      this.errorVal = this.tabStatusVal
+    }
   },
 }
 </script>

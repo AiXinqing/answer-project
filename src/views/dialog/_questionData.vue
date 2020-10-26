@@ -147,6 +147,7 @@ export default {
       errorVal: '',
       objectiveData: {},
       editQuestionId: null,
+      orders:0,
       ContentHeight: 0, // 内容高度
       options:[],
     }
@@ -164,7 +165,7 @@ export default {
       'pageData',
       'questionOrder',
     ]),
-    ...mapGetters('pageContent', ['questionNumber_big_exist']),
+    ...mapGetters('pageContent', ['questionNumber_big_exist','question_order']),
     questionNumber_big(){
       return this.questionNumber_big_exist.length
     },
@@ -296,7 +297,6 @@ export default {
       'pageData_add',
       'pageData_edit',
       'pageData_insert',
-      'questionOrder_add',
     ]),
     closeFrame() {
       // 取消弹框
@@ -347,6 +347,7 @@ export default {
       let current = this.pageData.filter((item) => item.id === id)
       this.quesctionObj = JSON.parse(JSON.stringify(current[0].content))
       this.editQuestionId = id
+      this.orders = current.order
       this.openedFrame = true
       this.subTopic_number_calculate()
     },
@@ -448,44 +449,31 @@ export default {
           ...this.objectiveData,
           pageLayout:this.pageLayout
         },
-        order: this.questionOrder,
+        order: this.question_order,
         showData:this.topicGroupData,
         first: true,
       }
 
       if (this.editQuestionId == null) {
         if (InsertTitle && this.questionNumber_big_exist.length > 0) {
-          let index = this.questionNumber_big_exist.findIndex(
-            (item) => item.value === this.existNumber
-          )
-          if (index > -1) {
-            let objIndex = this.pageData.findIndex(
-              (item) => item.id == this.questionNumber_big_exist[index].id
-            )
-            if (objIndex > -1) {
-              //-------------------------------------------------插入数组对象
-              let data = {
-                obj: {
-                  ...obj,
-                  order: this.pageData[index].order + 1,
-                },
-                num: this.existNumber + 1,
-                order: this.pageData[index].order + 1,
-                SelfOrder: Postpone || false,
-              }
-              this.pageData_insert(data)
+            let select = this.questionNumber_big_exist[this.existNumber]
+            let data = {
+              obj: {
+                ...obj,
+                order: this.question_order,
+              },
+              bigId: select.id,
+              SelfOrder: Postpone || false,
             }
-          }
+            this.pageData_insert(data)
         } else {
           this.pageData_add(obj)
         }
 
-        this.questionOrder_add()
-
       } else {
         this.subTopic_determine_pid_clean(this.topicList[0].pid)
         obj.id = this.editQuestionId
-        this.pageData_edit(obj)
+        this.pageData_edit({...obj,order:this.orders})
       }
       // 小题数组追加数据
       this.subTopic_already_add(this.topicList)
