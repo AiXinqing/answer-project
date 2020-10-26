@@ -34,16 +34,11 @@
           ></el-input>
         </el-col>
       </el-row>
-      <!-- <tab-pane-box
+      <!-- 题型编辑区 -->
+      <tab-pane-box
         :tab-pane-data="tabData"
-        :group-data="editingData.group"
-        :edit-id="editQuestionId"
-        @hanlde-dels="hanldeDel"
-        @hanlde-add-subtopic="hanldeAddSubtopic"
-        @hanlde-status="hanldeStatus"
-        @hanlde-add-group-question="hanldeAddGroupQuestion"
-        @edit-topic-func="editTopicFunc"
-      /> -->
+      />
+      <!-- 题型编辑区 -->
       <div class="condition_box Insert_box" v-show="editQuestionId == null">
         <el-checkbox v-model="editingData.InsertTitle"
           >插入添加题目</el-checkbox
@@ -85,8 +80,12 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex' //mapState, mapMutations,
+  import { mapState,mapGetters } from 'vuex' // mapMutations,
+  import tabPaneBox from '../Subassembly/objective'
   export default {
+    components: {
+      tabPaneBox,
+    },
     data() {
       return {
         openedFrame: false,
@@ -113,6 +112,7 @@
       }
     },
     computed: {
+      ...mapState('questionType', ['tabPaneData']),
       ...mapGetters('pageContent', ['questionNumber_big_exist','question_order','options']),
       questionNumber_big(){
         return this.questionNumber_big_exist.length
