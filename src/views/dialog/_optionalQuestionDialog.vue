@@ -20,7 +20,7 @@
         <el-col :span="12" class="select-item">
           <div class="label">题目:</div>
           <el-input
-            v-model="data.topic"
+            v-model="data.topicName"
             size="mini"
             placeholder="请输入内容"
           ></el-input>
@@ -104,6 +104,7 @@ export default {
       editQuestionId: null,
       errorVal: '',
       existNumber: null,
+      orders:0,
       questionData: {
         number: 0,
         topicName: '选作题',
@@ -133,9 +134,9 @@ export default {
       'subTopic_number',
       'subTopic_number_determine',
     ]),
-    ...mapState('pageContent', ['questionOrder', 'pageData','pageLayout']),
+    ...mapState('pageContent', ['pageData','pageLayout']),
     ...mapState('answerQuestion', ['answerQuestionArr']),
-    ...mapGetters('pageContent', ['questionNumber_big_exist']),
+    ...mapGetters('pageContent', ['questionNumber_big_exist','question_order']),
     questionNumber_big(){
       return this.questionNumber_big_exist.length
     },
@@ -209,7 +210,6 @@ export default {
       'pageData_add',
       'pageData_edit',
       'pageData_insert',
-      'questionOrder_add',
     ]),
     ...mapMutations('questionType', [
       'subTopic_number_calculate',
@@ -230,6 +230,7 @@ export default {
     openedEdit(obj) {
       //编辑弹框
       this.editQuestionId = obj.id
+      this.orders = obj.order
       this.openedFrame = true
       this.data = JSON.parse(JSON.stringify(obj))
       this.subTopic_number_calculate()
@@ -263,47 +264,31 @@ export default {
           scoreTotal:group[0].scoreTotal,
           pageLayout:this.pageLayout
         },
-        order: this.questionOrder,
         first: true,
       }
 
       if (this.editQuestionId == null) {
         if (InsertTitle && this.questionNumber_big_exist.length > 0) {
-          let index = this.questionNumber_big_exist.findIndex(
-            (item) => item.value === this.existNumber
-          )
-
-          if (index > -1) {
-            let objIndex = this.pageData.findIndex(
-              (item) => item.id == this.questionNumber_big_exist[index].id
-            )
-
-            if (objIndex > -1) {
-              //-------------------------------------------------插入数组对象
-              let data = {
-                obj: {
-                  ...obj,
-                  order: this.pageData[index].order + 1,
-                },
-                num: this.existNumber + 1,
-                order: this.pageData[index].order + 1,
-                SelfOrder: Postpone,
-              }
-
-              this.pageData_insert(data)
-            }
+          let select = this.questionNumber_big_exist[this.existNumber]
+          let data = {
+              obj: {
+                ...obj,
+                order: this.question_order,
+              },
+              bigId: select.id,
+              SelfOrder: Postpone,
           }
+          this.pageData_insert(data)
         } else {
           this.pageData_add(obj)
 
         }
-        this.questionOrder_add()
 
       } else {
         // 编辑
         this.subTopic_determine_pid_clean(this.childGroups[0].pid)
         obj.id = this.editQuestionId
-        this.pageData_edit(obj)
+        this.pageData_edit({...obj,order:this.orders})
       }
       //------------------------------------
       this.openedFrame = false // 关闭弹窗

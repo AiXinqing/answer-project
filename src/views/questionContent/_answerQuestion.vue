@@ -150,16 +150,13 @@ export default {
   methods: {
     ...mapMutations('pageContent', [
       'pageData_del',
-      'questionNumber_big_subtract',
       'questionOrder_subtract',
       'pageData_edit',
-      'pageData_objId_del'
     ]),
     ...mapMutations('questionType', [
       'subTopic_already_del',
       'subTopic_number_calculate',
-      'subTopic_determine_del',
-      'questionNumber_big_exist_del',
+      'subTopic_determine_clean',
     ]),
     hanldeCloseEsitor(content) {
       this.isEditor = false
@@ -177,7 +174,7 @@ export default {
       let {group} = this.data.content
       let questionGroup = group[0]
 
-      const {sid,fid,pid,id,objId} = this.data
+      const {sid,fid,pid,id} = this.data
 
       if(sid){
         //三节
@@ -220,15 +217,14 @@ export default {
         let index = questionGroup.childGroup.findIndex(question => question.id === id)
         if(index > -1){
           questionGroup.childGroup.splice(index,1)
+          this.subTopic_already_del([this.data])
+          this.subTopic_determine_clean(this.data.topic)
         }
       }
       // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
       if (index > -1) {
         this.pageData_del(index)
-        this.$nextTick(()=>{
-          this.pageData_objId_del({group:questionGroup,objId:objId})
-        })
       }
 
     },

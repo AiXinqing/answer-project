@@ -9,7 +9,7 @@ const state = {
   pageHeight: [], // 页面高度
 
   questionOrder: 0, // 题序
-  questionNumber_big: 0, // 大题题号
+  // questionNumber_big: 0, // 大题题号
 
   scoreTotal: 0, // 试卷总分
 }
@@ -73,19 +73,22 @@ const mutations = {
     const index = state.pageData.findIndex((itme) => itme.id == bigId)
     if (index > -1) {
       nums = index + 1
+      if(obj.questionType == "answerQuestion"){
+        // 解答题插入
+        nums = nums + obj.index
+      }
       state.pageData.splice(nums, 0, obj)
     }
     if (SelfOrder) {
-      console.log()
       let order = 0
       state.pageData = state.pageData.map((question) => {
-        if (!question.questionType !== "NonRresponseArea") {
+        if (question.questionType !== "NonRresponseArea") {
           order += 1
         }
         let num = {}
         if (!question.questionType !== "AnswerSheetTitle") {
           num = {
-            number: order - 2
+            number:order - 2
           }
         }
         return {
@@ -113,15 +116,15 @@ const mutations = {
 
 
 
-  questionNumber_big_add: (state) => {
-    state.questionNumber_big += 1
-  },
-  questionNumber_big_subtract: (state) => {
-    state.questionNumber_big -= 1
-    if (state.questionNumber_big < 0) {
-      state.questionNumber_big = 0
-    }
-  },
+  // questionNumber_big_add: (state) => {
+  //   state.questionNumber_big += 1
+  // },
+  // questionNumber_big_subtract: (state) => {
+  //   state.questionNumber_big -= 1
+  //   if (state.questionNumber_big < 0) {
+  //     state.questionNumber_big = 0
+  //   }
+  // },
 
   pageHeight_set: (state, Arr = []) => {
     // 页面高度更新
@@ -225,6 +228,9 @@ const getters = {
   },
   question_order: (state) => {
     return state.pageData.filter(question => question.questionType !== 'NonRresponseArea').length
+  },
+  options:()=>{
+    return state.questionNumber.map((label,value)=>({label,value}))
   }
 }
 

@@ -71,7 +71,7 @@ export default {
     preCreateTitle () {
       let answerTitle = this.pageData[0]
       this.editTitleRows(parseInt(this.AdmissionTicket))
-      this.pageData_edit({
+      this.pageData.splice(0,1,{
         ...answerTitle,
         content:{
           ...answerTitle.content,

@@ -20,7 +20,7 @@
         <el-col :span="12" class="select-item">
           <div class="label">题目:</div>
           <el-input
-            v-model="objectiveData.topic"
+            v-model="objectiveData.topicName"
             size="mini"
             placeholder="请输入内容"
           ></el-input>
@@ -355,7 +355,7 @@ export default {
       if (this.editQuestionId == null) {
         if (InsertTitle && this.questionNumber_big_exist.length > 0) {
           let select = this.questionNumber_big_exist[this.existNumber]
-          console.log(select)
+
           let data = {
               obj: {
                 ...obj,
@@ -363,8 +363,8 @@ export default {
               },
               bigId: select.id,
               SelfOrder: Postpone,
-            }
-            this.pageData_insert(data)
+          }
+          this.pageData_insert(data)
         } else {
           this.pageData_add(obj)
         }
