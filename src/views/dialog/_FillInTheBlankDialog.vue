@@ -355,7 +355,7 @@ export default {
       if (this.editQuestionId == null) {
         if (InsertTitle && this.questionNumber_big_exist.length > 0) {
           let select = this.questionNumber_big_exist[this.existNumber]
-          console.log(select)
+
           let data = {
               obj: {
                 ...obj,
@@ -363,8 +363,8 @@ export default {
               },
               bigId: select.id,
               SelfOrder: Postpone,
-            }
-            this.pageData_insert(data)
+          }
+          this.pageData_insert(data)
         } else {
           this.pageData_add(obj)
         }

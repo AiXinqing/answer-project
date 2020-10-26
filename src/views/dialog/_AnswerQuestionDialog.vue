@@ -92,6 +92,7 @@ export default {
       openedFrame: false,
       errorVal: '',
       existNumber: null,
+      orders:0,
       previous:null,
       questionData: {
         number: 0,
@@ -128,7 +129,7 @@ export default {
       'pageLayout',
     ]),
     ...mapState('answerQuestion', ['answerQuestionArr',]),
-    ...mapGetters('pageContent', ['questionNumber_big_exist']),
+    ...mapGetters('pageContent', ['questionNumber_big_exist','question_order']),
     questionNumber_big(){
       return this.questionNumber_big_exist.length
     },
@@ -256,7 +257,7 @@ export default {
       'subTopic_already_add',
       'subTopic_determine_pid_clean',
     ]),
-    ...mapMutations('answerQuestion', ['set_answerQuestionArr',]),
+    ...mapMutations('answerQuestion', ['set_answerQuestionArr']),
     opened () {
 
       this.questionData = JSON.parse(JSON.stringify({
@@ -276,6 +277,7 @@ export default {
     openedEdit (obj) {
       //编辑弹框
       this.editQuestionId = obj.objId
+      this.orders = obj.order
       this.previous = obj.previousOrder
       this.openedFrame = true
       this.questionData = JSON.parse(JSON.stringify(obj.content))
@@ -295,9 +297,7 @@ export default {
       let Arr = []
       let objId = `answer_${+new Date()}`
       let rectHeight = this.dataTopic.rows * 35 + 12 + 20 // 小题初始高度
-      let orders = this.questionOrder - 1 // 题型排序序列号
       this.RefactorData.forEach((item, index) => {
-        orders += 1
         let obj = {
           heightTitle: index == 0 ? 32 : 0,
           height: index == 0 ? rectHeight + 32 : rectHeight,
@@ -312,41 +312,31 @@ export default {
           objId: objId,
           row:this.dataTopic.rows,
           rowHeight:35,
-          order: orders,
           scoreTotal:++item.score,
-          previousOrder:this.questionOrder - 1 // 解答题插入前的序列号
+          previousOrder:this.questionOrder - 1, // 解答题插入前的序列号
+          index:index,
         }
         Arr.push(obj)
-        this.questionOrder_add()
       })
 
       if (this.editQuestionId == null) {
         // 新增
         if(InsertTitle && this.questionNumber_big_exist.length > 0){
-
-          let index = this.questionNumber_big_exist.findIndex(
-            (item) => item.value === this.existNumber
-          )
-
-          if(index > -1){
-            let existNum = this.existNumber - 1
-
-            Arr.forEach((obj) => {
-              existNum += 1
-              orders += 1
-              let data = {
-                obj: {
-                  ...obj,
-                  order: orders,
+          let select = this.questionNumber_big_exist[this.existNumber]
+          let i = this.question_order
+          Arr.forEach((obj) => {
+            i += 1
+            let data = {
+              obj: {
+                ...obj,
+                order: i,
                 },
-                num: existNum,
-                order: orders,
+                bigId: select.id,
                 SelfOrder: Postpone,
-              }
-              this.pageData_insert(data)
+            }
+            this.pageData_insert(data)
+          })
 
-            })
-          }
         } else {
           Arr.forEach(obj => {
             this.pageData_add(obj)

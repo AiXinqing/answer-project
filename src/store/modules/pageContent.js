@@ -73,19 +73,22 @@ const mutations = {
     const index = state.pageData.findIndex((itme) => itme.id == bigId)
     if (index > -1) {
       nums = index + 1
+      if(obj.questionType == "answerQuestion"){
+        // 解答题插入
+        nums = nums + obj.index
+      }
       state.pageData.splice(nums, 0, obj)
     }
     if (SelfOrder) {
-      console.log()
       let order = 0
       state.pageData = state.pageData.map((question) => {
-        if (!question.questionType !== "NonRresponseArea") {
+        if (question.questionType !== "NonRresponseArea") {
           order += 1
         }
         let num = {}
         if (!question.questionType !== "AnswerSheetTitle") {
           num = {
-            number: order - 2
+            number:order - 2
           }
         }
         return {
