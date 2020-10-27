@@ -44,10 +44,6 @@
 
     data() {
       return {
-        activeName: 'singleChoice',
-        input: '',
-        isdisabled: false,
-        data:{}
       }
     },
 
