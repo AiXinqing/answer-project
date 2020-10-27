@@ -27,8 +27,8 @@
 </template>
 
 <script>
-  import choiceTabs from '../singleChoice/tabs'
-  import choiceGroup from '../singleChoice/groupItem'
+  import choiceTabs from './tabs'
+  import choiceGroup from './groupItem'
   export default {
     components: {
       choiceTabs,
