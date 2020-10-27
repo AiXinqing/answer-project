@@ -13,6 +13,7 @@
           :group-data="groupData[item.name]"
           @group-verify-status="groupVerifyStatus"
           @update-group-subTopic="updateGroupSubTopic"
+          @pre-edit-subtopic="preEditSubtopic"
         />
       </el-tab-pane>
     </template>
@@ -21,9 +22,13 @@
 
 <script>
   import singleChoice from '../objective/singleChoice'
+  import checkChoice from '../objective/checkChoice'
+  import judgmentChoice from '../objective/judgmentChoice'
   export default {
     components: {
       singleChoice,
+      checkChoice,
+      judgmentChoice
     },
     props: {
       tabPaneData: {
@@ -33,10 +38,6 @@
       groupData: {
         type: Object,
         default: () => { },
-      },
-      editId: {
-        teyp: Number,
-        default: null
       }
     },
     data() {
@@ -63,12 +64,18 @@
       hanldeClick() {
 
       },
+
       groupVerifyStatus(verify){
         this.isdisabled = verify.status
         this.$emit('group-verify-status', verify)
       },
+
       updateGroupSubTopic(group){
         this.$emit('update-group-subTopic',group)
+      },
+
+      preEditSubtopic(subtopic){
+        this.$emit('pre-edit-subtopic',subtopic)
       }
     },
   }

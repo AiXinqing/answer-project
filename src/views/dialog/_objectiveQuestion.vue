@@ -40,6 +40,7 @@
         :group-data="editingData.group"
         @group-verify-status="groupVerifyStatus"
         @update-group-subTopic="updateGroupSubTopic"
+        @pre-edit-subtopic="preEditSubtopic"
       />
       <!-- 题型编辑区 -->
       <div class="condition_box Insert_box" v-show="editQuestionId == null">
@@ -109,8 +110,27 @@
               id: 'singleBox0',
               childGroup: [],
             },],
-            checkChoice:[],
-            judgmentChoice:[],
+            checkChoice:[
+              {
+                start: 1,
+                end: null,
+                score: null,
+                lessScore: null,
+                select: 4,
+                id: 'checkbox0',
+                childGroup: [],
+              },
+            ],
+            judgmentChoice:[
+              {
+                start: 1,
+                end: null,
+                score: null,
+                select: 2,
+                id: 'judgment0',
+                childGroup: [],
+              },
+            ],
           }
         },
         editingData:{},
@@ -156,37 +176,64 @@
       opened() {
         this.openedFrame = true
       },
+
       openedEdit(){
         this.openedFrame = true
       },
+
       closeFrame() {
         // 取消弹框
-        this.preEditQuestion = JSON.parse(JSON.stringify(this.closeData))
+        // this.preEditQuestion = JSON.parse(JSON.stringify(this.closeData))
         this.openedFrame = false
       },
+
       changeQuestionBig(num){
         this.preEditData = {
           ...this.preEditData,
           number:num
         }
       },
+
       hanldeSelectexistBig(){},
+
       preCreateQuestion(){
         // 保存题型
       },
+
       groupVerifyStatus(verify){
         this.errorVal = verify.str
       },
+
       updateGroupSubTopic(groupObj){
+        // 编辑题组
+        let {type,data} = groupObj
         let {group} = this.preEditData
-        let curGroup = group[groupObj.type]
-        let index = curGroup.findIndex(group => group.id == groupObj.data.id)
+
+        let curGroup = group[type]
+        let index = curGroup.findIndex(group => group.id == data.id)
 
         if(index > -1){
-          this.preEditData.group[groupObj.type].splice(index,1,groupObj.data)
+          this.preEditData.group[type].splice(index,1,data)
         }
+      },
 
-      }
+      preEditSubtopic(subtopic){
+        //编辑小题号
+        let {type,data} = subtopic
+        let {group} = this.preEditData
+
+        let curGroup = group[type]
+        let index = curGroup.findIndex(group => group.id == data.pid)
+
+        if(index > -1){
+          let childrenGroup = curGroup[index].childGroup
+          let cIndex = childrenGroup.findIndex(topic => topic.id == data.id)
+
+          if(cIndex > -1){
+            this.preEditData.group[type][index].childGroup.splice(cIndex,1,data)
+          }
+        }
+      },
     },
   }
 </script>

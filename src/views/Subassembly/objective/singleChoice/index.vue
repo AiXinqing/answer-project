@@ -16,8 +16,8 @@
           <choice-group
             v-for="item in group.childGroup"
             :key="item.topice"
-            :child-item="item"
-            @edit-topic-func="editTopicFunc"
+            :subtopic="item"
+            @pre-edit-subtopic="preEditSubtopic"
           />
         </div>
       </template>
@@ -34,16 +34,14 @@
       choiceTabs,
       choiceGroup
     },
+
     props: {
       groupData: {
         type: Array,
         default: () => [],
-      },
-      editId: {
-        teyp: Number,
-        default: null
       }
     },
+
     data() {
       return {
         activeName: 'singleChoice',
@@ -52,11 +50,11 @@
         data:{}
       }
     },
+
     computed: {
-      choice() {
-        return ''
-      }
+
     },
+
     watch: {
       groupData: {
         immediate: true,
@@ -67,15 +65,22 @@
         }
       }
     },
+
     methods: {
       hanldeClick() {
 
       },
+
       addGroupQuestion(){},
-      editTopicFunc(){},
+
+      preEditSubtopic(subtopic){
+        this.$emit('pre-edit-subtopic',subtopic)
+      },
+
       groupVerifyStatus(verify){
         this.$emit('group-verify-status', verify)
       },
+
       updateGroupSubTopic(group){
         this.$emit('update-group-subTopic',group)
       }
