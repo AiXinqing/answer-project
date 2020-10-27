@@ -143,7 +143,7 @@
       }
     },
     computed: {
-      ...mapGetters('pageContent', ['questionNumber_big_exist','question_order','options','pageData']),
+      ...mapGetters('pageContent', ['questionNumber_big_exist','question_order','options','pageData','pageWidth',]),
 
       ...mapState('questionType',['subTopic_number',
       'subTopic_number_already',
@@ -152,12 +152,19 @@
       questionNumber_big(){
         return this.questionNumber_big_exist.length
       },
-      name() {
-        return this.data
-      },
+
       title(){
         return  !this.editQuestionId ? '新增客观题' : '编辑客观题'
       },
+
+      isdisabledFn(){
+        return this.questionGroup.length > 0 && !this.errorMessage ? false :true
+      },
+
+      errorMessage() {
+        return this.errorVal != '' ? true : false
+      },
+
       questionGroup(){
         const {singleChoice,checkChoice,judgmentChoice} = this.editingData.group
         return [
@@ -166,12 +173,72 @@
           ...judgmentChoice.map(group => group.childGroup).flat(),
         ]
       },
-      isdisabledFn(){
-        return this.questionGroup.length > 0 && !this.errorMessage ? false :true
+
+      rowGroup(){
+        // 每行所占小题
+        let result = []
+        let {rows} = this.editingData
+        for (var i = 0; i < this.questionGroup.length; i += rows) {
+          result.push(this.questionGroup.slice(i, i + rows))
+        }
+        return result
       },
-      errorMessage() {
-        return this.errorVal != '' ? true : false
+
+      maxWidth(){
+        // 最大宽度
+        const maxWidthArr = []
+
+        this.rowGroup.filter((item) => {
+          let widthS = item.map((row) => row.width)
+          maxWidthArr.push(Math.max.apply(null, widthS))
+        })
+        console.log(maxWidthArr)
+
+        let sum = 0,max = this.pageWidth
+        let arr = [],numberArr = []
+        maxWidthArr.forEach(num => {
+          sum += num
+          if(sum <= max){
+            arr.push(num)
+          }else{
+            numberArr.push(arr)
+            sum = num
+            arr = [num]
+          }
+        });
+        if(arr.length > 0){
+          numberArr.push(arr)
+        }
+
+        return numberArr.map(num => num.length)
       },
+
+      contentHeight(){
+        // 计算题型内容所占高度
+        // 计算宽度所占数组长度
+        let heights = this.rowGroup.map((item) => item.length * 22)
+        // 根据宽度数组 和 高度数组合成高度二维数组
+        let twoDimensional = []
+        let num = 0
+        for (let i = 0; i < this.maxWidth.length; i++) {
+          num += this.maxWidth[i]
+          twoDimensional.push(heights.slice(num - this.maxWidth[i], num))
+        }
+        let heightList = twoDimensional.map((item) => {
+          return Math.max.apply(null, item)
+        })
+        if (heightList.length > 0) {
+          return (
+            heightList.reduce(
+              (accumulator, currentValue) => accumulator + currentValue
+            ) +
+            heightList.length * 10
+          )
+        } else {
+          return 0
+        }
+      },
+
     },
     watch: {
       preEditData: {
@@ -312,7 +379,9 @@
       preCreateQuestion(){
         // 保存题型
         // const { rows,InsertTitle,Postpone,} = this.editingData
-
+        console.log(this.rowGroup)
+        console.log(this.maxWidth)
+        console.log(this.contentHeight)
       },
 
       groupVerifyStatus(verify){

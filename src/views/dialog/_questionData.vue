@@ -631,6 +631,7 @@ export default {
         }
         widths.push(long)
       }
+      console.log(widths)
       // let widthsLong = widths.length
       // 计算高度所占数组长度
       let heights = result.map((item) => item.length * 22)
