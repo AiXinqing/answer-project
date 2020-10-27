@@ -59,7 +59,7 @@
             :items="questionNumber_big_exist"
             size="mini"
             :value="existNumber"
-            @change="hanldeSelectexistBig"
+            @change="changeSelectexistBig"
           />
           <span>大题后</span>
         </div>
@@ -135,6 +135,7 @@
           }
         },
         editingData:{},
+        InitialData:{},
         editQuestionId: null,
         orders:0,
         errorVal: '',
@@ -142,9 +143,11 @@
       }
     },
     computed: {
-      ...mapGetters('pageContent', ['questionNumber_big_exist','question_order','options']),
+      ...mapGetters('pageContent', ['questionNumber_big_exist','question_order','options','pageData']),
 
-      ...mapState('questionType',['subTopic_number','subTopic_number_already']),
+      ...mapState('questionType',['subTopic_number',
+      'subTopic_number_already',
+      'subTopic_number_determine',]),
 
       questionNumber_big(){
         return this.questionNumber_big_exist.length
@@ -205,6 +208,10 @@
                 }),
               }
             }
+            this.existNumber =
+            this.questionNumber_big_exist.length > 0
+              ? this.questionNumber_big_exist[0].value
+              : null
           }
           this.editingData = {
             ...this.preEditData,
@@ -228,6 +235,11 @@
         }
       }
     },
+
+    mounted() {
+      this.InitialData = JSON.parse(JSON.stringify(this.preEditData))
+    },
+
     methods: {
       ...mapMutations('questionType', [
         'subTopic_number_calculate',
@@ -240,16 +252,51 @@
       ...mapMutations('pageContent',[]),
 
       opened() {
+        this.preEditData = JSON.parse(
+          JSON.stringify({ ...this.preEditData, number: this.questionNumber_big })
+        )
+
         this.openedFrame = true
+        this.subTopic_already_reset() // 清空
+        this.subTopic_already_add(this.subTopic_number_determine)
+        this.subTopic_number_calculate()
       },
 
-      openedEdit(){
+      openedEdit(id){
+        let current = this.pageData.filter((item) => item.id === id)
+        this.quesctionObj = JSON.parse(JSON.stringify(current[0].content))
+        this.editQuestionId = id
+        this.orders = current.order
         this.openedFrame = true
+        this.subTopic_number_calculate()
       },
 
       closeFrame() {
         // 取消弹框
+        this.preEditData = this.InitialData
         this.openedFrame = false
+        this.subTopic_number_calculate()
+      },
+
+      change(id, num){
+        // 改变row数量
+        let current = this.pageData.filter((item) => item.id === id)
+        let obj = JSON.parse(JSON.stringify(current[0].content))
+        this.editQuestionId = id
+
+        let sum = num == 1 ? -1 : 1
+        let rowNum = obj.row + sum
+        if(rowNum < 1){
+          rowNum = 1
+        }
+        if(rowNum > 10){
+          rowNum = 10
+        }
+
+        this.preEditData = JSON.parse(JSON.stringify({...obj,row:rowNum}))
+        this.$nextTick(() => {
+          this.preCreateQuestion()
+        })
       },
 
       changeQuestionBig(num){
@@ -259,10 +306,14 @@
         }
       },
 
-      hanldeSelectexistBig(){},
+      changeSelectexistBig(e){
+        this.existNumber = e
+      },
 
       preCreateQuestion(){
         // 保存题型
+        // const { rows,InsertTitle,Postpone,} = this.editingData
+
       },
 
       groupVerifyStatus(verify){
