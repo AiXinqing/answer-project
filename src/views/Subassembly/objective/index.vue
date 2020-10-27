@@ -1,6 +1,5 @@
 <template>
   <el-tabs v-model="activeName" type="border-card" @tab-click="hanldeClick" class="card_top">
-
     <template  v-for="(item, i) in tabPaneData">
       <el-tab-pane
         :key="i"
@@ -10,10 +9,13 @@
       >
         <component
           :is="item.name"
-          :group-data="groupData[item.name]"
+          :active-name="item.name"
+          :group-data="grouptopic[item.name]"
           @group-verify-status="groupVerifyStatus"
           @update-group-subTopic="updateGroupSubTopic"
           @pre-edit-subtopic="preEditSubtopic"
+          @add-group-question="addGroupQuestion"
+          @del-subtopic-group="delSubtopicGroup"
         />
       </el-tab-pane>
     </template>
@@ -22,16 +24,17 @@
 
 <script>
   import singleChoice from '../objective/singleChoice'
+  import checkChoice from '../objective/checkChoice'
+  import judgmentChoice from '../objective/judgmentChoice'
+  import {mapState} from 'vuex'
   export default {
     components: {
       singleChoice,
+      checkChoice,
+      judgmentChoice
     },
     props: {
-      tabPaneData: {
-        type: Array,
-        default: () => [],
-      },
-      groupData: {
+      questionGroup: {
         type: Object,
         default: () => { },
       }
@@ -39,30 +42,36 @@
     data() {
       return {
         activeName: 'singleChoice',
-        input: '',
-        isdisabled: false,
-        data:{}
+        grouptopic:{},
+        errorStr:'',
+        verifyStatus:false
       }
     },
     computed: {
+      ...mapState('questionType',['tabPaneData']),
+
+      isdisabled(){
+        return this.errorStr != '' && this.verifyStatus ? true : false
+      },
     },
     watch: {
-      groupData: {
+      questionGroup: {
         immediate: true,
         handler () {
-          this.data = {
-            ...this.groupData
+          this.grouptopic = {
+            ...this.questionGroup
           }
         }
       }
     },
     methods: {
-      hanldeClick() {
-
+      hanldeClick(tab) {
+        this.activeName = tab.name
       },
 
       groupVerifyStatus(verify){
-        this.isdisabled = verify.status
+        this.verifyStatus = verify.status
+        this.errorStr = verify.str
         this.$emit('group-verify-status', verify)
       },
 
@@ -72,7 +81,16 @@
 
       preEditSubtopic(subtopic){
         this.$emit('pre-edit-subtopic',subtopic)
-      }
+      },
+
+      addGroupQuestion(group){
+        this.$emit('add-group-question',group)
+      },
+
+      delSubtopicGroup(subtopic) {
+        this.$emit('del-subtopic-group',subtopic)
+        this.errorStr = ''
+      },
     },
   }
 </script>

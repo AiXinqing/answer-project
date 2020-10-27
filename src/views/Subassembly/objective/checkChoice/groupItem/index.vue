@@ -1,11 +1,13 @@
 <template>
   <el-row >
-    <el-col :span="4" class="question_tabtitle" >{{data.topic}}</el-col>
+    <el-col :span="4" class="question_tabtitle">{{data.topic}}</el-col>
     <el-col :span="20" class="group_item_right">
       <div>
         <el-input v-model="data.score" size="mini" @blur="preEditSubtopic" onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})"/>
+        <span>分,少选得</span>
+        <el-input v-model="data.lessScore" size="mini" @blur="preEditSubtopic" :max="data.score" onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />
         <span>分</span>
-        <el-input v-model.number="data.select" size="mini" @blur="preEditSubtopic" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
+        <el-input v-model="data.select" size="mini" @blur="preEditSubtopic" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
         <span>个选项</span>
       </div>
     </el-col>
@@ -32,26 +34,29 @@ export default {
         this.data = {
           ...this.subtopic,
           score: this.subtopic.score == 0 ? '':this.subtopic.score,
+          lessScore: this.subtopic.lessScore == 0 ? null:this.subtopic.lessScore,
         }
       }
     }
   },
   methods: {
     preEditSubtopic () {
-      const {score,select} = this.data
+      const {score,select,lessScore} = this.data
       let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
+      let lessScoreVal = lessScore ? lessScore.toString().match(/^\d+(?:\.\d{0,1})?/) : lessScore
+
       if(scoreVal !='' && select !=''){
         console.log(this.data)
         this.$emit('pre-edit-subtopic', {
-          type:'singleChoice',
+          type:'checkChoice',
           data:{
             ...this.data,
             select: typeof(select)=='string' ? 4 : select,
-            score:Number(scoreVal)
+            score:Number(scoreVal),
+            lessScore:Number(lessScoreVal),
           }
         })
       }
-
     },
   },
 }
@@ -61,9 +66,6 @@ export default {
 .group_item {
   .el-row {
     border-bottom: 1px solid #888;
-  }
-  .el-row:last-child {
-    border-bottom: none;
   }
 }
 </style>

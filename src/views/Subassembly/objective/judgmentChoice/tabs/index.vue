@@ -7,7 +7,7 @@
     <span>题,每题</span>
     <el-input v-model="data.score" size="mini" @blur="preQuestiongroup" onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />
     <span>分,每题</span>
-    <el-input v-model.number="data.select" size="mini" @blur="preQuestiongroup"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
+    <el-input v-model.number="data.select" disabled size="mini" @blur="preQuestiongroup"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
     <span>个选项</span>
     <i class="el-icon-delete" @click="delSubtopicGroup" ></i>
   </div>
@@ -111,7 +111,7 @@
             ...this.data,
             score:Number(scoreVal),
             pid: this.data.id,
-            id: 'single_' + index,
+            id: 'judgment_' + index,
             topic: index
           }
           group.push(subtopic)
@@ -136,7 +136,7 @@
       ...mapMutations('questionType', [
         'subTopic_already_add',
         'already_pid_clean',
-        'subTopic_number_calculate'
+        'subTopic_number_calculate',
       ]),
 
       delSubtopicGroup() {
@@ -155,7 +155,7 @@
         if (!this.verifyStatus){
 
           let itemObj = {
-            type: 'singleChoice',
+            type: 'judgmentChoice',
             data: {
               ...this.data,
               score:Number(scoreVal),

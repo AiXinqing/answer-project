@@ -2,7 +2,7 @@
   <div>
     <div class="big-question-box">
       <choice-tabs
-        v-for="group in questionGroup"
+        v-for="group in groupData"
         :key="group.id"
         :group="group"
         :active-name="activeName"
@@ -13,7 +13,7 @@
     </div>
     <div class="add_question" @click="addGroupQuestion()">+ 分段添加小题</div>
     <div class="question-group">
-      <template v-for="group in questionGroup">
+      <template v-for="group in groupData">
         <div :key="group.id" class="group_item">
           <choice-group
             v-for="item in group.childGroup"
@@ -80,8 +80,8 @@
           start: this.subTopic_number,
           end: null,
           score: null,
-          select: 4,
-          id: `single_${+new Date()}`,
+          select: 2,
+          id: `judgment_${+new Date()}`,
           childGroup: [],
         }
         this.$emit('add-group-question',{type:this.activeName,groupTopic:group})

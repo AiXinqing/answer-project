@@ -6,7 +6,9 @@
     <el-input v-model.number="data.end" size="mini" @blur="preQuestiongroup" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
     <span>题,每题</span>
     <el-input v-model="data.score" size="mini" @blur="preQuestiongroup" onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />
-    <span>分,每题</span>
+    <span>分,少选</span>
+    <el-input v-model="data.lessScore" size="mini" @blur="preQuestiongroup" onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})"/>
+    <span>得分,每题</span>
     <el-input v-model.number="data.select" size="mini" @blur="preQuestiongroup"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
     <span>个选项</span>
     <i class="el-icon-delete" @click="delSubtopicGroup" ></i>
@@ -37,7 +39,7 @@
       ...mapState('questionType', [
         'subTopic_number',
         'subTopic_number_already',
-        'subTopic_number_determine'
+        'subTopic_number_determine',
       ]),
 
       verify(){
@@ -103,15 +105,18 @@
       },
 
       subTopicList(){
-        const {start,end,score} = this.data
+        const {start,end,score,lessScore} = this.data
         let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
+        let lessScoreVal = lessScore ? lessScore.toString().match(/^\d+(?:\.\d{0,1})?/) : lessScore
+
         let group = []
         for (let index = start; index <= end; index++) {
           let subtopic = {
             ...this.data,
             score:Number(scoreVal),
+            lessScore:Number(lessScoreVal),
             pid: this.data.id,
-            id: 'single_' + index,
+            id: 'check_' + index,
             topic: index
           }
           group.push(subtopic)
@@ -126,7 +131,8 @@
         handler () {
           this.data = {
             ...this.group,
-            score: this.data.score == 0 ? null:this.data.score
+            score: this.data.score == 0 ? '':this.data.score,
+            lessScore: this.data.lessScore == 0 ? null:this.data.lessScore,
           }
         }
       }
@@ -136,7 +142,7 @@
       ...mapMutations('questionType', [
         'subTopic_already_add',
         'already_pid_clean',
-        'subTopic_number_calculate'
+        'subTopic_number_calculate',
       ]),
 
       delSubtopicGroup() {
@@ -144,8 +150,9 @@
       },
 
       preQuestiongroup(){
-        const {score,select,pid} = this.data
+        const {score,select,pid,lessScore} = this.data
         let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
+        let lessScoreVal = lessScore ? lessScore.toString().match(/^\d+(?:\.\d{0,1})?/) : lessScore
 
         this.$emit('group-verify-status', {
           str:this.verify,
@@ -155,17 +162,18 @@
         if (!this.verifyStatus){
 
           let itemObj = {
-            type: 'singleChoice',
+            type: 'checkChoice',
             data: {
               ...this.data,
               score:Number(scoreVal),
+              lessScore:Number(lessScoreVal),
               select: typeof(select)=='string' ? 4 :select,
               start: parseInt(this.data.start),
               childGroup: this.subTopicList
             }
           }
           this.$emit('update-group-subTopic',itemObj)
-          // 先清除
+          // 先清除临时题组
           this.already_pid_clean(pid)
           // 后添加
           this.subTopic_already_add(this.subTopicList)
