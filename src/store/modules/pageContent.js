@@ -231,6 +231,9 @@ const getters = {
   },
   options:()=>{
     return state.questionNumber.map((label,value)=>({label,value}))
+  },
+  pageWidth:(state) => {
+    return state.pageLayout.column === 3 && state.pageLayout.size == 'A3' ? 480 : 745
   }
 }
 

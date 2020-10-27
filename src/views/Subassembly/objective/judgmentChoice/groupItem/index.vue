@@ -31,6 +31,7 @@ export default {
       handler () {
         this.data = {
           ...this.subtopic,
+          score: this.subtopic.score == 0 ? '':this.subtopic.score,
         }
       }
     }

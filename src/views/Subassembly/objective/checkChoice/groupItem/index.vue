@@ -33,6 +33,8 @@ export default {
       handler () {
         this.data = {
           ...this.subtopic,
+          score: this.subtopic.score == 0 ? '':this.subtopic.score,
+          lessScore: this.subtopic.lessScore == 0 ? null:this.subtopic.lessScore,
         }
       }
     }

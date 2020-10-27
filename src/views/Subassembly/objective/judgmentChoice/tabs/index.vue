@@ -37,69 +37,65 @@
       ]),
 
       verify(){
-        const {start,end,score,id} = this.data
+        const {start,end,score} = this.data
         let scoreVal = score ? parseFloat(score) : score
-        let determine = this.subTopic_number_determine // 存在
-        let already = this.subTopic_number_already // 临
-        let startStr = ''
-        let endStr = ''
+        let determine = this.subTopic_number_determine
+        let already = this.subTopic_number_already
+        let strStart = ''
+        let strEnd = ''
+        if (determine.length > 0 || already.length > 0) {
+          let numStart = determine.findIndex(item => item.topic == start)
+          let index = already.findIndex(item => item.topic == start)
+          let numEnd = determine.findIndex(item => item.topic == end)
+          let endIndex = already.findIndex(item => item.topic == start)
 
-        if(determine.length > 0 || already.length > 0){
-          let M_startIndex = determine.findIndex(subTopic => subTopic.topice == start)
-          let M_endindex = determine.findIndex(subTopic => subTopic.topice == end)
-          let A_startIndex = already.findIndex(subTopic => subTopic.topice == start)
-          let A_endindex = already.findIndex(subTopic => subTopic.topice == end)
-
-          if(!this.editId){
-            if (A_startIndex > -1) {
-              if (already[A_startIndex].pid != id) {
-                startStr = `${start}题已经存在，请勿重复添加`
+          if (this.editId != null) { // 编辑
+            if (index > -1) {
+              if (already[index].pid != this.data.id) {
+                strStart = `${start}题已经存在，请勿重复添加`
               }
-            } else { startStr = '' }
-
-            if (A_endindex > -1) {
-              if (already[A_endindex].pid != id) {
-                endStr = `${end}题已经存在，请勿重复添加`
-              }
-            } else { endStr = '' }
-          }else{
-
-            if(M_startIndex > -1 || A_startIndex > -1){
-              startStr = `${start}题已经存在，请勿重复添加`
-              if (A_startIndex > -1) {
-                if (determine[A_startIndex].pid != id) {
-                  startStr = `${start}题已经存在，请勿重复添加`
-                } else { startStr = '' }
+            } else { strStart = '' }
+          } else {
+            if (numStart > -1 || index > -1) {
+              if (index > -1) {
+                if (already[index].pid != this.data.id) {
+                  strStart = `${start}题已经存在，请勿重复添加`
+                } else { strStart = '' }
               } else {
-                startStr = `${start}题已经存在，请勿重复添加`
+                strStart = `${start}题已经存在，请勿重复添加`
               }
-            }else { startStr = '' }
-
-
-            if(M_endindex > -1 || A_endindex > -1){
-              endStr = `${end}题已经存在，请勿重复添加`
-
-              if (A_endindex > -1) {
-                if (already[A_endindex].pid != id) {
-                  endStr = `${end}题已经存在，请勿重复添加`
-                } else { endStr = '' }
-              } else {
-                endStr = `${end}题已经存在，请勿重复添加`
-              }
-            }else{endStr = ''}
+            } else { strStart = '' }
           }
-
+          if (this.editId != null) { // 编辑
+            if (endIndex > -1) {
+              if (already[endIndex].pid != this.data.id) {
+                strEnd = `${end}题已经存在，请勿重复添加`
+              }
+            } else { strStart = '' }
+          } else {
+            if (numEnd > -1 || endIndex > -1) {
+              if (endIndex > -1) {
+                if (already[endIndex].pid != this.data.id) {
+                  strEnd = `${end}题已经存在，请勿重复添加`
+                } else { strStart = '' }
+              } else {
+                strEnd = `${end}题已经存在，请勿重复添加`
+              }
+            } else { strStart = '' }
+          }
         }
-        return start == 0 ? '开始题号必须大于0':
-              end == 0 ? '结束题号必须大于0' :
-              start == 0 && end ? '开始题号不能大于结束题号' :
-                start != 0 && end && !scoreVal ? '分数不能为空' :
-                  startStr.length > 0 ? startStr :
-                  endStr.length > 0 ? endStr : ''
+
+        return start == 0 ? '开始题号必须大于0' :
+          end == 0 ? '结束题号必须大于0' :
+            start == 0 && end != null ? '开始题号不能大于结束题号' :
+              start > end && end != null ? '开始题号不能大于结束题号' :
+                start != 0 && end != null && scoreVal == null ? '分数不能为空' :
+                  strStart.length > 0 ? strStart :
+                    strEnd.length > 0 ? strEnd : ''
       },
 
       verifyStatus(){
-        return !this.verify ? false : true
+        return this.verify && this.data.end  ? true : false
       },
 
       subTopicList(){
@@ -125,7 +121,8 @@
         immediate: true,
         handler () {
           this.data = {
-            ...this.group
+            ...this.group,
+            score: this.data.score == 0 ? null:this.data.score
           }
         }
       }
@@ -135,6 +132,7 @@
     ...mapMutations('questionType', [
       'subTopic_already_add',
       'already_pid_clean',
+      'subTopic_number_calculate',
     ]),
       subTopiceDel() {
 
@@ -165,6 +163,7 @@
           this.already_pid_clean(pid)
           // 后添加
           this.subTopic_already_add(this.subTopicList)
+          this.subTopic_number_calculate()
         }
       }
     },

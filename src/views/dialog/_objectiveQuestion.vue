@@ -83,7 +83,7 @@
 </template>
 
 <script>
-  import {mapGetters } from 'vuex'
+  import {mapGetters,mapState,mapMutations } from 'vuex'
   import tabPaneBox from '../Subassembly/objective'
   export default {
     components: {
@@ -141,6 +141,9 @@
     },
     computed: {
       ...mapGetters('pageContent', ['questionNumber_big_exist','question_order','options']),
+
+      ...mapState('questionType',['subTopic_number','subTopic_number_already']),
+
       questionNumber_big(){
         return this.questionNumber_big_exist.length
       },
@@ -151,8 +154,12 @@
         return  !this.editQuestionId ? '新增客观题' : '编辑客观题'
       },
       questionGroup(){
-        // console.log(this.editingData)
-        return []
+        const {singleChoice,checkChoice,judgmentChoice} = this.editingData.group
+        return [
+          ...singleChoice.map(group => group.childGroup).flat(),
+          ...checkChoice.map(group => group.childGroup).flat(),
+          ...judgmentChoice.map(group => group.childGroup).flat(),
+        ]
       },
       isdisabledFn(){
         return this.questionGroup.length > 0 && !this.errorMessage ? false :true
@@ -165,13 +172,70 @@
       preEditData: {
         immediate: true,
         handler() {
-          this.editingData = {
-            ...this.preEditData
+          //变量更改
+          let Increase = {}
+          let {
+            singleChoice,
+            checkChoice,
+            judgmentChoice
+          } = this.preEditData.group
+          if(!this.editQuestionId){
+            Increase = {
+              number: this.questionNumber_big,
+              group:{
+                singleChoice:singleChoice.map(group => {
+                  return {
+                        ...group,
+                        start: group.end == null ? this.subTopic_number : group.start,
+                      }
+                }),
+                checkChoice:checkChoice.map(group => {
+                  return {
+                        ...group,
+                        start: group.end == null ? this.subTopic_number : group.start,
+                      }
+                }),
+                judgmentChoice:judgmentChoice.map(group => {
+                  return {
+                        ...group,
+                        start: group.end == null ? this.subTopic_number : group.start,
+                      }
+                }),
+              }
+            }
           }
+          this.editingData = {
+            ...this.preEditData,
+            ...Increase
+          }
+        }
+      },
+
+      questionGroup:{
+        immediate: true,
+        handler(){
+          this.subTopic_already_reset()
+          if(this.questionGroup.length > 0){
+            this.subTopic_already_add(this.questionGroup)
+          }else{
+            this.subTopic_already_add(this.subTopic_number_determine)
+          }
+          this.subTopic_number_calculate()
+
         }
       }
     },
     methods: {
+      ...mapMutations('questionType', [
+        'subTopic_number_calculate',
+        'subTopic_already_add', // 小题数组
+        'subTopic_already_del', // 删除题组-小题
+        'subTopic_calculate_determine', // 储存确定题型
+        'subTopic_already_reset', // 清空
+        'subTopic_determine_pid_clean',
+      ]),
+      ...mapMutations('pageContent',[]),
+
       opened() {
         this.openedFrame = true
       },
@@ -204,16 +268,18 @@
 
       updateGroupSubTopic(groupObj){
         // 编辑题组
+        let obj = JSON.parse(JSON.stringify(this.preEditData))
         let {type,data} = groupObj
-        let {group} = this.preEditData
+        let {group} = obj
 
         let curGroup = group[type]
         let index = curGroup.findIndex(group => group.id == data.id)
 
         if(index > -1){
           curGroup.splice(index,1,data)
-          // console.log(this.preEditData)
-          // console.log(this.editingData)
+          this.$nextTick(()=>{
+            this.preEditData = JSON.parse(JSON.stringify(obj))
+          })
         }
       },
 
