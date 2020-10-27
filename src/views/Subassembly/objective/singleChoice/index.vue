@@ -9,7 +9,7 @@
         @update-group-subTopic="updateGroupSubTopic"
       />
     </div>
-    <div class="add_question" @click="addGroupQuestion(activeName)">+ 分段添加小题</div>
+    <div class="add_question" @click="addGroupQuestion()">+ 分段添加小题</div>
     <div class="question-group">
       <template v-for="group in groupData">
         <div :key="group.id" class="group_item">

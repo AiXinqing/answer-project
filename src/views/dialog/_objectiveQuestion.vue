@@ -153,6 +153,7 @@
         return  !this.editQuestionId ? '新增客观题' : '编辑客观题'
       },
       questionGroup(){
+        // console.log(this.editingData)
         return []
       },
       isdisabledFn(){
@@ -183,7 +184,6 @@
 
       closeFrame() {
         // 取消弹框
-        // this.preEditQuestion = JSON.parse(JSON.stringify(this.closeData))
         this.openedFrame = false
       },
 
@@ -213,7 +213,7 @@
         let index = curGroup.findIndex(group => group.id == data.id)
 
         if(index > -1){
-          this.preEditData.group[type].splice(index,1,data)
+          this.preEditData = JSON.parse(JSON.stringify(curGroup.splice(index,1,data)))
         }
       },
 
@@ -230,7 +230,7 @@
           let cIndex = childrenGroup.findIndex(topic => topic.id == data.id)
 
           if(cIndex > -1){
-            this.preEditData.group[type][index].childGroup.splice(cIndex,1,data)
+            this.preEditData  = JSON.parse(JSON.stringify(childrenGroup.splice(cIndex,1,data)))
           }
         }
       },

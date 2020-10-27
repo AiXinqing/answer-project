@@ -35,7 +35,7 @@
         'subTopic_number_already',
         'subTopic_number_determine'
       ]),
-      
+
       verify(){
         const {start,end,score,id} = this.data
         let scoreVal = score ? parseFloat(score) : score

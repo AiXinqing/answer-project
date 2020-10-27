@@ -111,7 +111,7 @@
             ...this.data,
             score:Number(scoreVal),
             pid: this.data.id,
-            id: 'single_' + index,
+            id: 'judgment_' + index,
             topic: index
           }
           group.push(subtopic)
