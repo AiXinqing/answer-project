@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   props: {
     subtopic: {
@@ -20,34 +21,55 @@ export default {
       default: () => { },
     },
   },
+
   data () {
     return {
       data: {}
     }
   },
+
+  computed: {
+    ...mapState('questionType', [
+        'letterList'
+    ]),
+
+    selectBox(){
+      return this.activeName == 'judgmentChoice' ? ['T','F'] :
+              this.letterList.slice(0,this.data.select)
+    },
+
+    selectWdith(){
+      return 40 + this.data.select * 23
+    },
+  },
+
   watch: {
     subtopic: {
       immediate: true,
       handler () {
+        let {score,select} = this.subtopic
         this.data = {
           ...this.subtopic,
-          score: this.subtopic.score == 0 ? '':this.subtopic.score,
+          score: score == 0 ? '' : score,
+          select: typeof(select)=='string' ? 4 : select <= 0 ? 1: select,
         }
       }
     }
   },
+
   methods: {
     preEditSubtopic () {
       const {score,select} = this.data
       let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
       if(scoreVal !='' && select !=''){
-        console.log(this.data)
         this.$emit('pre-edit-subtopic', {
           type:'singleChoice',
           data:{
             ...this.data,
-            select: typeof(select)=='string' ? 4 : select,
-            score:Number(scoreVal)
+            select: typeof(select)=='string' ? 4 : select <= 0 ? 1: select,
+            score:Number(scoreVal),
+            selectBox:this.selectBox,
+            width:this.selectWdith,
           }
         })
       }

@@ -7,7 +7,7 @@
         <span>分,少选得</span>
         <el-input v-model="data.lessScore" size="mini" @blur="preEditSubtopic" :max="data.score" onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />
         <span>分</span>
-        <el-input v-model="data.select" size="mini" @blur="preEditSubtopic" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
+        <el-input v-model.number="data.select" size="mini" @blur="preEditSubtopic" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
         <span>个选项</span>
       </div>
     </el-col>
@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   props: {
     subtopic: {
@@ -22,23 +23,43 @@ export default {
       default: () => { },
     },
   },
+
   data () {
     return {
       data: {}
     }
   },
+
+  computed: {
+    ...mapState('questionType', [
+        'letterList'
+    ]),
+
+    selectBox(){
+      return this.activeName == 'judgmentChoice' ? ['T','F'] :
+              this.letterList.slice(0,this.data.select)
+    },
+
+    selectWdith(){
+      return 40 + this.data.select * 23
+    },
+  },
+
   watch: {
     subtopic: {
       immediate: true,
       handler () {
+        let {score,lessScore,select} = this.subtopic
         this.data = {
           ...this.subtopic,
-          score: this.subtopic.score == 0 ? '':this.subtopic.score,
-          lessScore: this.subtopic.lessScore == 0 ? null:this.subtopic.lessScore,
+          score: score == 0 ? '' : score,
+          lessScore:lessScore == 0 ? null: lessScore,
+          select: typeof(select)=='string' ? 4 : select <= 0 ? 1: select,
         }
       }
     }
   },
+
   methods: {
     preEditSubtopic () {
       const {score,select,lessScore} = this.data
@@ -51,9 +72,11 @@ export default {
           type:'checkChoice',
           data:{
             ...this.data,
-            select: typeof(select)=='string' ? 4 : select,
+            select: typeof(select)=='string' ? 4 : select <= 0 ? 1: select,
             score:Number(scoreVal),
             lessScore:Number(lessScoreVal),
+            selectBox:this.selectBox,
+            width:this.selectWdith,
           }
         })
       }

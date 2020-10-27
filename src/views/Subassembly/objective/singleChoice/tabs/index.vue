@@ -37,7 +37,8 @@
       ...mapState('questionType', [
         'subTopic_number',
         'subTopic_number_already',
-        'subTopic_number_determine'
+        'subTopic_number_determine',
+        'letterList'
       ]),
 
       selectBox(){
@@ -170,7 +171,7 @@
             data: {
               ...this.data,
               score:Number(scoreVal),
-              select: typeof(select)=='string' ? 4 :select,
+              select: typeof(select)=='string' ? 4 : select <= 0 ? 1: select,
               start: parseInt(this.data.start),
               childGroup: this.subTopicList
             }
