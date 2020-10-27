@@ -25,8 +25,8 @@
 import columnDialog from './_studentColumnDialog'
 import AdmissionNumberDialog from './_AdmissionNumberDialog'
 
-// import questionDialog from './_questionData'
-import questionDialog from './_objectiveQuestion'
+import questionDialog from './_questionData'
+// import questionDialog from './_objectiveQuestion'
 
 import FillInTheBlankDialog from './_FillInTheBlankDialog'
 import AnswerQuestionDialog from './_AnswerQuestionDialog'

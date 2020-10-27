@@ -42,6 +42,15 @@
         'subTopic_number_determine',
       ]),
 
+      selectBox(){
+        return this.activeName == 'judgmentChoice' ? ['T','F'] :
+                this.letterList.slice(0,this.data.select)
+      },
+
+      selectWdith(){
+        return 40 + this.data.select * 23
+      },
+
       verify(){
         const {start,end,score} = this.data
         let scoreVal = score ? parseFloat(score) : score
@@ -117,7 +126,9 @@
             lessScore:Number(lessScoreVal),
             pid: this.data.id,
             id: 'check_' + index,
-            topic: index
+            topic: index,
+            selectBox:this.selectBox,
+            width:this.selectWdith,
           }
           group.push(subtopic)
         }
