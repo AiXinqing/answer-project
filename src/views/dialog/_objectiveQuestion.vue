@@ -36,8 +36,7 @@
       </el-row>
       <!-- 题型编辑区 -->
       <tab-pane-box
-        :tab-pane-data="tabPaneData"
-        :group-data="editingData.group"
+        :question-group="editingData.group"
         @group-verify-status="groupVerifyStatus"
         @update-group-subTopic="updateGroupSubTopic"
         @pre-edit-subtopic="preEditSubtopic"
@@ -84,7 +83,7 @@
 </template>
 
 <script>
-  import { mapState,mapGetters } from 'vuex' // mapMutations,
+  import {mapGetters } from 'vuex'
   import tabPaneBox from '../Subassembly/objective'
   export default {
     components: {
@@ -141,7 +140,6 @@
       }
     },
     computed: {
-      ...mapState('questionType', ['tabPaneData']),
       ...mapGetters('pageContent', ['questionNumber_big_exist','question_order','options']),
       questionNumber_big(){
         return this.questionNumber_big_exist.length
@@ -213,7 +211,9 @@
         let index = curGroup.findIndex(group => group.id == data.id)
 
         if(index > -1){
-          this.preEditData = JSON.parse(JSON.stringify(curGroup.splice(index,1,data)))
+          curGroup.splice(index,1,data)
+          // console.log(this.preEditData)
+          // console.log(this.editingData)
         }
       },
 
@@ -230,7 +230,7 @@
           let cIndex = childrenGroup.findIndex(topic => topic.id == data.id)
 
           if(cIndex > -1){
-            this.preEditData  = JSON.parse(JSON.stringify(childrenGroup.splice(cIndex,1,data)))
+            childrenGroup.splice(cIndex,1,data)
           }
         }
       },

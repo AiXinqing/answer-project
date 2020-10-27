@@ -2,7 +2,7 @@
   <div>
     <div class="big-question-box">
       <choice-tabs
-        v-for="group in groupData"
+        v-for="group in questionGroup"
         :key="group.id"
         :group="group"
         @group-verify-status="groupVerifyStatus"
@@ -11,7 +11,7 @@
     </div>
     <div class="add_question" @click="addGroupQuestion()">+ 分段添加小题</div>
     <div class="question-group">
-      <template v-for="group in groupData">
+      <template v-for="group in questionGroup">
         <div :key="group.id" class="group_item">
           <choice-group
             v-for="item in group.childGroup"
@@ -44,6 +44,7 @@
 
     data() {
       return {
+        questionGroup:[]
       }
     },
 
@@ -55,7 +56,7 @@
       groupData: {
         immediate: true,
         handler () {
-          this.data = {
+          this.questionGroup = {
             ...this.groupData
           }
         }

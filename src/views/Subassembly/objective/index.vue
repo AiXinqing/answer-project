@@ -1,6 +1,5 @@
 <template>
   <el-tabs v-model="activeName" type="border-card" @tab-click="hanldeClick" class="card_top">
-
     <template  v-for="(item, i) in tabPaneData">
       <el-tab-pane
         :key="i"
@@ -10,7 +9,7 @@
       >
         <component
           :is="item.name"
-          :group-data="groupData[item.name]"
+          :group-data="grouptopic[item.name]"
           @group-verify-status="groupVerifyStatus"
           @update-group-subTopic="updateGroupSubTopic"
           @pre-edit-subtopic="preEditSubtopic"
@@ -24,6 +23,7 @@
   import singleChoice from '../objective/singleChoice'
   import checkChoice from '../objective/checkChoice'
   import judgmentChoice from '../objective/judgmentChoice'
+  import {mapState} from 'vuex'
   export default {
     components: {
       singleChoice,
@@ -31,11 +31,7 @@
       judgmentChoice
     },
     props: {
-      tabPaneData: {
-        type: Array,
-        default: () => [],
-      },
-      groupData: {
+      questionGroup: {
         type: Object,
         default: () => { },
       }
@@ -43,24 +39,27 @@
     data() {
       return {
         activeName: 'singleChoice',
-        isdisabled: false
+        isdisabled: false,
+        grouptopic:{}
       }
     },
     computed: {
+      ...mapState('questionType',['tabPaneData']),
     },
     watch: {
-      groupData: {
+      questionGroup: {
         immediate: true,
         handler () {
-          this.data = {
-            ...this.groupData
+          this.grouptopic = {
+            ...this.questionGroup
           }
+          console.log(this.grouptopic)
         }
       }
     },
     methods: {
-      hanldeClick() {
-
+      hanldeClick(tab) {
+        this.activeName = tab.name
       },
 
       groupVerifyStatus(verify){

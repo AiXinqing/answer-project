@@ -44,6 +44,7 @@
 
     data() {
       return {
+        questionGroup:[]
       }
     },
 
@@ -55,7 +56,7 @@
       groupData: {
         immediate: true,
         handler () {
-          this.data = {
+          this.questionGroup = {
             ...this.groupData
           }
         }
