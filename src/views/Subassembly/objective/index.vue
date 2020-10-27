@@ -42,12 +42,17 @@
     data() {
       return {
         activeName: 'singleChoice',
-        isdisabled: false,
-        grouptopic:{}
+        grouptopic:{},
+        errorStr:'',
+        verifyStatus:false
       }
     },
     computed: {
       ...mapState('questionType',['tabPaneData']),
+
+      isdisabled(){
+        return this.errorStr != '' && this.verifyStatus ? true : false
+      },
     },
     watch: {
       questionGroup: {
@@ -56,7 +61,6 @@
           this.grouptopic = {
             ...this.questionGroup
           }
-          console.log(this.grouptopic)
         }
       }
     },
@@ -66,7 +70,8 @@
       },
 
       groupVerifyStatus(verify){
-        this.isdisabled = verify.status
+        this.verifyStatus = verify.status
+        this.errorStr = verify.str
         this.$emit('group-verify-status', verify)
       },
 
@@ -84,6 +89,7 @@
 
       delSubtopicGroup(subtopic) {
         this.$emit('del-subtopic-group',subtopic)
+        this.errorStr = ''
       },
     },
   }

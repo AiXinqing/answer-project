@@ -97,7 +97,11 @@
 
       updateGroupSubTopic(group){
         this.$emit('update-group-subTopic',group)
-      }
+      },
+
+      delSubtopicGroup(subtopic) {
+        this.$emit('del-subtopic-group',subtopic)
+      },
     },
   }
 </script>

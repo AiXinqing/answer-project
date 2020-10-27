@@ -210,7 +210,7 @@
             ...this.preEditData,
             ...Increase
           }
-          console.log(this.preEditData)
+
         }
       },
 
@@ -332,6 +332,7 @@
           this.$nextTick(()=>{
             this.preEditData = JSON.parse(JSON.stringify(obj))
           })
+          this.errorVal = ''
         }
 
       }
