@@ -47,7 +47,7 @@
       },
 
       selectWdith(){
-        return 40 + this.data.select * 23
+        return 42 + this.data.select * 26
       },
 
       verify(){
