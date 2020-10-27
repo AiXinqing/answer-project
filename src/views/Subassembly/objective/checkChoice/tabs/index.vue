@@ -11,7 +11,7 @@
     <span>得分,每题</span>
     <el-input v-model.number="data.select" size="mini" @blur="preQuestiongroup"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
     <span>个选项</span>
-    <i class="el-icon-delete" @click="subTopiceDel(data.id,activeNameItem)" ></i>
+    <i class="el-icon-delete" @click="delSubtopicGroup" ></i>
   </div>
 </template>
 
@@ -23,6 +23,10 @@
         type: Object,
         default: () => { }
       },
+      activeName:{
+        type:String,
+        default:''
+      }
     },
     data() {
       return {
@@ -135,14 +139,16 @@
     },
 
     methods: {
-    ...mapMutations('questionType', [
-      'subTopic_already_add',
-      'already_pid_clean',
-      'subTopic_number_calculate',
-    ]),
-      subTopiceDel() {
+      ...mapMutations('questionType', [
+        'subTopic_already_add',
+        'already_pid_clean',
+        'subTopic_number_calculate',
+      ]),
 
+      delSubtopicGroup() {
+        this.$emit('del-subtopic-group',{type:this.activeName,subtopic:this.data})
       },
+
       preQuestiongroup(){
         const {score,select,pid,lessScore} = this.data
         let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score

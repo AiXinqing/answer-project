@@ -9,10 +9,13 @@
       >
         <component
           :is="item.name"
+          :active-name="item.name"
           :group-data="grouptopic[item.name]"
           @group-verify-status="groupVerifyStatus"
           @update-group-subTopic="updateGroupSubTopic"
           @pre-edit-subtopic="preEditSubtopic"
+          @add-group-question="addGroupQuestion"
+          @del-subtopic-group="delSubtopicGroup"
         />
       </el-tab-pane>
     </template>
@@ -73,7 +76,15 @@
 
       preEditSubtopic(subtopic){
         this.$emit('pre-edit-subtopic',subtopic)
-      }
+      },
+
+      addGroupQuestion(group){
+        this.$emit('add-group-question',group)
+      },
+
+      delSubtopicGroup(subtopic) {
+        this.$emit('del-subtopic-group',subtopic)
+      },
     },
   }
 </script>

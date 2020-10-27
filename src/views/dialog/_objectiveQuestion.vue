@@ -40,6 +40,8 @@
         @group-verify-status="groupVerifyStatus"
         @update-group-subTopic="updateGroupSubTopic"
         @pre-edit-subtopic="preEditSubtopic"
+        @add-group-question="addGroupQuestion"
+        @del-subtopic-group="delSubtopicGroup"
       />
       <!-- 题型编辑区 -->
       <div class="condition_box Insert_box" v-show="editQuestionId == null">
@@ -208,6 +210,7 @@
             ...this.preEditData,
             ...Increase
           }
+          console.log(this.preEditData)
         }
       },
 
@@ -285,10 +288,10 @@
 
       preEditSubtopic(subtopic){
         //编辑小题号
+        let obj = JSON.parse(JSON.stringify(this.preEditData))
         let {type,data} = subtopic
-        let {group} = this.preEditData
 
-        let curGroup = group[type]
+        let curGroup = obj.group[type]
         let index = curGroup.findIndex(group => group.id == data.pid)
 
         if(index > -1){
@@ -297,9 +300,41 @@
 
           if(cIndex > -1){
             childrenGroup.splice(cIndex,1,data)
+            this.$nextTick(()=>{
+              this.preEditData = JSON.parse(JSON.stringify(obj))
+            })
           }
         }
       },
+
+      addGroupQuestion(groupSubTopic){
+        //添加分段小题组
+        let {type,groupTopic} = groupSubTopic
+        let obj = JSON.parse(JSON.stringify(this.preEditData))
+
+        obj.group[type].push(groupTopic)
+
+        this.$nextTick(()=>{
+          this.preEditData = JSON.parse(JSON.stringify(obj))
+        })
+      },
+
+      delSubtopicGroup(groupSubTopic){
+        // 删除题组
+        let {type,subtopic} = groupSubTopic
+        let obj = JSON.parse(JSON.stringify(this.preEditData))
+        let curGroup = obj.group[type]
+
+        let index = curGroup.findIndex(group => group.id == subtopic.id)
+
+        if(index > -1){
+          curGroup.splice(index,1)
+          this.$nextTick(()=>{
+            this.preEditData = JSON.parse(JSON.stringify(obj))
+          })
+        }
+
+      }
     },
   }
 </script>

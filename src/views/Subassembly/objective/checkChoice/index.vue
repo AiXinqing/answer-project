@@ -5,11 +5,13 @@
         v-for="group in groupData"
         :key="group.id"
         :group="group"
+        :active-name="activeName"
         @group-verify-status="groupVerifyStatus"
         @update-group-subTopic="updateGroupSubTopic"
+        @del-subtopic-group="delSubtopicGroup"
       />
     </div>
-    <div class="add_question" @click="addGroupQuestion(activeName)">+ 分段添加小题</div>
+    <div class="add_question" @click="addGroupQuestion()">+ 分段添加小题</div>
     <div class="question-group">
       <template v-for="group in groupData">
         <div :key="group.id" class="group_item">
@@ -29,6 +31,7 @@
 <script>
   import choiceTabs from './tabs'
   import choiceGroup from './groupItem'
+  import {mapState } from 'vuex'
   export default {
     components: {
       choiceTabs,
@@ -39,6 +42,10 @@
       groupData: {
         type: Array,
         default: () => [],
+      },
+      activeName:{
+        type:String,
+        default:''
       }
     },
 
@@ -49,7 +56,7 @@
     },
 
     computed: {
-
+      ...mapState('questionType',['subTopic_number']),
     },
 
     watch: {
@@ -68,7 +75,18 @@
 
       },
 
-      addGroupQuestion(){},
+      addGroupQuestion(){
+        let group ={
+          start: this.subTopic_number,
+          end: null,
+          score: null,
+          lessScore: null,
+          select: 4,
+          id: `checkbox_${+new Date()}`,
+          childGroup: [],
+        }
+        this.$emit('add-group-question',{type:this.activeName,groupTopic:group})
+      },
 
       preEditSubtopic(subtopic){
         this.$emit('pre-edit-subtopic',subtopic)
@@ -81,7 +99,11 @@
 
       updateGroupSubTopic(group){
         this.$emit('update-group-subTopic',group)
-      }
+      },
+
+      delSubtopicGroup(subtopic) {
+        this.$emit('del-subtopic-group',subtopic)
+      },
     },
   }
 </script>
