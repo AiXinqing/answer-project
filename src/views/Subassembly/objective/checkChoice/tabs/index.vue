@@ -40,7 +40,17 @@
         'subTopic_number',
         'subTopic_number_already',
         'subTopic_number_determine',
+        'letterList'
       ]),
+
+      selectBox(){
+        return this.activeName == 'judgmentChoice' ? ['T','F'] :
+                this.letterList.slice(0,this.data.select)
+      },
+
+      selectWdith(){
+        return 42 + this.data.select * 26
+      },
 
       verify(){
         const {start,end,score} = this.data
@@ -117,7 +127,9 @@
             lessScore:Number(lessScoreVal),
             pid: this.data.id,
             id: 'check_' + index,
-            topic: index
+            topic: index,
+            selectBox:this.selectBox,
+            width:this.selectWdith,
           }
           group.push(subtopic)
         }
@@ -167,7 +179,7 @@
               ...this.data,
               score:Number(scoreVal),
               lessScore:Number(lessScoreVal),
-              select: typeof(select)=='string' ? 4 :select,
+              select: typeof(select)=='string' ? 4 : select <= 0 ? 1: select,
               start: parseInt(this.data.start),
               childGroup: this.subTopicList
             }
