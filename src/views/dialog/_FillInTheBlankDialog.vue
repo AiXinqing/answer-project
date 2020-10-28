@@ -42,10 +42,10 @@
         @pre-edit-question-group="preEditQuestionGroup"
         @del-question-group="delQuestionGroup"
         @add-subTopic-group="addSubTopicGroup"
+        @add-subtopic-firstlevel="addSubtopicFirstlevel"
+        @del-subtopic-firstlevel="delSubTopicFirstlevel"
+        @change-firstlevel-space="ChangeFirstlevelSpace"
 
-        @hanlde-subtopic-del="hanldeSubtopicDel"
-        @topic-detail-add="topicDetailAdd"
-        @change-space-value="ChangeSpaceValue"
         @hanlde-last-topic-del="hanldeLastTopicDel"
         @change-last-sub-topic-score="changeLastSubTopicScore"
       />
@@ -426,7 +426,7 @@ export default {
         this.errorVal = ''
       }
     },
-    hanldeSubtopicDel(obj) {
+    delSubTopicFirstlevel(obj) {
       // 删除小题
       let dataObj = JSON.parse(JSON.stringify(this.spaceTopic))
       let {group} = dataObj
@@ -541,7 +541,7 @@ export default {
         return {}
       }
     },
-    topicDetailAdd(obj) {
+    addSubtopicFirstlevel(obj) {
       // 添加小题
       let {group} = this.spaceTopic
       const i = group.findIndex((item) => item.id === obj.pid)
@@ -584,7 +584,7 @@ export default {
         }
       }
     },
-    ChangeSpaceValue(obj) {
+    ChangeFirstlevelSpace(obj) {
       // 分值分数修改
       // 添加小题空格数
 

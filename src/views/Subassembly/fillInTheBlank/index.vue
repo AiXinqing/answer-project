@@ -16,20 +16,20 @@
           v-for="(item, index) in groupChild"
           :key="index"
           :small-topic="item"
-          @hanlde-subtopic-del="hanldeSubtopicDel"
-          @topic-detail-add="topicDetailAdd"
+          @hanlde-subtopic-del="delSubTopicFirstlevel"
+          @topic-detail-add="addSubtopicFirstlevel"
           @change-space-value="ChangeSpaceValue"
           @hanlde-last-topic-del="hanldeLastTopicDel"
           @change-last-sub-topic-score="changeLastSubTopicScore"
         /> -->
-        {{questionGroups}}
         <sub-topic-item
           v-for="(subtopic, index) in groupChild"
           :key="index"
           :group-subtopic="subtopic"
-          @hanlde-subtopic-del="hanldeSubtopicDel"
-          @topic-detail-add="topicDetailAdd"
-          @change-space-value="ChangeSpaceValue"
+          @hanlde-subtopic-del="delSubTopicFirstlevel"
+          @add-subtopic-firstlevel="addSubtopicFirstlevel"
+
+          @change-firstlevel-space="changeFirstlevelSpace"
           @hanlde-last-topic-del="hanldeLastTopicDel"
           @change-last-sub-topic-score="changeLastSubTopicScore"
         />
@@ -113,17 +113,17 @@
         this.$emit('change-status',val)
       },
 
-      hanldeSubtopicDel (obj) {
+      delSubTopicFirstlevel (obj) {
         // 删除小题号
-        this.$emit('hanlde-subtopic-del', obj)
+        this.$emit('del-subtopic-firstlevel', obj)
       },
-      topicDetailAdd (obj) {
+      addSubtopicFirstlevel (obj) {
         // 添加小题空格数
         this.$emit('topic-detail-add', obj)
       },
-      ChangeSpaceValue (obj) {
+      changeFirstlevelSpace (obj) {
         // 分值分数修改
-        this.$emit('change-space-value', obj)
+        this.$emit('change-firstlevel-space', obj)
       },
       hanldeLastTopicDel (obj) {
         // 删除小题last题组item
