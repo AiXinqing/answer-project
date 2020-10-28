@@ -140,14 +140,24 @@
         orders:0,
         errorVal: '',
         ContentHeight: 0, // 内容高度
+        //标题附加高度
+        heightTitle:23,
+        MarginHeight:10,
+        rowHeight:21,
+        titleH:32,
+
       }
     },
     computed: {
-      ...mapGetters('pageContent', ['questionNumber_big_exist','question_order','options','pageData','pageWidth',]),
+      ...mapGetters('pageContent', ['questionNumber_big_exist',
+      'question_order','options','pageWidth',
+      'pageLayout',]),
 
       ...mapState('questionType',['subTopic_number',
       'subTopic_number_already',
       'subTopic_number_determine',]),
+
+      ...mapState('pageContent',['pageData']),
 
       questionNumber_big(){
         return this.questionNumber_big_exist.length
@@ -187,12 +197,10 @@
       maxWidth(){
         // 最大宽度
         const maxWidthArr = []
-
         this.rowGroup.filter((item) => {
           let widthS = item.map((row) => row.width)
           maxWidthArr.push(Math.max.apply(null, widthS))
         })
-        console.log(maxWidthArr)
 
         let sum = 0,max = this.pageWidth
         let arr = [],numberArr = []
@@ -209,7 +217,6 @@
         if(arr.length > 0){
           numberArr.push(arr)
         }
-
         return numberArr.map(num => num.length)
       },
 
@@ -239,7 +246,39 @@
         }
       },
 
+      subTopicGroup(){
+        let RowArr = []
+        let columnArr = []
+        let widthSum = 0
+
+        this.rowGroup.forEach(item => {
+          let maxWidth = Math.max.apply(Math, item.map(function(o) {return o.width}))
+          widthSum += maxWidth
+
+          if(widthSum < this.pageWidth){
+            columnArr.push(item)
+          }else{
+            RowArr.push(columnArr)
+            widthSum = maxWidth
+            columnArr = []
+            columnArr.push(item)
+          }
+
+        })
+
+        if(columnArr.length > 0){
+          RowArr.push(columnArr)
+        }
+        return RowArr
+      },
+
+      scoreTotal(){
+        return this.questionGroup.map(topic => topic.score)
+                                  .reduce((acc,cur) => acc + cur)
+      },
+
     },
+
     watch: {
       preEditData: {
         immediate: true,
@@ -315,7 +354,12 @@
         'subTopic_already_reset', // 清空
         'subTopic_determine_pid_clean',
       ]),
-      ...mapMutations('pageContent',[]),
+
+      ...mapMutations('pageContent', [
+        'pageData_add',
+        'pageData_edit',
+        'pageData_insert',
+      ]),
 
       opened() {
         this.preEditData = JSON.parse(
@@ -330,7 +374,7 @@
 
       openedEdit(id){
         let current = this.pageData.filter((item) => item.id === id)
-        this.quesctionObj = JSON.parse(JSON.stringify(current[0].content))
+        this.preEditData = JSON.parse(JSON.stringify(current[0].content))
         this.editQuestionId = id
         this.orders = current.order
         this.openedFrame = true
@@ -347,19 +391,26 @@
       change(id, num){
         // 改变row数量
         let current = this.pageData.filter((item) => item.id === id)
-        let obj = JSON.parse(JSON.stringify(current[0].content))
+        this.preEditData = JSON.parse(JSON.stringify(current[0].content))
         this.editQuestionId = id
 
-        let sum = num == 1 ? -1 : 1
-        let rowNum = obj.row + sum
-        if(rowNum < 1){
-          rowNum = 1
+        let rows = this.preEditData.rows
+        if (num == 1) {
+          // 1减法 2加法
+          if (rows > 1) {
+            rows -= 1
+          } else {
+            rows = 1
+          }
+        } else {
+          if (rows < 10) {
+            rows += 1
+          } else {
+            rows = 10
+          }
         }
-        if(rowNum > 10){
-          rowNum = 10
-        }
-
-        this.preEditData = JSON.parse(JSON.stringify({...obj,row:rowNum}))
+        this.preEditData.rows = rows
+        this.editingData.rows = rows
         this.$nextTick(() => {
           this.preCreateQuestion()
         })
@@ -378,10 +429,54 @@
 
       preCreateQuestion(){
         // 保存题型
-        // const { rows,InsertTitle,Postpone,} = this.editingData
-        console.log(this.rowGroup)
-        console.log(this.maxWidth)
-        console.log(this.contentHeight)
+        const { rows,InsertTitle,Postpone,} = this.editingData
+
+        let questionId = `objective_${+new Date()}`
+
+        var questionObj = {
+            heightTitle: this.heightTitle,
+            MarginHeight: this.MarginHeight,
+            rowHeight: this.rowHeight * rows,
+            id: questionId,
+            height: this.contentHeight + this.titleH, // 32标题高度
+            questionType: 'ObjectiveQuestion',
+            content: {
+              ...this.editingData,
+              scoreTotal:this.scoreTotal,
+              pageLayout:this.pageLayout
+            },
+            order: this.question_order,
+            showData:this.subTopicGroup,
+            first: true,
+          }
+        if (this.editQuestionId == null) {
+          if (InsertTitle && this.questionNumber_big_exist.length > 0){
+              let select = this.questionNumber_big_exist[this.existNumber]
+              let data = {
+              obj: {
+                ...questionObj,
+                order: this.question_order,
+              },
+              bigId: select.id,
+              SelfOrder: Postpone || false,
+            }
+            this.pageData_insert(data)
+          }else{
+            this.pageData_add(questionObj)
+          }
+        }else{
+          this.subTopic_determine_pid_clean(this.questionGroup[0].pid)
+          questionObj.id = this.editQuestionId
+          this.pageData_edit({...questionObj,order:this.orders})
+        }
+        // 小题数组追加数据
+        this.subTopic_already_add(this.questionGroup)
+        this.subTopic_calculate_determine(this.questionGroup)
+        // guan bi - 清楚数据
+        this.preEditData = JSON.parse(JSON.stringify(this.InitialData))
+
+        //------------------------------------
+        this.openedFrame = false // 关闭弹窗
       },
 
       groupVerifyStatus(verify){
