@@ -58,38 +58,38 @@
         let strStart = ''
         let strEnd = ''
         if (determine.length > 0 || already.length > 0) {
-          let numStart = determine.findIndex(item => item.topic == start)
-          let index = already.findIndex(item => item.topic == start)
-          let numEnd = determine.findIndex(item => item.topic == end)
-          let endIndex = already.findIndex(item => item.topic == start)
+          let d_s_index = determine.findIndex(item => item.topic == start)
+          let a_s_index = already.findIndex(item => item.topic == start)
+
+          let d_e_index = determine.findIndex(item => item.topic == end)
+          let a_e_index = already.findIndex(item => item.topic == end)
 
           if (this.editId != null) { // 编辑
-            if (index > -1) {
-              if (already[index].pid != this.data.id) {
+            if (a_s_index > -1) {
+              if (already[a_s_index].pid != this.data.id) {
                 strStart = `${start}题已经存在，请勿重复添加`
               }
             } else { strStart = '' }
+
+            if (a_e_index > -1) {
+              if (already[a_e_index].pid != this.data.id) {
+                strEnd = `${end}题已经存在，请勿重复添加`
+              }
+            } else { strStart = '' }
           } else {
-            if (numStart > -1 || index > -1) {
-              if (index > -1) {
-                if (already[index].pid != this.data.id) {
+            if (d_s_index > -1 || a_s_index > -1) {
+              if (a_s_index > -1) {
+                if (already[a_s_index].pid != this.data.id) {
                   strStart = `${start}题已经存在，请勿重复添加`
                 } else { strStart = '' }
               } else {
                 strStart = `${start}题已经存在，请勿重复添加`
               }
             } else { strStart = '' }
-          }
-          if (this.editId != null) { // 编辑
-            if (endIndex > -1) {
-              if (already[endIndex].pid != this.data.id) {
-                strEnd = `${end}题已经存在，请勿重复添加`
-              }
-            } else { strStart = '' }
-          } else {
-            if (numEnd > -1 || endIndex > -1) {
-              if (endIndex > -1) {
-                if (already[endIndex].pid != this.data.id) {
+
+            if (d_e_index > -1 || a_e_index > -1) {
+              if (a_e_index > -1) {
+                if (already[a_e_index].pid != this.data.id) {
                   strEnd = `${end}题已经存在，请勿重复添加`
                 } else { strStart = '' }
               } else {
@@ -97,6 +97,7 @@
               }
             } else { strStart = '' }
           }
+
         }
 
         return start == 0 ? '开始题号必须大于0' :
@@ -138,7 +139,7 @@
         handler () {
           this.data = {
             ...this.group,
-            score: this.data.score == 0 ? null:this.data.score
+            score: this.group.score == 0 ? null:this.group.score
           }
         }
       }
