@@ -41,7 +41,7 @@ export default {
       'subTopic_number_determine', // 确定小题数值
     ]),
 
-    verify () {
+    tabStatusVal () {
       const {start,end,score} = this.data
         let scoreVal = score ? parseFloat(score) : score
         let determine = this.subTopic_number_determine
@@ -146,18 +146,18 @@ export default {
     ]),
 
     preEditQuestionGroup () {
-      this.$emit('change-status', this.verify)
+      this.$emit('change-status', this.tabStatusVal)
 
       if (!this.tabStatus) {
         let obj = {
           ...this.data,
           childGroup: this.subTopicList
         }
-        this.$emit('pre-edit-question-group',obj)
         // 弹框临时小题数
         const temporaryArr = this.subTopicList.map(item => ({ ...item, subtopic: 1 }))
         this.subTopic_already_add(temporaryArr)
         // temporaryArr
+        this.$emit('pre-edit-question-group', obj)
         this.subTopic_number_calculate()
       }
     },

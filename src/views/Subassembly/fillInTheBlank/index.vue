@@ -1,14 +1,5 @@
 <template>
   <div class="space_box">
-    <!-- <space-item
-      v-for="(item, index) in topicGroup"
-      :key="index"
-      :space-item="item"
-      :edit-id="editId"
-      @hanlde-status="hanldeStatus"
-      @hanlde-add-group-question="hanldeAddGroupQuestion"
-      @hanlde-del-group="hanldeDelGroup"
-    /> -->
     <question-group
       v-for="(subTopic, index) in questionGroups"
       :key="index"
@@ -22,7 +13,7 @@
     <div class="question-group">
       <el-collapse >
         <!-- <group-item
-          v-for="(item, index) in groupItemData"
+          v-for="(item, index) in groupChild"
           :key="index"
           :small-topic="item"
           @hanlde-subtopic-del="hanldeSubtopicDel"
@@ -31,19 +22,30 @@
           @hanlde-last-topic-del="hanldeLastTopicDel"
           @change-last-sub-topic-score="changeLastSubTopicScore"
         /> -->
-        <!-- <sub-topic-item/> -->
+        {{questionGroups}}
+        <sub-topic-item
+          v-for="(subtopic, index) in groupChild"
+          :key="index"
+          :group-subtopic="subtopic"
+          @hanlde-subtopic-del="hanldeSubtopicDel"
+          @topic-detail-add="topicDetailAdd"
+          @change-space-value="ChangeSpaceValue"
+          @hanlde-last-topic-del="hanldeLastTopicDel"
+          @change-last-sub-topic-score="changeLastSubTopicScore"
+        />
       </el-collapse>
     </div>
   </div>
 </template>
 
 <script>
-  import questionGroup from './group'
-  // import subTopicItem from './item'
+  import { mapState} from 'vuex'
+  import questionGroup from '../fillInTheBlank/group'
+  import subTopicItem from '../fillInTheBlank/item'
   export default {
     components: {
       questionGroup,
-      // subTopicItem,
+      subTopicItem,
     },
 
     props: {
@@ -65,9 +67,14 @@
     },
 
     computed: {
-      name() {
-        return this.data
+      ...mapState('questionType', [
+        'subTopic_number',
+      ]),
+
+      groupChild () {
+        return this.groupData.map(question => question.childGroup).flat()
       }
+
     },
 
     watch: {
@@ -81,10 +88,22 @@
 
     methods: {
       addsubTopicGroup() {
+        let group = {
+          start: this.subTopic_number,
+          end: null,
+          score: null,
+          space: 1,
+          id: `spaceTopic_${+new Date()}`,
+          childGroup: [],
+        }
 
+        this.$emit('add-subTopic-group',group)
       },
-      
-      preEditQuestionGroup(){},
+
+      preEditQuestionGroup(obj){
+        console.log(obj)
+        this.$emit('pre-edit-question-group',obj)
+      },
 
       delQuestionGroup(id){
         this.$emit('del-question-group',id)
@@ -93,6 +112,27 @@
       changeStatus(val){
         this.$emit('change-status',val)
       },
+
+      hanldeSubtopicDel (obj) {
+        // 删除小题号
+        this.$emit('hanlde-subtopic-del', obj)
+      },
+      topicDetailAdd (obj) {
+        // 添加小题空格数
+        this.$emit('topic-detail-add', obj)
+      },
+      ChangeSpaceValue (obj) {
+        // 分值分数修改
+        this.$emit('change-space-value', obj)
+      },
+      hanldeLastTopicDel (obj) {
+        // 删除小题last题组item
+        this.$emit('hanlde-last-topic-del', obj)
+      },
+      changeLastSubTopicScore (obj, oldObj) {
+        // last-sub分值改变
+        this.$emit('change-last-sub-topic-score', obj, oldObj)
+      }
 
     },
   }

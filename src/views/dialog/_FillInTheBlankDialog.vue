@@ -41,8 +41,8 @@
         @change-status="changeStatus"
         @pre-edit-question-group="preEditQuestionGroup"
         @del-question-group="delQuestionGroup"
+        @add-subTopic-group="addSubTopicGroup"
 
-        @hanlde-add-sub-topic="hanldeAddSubtopic"
         @hanlde-subtopic-del="hanldeSubtopicDel"
         @topic-detail-add="topicDetailAdd"
         @change-space-value="ChangeSpaceValue"
@@ -90,7 +90,7 @@
 </template>
 
 <script>
-// import spaceQuestion from '../questionContent/Precautions/_spaceQuestion'
+// import spaceQuestion from '../questionContent/Precautions/fillInTheBlank'
 import spaceQuestion from '../Subassembly/fillInTheBlank'
 import { mapState, mapMutations,mapGetters } from 'vuex'
 export default {
@@ -401,6 +401,7 @@ export default {
       this.errorVal = val
     },
     preEditQuestionGroup(obj) {
+      console.log(obj)
       //添加题组
       let {group} = this.spaceTopic
       const index = group.findIndex((item) => item.id === obj.id)
@@ -486,17 +487,10 @@ export default {
         }
       }
     },
-    hanldeAddSubtopic() {
+    addSubTopicGroup(group) {
       //添加分段题组
-      let obj = {
-        start: this.subTopic_number,
-        end: null,
-        score: null,
-        space: 1,
-        id: `spaceTopic_${+new Date()}`,
-        childGroup: [],
-      }
-      this.spaceTopic.group.push(obj)
+      
+      this.spaceTopic.group.push(group)
     },
     SplitFunc(index, groupObj, arr) {
       // 删除小题拆分数组 sub
