@@ -38,9 +38,10 @@
       <space-question
         :group-data="objectiveData.group"
         :edit-id="editQuestionId"
-        @hanlde-status="hanldeStatus"
-        @hanlde-add-group-question="hanldeAddGroupQuestion"
-        @hanlde-del-group="hanldeDelGroup"
+        @change-status="changeStatus"
+        @pre-edit-question-group="preEditQuestionGroup"
+        @del-question-group="delQuestionGroup"
+
         @hanlde-add-sub-topic="hanldeAddSubtopic"
         @hanlde-subtopic-del="hanldeSubtopicDel"
         @topic-detail-add="topicDetailAdd"
@@ -89,7 +90,8 @@
 </template>
 
 <script>
-import spaceQuestion from '../questionContent/Precautions/_spaceQuestion'
+// import spaceQuestion from '../questionContent/Precautions/_spaceQuestion'
+import spaceQuestion from '../Subassembly/fillInTheBlank'
 import { mapState, mapMutations,mapGetters } from 'vuex'
 export default {
   components: {
@@ -395,10 +397,10 @@ export default {
     HeightCalculation() {
       // 计算题型内容所占高度
     },
-    hanldeStatus(val) {
+    changeStatus(val) {
       this.errorVal = val
     },
-    hanldeAddGroupQuestion(obj) {
+    preEditQuestionGroup(obj) {
       //添加题组
       let {group} = this.spaceTopic
       const index = group.findIndex((item) => item.id === obj.id)
@@ -407,7 +409,7 @@ export default {
         // 追曾小题号至数组
       }
     },
-    hanldeDelGroup(id) {
+    delQuestionGroup(id) {
       //删除题组
       let {group} = this.spaceTopic
       const index = group.findIndex((item) => item.id === id)
