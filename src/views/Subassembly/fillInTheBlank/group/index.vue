@@ -18,7 +18,7 @@
 import { mapState, mapMutations } from 'vuex'
 export default {
   props: {
-    spaceItem: {
+    subTopic: {
       type: Object,
       default: () => { }
     },
@@ -126,11 +126,11 @@ export default {
   },
 
   watch: {
-    spaceItem: {
+    subTopic: {
       immediate: true,
       handler () {
         this.data = {
-          ...this.spaceItem
+          ...this.subTopic
         }
         if (this.data.end == '' || this.data.end == null) {
           this.data.start = this.subTopic_number
@@ -147,6 +147,7 @@ export default {
 
     preEditQuestionGroup () {
       this.$emit('change-status', this.tabStatusVal)
+      console.log(this.subTopicList)
       if (!this.tabStatus) {
         let obj = {
           ...this.data,
