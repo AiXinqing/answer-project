@@ -30,8 +30,8 @@
         v-for="(item, i) in data.group"
         :key="i"
         :form-data="item"
-        @hanlde-status="hanldeStatus"
-        @pre-optional-data="preOptionalData"
+        @change-status="changeStatus"
+        @pre-edit-optional-group="preEditOptionalGroup"
       />
       <div class="question-group">
         <optional-item
@@ -125,7 +125,9 @@ export default {
           },
         ],
       },
-      options:[],
+      MarginHeight:54,
+      rowHeight:35,
+      heightTitle:54,
     }
   },
   computed: {
@@ -136,13 +138,16 @@ export default {
     ]),
     ...mapState('pageContent', ['pageData','pageLayout']),
     ...mapState('answerQuestion', ['answerQuestionArr']),
-    ...mapGetters('pageContent', ['questionNumber_big_exist','question_order']),
+    ...mapGetters('pageContent', ['questionNumber_big_exist','question_order','options']),
+
     questionNumber_big(){
       return this.questionNumber_big_exist.length
     },
+
     errorMessage() {
       return this.errorVal != '' ? true : false
     },
+
     groupItemData() {
       return this.data.group.map((item) => item.childGroup)[0]
     },
@@ -163,28 +168,20 @@ export default {
     questionData: {
       immediate: true,
       handler() {
+        let num = {}
+        if (this.editQuestionId == null){
+          num = {
+            number: this.questionNumber_big,
+            group:this.questionData.group.map(subtopic => ({
+              ...subtopic,
+              start: subtopic.end == '' ? this.subTopic_number : subtopic.start,
+            }))
+          }
+        }
         this.data = {
           ...this.questionData,
+          ...num,
         }
-        if (this.editQuestionId == null) {
-          this.$nextTick(() => {
-            this.data = {
-              ...this.data,
-              number: this.questionNumber_big,
-            }
-          })
-          this.data.group.map((item) => {
-            return {
-              ...item,
-              start: item.end == '' ? this.subTopic_number : item.start,
-            }
-          })
-        }
-        this.options = this.questionNumber.map((label,value)=>({label,value}))
-        this.existNumber =
-          this.questionNumber_big_exist.length > 0
-            ? this.questionNumber_big_exist[0].value
-            : null
       },
     },
 
@@ -246,22 +243,21 @@ export default {
       // 当前页内容所占高度topic, number,Postpone
       const { rows, InsertTitle, Postpone,group } = this.data
 
-      let rectHeight = rows * 35 // 当前内容高度 45(内部高度)
-      let MarginHeight = +14 + 40
-      let heights = rectHeight + MarginHeight + 54
+      let rectHeight = rows * this.rowHeight // 当前内容高度 45(内部高度)
+      let heights = rectHeight + this.MarginHeight + this.heightTitle
 
       let objId = `optional_${+new Date()}`
 
       let obj = {
-        MarginHeight: MarginHeight,
-        heightTitle: 54,
+        MarginHeight: this.MarginHeight,
+        heightTitle: this.heightTitle,
         height: heights,
-        rowHeight: 35,
+        rowHeight: this.rowHeight,
         id: objId,
         questionType: 'optionalQuestion',
         content:{
           ...this.data,
-          scoreTotal:group[0].scoreTotal,
+          scoreTotal:group[0].score,
           pageLayout:this.pageLayout
         },
         first: true,
@@ -300,14 +296,14 @@ export default {
 
       this.data = JSON.parse(JSON.stringify(this.closeData))
     },
-    hanldeStatus(val) {
+    changeStatus(val) {
       // 报错状态
       this.errorVal = val
     },
     hanldeSelectexistBig(e) {
       this.existNumber = e
     },
-    preOptionalData(obj) {
+    preEditOptionalGroup(obj) {
       // 新增题组
       const index = this.data.group.findIndex((item) => item.id === obj.id)
       if (index > -1) {

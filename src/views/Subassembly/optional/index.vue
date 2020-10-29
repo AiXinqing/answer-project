@@ -1,15 +1,15 @@
 <template>
   <div class="big-item">
     <span>几选几:</span>
-    <el-input v-model.number="data.choices" size="mini" @blur="groupTopicHanlde"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
+    <el-input v-model.number="data.choices" size="mini" @blur="preEditGroup"  oninput="value=value.replace(/[^\d]/g,'')"/>
     <span> 选 </span>
-    <el-input v-model.number="data.select" size="mini" @blur="groupTopicHanlde" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
+    <el-input v-model.number="data.select" size="mini" @blur="preEditGroup" oninput="value=value.replace(/[^\d]/g,'')"/>
     <span> ;每题 </span>
-    <el-input v-model.number="data.score" size="mini" @blur="groupTopicHanlde" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
+    <el-input v-model.number="data.score" size="mini" @blur="preEditGroup" onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})"/>
     <span> 分;题号 </span>
-    <el-input v-model.number="data.start" size="mini" @blur="groupTopicHanlde" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
+    <el-input v-model.number="data.start" size="mini" @blur="preEditGroup" oninput="value=value.replace(/[^\d]/g,'')"/>
     <span> 到</span>
-    <el-input v-model.number="data.end" size="mini" disabled @blur="groupTopicHanlde" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
+    <el-input v-model.number="data.end" size="mini" disabled @blur="preEditGroup" oninput="value=value.replace(/[^\d]/g,'')"/>
   </div>
 </template>
 
@@ -61,13 +61,12 @@ export default {
       'subTopic_already_clean',
       'subTopic_number_calculate',
     ]),
-    groupTopicHanlde () {
+    preEditGroup () {
       const { choices, start, id, score } = this.data
       // 报错信息
-      this.$emit('hanlde-status', this.tabStatusVal)
+      this.$emit('change-status', this.tabStatusVal)
       let topicList = []
       this.data.end = choices + start - 1
-      let scoreTotal = 0
 
       for (let i = start; i <= this.data.end; i++) {
         let obj = {
@@ -76,15 +75,12 @@ export default {
           topic: i,
           score: score,
         }
-        scoreTotal += score // 此题总分
         topicList.push(obj)
       }
 
 
       if (!this.tabStatus) {
-        // console.log(this.data.childGroup)
         if (this.data.childGroup.length > 0) {
-          console.log(this.data.childGroup)
           this.data.childGroup.forEach(item => {
             this.subTopic_already_clean(item.id)
           })
@@ -92,7 +88,7 @@ export default {
         }
         let objL = JSON.parse(JSON.stringify({ ...this.data, childGroup: [] }))
         this.subTopic_already_add(topicList) // 存数组 scoreTotal
-        this.$emit('pre-optional-data', { ...objL, childGroup: topicList, scoreTotal: scoreTotal })
+        this.$emit('pre-edit-optional-group', { ...objL, childGroup: topicList })
         this.subTopic_number_calculate()
       }
     }
