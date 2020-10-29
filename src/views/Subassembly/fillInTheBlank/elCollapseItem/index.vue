@@ -1,24 +1,37 @@
 <template>
   <el-collapse-item>
     <template slot="title">
-      <div class="space_group_list">
-        <span class="space-em" @click.stop="clickFun">题 {{data.topic}} 共 </span>
+      <div class="space_group_list" @click.stop="clickFun">
+        <span class="space-em">题 {{data.topic}} 共 </span>
         <span v-if=" data.childGroup == undefined || data.childGroup.length <= 0">
           <el-input v-model.number="data.space" size="mini" @click.stop.native="clickFun" @blur="changeFirstlevelSpace"  oninput="value=value.replace(/[^\d]/g,'')" />
-          <span @click.stop="clickFun"> 空 每空 </span>
+          <span> 空 每空 </span>
           <el-input v-model="data.score" size="mini" @click.stop.native="clickFun" @blur="changeFirstlevelSpace"  onkeyup.stop.native="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />
-          <span @click.stop="clickFun"> 分 共 {{data.sum}} 分 </span>
+          <span> 分 共 {{data.sum}} 分 </span>
         </span>
         <span v-else>{{data.sum}} 分</span>
         <span class="add_groupTopic" @click.stop="addSubtopicFirstlevel">+ 添加小题</span>
         <i class="el-icon-del" @click.stop="delSubTopicFirstlevel" >-</i>
       </div>
     </template>
+    <component
+      :is="isComponent"
+      :sub-item-data="GroupSmallTopic"
+      :sub-child-data="data.childGroup"
+      @hanlde-last-topic-del="hanldeLastTopicDel"
+      @change-last-sub-topic-score="changeLastSubTopicScore"
+    />
   </el-collapse-item>
 </template>
 
 <script>
+  import firstlevelItem from './firstlevelItem' // 一级下来框
+  import levelTwoItem from './levelTwoItem'
   export default {
+    components: {
+      firstlevelItem,
+      levelTwoItem
+    },
     props: {
       groupSubtopic: {
         type: Object,
@@ -30,6 +43,25 @@
       return {
         data: {}
       }
+    },
+
+    computed: {
+      GroupSmallTopic () {
+        let changeObj = JSON.parse(JSON.stringify(this.data))
+        let {space} = changeObj
+        let arr = []
+
+        for (let i = 0; i < space; i++) {
+          arr.push({ ...changeObj, smallTopic: i })
+        }
+        return arr
+      },
+
+      isComponent () {
+        let {childGroup} = this.data
+        return childGroup == undefined || childGroup.length <= 0 ? firstlevelItem : levelTwoItem
+      }
+
     },
 
     watch: {
@@ -54,6 +86,20 @@
 
       changeFirstlevelSpace(){
         this.$emit('change-firstlevel-space', this.data)
+      },
+
+      clickFun(){
+        // 点击无操作
+      },
+
+      hanldeLastTopicDel (obj) {
+        // 删除小题last题组item
+        this.$emit('hanlde-last-topic-del', {...obj,score:Number(obj.score.toString().match(/^\d+(?:\.\d{0,1})?/))})
+      },
+
+      changeLastSubTopicScore (obj, oldObj) {
+      // last-sub分值改变
+        this.$emit('change-last-sub-topic-score', {...obj,score:Number(obj.score.toString().match(/^\d+(?:\.\d{0,1})?/))}, oldObj)
       }
     },
   }

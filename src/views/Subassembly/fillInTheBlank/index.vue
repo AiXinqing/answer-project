@@ -12,16 +12,6 @@
     <div class="add_question" @click="addsubTopicGroup">+ 分段添加小题</div>
     <div class="question-group">
       <el-collapse >
-        <!-- <group-item
-          v-for="(item, index) in groupChild"
-          :key="index"
-          :small-topic="item"
-          @hanlde-subtopic-del="delSubTopicFirstlevel"
-          @topic-detail-add="addSubtopicFirstlevel"
-          @change-space-value="ChangeSpaceValue"
-          @hanlde-last-topic-del="hanldeLastTopicDel"
-          @change-last-sub-topic-score="changeLastSubTopicScore"
-        /> -->
         <sub-topic-item
           v-for="(subtopic, index) in groupChild"
           :key="index"
