@@ -24,15 +24,13 @@
       activeName:{
         type:String,
         default:''
+      },
+      editId:{
+        type: String,
+        default: '',
       }
     },
-    data() {
-      return {
-        data: {
-          editId:null
-        }
-      }
-    },
+
     computed: {
       ...mapState('questionType', [
         'subTopic_number',
@@ -53,51 +51,38 @@
       verify(){
         const {start,end,score} = this.data
         let scoreVal = score ? parseFloat(score) : score
-        let determine = this.subTopic_number_determine
+
         let already = this.subTopic_number_already
+        let determine = this.subTopic_number_determine
         let strStart = ''
         let strEnd = ''
-        if (determine.length > 0 || already.length > 0) {
-          let d_s_index = determine.findIndex(item => item.topic == start)
-          let a_s_index = already.findIndex(item => item.topic == start)
 
+        if (already.length > 0) {
+          let d_s_index = determine.findIndex(item => item.topic == start)
           let d_e_index = determine.findIndex(item => item.topic == end)
+          let a_s_index = already.findIndex(item => item.topic == start)
           let a_e_index = already.findIndex(item => item.topic == end)
 
-          if (this.editId != null) { // 编辑
-            if (a_s_index > -1) {
-              if (already[a_s_index].pid != this.data.id) {
+          if(!this.editId){
+            if(d_s_index > -1){
+              strStart = `${start}题已经存在，请勿重复添加`
+            }else{ strStart = '' }
+            if(d_e_index > -1){
+              strEnd = `${end}题已经存在，请勿重复添加`
+            }else{ strEnd = '' }
+          }else{
+            if(a_s_index > -1){
+              if(already[a_s_index].pid != this.data.id){
                 strStart = `${start}题已经存在，请勿重复添加`
-              }
-            } else { strStart = '' }
+              }else { strStart = '' }
+            }else{ strStart = '' }
 
-            if (a_e_index > -1) {
-              if (already[a_e_index].pid != this.data.id) {
+            if(a_e_index > -1){
+              if(already[a_e_index].pid != this.data.id){
                 strEnd = `${end}题已经存在，请勿重复添加`
-              }
-            } else { strStart = '' }
-          } else {
-            if (d_s_index > -1 || a_s_index > -1) {
-              if (a_s_index > -1) {
-                if (already[a_s_index].pid != this.data.id) {
-                  strStart = `${start}题已经存在，请勿重复添加`
-                } else { strStart = '' }
-              } else {
-                strStart = `${start}题已经存在，请勿重复添加`
-              }
-            } else { strStart = '' }
-
-            if (d_e_index > -1 || a_e_index > -1) {
-              if (a_e_index > -1) {
-                if (already[a_e_index].pid != this.data.id) {
-                  strEnd = `${end}题已经存在，请勿重复添加`
-                } else { strStart = '' }
-              } else {
-                strEnd = `${end}题已经存在，请勿重复添加`
-              }
-            } else { strStart = '' }
+              }else { strEnd = '' }
+            }else{ strEnd = '' }
           }
-
         }
 
         return start == 0 ? '开始题号必须大于0' :

@@ -10,6 +10,7 @@
         <component
           :is="item.name"
           :active-name="item.name"
+          :edit-id="editId"
           :group-data="grouptopic[item.name]"
           @group-verify-status="groupVerifyStatus"
           @update-group-subTopic="updateGroupSubTopic"
@@ -37,6 +38,10 @@
       questionGroup: {
         type: Object,
         default: () => { },
+      },
+      editId:{
+        type: String,
+        default: '',
       }
     },
     data() {

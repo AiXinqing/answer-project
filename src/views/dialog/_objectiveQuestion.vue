@@ -36,6 +36,7 @@
       </el-row>
       <!-- 题型编辑区 -->
       <tab-pane-box
+        :edit-id="editQuestionId"
         :question-group="editingData.group"
         @group-verify-status="groupVerifyStatus"
         @update-group-subTopic="updateGroupSubTopic"
@@ -44,7 +45,7 @@
         @del-subtopic-group="delSubtopicGroup"
       />
       <!-- 题型编辑区 -->
-      <div class="condition_box Insert_box" v-show="editQuestionId == null">
+      <div class="condition_box Insert_box" v-show="editQuestionId == ''">
         <el-checkbox v-model="editingData.InsertTitle"
           >插入添加题目</el-checkbox
         >
@@ -136,7 +137,7 @@
         },
         editingData:{},
         InitialData:{},
-        editQuestionId: null,
+        editQuestionId: '',
         orders:0,
         errorVal: '',
         ContentHeight: 0, // 内容高度
@@ -449,7 +450,7 @@
             showData:this.subTopicGroup,
             first: true,
           }
-        if (this.editQuestionId == null) {
+        if (this.editQuestionId == '') {
           if (InsertTitle && this.questionNumber_big_exist.length > 0){
               let select = this.questionNumber_big_exist[this.existNumber]
               let data = {
@@ -470,8 +471,9 @@
           this.pageData_edit({...questionObj,order:this.orders})
         }
         // 小题数组追加数据
-        this.subTopic_already_add(this.questionGroup)
         this.subTopic_calculate_determine(this.questionGroup)
+        this.subTopic_already_add(this.questionGroup)
+
         // guan bi - 清楚数据
         this.preEditData = JSON.parse(JSON.stringify(this.InitialData))
 

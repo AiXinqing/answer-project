@@ -6,6 +6,7 @@
         :key="group.id"
         :group="group"
         :active-name="activeName"
+        :edit-id="editId"
         @group-verify-status="groupVerifyStatus"
         @update-group-subTopic="updateGroupSubTopic"
         @del-subtopic-group="delSubtopicGroup"
@@ -46,6 +47,10 @@
       activeName:{
         type:String,
         default:''
+      },
+      editId:{
+        type: String,
+        default: '',
       }
     },
 
