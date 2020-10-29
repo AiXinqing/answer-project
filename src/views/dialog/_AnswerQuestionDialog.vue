@@ -28,6 +28,7 @@
         v-for="(item,i) in dataTopic.group"
         :key="i"
         :form-data="item"
+        :edit-id="editQuestionId"
         @hanlde-status="hanldeStatus"
         @add-answer-topic-group="addAnswerTopicGroup"
       />
