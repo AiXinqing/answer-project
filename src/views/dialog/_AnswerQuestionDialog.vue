@@ -23,15 +23,18 @@
           <el-input v-model="dataTopic.topicName" size="mini" placeholder="请输入内容"></el-input>
         </el-col>
       </el-row>
-      <add-form
+      <!-- 新增题组 -->
+      <question-grous
         v-for="(item,i) in dataTopic.group"
         :key="i"
         :form-data="item"
         @hanlde-status="hanldeStatus"
         @add-answer-topic-group="addAnswerTopicGroup"
       />
+      <!-- 新增题组 -->
       <div class="question-group">
-        <answer-item
+        <!-- 小题显示区 -->
+        <subtopic-level-item
           v-for="(item,i) in childGroups"
           :key="i"
           :child-data="item"
@@ -40,6 +43,7 @@
           @pre-edit-points-answer-group="preEditPointsAnswerGroup"
           @pre-edit-points-item="preEditPointsItem"
         />
+        <!-- 小题显示区 -->
       </div>
       <div class="condition_box">
         <el-checkbox v-model="dataTopic.ShowScore">小题显示分数</el-checkbox>
@@ -76,13 +80,15 @@
 </template>
 
 <script>
-import AddForm from '../questionContent/Precautions/answer/_index'
-import answerItem from '../questionContent/Precautions/answer/_item'
+// import AddForm from '../questionContent/Precautions/answer/_index'
+import questionGrous from '../Subassembly/answer'
+// import answerItem from '../questionContent/Precautions/answer/_item'
+import subtopicLevelItem from '../Subassembly/answer/firstlevelItem'
 import { mapState, mapMutations,mapGetters } from 'vuex'
 export default {
   components: {
-    AddForm,
-    answerItem
+    questionGrous,
+    subtopicLevelItem
   },
   data () {
     return {
