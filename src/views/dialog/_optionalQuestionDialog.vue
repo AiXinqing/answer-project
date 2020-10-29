@@ -26,7 +26,7 @@
           ></el-input>
         </el-col>
       </el-row>
-      <add-form
+      <optional-group
         v-for="(item, i) in data.group"
         :key="i"
         :form-data="item"
@@ -88,12 +88,12 @@
 </template>
 
 <script>
-import AddForm from '../questionContent/Precautions/optional/_index'
-import optionalItem from '../questionContent/Precautions/optional/_item'
+import optionalGroup from '../Subassembly/optional'
+import optionalItem from '../Subassembly/optional/item'
 import { mapState, mapMutations,mapGetters} from 'vuex'
 export default {
   components: {
-    AddForm,
+    optionalGroup,
     optionalItem,
   },
   data() {
