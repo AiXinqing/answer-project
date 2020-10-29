@@ -41,7 +41,7 @@
 <script>
   import { mapState} from 'vuex'
   import questionGroup from '../fillInTheBlank/group'
-  import subTopicItem from '../fillInTheBlank/item'
+  import subTopicItem from '../fillInTheBlank/elCollapseItem'
   export default {
     components: {
       questionGroup,
