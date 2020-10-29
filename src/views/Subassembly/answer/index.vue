@@ -42,7 +42,7 @@ export default {
       if (determine.length > 0){
         let d_s_index = determine.findIndex(item => item.topic == start)
         let d_e_index = determine.findIndex(item => item.topic == end)
-        
+
         if(!this.editId){
           if(d_s_index > -1){
             strStart = `${start}题已经存在，请勿重复添加`

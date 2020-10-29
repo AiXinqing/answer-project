@@ -43,10 +43,10 @@
         type: Array,
         default: () => []
       },
-      editId: {
-        tyoe: Number,
-        default: null
-      }
+      editId:{
+        type: Object,
+        default: () => { }
+      },
     },
 
     data () {

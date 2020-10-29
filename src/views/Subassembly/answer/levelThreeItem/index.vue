@@ -62,7 +62,7 @@ export default {
       let temporaryArr = JSON.parse(JSON.stringify(this.lastData.childGroup)) || []
       let datas = this.lastData
       let long = temporaryArr.length + 1
-      console.log(datas)
+
       let subObj = {
         ...datas,
         spId: datas.sid,
