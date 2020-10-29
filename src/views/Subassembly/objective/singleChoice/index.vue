@@ -116,13 +116,6 @@
 .big-question-box {
   margin-bottom: 20px;
 }
-.question-group {
-  width: 100%;
-  height: 200px;
-  overflow: auto;
-  border: 1px solid #888;
-  margin-top: 15px;
-}
 .big-item,
 .group_item_right {
   position: relative;

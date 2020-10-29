@@ -139,7 +139,7 @@ export default {
 }
 .question-group {
   width: 100%;
-  height: 200px;
+  height: 260px;
   overflow: auto;
   border: 1px solid #888;
   margin-top: 15px;

@@ -76,6 +76,7 @@
     methods: {
       addSubtopicFirstlevel() {
         // 添加一级小题
+        console.log(1)
         this.$emit('add-subtopic-firstlevel', {...this.data,score:Number(this.data.score.toString().match(/^\d+(?:\.\d{0,1})?/))})
       },
 

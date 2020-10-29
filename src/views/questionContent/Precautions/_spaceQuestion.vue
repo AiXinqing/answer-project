@@ -118,11 +118,4 @@ export default {
 .add_question {
   margin-top: 20px;
 }
-.question-group {
-  width: 100%;
-  height: 260px;
-  overflow: auto;
-  border: 1px solid #888;
-  margin-top: 15px;
-}
 </style>

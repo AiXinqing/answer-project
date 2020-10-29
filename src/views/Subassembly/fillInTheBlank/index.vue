@@ -109,7 +109,8 @@
       },
       addSubtopicFirstlevel (obj) {
         // 添加小题空格数
-        this.$emit('topic-detail-add', obj)
+        console.log(obj)
+        this.$emit('add-subtopic-firstlevel', obj)
       },
       changeFirstlevelSpace (obj) {
         // 分值分数修改
@@ -132,12 +133,5 @@
   .space_box,
   .add_question {
     margin-top: 20px;
-  }
-  .question-group {
-    width: 100%;
-    height: 200px;
-    overflow: auto;
-    border: 1px solid #888;
-    margin-top: 15px;
   }
 </style>
