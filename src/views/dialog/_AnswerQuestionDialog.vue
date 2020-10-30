@@ -151,57 +151,30 @@ export default {
     errorMessage () {
       return this.errorVal != '' ? true : false
     },
+
+    firstGroup(){
+      return this.questionData.group.map(question => question.childGroup).flat()
+    },
+
+    levelTwoGroup(){
+      return this.firstGroup.map(question => {
+        return question.childGroup.length > 0 ? question.childGroup : question
+      }).flat()
+    },
+
+    levelThreeGroup(){
+      return this.levelTwoGroup.map(question => {
+        return question.childGroup.length > 0 ? question.childGroup : question
+      }).flat()
+    },
+
     RefactorData () {
-      let {group} = this.questionData
-      let itemArr = []
-      group.forEach(item => {
-        if (item.childGroup.length > 0) {
-
-          let subItem = item.childGroup
-
-          subItem.forEach(subEle => {
-            if (subEle.childGroup.length > 0) {
-
-              let lastItem = subEle.childGroup
-
-              lastItem.forEach(lastEle => {
-
-                if (lastEle.childGroup.length > 0) {
-
-                  let pointsItem = lastEle.childGroup
-
-                  pointsItem.forEach(ele => {
-
-                    if (ele.childGroup > 0) {
-                      ele.childGroup.forEach(eleItem => {
-                        itemArr.push(eleItem)
-                      })
-                    } else {
-                      itemArr.push(ele)
-                    }
-
-                  })
-
-                } else {
-                  itemArr.push(lastEle)
-                }
-
-              })
-
-            } else {
-              itemArr.push(subEle)
-            }
-
-          })
-
-        } else {
-          itemArr.push(item)
-        }
-      })
-      return itemArr
+      return this.levelThreeGroup.map(question => {
+        return question.childGroup.length > 0 ? question.childGroup : question
+      }).flat()
     },
     scoreTotal () {
-      return this.childGroups.map(item => item.score).reduce((accumulator, currentValue) => {
+      return this.RefactorData.map(item => item.score).reduce((accumulator, currentValue) => {
         return accumulator + currentValue
       })
     },
@@ -320,7 +293,7 @@ export default {
           objId: objId,
           row:this.dataTopic.rows,
           rowHeight:35,
-          scoreTotal:++item.score,
+          scoreTotal:this.scoreTotal,
           previousOrder:this.questionOrder - 1, // 解答题插入前的序列号
           index:index,
         }
