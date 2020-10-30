@@ -81,9 +81,7 @@
 </template>
 
 <script>
-// import AddForm from '../questionContent/Precautions/answer/_index'
 import questionGrous from '../Subassembly/answer'
-// import answerItem from '../questionContent/Precautions/answer/_item'
 import subtopicLevelItem from '../Subassembly/answer/firstlevelItem'
 import { mapState, mapMutations,mapGetters } from 'vuex'
 export default {
@@ -128,6 +126,7 @@ export default {
       'subTopic_number',
       'subTopic_number_determine',
     ]),
+
     ...mapState('pageContent', [
       'pageHeight',
       'page_size',
@@ -135,8 +134,11 @@ export default {
       'pageData',
       'pageLayout',
     ]),
+
     ...mapState('answerQuestion', ['answerQuestionArr',]),
+
     ...mapGetters('pageContent', ['questionNumber_big_exist','question_order']),
+
     questionNumber_big(){
       return this.questionNumber_big_exist.length
     },
@@ -148,16 +150,13 @@ export default {
     childGroups () {
       return this.dataTopic.group.map(item => item.childGroup).flat()
     },
+
     errorMessage () {
       return this.errorVal != '' ? true : false
     },
 
-    firstGroup(){
-      return this.questionData.group.map(question => question.childGroup).flat()
-    },
-
     levelTwoGroup(){
-      return this.firstGroup.map(question => {
+      return this.childGroups.map(question => {
         return question.childGroup.length > 0 ? question.childGroup : question
       }).flat()
     },
@@ -173,19 +172,52 @@ export default {
         return question.childGroup.length > 0 ? question.childGroup : question
       }).flat()
     },
+
     scoreTotal () {
       return this.RefactorData.map(item => item.score).reduce((accumulator, currentValue) => {
         return accumulator + currentValue
       })
     },
+
+    subTopicGroup(){
+      //确定信息
+      let Arr = []
+      let objId = `answer_${+new Date()}`
+      let rectHeight = this.dataTopic.rows * 35 + 12 + 20 // 小题初始高度
+      this.RefactorData.forEach((item, index) => {
+        let obj = {
+          heightTitle: index == 0 ? 32 : 0,
+          height: index == 0 ? rectHeight + 32 : rectHeight,
+          MarginHeight: 12,
+          ...item,
+          content: {
+            ...this.dataTopic,
+            pageLayout:this.pageLayout,
+          },
+          first: index === 0 ? true : false,
+          questionType: 'answerQuestion',
+          objId: objId,
+          row:this.dataTopic.rows,
+          rowHeight:35,
+          scoreTotal:this.scoreTotal,
+          previousOrder:this.questionOrder - 1, // 解答题插入前的序列号
+          index:index,
+        }
+        Arr.push(obj)
+      })
+      return Arr
+    },
+
     isdisabledFn(){
       return this.childGroups.length > 0 && !this.errorMessage ? false:true
     },
   },
+
   mounted () {
     this.closeData = JSON.parse(JSON.stringify(this.questionData))
     this.subTopic_number_calculate()
   },
+
   watch: {
     questionData: {
       immediate: true,
@@ -229,6 +261,7 @@ export default {
       'pageData_objId_filter',
       'pageData_simple_insert'
     ]),
+
     ...mapMutations('questionType', [
       'subTopic_number_calculate_already',
       'subTopic_number_calculate',
@@ -237,9 +270,10 @@ export default {
       'subTopic_already_add',
       'subTopic_determine_pid_clean',
     ]),
-    ...mapMutations('answerQuestion', ['set_answerQuestionArr']),
-    opened () {
 
+    ...mapMutations('answerQuestion', ['set_answerQuestionArr']),
+
+    opened () {
       this.questionData = JSON.parse(JSON.stringify({
         ...this.questionData,
         start:this.subTopic_number
@@ -254,6 +288,7 @@ export default {
       this.subTopic_already_add(this.subTopic_number_determine)
       this.subTopic_number_calculate()
     },
+
     openedEdit (obj) {
       //编辑弹框
       this.editQuestionId = obj.objId
@@ -265,6 +300,7 @@ export default {
       this.subTopic_already_add(this.subTopic_number_determine)
       this.subTopic_number_calculate()
     },
+
     closeFrame () {
       // 关闭弹窗
       this.questionData = JSON.parse(JSON.stringify(this.closeData))
@@ -272,40 +308,15 @@ export default {
       this.subTopic_already_reset() // 清空临时小题group
       this.errorVal = ''
     },
+
     preCreateQuestion () {
       const { InsertTitle, Postpone} = this.dataTopic
-      //确定信息
-      let Arr = []
-      let objId = `answer_${+new Date()}`
-      let rectHeight = this.dataTopic.rows * 35 + 12 + 20 // 小题初始高度
-      this.RefactorData.forEach((item, index) => {
-        let obj = {
-          heightTitle: index == 0 ? 32 : 0,
-          height: index == 0 ? rectHeight + 32 : rectHeight,
-          MarginHeight: 12,
-          ...item,
-          content: {
-            ...this.dataTopic,
-            pageLayout:this.pageLayout,
-          },
-          first: index === 0 ? true : false,
-          questionType: 'answerQuestion',
-          objId: objId,
-          row:this.dataTopic.rows,
-          rowHeight:35,
-          scoreTotal:this.scoreTotal,
-          previousOrder:this.questionOrder - 1, // 解答题插入前的序列号
-          index:index,
-        }
-        Arr.push(obj)
-      })
-
       if (this.editQuestionId == '') {
         // 新增
         if(InsertTitle && this.questionNumber_big_exist.length > 0){
           let select = this.questionNumber_big_exist[this.existNumber]
           let i = this.question_order
-          Arr.forEach((obj) => {
+          this.subTopicGroup.forEach((obj) => {
             i += 1
             let data = {
               obj: {
@@ -319,7 +330,7 @@ export default {
           })
 
         } else {
-          Arr.forEach(obj => {
+          this.subTopicGroup.forEach(obj => {
             this.pageData_add(obj)
           })
         }
@@ -335,7 +346,7 @@ export default {
               previous = pageObj.order
             }
           }
-          Arr.forEach((question) => {
+          this.subTopicGroup.forEach((question) => {
             previous += 1
             let data = {
               obj: {

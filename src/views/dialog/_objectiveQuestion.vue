@@ -151,8 +151,7 @@
     },
     computed: {
       ...mapGetters('pageContent', ['questionNumber_big_exist',
-      'question_order','options','pageWidth',
-      'pageLayout',]),
+      'question_order','options','pageWidth',]),
 
       ...mapState('questionType',['subTopic_number',
       'subTopic_number_already',
