@@ -297,6 +297,7 @@ export default {
       this.questionData = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
       this.subTopic_already_reset() // 清空临时小题group
+      this.errorVal = ''
     },
     preCreateQuestion () {
       const { InsertTitle, Postpone} = this.dataTopic

@@ -103,14 +103,6 @@ export default {
       ]
     },
 
-    groupDataa () {
-      let result = [];
-      for (var i = 0; i < this.topicBox.length; i += this.data.rows) {
-        result.push(this.topicBox.slice(i, i + this.data.rows));
-      }
-      return result
-    },
-
     groupData () {
       return this.questionData.showData.flat()
     },
@@ -169,7 +161,7 @@ export default {
       this.cotent = content
       console.log(content)
     },
-    
+
     hanldeSubtraction (id, num) {
       this.$emit('hanlde-subtraction', id, num)
     }

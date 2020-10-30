@@ -108,6 +108,7 @@ const mutations = {
   subTopic_determine_clean: (state, topic) => {
     // 清除相同pid
     state.subTopic_number_determine = state.subTopic_number_determine.filter((item) => {
+      console.log(![topic].includes(item.topic))
       return ![topic].includes(item.topic)
     })
   },

@@ -106,7 +106,7 @@ export default {
       return `<span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${scoreTotal})</span>分<span class='optional-prompt'>${this.promptTitle}</span>`
     },
     topicData () {
-      return this.contentData.group[0].childGroup
+      return this.contentData.group.map(question => question.childGroup).flat()
     },
     rowsData () {
       let Arr = []

@@ -238,6 +238,7 @@ export default {
       this.questionData = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
       this.subTopic_already_reset() // 清空临时小题group
+      this.errorVal = ''
     },
     preCreateQuestion() {
       // 当前页内容所占高度topic, number,Postpone
