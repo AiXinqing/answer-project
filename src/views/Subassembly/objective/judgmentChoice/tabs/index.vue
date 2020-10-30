@@ -31,6 +31,12 @@
       }
     },
 
+    data() {
+      return {
+        data: {}
+      }
+    },
+
     computed: {
       ...mapState('questionType', [
         'subTopic_number',
@@ -65,24 +71,36 @@
 
           if(!this.editId){
             if(d_s_index > -1){
-              strStart = `${start}题已经存在，请勿重复添加`
-            }else{ strStart = '' }
-            if(d_e_index > -1){
-              strEnd = `${end}题已经存在，请勿重复添加`
-            }else{ strEnd = '' }
-          }else{
-            if(a_s_index > -1){
-              if(already[a_s_index].pid != this.data.id){
                 strStart = `${start}题已经存在，请勿重复添加`
-              }else { strStart = '' }
-            }else{ strStart = '' }
-
-            if(a_e_index > -1){
-              if(already[a_e_index].pid != this.data.id){
+              }else{
+                if(a_s_index > -1){
+                  if(already[a_s_index].pid != this.data.id){
+                    strStart = `${start}题已经存在，请勿重复添加`
+                  }else { strStart = '' }
+                }else{ strStart = '' }
+              }
+              if(d_e_index > -1){
                 strEnd = `${end}题已经存在，请勿重复添加`
-              }else { strEnd = '' }
-            }else{ strEnd = '' }
-          }
+              }else{
+                if(a_e_index > -1){
+                  if(already[a_e_index].pid != this.data.id){
+                    strEnd = `${end}题已经存在，请勿重复添加`
+                  }else { strEnd = '' }
+                }else{ strEnd = '' }
+              }
+            }else{
+              if(a_s_index > -1){
+                if(already[a_s_index].pid != this.data.id){
+                  strStart = `${start}题已经存在，请勿重复添加`
+                }else { strStart = '' }
+              }else{ strStart = '' }
+
+              if(a_e_index > -1){
+                if(already[a_e_index].pid != this.data.id){
+                  strEnd = `${end}题已经存在，请勿重复添加`
+                }else { strEnd = '' }
+              }else{ strEnd = '' }
+            }
         }
 
         return start == 0 ? '开始题号必须大于0' :
