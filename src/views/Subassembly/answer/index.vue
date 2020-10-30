@@ -17,8 +17,8 @@ export default {
       default: () => { }
     },
     editId:{
-      type: Object,
-      default: () => { }
+      type: String,
+      default: ''
     },
   },
   data () {

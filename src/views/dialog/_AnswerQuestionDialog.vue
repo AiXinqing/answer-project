@@ -55,7 +55,7 @@
           <span class="p-5"> 行 </span>
         </span>
       </div>
-      <div class="condition_box Insert_box" v-show="editQuestionId == null">
+      <div class="condition_box Insert_box" v-show="editQuestionId ==''">
         <el-checkbox v-model="dataTopic.InsertTitle">插入添加题目</el-checkbox>
         <div
           :class="['questionNumber_big_exist_style',{'Fade':!dataTopic.InsertTitle}]">
@@ -95,7 +95,7 @@ export default {
     return {
       dataTopic: {},
       closeData: {},
-      editQuestionId: null,
+      editQuestionId: '',
       openedFrame: false,
       errorVal: '',
       existNumber: null,
@@ -220,7 +220,7 @@ export default {
         this.dataTopic = {
           ...this.questionData
         }
-        if (this.editQuestionId == null) {
+        if (this.editQuestionId == '') {
           this.$nextTick(() => {
             this.dataTopic = {
               ...this.dataTopic,
@@ -327,7 +327,7 @@ export default {
         Arr.push(obj)
       })
 
-      if (this.editQuestionId == null) {
+      if (this.editQuestionId == '') {
         // 新增
         if(InsertTitle && this.questionNumber_big_exist.length > 0){
           let select = this.questionNumber_big_exist[this.existNumber]

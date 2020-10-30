@@ -110,7 +110,7 @@ export default {
 
     TopicContent() {
       const {number,topicName} = this.contentData
-      return `<span>${this.options[number].label}.</span><span>${topicName}</span><span>(${this.data.scoreTotal})分</span>`
+      return `<span>${this.options[number].label}.</span><span>${topicName}</span><span>(${this.questionData.scoreTotal})分</span>`
     },
     topicData() {
       return this.contentData.group
