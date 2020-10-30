@@ -12,8 +12,9 @@
       v-for="(item,i) in pointsData"
       :key="i"
       :points-item-data="item"
-      @pre-edit-points-item="preEditPointsItem"
+      @pre-edit-last-subtopic="preEditLastSubtopic"
     />
+    <!-- @pre-edit-points-item="preEditPointsItem" -->
   </div>
 </div>
 </template>
@@ -80,9 +81,12 @@ export default {
     delLastItem () {
       this.$emit('pre-edit-points-answer-group', this.lastData, true)
     },
-    preEditPointsItem (obj, isDel = false) {
-      // 末尾题
-      this.$emit('pre-edit-points-item', obj, isDel)
+    // preEditPointsItem (obj, isDel = false) {
+    //   // 末尾题
+    //   this.$emit('pre-edit-points-item', obj, isDel)
+    // }
+    preEditLastSubtopic(subtopic){
+      this.$emit('pre-edit-last-subtopic',subtopic)
     }
   },
 }

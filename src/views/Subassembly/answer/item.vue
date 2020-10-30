@@ -2,9 +2,14 @@
 <!-- 分值item -->
   <div class="points_list">
     <span class="points-em">{{pointsData.topic}} </span>
-    <el-input v-model.number="pointsData.score" size="mini" class="points_list_input"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+    <el-input
+      v-model="pointsData.score"
+      @blur="preEditScore"
+      size="mini" class="points_list_input"
+      onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})"
+    />
     <span > 分  </span>
-    <i class="el-icon-del list-del" @click="delPointsItem">-</i>
+    <i class="el-icon-del list-del" @click="delLastSubtopic">-</i>
   </div>
 </template>
 
@@ -16,11 +21,14 @@ export default {
       default: () => { }
     },
   },
+
   data () {
     return {
-      pointsData: {}
+      pointsData: {},
+      isDel:false, // 是否删除
     }
   },
+
   watch: {
     pointsItemData: {
       immediate: true,
@@ -31,38 +39,52 @@ export default {
       }
     }
   },
+
   methods: {
-    delPointsItem () {
-      this.$emit('pre-edit-points-item', this.pointsData, true)
+    delLastSubtopic () {
+      this.isDel = true
+      this.preEditScore()
+    },
+
+    preEditScore(){
+      let {score} = this.pointsData
+      let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
+      this.$emit('pre-edit-last-subtopic',{
+        del:this.isDel,
+        obj:{
+          ...this.pointsData,
+          score:Number(scoreVal)
+        }
+      })
     }
   },
 }
 </script>
 
 <style lang="less" >
-.points_list {
-  width: 100%;
-  .points-em{
-    position: relative;
-    left: 3em;
+  .points_list {
+    width: 100%;
+    .points-em{
+      position: relative;
+      left: 3em;
+    }
+    .el-input--mini {
+      width: 48px;
+      margin: 0 10px;
+    }
+    .points_list_input {
+      margin-left: 64%;
+    }
   }
-  .el-input--mini {
-    width: 48px;
-    margin: 0 10px;
+  .el-icon-del.list-del {
+    margin-top: 0px;
+    right: 80px !important;
+    height: 30px;
+    line-height: 30px;
+    cursor: pointer;
+    position: unset;
   }
-  .points_list_input {
-    margin-left: 64%;
+  .el-collapse {
+    border-bottom: none;
   }
-}
-.el-icon-del.list-del {
-  margin-top: 0px;
-  right: 80px !important;
-  height: 30px;
-  line-height: 30px;
-  cursor: pointer;
-  position: unset;
-}
-.el-collapse {
-  border-bottom: none;
-}
 </style>

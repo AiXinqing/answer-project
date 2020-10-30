@@ -15,6 +15,7 @@
       @pre-edit-last-answer-item="preEditLastAnswerItem"
       @pre-edit-points-answer-group="preEditPointsAnswerGroup"
       @pre-edit-points-item="preEditPointsItem"
+      @pre-edit-last-subtopic="preEditLastSubtopic"
     />
   </div>
 </div>
@@ -84,21 +85,29 @@ export default {
       this.$emit('pre-edit-sub-answer-item', { ...datas, childGroup: temporaryArr })
       this.subTopic_number_calculate_already([{ ...datas, childGroup: temporaryArr }]) // 更新此题数据
     },
+
     preEditLastAnswerItem (obj, isDel) {
       // 新增小题下小题
       this.$emit('pre-edit-last-answer-item', obj, isDel)
     },
+
     preEditPointsAnswerGroup (obj, isDel = false) {
       // 添加小题下的小题
       this.$emit('pre-edit-points-answer-group', obj, isDel)
     },
+
     delAnswerItem () {
       this.$emit('pre-edit-sub-answer-item', this.data, true)
       this.subTopic_already_del([this.data])
     },
+
     preEditPointsItem (obj, isDel = false) {
       // 末尾题
       this.$emit('pre-edit-points-item', obj, isDel)
+    },
+
+    preEditLastSubtopic(subtopic){
+      this.$emit('pre-edit-last-subtopic',subtopic)
     }
   },
 }

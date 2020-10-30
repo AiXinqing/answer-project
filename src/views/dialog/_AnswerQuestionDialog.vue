@@ -43,6 +43,7 @@
           @pre-edit-last-answer-item="preEditLastAnswerItem"
           @pre-edit-points-answer-group="preEditPointsAnswerGroup"
           @pre-edit-points-item="preEditPointsItem"
+          @pre-edit-last-subtopic="preEditLastSubtopic"
         />
         <!-- 小题显示区 -->
       </div>
@@ -511,6 +512,54 @@ export default {
           }
         }
       }
+    },
+
+    preEditLastSubtopic(subtopic){
+      let {del,obj} = subtopic
+      // 最后一级item 分数编辑及删除
+      let temp = JSON.parse(JSON.stringify(this.dataTopic))
+      let {group} = temp
+
+      let firstLevel = this.findIndex(group,obj.spId)
+
+      if(firstLevel.index > -1){
+        let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.sid)
+
+        if(twoLevel.index > -1){
+          let threeLevel = this.findIndex(twoLevel.data.childGroup,obj.fid)
+
+          if(threeLevel.index > -1){
+            let fourLevel = this.findIndex(threeLevel.data.childGroup,obj.pid)
+
+            if(fourLevel.index > -1){
+              if(!del){
+                fourLevel.data.childGroup.splice(fourLevel.index, 1, obj)
+
+              }else{
+
+                if(fourLevel.data.childGroup.length > 1){
+                  fourLevel.data.childGroup.splice(fourLevel.index, 1)
+                }else{
+                  threeLevel.data.childGroup.splice(threeLevel.index, 1,{
+                    ...threeLevel.data.childGroup[threeLevel.index],
+                    score:0,
+                    childGroup:[]
+                  })
+                }
+              }
+
+              this.questionData = JSON.parse(JSON.stringify(temp))
+
+            }
+
+          }
+        }
+      }
+    },
+
+    findIndex(group,id){
+      let index = group.findIndex(item => item.id == id)
+      return {index:index,data:group[index]}
     },
 
     countTheScore (obj) {
