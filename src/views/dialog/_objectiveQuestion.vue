@@ -286,34 +286,9 @@
         handler() {
           //变量更改
           let Increase = {}
-          let {
-            singleChoice,
-            checkChoice,
-            judgmentChoice
-          } = this.preEditData.group
           if(!this.editQuestionId){
             Increase = {
               number: this.questionNumber_big,
-              group:{
-                singleChoice:singleChoice.map(group => {
-                  return {
-                        ...group,
-                        start: group.end == null ? this.subTopic_number : group.start,
-                      }
-                }),
-                checkChoice:checkChoice.map(group => {
-                  return {
-                        ...group,
-                        start: group.end == null ? this.subTopic_number : group.start,
-                      }
-                }),
-                judgmentChoice:judgmentChoice.map(group => {
-                  return {
-                        ...group,
-                        start: group.end == null ? this.subTopic_number : group.start,
-                      }
-                }),
-              }
             }
             this.existNumber =
             this.questionNumber_big_exist.length > 0
@@ -384,6 +359,7 @@
 
       closeFrame() {
         // 取消弹框
+        this.errorVal = ''
         this.preEditData = this.InitialData
         this.openedFrame = false
         this.subTopic_number_calculate()

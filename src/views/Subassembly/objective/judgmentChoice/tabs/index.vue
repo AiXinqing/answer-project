@@ -140,9 +140,11 @@
       group: {
         immediate: true,
         handler () {
+          let {score,start,end} = this.group
           this.data = {
             ...this.group,
-            score: this.group.score == 0 ? null:this.group.score
+            start:!end ? this.subTopic_number:start,
+            score: score == 0 ? null:score
           }
         }
       }
