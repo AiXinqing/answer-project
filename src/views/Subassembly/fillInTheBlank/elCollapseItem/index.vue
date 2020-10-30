@@ -18,6 +18,7 @@
       :is="isComponent"
       :sub-item-data="GroupSmallTopic"
       :sub-child-data="data.childGroup"
+      :edit-id="editId"
       @hanlde-last-topic-del="hanldeLastTopicDel"
       @change-last-sub-topic-score="changeLastSubTopicScore"
     />
@@ -36,6 +37,10 @@
       groupSubtopic: {
         type: Object,
         default: () => { }
+      },
+      editId:{
+        type: String,
+        default: ''
       },
     },
 

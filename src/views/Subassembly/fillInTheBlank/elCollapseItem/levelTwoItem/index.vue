@@ -5,6 +5,7 @@
       :key="i"
       :sub-item-info="item"
       :number="i +1"
+      :edit-id="editId"
       @hanlde-last-topic-del="hanldeLastTopicDel"
       @change-last-sub-topic-score="changeLastSubTopicScore"
     />
@@ -21,6 +22,10 @@ export default {
     subChildData: {
       type: Array,
       default: () => []
+    },
+    editId:{
+      type: String,
+      default: ''
     },
   },
   data () {

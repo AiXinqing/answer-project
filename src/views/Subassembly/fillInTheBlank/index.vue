@@ -16,6 +16,7 @@
           v-for="(subtopic, index) in groupChild"
           :key="index"
           :group-subtopic="subtopic"
+          :edit-id="editId"
           @hanlde-subtopic-del="delSubTopicFirstlevel"
           @add-subtopic-firstlevel="addSubtopicFirstlevel"
 
@@ -44,8 +45,8 @@
         default: () => []
       },
       editId:{
-        type: Object,
-        default: () => { }
+        type: String,
+        default: ''
       },
     },
 

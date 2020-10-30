@@ -49,7 +49,7 @@
         @hanlde-last-topic-del="hanldeLastTopicDel"
         @change-last-sub-topic-score="changeLastSubTopicScore"
       />
-      <div class="condition_box Insert_box" v-show="editQuestionId == null">
+      <div class="condition_box Insert_box" v-show="editQuestionId == ''">
         <el-checkbox v-model="objectiveData.InsertTitle"
           >插入添加题目</el-checkbox
         >
@@ -122,7 +122,7 @@ export default {
       closeData: {},
       errorVal: '',
       objectiveData: {},
-      editQuestionId: null,
+      editQuestionId: '',
       orders:0,
       ContentHeight: 0, // 内容高度
       options:[],
@@ -234,7 +234,7 @@ export default {
           ...this.spaceTopic,
         }
 
-        if (this.editQuestionId == null) {
+        if (this.editQuestionId == '') {
           this.$nextTick(() => {
             this.objectiveData.number = this.questionNumber_big
           })
@@ -290,6 +290,7 @@ export default {
       // 关闭弹框
       this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
+      this.errorVal=''
       //--------------
       this.subTopic_already_reset() // 清空临时小题group
       this.subTopic_already_add(this.subTopic_number_determine)
@@ -348,7 +349,7 @@ export default {
       // 小题数组追加至确定题型
       this.subTopic_number_calculate()
 
-      if (this.editQuestionId == null) {
+      if (this.editQuestionId == '') {
         if (InsertTitle && this.questionNumber_big_exist.length > 0) {
           let select = this.questionNumber_big_exist[this.existNumber]
 
