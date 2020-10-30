@@ -112,11 +112,10 @@ export default {
     subTopic: {
       immediate: true,
       handler () {
+        let {start,end} = this.subTopic
         this.data = {
-          ...this.subTopic
-        }
-        if (this.data.end == '' || this.data.end == null) {
-          this.data.start = this.subTopic_number
+          ...this.subTopic,
+          start:!end ? this.subTopic_number : start
         }
       }
     }

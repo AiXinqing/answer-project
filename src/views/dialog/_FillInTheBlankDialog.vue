@@ -238,12 +238,6 @@ export default {
           this.$nextTick(() => {
             this.objectiveData.number = this.questionNumber_big
           })
-          this.objectiveData.group.map((item) => {
-            return {
-              ...item,
-              start: item.end == null ? this.subTopic_number : item.start,
-            }
-          })
           this.existNumber =
             this.questionNumber_big_exist.length > 0
               ? this.questionNumber_big_exist[0].value
