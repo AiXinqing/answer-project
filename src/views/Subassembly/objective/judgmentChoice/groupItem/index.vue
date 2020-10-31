@@ -5,7 +5,7 @@
       <div>
         <el-input v-model="data.score" size="mini" @blur="preEditSubtopic" onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})"/>
         <span>分</span>
-        <el-input v-model.number="data.select" disabled size="mini" @blur="preEditSubtopic" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
+        <el-input v-model.number="data.select" disabled size="mini" @blur="preEditSubtopic" oninput="value=value.replace(/[^\d]/g,'')"/>
         <span>个选项</span>
       </div>
     </el-col>

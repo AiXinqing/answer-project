@@ -8,30 +8,31 @@
       <i class="el-icon-del " @click.stop="delAnswerItem">-</i>
   </div>
   <div class="sub_item" v-show="childGroup.length > 0">
-    <answer-sub-item
+    <level-two-item
       v-for="(item,i) in childGroup"
       :key="i"
       :sub-child-data="item"
       @pre-edit-last-answer-item="preEditLastAnswerItem"
       @pre-edit-points-answer-group="preEditPointsAnswerGroup"
       @pre-edit-points-item="preEditPointsItem"
+      @pre-edit-last-subtopic="preEditLastSubtopic"
     />
   </div>
 </div>
 </template>
 
 <script>
-import answerSubItem from './_subItem'
+import levelTwoItem from '../levelTwoItem'
 import { mapMutations } from 'vuex'
 export default {
+  components: {
+    levelTwoItem,
+  },
   props: {
     childData: {
       type: Object,
       default: () => { }
     },
-  },
-  components: {
-    answerSubItem,
   },
   data () {
     return {
@@ -84,21 +85,29 @@ export default {
       this.$emit('pre-edit-sub-answer-item', { ...datas, childGroup: temporaryArr })
       this.subTopic_number_calculate_already([{ ...datas, childGroup: temporaryArr }]) // 更新此题数据
     },
+
     preEditLastAnswerItem (obj, isDel) {
       // 新增小题下小题
       this.$emit('pre-edit-last-answer-item', obj, isDel)
     },
+
     preEditPointsAnswerGroup (obj, isDel = false) {
       // 添加小题下的小题
       this.$emit('pre-edit-points-answer-group', obj, isDel)
     },
+
     delAnswerItem () {
       this.$emit('pre-edit-sub-answer-item', this.data, true)
       this.subTopic_already_del([this.data])
     },
+
     preEditPointsItem (obj, isDel = false) {
       // 末尾题
       this.$emit('pre-edit-points-item', obj, isDel)
+    },
+
+    preEditLastSubtopic(subtopic){
+      this.$emit('pre-edit-last-subtopic',subtopic)
     }
   },
 }

@@ -341,6 +341,7 @@ export default {
       this.questionData = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
       this.subTopic_already_reset() // 清空
+      this.errorVal = ''
     },
     hanldeStatus(val) {
       // 报错状态

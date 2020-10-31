@@ -33,7 +33,7 @@
           @click="subTopic_numberFillEdit(questionData.id)"
           >编辑</span
         >
-        <span class="layui-btn layui-btn-xs" @click="delHanlde(questionData.id)"
+        <span class="layui-btn layui-btn-xs" @click="delfillTheBlank"
           >删除</span
         >
       </div>
@@ -159,11 +159,7 @@ export default {
       return this.questionData.showData
     },
     topicBox() {
-      let topicList = []
-      this.data.group.forEach((item) => {
-        topicList.push(...item.childGroup)
-      })
-      return topicList
+      return this.data.group.map(question => question.childGroup).flat()
     },
   },
   watch: {
@@ -200,8 +196,9 @@ export default {
       'subTopic_number_calculate',
       'subTopic_determine_clean',
     ]),
-    delHanlde(id) {
+    delfillTheBlank() {
       // 删除大题-小题数
+      let {id} = this.questionData
       const index = this.pageData.findIndex((itme) => itme.id === id)
       if (index > -1) {
         this.subTopic_already_del(this.topicBox)

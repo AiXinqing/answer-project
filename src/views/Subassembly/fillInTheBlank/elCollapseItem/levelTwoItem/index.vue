@@ -1,10 +1,11 @@
 <template>
   <el-collapse class="el-collapse-sub">
-    <last-item
+    <level-two-el-collapse
       v-for="(item,i) in subChildData"
       :key="i"
       :sub-item-info="item"
       :number="i +1"
+      :edit-id="editId"
       @hanlde-last-topic-del="hanldeLastTopicDel"
       @change-last-sub-topic-score="changeLastSubTopicScore"
     />
@@ -12,15 +13,19 @@
 </template>
 
 <script>
-import lastItem from './_lastItem'
+import levelTwoElCollapse from './elCollapse'
 export default {
   components: {
-    lastItem,
+    levelTwoElCollapse,
   },
   props: {
     subChildData: {
       type: Array,
       default: () => []
+    },
+    editId:{
+      type: String,
+      default: ''
     },
   },
   data () {
@@ -32,6 +37,7 @@ export default {
     hanldeLastTopicDel (obj) {
       this.$emit('hanlde-last-topic-del', obj)
     },
+
     changeLastSubTopicScore (obj, oldObj) {
       // last-sub分值改变
       this.$emit('change-last-sub-topic-score', obj, oldObj)

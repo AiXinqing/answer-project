@@ -8,19 +8,20 @@
       <i class="el-icon-del " @click.stop="delSubItem" >-</i>
   </div>
   <div class="last-group">
-    <answer-last-item
+    <level-three-item
       v-for="(item,i) in childGroup"
       :key="i"
       :last-item-data="item"
       @pre-edit-points-answer-group="preEditPointsAnswerGroup"
-      @pre-edit-points-item="preEditPointsItem"
+      @pre-edit-last-subtopic="preEditLastSubtopic"
     />
+    <!-- @pre-edit-points-item="preEditPointsItem" -->
   </div>
 </div>
 </template>
 
 <script>
-import answerLastItem from './_lastItem'
+import levelThreeItem from '../levelThreeItem'
 export default {
   props: {
     subChildData: {
@@ -29,7 +30,7 @@ export default {
     },
   },
   components: {
-    answerLastItem,
+    levelThreeItem,
   },
   data () {
     return {
@@ -84,9 +85,12 @@ export default {
     delSubItem () {
       this.$emit('pre-edit-last-answer-item', this.data, true)
     },
-    preEditPointsItem (obj, isDel = false) {
-      // 末尾题
-      this.$emit('pre-edit-points-item', obj, isDel)
+    // preEditPointsItem (obj, isDel = false) {
+    //   // 末尾题
+    //   this.$emit('pre-edit-points-item', obj, isDel)
+    // }
+    preEditLastSubtopic(subtopic){
+      this.$emit('pre-edit-last-subtopic',subtopic)
     }
   },
 }

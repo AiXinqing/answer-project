@@ -94,30 +94,18 @@ export default {
     ...mapState('questionType', ['questionNumber', 'letterList']),
     ...mapState('pageContent', ['pageData']),
 
-    topicBox () {
-      let group = this.data.group
-      const singleBox = group.singleBox
-      //---------------------------------小题计算
-      const singleArr = this.traverse(singleBox, this.letterList)
-      const checkbox = group.checkbox
-      const checkArr = this.traverse(checkbox, this.letterList)
-      const judgment = group.judgment
-      const judgmentArr = this.traverse(judgment, this.letterList)
-      let topicList = [...singleArr, ...checkArr, ...judgmentArr]
-      //--------------------------------------------------------
-      return topicList
-    },
-    groupDataa () {
-      let result = [];
-      for (var i = 0; i < this.topicBox.length; i += this.data.rows) {
-        result.push(this.topicBox.slice(i, i + this.data.rows));
-      }
-      return result
+    topicBox(){
+      const {singleChoice,checkChoice,judgmentChoice} = this.data.group
+      return [
+        ...singleChoice.map(group => group.childGroup).flat(),
+        ...checkChoice.map(group => group.childGroup).flat(),
+        ...judgmentChoice.map(group => group.childGroup).flat(),
+      ]
     },
 
-      groupData () {
-        return this.questionData.showData.flat()
-      },
+    groupData () {
+      return this.questionData.showData.flat()
+    },
   },
   watch: {
     contentData: {
@@ -139,31 +127,13 @@ export default {
   methods: {
     ...mapMutations('pageContent', ['pageData_del',
       'questionOrder_subtract',]),
+
     ...mapMutations('questionType', [
       'subTopic_already_del',
       'subTopic_number_calculate',
       'subTopic_determine_clean',
     ]),
-    traverse (Arr, letterList) {
-      if (Arr.length > 0) {
-        let data = []
-        Arr.forEach(item => {
 
-          item.childGroup.forEach(row => {
-            let obj = {
-              ...row,
-              selectBox: row.select == 2 && row.id.indexOf('judgment') != -1 ? ['T', 'F'] : letterList.slice(0, row.select),
-              width: row.select * 26 + 42
-            }
-            data.push(obj)
-          })
-        })
-
-        return data
-      } else {
-        return []
-      }
-    },
     delHanlde (id) { // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === id)
       if (index > -1) {
@@ -176,18 +146,22 @@ export default {
         this.subTopic_number_calculate()
       }
     },
+
     subTopic_numberHanldeEdit (id) {
       this.$emit('current-question-hanlde-edit', id)
     },
+
     hanldeEditor () {
       this.isEditor = true
       this.quilleditor = true
     },
+
     hanldeCloseEsitor (content) {
       this.isEditor = false
       this.cotent = content
       console.log(content)
     },
+
     hanldeSubtraction (id, num) {
       this.$emit('hanlde-subtraction', id, num)
     }

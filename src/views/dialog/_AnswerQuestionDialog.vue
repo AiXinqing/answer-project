@@ -23,15 +23,19 @@
           <el-input v-model="dataTopic.topicName" size="mini" placeholder="请输入内容"></el-input>
         </el-col>
       </el-row>
-      <add-form
+      <!-- 新增题组 -->
+      <question-grous
         v-for="(item,i) in dataTopic.group"
         :key="i"
         :form-data="item"
+        :edit-id="editQuestionId"
         @hanlde-status="hanldeStatus"
         @add-answer-topic-group="addAnswerTopicGroup"
       />
+      <!-- 新增题组 -->
       <div class="question-group">
-        <answer-item
+        <!-- 小题显示区 -->
+        <subtopic-level-item
           v-for="(item,i) in childGroups"
           :key="i"
           :child-data="item"
@@ -39,7 +43,9 @@
           @pre-edit-last-answer-item="preEditLastAnswerItem"
           @pre-edit-points-answer-group="preEditPointsAnswerGroup"
           @pre-edit-points-item="preEditPointsItem"
+          @pre-edit-last-subtopic="preEditLastSubtopic"
         />
+        <!-- 小题显示区 -->
       </div>
       <div class="condition_box">
         <el-checkbox v-model="dataTopic.ShowScore">小题显示分数</el-checkbox>
@@ -50,7 +56,7 @@
           <span class="p-5"> 行 </span>
         </span>
       </div>
-      <div class="condition_box Insert_box" v-show="editQuestionId == null">
+      <div class="condition_box Insert_box" v-show="editQuestionId ==''">
         <el-checkbox v-model="dataTopic.InsertTitle">插入添加题目</el-checkbox>
         <div
           :class="['questionNumber_big_exist_style',{'Fade':!dataTopic.InsertTitle}]">
@@ -76,19 +82,19 @@
 </template>
 
 <script>
-import AddForm from '../questionContent/Precautions/answer/_index'
-import answerItem from '../questionContent/Precautions/answer/_item'
+import questionGrous from '../Subassembly/answer'
+import subtopicLevelItem from '../Subassembly/answer/firstlevelItem'
 import { mapState, mapMutations,mapGetters } from 'vuex'
 export default {
   components: {
-    AddForm,
-    answerItem
+    questionGrous,
+    subtopicLevelItem
   },
   data () {
     return {
       dataTopic: {},
       closeData: {},
-      editQuestionId: null,
+      editQuestionId: '',
       openedFrame: false,
       errorVal: '',
       existNumber: null,
@@ -121,6 +127,7 @@ export default {
       'subTopic_number',
       'subTopic_number_determine',
     ]),
+
     ...mapState('pageContent', [
       'pageHeight',
       'page_size',
@@ -128,8 +135,11 @@ export default {
       'pageData',
       'pageLayout',
     ]),
+
     ...mapState('answerQuestion', ['answerQuestionArr',]),
+
     ...mapGetters('pageContent', ['questionNumber_big_exist','question_order']),
+
     questionNumber_big(){
       return this.questionNumber_big_exist.length
     },
@@ -141,71 +151,74 @@ export default {
     childGroups () {
       return this.dataTopic.group.map(item => item.childGroup).flat()
     },
+
     errorMessage () {
       return this.errorVal != '' ? true : false
     },
-    RefactorData () {
-      let {group} = this.questionData
-      let itemArr = []
-      group.forEach(item => {
-        if (item.childGroup.length > 0) {
 
-          let subItem = item.childGroup
-
-          subItem.forEach(subEle => {
-            if (subEle.childGroup.length > 0) {
-
-              let lastItem = subEle.childGroup
-
-              lastItem.forEach(lastEle => {
-
-                if (lastEle.childGroup.length > 0) {
-
-                  let pointsItem = lastEle.childGroup
-
-                  pointsItem.forEach(ele => {
-
-                    if (ele.childGroup > 0) {
-                      ele.childGroup.forEach(eleItem => {
-                        itemArr.push(eleItem)
-                      })
-                    } else {
-                      itemArr.push(ele)
-                    }
-
-                  })
-
-                } else {
-                  itemArr.push(lastEle)
-                }
-
-              })
-
-            } else {
-              itemArr.push(subEle)
-            }
-
-          })
-
-        } else {
-          itemArr.push(item)
-        }
-      })
-      return itemArr
+    levelTwoGroup(){
+      return this.childGroups.map(question => {
+        return question.childGroup.length > 0 ? question.childGroup : question
+      }).flat()
     },
+
+    levelThreeGroup(){
+      return this.levelTwoGroup.map(question => {
+        return question.childGroup.length > 0 ? question.childGroup : question
+      }).flat()
+    },
+
+    RefactorData () {
+      return this.levelThreeGroup.map(question => {
+        return question.childGroup.length > 0 ? question.childGroup : question
+      }).flat()
+    },
+
     scoreTotal () {
-      return this.childGroups.map(item => item.score).reduce((accumulator, currentValue) => {
+      return this.RefactorData.map(item => item.score).reduce((accumulator, currentValue) => {
         return accumulator + currentValue
       })
     },
+
+    subTopicGroup(){
+      //确定信息
+      let Arr = []
+      let objId = `answer_${+new Date()}`
+      let rectHeight = this.dataTopic.rows * 35 + 12 + 20 // 小题初始高度
+      this.RefactorData.forEach((item, index) => {
+        let obj = {
+          heightTitle: index == 0 ? 32 : 0,
+          height: index == 0 ? rectHeight + 32 : rectHeight,
+          MarginHeight: 12,
+          ...item,
+          content: {
+            ...this.dataTopic,
+            pageLayout:this.pageLayout,
+          },
+          first: index === 0 ? true : false,
+          questionType: 'answerQuestion',
+          objId: objId,
+          row:this.dataTopic.rows,
+          rowHeight:35,
+          scoreTotal:this.scoreTotal,
+          previousOrder:this.questionOrder - 1, // 解答题插入前的序列号
+          index:index,
+        }
+        Arr.push(obj)
+      })
+      return Arr
+    },
+
     isdisabledFn(){
       return this.childGroups.length > 0 && !this.errorMessage ? false:true
     },
   },
+
   mounted () {
     this.closeData = JSON.parse(JSON.stringify(this.questionData))
     this.subTopic_number_calculate()
   },
+
   watch: {
     questionData: {
       immediate: true,
@@ -213,7 +226,7 @@ export default {
         this.dataTopic = {
           ...this.questionData
         }
-        if (this.editQuestionId == null) {
+        if (this.editQuestionId == '') {
           this.$nextTick(() => {
             this.dataTopic = {
               ...this.dataTopic,
@@ -249,6 +262,7 @@ export default {
       'pageData_objId_filter',
       'pageData_simple_insert'
     ]),
+
     ...mapMutations('questionType', [
       'subTopic_number_calculate_already',
       'subTopic_number_calculate',
@@ -257,9 +271,10 @@ export default {
       'subTopic_already_add',
       'subTopic_determine_pid_clean',
     ]),
-    ...mapMutations('answerQuestion', ['set_answerQuestionArr']),
-    opened () {
 
+    ...mapMutations('answerQuestion', ['set_answerQuestionArr']),
+
+    opened () {
       this.questionData = JSON.parse(JSON.stringify({
         ...this.questionData,
         start:this.subTopic_number
@@ -274,6 +289,7 @@ export default {
       this.subTopic_already_add(this.subTopic_number_determine)
       this.subTopic_number_calculate()
     },
+
     openedEdit (obj) {
       //编辑弹框
       this.editQuestionId = obj.objId
@@ -285,46 +301,23 @@ export default {
       this.subTopic_already_add(this.subTopic_number_determine)
       this.subTopic_number_calculate()
     },
+
     closeFrame () {
       // 关闭弹窗
       this.questionData = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
       this.subTopic_already_reset() // 清空临时小题group
+      this.errorVal = ''
     },
+
     preCreateQuestion () {
       const { InsertTitle, Postpone} = this.dataTopic
-      //确定信息
-      let Arr = []
-      let objId = `answer_${+new Date()}`
-      let rectHeight = this.dataTopic.rows * 35 + 12 + 20 // 小题初始高度
-      this.RefactorData.forEach((item, index) => {
-        let obj = {
-          heightTitle: index == 0 ? 32 : 0,
-          height: index == 0 ? rectHeight + 32 : rectHeight,
-          MarginHeight: 12,
-          ...item,
-          content: {
-            ...this.dataTopic,
-            pageLayout:this.pageLayout,
-          },
-          first: index === 0 ? true : false,
-          questionType: 'answerQuestion',
-          objId: objId,
-          row:this.dataTopic.rows,
-          rowHeight:35,
-          scoreTotal:++item.score,
-          previousOrder:this.questionOrder - 1, // 解答题插入前的序列号
-          index:index,
-        }
-        Arr.push(obj)
-      })
-
-      if (this.editQuestionId == null) {
+      if (this.editQuestionId == '') {
         // 新增
         if(InsertTitle && this.questionNumber_big_exist.length > 0){
           let select = this.questionNumber_big_exist[this.existNumber]
           let i = this.question_order
-          Arr.forEach((obj) => {
+          this.subTopicGroup.forEach((obj) => {
             i += 1
             let data = {
               obj: {
@@ -338,7 +331,7 @@ export default {
           })
 
         } else {
-          Arr.forEach(obj => {
+          this.subTopicGroup.forEach(obj => {
             this.pageData_add(obj)
           })
         }
@@ -354,7 +347,7 @@ export default {
               previous = pageObj.order
             }
           }
-          Arr.forEach((question) => {
+          this.subTopicGroup.forEach((question) => {
             previous += 1
             let data = {
               obj: {
@@ -519,6 +512,54 @@ export default {
           }
         }
       }
+    },
+
+    preEditLastSubtopic(subtopic){
+      let {del,obj} = subtopic
+      // 最后一级item 分数编辑及删除
+      let temp = JSON.parse(JSON.stringify(this.dataTopic))
+      let {group} = temp
+
+      let firstLevel = this.findIndex(group,obj.spId)
+
+      if(firstLevel.index > -1){
+        let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.sid)
+
+        if(twoLevel.index > -1){
+          let threeLevel = this.findIndex(twoLevel.data.childGroup,obj.fid)
+
+          if(threeLevel.index > -1){
+            let fourLevel = this.findIndex(threeLevel.data.childGroup,obj.pid)
+
+            if(fourLevel.index > -1){
+              if(!del){
+                fourLevel.data.childGroup.splice(fourLevel.index, 1, obj)
+
+              }else{
+
+                if(fourLevel.data.childGroup.length > 1){
+                  fourLevel.data.childGroup.splice(fourLevel.index, 1)
+                }else{
+                  threeLevel.data.childGroup.splice(threeLevel.index, 1,{
+                    ...threeLevel.data.childGroup[threeLevel.index],
+                    score:0,
+                    childGroup:[]
+                  })
+                }
+              }
+
+              this.questionData = JSON.parse(JSON.stringify(temp))
+
+            }
+
+          }
+        }
+      }
+    },
+
+    findIndex(group,id){
+      let index = group.findIndex(item => item.id == id)
+      return {index:index,data:group[index]}
     },
 
     countTheScore (obj) {

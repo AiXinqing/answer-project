@@ -51,7 +51,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import questionDialog from '../dialog/_questionData'
+import questionDialog from '../dialog/_objectiveQuestion'
 export default {
   components: {
     questionDialog,

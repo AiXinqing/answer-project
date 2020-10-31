@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import airItem from './_airItem' // 空
+import airItem from './item' // 空
 export default {
   components: {
     airItem,

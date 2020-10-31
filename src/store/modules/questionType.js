@@ -18,9 +18,6 @@ const state = {
 
 const mutations = {
   subTopic_already_del(state, Arr) {
-    if (Arr.length <= 0) {
-      return false
-    }
     // 删除已有小题数组
     Arr.forEach((item) => {
       state.subTopic_number_already = state.subTopic_number_already.filter(question => question.topic != item.topic)
@@ -28,9 +25,6 @@ const mutations = {
   },
 
   subTopic_already_add(state, Arr) {
-    if (Arr == undefined) {
-      return false
-    }
     //新增小题数组
     Arr.forEach((item) => {
       const index = state.subTopic_number_already.findIndex(
@@ -64,9 +58,6 @@ const mutations = {
   },
 
   subTopic_number_calculate_already: (state, Arr) => {
-    if (Arr.length <= 0) {
-      return false
-    }
     Arr.forEach((newTopic) => {
       state.subTopic_number_already = state.subTopic_number_already.map(subTopic => {
         return subTopic.topic == newTopic.topic ? newTopic : subTopic
@@ -94,9 +85,6 @@ const mutations = {
   },
 
   subTopic_calculate_determine: (state, Arr) => {
-    if (Arr.length <= 0) {
-      return false
-    }
     // 添加确定值
     Arr.forEach((item) => {
       const index = state.subTopic_number_determine.findIndex(
@@ -120,14 +108,12 @@ const mutations = {
   subTopic_determine_clean: (state, topic) => {
     // 清除相同pid
     state.subTopic_number_determine = state.subTopic_number_determine.filter((item) => {
+      console.log(![topic].includes(item.topic))
       return ![topic].includes(item.topic)
     })
   },
 
   subTopic_determine_del: (state, Arr) => {
-    if (Arr.length <= 0) {
-      return false
-    }
     Arr.forEach((newTopic) => {
       state.subTopic_number_determine = state.subTopic_number_determine.map(subTopic => {
         return subTopic.topic == newTopic.topic ? newTopic : subTopic

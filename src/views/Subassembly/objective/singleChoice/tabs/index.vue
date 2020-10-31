@@ -1,13 +1,13 @@
 <template>
   <div class="big-item">
     <span>从</span>
-    <el-input v-model.number="data.start" size="mini" @blur="preQuestiongroup" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
+    <el-input v-model.number="data.start" size="mini" @blur="preQuestiongroup" oninput="value=value.replace(/[^\d]/g,'')" />
     <span>题到</span>
-    <el-input v-model.number="data.end" size="mini" @blur="preQuestiongroup" onkeyup="this.value = this.value.replace(/[^\d.]/g,'');" />
+    <el-input v-model.number="data.end" size="mini" @blur="preQuestiongroup" oninput="value=value.replace(/[^\d]/g,'')" />
     <span>题,每题</span>
     <el-input v-model="data.score" size="mini" @blur="preQuestiongroup" onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />
     <span>分,每题</span>
-    <el-input v-model.number="data.select" size="mini" @blur="preQuestiongroup"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"/>
+    <el-input v-model.number="data.select" size="mini" @blur="preQuestiongroup"  oninput="value=value.replace(/[^\d]/g,'')"/>
     <span>个选项</span>
     <i class="el-icon-delete" @click="delSubtopicGroup" ></i>
   </div>
@@ -24,15 +24,19 @@
       activeName:{
         type:String,
         default:''
+      },
+      editId:{
+        type: String,
+        default: '',
       }
     },
+
     data() {
       return {
-        data: {
-          editId:null
-        }
+        data: {}
       }
     },
+
     computed: {
       ...mapState('questionType', [
         'subTopic_number',
@@ -53,51 +57,51 @@
       verify(){
         const {start,end,score} = this.data
         let scoreVal = score ? parseFloat(score) : score
-        let determine = this.subTopic_number_determine
         let already = this.subTopic_number_already
+        let determine = this.subTopic_number_determine
         let strStart = ''
         let strEnd = ''
-        if (determine.length > 0 || already.length > 0) {
-          let numStart = determine.findIndex(item => item.topic == start)
-          let index = already.findIndex(item => item.topic == start)
-          let numEnd = determine.findIndex(item => item.topic == end)
-          let endIndex = already.findIndex(item => item.topic == start)
 
-          if (this.editId != null) { // 编辑
-            if (index > -1) {
-              if (already[index].pid != this.data.id) {
+        if (already.length > 0) {
+          let d_s_index = determine.findIndex(item => item.topic == start)
+          let d_e_index = determine.findIndex(item => item.topic == end)
+          let a_s_index = already.findIndex(item => item.topic == start)
+          let a_e_index = already.findIndex(item => item.topic == end)
+
+          if(!this.editId){
+            if(d_s_index > -1){
                 strStart = `${start}题已经存在，请勿重复添加`
+              }else{
+                if(a_s_index > -1){
+                  if(already[a_s_index].pid != this.data.id){
+                    strStart = `${start}题已经存在，请勿重复添加`
+                  }else { strStart = '' }
+                }else{ strStart = '' }
               }
-            } else { strStart = '' }
-          } else {
-            if (numStart > -1 || index > -1) {
-              if (index > -1) {
-                if (already[index].pid != this.data.id) {
+              if(d_e_index > -1){
+                strEnd = `${end}题已经存在，请勿重复添加`
+              }else{
+                if(a_e_index > -1){
+                  if(already[a_e_index].pid != this.data.id){
+                    strEnd = `${end}题已经存在，请勿重复添加`
+                  }else { strEnd = '' }
+                }else{ strEnd = '' }
+              }
+            }else{
+              if(a_s_index > -1){
+                if(already[a_s_index].pid != this.data.id){
                   strStart = `${start}题已经存在，请勿重复添加`
-                } else { strStart = '' }
-              } else {
-                strStart = `${start}题已经存在，请勿重复添加`
-              }
-            } else { strStart = '' }
-          }
-          if (this.editId != null) { // 编辑
-            if (endIndex > -1) {
-              if (already[endIndex].pid != this.data.id) {
-                strEnd = `${end}题已经存在，请勿重复添加`
-              }
-            } else { strStart = '' }
-          } else {
-            if (numEnd > -1 || endIndex > -1) {
-              if (endIndex > -1) {
-                if (already[endIndex].pid != this.data.id) {
+                }else { strStart = '' }
+              }else{ strStart = '' }
+
+              if(a_e_index > -1){
+                if(already[a_e_index].pid != this.data.id){
                   strEnd = `${end}题已经存在，请勿重复添加`
-                } else { strStart = '' }
-              } else {
-                strEnd = `${end}题已经存在，请勿重复添加`
-              }
-            } else { strStart = '' }
-          }
+                }else { strEnd = '' }
+              }else{ strEnd = '' }
+            }
         }
+
 
         return start == 0 ? '开始题号必须大于0' :
           end == 0 ? '结束题号必须大于0' :
@@ -136,9 +140,11 @@
       group: {
         immediate: true,
         handler () {
+          let {score,start,end} = this.group
           this.data = {
             ...this.group,
-            score: this.data.score == 0 ? null:this.data.score
+            start:!end ? this.subTopic_number:start,
+            score: score == 0 ? null:score
           }
         }
       }
@@ -188,6 +194,3 @@
   }
 </script>
 
-<style lang="scss" scoped>
-
-</style>

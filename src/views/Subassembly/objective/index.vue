@@ -10,6 +10,7 @@
         <component
           :is="item.name"
           :active-name="item.name"
+          :edit-id="editId"
           :group-data="grouptopic[item.name]"
           @group-verify-status="groupVerifyStatus"
           @update-group-subTopic="updateGroupSubTopic"
@@ -37,6 +38,10 @@
       questionGroup: {
         type: Object,
         default: () => { },
+      },
+      editId:{
+        type: String,
+        default: '',
       }
     },
     data() {
@@ -95,6 +100,77 @@
   }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
+@import '~@/assets/css/variables.less';
+.select-item {
+  display: flex;
+  .label {
+    width: 70px;
+    position: relative;
+    top: 4px;
+  }
+}
+.select-item:last-child {
+  margin-top: 20px;
+  .el-input.el-input--mini {
+    width: 130px;
+  }
+}
+.hj-select {
+  width: 130px;
+}
+.card_top {
+  margin-top: 20px;
+}
+.el-tabs--border-card {
+  box-shadow: none !important;
+  border: none;
+}
+.error-message {
+  color: red;
+  font-size: 14px;
+}
+.question-group {
+  .group_item:last-child {
+    .el-row:last-child {
+      border-bottom: none;
+    }
+  }
+}
 
+.el-tabs__nav-wrap {
+  border-top: 1px solid #eee;
+  border-left: 1px solid #eee;
+}
+.el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active,
+.el-tabs--border-card
+  > .el-tabs__header
+  .el-tabs__item:not(.is-disabled):hover {
+  color: #1ab394 !important;
+}
+.Insert_box {
+  margin-top: 10px;
+  position: relative;
+  .Insert_Mask {
+    position: absolute;
+    width: 80%;
+    height: 28px;
+    right: 0;
+    top: 0;
+  }
+}
+.questionNumber_big_exist_style {
+  display: inline-block;
+  .hj-select {
+    display: inline-block;
+    margin: 0 5px;
+  }
+}
+.Postpone {
+  margin-left: 20px;
+}
+.questionNumber_big_exist_style.Fade,
+.Postpone.Fade {
+  color: #999;
+}
 </style>

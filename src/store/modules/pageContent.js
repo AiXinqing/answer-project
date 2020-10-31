@@ -115,17 +115,6 @@ const mutations = {
   },
 
 
-
-  // questionNumber_big_add: (state) => {
-  //   state.questionNumber_big += 1
-  // },
-  // questionNumber_big_subtract: (state) => {
-  //   state.questionNumber_big -= 1
-  //   if (state.questionNumber_big < 0) {
-  //     state.questionNumber_big = 0
-  //   }
-  // },
-
   pageHeight_set: (state, Arr = []) => {
     // 页面高度更新
     const results = []

@@ -1,9 +1,9 @@
 <template>
-  <div class="space_group_item">
+  <div class="space_group_item" @click="clickFun">
       <span>第</span>
       <span> {{ number }} </span>
       <span> 空 </span>
-      <el-input v-model="score" size="mini" @blur="changeLastSubTopicScore(SmallTopic)" @click.stop.native="clickFun"  onkeyup.stop.native="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />
+      <el-input v-model="score" size="mini" @blur="changeLastSubTopicScore"   onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />
       <span>分</span>
     </div>
 </template>
@@ -41,9 +41,9 @@ export default {
     clickFun () {
 
     },
-    changeLastSubTopicScore (obj) {
+    changeLastSubTopicScore () {
       let newObj = {
-        ...obj,
+        ...this.SmallTopic,
         score: this.score
       }
       this.$emit('change-last-sub-topic-score', newObj, this.oldObj)

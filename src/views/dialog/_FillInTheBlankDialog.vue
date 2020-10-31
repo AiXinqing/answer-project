@@ -38,17 +38,18 @@
       <space-question
         :group-data="objectiveData.group"
         :edit-id="editQuestionId"
-        @hanlde-status="hanldeStatus"
-        @hanlde-add-group-question="hanldeAddGroupQuestion"
-        @hanlde-del-group="hanldeDelGroup"
-        @hanlde-add-sub-topic="hanldeAddSubtopic"
-        @hanlde-subtopic-del="hanldeSubtopicDel"
-        @topic-detail-add="topicDetailAdd"
-        @change-space-value="ChangeSpaceValue"
+        @change-status="changeStatus"
+        @pre-edit-question-group="preEditQuestionGroup"
+        @del-question-group="delQuestionGroup"
+        @add-subTopic-group="addSubTopicGroup"
+        @add-subtopic-firstlevel="addSubtopicFirstlevel"
+        @del-subtopic-firstlevel="delSubTopicFirstlevel"
+        @change-firstlevel-space="ChangeFirstlevelSpace"
+
         @hanlde-last-topic-del="hanldeLastTopicDel"
         @change-last-sub-topic-score="changeLastSubTopicScore"
       />
-      <div class="condition_box Insert_box" v-show="editQuestionId == null">
+      <div class="condition_box Insert_box" v-show="editQuestionId == ''">
         <el-checkbox v-model="objectiveData.InsertTitle"
           >插入添加题目</el-checkbox
         >
@@ -89,7 +90,8 @@
 </template>
 
 <script>
-import spaceQuestion from '../questionContent/Precautions/_spaceQuestion'
+// import spaceQuestion from '../questionContent/Precautions/fillInTheBlank'
+import spaceQuestion from '../Subassembly/fillInTheBlank'
 import { mapState, mapMutations,mapGetters } from 'vuex'
 export default {
   components: {
@@ -120,7 +122,7 @@ export default {
       closeData: {},
       errorVal: '',
       objectiveData: {},
-      editQuestionId: null,
+      editQuestionId: '',
       orders:0,
       ContentHeight: 0, // 内容高度
       options:[],
@@ -232,15 +234,9 @@ export default {
           ...this.spaceTopic,
         }
 
-        if (this.editQuestionId == null) {
+        if (this.editQuestionId == '') {
           this.$nextTick(() => {
             this.objectiveData.number = this.questionNumber_big
-          })
-          this.objectiveData.group.map((item) => {
-            return {
-              ...item,
-              start: item.end == null ? this.subTopic_number : item.start,
-            }
           })
           this.existNumber =
             this.questionNumber_big_exist.length > 0
@@ -294,6 +290,7 @@ export default {
       // 关闭弹框
       this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
       this.openedFrame = false
+      this.errorVal=''
       //--------------
       this.subTopic_already_reset() // 清空临时小题group
       this.subTopic_already_add(this.subTopic_number_determine)
@@ -352,7 +349,7 @@ export default {
       // 小题数组追加至确定题型
       this.subTopic_number_calculate()
 
-      if (this.editQuestionId == null) {
+      if (this.editQuestionId == '') {
         if (InsertTitle && this.questionNumber_big_exist.length > 0) {
           let select = this.questionNumber_big_exist[this.existNumber]
 
@@ -395,10 +392,11 @@ export default {
     HeightCalculation() {
       // 计算题型内容所占高度
     },
-    hanldeStatus(val) {
+    changeStatus(val) {
       this.errorVal = val
     },
-    hanldeAddGroupQuestion(obj) {
+    preEditQuestionGroup(obj) {
+      console.log(obj)
       //添加题组
       let {group} = this.spaceTopic
       const index = group.findIndex((item) => item.id === obj.id)
@@ -407,7 +405,7 @@ export default {
         // 追曾小题号至数组
       }
     },
-    hanldeDelGroup(id) {
+    delQuestionGroup(id) {
       //删除题组
       let {group} = this.spaceTopic
       const index = group.findIndex((item) => item.id === id)
@@ -423,7 +421,7 @@ export default {
         this.errorVal = ''
       }
     },
-    hanldeSubtopicDel(obj) {
+    delSubTopicFirstlevel(obj) {
       // 删除小题
       let dataObj = JSON.parse(JSON.stringify(this.spaceTopic))
       let {group} = dataObj
@@ -484,17 +482,10 @@ export default {
         }
       }
     },
-    hanldeAddSubtopic() {
+    addSubTopicGroup(group) {
       //添加分段题组
-      let obj = {
-        start: this.subTopic_number,
-        end: null,
-        score: null,
-        space: 1,
-        id: `spaceTopic_${+new Date()}`,
-        childGroup: [],
-      }
-      this.spaceTopic.group.push(obj)
+      
+      this.spaceTopic.group.push(group)
     },
     SplitFunc(index, groupObj, arr) {
       // 删除小题拆分数组 sub
@@ -545,7 +536,7 @@ export default {
         return {}
       }
     },
-    topicDetailAdd(obj) {
+    addSubtopicFirstlevel(obj) {
       // 添加小题
       let {group} = this.spaceTopic
       const i = group.findIndex((item) => item.id === obj.pid)
@@ -588,7 +579,7 @@ export default {
         }
       }
     },
-    ChangeSpaceValue(obj) {
+    ChangeFirstlevelSpace(obj) {
       // 分值分数修改
       // 添加小题空格数
 
