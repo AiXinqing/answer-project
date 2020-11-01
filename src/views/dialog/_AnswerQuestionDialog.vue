@@ -156,22 +156,19 @@ export default {
       return this.errorVal != '' ? true : false
     },
 
-    levelTwoGroup(){
-      return this.childGroups.map(question => {
-        return question.childGroup.length > 0 ? question.childGroup : question
-      }).flat()
-    },
-
-    levelThreeGroup(){
-      return this.levelTwoGroup.map(question => {
-        return question.childGroup.length > 0 ? question.childGroup : question
-      }).flat()
-    },
-
     RefactorData () {
-      return this.levelThreeGroup.map(question => {
-        return question.childGroup.length > 0 ? question.childGroup : question
-      }).flat()
+
+      function recursion(obj, arr = []){
+        if(obj.childGroup && obj.childGroup.length) {
+          return obj.childGroup.reduce((acc, item) => {
+            return recursion(item, acc)
+          }, arr)
+        }
+        arr.push(obj)
+        return arr
+      }
+
+      return recursion(this.dataTopic.group[0])
     },
 
     scoreTotal () {
@@ -210,7 +207,7 @@ export default {
     },
 
     isdisabledFn(){
-      return this.childGroups.length > 0 && !this.errorMessage ? false:true
+      return this.childGroups.length  && !this.errorMessage ? false:true
     },
   },
 
@@ -233,7 +230,7 @@ export default {
               number: this.questionNumber_big
             }
           })
-          this.existNumber = this.questionNumber_big_exist.length > 0 ? this.questionNumber_big_exist[0].value : null
+          this.existNumber = this.questionNumber_big_exist.length ? this.questionNumber_big_exist[0].value : null
         }
         this.options = this.questionNumber.map((label,value)=>({label,value}))
       }
@@ -243,7 +240,7 @@ export default {
       immediate: true,
       handler(){
         this.subTopic_already_reset()
-        if(this.childGroups.length > 0){
+        if(this.childGroups.length){
           this.subTopic_already_add(this.childGroups)
         }else{
           this.subTopic_already_add(this.subTopic_number_determine)
