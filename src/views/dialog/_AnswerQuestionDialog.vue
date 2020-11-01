@@ -223,6 +223,7 @@ export default {
     questionData: {
       immediate: true,
       handler () {
+        console.log(this.questionData)
         this.dataTopic = {
           ...this.questionData
         }

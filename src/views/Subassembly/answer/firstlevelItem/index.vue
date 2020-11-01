@@ -24,6 +24,14 @@
 <script>
 import levelTwoItem from '../levelTwoItem'
 import { mapMutations } from 'vuex'
+function  reducer(obj, count = 0){
+  if (obj.childGroup && obj.childGroup.length) {
+    return obj.childGroup.reduce((acc, item) => {
+        return reducer(item, acc);
+    }, count);
+  }
+  return count + obj.score
+}
 export default {
   components: {
     levelTwoItem,
@@ -48,16 +56,10 @@ export default {
     childData: {
       immediate: true,
       handler () {
+        console.log(this.childData)
         this.data = {
-          ...this.childData
-        }
-        if (this.data.childGroup.length > 0) {
-          console.log(this.data)
-          let sum = 0
-          this.data.childGroup.forEach(item => {
-            sum += item.score
-          })
-          this.data.score = sum
+          ...this.childData,
+          score: reducer(this.childData,0)
         }
       }
     }
@@ -108,7 +110,9 @@ export default {
 
     preEditLastSubtopic(subtopic){
       this.$emit('pre-edit-last-subtopic',subtopic)
-    }
+    },
+
+
   },
 }
 </script>

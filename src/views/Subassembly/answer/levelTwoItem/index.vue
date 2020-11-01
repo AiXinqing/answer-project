@@ -22,6 +22,14 @@
 
 <script>
 import levelThreeItem from '../levelThreeItem'
+function  reducer(obj, count = 0){
+  if (obj.childGroup && obj.childGroup.length) {
+    return obj.childGroup.reduce((acc, item) => {
+        return reducer(item, acc);
+    }, count);
+  }
+  return count + obj.score
+}
 export default {
   props: {
     subChildData: {
@@ -46,16 +54,13 @@ export default {
     subChildData: {
       immediate: true,
       handler () {
+        // let {score,childGroup} = this.subChildData
         this.data = {
-          ...this.subChildData
+          ...this.subChildData,
+          score:reducer(this.subChildData,0)
+          // score:childGroup.length > 0 ? childGroup.map(question => question.score)
+          //                               .reduce((accumulator, currentValue) => accumulator + currentValue) : score
         }
-        // if (this.data.childGroup.length > 0) {
-        //   let sum = 0
-        //   this.data.childGroup.forEach(item => {
-        //     sum += item.score
-        //   })
-        //   this.data.score = sum
-        // }
       }
     }
   },

@@ -14,13 +14,20 @@
       :points-item-data="item"
       @pre-edit-last-subtopic="preEditLastSubtopic"
     />
-    <!-- @pre-edit-points-item="preEditPointsItem" -->
   </div>
 </div>
 </template>
 
 <script>
 import pointsItem from '../item'
+function  reducer(obj, count = 0){
+  if (obj.childGroup && obj.childGroup.length) {
+    return obj.childGroup.reduce((acc, item) => {
+        return reducer(item, acc);
+    }, count);
+  }
+  return count + obj.score
+}
 export default {
   props: {
     lastItemData: {
@@ -46,14 +53,8 @@ export default {
       immediate: true,
       handler () {
         this.lastData = {
-          ...this.lastItemData
-        }
-        if (this.lastData.childGroup.length > 0) {
-          let sum = 0
-          this.lastData.childGroup.forEach(item => {
-            sum += item.score
-          })
-          this.lastData.score = sum
+          ...this.lastItemData,
+          score:reducer(this.lastItemData,0)
         }
       }
     }
