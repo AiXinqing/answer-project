@@ -2,7 +2,7 @@
 <div class="answer-last-group">
   <div class="space_group_list">
       <span class="space_group_title">{{lastData.topic}}</span>
-      <el-input v-model.number="lastData.score" size="mini" class="space_group_items"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+      <el-input v-model.number="lastData.score"  :disabled="isDisable" size="mini" class="space_group_items"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
       <span> 分</span>
       <span class="add_groupTopic" @click="pointsAnswerGroup">+ 添加小题</span>
       <i class="el-icon-del " @click="delLastItem">-</i>
@@ -46,6 +46,11 @@ export default {
   computed: {
     pointsData () {
       return this.lastData.childGroup
+    },
+
+    isDisable(){
+      let {childGroup} = this.lastItemData
+      return childGroup && childGroup.length ? true : false
     }
   },
   watch: {
@@ -56,6 +61,7 @@ export default {
           ...this.lastItemData,
           score:reducer(this.lastItemData,0)
         }
+        console.log(this.lastItemData)
       }
     }
   },

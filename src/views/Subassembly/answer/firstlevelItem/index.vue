@@ -2,7 +2,7 @@
 <div class="answer_group">
   <div class="space_group_list">
       <span class="space_group_title">{{data.topic}}</span>
-      <el-input v-model.number="data.score" size="mini" class="space_group_item"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+      <el-input v-model.number="data.score" :disabled="isDisable" size="mini" class="space_group_item"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
       <span> 分</span>
       <span class="add_groupTopic" @click.stop="addSubAnswerItem()">+ 添加小题</span>
       <i class="el-icon-del " @click.stop="delAnswerItem">-</i>
@@ -50,6 +50,11 @@ export default {
   computed: {
     childGroup () {
       return this.data.childGroup
+    },
+
+    isDisable(){
+      let {childGroup} = this.childData
+      return childGroup && childGroup.length ? true : false
     }
   },
   watch: {
