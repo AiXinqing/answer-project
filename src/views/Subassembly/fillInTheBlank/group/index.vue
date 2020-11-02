@@ -116,6 +116,13 @@ export default {
           id: `${id}_${+new Date()}_${index}`,
           topic: index,
           sum: score * space,
+          childGroup:[{
+            id: id,
+            pid: `${id}_${+new Date()}_${index}`,
+            lid:`last_${+new Date()}_1`,
+            score: Number(scoreVal),
+            smallTopic:1,
+          }]
         }
         group.push(subtopic)
       }

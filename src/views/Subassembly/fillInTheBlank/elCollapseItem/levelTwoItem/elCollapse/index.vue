@@ -18,8 +18,8 @@
         <air-item
           v-for="(item, index) in GroupSmallTopic"
           :key="index"
-          :group-small-topic="item"
-          @change-last-sub-topic-score="changeLastSubTopicScore"
+          :subtopic-group="item"
+          @pre-Edit-last-subtopic="preEditLastSubtopic"
         />
       </div>
     </el-collapse-item>

@@ -1,9 +1,9 @@
 <template>
   <div>
     <air-item
-      v-for="(item,index) in subItemData"
+      v-for="(item,index) in subtopicGroup"
       :key="index"
-      :group-small-topic="item"
+      :subtopic="item"
       :number="index + 1"
       @change-last-sub-topic-score="changeLastSubTopicScore"
     />
@@ -17,7 +17,7 @@ export default {
     airItem,
   },
   props: {
-    subItemData: {
+    subtopicGroup: {
       type: Array,
       default: () => []
     },
