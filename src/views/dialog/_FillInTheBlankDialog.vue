@@ -397,7 +397,7 @@ export default {
       this.errorVal = val
     },
     preEditQuestionGroup(obj) {
-      console.log(obj)
+      // console.log(obj)
       //添加题组
       let {group} = this.spaceTopic
       const index = group.findIndex((item) => item.id === obj.id)
@@ -485,7 +485,6 @@ export default {
     },
     addSubTopicGroup(group) {
       //添加分段题组
-      
       this.spaceTopic.group.push(group)
     },
     SplitFunc(index, groupObj, arr) {
@@ -592,6 +591,7 @@ export default {
 
       if (firstLevel.index > -1) {
         let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.id)
+        // let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.id)
         if(twoLevel.index > -1){
           firstLevel.data.childGroup.splice(twoLevel.index, 1, {
             ...twoLevel.data,
@@ -657,8 +657,8 @@ export default {
     },
 
     preEditLastSubtopic(obj, oldObj) { // 改变分值
-      console.log(obj)
-      console.log(oldObj)
+      // console.log(obj)
+      // console.log(oldObj)
       // // last-sub分值改变
       // const {fid} = obj // ,pid,id
       // let {group} = this.spaceTopic

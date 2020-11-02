@@ -17,6 +17,7 @@
         <i class="el-icon-del" @click.stop="delSubTopicFirstlevel" >-</i>
       </div>
     </template>
+
     <component
       :is="isComponent"
       :subtopic-group="data.childGroup"
@@ -68,7 +69,7 @@
       isComponent () {
         // let {childGroup} = this.data
         // return childGroup || childGroup.length <= 1 ? firstlevelItem : levelTwoItem
-        return 'firstlevelItem'
+        return 'levelTwoItem'
       }
 
     },
