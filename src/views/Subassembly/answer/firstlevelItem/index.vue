@@ -3,7 +3,7 @@
   <div class="space_group_list">
       <span class="space_group_title">{{data.topic}}</span>
       <el-input
-        v-model.number="data.score"
+        v-model="data.score"
         :disabled="isDisable" size="mini"
         class="space_group_item"
         @blur="preEditFirstSubtopic"
@@ -67,7 +67,6 @@ export default {
     childData: {
       immediate: true,
       handler () {
-        console.log(this.childData)
         this.data = {
           ...this.childData,
           score: reducer(this.childData,0)

@@ -2,7 +2,7 @@
 <div class="answer-sub-group">
   <div class="space_group_list">
       <span class="space_group_title">{{data.topic}}</span>
-      <el-input v-model.number="data.score"
+      <el-input v-model="data.score"
         :disabled="isDisable" size="mini"
         class="space_group_items"
         @blur="preEditTwoSubtopic"

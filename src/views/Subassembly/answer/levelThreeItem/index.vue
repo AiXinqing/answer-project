@@ -2,7 +2,7 @@
 <div class="answer-last-group">
   <div class="space_group_list">
       <span class="space_group_title">{{lastData.topic}}</span>
-      <el-input v-model.number="lastData.score"
+      <el-input v-model="lastData.score"
         :disabled="isDisable" size="mini" class="space_group_items"
         @blur="preEditThreSubtopic"
         onkeyup.stop.native="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})"

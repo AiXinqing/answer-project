@@ -119,7 +119,8 @@ export default {
           childGroup: [],
         },]
       },
-      options:[]
+      options:[],
+      initScore:1, // 删除后初始分数
     }
   },
   computed: {
@@ -385,7 +386,7 @@ export default {
     },
 
     preEditLastAnswerItem(obj, isDel = false) {
-    
+
       let group = this.dataTopic.group
       let index = group.findIndex(item => item.id == obj.fid)
       if (index > -1) {
@@ -417,47 +418,6 @@ export default {
       }
     },
 
-    // preEditPointsItem (obj, isDel = false) { // 编辑及删除 isDel 删除
-    //   // 末尾题
-    //   let {group} = this.dataTopic
-    //   let index = group.findIndex(item => item.id == obj.spId)
-    //   if (index > -1) {
-    //     let items = group[index]
-    //     let itemsIndex = items.childGroup.findIndex(item => item.id == obj.sid)
-    //     if (itemsIndex > -1) {
-    //       let subItems = items.childGroup[itemsIndex]
-    //       let subItemIndex = subItems.childGroup.findIndex(item => item.id == obj.fid)
-
-    //       if (subItemIndex > -1) {
-    //         let lastItem = subItems.childGroup[subItemIndex]
-    //         let lastIndex = lastItem.childGroup.findIndex(item => item.id == obj.pid)
-    //         if (lastIndex > -1) {
-    //           let pointsItem = lastItem.childGroup[subItemIndex]
-    //           let pointsIndex = pointsItem.childGroup.findIndex(item => item.id == obj.id)
-    //           if (pointsIndex > -1) {
-    //             if (isDel) {
-    //               pointsItem.childGroup.splice(pointsIndex, 1)
-
-    //             } else {
-    //               pointsItem.childGroup.splice(pointsIndex, 1, obj)
-
-    //               // 更改分值
-    //               pointsItem.score = this.countTheScore(pointsItem)
-    //               subItems.score = this.countTheScore(subItems)
-    //               lastItem.score = this.countTheScore(lastItem)
-    //               this.$nextTick(() => {
-    //                 subItems.score = this.countTheScore(subItems)
-    //               })
-    //             }
-    //             this.subTopic_number_calculate_already([subItems]) // 更新临时数组
-    //           }
-
-    //         }
-
-    //       }
-    //     }
-    //   }
-    // },
 
     preEditSubAnswerItem(obj, isDel = false){
       // yi级菜单下的小题
@@ -514,7 +474,7 @@ export default {
                 }else{
                   firstLevel.data.childGroup.splice(firstLevel.index, 1,{
                     ...firstLevel.data.childGroup[firstLevel.index],
-                    score:0,
+                    score:this.initScore,
                     childGroup:[]
                   })
                 }
@@ -553,7 +513,7 @@ export default {
                 }else{
                   twoLevel.data.childGroup.splice(twoLevel.index, 1,{
                     ...twoLevel.data.childGroup[twoLevel.index],
-                    score:0,
+                    score:this.initScore,
                     childGroup:[]
                   })
                 }
@@ -600,7 +560,7 @@ export default {
                   }else{
                     threeLevel.data.childGroup.splice(threeLevel.index, 1,{
                       ...threeLevel.data.childGroup[threeLevel.index],
-                      score:0,
+                      score:this.initScore,
                       childGroup:[]
                     })
                   }
