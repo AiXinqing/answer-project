@@ -2,7 +2,7 @@
 <div class="answer_group">
   <div class="space_group_list">
       <span class="space_group_title">{{data.topic}}</span>
-      <el-input v-model.number="data.score" size="mini" class="space_group_item"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+      <el-input v-model.number="data.score" :disabled="isDisable" size="mini" class="space_group_item"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
       <span> 分</span>
       <span class="add_groupTopic" @click.stop="addSubAnswerItem()">+ 添加小题</span>
       <i class="el-icon-del " @click.stop="delAnswerItem">-</i>
@@ -24,6 +24,14 @@
 <script>
 import levelTwoItem from '../levelTwoItem'
 import { mapMutations } from 'vuex'
+function  reducer(obj, count = 0){
+  if (obj.childGroup && obj.childGroup.length) {
+    return obj.childGroup.reduce((acc, item) => {
+        return reducer(item, acc);
+    }, count);
+  }
+  return count + obj.score
+}
 export default {
   components: {
     levelTwoItem,
@@ -42,22 +50,21 @@ export default {
   computed: {
     childGroup () {
       return this.data.childGroup
+    },
+
+    isDisable(){
+      let {childGroup} = this.childData
+      return childGroup && childGroup.length ? true : false
     }
   },
   watch: {
     childData: {
       immediate: true,
       handler () {
+        console.log(this.childData)
         this.data = {
-          ...this.childData
-        }
-        if (this.data.childGroup.length > 0) {
-          console.log(this.data)
-          let sum = 0
-          this.data.childGroup.forEach(item => {
-            sum += item.score
-          })
-          this.data.score = sum
+          ...this.childData,
+          score: reducer(this.childData,0)
         }
       }
     }
@@ -108,7 +115,9 @@ export default {
 
     preEditLastSubtopic(subtopic){
       this.$emit('pre-edit-last-subtopic',subtopic)
-    }
+    },
+
+
   },
 }
 </script>

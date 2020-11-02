@@ -156,22 +156,19 @@ export default {
       return this.errorVal != '' ? true : false
     },
 
-    levelTwoGroup(){
-      return this.childGroups.map(question => {
-        return question.childGroup.length > 0 ? question.childGroup : question
-      }).flat()
-    },
-
-    levelThreeGroup(){
-      return this.levelTwoGroup.map(question => {
-        return question.childGroup.length > 0 ? question.childGroup : question
-      }).flat()
-    },
-
     RefactorData () {
-      return this.levelThreeGroup.map(question => {
-        return question.childGroup.length > 0 ? question.childGroup : question
-      }).flat()
+
+      function recursion(obj, arr = []){
+        if(obj.childGroup && obj.childGroup.length) {
+          return obj.childGroup.reduce((acc, item) => {
+            return recursion(item, acc)
+          }, arr)
+        }
+        arr.push(obj)
+        return arr
+      }
+
+      return recursion(this.dataTopic.group[0])
     },
 
     scoreTotal () {
@@ -210,7 +207,7 @@ export default {
     },
 
     isdisabledFn(){
-      return this.childGroups.length > 0 && !this.errorMessage ? false:true
+      return this.childGroups.length  && !this.errorMessage ? false:true
     },
   },
 
@@ -233,7 +230,7 @@ export default {
               number: this.questionNumber_big
             }
           })
-          this.existNumber = this.questionNumber_big_exist.length > 0 ? this.questionNumber_big_exist[0].value : null
+          this.existNumber = this.questionNumber_big_exist.length ? this.questionNumber_big_exist[0].value : null
         }
         this.options = this.questionNumber.map((label,value)=>({label,value}))
       }
@@ -243,7 +240,7 @@ export default {
       immediate: true,
       handler(){
         this.subTopic_already_reset()
-        if(this.childGroups.length > 0){
+        if(this.childGroups.length){
           this.subTopic_already_add(this.childGroups)
         }else{
           this.subTopic_already_add(this.subTopic_number_determine)
@@ -437,41 +434,7 @@ export default {
         }
       }
     },
-    preEditPointsAnswerGroup (obj, isDel = false) {
-      // 添加小题下的小题
-
-      let {group} = this.dataTopic
-      let index = group.findIndex(item => item.id == obj.sid)
-      if (index > -1) {
-        let items = group[index]
-        let itemsIndex = items.childGroup.findIndex(item => item.id == obj.fid)
-        if (itemsIndex > -1) {
-          let subItems = items.childGroup[itemsIndex]
-          let subItemIndex = subItems.childGroup.findIndex(item => item.id == obj.pid)
-
-          if (subItemIndex > -1) {
-            let lastItem = subItems.childGroup[subItemIndex]
-            let lastIndex = lastItem.childGroup.findIndex(item => item.id == obj.id)
-            if (lastIndex > -1) {
-              if (isDel) {
-                lastItem.childGroup.splice(lastIndex, 1)
-              } else {
-                lastItem.childGroup.splice(lastIndex, 1, obj)
-
-                // 更改分值
-                subItems.score = this.countTheScore(subItems)
-                lastItem.score = this.countTheScore(lastItem)
-                this.$nextTick(() => {
-                  subItems.score = this.countTheScore(subItems)
-                })
-              }
-              this.subTopic_number_calculate_already([subItems]) // 更新临时数组
-            }
-
-          }
-        }
-      }
-    },
+    
     preEditPointsItem (obj, isDel = false) { // 编辑及删除 isDel 删除
       // 末尾题
       let {group} = this.dataTopic
@@ -512,6 +475,76 @@ export default {
           }
         }
       }
+    },
+
+    preEditPointsAnswerGroup (obj, isDel = false) {
+      // 三级菜单下的小题
+      let temp = JSON.parse(JSON.stringify(this.dataTopic))
+      let {group} = temp
+
+      let firstLevel = this.findIndex(group,obj.sid)
+
+      if(firstLevel.index > -1){
+        let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.fid)
+
+        if(twoLevel.index > -1){
+          let threeLevel = this.findIndex(twoLevel.data.childGroup,obj.pid)
+
+          if(threeLevel.index > -1){
+              if(!isDel){
+                threeLevel.data.childGroup.splice(threeLevel.index, 1, obj)
+
+              }else{
+
+                if(threeLevel.data.childGroup.length > 1){
+                  threeLevel.data.childGroup.splice(threeLevel.index, 1)
+                }else{
+                  twoLevel.data.childGroup.splice(twoLevel.index, 1,{
+                    ...twoLevel.data.childGroup[twoLevel.index],
+                    score:0,
+                    childGroup:[]
+                  })
+                }
+              }
+
+              this.questionData = JSON.parse(JSON.stringify(temp))
+
+            }
+        }
+      }
+
+      // let index = group.findIndex(item => item.id == obj.sid)
+      // if (index > -1) {
+      //   let items = group[index]
+      //   let itemsIndex = items.childGroup.findIndex(item => item.id == obj.fid)
+      //   if (itemsIndex > -1) {
+      //     let subItems = items.childGroup[itemsIndex]
+      //     let subItemIndex = subItems.childGroup.findIndex(item => item.id == obj.pid)
+
+      //     if (subItemIndex > -1) {
+      //       let lastItem = subItems.childGroup[subItemIndex]
+      //       let lastIndex = lastItem.childGroup.findIndex(item => item.id == obj.id)
+      //       if (lastIndex > -1) {
+      //         if (isDel) {
+      //           lastItem.childGroup.splice(lastIndex, 1)
+      //         } else {
+      //           lastItem.childGroup.splice(lastIndex, 1, obj)
+
+      //           // 更改分值
+      //           subItems.score = this.countTheScore(subItems)
+      //           lastItem.score = this.countTheScore(lastItem)
+      //           this.$nextTick(() => {
+      //             subItems.score = this.countTheScore(subItems)
+      //           })
+      //         }
+      //         this.subTopic_number_calculate_already([subItems]) // 更新临时数组
+
+      //         this.questionData = JSON.parse(JSON.stringify(temp))
+      //       }
+
+      //     }
+      //   }
+      // }
     },
 
     preEditLastSubtopic(subtopic){

@@ -2,7 +2,7 @@
 <div class="answer-sub-group">
   <div class="space_group_list">
       <span class="space_group_title">{{data.topic}}</span>
-      <el-input v-model.number="data.score" size="mini" class="space_group_items"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+      <el-input v-model.number="data.score" :disabled="isDisable" size="mini" class="space_group_items"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
       <span> 分</span>
       <span class="add_groupTopic" @click.stop="addLastAnswerItem">+ 添加小题</span>
       <i class="el-icon-del " @click.stop="delSubItem" >-</i>
@@ -22,6 +22,14 @@
 
 <script>
 import levelThreeItem from '../levelThreeItem'
+function  reducer(obj, count = 0){
+  if (obj.childGroup && obj.childGroup.length) {
+    return obj.childGroup.reduce((acc, item) => {
+        return reducer(item, acc);
+    }, count);
+  }
+  return count + obj.score
+}
 export default {
   props: {
     subChildData: {
@@ -40,6 +48,11 @@ export default {
   computed: {
     childGroup () {
       return this.data.childGroup
+    },
+
+    isDisable(){
+      let {childGroup} = this.data
+      return childGroup && childGroup.length ? true : false
     }
   },
   watch: {
@@ -47,15 +60,9 @@ export default {
       immediate: true,
       handler () {
         this.data = {
-          ...this.subChildData
+          ...this.subChildData,
+          score:reducer(this.subChildData,0)
         }
-        // if (this.data.childGroup.length > 0) {
-        //   let sum = 0
-        //   this.data.childGroup.forEach(item => {
-        //     sum += item.score
-        //   })
-        //   this.data.score = sum
-        // }
       }
     }
   },
