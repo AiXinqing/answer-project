@@ -2,7 +2,9 @@
 <div class="answer-last-group">
   <div class="space_group_list">
       <span class="space_group_title">{{lastData.topic}}</span>
-      <el-input v-model.number="lastData.score"  :disabled="isDisable" size="mini" class="space_group_items"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+      <el-input v-model.number="lastData.score"
+        :disabled="isDisable" size="mini" class="space_group_items"
+        onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
       <span> 分</span>
       <span class="add_groupTopic" @click="pointsAnswerGroup">+ 添加小题</span>
       <i class="el-icon-del " @click="delLastItem">-</i>
@@ -88,10 +90,7 @@ export default {
     delLastItem () {
       this.$emit('pre-edit-points-answer-group', this.lastData, true)
     },
-    // preEditPointsItem (obj, isDel = false) {
-    //   // 末尾题
-    //   this.$emit('pre-edit-points-item', obj, isDel)
-    // }
+
     preEditLastSubtopic(subtopic){
       this.$emit('pre-edit-last-subtopic',subtopic)
     }
