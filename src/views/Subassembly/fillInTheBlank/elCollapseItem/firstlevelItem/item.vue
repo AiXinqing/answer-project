@@ -3,7 +3,9 @@
       <span>第</span>
       <span> {{ number }} </span>
       <span> 空 </span>
-      <el-input v-model="score" size="mini" @blur="changeLastSubTopicScore"   onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />
+      <el-input v-model="score" size="mini" @blur="changeLastSubTopicScore"
+        onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})"
+      />
       <span>分</span>
     </div>
 </template>
@@ -42,6 +44,7 @@ export default {
 
     },
     changeLastSubTopicScore () {
+      console.log(12)
       let newObj = {
         ...this.SmallTopic,
         score: this.score
