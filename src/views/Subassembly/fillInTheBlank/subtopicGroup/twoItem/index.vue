@@ -7,12 +7,21 @@
     <el-input v-model="data.score" size="mini" @blur="ChangeSpaceValue"  onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />
     <span @click.stop="clickFun"> 分 共 {{data.sum}} 分 </span>
     <i class="el-icon-circle-clos" @click.stop="hanldeLastTopicDel" >删除</i>
+    <last-item
+      v-for="subtopic in data.childGroup"
+      :key="subtopic.smallTopic"
+      :subtopic="subtopic"
+    />
   </div>
 
 </template>
 
 <script>
+  import lastItem from './item.vue'
   export default {
+    components: {
+      lastItem,
+    },
     props: {
       subtopic: {
         type: Object,

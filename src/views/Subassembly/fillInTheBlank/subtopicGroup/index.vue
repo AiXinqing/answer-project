@@ -114,7 +114,7 @@
               sid:pid,
               lid:id,
               score: 1,
-              smallTopic:`${childGroup.length + 1}`,
+              smallTopic:1,
             }]
           }
           this.$emit('add-subTopic-collection',{obj:this.data,data:childObj})
