@@ -6,9 +6,7 @@
             <span @click.stop="clickFun">({{number}}) 共</span>
             <el-input v-model.number="subData.space" size="mini" @blur="ChangeSpaceValue"  oninput="value=value.replace(/[^\d]/g,'')"/>
             <span @click.stop="clickFun"> 空 每空 </span>
-            <el-input v-model="subData.score" size="mini" @blur="ChangeSpaceValue"
-              onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})"
-            />
+            <el-input v-model="subData.score" size="mini" @blur="ChangeSpaceValue"  onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />
             <span @click.stop="clickFun"> 分 共 {{subData.sum}} 分 </span>
             <i class="el-icon-circle-clos" @click.stop="hanldeLastTopicDel" >删除</i>
           </div>
@@ -18,8 +16,8 @@
         <air-item
           v-for="(item, index) in GroupSmallTopic"
           :key="index"
-          :subtopic-group="item"
-          @pre-Edit-last-subtopic="preEditLastSubtopic"
+          :group-small-topic="item"
+          @change-last-sub-topic-score="changeLastSubTopicScore"
         />
       </div>
     </el-collapse-item>
@@ -70,13 +68,12 @@ export default {
     clickFun () {
 
     },
-    ChangeSpaceValue () {
-      console.log(1)
-    },
+    ChangeSpaceValue () { },
 
     hanldeLastTopicDel () {
       this.$emit('hanlde-last-topic-del', this.subData)
     },
+    
     changeLastSubTopicScore (obj, oldObj) {
       // last-sub分值改变
       this.$emit('change-last-sub-topic-score', obj, oldObj)

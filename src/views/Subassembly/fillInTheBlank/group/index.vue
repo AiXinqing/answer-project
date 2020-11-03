@@ -121,7 +121,7 @@ export default {
             pid: `${id}_${+new Date()}_${index}`,
             sid:id,
             score: Number(scoreVal),
-            smallTopic:1,
+            subTopic:1,
             childGroup:[{
               id: `${id}_${+new Date()}_${index}`,
               pid:`sid_${+new Date()}_${index}`,

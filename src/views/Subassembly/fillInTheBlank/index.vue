@@ -11,7 +11,14 @@
     />
     <div class="add_question" @click="addsubTopicGroup">+ 分段添加小题</div>
     <div class="question-group">
-      <el-collapse >
+      <subtopic-group
+        v-for="(subtopic, index) in groupChild"
+        :key="index"
+        :group-subtopic="subtopic"
+        :edit-id="editId"
+      />
+      <!-- {{subtopic.topic}}</div> -->
+      <!-- <el-collapse >
         <sub-topic-item
           v-for="(subtopic, index) in groupChild"
           :key="index"
@@ -19,12 +26,11 @@
           :edit-id="editId"
           @hanlde-subtopic-del="delSubTopicFirstlevel"
           @add-subtopic-firstlevel="addSubtopicFirstlevel"
-
           @change-firstlevel-space="changeFirstlevelSpace"
           @hanlde-last-topic-del="hanldeLastTopicDel"
           @change-last-sub-topic-score="changeLastSubTopicScore"
         />
-      </el-collapse>
+      </el-collapse> -->
     </div>
   </div>
 </template>
@@ -32,11 +38,13 @@
 <script>
   import { mapState} from 'vuex'
   import questionGroup from '../fillInTheBlank/group'
-  import subTopicItem from '../fillInTheBlank/elCollapseItem'
+  import subtopicGroup from './subtopicGroup/'
+  // import subTopicItem from '../fillInTheBlank/elCollapseItem'
   export default {
     components: {
       questionGroup,
-      subTopicItem,
+      subtopicGroup
+      // subTopicItem,
     },
 
     props: {
@@ -63,6 +71,7 @@
       ]),
 
       groupChild () {
+        console.log(this.groupData)
         return this.groupData.map(question => question.childGroup).flat()
       }
 
