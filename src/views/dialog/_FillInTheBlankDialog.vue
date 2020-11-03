@@ -55,6 +55,7 @@
         @change-status="changeStatus"
         @pre-edit-question-group="preEditQuestionGroup"
         @add-subTopic-collection="addSubTopicCollection"
+        @change-level="changeLevel"
       />
       <div class="condition_box Insert_box" v-show="editQuestionId == ''">
         <el-checkbox v-model="objectiveData.InsertTitle"
@@ -432,6 +433,24 @@ export default {
           this.subTopic_number_calculate()
         })
         this.errorVal = ''
+      }
+    },
+
+    changeLevel(obj){
+      // 改变层级
+
+      let temp = JSON.parse(JSON.stringify(this.objectiveData))
+      let {group} = temp
+
+      let firstLevel = this.findIndex(group,obj.pid)
+      if (firstLevel.index > -1) {
+        let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.id)
+        console.log(twoLevel)
+        if(twoLevel.index > -1){
+          twoLevel.data.level = true
+
+          this.spaceTopic = JSON.parse(JSON.stringify(temp))
+        }
       }
     },
 

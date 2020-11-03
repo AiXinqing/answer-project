@@ -69,15 +69,14 @@
     data() {
       return {
         data: {},
-        level:false,
         switch_s:'right'
       }
     },
 
     computed: {
       isComponent() {
-        let {childGroup} = this.groupSubtopic
-        return childGroup.length <= 1 && !this.level ? 'firstlevelItem' : 'towlevelItem'
+        let {childGroup,level} = this.groupSubtopic
+        return childGroup.length <= 1 && !level ? 'firstlevelItem' : 'towlevelItem'
       }
     },
 
@@ -86,6 +85,7 @@
         immediate: true,
         handler () {
           this.data = { ...this.groupSubtopic}
+          this.switch_s = this.data.level ? 'down':'right'
         }
       }
     },
@@ -96,10 +96,10 @@
       },
 
       addSubtopicCollection(){
-        let {childGroup,id,pid} = this.data
-        if(this.level == false){
-          this.level = true
+        let {childGroup,id,pid,level} = this.data
+        if(!level){
           this.switch_s = 'down'
+          this.$emit('change-level',this.data)
         }else{
           let childObj = {
             ...this.data,

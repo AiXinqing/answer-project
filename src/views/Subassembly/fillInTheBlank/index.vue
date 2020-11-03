@@ -17,6 +17,7 @@
         :group-subtopic="subtopic"
         :edit-id="editId"
         @add-subTopic-collection="addSubTopicCollection"
+        @change-level="changeLevel"
       />
       <!-- {{subtopic.topic}}</div> -->
       <!-- <el-collapse >
@@ -115,7 +116,13 @@
       },
 
       addSubTopicCollection(obj){
+        //添加小题
         this.$emit('add-subTopic-collection',obj)
+      },
+
+      changeLevel(obj){
+        //改变层级规则
+        this.$emit('change-level',obj)
       },
 
       //------------------------------------------

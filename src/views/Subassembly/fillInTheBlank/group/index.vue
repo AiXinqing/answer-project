@@ -115,6 +115,7 @@ export default {
           id: `${id}_${+new Date()}_${index}`,
           topic: index,
           sum: score * space,
+          level:false,
           childGroup:[{
             ...this.data,
             id: `sid_${+new Date()}_${index}`,
