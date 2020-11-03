@@ -445,7 +445,6 @@ export default {
       let firstLevel = this.findIndex(group,obj.pid)
       if (firstLevel.index > -1) {
         let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.id)
-        console.log(twoLevel)
         if(twoLevel.index > -1){
           twoLevel.data.level = true
 

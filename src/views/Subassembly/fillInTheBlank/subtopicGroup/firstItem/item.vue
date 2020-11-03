@@ -49,5 +49,6 @@
     .el-input--mini{
       margin-left: 10px;
     }
+
   }
 </style>

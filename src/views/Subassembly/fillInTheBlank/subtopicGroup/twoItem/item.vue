@@ -1,5 +1,5 @@
 <template>
-  <div class="last-topic_box">
+  <div class="last-topic_boxs">
     <span>第</span>
     <span> {{ data.smallTopic }} </span>
     <span> 空 </span>
@@ -43,11 +43,17 @@
 </script>
 
 <style lang="less">
-  .last-topic_box{
+  .last-topic_boxs{
     margin-left: 40px;
     span,
     .el-input--mini{
       margin-left: 10px;
+    }
+
+    display: none;
+
+    &.down{
+      display:block
     }
   }
 </style>

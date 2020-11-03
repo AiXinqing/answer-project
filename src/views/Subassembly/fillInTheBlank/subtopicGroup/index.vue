@@ -27,7 +27,6 @@
     >
       <i :class="'el-icon-arrow-'+ switch_s"></i>
     </span>
-
     <div
       :class="['subTopic_list',switch_s]"
       v-for="subtopic in data.childGroup"

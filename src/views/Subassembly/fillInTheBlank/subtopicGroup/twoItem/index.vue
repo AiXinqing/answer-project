@@ -7,7 +7,14 @@
     <el-input v-model="data.score" size="mini" @blur="ChangeSpaceValue"  onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />
     <span @click.stop="clickFun"> 分 共 {{data.sum}} 分 </span>
     <i class="el-icon-circle-clos" @click.stop="hanldeLastTopicDel" >删除</i>
+    <span
+      class="change-group"
+      @click="expandCloseGroup"
+    >
+      <i :class="'el-icon-arrow-'+ switch_s"></i>
+    </span>
     <last-item
+      :class="switch_s"
       v-for="subtopic in data.childGroup"
       :key="subtopic.smallTopic"
       :subtopic="subtopic"
@@ -31,7 +38,8 @@
 
     data() {
       return {
-        data: {}
+        data: {},
+        switch_s:'right'
       }
     },
 
@@ -53,7 +61,15 @@
 
       },
 
-      clickFun(){}
+      clickFun(){},
+
+      expandCloseGroup(){
+        if(this.switch_s == 'right'){
+          this.switch_s = 'down'
+        }else{
+          this.switch_s = 'right'
+        }
+      }
     },
   }
 </script>

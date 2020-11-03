@@ -103,7 +103,6 @@
       },
 
       preEditQuestionGroup(obj){
-        console.log(obj)
         this.$emit('pre-edit-question-group',obj)
       },
 
@@ -126,6 +125,7 @@
       },
 
       //------------------------------------------
+      //旧
 
       delSubTopicFirstlevel (obj) {
         // 删除小题号
@@ -133,7 +133,6 @@
       },
       addSubtopicFirstlevel (obj) {
         // 添加小题空格数
-        console.log(obj)
         this.$emit('add-subtopic-firstlevel', obj)
       },
       changeFirstlevelSpace (obj) {
