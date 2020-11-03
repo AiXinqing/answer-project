@@ -18,6 +18,7 @@
         :edit-id="editId"
         @add-subTopic-collection="addSubTopicCollection"
         @change-level="changeLevel"
+        @change-firstlevel-space="changeFirstlevelSpace"
       />
       <!-- {{subtopic.topic}}</div> -->
       <!-- <el-collapse >

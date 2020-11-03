@@ -4,13 +4,13 @@
 
     <span v-if="isComponent == 'firstlevelItem'">
       <el-input v-model.number="data.space"
-        size="mini" @click.stop.native="clickFun"
+        size="mini"
         @blur="changeFirstlevelSpace"
         oninput="value=value.replace(/[^\d]/g,'')"
       />
       <span> 空 每空 </span>
       <el-input v-model="data.score"
-        size="mini" @click.stop.native="clickFun"
+        size="mini"
         @blur="changeFirstlevelSpace"
         onkeyup.stop.native="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})"
       />
@@ -44,6 +44,7 @@
 </template>
 
 <script>
+
   import firstlevelItem from './firstItem'
   import towlevelItem from './twoItem'
 
@@ -68,7 +69,8 @@
     data() {
       return {
         data: {},
-        switch_s:'right'
+        switch_s:'right',
+        off:''
       }
     },
 
@@ -83,14 +85,38 @@
       groupSubtopic: {
         immediate: true,
         handler () {
-          this.data = { ...this.groupSubtopic}
-          this.switch_s = this.data.level ? 'down':'right'
+          let sum = {}
+          if(this.isComponent == 'firstlevelItem'){
+            if(this.groupSubtopic.space != 0){
+              let tScore = this.groupSubtopic.childGroup.map(question => question.childGroup).flat()
+                                .map(question => question.score).reduce((acr,acc) => acr + acc)
+                  sum = {sum:tScore}
+            }else{
+              sum = {sum:0}
+            }
+          }
+          this.data = {
+            ...this.groupSubtopic,
+            ...sum
+          }
+
+          if(!this.off){
+            this.switch_s = this.data.level ? 'down':'right'
+          }else{this.off=''}
         }
       }
     },
 
     methods: {
       changeFirstlevelSpace(){
+        // 一级空格
+        this.off = this.switch_s
+        let {score} = this.data
+        let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
+        this.$emit('change-firstlevel-space', {
+          ...this.data,
+          score:Number(scoreVal)
+        })
 
       },
 

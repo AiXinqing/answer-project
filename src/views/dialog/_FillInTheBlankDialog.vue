@@ -56,6 +56,9 @@
         @pre-edit-question-group="preEditQuestionGroup"
         @add-subTopic-collection="addSubTopicCollection"
         @change-level="changeLevel"
+        @change-firstlevel-space="changeFirstlevelSpace"
+        @del-question-group="delQuestionGroup"
+        @add-subTopic-group="addSubTopicGroup"
       />
       <div class="condition_box Insert_box" v-show="editQuestionId == ''">
         <el-checkbox v-model="objectiveData.InsertTitle"
@@ -632,18 +635,20 @@ export default {
       let temp = JSON.parse(JSON.stringify(this.objectiveData)) // spaceTopic
       let {group} = temp
 
-      let {space,childGroup} = obj
-      let subtopicGroup = this.spaceArray(childGroup[0],space)
+      let {space} = obj
+      let subtopicGroup = this.spaceArray(obj,space)
 
       let firstLevel = this.findIndex(group,obj.pid)
 
       if (firstLevel.index > -1) {
         let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.id)
-        // let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.id)
+        console.log(firstLevel)
         if(twoLevel.index > -1){
-          firstLevel.data.childGroup.splice(twoLevel.index, 1, {
+
+          twoLevel.data.space = obj.space
+          twoLevel.data.score = obj.score
+          twoLevel.data.childGroup.splice(twoLevel.index, 1, {
             ...twoLevel.data,
-            space:obj.space,
             childGroup:subtopicGroup
           })
           this.spaceTopic = JSON.parse(JSON.stringify(temp))
@@ -690,15 +695,18 @@ export default {
       return {index:index,data:group[index]}
     },
 
-    spaceArray(data,space){
+    spaceArray(obj,space){
       // 生成小题数组
       let arr = []
-      let subtopic = data
       for (let i = 1; i < space + 1; i++) {
         arr.push({
-          ...subtopic,
+          ...obj.childGroup[0],
           smallTopic: i,
-          lid:'last_'+ +new Date() + '_' + i
+          lid:obj.id,
+          sid:obj.pid,
+          score:obj.score,
+          pid:'sid_'+ +new Date() + '_' + i,
+          id:'last_'+ +new Date() + '_' + i
         })
       }
       return arr
