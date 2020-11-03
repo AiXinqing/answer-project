@@ -35,7 +35,7 @@
           <div class="label m-5" style="padding-left:5px">空</div>
         </el-col>
       </el-row>
-      <space-question
+      <!-- <space-question
         :group-data="objectiveData.group"
         :edit-id="editQuestionId"
         @change-status="changeStatus"
@@ -48,6 +48,13 @@
 
         @hanlde-last-topic-del="hanldeLastTopicDel"
         @pre-Edit-last-subtopic="preEditLastSubtopic"
+      /> -->
+      <space-question
+        :group-data="objectiveData.group"
+        :edit-id="editQuestionId"
+        @change-status="changeStatus"
+        @pre-edit-question-group="preEditQuestionGroup"
+        @add-subTopic-collection="addSubTopicCollection"
       />
       <div class="condition_box Insert_box" v-show="editQuestionId == ''">
         <el-checkbox v-model="objectiveData.InsertTitle"
@@ -280,13 +287,14 @@ export default {
       'subTopic_already_pid_clean',
       'subTopic_determine_pid_clean',
     ]),
-    
+
     ...mapMutations('pageContent', [
       'pageData_add',
       'pageData_edit',
       'pageData_insert',
       'questionOrder_add',
     ]),
+
     closeFrame() {
       // 关闭弹框
       this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
@@ -296,6 +304,7 @@ export default {
       this.subTopic_already_reset() // 清空临时小题group
       this.subTopic_already_add(this.subTopic_number_determine)
     },
+
     opened() {
       this.spaceTopic = JSON.parse(
         JSON.stringify({ ...this.spaceTopic, number: this.questionNumber_big })
@@ -307,6 +316,7 @@ export default {
       this.subTopic_already_add(this.subTopic_number_determine)
       this.subTopic_number_calculate()
     },
+
     openedEdit(id) {
       let current = this.pageData.filter((item) => item.id === id)
 
@@ -316,6 +326,7 @@ export default {
       this.openedFrame = true
       this.subTopic_number_calculate()
     },
+
     preCreateQuestion() {
       // 数据编辑完成添加至全局数组中---------------
       // 计算高度
@@ -381,6 +392,7 @@ export default {
       //------------------------
       this.spaceTopic = JSON.parse(JSON.stringify(this.closeData))
     },
+
     hanldeSelect(e) {
       // 选择答题号
       this.spaceTopic.number = e
@@ -422,6 +434,24 @@ export default {
         this.errorVal = ''
       }
     },
+
+    addSubTopicCollection(subtopicObj){
+      let {obj,data} = subtopicObj
+      let temp = JSON.parse(JSON.stringify(this.objectiveData))
+      let {group} = temp
+
+      let firstLevel = this.findIndex(group,obj.pid)
+
+      if (firstLevel.index > -1) {
+        let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.id)
+        if(twoLevel.index > -1){
+          twoLevel.data.childGroup.push(data)
+          this.spaceTopic = JSON.parse(JSON.stringify(temp))
+        }
+      }
+    },
+
+    //--------------------------------------------
     delSubTopicFirstlevel(obj) {
       // 删除小题
       let dataObj = JSON.parse(JSON.stringify(this.spaceTopic))

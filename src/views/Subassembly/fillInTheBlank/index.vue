@@ -16,6 +16,7 @@
         :key="index"
         :group-subtopic="subtopic"
         :edit-id="editId"
+        @add-subTopic-collection="addSubTopicCollection"
       />
       <!-- {{subtopic.topic}}</div> -->
       <!-- <el-collapse >
@@ -112,6 +113,12 @@
       changeStatus(val){
         this.$emit('change-status',val)
       },
+
+      addSubTopicCollection(obj){
+        this.$emit('add-subTopic-collection',obj)
+      },
+
+      //------------------------------------------
 
       delSubTopicFirstlevel (obj) {
         // 删除小题号

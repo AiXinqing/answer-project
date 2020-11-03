@@ -123,9 +123,9 @@ export default {
             score: Number(scoreVal),
             subTopic:1,
             childGroup:[{
-              id: `${id}_${+new Date()}_${index}`,
+              id:`last_${+new Date()}_1`,
               pid:`sid_${+new Date()}_${index}`,
-              sid:`last_${+new Date()}_1`,
+              sid: `${id}_${+new Date()}_${index}`,
               lid:id,
               score: Number(scoreVal),
               smallTopic:1,

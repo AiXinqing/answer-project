@@ -36,7 +36,7 @@
 
     methods: {
       preEditLastSubtopic() {
-        
+
       }
     },
   }
@@ -44,7 +44,7 @@
 
 <style lang="less">
   .last-topic_box{
-    margin-left: 50px;
+    margin-left: 40px;
     span,
     .el-input--mini{
       margin-left: 10px;

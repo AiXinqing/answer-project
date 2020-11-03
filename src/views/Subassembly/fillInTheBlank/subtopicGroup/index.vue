@@ -19,7 +19,7 @@
 
     <span v-else> {{data.sum}} 分</span>
 
-    <span class="add_groupTopic" @click.stop="addSubtopicFirstlevel">+ 添加小题</span>
+    <span class="add_groupTopic" @click.stop="addSubtopicCollection">+ 添加小题</span>
     <i class="el-icon-del" @click.stop="delSubTopicFirstlevel" >-</i>
     <span
       class="change-group"
@@ -27,16 +27,19 @@
     >
       <i :class="'el-icon-arrow-'+ switch_s"></i>
     </span>
+
     <div
       :class="['subTopic_list',switch_s]"
       v-for="subtopic in data.childGroup"
-      :key="subtopic.pid"
+      :key="isComponent == 'firstlevelItem' ? subtopic.pid :subtopic.id"
     >
       <component
         :is="isComponent"
         :subtopic-group="subtopic.childGroup"
+        :subtopic="subtopic"
         :edit-id="editId"
       />
+
     </div>
   </div>
 </template>
@@ -74,7 +77,6 @@
     computed: {
       isComponent() {
         let {childGroup} = this.groupSubtopic
-        console.log(childGroup)
         return childGroup.length <= 1 && !this.level ? 'firstlevelItem' : 'towlevelItem'
       }
     },
@@ -93,8 +95,31 @@
 
       },
 
-      addSubtopicFirstlevel(){
+      addSubtopicCollection(){
+        let {childGroup,id,pid} = this.data
+        if(this.level == false){
+          this.level = true
+          this.switch_s = 'down'
+        }else{
+          let childObj = {
+            ...this.data,
+            id: `sid_${+new Date()}_${childGroup.length + 1}`,
+            pid: id,
+            sid:pid,
+            score: 1,
+            subTopic:`${childGroup.length + 1}`,
+            childGroup:[{
+              id: `last_${+new Date()}_${childGroup.length + 1}`,
+              pid:`sid_${+new Date()}_${childGroup.length + 1}`,
+              sid:pid,
+              lid:id,
+              score: 1,
+              smallTopic:`${childGroup.length + 1}`,
+            }]
+          }
+          this.$emit('add-subTopic-collection',{obj:this.data,data:childObj})
 
+        }
       },
 
       delSubTopicFirstlevel(){},
