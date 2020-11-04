@@ -19,6 +19,7 @@
         @add-subTopic-collection="addSubTopicCollection"
         @change-level="changeLevel"
         @change-firstlevel-space="changeFirstlevelSpace"
+        @del-subtopic-firstlevel="delSubTopicFirstlevel"
       />
       <!-- {{subtopic.topic}}</div> -->
       <!-- <el-collapse >
@@ -27,7 +28,7 @@
           :key="index"
           :group-subtopic="subtopic"
           :edit-id="editId"
-          @hanlde-subtopic-del="delSubTopicFirstlevel"
+
           @add-subtopic-firstlevel="addSubtopicFirstlevel"
           @change-firstlevel-space="changeFirstlevelSpace"
           @hanlde-last-topic-del="hanldeLastTopicDel"
@@ -74,7 +75,7 @@
       ]),
 
       groupChild () {
-        console.log(this.groupData)
+
         return this.groupData.map(question => question.childGroup).flat()
       }
 
@@ -125,13 +126,14 @@
         this.$emit('change-level',obj)
       },
 
+      delSubTopicFirstlevel (obj) {
+        // 删除一级小题号
+        this.$emit('del-subtopic-firstlevel', obj)
+      },
+
       //------------------------------------------
       //旧
 
-      delSubTopicFirstlevel (obj) {
-        // 删除小题号
-        this.$emit('del-subtopic-firstlevel', obj)
-      },
       addSubtopicFirstlevel (obj) {
         // 添加小题空格数
         this.$emit('add-subtopic-firstlevel', obj)

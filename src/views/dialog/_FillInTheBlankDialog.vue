@@ -59,6 +59,7 @@
         @change-firstlevel-space="changeFirstlevelSpace"
         @del-question-group="delQuestionGroup"
         @add-subTopic-group="addSubTopicGroup"
+        @del-subtopic-firstlevel="delSubTopicFirstlevel"
       />
       <div class="condition_box Insert_box" v-show="editQuestionId == ''">
         <el-checkbox v-model="objectiveData.InsertTitle"
@@ -472,68 +473,89 @@ export default {
       }
     },
 
-    //--------------------------------------------
-    delSubTopicFirstlevel(obj) {
-      // 删除小题
-      let dataObj = JSON.parse(JSON.stringify(this.spaceTopic))
-      let {group} = dataObj
-      const index = group.findIndex((item) => item.id === obj.pid)
-      let groupObj = group[index]
+    delSubTopicFirstlevel(obj){
+      let temp = JSON.parse(JSON.stringify(this.objectiveData))
+      let {group} = temp
+      let {topic} = obj
 
-      let arr = []
-      for (let i = groupObj.start; i <= groupObj.end; i++) {
-        arr.push(i)
-      }
-      let lastIndex = groupObj.childGroup.findIndex(
-        (item) => item.id === obj.id
-      )
-      if (lastIndex > -1) {
-        if (obj.topic == arr[0]) {
-          // 判断点击的是否是首尾
-          this.subTopic_already_del([groupObj.childGroup[index]])
-          groupObj.childGroup.splice(lastIndex, 1)
-          let objItem = {
-            ...groupObj,
-            start: groupObj.start + 1,
-          }
+      let firstLevel = this.findIndex(group,obj.pid)
 
-          if (objItem.start > arr[arr.length - 1]) {
-            group.splice(index, 1)
-          } else {
-            group.splice(index, 1, objItem)
-          }
-          this.spaceTopic = JSON.parse(JSON.stringify(dataObj))
-        } else if (obj.topic == arr[arr.length - 1]) {
-          this.subTopic_already_del([groupObj.childGroup[index]])
-          groupObj.childGroup.splice(lastIndex, 1)
-          let objItem = {
-            ...groupObj,
-            end: groupObj.end - 1,
-          }
-          if (objItem.start > arr[0]) {
-            group.splice(index, 1)
-          } else {
-            group.splice(index, 1, objItem)
-          }
-          this.spaceTopic = JSON.parse(JSON.stringify(dataObj))
-        } else {
-          this.subTopic_already_pid_clean(obj.pid) // 删除全部小题
+      if(firstLevel.index > -1){
+        let {start,end} = firstLevel.data
+        let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.id)
 
-          let SplitArray = this.SplitFunc(lastIndex, groupObj, arr)
-          if (SplitArray.length > 0) {
-            let itemArr = []
-            SplitArray.forEach((item) => {
-              if (item.childGroup != undefined) {
-                itemArr.push(...item.childGroup)
+        if(topic == start || topic == end){
+          if(twoLevel.index > -1){
+            if(firstLevel.data.childGroup.length > 1){
+              firstLevel.data.childGroup.splice(twoLevel.index, 1)
+              if(topic == start){
+                firstLevel.data.start += 1
               }
-            })
-            group.splice(index, 1) // 删除
-
-            this.spaceTopic.group.splice(0, 1, ...SplitArray)
+              if(topic == end){
+                firstLevel.data.end -= 1
+              }
+            }else{
+              group.splice(firstLevel.index, 1)
+            }
+            this.spaceTopic = JSON.parse(JSON.stringify(temp))
           }
+        }else{
+
+          let {childGroup} = firstLevel.data
+
+          let topics = twoLevel.data.topic
+          console.log(twoLevel.data)
+          console.log(topics)
+
+          let before = childGroup.slice(0,twoLevel.index) //前
+                      .map(question => ({...question,end:topics - 1 }))
+          let after = childGroup.slice(twoLevel.index + 1,childGroup.length) // 后
+                      .map(question => ({...question,start:topics + 1 }))
+          let curObj = firstLevel.data
+          let index = firstLevel.index
+
+          group.splice(firstLevel.index, 1)
+
+          group.splice(index,0,{
+            ...curObj,
+            childGroup:this.childGroupFunc(before,`${curObj.id}_${index}`),
+            end:before[0].end,
+            id: `${curObj.id}_${index}`
+          })
+          group.splice(index + 1,0,{
+            ...curObj,
+            childGroup:this.childGroupFunc(after,`${curObj.id}_${index + 1}`),
+            start:after[0].start,
+            id: `${curObj.id}_${index + 1}`
+          })
+          this.spaceTopic = JSON.parse(JSON.stringify(temp))
+
         }
+
       }
+
     },
+
+    childGroupFunc(obj,index){
+      // 返回显示id
+      return obj.map(question =>{
+        return {
+          ...question,
+          childGroup:question.childGroup.map(subtopic => {
+            console.log(subtopic)
+            return {
+              ...subtopic,
+              sid:index,
+              childGroup:subtopic.childGroup.map(topic =>({...topic,lid:index}))
+            }
+          }),
+          pid:index,
+        }
+      })
+    },
+
+    //--------------------------------------------
+    //旧
     addSubTopicGroup(group) {
       //添加分段题组
       this.spaceTopic.group.push(group)
@@ -642,15 +664,13 @@ export default {
 
       if (firstLevel.index > -1) {
         let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.id)
-        console.log(firstLevel)
+        console.log(twoLevel)
         if(twoLevel.index > -1){
 
           twoLevel.data.space = obj.space
           twoLevel.data.score = obj.score
-          twoLevel.data.childGroup.splice(twoLevel.index, 1, {
-            ...twoLevel.data,
-            childGroup:subtopicGroup
-          })
+          let three = twoLevel.data.childGroup[0]
+              three.childGroup = subtopicGroup
           this.spaceTopic = JSON.parse(JSON.stringify(temp))
         }
       }
@@ -700,7 +720,6 @@ export default {
       let arr = []
       for (let i = 1; i < space + 1; i++) {
         arr.push({
-          ...obj.childGroup[0],
           smallTopic: i,
           lid:obj.id,
           sid:obj.pid,

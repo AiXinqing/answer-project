@@ -103,6 +103,7 @@
           if(!this.off){
             this.switch_s = this.data.level ? 'down':'right'
           }else{this.off=''}
+          console.log(this.groupSubtopic)
         }
       }
     },
@@ -147,7 +148,10 @@
         }
       },
 
-      delSubTopicFirstlevel(){},
+      delSubTopicFirstlevel(){
+        // 删除一级小题
+        this.$emit('del-subtopic-firstlevel', {...this.data,score:Number(this.data.score.toString().match(/^\d+(?:\.\d{0,1})?/))})
+      },
 
       expandCloseGroup(){
         // 展开关闭小题层级
