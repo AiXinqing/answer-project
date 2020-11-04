@@ -414,7 +414,7 @@ export default {
       this.errorVal = val
     },
     preEditQuestionGroup(obj) {
-      // console.log(obj)
+
       //添加题组
       let {group} = this.spaceTopic
       const index = group.findIndex((item) => item.id === obj.id)
@@ -504,8 +504,6 @@ export default {
           let {childGroup} = firstLevel.data
 
           let topics = twoLevel.data.topic
-          console.log(twoLevel.data)
-          console.log(topics)
 
           let before = childGroup.slice(0,twoLevel.index) //前
                       .map(question => ({...question,end:topics - 1 }))
@@ -542,7 +540,6 @@ export default {
         return {
           ...question,
           childGroup:question.childGroup.map(subtopic => {
-            console.log(subtopic)
             return {
               ...subtopic,
               sid:index,
@@ -664,7 +661,7 @@ export default {
 
       if (firstLevel.index > -1) {
         let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.id)
-        console.log(twoLevel)
+
         if(twoLevel.index > -1){
 
           twoLevel.data.space = obj.space
