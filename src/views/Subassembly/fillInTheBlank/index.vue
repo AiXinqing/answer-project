@@ -22,7 +22,9 @@
         @change-twoLevel-topic="changeTwoLevelTopic"
         @del-subtopic-firstlevel="delSubTopicFirstlevel"
         @pre-edit-last-score="preEditLastScore"
+        @del-two-level-subtopic="delTwoLevelSubtopic"
       />
+
       <!-- {{subtopic.topic}}</div> -->
       <!-- <el-collapse >
         <sub-topic-item
@@ -131,6 +133,11 @@
       delSubTopicFirstlevel (obj) {
         // 删除一级小题号
         this.$emit('del-subtopic-firstlevel', obj)
+      },
+
+      delTwoLevelSubtopic(obj){
+        // 删除二级小题
+        this.$emit('del-two-level-subtopic',obj)
       },
 
       preEditLastScore(obj) {

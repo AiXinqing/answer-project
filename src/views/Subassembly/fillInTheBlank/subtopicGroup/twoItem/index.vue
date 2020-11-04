@@ -6,7 +6,7 @@
     <span @click.stop="clickFun"> 空 每空 </span>
     <el-input v-model="data.score" size="mini" @blur="changeSpaceValue"  onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />
     <span @click.stop="clickFun"> 分 共 {{data.sum}} 分 </span>
-    <i class="el-icon-circle-clos" @click.stop="hanldeLastTopicDel" >删除</i>
+    <i class="el-icon-circle-clos" @click.stop="delTwoLevelSubtopic" >删除</i>
     <span
       class="change-group"
       @click="expandCloseGroup"
@@ -82,8 +82,8 @@
         })
       },
 
-      hanldeLastTopicDel(){
-
+      delTwoLevelSubtopic(){
+        this.$emit('del-two-level-subtopic',this.data)
       },
 
       clickFun(){},
