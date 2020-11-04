@@ -3,7 +3,7 @@
     <span>第</span>
     <span> {{ data.smallTopic }} </span>
     <span> 空 </span>
-    <el-input v-model="data.score" size="mini" @blur="preEditLastSubtopic"
+    <el-input v-model="data.score" size="mini" @blur="preEditLastScore"
       onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})"
     />
     <span> 分</span>
@@ -35,8 +35,14 @@
     },
 
     methods: {
-      preEditLastSubtopic() {
-
+      preEditLastScore() {
+        console.log(this.data)
+        let {score} = this.data
+        let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
+        this.$emit('pre-edit-last-score',{
+          ...this.data,
+          score:Number(scoreVal)
+        })
       }
     },
   }

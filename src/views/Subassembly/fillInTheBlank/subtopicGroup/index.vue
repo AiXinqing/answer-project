@@ -37,6 +37,7 @@
         :subtopic-group="subtopic.childGroup"
         :subtopic="subtopic"
         :edit-id="editId"
+        @pre-edit-last-score="preEditLastScore"
       />
 
     </div>
@@ -47,6 +48,15 @@
 
   import firstlevelItem from './firstItem'
   import towlevelItem from './twoItem'
+
+  function  reducer(obj, count = 0){
+  if (obj.childGroup && obj.childGroup.length) {
+    return obj.childGroup.reduce((acc, item) => {
+        return reducer(item, acc);
+    }, count);
+  }
+  return count + obj.score
+}
 
   export default {
     components: {
@@ -85,25 +95,14 @@
       groupSubtopic: {
         immediate: true,
         handler () {
-          let sum = {}
-          if(this.isComponent == 'firstlevelItem'){
-            if(this.groupSubtopic.space != 0){
-              let tScore = this.groupSubtopic.childGroup.map(question => question.childGroup).flat()
-                                .map(question => question.score).reduce((acr,acc) => acr + acc)
-                  sum = {sum:tScore}
-            }else{
-              sum = {sum:0}
-            }
-          }
           this.data = {
             ...this.groupSubtopic,
-            ...sum
+            sum:reducer(this.groupSubtopic,0)
           }
 
           if(!this.off){
             this.switch_s = this.data.level ? 'down':'right'
           }else{this.off=''}
-          console.log(this.groupSubtopic)
         }
       }
     },
@@ -160,6 +159,12 @@
         }else{
           this.switch_s = 'right'
         }
+      },
+
+      // $emit---------------------------------
+      preEditLastScore(obj) {
+        // 编辑最后一级分数
+        this.$emit('pre-edit-last-score',obj)
       }
     },
   }

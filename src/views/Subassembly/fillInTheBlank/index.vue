@@ -20,6 +20,7 @@
         @change-level="changeLevel"
         @change-firstlevel-space="changeFirstlevelSpace"
         @del-subtopic-firstlevel="delSubTopicFirstlevel"
+        @pre-edit-last-score="preEditLastScore"
       />
       <!-- {{subtopic.topic}}</div> -->
       <!-- <el-collapse >
@@ -129,6 +130,11 @@
       delSubTopicFirstlevel (obj) {
         // 删除一级小题号
         this.$emit('del-subtopic-firstlevel', obj)
+      },
+
+      preEditLastScore(obj) {
+        // 编辑最后一级分数
+        this.$emit('pre-edit-last-score',obj)
       },
 
       //------------------------------------------

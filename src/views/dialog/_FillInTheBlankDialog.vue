@@ -60,6 +60,7 @@
         @del-question-group="delQuestionGroup"
         @add-subTopic-group="addSubTopicGroup"
         @del-subtopic-firstlevel="delSubTopicFirstlevel"
+        @pre-edit-last-score="preEditLastScore"
       />
       <div class="condition_box Insert_box" v-show="editQuestionId == ''">
         <el-checkbox v-model="objectiveData.InsertTitle"
@@ -551,6 +552,32 @@ export default {
       })
     },
 
+    preEditLastScore(obj){
+      //编辑最后一级分数
+      let temp = JSON.parse(JSON.stringify(this.objectiveData))
+      let {group} = temp
+
+      let firstLevel = this.findIndex(group,obj.lid)
+      console.log(firstLevel)
+      if (firstLevel.index > -1) {
+        let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.sid)
+
+        if(twoLevel.index > -1){
+          let threeLevel = this.findIndex(twoLevel.data.childGroup,obj.pid)
+
+          if(threeLevel.index > -1){
+            let fourLevel = this.findIndex(threeLevel.data.childGroup,obj.id)
+            console.log(fourLevel)
+            if(fourLevel.index > -1){
+              threeLevel.data.childGroup.splice(fourLevel.index,1, obj)
+              this.spaceTopic = JSON.parse(JSON.stringify(temp))
+            }
+
+          }
+        }
+      }
+    },
+
     //--------------------------------------------
     //旧
     addSubTopicGroup(group) {
@@ -655,7 +682,6 @@ export default {
       let {group} = temp
 
       let {space} = obj
-      let subtopicGroup = this.spaceArray(obj,space)
 
       let firstLevel = this.findIndex(group,obj.pid)
 
@@ -666,7 +692,10 @@ export default {
 
           twoLevel.data.space = obj.space
           twoLevel.data.score = obj.score
+
           let three = twoLevel.data.childGroup[0]
+          let subtopicGroup = this.spaceArray(obj,space,three.id)
+
               three.childGroup = subtopicGroup
           this.spaceTopic = JSON.parse(JSON.stringify(temp))
         }
@@ -712,23 +741,24 @@ export default {
       return {index:index,data:group[index]}
     },
 
-    spaceArray(obj,space){
+    spaceArray(obj,space,Tpid){
       // 生成小题数组
       let arr = []
       for (let i = 1; i < space + 1; i++) {
         arr.push({
           smallTopic: i,
-          lid:obj.id,
-          sid:obj.pid,
+          lid:obj.pid,
+          sid:obj.id,
           score:obj.score,
-          pid:'sid_'+ +new Date() + '_' + i,
+          pid:Tpid,
           id:'last_'+ +new Date() + '_' + i
         })
       }
       return arr
     },
 
-    preEditLastSubtopic(obj, oldObj) { // 改变分值
+    preEditLastScores(obj) { // 改变分值
+
       // console.log(obj)
       // console.log(oldObj)
       // // last-sub分值改变
