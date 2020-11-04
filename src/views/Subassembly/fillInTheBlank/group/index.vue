@@ -123,6 +123,7 @@ export default {
             sid:id,
             score: Number(scoreVal),
             subTopic:1,
+            level:false,
             childGroup:[{
               id:`last_${+new Date()}_1`,
               pid:`sid_${+new Date()}_${index}`,

@@ -38,6 +38,7 @@
         :subtopic="subtopic"
         :edit-id="editId"
         @pre-edit-last-score="preEditLastScore"
+        @change-twoLevel-topic="changeTwoLevelTopic"
       />
 
     </div>
@@ -49,14 +50,14 @@
   import firstlevelItem from './firstItem'
   import towlevelItem from './twoItem'
 
-  function  reducer(obj, count = 0){
-  if (obj.childGroup && obj.childGroup.length) {
-    return obj.childGroup.reduce((acc, item) => {
-        return reducer(item, acc);
-    }, count);
+  function reducer(obj, count = 0){
+    if (obj.childGroup && obj.childGroup.length) {
+      return obj.childGroup.reduce((acc, item) => {
+          return reducer(item, acc);
+      }, count);
+    }
+    return count + obj.score
   }
-  return count + obj.score
-}
 
   export default {
     components: {
@@ -117,7 +118,11 @@
           ...this.data,
           score:Number(scoreVal)
         })
+      },
 
+      changeTwoLevelTopic(obj){
+        // 多空小题段修改编辑
+        this.$emit('change-twoLevel-topic', obj)
       },
 
       addSubtopicCollection(){

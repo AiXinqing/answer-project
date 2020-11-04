@@ -2,9 +2,9 @@
 
   <div class="sub-item-group" @click="clickFun">
     <span class="tig" @click.stop="clickFun">({{data.subTopic}}) 共 </span>
-    <el-input v-model.number="data.space" size="mini" @blur="ChangeSpaceValue"  oninput="value=value.replace(/[^\d]/g,'')"/>
+    <el-input v-model.number="data.space" size="mini" @blur="changeSpaceValue"  oninput="value=value.replace(/[^\d]/g,'')"/>
     <span @click.stop="clickFun"> 空 每空 </span>
-    <el-input v-model="data.score" size="mini" @blur="ChangeSpaceValue"  onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />
+    <el-input v-model="data.score" size="mini" @blur="changeSpaceValue"  onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />
     <span @click.stop="clickFun"> 分 共 {{data.sum}} 分 </span>
     <i class="el-icon-circle-clos" @click.stop="hanldeLastTopicDel" >删除</i>
     <span
@@ -24,8 +24,19 @@
 
 </template>
 
+
 <script>
   import lastItem from './item.vue'
+
+  function reducer(obj, count = 0){
+    if (obj.childGroup && obj.childGroup.length) {
+      return obj.childGroup.reduce((acc, item) => {
+          return reducer(item, acc);
+      }, count);
+    }
+    return count + obj.score
+  }
+
   export default {
     components: {
       lastItem,
@@ -40,7 +51,8 @@
     data() {
       return {
         data: {},
-        switch_s:'right'
+        switch_s:'right',
+        off:''
       }
     },
 
@@ -48,14 +60,26 @@
       subtopic: {
         immediate: true,
         handler () {
-          this.data = { ...this.subtopic }
+          this.data = {
+            ...this.subtopic,
+            sum:reducer(this.subtopic,0)
+          }
+          if(!this.off){
+            this.switch_s = this.data.level ? 'down':'right'
+          }else{this.off=''}
         }
       }
     },
 
     methods: {
-      ChangeSpaceValue() {
-
+      changeSpaceValue() {
+        this.off = this.switch_s
+        let {score} = this.data
+        let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
+        this.$emit('change-twoLevel-topic', {
+          ...this.data,
+          score:Number(scoreVal)
+        })
       },
 
       hanldeLastTopicDel(){

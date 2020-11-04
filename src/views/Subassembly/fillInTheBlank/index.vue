@@ -19,6 +19,7 @@
         @add-subTopic-collection="addSubTopicCollection"
         @change-level="changeLevel"
         @change-firstlevel-space="changeFirstlevelSpace"
+        @change-twoLevel-topic="changeTwoLevelTopic"
         @del-subtopic-firstlevel="delSubTopicFirstlevel"
         @pre-edit-last-score="preEditLastScore"
       />
@@ -137,6 +138,16 @@
         this.$emit('pre-edit-last-score',obj)
       },
 
+      changeFirstlevelSpace (obj) {
+        // 分值分数修改
+        this.$emit('change-firstlevel-space', obj)
+      },
+
+      changeTwoLevelTopic(obj){
+        // 多空小题段修改编辑
+        this.$emit('change-twoLevel-topic', obj)
+      },
+
       //------------------------------------------
       //旧
 
@@ -144,10 +155,7 @@
         // 添加小题空格数
         this.$emit('add-subtopic-firstlevel', obj)
       },
-      changeFirstlevelSpace (obj) {
-        // 分值分数修改
-        this.$emit('change-firstlevel-space', obj)
-      },
+
       hanldeLastTopicDel (obj) {
         // 删除小题last题组item
         this.$emit('hanlde-last-topic-del', obj)

@@ -57,6 +57,7 @@
         @add-subTopic-collection="addSubTopicCollection"
         @change-level="changeLevel"
         @change-firstlevel-space="changeFirstlevelSpace"
+        @change-twoLevel-topic="changeTwoLevelTopic"
         @del-question-group="delQuestionGroup"
         @add-subTopic-group="addSubTopicGroup"
         @del-subtopic-firstlevel="delSubTopicFirstlevel"
@@ -475,6 +476,7 @@ export default {
     },
 
     delSubTopicFirstlevel(obj){
+      // 分段小题删除
       let temp = JSON.parse(JSON.stringify(this.objectiveData))
       let {group} = temp
       let {topic} = obj
@@ -558,7 +560,7 @@ export default {
       let {group} = temp
 
       let firstLevel = this.findIndex(group,obj.lid)
-      console.log(firstLevel)
+
       if (firstLevel.index > -1) {
         let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.sid)
 
@@ -567,7 +569,7 @@ export default {
 
           if(threeLevel.index > -1){
             let fourLevel = this.findIndex(threeLevel.data.childGroup,obj.id)
-            console.log(fourLevel)
+
             if(fourLevel.index > -1){
               threeLevel.data.childGroup.splice(fourLevel.index,1, obj)
               this.spaceTopic = JSON.parse(JSON.stringify(temp))
@@ -677,6 +679,13 @@ export default {
       }
     },
     changeFirstlevelSpace(obj) {
+
+      if(obj.space == 0){
+        this.errorVal = '每题空格数必须为正整数'
+        return false
+      }else{
+        this.errorVal = ''
+      }
     // 一级修改空格数
       let temp = JSON.parse(JSON.stringify(this.objectiveData)) // spaceTopic
       let {group} = temp
@@ -698,6 +707,43 @@ export default {
 
               three.childGroup = subtopicGroup
           this.spaceTopic = JSON.parse(JSON.stringify(temp))
+        }
+      }
+    },
+
+    changeTwoLevelTopic(obj) {
+
+      if(obj.space == 0){
+        this.errorVal = '每题空格数必须为正整数'
+        return false
+      }else{
+        this.errorVal = ''
+      }
+    // 一级修改空格数
+      let temp = JSON.parse(JSON.stringify(this.objectiveData)) // spaceTopic
+      let {group} = temp
+
+      let {space} = obj
+
+      let firstLevel = this.findIndex(group,obj.sid)
+
+      if (firstLevel.index > -1) {
+        let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.pid)
+
+        if(twoLevel.index > -1){
+          let threeLevel = this.findIndex(twoLevel.data.childGroup,obj.id)
+
+
+          if(threeLevel.index > -1){
+            threeLevel.data.space = obj.space
+            threeLevel.data.score = obj.score
+            let subtopicGroup = this.spaceArray(obj,space,threeLevel.data.id,true)
+
+
+            threeLevel.data.childGroup = subtopicGroup
+
+            this.spaceTopic = JSON.parse(JSON.stringify(temp))
+          }
         }
       }
     },
@@ -741,59 +787,22 @@ export default {
       return {index:index,data:group[index]}
     },
 
-    spaceArray(obj,space,Tpid){
+    spaceArray(obj,space,Tpid,isT){
       // 生成小题数组
       let arr = []
       for (let i = 1; i < space + 1; i++) {
         arr.push({
           smallTopic: i,
-          lid:obj.pid,
-          sid:obj.id,
+          lid:!isT ? obj.pid : obj.sid,
+          sid:!isT ? obj.id : obj.pid,
           score:obj.score,
-          pid:Tpid,
+          pid:!isT ? Tpid : obj.id,
           id:'last_'+ +new Date() + '_' + i
         })
       }
       return arr
     },
 
-    preEditLastScores(obj) { // 改变分值
-
-      // console.log(obj)
-      // console.log(oldObj)
-      // // last-sub分值改变
-      // const {fid} = obj // ,pid,id
-      // let {group} = this.spaceTopic
-      // if(fid){
-
-      //   let index = group.findIndex(group => group.id === obj.fid)
-      //   if(index > -1){
-      //     let subGroup = group[index].childGroup
-      //     let subIndex = subGroup.findIndex(subObj => subObj.id === obj.pid)
-      //     if(subIndex > -1){
-      //       let lastGrop = subGroup[subIndex].childGroup
-      //       let lastIndex = lastGrop.findIndex(lastObj => lastObj.id === obj.id)
-      //       if(lastIndex > -1){
-      //         lastGrop.splice(lastIndex, 1, {...obj,sum:obj.score,score:oldObj.score})
-      //         // 计算小题下所有总分值
-      //         const groupSum = lastGrop.reduce((acc,cur) => acc.sum + cur.sum)
-      //         subGroup.splice(subIndex, 1, {...subGroup[index],sum:groupSum})
-
-      //       }
-      //     }
-      //   }
-      // }else{
-      //   let index = group.findIndex(group => group.id === obj.pid)
-      //   if(index > -1){
-      //     let subGroup = group[index].childGroup
-      //     let subIndex = subGroup.findIndex(subObj => subObj.id === obj.id)
-      //     if(subIndex > -1) {
-      //       let iss = subGroup[subIndex].sum - oldObj.score + obj.score
-      //       subGroup.splice(subIndex, 1, {...obj,sum:iss})
-      //     }
-      //   }
-      // }
-    },
   },
 }
 </script>
