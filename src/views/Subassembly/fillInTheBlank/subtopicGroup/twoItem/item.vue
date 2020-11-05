@@ -29,14 +29,15 @@
       subtopic: {
         immediate: true,
         handler () {
-          this.data = { ...this.subtopic }
+          this.data = {
+            ...this.subtopic,
+          }
         }
       }
     },
 
     methods: {
       preEditLastScore() {
-        console.log(1)
         let {score} = this.data
         let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
         this.$emit('pre-edit-last-score',{

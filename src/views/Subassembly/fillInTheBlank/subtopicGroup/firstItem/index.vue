@@ -15,6 +15,7 @@
     components: {
       subtopicItem,
     },
+
     props: {
       subtopicGroup: {
         type: Array,

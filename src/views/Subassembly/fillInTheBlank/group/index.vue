@@ -112,32 +112,64 @@ export default {
           ...this.data,
           score: Number(scoreVal),
           pid: id,
-          id: `${id}_${+new Date()}_${index}`,
+          id: `subTopic_${+new Date()}_${index}`,
           topic: index,
           sum: score * space,
           level:false,
-          childGroup:[{
-            ...this.data,
-            id: `sid_${+new Date()}_${index}`,
-            pid: `${id}_${+new Date()}_${index}`,
-            sid:id,
-            score: Number(scoreVal),
-            subTopic:1,
-            level:false,
-            childGroup:[{
-              id:`last_${+new Date()}_1`,
-              pid:`sid_${+new Date()}_${index}`,
-              sid: `${id}_${+new Date()}_${index}`,
-              lid:id,
-              score: Number(scoreVal),
-              smallTopic:1,
-            }]
-          }]
         }
         group.push(subtopic)
       }
       return group
-    }
+    },
+
+    // subTopicGroup(){
+    //   return this.subTopicList.map((topic,index) => {
+    //     return {
+    //       ...topic,
+    //       childGroup:[{
+    //         ...topic,
+    //         id:`sid_${+new Date()}_${index}`,
+    //         pid:topic.id,
+    //         sid:topic.pid,
+    //         smallTopic:1,
+    //       }]
+    //     }
+    //   })
+    // },
+
+    subTopicSpace(){
+      return this.subTopicList.map((topic,index) => {
+        return {
+          ...topic,
+          Multistage:false,
+          childGroup:[
+            {
+                id:`sid_${+new Date()}_${index}`,
+                pid:topic.id,
+                sid:topic.pid,
+                topic:topic.topic,
+                smallTopic:1,
+                score:topic.score,
+            }
+          ]
+          // childGroup:topic.childGroup.map((subtopic,index) => {
+          //   return {
+          //     ...subtopic,
+          //     childGroup:[{
+          //       id:`lid_${+new Date()}_${index}`,
+          //       pid:subtopic.id,
+          //       sid:subtopic.pid,
+          //       lid:subtopic.sid,
+          //       topic:subtopic.topic,
+          //       smallTopic:subtopic.smallTopic,
+          //       spaceTopic:1,
+          //       score:subtopic.score,
+          //     }]
+          //   }
+          // })
+        }
+      })
+    },
   },
 
   watch: {
@@ -162,11 +194,18 @@ export default {
     preEditQuestionGroup () {
       this.$emit('change-status', this.verify)
 
+      const {score} = this.data
+      let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
+
       if (!this.tabStatus) {
+        console.log(this.subTopicGroup)
+
         let obj = {
           ...this.data,
-          childGroup: this.subTopicList
+          childGroup: this.subTopicSpace,
+          score:Number(scoreVal)
         }
+        console.log(obj)
         this.$emit('pre-edit-question-group',obj)
         // 弹框临时小题数
         const temporaryArr = this.subTopicList.map(item => ({ ...item, subtopic: 1 }))

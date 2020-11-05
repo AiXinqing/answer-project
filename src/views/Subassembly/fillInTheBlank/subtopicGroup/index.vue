@@ -48,7 +48,8 @@
 
 <script>
 
-  import firstlevelItem from './firstItem'
+  // import firstlevelItem from './firstItem'
+  import firstlevelItem from './firstItem/item.vue'
   import towlevelItem from './twoItem'
 
   function reducer(obj, count = 0){
@@ -57,7 +58,7 @@
           return reducer(item, acc);
       }, count);
     }
-    return count + obj.score
+    return count + Number(obj.score)
   }
 
   export default {

@@ -116,7 +116,7 @@ export default {
             end: null,
             score: null,
             space: 1,
-            id: 'spaceTopic',
+            id: 'FillInTheGroup',
             childGroup: [],
           },
         ],
@@ -159,66 +159,78 @@ export default {
     },
 
     topicGroupData() {
-      let {rows,group} = this.objectiveData
-      let array = []
+      let {group} = this.objectiveData
+      console.log(group)
+      // let array = []
 
-      group.map((item) => {
-        array.push(...item.childGroup)
-      })
+      // group.map((item) => {
+      //   array.push(...item.childGroup)
+      // })
 
-      if (array.length > 0) {
-        let temporaryArr = []
-        let datas = []
-        array.forEach((ele) => {
-          let { childGroup } = ele
-          if (childGroup && childGroup.length > 0) {
-            childGroup.forEach((row, index) => {
-              for (let i = 1; i <= row.space; i++) {
-                if (temporaryArr.length + 1 > rows) {
-                  datas.push(temporaryArr)
-                  temporaryArr = []
-                  if (i == 1) {
-                    temporaryArr.push({ ...row, lgTopic: index + 1 }) // 小标题
-                  } else {
-                    temporaryArr.push(row)
-                  }
-                } else {
-                  if (i == 1) {
-                    temporaryArr.push({ ...row, lgTopic: index + 1 }) // 小标题
-                  } else {
-                    temporaryArr.push(row)
-                  }
-                }
-              }
-            })
-          } else {
-            for (let i = 1; i <= ele.space; i++) {
-              if (temporaryArr.length + 1 > rows) {
-                datas.push(temporaryArr)
-                temporaryArr = []
-                if (i == 1) {
-                  temporaryArr.push({ ...ele, lgTopic: 0 }) // 小标题
-                } else {
-                  temporaryArr.push(ele)
-                }
-              } else {
-                if (i == 1) {
-                  temporaryArr.push({ ...ele, lgTopic: 0 }) // 小标题
-                } else {
-                  temporaryArr.push(ele)
-                }
-              }
-            }
-          }
-        })
-        if (temporaryArr.length > 0) {
-          datas.push(temporaryArr)
+      // if (array.length > 0) {
+      //   let temporaryArr = []
+      //   let datas = []
+      //   array.forEach((ele) => {
+      //     let { childGroup } = ele
+      //     if (childGroup && childGroup.length > 0) {
+      //       childGroup.forEach((row, index) => {
+      //         for (let i = 1; i <= row.space; i++) {
+      //           if (temporaryArr.length + 1 > rows) {
+      //             datas.push(temporaryArr)
+      //             temporaryArr = []
+      //             if (i == 1) {
+      //               temporaryArr.push({ ...row, lgTopic: index + 1 }) // 小标题
+      //             } else {
+      //               temporaryArr.push(row)
+      //             }
+      //           } else {
+      //             if (i == 1) {
+      //               temporaryArr.push({ ...row, lgTopic: index + 1 }) // 小标题
+      //             } else {
+      //               temporaryArr.push(row)
+      //             }
+      //           }
+      //         }
+      //       })
+      //     } else {
+      //       for (let i = 1; i <= ele.space; i++) {
+      //         if (temporaryArr.length + 1 > rows) {
+      //           datas.push(temporaryArr)
+      //           temporaryArr = []
+      //           if (i == 1) {
+      //             temporaryArr.push({ ...ele, lgTopic: 0 }) // 小标题
+      //           } else {
+      //             temporaryArr.push(ele)
+      //           }
+      //         } else {
+      //           if (i == 1) {
+      //             temporaryArr.push({ ...ele, lgTopic: 0 }) // 小标题
+      //           } else {
+      //             temporaryArr.push(ele)
+      //           }
+      //         }
+      //       }
+      //     }
+      //   })
+      //   if (temporaryArr.length > 0) {
+      //     datas.push(temporaryArr)
+      //   }
+
+      //   return datas
+      // } else {
+      //   return []
+      // }
+      function recursion(obj, arr = []){
+        if(obj.childGroup && obj.childGroup.length) {
+          return obj.childGroup.reduce((acc, item) => {
+            return recursion(item, acc)
+          }, arr)
         }
-
-        return datas
-      } else {
-        return []
+        arr.push(obj)
+        return arr
       }
+
+      return recursion(this.objectiveData.group[0])
     },
 
     childGroups(){
