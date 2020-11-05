@@ -522,6 +522,7 @@ export default {
                       .map(question => ({...question,end:topics - 1 }))
           let after = childGroup.slice(twoLevel.index + 1,childGroup.length) // 后
                       .map(question => ({...question,start:topics + 1 }))
+
           let curObj = firstLevel.data
           let index = firstLevel.index
 
@@ -533,9 +534,10 @@ export default {
             end:before[0].end,
             id: `${curObj.id}_${index}`
           })
+
           group.splice(index + 1,0,{
             ...curObj,
-            childGroup:this.childGroupFunc(after,`${curObj.id}_${index + 1}`),
+            childGroup: this.childGroupFunc(after,`${curObj.id}_${index + 1}`),
             start:after[0].start,
             id: `${curObj.id}_${index + 1}`
           })
@@ -553,7 +555,10 @@ export default {
         return {
           ...question,
           childGroup:question.childGroup.map(subtopic => {
-            return {
+            return !subtopic.childGroup ? {
+              ...subtopic,
+              sid:index,
+            } : {
               ...subtopic,
               sid:index,
               childGroup:subtopic.childGroup.map(topic =>({...topic,lid:index}))
