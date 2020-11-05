@@ -27,6 +27,7 @@
     >
       <i :class="'el-icon-arrow-'+ switch_s"></i>
     </span>
+
     <div
       :class="['subTopic_list',switch_s]"
       v-for="subtopic in data.childGroup"
@@ -51,15 +52,6 @@
 
   import firstlevelItem from './firstItem'
   import towlevelItem from './twoItem'
-
-  function reducer(obj, count = 0){
-    if (obj.childGroup && obj.childGroup.length) {
-      return obj.childGroup.reduce((acc, item) => {
-          return reducer(item, acc);
-      }, count);
-    }
-    return count + Number(obj.score)
-  }
 
   export default {
     components: {
@@ -123,14 +115,13 @@
                                 .reduce((accumulator, currentValue) => accumulator + currentValue)
             sum = {sum:tScore}
           }else{
-            sum = {sum:reducer(this.groupSubtopic,0)}
+            // sum = {sum:reducer(this.groupSubtopic,0)}
           }
           this.data = {
             ...this.groupSubtopic,
             ...sum
           }
-
-          console.log(this.groupSubtopic)
+          console.log(this.data)
 
           if(!this.off){
             this.switch_s = this.data.level ? 'down':'right'

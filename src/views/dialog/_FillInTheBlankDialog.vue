@@ -604,17 +604,29 @@ export default {
           let threeLevel = this.findIndex(twoLevel.data.childGroup,obj.id)
 
           if(threeLevel.index > -1){
-
             twoLevel.data.childGroup.splice(threeLevel.index,1)
-            if(!twoLevel.data.childGroup.length){
-              twoLevel.data.space = 0
-              twoLevel.data.level = false
+            let {childGroup} = twoLevel.data
+            if(childGroup.length <= 0){
+
+              firstLevel.data.childGroup.splice(twoLevel.index,1, {
+                ...twoLevel.data,
+                Multistage:false,
+                space:1,
+                childGroup:[{
+                    id:`sid_${+new Date()}`,
+                    pid:twoLevel.data.id,
+                    sid:twoLevel.data.pid,
+                    topic:twoLevel.data.topic,
+                    smallTopic:1,
+                    score:twoLevel.data.score,
+                }]
+              })
             }
+            this.spaceTopic = JSON.parse(JSON.stringify(temp))
           }
 
         }
       }
-      this.spaceTopic = JSON.parse(JSON.stringify(temp))
 
     },
 

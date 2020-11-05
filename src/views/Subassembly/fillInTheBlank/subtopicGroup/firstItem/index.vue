@@ -15,7 +15,7 @@
     props: {
       subtopic: {
         type: Object,
-        default: ()=>{}
+        default: ()=> {}
       },
     },
 

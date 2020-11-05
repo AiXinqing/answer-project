@@ -198,14 +198,11 @@ export default {
       let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
 
       if (!this.tabStatus) {
-        console.log(this.subTopicGroup)
-
         let obj = {
           ...this.data,
           childGroup: this.subTopicSpace,
           score:Number(scoreVal)
         }
-        console.log(obj)
         this.$emit('pre-edit-question-group',obj)
         // 弹框临时小题数
         const temporaryArr = this.subTopicList.map(item => ({ ...item, subtopic: 1 }))

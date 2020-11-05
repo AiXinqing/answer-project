@@ -79,7 +79,6 @@
       ]),
 
       groupChild () {
-
         return this.groupData.map(question => question.childGroup).flat()
       }
 
