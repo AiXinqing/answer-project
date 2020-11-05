@@ -1,37 +1,62 @@
 <template>
-  <div class="last-topic">
-    <subtopic-item
-      v-for="subtopic in subtopicGroup"
-      :key="subtopic.smallTopic"
-      :subtopic="subtopic"
-      @pre-edit-last-score="preEditLastScore"
+  <div class="last-topic_box">
+    <span>第</span>
+    <span> {{ data.smallTopic }} </span>
+    <span> 空 </span>
+    <el-input v-model="data.score" size="mini" @blur="preEditLastScore"
+      onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})"
     />
+    <span> 分</span>
   </div>
 </template>
 
 <script>
-  import subtopicItem from './item.vue'
   export default {
-    components: {
-      subtopicItem,
-    },
-
     props: {
-      subtopicGroup: {
-        type: Array,
-        default: () => []
+      subtopic: {
+        type: Object,
+        default: ()=>{}
       },
     },
 
+    data() {
+      return {
+        data: {}
+      }
+    },
+
+    watch: {
+      subtopic: {
+        immediate: true,
+        handler () {
+          this.data = {
+            ...this.subtopic
+          }
+        }
+      }
+    },
+
     methods: {
-      preEditLastScore(obj) {
-        // 编辑最后一级分数
-        this.$emit('pre-edit-last-score',obj)
+      preEditLastScore() {
+
+        let {score} = this.data
+        let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
+        this.$emit('pre-edit-last-score',{
+          ...this.data,
+          score:Number(scoreVal)
+        })
       }
     },
   }
 </script>
 
 <style lang="less">
+  .last-topic_box{
+    margin-left: 40px;
+    span,
+    .el-input--mini{
+      margin-left: 10px;
+    }
 
+  }
 </style>

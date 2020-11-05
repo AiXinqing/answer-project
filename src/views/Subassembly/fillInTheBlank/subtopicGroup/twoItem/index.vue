@@ -1,7 +1,7 @@
 <template>
 
   <div class="sub-item-group" @click="clickFun">
-    <span class="tig" @click.stop="clickFun">({{data.subTopic}}) 共 </span>
+    <span class="tig" @click.stop="clickFun">({{data.smallTopic}}) 共 </span>
     <el-input v-model.number="data.space" size="mini" @blur="changeSpaceValue"  oninput="value=value.replace(/[^\d]/g,'')"/>
     <span @click.stop="clickFun"> 空 每空 </span>
     <el-input v-model="data.score" size="mini" @blur="changeSpaceValue"  onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />

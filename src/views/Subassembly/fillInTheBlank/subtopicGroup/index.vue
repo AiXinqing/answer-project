@@ -30,8 +30,9 @@
     <div
       :class="['subTopic_list',switch_s]"
       v-for="subtopic in data.childGroup"
-      :key="isComponent == 'firstlevelItem' ? subtopic.pid :subtopic.id"
+      :key="subtopic.id"
     >
+
       <component
         :is="isComponent"
         :subtopic-group="subtopic.childGroup"
@@ -48,8 +49,7 @@
 
 <script>
 
-  // import firstlevelItem from './firstItem'
-  import firstlevelItem from './firstItem/item.vue'
+  import firstlevelItem from './firstItem'
   import towlevelItem from './twoItem'
 
   function reducer(obj, count = 0){
@@ -89,19 +89,48 @@
 
     computed: {
       isComponent() {
-        let {childGroup,level} = this.groupSubtopic
-        return childGroup.length <= 1 && !level ? 'firstlevelItem' : 'towlevelItem'
+        let {Multistage} = this.groupSubtopic
+        return !Multistage ? 'firstlevelItem' : 'towlevelItem'
+      },
+
+      spaceGroup (){
+        let Arr =[]
+        let {space,score} = this.data
+        let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
+        for (let index = 1; index < space + 1; index++) {
+          let subtopic = {
+            ...this.data,
+            id:`sid_${+new Date()}_${index}`,
+            pid:this.data.id,
+            sid:this.data.pid,
+            topic:this.data.topic,
+            smallTopic:index,
+            score:Number(scoreVal),
+          }
+          Arr.push(subtopic)
       }
+        return Arr
+      },
     },
 
     watch: {
       groupSubtopic: {
         immediate: true,
         handler () {
+          let sum ={}
+          if(this.isComponent == 'firstlevelItem'){
+            let tScore = this.groupSubtopic.childGroup.map(question => question.score)
+                                .reduce((accumulator, currentValue) => accumulator + currentValue)
+            sum = {sum:tScore}
+          }else{
+            sum = {sum:reducer(this.groupSubtopic,0)}
+          }
           this.data = {
             ...this.groupSubtopic,
-            sum:reducer(this.groupSubtopic,0)
+            ...sum
           }
+
+          console.log(this.groupSubtopic)
 
           if(!this.off){
             this.switch_s = this.data.level ? 'down':'right'
@@ -116,9 +145,11 @@
         this.off = this.switch_s
         let {score} = this.data
         let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
+
         this.$emit('change-firstlevel-space', {
           ...this.data,
-          score:Number(scoreVal)
+          score:Number(scoreVal),
+          childGroup:this.spaceGroup
         })
       },
 
@@ -128,30 +159,25 @@
       },
 
       addSubtopicCollection(){
-        let {childGroup,id,pid,level} = this.data
+
+        let {childGroup,level,Multistage} = this.data
+
         if(!level){
           this.switch_s = 'down'
-          this.$emit('change-level',this.data)
-        }else{
-          let childObj = {
-            ...this.data,
-            id: `sid_${+new Date()}_${childGroup.length + 1}`,
-            pid: id,
-            sid:pid,
-            score: 1,
-            subTopic:`${childGroup.length + 1}`,
-            childGroup:[{
-              id: `last_${+new Date()}_${childGroup.length + 1}`,
-              pid:`sid_${+new Date()}_${childGroup.length + 1}`,
-              sid:pid,
-              lid:id,
-              score: 1,
-              smallTopic:1,
-            }]
-          }
-          this.$emit('add-subTopic-collection',{obj:this.data,data:childObj})
-
         }
+
+        if(!Multistage){
+          this.$emit('add-subTopic-collection',{
+            ...this.data,
+            level:true,
+            childGroup:this.subtopicGroup(this.data),
+            Multistage:true
+          })
+        }else{
+          childGroup.push(...this.subtopicGroup(this.data,childGroup.length + 1))
+          this.$emit('add-subTopic-collection',this.data)
+        }
+
       },
 
       delSubTopicFirstlevel(){
@@ -177,7 +203,40 @@
       preEditLastScore(obj) {
         // 编辑最后一级分数
         this.$emit('pre-edit-last-score',obj)
-      }
+      },
+
+      //----------------------------------
+      subtopicGroup(data,smallTopic = 1){
+        let end = 1
+        let Arr = []
+        for(let i = 1 ; i < end + 1;i++){
+          let sid = `sid_${+new Date()}_${i}`
+          Arr.push({
+            id:sid,
+            pid:data.id,
+            sid:data.pid,
+            smallTopic:smallTopic,
+            topic:data.topic,
+            score:data.score,
+            space:1,
+            level: false,
+            sum: 1,
+            childGroup:[{
+              id:`lid_${+new Date()}`,
+              pid:sid,
+              sid:data.id,
+              lid:data.pid,
+              sum:1,
+              score:data.score,
+              smallTopic: smallTopic,
+              topic:data.topic,
+              spaceTopic:1,
+            }]
+          })
+        }
+        return Arr
+      },
+
     },
   }
 </script>

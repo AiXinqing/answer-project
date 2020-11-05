@@ -127,11 +127,11 @@ export default {
     //     return {
     //       ...topic,
     //       childGroup:[{
-    //         ...topic,
-    //         id:`sid_${+new Date()}_${index}`,
-    //         pid:topic.id,
-    //         sid:topic.pid,
-    //         smallTopic:1,
+            // ...topic,
+            // id:`sid_${+new Date()}_${index}`,
+            // pid:topic.id,
+            // sid:topic.pid,
+            // smallTopic:1,
     //       }]
     //     }
     //   })

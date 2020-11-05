@@ -159,8 +159,7 @@ export default {
     },
 
     topicGroupData() {
-      let {group} = this.objectiveData
-      console.log(group)
+      // let {group} = this.objectiveData
       // let array = []
 
       // group.map((item) => {
@@ -467,8 +466,9 @@ export default {
       }
     },
 
-    addSubTopicCollection(subtopicObj){
-      let {obj,data} = subtopicObj
+    addSubTopicCollection(obj){
+      // 添加小题
+
       let temp = JSON.parse(JSON.stringify(this.objectiveData))
       let {group} = temp
 
@@ -476,8 +476,10 @@ export default {
 
       if (firstLevel.index > -1) {
         let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.id)
+
         if(twoLevel.index > -1){
-          twoLevel.data.childGroup.push(data)
+
+          firstLevel.data.childGroup.splice(twoLevel.index,1,obj)
           this.spaceTopic = JSON.parse(JSON.stringify(temp))
         }
       }
@@ -567,22 +569,17 @@ export default {
       let temp = JSON.parse(JSON.stringify(this.objectiveData))
       let {group} = temp
 
-      let firstLevel = this.findIndex(group,obj.lid)
+      let firstLevel = this.findIndex(group,obj.sid)
 
       if (firstLevel.index > -1) {
-        let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.sid)
+        let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.pid)
 
         if(twoLevel.index > -1){
-          let threeLevel = this.findIndex(twoLevel.data.childGroup,obj.pid)
+          let threeLevel = this.findIndex(twoLevel.data.childGroup,obj.id)
 
           if(threeLevel.index > -1){
-            let fourLevel = this.findIndex(threeLevel.data.childGroup,obj.id)
-
-            if(fourLevel.index > -1){
-              threeLevel.data.childGroup.splice(fourLevel.index,1, obj)
-              this.spaceTopic = JSON.parse(JSON.stringify(temp))
-            }
-
+            twoLevel.data.childGroup.splice(threeLevel.index,1, obj)
+            this.spaceTopic = JSON.parse(JSON.stringify(temp))
           }
         }
       }
@@ -624,33 +621,13 @@ export default {
     },
 
     changeFirstlevelSpace(obj) {
-
-      if(obj.space == 0){
-        this.errorVal = '每题空格数必须为正整数'
-        return false
-      }else{
-        this.errorVal = ''
-      }
-    // 一级修改空格数
-      let temp = JSON.parse(JSON.stringify(this.objectiveData)) // spaceTopic
+      let temp = JSON.parse(JSON.stringify(this.objectiveData))
       let {group} = temp
-
-      let {space} = obj
-
       let firstLevel = this.findIndex(group,obj.pid)
-
-      if (firstLevel.index > -1) {
+      if(firstLevel.index > -1){
         let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.id)
-
-        if(twoLevel.index > -1){
-
-          twoLevel.data.space = obj.space
-          twoLevel.data.score = obj.score
-
-          let three = twoLevel.data.childGroup[0]
-          let subtopicGroup = this.spaceArray(obj,space,three.id)
-
-              three.childGroup = subtopicGroup
+        if(twoLevel.index >- 1){
+          firstLevel.data.childGroup.splice(twoLevel.index, 1,obj)
           this.spaceTopic = JSON.parse(JSON.stringify(temp))
         }
       }
