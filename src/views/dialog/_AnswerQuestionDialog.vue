@@ -40,10 +40,11 @@
           :key="i"
           :child-data="item"
           @pre-edit-sub-answer-item="preEditSubAnswerItem"
-          @pre-edit-last-answer-item="preEditLastAnswerItem"
+          @pre-edit-two-subtopic="preEditTwoSubtopic"
           @pre-edit-points-answer-group="preEditPointsAnswerGroup"
-          @pre-edit-points-item="preEditPointsItem"
           @pre-edit-last-subtopic="preEditLastSubtopic"
+
+          @pre-edit-last-answer-item="preEditLastAnswerItem"
         />
         <!-- 小题显示区 -->
       </div>
@@ -118,7 +119,8 @@ export default {
           childGroup: [],
         },]
       },
-      options:[]
+      options:[],
+      initScore:1, // 删除后初始分数
     }
   },
   computed: {
@@ -382,28 +384,9 @@ export default {
       }
 
     },
-    preEditSubAnswerItem (obj, isDel = false) {
-      // 新增题组数据
-      let group = this.dataTopic.group
-      let index = group.findIndex(item => item.id == obj.pid)
-      if (index > -1) {
-        let subItem = group[index]
-        let itemIndex = subItem.childGroup.findIndex(item => item.id == obj.id)
 
-        if (itemIndex > -1) {
-          if (isDel) {
-            subItem.childGroup.splice(itemIndex, 1)
-          } else {
-            subItem.childGroup.splice(itemIndex, 1, obj)
-            // 改变分数值
-            subItem.childGroup[itemIndex].score = this.countTheScore(subItem.childGroup[itemIndex])
-          }
+    preEditLastAnswerItem(obj, isDel = false) {
 
-        }
-      }
-    },
-    preEditLastAnswerItem (obj, isDel = false) {
-      // 新增小题
       let group = this.dataTopic.group
       let index = group.findIndex(item => item.id == obj.fid)
       if (index > -1) {
@@ -434,45 +417,70 @@ export default {
         }
       }
     },
-    
-    preEditPointsItem (obj, isDel = false) { // 编辑及删除 isDel 删除
-      // 末尾题
-      let {group} = this.dataTopic
-      let index = group.findIndex(item => item.id == obj.spId)
-      if (index > -1) {
-        let items = group[index]
-        let itemsIndex = items.childGroup.findIndex(item => item.id == obj.sid)
-        if (itemsIndex > -1) {
-          let subItems = items.childGroup[itemsIndex]
-          let subItemIndex = subItems.childGroup.findIndex(item => item.id == obj.fid)
 
-          if (subItemIndex > -1) {
-            let lastItem = subItems.childGroup[subItemIndex]
-            let lastIndex = lastItem.childGroup.findIndex(item => item.id == obj.pid)
-            if (lastIndex > -1) {
-              let pointsItem = lastItem.childGroup[subItemIndex]
-              let pointsIndex = pointsItem.childGroup.findIndex(item => item.id == obj.id)
-              if (pointsIndex > -1) {
-                if (isDel) {
-                  pointsItem.childGroup.splice(pointsIndex, 1)
 
-                } else {
-                  pointsItem.childGroup.splice(pointsIndex, 1, obj)
+    preEditSubAnswerItem(obj, isDel = false){
+      // yi级菜单下的小题
+      let temp = JSON.parse(JSON.stringify(this.dataTopic))
+      let {group} = temp
 
-                  // 更改分值
-                  pointsItem.score = this.countTheScore(pointsItem)
-                  subItems.score = this.countTheScore(subItems)
-                  lastItem.score = this.countTheScore(lastItem)
-                  this.$nextTick(() => {
-                    subItems.score = this.countTheScore(subItems)
+      let firstLevel = this.findIndex(group,obj.pid)
+
+      if(firstLevel.index > -1){
+        let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.id)
+
+          if(twoLevel.index > -1){
+
+              if(!isDel){
+                firstLevel.data.childGroup.splice(twoLevel.index, 1, obj)
+              }else{
+                if(firstLevel.data.childGroup.length > 1){
+                  firstLevel.data.childGroup.splice(twoLevel.index, 1)
+                }else{
+                  group.splice(firstLevel.index, 1,{
+                    ...group[firstLevel.index],
+                    end:null,
+                    childGroup:[]
                   })
                 }
-                this.subTopic_number_calculate_already([subItems]) // 更新临时数组
               }
-
-            }
-
+              this.questionData = JSON.parse(JSON.stringify(temp))
           }
+      }
+    },
+
+    preEditTwoSubtopic (obj, isDel = false) {
+      // 二级菜单下的小题
+      let temp = JSON.parse(JSON.stringify(this.dataTopic))
+      let {group} = temp
+
+      let firstLevel = this.findIndex(group,obj.fid)
+
+      if(firstLevel.index > -1){
+        let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.pid)
+
+        if(twoLevel.index > -1){
+          let threeLevel = this.findIndex(twoLevel.data.childGroup,obj.id)
+
+          if(threeLevel.index > -1){
+
+              if(!isDel){
+                twoLevel.data.childGroup.splice(threeLevel.index, 1, obj)
+
+              }else{
+
+                if(twoLevel.data.childGroup.length > 1){
+                  twoLevel.data.childGroup.splice(threeLevel.index, 1)
+                }else{
+                  firstLevel.data.childGroup.splice(firstLevel.index, 1,{
+                    ...firstLevel.data.childGroup[firstLevel.index],
+                    score:this.initScore,
+                    childGroup:[]
+                  })
+                }
+              }
+              this.questionData = JSON.parse(JSON.stringify(temp))
+            }
         }
       }
     },
@@ -491,60 +499,32 @@ export default {
           let threeLevel = this.findIndex(twoLevel.data.childGroup,obj.pid)
 
           if(threeLevel.index > -1){
+            let fourLevel = this.findIndex(threeLevel.data.childGroup,obj.id)
+
+            if(fourLevel.index > -1){
+
               if(!isDel){
-                threeLevel.data.childGroup.splice(threeLevel.index, 1, obj)
+                threeLevel.data.childGroup.splice(fourLevel.index, 1, obj)
 
               }else{
 
                 if(threeLevel.data.childGroup.length > 1){
-                  threeLevel.data.childGroup.splice(threeLevel.index, 1)
+                  threeLevel.data.childGroup.splice(fourLevel.index, 1)
                 }else{
                   twoLevel.data.childGroup.splice(twoLevel.index, 1,{
                     ...twoLevel.data.childGroup[twoLevel.index],
-                    score:0,
+                    score:this.initScore,
                     childGroup:[]
                   })
                 }
               }
-
               this.questionData = JSON.parse(JSON.stringify(temp))
+            }
+
 
             }
         }
       }
-
-      // let index = group.findIndex(item => item.id == obj.sid)
-      // if (index > -1) {
-      //   let items = group[index]
-      //   let itemsIndex = items.childGroup.findIndex(item => item.id == obj.fid)
-      //   if (itemsIndex > -1) {
-      //     let subItems = items.childGroup[itemsIndex]
-      //     let subItemIndex = subItems.childGroup.findIndex(item => item.id == obj.pid)
-
-      //     if (subItemIndex > -1) {
-      //       let lastItem = subItems.childGroup[subItemIndex]
-      //       let lastIndex = lastItem.childGroup.findIndex(item => item.id == obj.id)
-      //       if (lastIndex > -1) {
-      //         if (isDel) {
-      //           lastItem.childGroup.splice(lastIndex, 1)
-      //         } else {
-      //           lastItem.childGroup.splice(lastIndex, 1, obj)
-
-      //           // 更改分值
-      //           subItems.score = this.countTheScore(subItems)
-      //           lastItem.score = this.countTheScore(lastItem)
-      //           this.$nextTick(() => {
-      //             subItems.score = this.countTheScore(subItems)
-      //           })
-      //         }
-      //         this.subTopic_number_calculate_already([subItems]) // 更新临时数组
-
-      //         this.questionData = JSON.parse(JSON.stringify(temp))
-      //       }
-
-      //     }
-      //   }
-      // }
     },
 
     preEditLastSubtopic(subtopic){
@@ -565,23 +545,29 @@ export default {
             let fourLevel = this.findIndex(threeLevel.data.childGroup,obj.pid)
 
             if(fourLevel.index > -1){
-              if(!del){
-                fourLevel.data.childGroup.splice(fourLevel.index, 1, obj)
 
-              }else{
+              let fivesLevel = this.findIndex(fourLevel.data.childGroup,obj.id)
 
-                if(fourLevel.data.childGroup.length > 1){
-                  fourLevel.data.childGroup.splice(fourLevel.index, 1)
+              if(fivesLevel.index > -1){
+
+                if(!del){
+                  fourLevel.data.childGroup.splice(fivesLevel.index, 1, obj)
+
                 }else{
-                  threeLevel.data.childGroup.splice(threeLevel.index, 1,{
-                    ...threeLevel.data.childGroup[threeLevel.index],
-                    score:0,
-                    childGroup:[]
-                  })
+
+                  if(fourLevel.data.childGroup.length){
+                    fourLevel.data.childGroup.splice(fivesLevel.index, 1)
+                  }else{
+                    threeLevel.data.childGroup.splice(threeLevel.index, 1,{
+                      ...threeLevel.data.childGroup[threeLevel.index],
+                      score:this.initScore,
+                      childGroup:[]
+                    })
+                  }
                 }
+                this.questionData = JSON.parse(JSON.stringify(temp))
               }
 
-              this.questionData = JSON.parse(JSON.stringify(temp))
 
             }
 

@@ -107,15 +107,30 @@ export default {
       let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
       let group = []
       for (let index = start; index <= end; index++) {
+
         let subtopic = {
+          ...this.data,
           score: Number(scoreVal),
-          end: end,
-          space: space,
-          start: start,
           pid: id,
           id: `${id}_${+new Date()}_${index}`,
           topic: index,
           sum: score * space,
+          childGroup:[{
+            ...this.data,
+            id: `sid_${+new Date()}_${index}`,
+            pid: `${id}_${+new Date()}_${index}`,
+            sid:id,
+            score: Number(scoreVal),
+            smallTopic:1,
+            childGroup:[{
+              id: `${id}_${+new Date()}_${index}`,
+              pid:`sid_${+new Date()}_${index}`,
+              sid:`last_${+new Date()}_1`,
+              lid:id,
+              score: Number(scoreVal),
+              smallTopic:1,
+            }]
+          }]
         }
         group.push(subtopic)
       }

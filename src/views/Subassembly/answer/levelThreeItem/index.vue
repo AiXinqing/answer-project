@@ -2,9 +2,11 @@
 <div class="answer-last-group">
   <div class="space_group_list">
       <span class="space_group_title">{{lastData.topic}}</span>
-      <el-input v-model.number="lastData.score"
+      <el-input v-model="lastData.score"
         :disabled="isDisable" size="mini" class="space_group_items"
-        onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+        @blur="preEditThreSubtopic"
+        onkeyup.stop.native="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})"
+      />
       <span> 分</span>
       <span class="add_groupTopic" @click="pointsAnswerGroup">+ 添加小题</span>
       <i class="el-icon-del " @click="delLastItem">-</i>
@@ -63,32 +65,40 @@ export default {
           ...this.lastItemData,
           score:reducer(this.lastItemData,0)
         }
-        console.log(this.lastItemData)
       }
     }
   },
   methods: {
     pointsAnswerGroup () {
-      let temporaryArr = JSON.parse(JSON.stringify(this.lastData.childGroup)) || []
-      let datas = this.lastData
+      let temporaryArr = JSON.parse(JSON.stringify(this.lastData.childGroup))
+      let {sid,fid,pid,id,topic} = this.lastData
       let long = temporaryArr.length + 1
 
       let subObj = {
-        ...datas,
-        spId: datas.sid,
-        sid: datas.fid,
-        fid: datas.pid,
-        pid: datas.id,
-        id: `answerPoints_${+new Date()}_${datas.topic}_${long}`,
-        topic: `${datas.topic}.${long}`,
+        ...this.lastData,
+        spId: sid,
+        sid: fid,
+        fid: pid,
+        pid: id,
+        id: `answerPoints_${+new Date()}_${topic}_${long}`,
+        topic: `${topic}.${long}`,
         score: 1
       }
       temporaryArr.push({ ...subObj, childGroup: [] })
 
-      this.$emit('pre-edit-points-answer-group', { ...datas, childGroup: temporaryArr })
+      this.$emit('pre-edit-points-answer-group', { ...this.lastData, childGroup: temporaryArr })
     },
     delLastItem () {
       this.$emit('pre-edit-points-answer-group', this.lastData, true)
+    },
+
+    preEditThreSubtopic(){
+      let {score} = this.lastData
+      let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
+      this.$emit('pre-edit-points-answer-group', {
+          ...this.lastData,
+          score:Number(scoreVal)
+        })
     },
 
     preEditLastSubtopic(subtopic){

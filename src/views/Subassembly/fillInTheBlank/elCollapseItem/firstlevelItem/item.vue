@@ -1,9 +1,11 @@
 <template>
   <div class="space_group_item" @click="clickFun">
       <span>第</span>
-      <span> {{ number }} </span>
+      <span> {{ data.smallTopic }} </span>
       <span> 空 </span>
-      <el-input v-model="score" size="mini" @blur="changeLastSubTopicScore"   onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})" />
+      <el-input v-model="data.score" size="mini" @blur="preEditLastSubtopic"
+        onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})"
+      />
       <span>分</span>
     </div>
 </template>
@@ -11,7 +13,7 @@
 <script>
 export default {
   props: {
-    GroupSmallTopic: {
+    subtopic: {
       type: Object,
       default: () => []
     },
@@ -23,16 +25,17 @@ export default {
   },
   data () {
     return {
-      SmallTopic: {},
-      score: Number(this.GroupSmallTopic.score.toString().match(/^\d+(?:\.\d{0,1})?/))
+      data: {},
+      score: Number(this.subtopic.score.toString().match(/^\d+(?:\.\d{0,1})?/))
     }
   },
   watch: {
-    GroupSmallTopic: {
+    subtopic: {
       immediate: true,
       handler () {
-        this.SmallTopic = { ...this.GroupSmallTopic }
-        this.oldObj = JSON.parse(JSON.stringify(this.GroupSmallTopic));
+
+        this.data = { ...this.subtopic }
+        this.oldObj = JSON.parse(JSON.stringify(this.subtopic));
       }
     }
   },
@@ -41,12 +44,13 @@ export default {
     clickFun () {
 
     },
-    changeLastSubTopicScore () {
+    preEditLastSubtopic () {
+
       let newObj = {
         ...this.SmallTopic,
         score: this.score
       }
-      this.$emit('change-last-sub-topic-score', newObj, this.oldObj)
+      this.$emit('pre-Edit-last-subtopic', newObj, this.oldObj)
     }
   },
 }

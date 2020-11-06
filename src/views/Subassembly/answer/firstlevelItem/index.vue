@@ -2,10 +2,16 @@
 <div class="answer_group">
   <div class="space_group_list">
       <span class="space_group_title">{{data.topic}}</span>
-      <el-input v-model.number="data.score" :disabled="isDisable" size="mini" class="space_group_item"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+      <el-input
+        v-model="data.score"
+        :disabled="isDisable" size="mini"
+        class="space_group_item"
+        @blur="preEditFirstSubtopic"
+        onkeyup.stop.native="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})"
+      />
       <span> 分</span>
-      <span class="add_groupTopic" @click.stop="addSubAnswerItem()">+ 添加小题</span>
-      <i class="el-icon-del " @click.stop="delAnswerItem">-</i>
+      <span class="add_groupTopic" @click.stop="addSubAnswerItem">+ 添加小题</span>
+      <i class="el-icon-del " @click.stop="delFirstSubtopic">-</i>
   </div>
   <div class="sub_item" v-show="childGroup.length > 0">
     <level-two-item
@@ -14,8 +20,8 @@
       :sub-child-data="item"
       @pre-edit-last-answer-item="preEditLastAnswerItem"
       @pre-edit-points-answer-group="preEditPointsAnswerGroup"
-      @pre-edit-points-item="preEditPointsItem"
       @pre-edit-last-subtopic="preEditLastSubtopic"
+      @pre-edit-two-subtopic="preEditTwoSubtopic"
     />
   </div>
 </div>
@@ -61,7 +67,6 @@ export default {
     childData: {
       immediate: true,
       handler () {
-        console.log(this.childData)
         this.data = {
           ...this.childData,
           score: reducer(this.childData,0)
@@ -76,21 +81,35 @@ export default {
     ]),
     addSubAnswerItem () {
       let temporaryArr = JSON.parse(JSON.stringify(this.data.childGroup)) || []
-      let datas = this.data
+      let {pid,id,topic} = this.data
       let long = temporaryArr.length + 1
       let subObj = {
-        ...datas,
-        fid: datas.pid,
-        pid: datas.id,
-        id: `answerSub_${+new Date()}_${datas.topic}_${long}`,
-        topic: `${datas.topic}.${long}`,
+        ...this.data,
+        fid: pid,
+        pid: id,
+        id: `answerSub_${+new Date()}_${topic}_${long}`,
+        topic: `${topic}.${long}`,
         score: 1
       }
       temporaryArr.push({ ...subObj, childGroup: [] })
 
 
-      this.$emit('pre-edit-sub-answer-item', { ...datas, childGroup: temporaryArr })
-      this.subTopic_number_calculate_already([{ ...datas, childGroup: temporaryArr }]) // 更新此题数据
+      this.$emit('pre-edit-sub-answer-item', { ...this.data, childGroup: temporaryArr })
+      this.subTopic_number_calculate_already([{ ...this.data, childGroup: temporaryArr }]) // 更新此题数据
+    },
+
+    preEditFirstSubtopic(){
+      let {score} = this.data
+      let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
+      this.$emit('pre-edit-sub-answer-item', {
+          ...this.data,
+          score:Number(scoreVal)
+        })
+    },
+
+    delFirstSubtopic(){
+      this.$emit('pre-edit-sub-answer-item', this.data, true)
+      this.subTopic_already_del([this.data])
     },
 
     preEditLastAnswerItem (obj, isDel) {
@@ -98,22 +117,24 @@ export default {
       this.$emit('pre-edit-last-answer-item', obj, isDel)
     },
 
-    preEditPointsAnswerGroup (obj, isDel = false) {
-      // 添加小题下的小题
-      this.$emit('pre-edit-points-answer-group', obj, isDel)
-    },
-
     delAnswerItem () {
+      // 二级删除
       this.$emit('pre-edit-sub-answer-item', this.data, true)
       this.subTopic_already_del([this.data])
     },
 
-    preEditPointsItem (obj, isDel = false) {
-      // 末尾题
-      this.$emit('pre-edit-points-item', obj, isDel)
+    preEditTwoSubtopic(obj,isDel){
+      //二级小题
+      this.$emit('pre-edit-two-subtopic', obj,isDel)
+    },
+
+    preEditPointsAnswerGroup (obj, isDel = false) {
+      // 三级小题
+      this.$emit('pre-edit-points-answer-group', obj, isDel)
     },
 
     preEditLastSubtopic(subtopic){
+      // 最后一级
       this.$emit('pre-edit-last-subtopic',subtopic)
     },
 

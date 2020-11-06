@@ -2,7 +2,12 @@
 <div class="answer-sub-group">
   <div class="space_group_list">
       <span class="space_group_title">{{data.topic}}</span>
-      <el-input v-model.number="data.score" :disabled="isDisable" size="mini" class="space_group_items"   onkeyup.stop.native="this.value = this.value.replace(/[^\d.]/g,'');" />
+      <el-input v-model="data.score"
+        :disabled="isDisable" size="mini"
+        class="space_group_items"
+        @blur="preEditTwoSubtopic"
+        onkeyup.stop.native="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})"
+      />
       <span> 分</span>
       <span class="add_groupTopic" @click.stop="addLastAnswerItem">+ 添加小题</span>
       <i class="el-icon-del " @click.stop="delSubItem" >-</i>
@@ -15,7 +20,6 @@
       @pre-edit-points-answer-group="preEditPointsAnswerGroup"
       @pre-edit-last-subtopic="preEditLastSubtopic"
     />
-    <!-- @pre-edit-points-item="preEditPointsItem" -->
   </div>
 </div>
 </template>
@@ -69,34 +73,43 @@ export default {
   methods: {
     addLastAnswerItem () {
       let temporaryArr = JSON.parse(JSON.stringify(this.data.childGroup)) || []
-      let datas = this.data
+      let {pid,fid,id,topic} = this.data
       let long = temporaryArr.length + 1
       let subObj = {
-        ...datas,
-        fid: datas.pid,
-        sid: datas.fid,
-        pid: datas.id,
-        id: `answerLast_${+new Date()}_${datas.topic}_${long}`,
-        topic: `${datas.topic}.${long}`,
+        ...this.data,
+        fid: pid,
+        sid: fid,
+        pid: id,
+        id: `answerLast_${+new Date()}_${topic}_${long}`,
+        topic: `${topic}.${long}`,
         score: 1
       }
       temporaryArr.push({ ...subObj, childGroup: [] })
 
-      this.$emit('pre-edit-last-answer-item', { ...datas, childGroup: temporaryArr })
-      // this.subTopic_number_calculate_already([{ ...datas, childGroup: temporaryArr }]) // 更新此题数据
+      this.$emit('pre-edit-two-subtopic', { ...this.data, childGroup: temporaryArr })
+
     },
+
+    preEditTwoSubtopic(){
+      let {score} = this.data
+      let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
+      this.$emit('pre-edit-two-subtopic', {
+        ...this.data,
+          score:Number(scoreVal)
+        })
+    },
+
+    delSubItem () {
+      this.$emit('pre-edit-two-subtopic', this.data, true)
+    },
+
     preEditPointsAnswerGroup (obj, isDel = false) {
-      // 添加小题下的小题
+      // 三级小题下的小题
       this.$emit('pre-edit-points-answer-group', obj, isDel)
     },
-    delSubItem () {
-      this.$emit('pre-edit-last-answer-item', this.data, true)
-    },
-    // preEditPointsItem (obj, isDel = false) {
-    //   // 末尾题
-    //   this.$emit('pre-edit-points-item', obj, isDel)
-    // }
+
     preEditLastSubtopic(subtopic){
+      //最后一级
       this.$emit('pre-edit-last-subtopic',subtopic)
     }
   },
