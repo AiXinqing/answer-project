@@ -38,7 +38,6 @@
 
     methods: {
       preEditLastScore() {
-
         let {score} = this.data
         let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
         this.$emit('pre-edit-last-score',{

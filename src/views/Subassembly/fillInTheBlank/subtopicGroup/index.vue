@@ -40,6 +40,7 @@
         :subtopic="subtopic"
         :edit-id="editId"
         @pre-edit-last-score="preEditLastScore"
+        @pre-edit-two-last-score="preEditTwoLastScore"
         @change-twoLevel-topic="changeTwoLevelTopic"
         @del-two-level-subtopic="delTwoLevelSubtopic"
       />
@@ -194,6 +195,11 @@
       preEditLastScore(obj) {
         // 编辑最后一级分数
         this.$emit('pre-edit-last-score',obj)
+      },
+
+      preEditTwoLastScore(obj){
+        // 二级最后一级分数
+        this.$emit('pre-edit-two-last-score',obj)
       },
 
       //----------------------------------

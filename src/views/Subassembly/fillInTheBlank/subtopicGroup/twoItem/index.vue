@@ -18,7 +18,7 @@
       v-for="subtopic in data.childGroup"
       :key="subtopic.smallTopic"
       :subtopic="subtopic"
-      @pre-edit-last-score="preEditLastScore"
+      @pre-edit-two-last-score="preEditTwoLastScore"
     />
   </div>
 
@@ -60,6 +60,7 @@
       subtopic: {
         immediate: true,
         handler () {
+          console.log(this.subtopic)
           this.data = {
             ...this.subtopic,
             sum:reducer(this.subtopic,0)
@@ -96,9 +97,9 @@
         }
       },
 
-      preEditLastScore(obj) {
+      preEditTwoLastScore(obj) {
         // 编辑最后一级分数
-        this.$emit('pre-edit-last-score',obj)
+        this.$emit('pre-edit-two-last-score',obj)
       }
     },
   }

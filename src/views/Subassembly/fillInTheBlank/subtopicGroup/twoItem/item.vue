@@ -1,7 +1,7 @@
 <template>
   <div class="last-topic_boxs">
     <span>第</span>
-    <span> {{ data.smallTopic }} </span>
+    <span> {{ data.spaceTopic }} </span>
     <span> 空 </span>
     <el-input v-model="data.score" size="mini" @blur="preEditLastScore"
       onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})"
@@ -40,7 +40,7 @@
       preEditLastScore() {
         let {score} = this.data
         let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
-        this.$emit('pre-edit-last-score',{
+        this.$emit('pre-edit-two-last-score',{
           ...this.data,
           score:Number(scoreVal)
         })

@@ -23,6 +23,7 @@
         @del-subtopic-firstlevel="delSubTopicFirstlevel"
         @pre-edit-last-score="preEditLastScore"
         @del-two-level-subtopic="delTwoLevelSubtopic"
+        @pre-edit-two-last-score="preEditTwoLastScore"
       />
 
     </div>
@@ -128,6 +129,11 @@
       preEditLastScore(obj) {
         // 编辑最后一级分数
         this.$emit('pre-edit-last-score',obj)
+      },
+
+      preEditTwoLastScore(obj){
+        // 二级最后一级分数
+        this.$emit('pre-edit-two-last-score',obj)
       },
 
       changeFirstlevelSpace (obj) {

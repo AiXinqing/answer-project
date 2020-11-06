@@ -49,6 +49,7 @@
         @add-subTopic-group="addSubTopicGroup"
         @del-subtopic-firstlevel="delSubTopicFirstlevel"
         @pre-edit-last-score="preEditLastScore"
+        @pre-edit-two-last-score="preEditTwoLastScore"
         @del-two-level-subtopic="delTwoLevelSubtopic"
       />
       <div class="condition_box Insert_box" v-show="editQuestionId == ''">
@@ -590,6 +591,32 @@ export default {
       }
     },
 
+    preEditTwoLastScore(obj){
+      //二级编辑最后一级分数
+      console.log(obj)
+      let temp = JSON.parse(JSON.stringify(this.objectiveData))
+      let {group} = temp
+
+      let firstLevel = this.findIndex(group,obj.lid)
+
+      if (firstLevel.index > -1) {
+        let twoLevel = this.findIndex(firstLevel.data.childGroup,obj.sid)
+
+        if(twoLevel.index > -1){
+          let threeLevel = this.findIndex(twoLevel.data.childGroup,obj.pid)
+
+          if(threeLevel.index > -1){
+            let fourLevel = this.findIndex(threeLevel.data.childGroup,obj.id)
+
+            if(fourLevel.index > -1){
+              threeLevel.data.childGroup.splice(fourLevel.index,1, obj)
+              this.spaceTopic = JSON.parse(JSON.stringify(temp))
+            }
+          }
+        }
+      }
+    },
+
     delTwoLevelSubtopic(obj){
 
       // 删除二级小题
@@ -672,12 +699,10 @@ export default {
         if(twoLevel.index > -1){
           let threeLevel = this.findIndex(twoLevel.data.childGroup,obj.id)
 
-
           if(threeLevel.index > -1){
             threeLevel.data.space = obj.space
             threeLevel.data.score = obj.score
             let subtopicGroup = this.spaceArray(obj,space,threeLevel.data.id,true)
-
 
             threeLevel.data.childGroup = subtopicGroup
 
@@ -699,6 +724,7 @@ export default {
       for (let i = 1; i < space + 1; i++) {
         arr.push({
           smallTopic: i,
+          spaceTopic: i,
           lid:!isT ? obj.pid : obj.sid,
           sid:!isT ? obj.id : obj.pid,
           score:obj.score,
