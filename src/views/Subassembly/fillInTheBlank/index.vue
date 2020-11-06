@@ -25,20 +25,6 @@
         @del-two-level-subtopic="delTwoLevelSubtopic"
       />
 
-      <!-- {{subtopic.topic}}</div> -->
-      <!-- <el-collapse >
-        <sub-topic-item
-          v-for="(subtopic, index) in groupChild"
-          :key="index"
-          :group-subtopic="subtopic"
-          :edit-id="editId"
-
-          @add-subtopic-firstlevel="addSubtopicFirstlevel"
-          @change-firstlevel-space="changeFirstlevelSpace"
-          @hanlde-last-topic-del="hanldeLastTopicDel"
-          @change-last-sub-topic-score="changeLastSubTopicScore"
-        />
-      </el-collapse> -->
     </div>
   </div>
 </template>
