@@ -122,21 +122,6 @@ export default {
       return group
     },
 
-    // subTopicGroup(){
-    //   return this.subTopicList.map((topic,index) => {
-    //     return {
-    //       ...topic,
-    //       childGroup:[{
-            // ...topic,
-            // id:`sid_${+new Date()}_${index}`,
-            // pid:topic.id,
-            // sid:topic.pid,
-            // smallTopic:1,
-    //       }]
-    //     }
-    //   })
-    // },
-
     subTopicSpace(){
       return this.subTopicList.map((topic,index) => {
         return {
@@ -152,21 +137,6 @@ export default {
                 score:topic.score,
             }
           ]
-          // childGroup:topic.childGroup.map((subtopic,index) => {
-          //   return {
-          //     ...subtopic,
-          //     childGroup:[{
-          //       id:`lid_${+new Date()}_${index}`,
-          //       pid:subtopic.id,
-          //       sid:subtopic.pid,
-          //       lid:subtopic.sid,
-          //       topic:subtopic.topic,
-          //       smallTopic:subtopic.smallTopic,
-          //       spaceTopic:1,
-          //       score:subtopic.score,
-          //     }]
-          //   }
-          // })
         }
       })
     },

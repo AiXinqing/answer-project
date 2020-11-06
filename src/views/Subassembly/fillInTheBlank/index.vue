@@ -24,6 +24,7 @@
         @pre-edit-last-score="preEditLastScore"
         @del-two-level-subtopic="delTwoLevelSubtopic"
         @pre-edit-two-last-score="preEditTwoLastScore"
+        @change-status="changeStatus"
       />
 
     </div>
@@ -34,12 +35,11 @@
   import { mapState} from 'vuex'
   import questionGroup from '../fillInTheBlank/group'
   import subtopicGroup from './subtopicGroup/'
-  // import subTopicItem from '../fillInTheBlank/elCollapseItem'
+
   export default {
     components: {
       questionGroup,
       subtopicGroup
-      // subTopicItem,
     },
 
     props: {

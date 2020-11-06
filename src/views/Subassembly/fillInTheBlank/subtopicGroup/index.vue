@@ -43,6 +43,7 @@
         @pre-edit-two-last-score="preEditTwoLastScore"
         @change-twoLevel-topic="changeTwoLevelTopic"
         @del-two-level-subtopic="delTwoLevelSubtopic"
+        @change-status="changeStatus"
       />
 
     </div>
@@ -142,14 +143,30 @@
       changeFirstlevelSpace(){
         // 一级空格
         this.off = this.switch_s
-        let {score} = this.data
+        let {score,space} = this.data
         let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
+            scoreVal = Number(scoreVal)
 
-        this.$emit('change-firstlevel-space', {
-          ...this.data,
-          score:Number(scoreVal),
-          childGroup:this.spaceGroup
-        })
+        if(space && space >= 1 && scoreVal >= 1){
+          this.$emit('change-firstlevel-space', {
+            ...this.data,
+            score:Number(scoreVal),
+            childGroup:this.spaceGroup
+          })
+        }else{
+          let errorVal = ''
+          if(!space || space <= 0){
+            errorVal = '每题空格数必须为正整数'
+          }
+
+          if(score <= 0){
+            errorVal = '分数必须大于0'
+          }
+
+          this.$emit('change-status',errorVal)
+        }
+
+
       },
 
       changeTwoLevelTopic(obj){
@@ -207,6 +224,10 @@
       preEditTwoLastScore(obj){
         // 二级最后一级分数
         this.$emit('pre-edit-two-last-score',obj)
+      },
+
+      changeStatus(val){
+        this.$emit('change-status',val)
       },
 
       //----------------------------------

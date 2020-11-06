@@ -74,12 +74,28 @@
     methods: {
       changeSpaceValue() {
         this.off = this.switch_s
-        let {score} = this.data
+        let {score,space} = this.data
         let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
-        this.$emit('change-twoLevel-topic', {
-          ...this.data,
-          score:Number(scoreVal)
-        })
+            scoreVal = Number(scoreVal)
+
+        if(space && space >= 1 && scoreVal >= 1){
+          this.$emit('change-twoLevel-topic', {
+            ...this.data,
+            score:Number(scoreVal)
+          })
+        }else{
+          let errorVal = ''
+          if(!space || space <= 0){
+            errorVal = '每题空格数必须为正整数'
+          }
+
+          if(score <= 0){
+            errorVal = '分数必须大于0'
+          }
+
+          this.$emit('change-status',errorVal)
+        }
+
       },
 
       delTwoLevelSubtopic(){

@@ -621,6 +621,7 @@ export default {
     },
 
     changeFirstlevelSpace(obj) {
+
       let temp = JSON.parse(JSON.stringify(this.objectiveData))
       let {group} = temp
       let firstLevel = this.findIndex(group,obj.pid)
@@ -629,18 +630,13 @@ export default {
         if(twoLevel.index >- 1){
           firstLevel.data.childGroup.splice(twoLevel.index, 1,obj)
           this.spaceTopic = JSON.parse(JSON.stringify(temp))
+          this.errorVal = ''
         }
       }
     },
 
     changeTwoLevelTopic(obj) {
 
-      if(obj.space == 0){
-        this.errorVal = '每题空格数必须为正整数'
-        return false
-      }else{
-        this.errorVal = ''
-      }
     // 一级修改空格数
       let temp = JSON.parse(JSON.stringify(this.objectiveData)) // spaceTopic
       let {group} = temp
@@ -663,6 +659,7 @@ export default {
             threeLevel.data.childGroup = subtopicGroup
 
             this.spaceTopic = JSON.parse(JSON.stringify(temp))
+            this.errorVal = ''
           }
         }
       }
