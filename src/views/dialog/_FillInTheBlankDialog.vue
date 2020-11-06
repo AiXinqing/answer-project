@@ -159,67 +159,7 @@ export default {
       return this.errorVal != '' ? true : false
     },
 
-    topicGroupData() {
-      // let {group} = this.objectiveData
-      // let array = []
-
-      // group.map((item) => {
-      //   array.push(...item.childGroup)
-      // })
-
-      // if (array.length > 0) {
-      //   let temporaryArr = []
-      //   let datas = []
-      //   array.forEach((ele) => {
-      //     let { childGroup } = ele
-      //     if (childGroup && childGroup.length > 0) {
-      //       childGroup.forEach((row, index) => {
-      //         for (let i = 1; i <= row.space; i++) {
-      //           if (temporaryArr.length + 1 > rows) {
-      //             datas.push(temporaryArr)
-      //             temporaryArr = []
-      //             if (i == 1) {
-      //               temporaryArr.push({ ...row, lgTopic: index + 1 }) // 小标题
-      //             } else {
-      //               temporaryArr.push(row)
-      //             }
-      //           } else {
-      //             if (i == 1) {
-      //               temporaryArr.push({ ...row, lgTopic: index + 1 }) // 小标题
-      //             } else {
-      //               temporaryArr.push(row)
-      //             }
-      //           }
-      //         }
-      //       })
-      //     } else {
-      //       for (let i = 1; i <= ele.space; i++) {
-      //         if (temporaryArr.length + 1 > rows) {
-      //           datas.push(temporaryArr)
-      //           temporaryArr = []
-      //           if (i == 1) {
-      //             temporaryArr.push({ ...ele, lgTopic: 0 }) // 小标题
-      //           } else {
-      //             temporaryArr.push(ele)
-      //           }
-      //         } else {
-      //           if (i == 1) {
-      //             temporaryArr.push({ ...ele, lgTopic: 0 }) // 小标题
-      //           } else {
-      //             temporaryArr.push(ele)
-      //           }
-      //         }
-      //       }
-      //     }
-      //   })
-      //   if (temporaryArr.length > 0) {
-      //     datas.push(temporaryArr)
-      //   }
-
-      //   return datas
-      // } else {
-      //   return []
-      // }
+    subtopicGroup(){
       function recursion(obj, arr = []){
         if(obj.childGroup && obj.childGroup.length) {
           return obj.childGroup.reduce((acc, item) => {
@@ -229,8 +169,20 @@ export default {
         arr.push(obj)
         return arr
       }
-
       return recursion(this.objectiveData.group[0])
+    },
+
+    topicGroupData() {
+      // 重组小题
+      let arr = this.subtopicGroup
+      const len = arr.length
+
+      let result = []
+      const sliceNum = this.spaceTopic.rows
+      for(let i = 0; i < len / sliceNum; i++){
+          result.push(arr.slice(i * sliceNum, (i+1) * sliceNum))
+      }
+      return result
     },
 
     childGroups(){
@@ -345,15 +297,13 @@ export default {
     preCreateQuestion() {
       // 数据编辑完成添加至全局数组中---------------
       // 计算高度
+
       let height = this.topicGroupData.length * 45 + 17 + 32
       // 此题总分计算
       const {InsertTitle, Postpone } = this.objectiveData
 
-      let scoreTotal = 0
-
-      this.childGroups.map((item) => {
-        scoreTotal += item.sum
-      })
+      let scoreTotal = this.subtopicGroup.map(topic => topic.score)
+                          .reduce((accumulator, currentValue) => accumulator + currentValue)
       let objId = `FillInTheBlank_${+new Date()}`
       // 此题总分计算
       let obj = {
@@ -593,7 +543,6 @@ export default {
 
     preEditTwoLastScore(obj){
       //二级编辑最后一级分数
-      console.log(obj)
       let temp = JSON.parse(JSON.stringify(this.objectiveData))
       let {group} = temp
 
