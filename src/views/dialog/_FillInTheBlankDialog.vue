@@ -129,6 +129,11 @@ export default {
       orders:0,
       ContentHeight: 0, // 内容高度
       options:[],
+      fill:{
+        fillRow:35, // 内容行高
+        fillMargin:12, // 间隔
+        fillTitle:32, // 标题高度
+      }
     }
   },
   computed: {
@@ -296,9 +301,11 @@ export default {
 
     preCreateQuestion() {
       // 数据编辑完成添加至全局数组中---------------
+      // 行高配置
+      let {fillRow,fillMargin,fillTitle} = this.fill
       // 计算高度
 
-      let height = this.topicGroupData.length * 45 + 17 + 32
+      let height = this.topicGroupData.length * fillRow + fillMargin + fillTitle
       // 此题总分计算
       const {InsertTitle, Postpone } = this.objectiveData
 
@@ -307,11 +314,11 @@ export default {
       let objId = `FillInTheBlank_${+new Date()}`
       // 此题总分计算
       let obj = {
-        heightTitle: 32,
-        MarginHeight: 17,
+        heightTitle: fillTitle,
+        MarginHeight: fillMargin,
         id: objId,
         height: height, // 32标题高度
-        rowHeight: 45,
+        rowHeight: fillRow,
         questionType: 'FillInTheBlank',
         content: {
           ...this.objectiveData,
