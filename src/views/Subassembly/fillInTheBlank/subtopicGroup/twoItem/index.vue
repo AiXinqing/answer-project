@@ -60,7 +60,6 @@
       subtopic: {
         immediate: true,
         handler () {
-          console.log(this.subtopic)
           this.data = {
             ...this.subtopic,
             sum:reducer(this.subtopic,0)
