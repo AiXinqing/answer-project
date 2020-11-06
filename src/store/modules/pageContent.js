@@ -233,25 +233,34 @@ const getters = {
   questionNumber_big_exist: (state) => {
     // 大题号
     let obj = {}
-    return state.pageData.filter(question => question.questionType !== 'AnswerSheetTitle')
+
+    let Arr =  state.pageData.filter(question => question.questionType !== 'AnswerSheetTitle' )
       .filter(question => question.questionType !== 'NonRresponseArea')
       .map((question, index) => {
         let {
           number,
           topicName
         } = question.content
+        let objId = {}
+        if (question.objId) {
+          objId = {objId:question.objId}
+        }
         return {
           id: question.id,
+          ...objId,
           label: state.questionNumber[number] + '.' + topicName,
-          order: question.order,
-          value: index
+          order: !question.order ? index + 1 : question.order,
+          value: index,
+          type:question.questionType
         }
-      }).reduce((acc, cur) => {
-        obj[cur.label] ? '' : obj[cur.label] = true && acc.push(cur)
-        return acc.map(question => {
-          return question.label == cur.label ? cur : question
-        })
-      }, [])
+      })
+      // .reduce((acc, cur) => {
+      //   obj[cur.label] ? '' : obj[cur.label] = true && acc.push(cur)
+      //   return acc.map(question => {
+      //     return question.label == cur.label ? cur : question
+      //   })
+      // }, [])
+    return Arr
   },
   question_order: (state) => {
     return state.pageData.filter(question => question.questionType !== 'NonRresponseArea').length
