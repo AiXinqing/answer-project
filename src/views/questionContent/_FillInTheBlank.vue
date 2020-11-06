@@ -125,7 +125,6 @@ export default {
         : 695
     },
     subtopicGroup() {
-      console.log(this.questionData.showData)
       return this.questionData.showData
     },
     topicBox() {

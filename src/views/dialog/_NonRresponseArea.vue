@@ -113,6 +113,7 @@ export default {
       'pageData_edit',
       'pageData_id_filter',
       'questionOrder_add',
+      'add_nonAnswer'
     ]),
     closeFrame() {
       this.openedFrame = false
@@ -162,20 +163,25 @@ export default {
             pageLayout:this.pageLayout
           },
         }
+        let select = this.questionNumber_big_exist[this.data.positionNum]
         if (this.editQuestionId == null) {
-          let select = this.questionNumber_big_exist[this.data.positionNum]
           let data = {
             obj: obj,
             bigId: select.id,
             SelfOrder: false,
           }
             this.pageData_insert(data)
-          // }
+            this.add_nonAnswer({...obj,insertIndex:select.id})
         } else {
           this.pageData_edit({
             ...obj,
             id:this.editQuestionId,
             changeOrder:positionNum + 2
+          })
+          this.add_nonAnswer({
+            ...obj,
+            id:this.editQuestionId,
+            insertIndex:select.id
           })
         }
         this.openedFrame = false
@@ -186,7 +192,9 @@ export default {
       this.openedFrame = true
     },
     openedEdit(obj) {
+      console.log(obj)
       this.editQuestionId = obj.id
+      console.log(this.editQuestionId)
       this.data = JSON.parse(JSON.stringify(obj.content))
       this.openedFrame = true
     },

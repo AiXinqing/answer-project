@@ -165,7 +165,7 @@ export default {
       }
     }
   }
-  .space_group_item{
+  .space_group_items{
     &.el-input.el-input--mini{
       width: 48px;
     }

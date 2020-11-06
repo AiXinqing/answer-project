@@ -12,6 +12,8 @@ const state = {
   // questionNumber_big: 0, // 大题题号
 
   scoreTotal: 0, // 试卷总分
+
+  nonAnswer:[], // 非答题存在数组
 }
 
 const mutations = {
@@ -57,11 +59,17 @@ const mutations = {
   pageData_del: (state, index) => {
     state.pageData.splice(index, 1)
   },
+
   pageData_id_clean: (state, id) => {
     // 内容分页
     state.pageData = state.pageData.filter((item) => {
       return ![id].includes(item.id)
     })
+  },
+
+  pageData_nonA_clean: (state,objId) => {
+    state.pageData = state.pageData.filter((item) => item.questionType != "NonRresponseArea")
+    state.pageData = state.pageData.filter((item) => item.objId != objId)
   },
 
   pageData_insert: (state, {
@@ -102,9 +110,12 @@ const mutations = {
 
     }
   },
+
   pageData_simple_insert: (state, data) => {
     // 解答题插入
-    state.pageData.splice(data.num, 0, data.obj)
+    if (data.num > -1) {
+      state.pageData.splice(data.num + 1,0,data.obj)
+    }
   },
   pageData_order_edit: (state, data) => {
     // 解答题
@@ -181,6 +192,33 @@ const mutations = {
           pageLayout: layout
         },
         ...tem
+      }
+    })
+  },
+
+  add_nonAnswer: (state, obj) => {
+    // 非答题新增
+    let index = state.nonAnswer.findIndex(ele => ele.id == obj.id)
+    if (index > -1) {
+      state.nonAnswer = state.nonAnswer.splice(index, 0, obj)
+    } else {
+      state.nonAnswer.push(obj)
+    }
+  },
+
+  del_nonAnswer: (state, obj) => {
+    // 非答题新增
+    let index = state.nonAnswer.findIndex(ele => ele.id == obj.id)
+    if (index > -1) {
+      state.nonAnswer = state.nonAnswer.splice(index, 1)
+    }
+  },
+  // 插入清空的非答题
+  nonAnswer_insert: (state) => {
+    state.nonAnswer.forEach(obj => {
+      let index = state.pageData.findIndex(question => question.id == obj.insertIndex)
+      if (index > -1) {
+        state.pageData.splice(index + 1, 0, obj)
       }
     })
   },

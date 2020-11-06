@@ -60,6 +60,7 @@ export default {
           this.pageData_order_edit({objId:question.objId,num:index - 1})
         }
         this.pageData_del(index)
+        this.del_nonAnswer(this.questionData)
       }
     },
     curEditNon (obj) {
