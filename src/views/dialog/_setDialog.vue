@@ -221,7 +221,7 @@ export default {
   height: 40px;
   border: 2px solid;
   border-radius: 3px;
-  line-height: 50px;
+  line-height: 45px;
   cursor: pointer;
 }
 .el_row_layout {
