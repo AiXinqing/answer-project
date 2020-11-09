@@ -254,12 +254,12 @@ const getters = {
           type:question.questionType
         }
       })
-      // .reduce((acc, cur) => {
-      //   obj[cur.label] ? '' : obj[cur.label] = true && acc.push(cur)
-      //   return acc.map(question => {
-      //     return question.label == cur.label ? cur : question
-      //   })
-      // }, [])
+      .reduce((acc, cur) => {
+        obj[cur.label] ? '' : obj[cur.label] = true && acc.push(cur)
+        return acc.map(question => {
+          return question.label == cur.label && question.order < cur.order ? cur : question
+        })
+      }, [])
     return Arr
   },
   question_order: (state) => {

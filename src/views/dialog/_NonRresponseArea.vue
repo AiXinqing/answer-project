@@ -163,7 +163,13 @@ export default {
             pageLayout:this.pageLayout
           },
         }
-        let select = this.questionNumber_big_exist[this.data.positionNum]
+
+        let index = this.questionNumber_big_exist.findIndex(question => question.value == positionNum)
+        let select = {}
+        if(index > -1){
+          select = this.questionNumber_big_exist[index]
+        }
+
         if (this.editQuestionId == null) {
           let data = {
             obj: obj,
@@ -192,9 +198,7 @@ export default {
       this.openedFrame = true
     },
     openedEdit(obj) {
-      console.log(obj)
       this.editQuestionId = obj.id
-      console.log(this.editQuestionId)
       this.data = JSON.parse(JSON.stringify(obj.content))
       this.openedFrame = true
     },
