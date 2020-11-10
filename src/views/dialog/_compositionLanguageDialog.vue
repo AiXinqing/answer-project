@@ -78,8 +78,7 @@
               >最少字数处显示一个字数标记</el-radio
             >
             <el-radio v-model="data.mark" label="2"
-              >每100字显示一个字数标记</el-radio
-            >
+              >每100字显示一个字数标记</el-radio>
           </el-col>
         </el-row>
         <el-row>
@@ -123,8 +122,7 @@
         type="confirm"
         :disabled="isdisabledFn"
         @click="preCreateQuestion"
-        >确 定</hj-button
-      >
+        >确 定</hj-button>
     </div>
   </hj-dialog>
 </template>
