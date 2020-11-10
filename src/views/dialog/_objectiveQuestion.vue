@@ -387,7 +387,7 @@
         }
         this.preEditData.rows = rows
         this.editingData.rows = rows
-        this.$nextTick(() => {
+        this.$nextTick(()=>{
           this.preCreateQuestion()
         })
       },
@@ -429,13 +429,13 @@
           if (InsertTitle && this.questionNumber_big_exist.length > 0){
               let select = this.questionNumber_big_exist[this.existNumber]
               let data = {
-              obj: {
-                ...questionObj,
-                order: this.question_order,
-              },
-              bigId: select.id,
-              SelfOrder: Postpone || false,
-            }
+                obj: {
+                  ...questionObj,
+                  order: this.question_order,
+                },
+                bigId: select.id,
+                SelfOrder: Postpone || false,
+              }
             this.pageData_insert(data)
           }else{
             this.pageData_add(questionObj)
@@ -462,24 +462,24 @@
 
       updateGroupSubTopic(groupObj){
         // 编辑题组
-        let obj = JSON.parse(JSON.stringify(this.preEditData))
+        let obj = this.editingData //JSON.parse(JSON.stringify(this.editingData))
         let {type,data} = groupObj
         let {group} = obj
 
         let curGroup = group[type]
         let index = curGroup.findIndex(group => group.id == data.id)
 
+
         if(index > -1){
           curGroup.splice(index,1,data)
-          this.$nextTick(()=>{
-            this.preEditData = JSON.parse(JSON.stringify(obj))
-          })
+          console.log(obj)
+          // this.preEditData = JSON.parse(JSON.stringify(obj))
         }
       },
 
       preEditSubtopic(subtopic){
         //编辑小题号
-        let obj = JSON.parse(JSON.stringify(this.preEditData))
+        let obj = this.editingData //JSON.parse(JSON.stringify(this.preEditData))
         let {type,data} = subtopic
 
         let curGroup = obj.group[type]
@@ -491,9 +491,9 @@
 
           if(cIndex > -1){
             childrenGroup.splice(cIndex,1,data)
-            this.$nextTick(()=>{
-              this.preEditData = JSON.parse(JSON.stringify(obj))
-            })
+            // this.$nextTick(()=>{
+            //   this.preEditData = JSON.parse(JSON.stringify(obj))
+            // })
           }
         }
       },

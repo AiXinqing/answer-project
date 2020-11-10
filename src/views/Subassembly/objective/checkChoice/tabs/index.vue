@@ -176,7 +176,7 @@
           status:this.verifyStatus
         })
 
-        if (!this.verifyStatus){
+        if (!this.verifyStatus && this.verify == ''){
 
           let itemObj = {
             type: 'checkChoice',
