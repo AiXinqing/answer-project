@@ -151,9 +151,6 @@ const mutations = {
     state.pageHeight = results
   },
 
-  questionOrder_add: (state) => {
-    state.questionOrder += 1
-  },
   questionOrder_subtract: (state, order) => {
     state.pageData.map((item) =>
       item.order > order ? item.order - 1 : item.order

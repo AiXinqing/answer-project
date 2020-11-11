@@ -112,7 +112,6 @@ export default {
       'pageData_insert',
       'pageData_edit',
       'pageData_id_filter',
-      'questionOrder_add',
       'add_nonAnswer'
     ]),
     closeFrame() {

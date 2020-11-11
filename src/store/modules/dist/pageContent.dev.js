@@ -139,9 +139,7 @@ var mutations = {
 
     state.pageHeight = results;
   },
-  questionOrder_add: function questionOrder_add(state) {
-    state.questionOrder = state.questionOrder + 1;
-  },
+
   questionOrder_subtract: function questionOrder_subtract(state, order) {
     console.log(order);
     state.pageData.map(function (item) {

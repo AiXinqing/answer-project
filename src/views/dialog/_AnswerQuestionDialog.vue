@@ -255,8 +255,6 @@ export default {
       'pageData_add',
       'pageData_edit',
       'pageData_insert',
-      'questionOrder_add',
-      'questionOrder_subtract',
       'pageData_simple_insert',
       'nonAnswer_insert',
       'pageData_nonA_clean'

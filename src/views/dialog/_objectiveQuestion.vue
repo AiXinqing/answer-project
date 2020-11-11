@@ -472,7 +472,7 @@
 
         if(index > -1){
           curGroup.splice(index,1,data)
-          console.log(obj)
+
           // this.preEditData = JSON.parse(JSON.stringify(obj))
         }
       },

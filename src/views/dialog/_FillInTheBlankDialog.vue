@@ -264,7 +264,6 @@ export default {
       'pageData_add',
       'pageData_edit',
       'pageData_insert',
-      'questionOrder_add',
     ]),
 
     closeFrame() {
@@ -349,7 +348,6 @@ export default {
         } else {
           this.pageData_add(obj)
         }
-        this.questionOrder_add()
 
       } else {
         this.subTopic_determine_pid_clean(this.childGroups[0].pid)
