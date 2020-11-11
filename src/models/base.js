@@ -1,6 +1,18 @@
 // 页面高度
 export const PAGE_HEIGHT = 1160
 
+//页面布局
+export const LAYOUT_COLUMNS = [
+  { id: 1, content: '一栏', pid: 'A4' },
+  { id: 2, content: '两栏', pid: 'A3' },
+  { id: 3, content: '三栏', pid: 'A3' },
+]
+
+export const LAYOUT_SIZE = [
+  { id: 'A3', content: 'A3/B4/8K纸' },
+  { id: 'A4', content: 'A4/B5纸' },
+]
+
 // 标题设置
 export const TITLE_SUDENTINFO = [
     {
@@ -26,6 +38,7 @@ export const TITLE_SUDENTINFO = [
     }
 ]
 
+//注意事项
 export const PRECAUTIONS = [
   '答题前请将姓名、班级、考场、座号和准考证号填写清楚。',
   '客观题答题,必须使用2B铅笔填涂,修改时用橡皮擦干净。',
@@ -33,6 +46,7 @@ export const PRECAUTIONS = [
   '必须在题号对应的答题区域内作答,超出答题区域书写无效。',
   '保持答卷清洁完整。'
 ]
+
 
 // 大题号
 export const QUESTION_NUMBERS = [
