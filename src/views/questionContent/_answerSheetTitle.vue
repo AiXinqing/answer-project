@@ -17,11 +17,10 @@
       >
         <div class="precautions_title">注 意 事 项</div>
         <div :class="['precautions_content', { active: rectWidth == 480 }]">
-          <div>1. 答题前请将姓名、班级、考场、座号和准考证号填写清楚。</div>
-          <div>2. 客观题答题,必须使用2B铅笔填涂,修改时用橡皮擦干净。</div>
-          <div>3. 主观题必须使用黑色签字笔书写。</div>
-          <div>4. 必须在题号对应的答题区域内作答,超出答题区域书写无效。</div>
-          <div>5. 保持答卷清洁完整。</div>
+            <div
+              v-for="(item,index) in title_percautions"
+              :key="index"
+            >{{`${index + 1}. ${item}`}}</div>
         </div>
         <div class="precautions_mark">
           <svg
@@ -95,6 +94,7 @@
 <script>
 import hjTextarea from './Precautions/_textarea'
 import studentInfo from './Precautions/_studentInfo'
+import {PRECAUTIONS} from '@/models/base'
 export default {
   components: {
     hjTextarea,
@@ -122,7 +122,8 @@ export default {
       studentInfoList: [],
       data:{},
       titleRows:this.questionData.content.titleRows,
-      dataLayout:this.questionData.content.pageLayout
+      dataLayout:this.questionData.content.pageLayout,
+      title_percautions:PRECAUTIONS
     }
   },
   computed: {

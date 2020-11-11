@@ -5,7 +5,7 @@ const state = {
   tabPaneData:[
     { label: '单选框', name: 'singleChoice' },
     { label: '多选框', name: 'checkChoice' },
-    { label: '判断题', name: 'judgmentChoice' },
+    { label: '判断题', name: 'judgmentChoice'},
   ],
   questionNumber_big_exist: [], // 存在大题
   subTopic_number: 1,
