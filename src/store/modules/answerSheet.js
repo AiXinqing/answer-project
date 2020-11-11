@@ -1,6 +1,5 @@
 const state = {
   GroupDataArr: [],
-  page_size: 1160,
 }
 
 const mutations = {

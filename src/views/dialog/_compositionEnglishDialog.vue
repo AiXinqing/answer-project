@@ -103,6 +103,7 @@
 
 <script>
 import { mapState, mapMutations,mapGetters } from 'vuex'
+import { PAGE_HEIGHT } from '@/models/base'
 
 export default {
   components: {},
@@ -128,6 +129,7 @@ export default {
       editData: {},
       options:[],
       changeClick:false,
+      page_height:PAGE_HEIGHT
     }
   },
   computed: {
@@ -138,7 +140,6 @@ export default {
     ]),
     ...mapState('pageContent', [
       'pageHeight',
-      'page_size',
       'pageData',
       'pageLayout',
     ]),
@@ -216,7 +217,7 @@ export default {
           return accumulator + currentValue
         })
 
-      let currentPageHeight = this.page_size - heights - 32 // 当前页剩余可用高度
+      let currentPageHeight = this.page_height - heights - 32 // 当前页剩余可用高度
       return currentPageHeight
     },
     BeforeEditing() {

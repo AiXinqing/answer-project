@@ -129,6 +129,8 @@
 
 <script>
 import { mapState, mapMutations,mapGetters } from 'vuex'
+import { PAGE_HEIGHT } from '@/models/base'
+
 export default {
   components: {},
   data() {
@@ -155,7 +157,8 @@ export default {
       },
       editData: {},
       options:[],
-      changeClick:false
+      changeClick:false,
+      page_height:PAGE_HEIGHT
     }
   },
   computed: {
@@ -166,7 +169,6 @@ export default {
     ]),
     ...mapState('pageContent', [
       'pageHeight',
-      'page_size',
       'pageData',
       'pageLayout',
     ]),
@@ -192,7 +194,7 @@ export default {
     pageRow() {
       // 一页所占用的行数
       let row = Math.floor(
-        (this.page_size - 60) / (this.latticeWidth + this.data.spacing)
+        (this.page_height - 60) / (this.latticeWidth + this.data.spacing)
       )
       return row
     },
@@ -258,7 +260,7 @@ export default {
           return accumulator + currentValue
         })
 
-      let currentPageHeight = this.page_size - heights - 32 // 当前页剩余可用高度
+      let currentPageHeight = this.page_height - heights - 32 // 当前页剩余可用高度
       return currentPageHeight
     },
     BeforeEditing() {

@@ -5,7 +5,7 @@ const state = {
   ],
   pageLayout: {}, // 页面布局
   pageData: [],
-  page_size: 1170 - 60, // 一页高度
+
   pageHeight: [], // 页面高度
 
   questionOrder: 0, // 题序

@@ -42,6 +42,7 @@
 
 <script>
 import { mapState, mapMutations} from 'vuex'
+import { PAGE_HEIGHT } from '@/models/base'
 
 import AnswerSheetTitle from './questionContent/_answerSheetTitle' // 答题卡标题
 import ObjectiveQuestion from './questionContent/_ObjectiveQuestion' // 客观题
@@ -69,6 +70,7 @@ export default {
     return {
       contentData: [],
       heightArray: [],
+      page_height:PAGE_HEIGHT
     }
   },
   beforeRouteLeave(to, from, next) {
@@ -88,7 +90,6 @@ export default {
     ...mapState('pageContent', [
       'pageLayout',
       'pageData',
-      'page_size',
       'questionOrder',
     ]),
 
@@ -143,7 +144,7 @@ export default {
         }
         let ActualHeight = rect.height + 20 //
         // avalible 剩余高度
-        let avalibleHeight = this.page_size - curPage.height
+        let avalibleHeight = this.page_height - curPage.height
         // 用于填空题数组切割
         let itemObj = JSON.parse(JSON.stringify(rect))
 
@@ -172,8 +173,8 @@ export default {
           restCutPage()
           // 判罚当前高度能分几页
           let height = rect.height - avalibleHeight + SplitVal
-          while (height > this.page_size) {
-            let curRects = this.questionType(rect, this.page_size)
+          while (height > this.page_height) {
+            let curRects = this.questionType(rect, this.page_height)
             results.push([
               {
                 ...rect,
