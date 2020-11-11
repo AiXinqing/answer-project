@@ -91,17 +91,17 @@ export default {
       'pageLayout',
       'pageData',
     ]),
-    ...mapGetters('page',['page_width']),
+    ...mapGetters('page',['page_width','compile_pageData']),
 
     pageWidth() {
       return this.page_width + 40
     },
   },
   watch: {
-    pageData: {
+    compile_pageData: {
       immediate: true,
       handler() {
-        this.contentData = this.pageContentFunc(this.pageData)
+        this.contentData = this.pageContentFunc(this.compile_pageData)
         if (this.contentData.length > 0) {
           this.$nextTick(() => {
             this.heightArray = this.$refs['box'].map(
@@ -174,7 +174,7 @@ export default {
       if(currentPage.height){
         results.push(currentPage.rects)
       }
-      console.log(results)
+
       return results
     },
 
