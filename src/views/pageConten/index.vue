@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations} from 'vuex'
+import { mapState, mapMutations, mapGetters} from 'vuex'
 import { PAGE_HEIGHT } from '@/models/base'
 
 import AnswerSheetTitle from '../questionContent/_answerSheetTitle' // 答题卡标题
@@ -87,15 +87,14 @@ export default {
     })
   },
   computed: {
-    ...mapState('pageContent', [
+    ...mapState('page', [
       'pageLayout',
       'pageData',
     ]),
+    ...mapGetters('page',['page_width']),
 
     pageWidth() {
-      return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
-        ? 520
-        : 785
+      return this.page_width + 40
     },
   },
   watch: {

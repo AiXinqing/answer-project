@@ -8,12 +8,17 @@ const state = {
 }
 
 const mutations = {
-  //新增
+  //编辑页面布局
+  pageLayout_change: (state, obj) => {
+    state.pageLayout = obj
+  },
+
+  //新增页面数据
   pageData_add: (state, Arr) => {
     state.pageData.push(Arr)
   },
 
-  // 编辑
+  // 编辑页面数据
   pageData_edit: (state, question) => {
     const index = state.pageData.findIndex((itme) => itme.id === question.id)
     if (index > -1) {
@@ -32,6 +37,12 @@ const actions = {
 }
 
 const getters = {
+  // 页面宽度
+  page_width:(state) => {
+    return state.pageLayout.column === 3 && state.pageLayout.size == 'A3'
+        ? 480
+        : 745
+  },
 
 }
 

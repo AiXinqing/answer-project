@@ -110,7 +110,8 @@ export default {
   },
   computed: {
     ...mapState('titleSet', ['textVal', 'titleRows']),
-    ...mapState('pageContent', ['questionOrder','pageLayout','pageData']),
+    ...mapState('pageContent', ['questionOrder',]),
+    ...mapState('page', ['pageLayout','pageData']),
 
     btnName(){
       return this.createLayout ? '创 建' : '确 定'
@@ -122,10 +123,14 @@ export default {
   },
   methods: {
     ...mapMutations('pageContent', [
+      'pageLayout_launch_page',]),
+
+    ...mapMutations('page',[
       'pageLayout_change',
       'pageData_add',
       'pageData_edit',
-      'pageLayout_launch_page',]),
+    ]),
+
     openRForm (type) {
       if (type === 1) {
         this.createLayout = true
