@@ -37,9 +37,8 @@
 
     data() {
       return {
-        data: {
-          letterList:LETTER_LIST
-        }
+        data: {},
+        letterList:LETTER_LIST
       }
     },
 
