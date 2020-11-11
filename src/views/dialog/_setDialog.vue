@@ -95,6 +95,8 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
+import { TITLE_SUDENTINFO } from '@/models/base'
+
 import questionDialog from '../dialog/_objectiveQuestion'
 export default {
   components: {
@@ -123,10 +125,11 @@ export default {
       ],
       size: this.propLayout.size || 'A3',
       layout: this.propLayout.column || 2,
+      titleInfo:TITLE_SUDENTINFO
     }
   },
   computed: {
-    ...mapState('titleSet', ['textVal', 'titleInfo', 'titleRows']),
+    ...mapState('titleSet', ['textVal', 'titleRows']),
     ...mapState('pageContent', ['questionOrder','pageLayout','pageData']),
   },
   methods: {
