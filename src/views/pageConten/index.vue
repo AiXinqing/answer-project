@@ -42,6 +42,7 @@
 
 <script>
 import { mapState, mapMutations} from 'vuex'
+import { PAGE_HEIGHT } from '@/models/base'
 
 import AnswerSheetTitle from '../questionContent/_answerSheetTitle' // 答题卡标题
 import ObjectiveQuestion from '../questionContent/_ObjectiveQuestion' // 客观题
@@ -69,6 +70,7 @@ export default {
     return {
       contentData: [],
       heightArray: [],
+      page_height: PAGE_HEIGHT
     }
   },
   beforeRouteLeave(to, from, next) {
@@ -88,7 +90,6 @@ export default {
     ...mapState('pageContent', [
       'pageLayout',
       'pageData',
-      'page_size',
       'questionOrder',
     ]),
 
@@ -138,7 +139,7 @@ export default {
 
       rects.forEach(rect =>{
 
-        var avalibleHeight = this.page_size - currentPage.height
+        var avalibleHeight = this.page_height - currentPage.height
 
         if(rect.height > avalibleHeight){ // 高度溢出
           // 分页-剩余高度新建rect
@@ -151,12 +152,12 @@ export default {
 
           // 判断当前rect高度能分几页
           let height = rect.height - avalibleHeight
-          while (height > this.page_size) {
+          while (height > this.page_height) {
             results.push([{
               ...rect,
-              castHeight: this.page_size,
+              castHeight: this.page_height,
             }]);
-            height -= this.page_size
+            height -= this.page_height
           }
           currentPage.height = height
           currentPage.rects.push({

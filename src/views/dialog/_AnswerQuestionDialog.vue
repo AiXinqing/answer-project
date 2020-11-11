@@ -132,7 +132,6 @@ export default {
 
     ...mapState('pageContent', [
       'pageHeight',
-      'page_size',
       'questionOrder',
       'pageData',
       'pageLayout',

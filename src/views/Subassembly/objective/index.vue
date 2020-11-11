@@ -27,7 +27,9 @@
   import singleChoice from '../objective/singleChoice'
   import checkChoice from '../objective/checkChoice'
   import judgmentChoice from '../objective/judgmentChoice'
-  import {mapState} from 'vuex'
+
+  import {OBJECTIVE_QUESTION} from '@/models/base'
+
   export default {
     components: {
       singleChoice,
@@ -49,12 +51,11 @@
         activeName: 'singleChoice',
         grouptopic:{},
         errorStr:'',
-        verifyStatus:false
+        verifyStatus:false,
+        tabPaneData:OBJECTIVE_QUESTION
       }
     },
     computed: {
-      ...mapState('questionType',['tabPaneData']),
-
       isdisabled(){
         return this.errorStr != '' && this.verifyStatus ? true : false
       },

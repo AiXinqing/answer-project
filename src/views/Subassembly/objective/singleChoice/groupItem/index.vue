@@ -13,7 +13,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import {LETTER_LIST} from '@/models/base'
+
 export default {
   props: {
     subtopic: {
@@ -24,14 +25,13 @@ export default {
 
   data () {
     return {
-      data: {}
+      data: {
+        letterList:LETTER_LIST
+      }
     }
   },
 
   computed: {
-    ...mapState('questionType', [
-        'letterList'
-    ]),
 
     selectBox(){
       return this.activeName == 'judgmentChoice' ? ['T','F'] :
