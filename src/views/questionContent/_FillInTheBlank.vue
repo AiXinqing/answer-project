@@ -158,7 +158,6 @@ export default {
   methods: {
     ...mapMutations('pageContent', [
       'pageData_del',
-      'questionOrder_subtract',
       'pageData_edit',
     ]),
     ...mapMutations('questionType', [

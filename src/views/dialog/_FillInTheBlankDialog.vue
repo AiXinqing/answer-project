@@ -145,7 +145,6 @@ export default {
     ...mapState('pageContent', [
       'pageData',
       'pageLayout',
-      'questionOrder',
     ]),
 
     ...mapGetters('pageContent', ['questionNumber_big_exist']),

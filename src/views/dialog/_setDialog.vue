@@ -15,7 +15,7 @@
             v-for="item in sizeArr"
             :key="item.id"
             :class="['paper', { active: item.id === size }]"
-            @click="hanldeTab(item.id)"
+            @click="changeSize(item.id)"
           >
             <span class="paper-size" :style="{width:item.id == 'A4' ? '35px' : '50px'}">{{ item.id }}</span>
             <div class="title">{{ item.content }}</div>
@@ -67,13 +67,13 @@
         </el-col>
       </el-row>
     </div>
-    <div class="dialog-footer createLayout" v-if="createLayout">
-      <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateTitle">创建</hj-button>
+
+    <div
+      :class="['dialog-footer',{createLayout:createLayout}]">
+      <hj-button v-if="!createLayout" type="cancel" @click="closeFrame">取 消</hj-button>
+      <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateTitle">{{btnName}}</hj-button>
     </div>
-    <div class="dialog-footer" v-else>
-      <hj-button type="cancel" @click="closeFrame">取 消</hj-button>
-      <hj-button type="confirm" :disabled="isdisabledFn" @click="preCreateTitle(1)">确 定</hj-button>
-    </div>
+
     <question-dialog ref="questionDialogs" />
   </hj-dialog>
 </template>
@@ -90,7 +90,7 @@ export default {
   props: {
     propLayout: {
       type: Object,
-      default: () => { },
+      default: () => {},
     },
   },
   data () {
@@ -101,8 +101,8 @@ export default {
       createLayout: true,
       sizeArr: LAYOUT_SIZE,
       layoutArr: LAYOUT_COLUMNS,
-      size: this.propLayout.size || 'A3',
-      layout: this.propLayout.column || 2,
+      size: this.propLayout.size,
+      layout: this.propLayout.column,
       titleInfo:TITLE_SUDENTINFO,
       color:'#00B494',
       activeColor:'#666'
@@ -111,6 +111,14 @@ export default {
   computed: {
     ...mapState('titleSet', ['textVal', 'titleRows']),
     ...mapState('pageContent', ['questionOrder','pageLayout','pageData']),
+
+    btnName(){
+      return this.createLayout ? '创 建' : '确 定'
+    },
+
+    change(){
+      return this.createLayout ? 0 : 1
+    },
   },
   methods: {
     ...mapMutations('pageContent', [
@@ -129,7 +137,8 @@ export default {
     closeFrame () {
       this.openedFrame = false
     },
-    preCreateTitle (change) {
+    preCreateTitle () {
+
       const obj = {
         size: this.size,
         column: this.layout,
@@ -152,7 +161,7 @@ export default {
         first: true
       }
 
-      if (change == 1) {
+      if (this.change) {
         this.openedFrame = false
         this.pageData_edit(TestData)
 
@@ -167,7 +176,8 @@ export default {
 
       this.openedFrame = false
     },
-    hanldeTab (item) {
+
+    changeSize (item) {
       this.size = item
       this.layout =
         this.size === 'A4' ? 1 : this.size === 'A3' ? 2 : this.layout

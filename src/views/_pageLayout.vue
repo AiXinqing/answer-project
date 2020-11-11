@@ -13,13 +13,12 @@
         <div class="layout-bottom">
           <div>{{size}}</div>
           <div>{{column}}</div>
-          <!-- <div>线上阅卷</div> -->
         </div>
       </div>
     </div>
-    <!-- tanchu -->
+
     <set-dialog ref="editorLayout" :prop-layout="pageLayout" />
-    <!-- tanchu -->
+
     <hj-dialog title="提示" :visible.sync="openedPrompt" :width="'400px'">
       <div class="Prompt_info">
         <i class="el-icon-question"></i>修改后将会清空所有手动修改的内容，确定修改吗？
@@ -33,7 +32,9 @@
 </template>
 
 <script>
-import { mapState,mapMutations } from 'vuex'
+import { mapState } from 'vuex'
+import { LAYOUT_COLUMNS,LAYOUT_SIZE } from '@/models/base'
+
 import setDialog from './dialog/_setDialog'
 export default {
   components: {
@@ -45,33 +46,42 @@ export default {
     }
   },
   computed: {
-    ...mapState('pageContent', ['pageLayout','page_size','scoreTotal','pageData']),
-    testPaper() {
-      return 'A3/B4/8K纸'
-    },
-    column(){
-      return this.pageLayout.column == 3 ? '三栏' : this.pageLayout.column == 1 ? '一栏' :  '两栏'
-    },
-    size() {
+    ...mapState('pageContent', ['scoreTotal']),
+    ...mapState('page', ['pageLayout','pageData']),
 
-      return this.pageLayout.column == 1 ? 'A4/B5纸': 'A3/B4/8K纸'
+
+    column(){
+      let index = LAYOUT_COLUMNS.findIndex(obj => obj.id == this.pageLayout.column)
+      if(index > -1){
+        return LAYOUT_COLUMNS[index].content
+      }return '两栏'
+    },
+
+    size() {
+      let index = LAYOUT_SIZE.findIndex(obj => obj.id == this.pageLayout.size)
+      if(index > -1){
+        return LAYOUT_SIZE[index].content
+      } return 'A3/B4/8K纸'
     }
   },
   mounted () {
     this.$refs.editorLayout.openRForm(1)
   },
   methods: {
-    ...mapMutations('pageContent', ['pageData_edit']),
+
     closePrompt () {
       this.openedPrompt = false
     },
+
     openPrompt () {
       this.openedPrompt = true
     },
+
     PromptFunc () {
       this.$refs.editorLayout.openRForm(2)
       this.closePrompt()
     },
+
     modifyLayoutFunc () {
       // 打开修改弹出框
       this.openPrompt()

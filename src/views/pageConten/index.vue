@@ -90,7 +90,6 @@ export default {
     ...mapState('pageContent', [
       'pageLayout',
       'pageData',
-      'questionOrder',
     ]),
 
     pageWidth() {

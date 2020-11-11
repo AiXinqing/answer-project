@@ -1,5 +1,10 @@
 const state = {
-  pageData:[]
+  pageLayout: {
+    size: 'A3',
+    column:2
+  },
+
+  pageData: [],
 }
 
 const mutations = {

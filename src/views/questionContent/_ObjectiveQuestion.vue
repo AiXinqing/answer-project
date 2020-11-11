@@ -125,8 +125,7 @@ export default {
     })
   },
   methods: {
-    ...mapMutations('pageContent', ['pageData_del',
-      'questionOrder_subtract',]),
+    ...mapMutations('pageContent', ['pageData_del',]),
 
     ...mapMutations('questionType', [
       'subTopic_already_del',
