@@ -8,7 +8,6 @@ const state = {
   subTopic_number_already: [], // 已有的题组
   subTopic_number_determine: [], // 确定下的小题
 
-  letterList: ['A', 'B', 'C', 'D', 'E', 'G', 'H', 'I', 'J', 'K'],
   largest_questionNum: 200, // 最大题数
 }
 

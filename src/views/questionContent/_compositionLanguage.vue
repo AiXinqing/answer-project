@@ -67,6 +67,8 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
+import { QUESTION_NUMBERS } from '@/models/base'
+
 import quillEditor from '../../components/quillEditor'
 export default {
   components: {
@@ -87,10 +89,10 @@ export default {
       isEditor: false,
       data: {},
       cotent: '',
+      options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
     }
   },
   computed: {
-    ...mapState('questionType', ['questionNumber', 'letterList']),
     ...mapState('pageContent', ['pageData']),
     strLong() {
       let long = this.contentData.topic.toString().length
@@ -139,7 +141,6 @@ export default {
         this.data = {
           ...this.questionData,
         }
-        this.options = this.questionNumber.map((label,value)=>({label,value}))
       },
     },
     TopicContent: {

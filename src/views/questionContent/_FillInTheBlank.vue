@@ -76,6 +76,8 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
+import { QUESTION_NUMBERS } from '@/models/base'
+
 import quillEditor from '../../components/quillEditor'
 import dragChangeHeight from '../questionContent/drag'
 export default {
@@ -98,7 +100,7 @@ export default {
       data: {},
       isEditor: false,
       cotent: '',
-      options:[],
+      options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
       quilleditor:false,
       pageLayout:this.contentData.pageLayout,
     }
@@ -138,7 +140,6 @@ export default {
         this.data = {
           ...this.contentData,
         }
-        this.options = this.questionNumber.map((label,value)=>({label,value}))
         this.pageLayout = this.contentData.pageLayout
       },
     },
