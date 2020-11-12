@@ -4,7 +4,6 @@ const state = {
     size: 'A3',
     column:2
   },
-
   pageData: [],
 }
 
@@ -15,8 +14,8 @@ const mutations = {
   },
 
   //新增页面数据
-  pageData_add: (state, Arr) => {
-    state.pageData.push(Arr)
+  pageData_add: (state, question) => {
+    state.pageData.push(question)
   },
 
   // 编辑页面数据
@@ -127,11 +126,12 @@ const getters = {
         return {...question,height:heights,showData:RowArr}
   },
 
-  questionNumber_big_exist: (state,getters) => {
+  questionNumber_big_exist: (state) => {
     // 大题号
     let obj = {}
+    let Arr = []
 
-    let Arr =  getters.compile_pageData.filter(question => question.questionType !== 'AnswerSheetTitle' )
+    Arr =  state.pageData.filter(question => question.questionType !== 'AnswerSheetTitle' )
       .filter(question => question.questionType !== 'NonRresponseArea')
       .map((question, index) => {
         let {
@@ -157,7 +157,7 @@ const getters = {
           return question.label == cur.label && question.order < cur.order ? cur : question
         })
       }, [])
-    console.log(Arr)
+
     return Arr
   },
 

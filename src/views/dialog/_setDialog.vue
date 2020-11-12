@@ -151,7 +151,7 @@ export default {
       this.pageLayout_change(obj)
 
       const TestData = {
-        id: 1,
+        id: 'AnswerSheet',
         height: 380,
         questionType: 'AnswerSheetTitle',
         MarginHeight: 0,
