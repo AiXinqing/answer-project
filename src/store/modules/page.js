@@ -100,65 +100,30 @@ const getters = {
   question_objective: (state, getters) => (question) => {
     // 客观题
     let { rowGroup, titleH } = question.height
-    const maxWidthArr = []
     //题型分组
     let RowArr = [],columnArr = [],widthSum = 0,
-        max = getters.page_width
-    rowGroup.filter((item) => {
-      let widthS = item.map((row) => row.width)
-      maxWidthArr.push(Math.max.apply(null, widthS))
+      max = getters.page_width
 
-      let maxWidth = Math.max.apply(Math, item.map(function(o) {return o.width}))
-          widthSum += maxWidth
-
-          if(widthSum < max){
-            columnArr.push(item)
-          }else{
-            RowArr.push(columnArr)
-            widthSum = maxWidth
-            columnArr = []
-            columnArr.push(item)
-          }
-    })
-
-    if(columnArr.length > 0){
-      RowArr.push(columnArr)
-    }
-
-    let sum = 0,arr = [], numberArr = []
-        maxWidthArr.forEach(num => {
-          sum += num
-          if(sum <= max){
-            arr.push(num)
-          }else{
-            numberArr.push(arr)
-            sum = num
-            arr = [num]
-          }
+        rowGroup.forEach(question => {
+          let maxWidth = question.map(subtopic => subtopic.width)
+            .reduce((a, b) => b > a ? b : a)
+            widthSum += maxWidth
+            if(widthSum < max){
+                columnArr.push(question)
+              }else{
+                RowArr.push(columnArr)
+                widthSum = maxWidth
+                columnArr = []
+                columnArr.push(question)
+              }
         })
-        if(arr.length > 0){
-          numberArr.push(arr)
+
+        if(columnArr.length > 0){
+            RowArr.push(columnArr)
         }
-    let maxWidth = numberArr.map(num => num.length)
-    let heights = rowGroup.map((item) => item.length * 22)
-    let twoDimensional = [], num = 0, contentHeight = 0
-    for (let i = 0; i < maxWidth.length; i++) {
-          num += maxWidth[i]
-          twoDimensional.push(heights.slice(num - maxWidth[i], num))
-        }
-    let heightList = twoDimensional.map((item) => {
-      return Math.max.apply(null, item)
-    })
-    if (heightList.length > 0) {
-      contentHeight = (
-        heightList.reduce(
-          (accumulator, currentValue) => accumulator + currentValue
-        ) +
-        heightList.length * 10
-      )
-    }
-    let height_content = contentHeight + titleH
-    return {...question,height:height_content,showData:RowArr}
+        //计算内容高度
+        let heights = titleH + RowArr.length * question.rowHeight
+        return {...question,height:heights,showData:RowArr}
   }
 
 }

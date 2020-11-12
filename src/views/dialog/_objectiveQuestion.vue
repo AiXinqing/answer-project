@@ -413,12 +413,12 @@
         var questionObj = {
             heightTitle: this.heightTitle,
             MarginHeight: this.MarginHeight,
-            rowHeight: this.rowHeight * rows,
+            rowHeight: this.rowHeight * rows + 10,
             id: questionId,
            // height: this.contentHeight + this.titleH, // 32标题高度
             height:{
               rowGroup:this.rowGroup,
-              titleH:this.titleH
+              titleH:this.heightTitle + this.MarginHeight
             },
             questionType: 'ObjectiveQuestion',
             content: {

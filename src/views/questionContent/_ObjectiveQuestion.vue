@@ -2,7 +2,7 @@
 <!-- 选择题 -->
   <div class="question-info">
 
-    <template v-if="questionData.first && questionData.borderTop == undefined">
+    <template v-if="questionData.first">
       <div
         class="question-title"
         ref="questionTitle"
@@ -120,9 +120,9 @@ export default {
     }
   },
   mounted () {
-    this.$nextTick(()=>{
-      this.cotent = this.$refs.questionTitle.innerHTML
-    })
+    // this.$nextTick(()=>{
+    //   this.cotent = this.$refs.questionTitle.innerHTML
+    // })
   },
   methods: {
     ...mapMutations('page', ['pageData_del',]),

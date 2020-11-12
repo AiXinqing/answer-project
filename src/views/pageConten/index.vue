@@ -9,10 +9,7 @@
       <div
         v-for="(topice,index) in pageList"
         :key="topice.id + '_' + i + '_' + index"
-        :class="[
-          'footer',
-          { answer: topice.first != undefined && topice.first == false },
-        ]"
+        class="footer"
         ref="box"
         :style="{ minHeight: topice.castHeight + 'px' }"
       >
@@ -110,7 +107,7 @@ export default {
             this.pageHeight_set(this.heightArray)
           })
         }
-        localStorage.setItem('accessToken', JSON.stringify(this.pageData))
+        //localStorage.setItem('accessToken', JSON.stringify(this.compile_pageData))
       },
     },
   },
@@ -126,6 +123,7 @@ export default {
       this.scoreTotal_reset() // 试卷总分清零
 
       var results = []
+
       // currentPage.height 总高度
       var currentPage = {height:0,rects:[]}
 
@@ -136,34 +134,79 @@ export default {
       }
 
       rects.forEach(rect =>{
+        let backup = {}
+        if(rect.content.scoreTotal){
+          // 试卷总分叠加
+          this.scoreTotal_sum(rect.content.scoreTotal)
+        }
 
-        var avalibleHeight = this.page_height - currentPage.height
+        var avalibleHeight = this.page_height - currentPage.height - 20
+        // 用于填空题数组切割
+        const itemObj = JSON.parse(JSON.stringify(rect))
 
         if(rect.height > avalibleHeight){ // 高度溢出
+          let curRect = this.preliminaryQuestion(rect, avalibleHeight)
+
           // 分页-剩余高度新建rect
+          if(rect.showData && rect.showData.length){
+            backup = {
+              showData:itemObj.showData.splice(0, curRect.availableRow),
+              first:true
+            }
+          }
+
           currentPage.rects.push({
             ...rect,
-            castHeight:avalibleHeight
+            castHeight:curRect.height,
+            ...backup
           })
+
           results.push(currentPage.rects) // 增加一页
           resetCurrentPage()
 
-          // 判断当前rect高度能分几页
-          let height = rect.height - avalibleHeight
+
+          // 判断当前rect高度能分几页----------------------------------------
+          let height = rect.height - curRect.height
+
+          //剩余高度超过一页高度
           while (height > this.page_height) {
+            let curRects = this.preliminaryQuestion(rect, this.page_height)
+
+            if(rect.showData && rect.showData.length){
+              // 切割数组
+              backup = {
+                showData:itemObj.showData.splice(0, curRects.availableRow),
+                first:false
+              }
+            }
+
             results.push([{
               ...rect,
               castHeight: this.page_height,
+              ...backup
             }]);
-            height -= this.page_height
+            height -= this.page_height - 20
+          }
+
+          //最后剩余高度---------------------------------------------------
+
+          if(rect.showData && rect.showData.length){
+              backup = {
+                showData: itemObj.showData,
+                first:false
+              }
           }
           currentPage.height = height
           currentPage.rects.push({
             ...rect,
             castHeight: height,
+            ...backup
           })
+
         }else{
-          currentPage.height += rect.height
+
+          currentPage.height += (rect.height + 20)
+
           currentPage.rects.push({
             ...rect,
             castHeight: rect.height,
@@ -176,6 +219,24 @@ export default {
       }
 
       return results
+    },
+
+    preliminaryQuestion(question,avalibleHeight){
+
+      const {MarginHeight,heightTitle,rowHeight} = question
+      const cornerHeight = MarginHeight + heightTitle
+      const RemainingHeight = avalibleHeight - cornerHeight
+      const availableRow = Math.floor(RemainingHeight / rowHeight)
+      const current_height = availableRow * rowHeight + cornerHeight
+
+
+      const parameter = {
+        availableRow:availableRow,
+        height:current_height,
+        pagination:avalibleHeight >= current_height ? false : true
+      }
+
+      return parameter
     },
 
     subTopic_numberHanldeEdit(id) {
