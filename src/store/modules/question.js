@@ -1,19 +1,27 @@
 import { QUESTION_NUMBERS } from '@/models/base'
 
 const state = {
-  orderSort:0
+  questionOrder:0
 }
 
 const mutations = {
-  set_orderSort: (state) => {
-    state.orderSort = state.orderSort + 1
+  set_questionOrder: (state) => {
+    state.questionOrder = state.questionOrder + 1
   },
-  del_orderSort: (state, order) => {
-    console.log(order)
+
+  del_questionOrder: (state, order) => {
+
     state.pageData.map((item) =>
       item.order > order ? item.order - 1 : item.order
     )
-    state.orderSort = state.orderSort - 1
+    state.questionOrder = state.questionOrder - 1
+  },
+
+  questionOrder_subtract: (state, order) => {
+    state.pageData.map((item) =>
+      item.order > order ? item.order - 1 : item.order
+    )
+    state.questionOrder = state.questionOrder - 1
   },
 }
 

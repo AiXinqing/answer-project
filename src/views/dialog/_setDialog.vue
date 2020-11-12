@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations,mapGetters} from 'vuex'
 import { TITLE_SUDENTINFO, LAYOUT_COLUMNS ,LAYOUT_SIZE} from '@/models/base'
 
 import questionDialog from '../dialog/_objectiveQuestion'
@@ -110,7 +110,7 @@ export default {
   },
   computed: {
     ...mapState('titleSet', ['textVal', 'titleRows']),
-    ...mapState('pageContent', ['questionOrder',]),
+    ...mapGetters('page', ['questionOrder']),
     ...mapState('page', ['pageLayout','pageData']),
 
     btnName(){
@@ -178,7 +178,6 @@ export default {
         // 新增值
         this.pageData_add(TestData)
       }
-
       this.openedFrame = false
     },
 

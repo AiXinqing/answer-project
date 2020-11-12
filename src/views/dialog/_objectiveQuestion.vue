@@ -150,15 +150,13 @@
       }
     },
     computed: {
-      ...mapGetters('pageContent', [
-      'question_order']),
 
       ...mapState('questionType',['subTopic_number',
       'subTopic_number_already',
       'subTopic_number_determine',]),
 
       ...mapState('page',['pageData']),
-      ...mapGetters('page',['page_width','questionNumber_big_exist']),
+      ...mapGetters('page',['page_width','questionNumber_big_exist','questionOrder']),
       ...mapGetters('question',['options']),
 
       questionNumber_big(){
@@ -169,14 +167,6 @@
         return  !this.editQuestionId ? '新增客观题' : '编辑客观题'
       },
 
-      isdisabledFn(){
-        return this.questionGroup.length > 0 && !this.errorMessage ? false :true
-      },
-
-      errorMessage() {
-        return this.errorVal != '' ? true : false
-      },
-
       questionGroup(){
         const {singleChoice,checkChoice,judgmentChoice} = this.editingData.group
         return [
@@ -185,6 +175,15 @@
           ...judgmentChoice.map(group => group.childGroup).flat(),
         ]
       },
+
+      isdisabledFn(){
+        return this.questionGroup.length > 0 && !this.errorMessage ? false :true
+      },
+
+      errorMessage() {
+        return this.errorVal != '' ? true : false
+      },
+
 
       rowGroup(){
         // 每行所占小题
@@ -349,7 +348,7 @@
               scoreTotal:this.scoreTotal,
               pageLayout:this.pageLayout
             },
-            order: this.question_order,
+            order: this.questionOrder,
             showData:[],
             first: true,
           }
@@ -359,7 +358,6 @@
               let data = {
                 obj: {
                   ...questionObj,
-                  order: this.question_order,
                 },
                 bigId: select.id,
                 SelfOrder: Postpone || false,
@@ -390,7 +388,7 @@
 
       updateGroupSubTopic(groupObj){
         // 编辑题组
-        let obj = this.editingData //JSON.parse(JSON.stringify(this.editingData))
+        let obj = this.editingData
         let {type,data} = groupObj
         let {group} = obj
 
@@ -400,14 +398,12 @@
 
         if(index > -1){
           curGroup.splice(index,1,data)
-
-          // this.preEditData = JSON.parse(JSON.stringify(obj))
         }
       },
 
       preEditSubtopic(subtopic){
         //编辑小题号
-        let obj = this.editingData //JSON.parse(JSON.stringify(this.preEditData))
+        let obj = this.editingData
         let {type,data} = subtopic
 
         let curGroup = obj.group[type]
@@ -419,9 +415,6 @@
 
           if(cIndex > -1){
             childrenGroup.splice(cIndex,1,data)
-            // this.$nextTick(()=>{
-            //   this.preEditData = JSON.parse(JSON.stringify(obj))
-            // })
           }
         }
       },

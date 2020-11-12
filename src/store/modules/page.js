@@ -1,5 +1,6 @@
-
+import { QUESTION_NUMBERS } from '@/models/base'
 const state = {
+  questionNumber: QUESTION_NUMBERS,
   pageLayout: {
     size: 'A3',
     column:2
@@ -73,6 +74,7 @@ const mutations = {
   pageData_del: (state, index) => {
     state.pageData.splice(index, 1)
   },
+
 }
 
 const actions = {
@@ -85,6 +87,10 @@ const getters = {
     return state.pageLayout.column === 3 && state.pageLayout.size == 'A3'
         ? 480
         : 745
+  },
+
+  questionOrder: (state) => {
+    return state.pageData.filter(question => question.questionType !== 'NonRresponseArea').length
   },
 
   compile_pageData: (state,getters) => {
@@ -126,12 +132,12 @@ const getters = {
         return {...question,height:heights,showData:RowArr}
   },
 
-  questionNumber_big_exist: (state) => {
+  questionNumber_big_exist: (state,getters) => {
     // 大题号
     let obj = {}
     let Arr = []
 
-    Arr =  state.pageData.filter(question => question.questionType !== 'AnswerSheetTitle' )
+    Arr =  getters.compile_pageData.filter(question => question.questionType !== 'AnswerSheetTitle' )
       .filter(question => question.questionType !== 'NonRresponseArea')
       .map((question, index) => {
         let {
@@ -157,7 +163,6 @@ const getters = {
           return question.label == cur.label && question.order < cur.order ? cur : question
         })
       }, [])
-
     return Arr
   },
 
