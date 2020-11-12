@@ -93,7 +93,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('pageContent', ['pageData']),
+    ...mapState('page', ['pageData']),
 
     topicBox(){
       const {singleChoice,checkChoice,judgmentChoice} = this.data.group
@@ -125,7 +125,7 @@ export default {
     })
   },
   methods: {
-    ...mapMutations('pageContent', ['pageData_del',]),
+    ...mapMutations('page', ['pageData_del',]),
 
     ...mapMutations('questionType', [
       'subTopic_already_del',

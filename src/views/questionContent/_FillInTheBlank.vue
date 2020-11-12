@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations,mapGetters } from 'vuex'
 import { QUESTION_NUMBERS } from '@/models/base'
 
 import quillEditor from '../../components/quillEditor'
@@ -107,7 +107,9 @@ export default {
   },
   computed: {
     ...mapState('questionType', ['questionNumber', 'letterList']),
-    ...mapState('pageContent', ['pageData']),
+    ...mapState('page', ['pageData']),
+    ...mapGetters('page', ['page_width']),
+
     heightContetn(){
       const {castHeight,heightTitle,height} = this.questionData
       let obj = {
@@ -122,9 +124,7 @@ export default {
     },
 
     pageWidth() {
-      return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
-        ? 440
-        : 695
+      return this.page_width - 50
     },
     subtopicGroup() {
       return this.questionData.showData
@@ -156,7 +156,7 @@ export default {
     })
   },
   methods: {
-    ...mapMutations('pageContent', [
+    ...mapMutations('page', [
       'pageData_del',
       'pageData_edit',
     ]),

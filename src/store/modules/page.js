@@ -69,6 +69,10 @@ const mutations = {
 
     }
   },
+
+  pageData_del: (state, index) => {
+    state.pageData.splice(index, 1)
+  },
 }
 
 const actions = {

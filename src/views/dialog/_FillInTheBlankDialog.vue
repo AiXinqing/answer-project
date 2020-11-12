@@ -142,21 +142,16 @@ export default {
       'subTopic_number',
       'subTopic_number_determine',
     ]),
-    ...mapState('pageContent', [
+    ...mapState('page', [
       'pageData',
       'pageLayout',
     ]),
 
     ...mapGetters('pageContent', ['questionNumber_big_exist']),
+    ...mapGetters('page', ['page_width']),
 
     questionNumber_big(){
       return this.questionNumber_big_exist.length
-    },
-
-    pageWidth() {
-      return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
-        ? 480
-        : 745
     },
 
     errorMessage() {
@@ -259,7 +254,7 @@ export default {
       'subTopic_determine_pid_clean',
     ]),
 
-    ...mapMutations('pageContent', [
+    ...mapMutations('page', [
       'pageData_add',
       'pageData_edit',
       'pageData_insert',
