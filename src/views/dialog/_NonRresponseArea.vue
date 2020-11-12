@@ -61,18 +61,17 @@ export default {
       },
       closeData: {},
       editQuestionId: null,
-      options:[]
     }
   },
   computed: {
-    ...mapState('questionType', ['questionNumber']),
     ...mapState('pageContent', ['questionOrder', 'pageData','pageLayout']),
-    ...mapGetters('pageContent', ['questionNumber_big_exist']),
+    ...mapGetters('question', ['options']),
+    ...mapGetters('page', ['questionNumber_big_exist']),
     errorMessage() {
       return this.errorVal != '' ? true : false
     },
     isdisabledFn() {
-      return  this.questionNumber_big_exist.length > 0 && !this.errorMessage ? false:true
+      return  this.questionNumber_big_exist.length && !this.errorMessage ? false:true
     },
     tabStatusVal() {
       const { rows, positionNum } = this.data
@@ -100,7 +99,6 @@ export default {
                 : null,
           }
         }
-        this.options = this.questionNumber.map((label,value)=>({label,value}))
       },
     },
   },

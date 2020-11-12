@@ -128,7 +128,6 @@ export default {
       editQuestionId: '',
       orders:0,
       ContentHeight: 0, // 内容高度
-      options:[],
       fill:{
         fillRow:35, // 内容行高
         fillMargin:12, // 间隔
@@ -138,7 +137,6 @@ export default {
   },
   computed: {
     ...mapState('questionType', [
-      'questionNumber',
       'subTopic_number',
       'subTopic_number_determine',
     ]),

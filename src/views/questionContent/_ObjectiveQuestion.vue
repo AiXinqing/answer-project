@@ -61,8 +61,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
-import { QUESTION_NUMBERS } from '@/models/base'
+import { mapState, mapMutations,mapGetters } from 'vuex'
 
 import quillEditor from '../../components/quillEditor'
 // import VueUeditor from '../../components/VueUeditor'
@@ -87,13 +86,13 @@ export default {
       data: {},
       isEditor: false,
       cotent: '',
-      options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
       quilleditor:false,
       pageLayout:this.contentData.pageLayout,
     }
   },
   computed: {
     ...mapState('page', ['pageData']),
+    ...mapGetters('question',['options']),
 
     topicBox(){
       const {singleChoice,checkChoice,judgmentChoice} = this.data.group

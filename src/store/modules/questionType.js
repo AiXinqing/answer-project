@@ -1,9 +1,9 @@
 const state = {
-  questionNumber: ['一','二','三','四','五','六','七','八',
-  '九','十','十一','十二','十三','十四','十五','十六','十七',
-  '十八','十九','二十','二十一','二十二','二十三','二十四'],
+  // questionNumber: ['一','二','三','四','五','六','七','八',
+  // '九','十','十一','十二','十三','十四','十五','十六','十七',
+  // '十八','十九','二十','二十一','二十二','二十三','二十四'],
 
-  questionNumber_big_exist: [], // 存在大题
+  // questionNumber_big_exist: [], // 存在大题
   subTopic_number: 1,
   subTopic_number_already: [], // 已有的题组
   subTopic_number_determine: [], // 确定下的小题
@@ -115,54 +115,54 @@ const mutations = {
     })
   },
   // 编辑存在大题
-  questionNumber_big_exist_edit: (state, obj) => {
-    const index = state.questionNumber_big_exist.findIndex(
-      (row) => row.id === obj.id
-    )
-    if (index > -1) {
-      state.subTopic_number_determine.splice(index, 1, obj)
-    } else {
-      state.questionNumber_big_exist.push(obj)
-    }
-  },
+  // questionNumber_big_exist_edit: (state, obj) => {
+  //   const index = state.questionNumber_big_exist.findIndex(
+  //     (row) => row.id === obj.id
+  //   )
+  //   if (index > -1) {
+  //     state.subTopic_number_determine.splice(index, 1, obj)
+  //   } else {
+  //     state.questionNumber_big_exist.push(obj)
+  //   }
+  // },
 
-  questionNumber_big_exist_insert: (state, {
-    obj,
-    num,
-    order,
-    SelfOrder
-  }) => {
-    state.questionNumber_big_exist.map(function (item) {
-      return {
-        ...item,
-        order: item.order >= order ? item.order + 1 : item.order,
-      }
-    });
-    setTimeout(function () {
-      state.questionNumber_big_exist.splice(num, 0, obj);
-      state.questionNumber_big_exist = state.questionNumber_big_exist.sort(function (a, b) {
-        return a.order - b.order;
-      });
-      if (SelfOrder) {
-        state.questionNumber_big_exist.forEach((item, index) => {
-          state.questionNumber_big_exist.splice(index, 1, {
-            ...item,
-            label: state.options[index].label + '.' + item.label.split('.')[1]
-          })
-        })
-      }
-    }, 50);
-  },
+  // questionNumber_big_exist_insert: (state, {
+  //   obj,
+  //   num,
+  //   order,
+  //   SelfOrder
+  // }) => {
+  //   state.questionNumber_big_exist.map(function (item) {
+  //     return {
+  //       ...item,
+  //       order: item.order >= order ? item.order + 1 : item.order,
+  //     }
+  //   });
+  //   setTimeout(function () {
+  //     state.questionNumber_big_exist.splice(num, 0, obj);
+  //     state.questionNumber_big_exist = state.questionNumber_big_exist.sort(function (a, b) {
+  //       return a.order - b.order;
+  //     });
+  //     if (SelfOrder) {
+  //       state.questionNumber_big_exist.forEach((item, index) => {
+  //         state.questionNumber_big_exist.splice(index, 1, {
+  //           ...item,
+  //           label: state.options[index].label + '.' + item.label.split('.')[1]
+  //         })
+  //       })
+  //     }
+  //   }, 50);
+  // },
 
-  questionNumber_big_exist_del: (state, obj) => {
-    let id = obj.objId != undefined ? obj.objId : obj.id
-    const index = state.questionNumber_big_exist.findIndex(
-      (row) => row.id === id
-    )
-    if (index > -1) {
-      state.questionNumber_big_exist.splice(index, 1)
-    }
-  },
+  // questionNumber_big_exist_del: (state, obj) => {
+  //   let id = obj.objId != undefined ? obj.objId : obj.id
+  //   const index = state.questionNumber_big_exist.findIndex(
+  //     (row) => row.id === id
+  //   )
+  //   if (index > -1) {
+  //     state.questionNumber_big_exist.splice(index, 1)
+  //   }
+  // },
 
 }
 

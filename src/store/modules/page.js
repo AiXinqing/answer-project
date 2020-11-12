@@ -1,3 +1,4 @@
+
 const state = {
   pageLayout: {
     size: 'A3',
@@ -124,7 +125,41 @@ const getters = {
         //计算内容高度
         let heights = titleH + RowArr.length * question.rowHeight
         return {...question,height:heights,showData:RowArr}
-  }
+  },
+
+  questionNumber_big_exist: (state,getters) => {
+    // 大题号
+    let obj = {}
+
+    let Arr =  getters.compile_pageData.filter(question => question.questionType !== 'AnswerSheetTitle' )
+      .filter(question => question.questionType !== 'NonRresponseArea')
+      .map((question, index) => {
+        let {
+          number,
+          topicName
+        } = question.content
+        let objId = {}
+        if (question.objId) {
+          objId = {objId:question.objId}
+        }
+        return {
+          id: question.id,
+          ...objId,
+          label: state.questionNumber[number] + '.' + topicName,
+          order: !question.order ? index + 1 : question.order,
+          value: index,
+          type:question.questionType
+        }
+      })
+      .reduce((acc, cur) => {
+        obj[cur.label] ? '' : obj[cur.label] = true && acc.push(cur)
+        return acc.map(question => {
+          return question.label == cur.label && question.order < cur.order ? cur : question
+        })
+      }, [])
+    console.log(Arr)
+    return Arr
+  },
 
 }
 

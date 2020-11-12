@@ -119,13 +119,11 @@ export default {
           childGroup: [],
         },]
       },
-      options:[],
       initScore:1, // 删除后初始分数
     }
   },
   computed: {
     ...mapState('questionType', [
-      'questionNumber',
       'subTopic_number',
       'subTopic_number_determine',
     ]),
@@ -140,6 +138,7 @@ export default {
     ...mapState('answerQuestion', ['answerQuestionArr',]),
 
     ...mapGetters('pageContent', ['questionNumber_big_exist','question_order']),
+    ...mapGetters('question',['options']),
 
     questionNumber_big(){
       return this.questionNumber_big_exist.length
@@ -233,7 +232,6 @@ export default {
           })
           this.existNumber = this.questionNumber_big_exist.length ? this.questionNumber_big_exist[0].value : null
         }
-        this.options = this.questionNumber.map((label,value)=>({label,value}))
       }
     },
 

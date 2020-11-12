@@ -127,14 +127,12 @@ export default {
         Postpone: false,
       },
       editData: {},
-      options:[],
       changeClick:false,
       page_height:PAGE_HEIGHT
     }
   },
   computed: {
     ...mapState('questionType', [
-      'questionNumber',
       'subTopic_number',
       'subTopic_number_determine',
     ]),
@@ -143,10 +141,12 @@ export default {
       'pageData',
       'pageLayout',
     ]),
+    ...mapGetters('pageContent', ['questionNumber_big_exist','question_order']),
+    ...mapGetters('question',['options']),
+
     title(){
       return this.editQuestionId ? '编辑作文' : '设置'
     },
-    ...mapGetters('pageContent', ['questionNumber_big_exist','question_order']),
     questionNumber_big(){
       return this.questionNumber_big_exist.length
     },
@@ -248,7 +248,6 @@ export default {
           this.questionNumber_big_exist.length > 0
             ? this.questionNumber_big_exist[0].value
             : null
-        this.options = this.questionNumber.map((label,value)=>({label,value}))
       },
     },
   },

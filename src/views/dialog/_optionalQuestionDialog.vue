@@ -132,13 +132,13 @@ export default {
   },
   computed: {
     ...mapState('questionType', [
-      'questionNumber',
       'subTopic_number',
       'subTopic_number_determine',
     ]),
     ...mapState('pageContent', ['pageData','pageLayout']),
     ...mapState('answerQuestion', ['answerQuestionArr']),
-    ...mapGetters('pageContent', ['questionNumber_big_exist','question_order','options']),
+    ...mapGetters('pageContent', ['questionNumber_big_exist','question_order']),
+    ...mapGetters('question',['options']),
 
     questionNumber_big(){
       return this.questionNumber_big_exist.length

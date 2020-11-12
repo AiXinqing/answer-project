@@ -156,7 +156,6 @@ export default {
         Postpone: false,
       },
       editData: {},
-      options:[],
       changeClick:false,
       page_height:PAGE_HEIGHT
     }
@@ -173,6 +172,7 @@ export default {
       'pageLayout',
     ]),
     ...mapGetters('pageContent', ['questionNumber_big_exist','question_order']),
+    ...mapGetters('question',['options']),
     questionNumber_big(){
       return this.questionNumber_big_exist.length
     },
@@ -291,7 +291,6 @@ export default {
           this.questionNumber_big_exist.length > 0
             ? this.questionNumber_big_exist[0].value
             : null
-        this.options = this.questionNumber.map((label,value)=>({label,value}))
       },
     },
   },

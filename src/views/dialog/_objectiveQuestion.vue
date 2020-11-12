@@ -150,15 +150,16 @@
       }
     },
     computed: {
-      ...mapGetters('pageContent', ['questionNumber_big_exist',
-      'question_order','options',]),
+      ...mapGetters('pageContent', [
+      'question_order']),
 
       ...mapState('questionType',['subTopic_number',
       'subTopic_number_already',
       'subTopic_number_determine',]),
 
       ...mapState('page',['pageData']),
-      ...mapGetters('page',['page_width']),
+      ...mapGetters('page',['page_width','questionNumber_big_exist']),
+      ...mapGetters('question',['options']),
 
       questionNumber_big(){
         return this.questionNumber_big_exist.length
@@ -195,84 +196,6 @@
         return result
       },
 
-      // maxWidth(){
-      //   // 最大宽度
-      //   const maxWidthArr = []
-      //   this.rowGroup.filter((item) => {
-      //     let widthS = item.map((row) => row.width)
-      //     maxWidthArr.push(Math.max.apply(null, widthS))
-      //   })
-
-      //   let sum = 0,max = this.page_width
-      //   let arr = [],numberArr = []
-      //   maxWidthArr.forEach(num => {
-      //     sum += num
-      //     if(sum <= max){
-      //       arr.push(num)
-      //     }else{
-      //       numberArr.push(arr)
-      //       sum = num
-      //       arr = [num]
-      //     }
-      //   });
-      //   if(arr.length > 0){
-      //     numberArr.push(arr)
-      //   }
-      //   return numberArr.map(num => num.length)
-      // },
-
-      // contentHeight(){
-      //   // 计算题型内容所占高度
-      //   // 计算宽度所占数组长度
-      //   let heights = this.rowGroup.map((item) => item.length * 22)
-      //   // 根据宽度数组 和 高度数组合成高度二维数组
-      //   let twoDimensional = []
-      //   let num = 0
-      //   for (let i = 0; i < this.maxWidth.length; i++) {
-      //     num += this.maxWidth[i]
-      //     twoDimensional.push(heights.slice(num - this.maxWidth[i], num))
-      //   }
-      //   let heightList = twoDimensional.map((item) => {
-      //     return Math.max.apply(null, item)
-      //   })
-      //   if (heightList.length > 0) {
-      //     return (
-      //       heightList.reduce(
-      //         (accumulator, currentValue) => accumulator + currentValue
-      //       ) +
-      //       heightList.length * 10
-      //     )
-      //   } else {
-      //     return 0
-      //   }
-      // },
-
-      // subTopicGroup(){
-      //   let RowArr = []
-      //   let columnArr = []
-      //   let widthSum = 0
-
-      //   this.rowGroup.forEach(item => {
-      //     let maxWidth = Math.max.apply(Math, item.map(function(o) {return o.width}))
-      //     widthSum += maxWidth
-
-      //     if(widthSum < this.page_width){
-      //       columnArr.push(item)
-      //     }else{
-      //       RowArr.push(columnArr)
-      //       widthSum = maxWidth
-      //       columnArr = []
-      //       columnArr.push(item)
-      //     }
-
-      //   })
-
-      //   if(columnArr.length > 0){
-      //     RowArr.push(columnArr)
-      //   }
-      //   return RowArr
-      // },
-
       scoreTotal(){
         return this.questionGroup.map(topic => topic.score)
                                   .reduce((acc,cur) => acc + cur)
@@ -291,7 +214,7 @@
               number: this.questionNumber_big,
             }
             this.existNumber =
-            this.questionNumber_big_exist.length > 0
+            this.questionNumber_big_exist.length
               ? this.questionNumber_big_exist[0].value
               : null
           }
@@ -431,7 +354,7 @@
             first: true,
           }
         if (this.editQuestionId == '') {
-          if (InsertTitle && this.questionNumber_big_exist.length > 0){
+          if (InsertTitle && this.questionNumber_big_exist.length ){
               let select = this.questionNumber_big_exist[this.existNumber]
               let data = {
                 obj: {
