@@ -149,6 +149,7 @@ export default {
 
     ...mapGetters('pageContent', ['questionNumber_big_exist']),
     ...mapGetters('page', ['page_width']),
+    ...mapGetters('question',['options']),
 
     questionNumber_big(){
       return this.questionNumber_big_exist.length
@@ -215,13 +216,6 @@ export default {
               : null
         }
       },
-    },
-
-    questionNumber: {
-      immediate: true,
-      handler() {
-        this.options = this.questionNumber.map((label,value)=>({label,value}))
-      }
     },
 
     childGroups:{
