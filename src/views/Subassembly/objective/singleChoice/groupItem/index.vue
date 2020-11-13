@@ -25,9 +25,8 @@ export default {
 
   data () {
     return {
-      data: {
-        letterList:LETTER_LIST
-      }
+      data: {},
+      letterList:LETTER_LIST
     }
   },
 
@@ -35,7 +34,7 @@ export default {
 
     selectBox(){
       return this.activeName == 'judgmentChoice' ? ['T','F'] :
-              this.letterList.slice(0,this.data.select)
+              LETTER_LIST.slice(0,this.data.select)
     },
 
     selectWdith(){

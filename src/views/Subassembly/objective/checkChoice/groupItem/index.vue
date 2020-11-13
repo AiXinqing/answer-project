@@ -27,9 +27,8 @@ export default {
 
   data () {
     return {
-      data: {
-        letterList:LETTER_LIST
-      },
+      data: {},
+      letterList:LETTER_LIST
     }
   },
 
@@ -67,7 +66,7 @@ export default {
       let lessScoreVal = lessScore ? lessScore.toString().match(/^\d+(?:\.\d{0,1})?/) : lessScore
 
       if(scoreVal !='' && select !=''){
-        console.log(this.data)
+
         this.$emit('pre-edit-subtopic', {
           type:'checkChoice',
           data:{

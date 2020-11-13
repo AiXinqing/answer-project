@@ -25,9 +25,8 @@ export default {
 
   data () {
     return {
-      data: {
-        letterList:LETTER_LIST
-      }
+      data: {},
+      letterList:LETTER_LIST
     }
   },
 
@@ -62,7 +61,6 @@ export default {
       const {score,select} = this.data
       let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
       if(scoreVal !='' && select !=''){
-        console.log(this.data)
         this.$emit('pre-edit-subtopic', {
           type:'judgmentChoice',
           data:{
