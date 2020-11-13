@@ -6,6 +6,7 @@ const state = {
     column:2
   },
   pageData: [],
+  nonAnswer:[], // 非答题存在数组
 }
 
 const mutations = {
@@ -38,6 +39,7 @@ const mutations = {
     SelfOrder
   }) => {
     let nums = 0
+
     const index = state.pageData.findIndex((itme) => itme.id == bigId)
     if (index > -1) {
       nums = index + 1
@@ -47,6 +49,7 @@ const mutations = {
       }
       state.pageData.splice(nums, 0, obj)
     }
+
     if (SelfOrder) {
       let order = 0
       state.pageData = state.pageData.map((question) => {
@@ -75,6 +78,14 @@ const mutations = {
     state.pageData.splice(index, 1)
   },
 
+  pageData_order_edit: (state, data) => {
+    // 解答题
+    state.pageData = state.pageData.map(question => ({
+      ...question,
+      previousOrder: question.objId === data.objId ? data.num : question.previousOrder
+    }))
+  },
+
   pageData_id_filter: (state, id) => {
     // 解答题
     state.pageData = state.pageData.filter(question => question.id != id)
@@ -88,6 +99,23 @@ const mutations = {
     } else {
       state.nonAnswer.push(obj)
     }
+  },
+
+  del_nonAnswer: (state, obj) => {
+    // 非答题新增
+    let index = state.nonAnswer.findIndex(ele => ele.id == obj.id)
+    if (index > -1) {
+      state.nonAnswer = state.nonAnswer.splice(index, 1)
+    }
+  },
+  // 插入清空的非答题
+  nonAnswer_insert: (state) => {
+    state.nonAnswer.forEach(obj => {
+      let index = state.pageData.findIndex(question => question.id == obj.insertIndex)
+      if (index > -1) {
+        state.pageData.splice(index + 1, 0, obj)
+      }
+    })
   },
 
 }

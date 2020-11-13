@@ -163,6 +163,7 @@ export default {
         }
 
         let index = this.questionNumber_big_exist.findIndex(question => question.value == positionNum)
+
         let select = {}
         if(index > -1){
           select = this.questionNumber_big_exist[index]

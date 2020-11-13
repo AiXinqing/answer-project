@@ -38,7 +38,7 @@ export default {
     }
   }
   , computed: {
-    ...mapState('pageContent', ['pageData']),
+    ...mapState('page', ['pageData']),
   },
   watch: {
     contentData: {
@@ -51,8 +51,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('pageContent', ['pageData_del',
-      'questionNumber_big_subtract',
+    ...mapMutations('page', ['pageData_del',
       'pageData_order_edit','del_nonAnswer']),
     delHanlde (id) {
       const index = this.pageData.findIndex((itme) => itme.id === id)
@@ -99,8 +98,9 @@ export default {
     text-align: center;
   }
   .question_editOrDel {
-    top: 5px;
+    top: -56px;
     right: 5px;
+    position: absolute;
   }
 }
 .question_array{

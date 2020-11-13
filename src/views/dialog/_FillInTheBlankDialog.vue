@@ -145,7 +145,7 @@ export default {
     ]),
 
     ...mapGetters('pageContent', ['questionNumber_big_exist']),
-    ...mapGetters('page', ['page_width']),
+    ...mapGetters('page', ['page_width','questionOrder']),
     ...mapGetters('question',['options']),
 
     questionNumber_big(){
@@ -286,6 +286,7 @@ export default {
     preCreateQuestion() {
       // 数据编辑完成添加至全局数组中---------------
       // 行高配置
+      console.log(this.questionOrder)
       let {fillRow,fillMargin,fillTitle} = this.fill
       // 计算高度
 
@@ -304,6 +305,7 @@ export default {
         height: height, // 32标题高度
         rowHeight: fillRow,
         questionType: 'FillInTheBlank',
+        order:this.questionOrder,
         content: {
           ...this.objectiveData,
           scoreTotal: scoreTotal,
@@ -324,7 +326,7 @@ export default {
           let data = {
               obj: {
                 ...obj,
-                order: this.question_order,
+                order: this.questionOrder,
               },
               bigId: select.id,
               SelfOrder: Postpone,
