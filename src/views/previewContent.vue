@@ -102,131 +102,117 @@ export default {
     ...mapMutations('pageContent', ['pageHeight_set']),
     pageContentFunc(rects = []) {
 
-      let results = []
-      let SplitVal = 0 // 拆分所用
-      let curPage = {
-        height: 0,
-        rects: [],
+      var results = []
+
+      // currentPage.height 总高度
+      var currentPage = {height:0,rects:[]}
+
+      //重置高度
+      function resetCurrentPage () {
+        currentPage.height = 0;
+        currentPage.rects = [];
       }
-      function restCutPage() {
-        curPage.height = 0
-        curPage.rects = []
-      }
-      rects.forEach((rect) => {
-        let ActualHeight = rect.height + 20 //
-        // avalible 剩余高度
-        let avalibleHeight = this.page_height - curPage.height
+
+      rects.forEach(rect =>{
+        let backup = {}
+
+        var avalibleHeight = this.page_height - currentPage.height - 20
         // 用于填空题数组切割
-        let itemObj = JSON.parse(JSON.stringify(rect))
+        const itemObj = JSON.parse(JSON.stringify(rect))
 
+        if(rect.height > avalibleHeight){ // 高度溢出
+          let curRect = this.preliminaryQuestion(rect, avalibleHeight)
 
-        // 高度溢出
-        if (ActualHeight > avalibleHeight) {
-          // 返回计算行数及最低高度
-          let curRect = this.questionType(rect, avalibleHeight)
-
-          if (avalibleHeight >= 32 &&!curRect.isPage) {
-            SplitVal = avalibleHeight - curRect.height
-
-            curPage.rects.push({
-              ...rect,
-              castHeight: curRect.height,
-              showData: curRect.isArray
-                ? itemObj.showData.splice(0, curRect.row)
-                : [],
-              first: curRect.isArray ? true : rect.first,
-            })
+          // 分页-剩余高度新建rect
+          if(rect.showData && rect.showData.length){
+            backup = {
+              showData:itemObj.showData.splice(0, curRect.availableRow),
+              first:true
+            }
           }
 
-          // 追加一页页面
-          results.push(curPage.rects)
-          // 重置高度
-          restCutPage()
-          // 判罚当前高度能分几页
-          let height = rect.height - avalibleHeight + SplitVal
+          currentPage.rects.push({
+            ...rect,
+            castHeight:curRect.height,
+            ...backup
+          })
+
+          results.push(currentPage.rects) // 增加一页
+          resetCurrentPage()
+
+
+          // 判断当前rect高度能分几页----------------------------------------
+          let height = rect.height - curRect.height
+
+          //剩余高度超过一页高度
           while (height > this.page_height) {
-            let curRects = this.questionType(rect, this.page_height)
-            results.push([
-              {
-                ...rect,
-                castHeight: curRects.height, // 追加一页高度
-                showData: curRect.isArray
-                  ? itemObj.showData.splice(0, curRects.row)
-                  : [],
-                borderTop: !curRects.isPage ? 1 : 0, // 分页第一个
-              },
-            ])
-            height -= curRects.height
+            let curRects = this.preliminaryQuestion(rect, this.page_height)
+
+            if(rect.showData && rect.showData.length){
+              // 切割数组
+              backup = {
+                showData:itemObj.showData.splice(0, curRects.availableRow),
+                first:false
+              }
+            }
+
+            results.push([{
+              ...rect,
+              castHeight: this.page_height,
+              ...backup
+            }]);
+            height -= this.page_height - 20
           }
 
-          if (avalibleHeight >= 32 &&!curRect.isPage) {
-            curPage.height = height
-          } else {
-            curPage.height = ActualHeight
-            height = curPage.height
-          }
+          //最后剩余高度---------------------------------------------------
 
-          curPage.rects.push({
+          if(rect.showData && rect.showData.length){
+              backup = {
+                showData: itemObj.showData,
+                first:false
+              }
+          }
+          currentPage.height = height
+          currentPage.rects.push({
             ...rect,
             castHeight: height,
-            heightTitle: 0,
-            showData: itemObj.showData,
-            borderTop: !curRect.isPage ? 1 : 0,
-          }) // 追加剩余高度
-        } else {
-          curPage.height += ActualHeight
-          curPage.rects.push({
+            ...backup
+          })
+
+        }else{
+
+          currentPage.height += (rect.height + 20)
+
+          currentPage.rects.push({
             ...rect,
             castHeight: rect.height,
           })
         }
       })
-      if (curPage.height) {
-        results.push(curPage.rects)
+
+      if(currentPage.height){
+        results.push(currentPage.rects)
       }
 
       return results
     },
-    questionType(obj, rectHeigth) {
 
-      let MarginHeight = obj.MarginHeight + obj.heightTitle
-      let contentHeight = rectHeigth - MarginHeight
-      //-----------当前高度可占多少行
-      let RowHeight = obj.rowHeight
-      let row = Math.floor(contentHeight / RowHeight)
+    preliminaryQuestion(question,avalibleHeight){
 
-      let rectObj = {
-        height: row * RowHeight + MarginHeight,
-        row: row,
-        isArray: false,
-        isPage: row * RowHeight + MarginHeight < MarginHeight ? true : false,
+      const {MarginHeight,heightTitle,rowHeight} = question
+      const cornerHeight = MarginHeight + heightTitle
+      const RemainingHeight = avalibleHeight - cornerHeight
+      const availableRow = Math.floor(RemainingHeight / rowHeight)
+      const current_height = availableRow * rowHeight + cornerHeight
+
+
+      const parameter = {
+        availableRow:availableRow,
+        height:current_height,
+        pagination:avalibleHeight >= current_height ? false : true
       }
-      switch (obj.questionType) {
-        case 'FillInTheBlank':
-          return {
-            ...rectObj,
-            isPage: false,
-            isArray: true,
-          }
-        case 'ObjectiveQuestion':
-          return {
-            ...rectObj,
-            isPage: false,
-            isArray: true,
-          }
-        case 'answerQuestion':
-          return rectObj
-        case 'optionalQuestion':
-          return rectObj
-        case 'compositionEnglish':
-          return rectObj
-        case 'compositionLanguage':
-          return rectObj
-        case 'NonRresponseArea':
-          return rectObj
-        default:
-          return { height: 0, row: 0, isPage: false, isArray: false }
-      }
+
+      return parameter
     },
   },
 }

@@ -107,7 +107,7 @@ export default {
             this.pageHeight_set(this.heightArray)
           })
         }
-        //localStorage.setItem('accessToken', JSON.stringify(this.compile_pageData))
+        localStorage.setItem('accessToken', JSON.stringify(this.compile_pageData))
       },
     },
   },

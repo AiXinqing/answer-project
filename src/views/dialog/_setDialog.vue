@@ -170,10 +170,6 @@ export default {
         this.openedFrame = false
         this.pageData_edit(TestData)
 
-        this.pageData.filter(obj => obj.questionType == 'ObjectiveQuestion').forEach(element => {
-          this.$refs.questionDialogs.layoutEdit(element)
-        })
-        setTimeout(function() { this.pageLayout_launch_page(this.pageLayout) }, 500)
       } else {
         // 新增值
         this.pageData_add(TestData)

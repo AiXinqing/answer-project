@@ -17,6 +17,7 @@
           :max="maxAdmission"
           :min="minAdmission"
           @input="changeValueFunc"
+          class="padding__inner"
         />
         <div class="label-Warning">{{ labelWarning }}</div>
       </div>
@@ -42,7 +43,7 @@ export default {
   },
   computed: {
     ...mapState('titleSet', ['titleRows']),
-    ...mapState('pageContent', ['pageLayout','pageData']),
+    ...mapState('page', ['pageLayout','pageData']),
 
     maxAdmission () {
       // 最大数
@@ -93,7 +94,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .item-style {
   padding: 10px 0;
 }
@@ -117,6 +118,12 @@ export default {
     top: 40px;
     font-size: 12px;
     left: 88px;
+  }
+}
+.padding__inner{
+  input.el-input__inner{
+    padding: 16px 0;
+    font-size: 20px !important;
   }
 }
 </style>

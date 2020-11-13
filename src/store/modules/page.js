@@ -94,13 +94,9 @@ const getters = {
   },
 
   compile_pageData: (state,getters) => {
-    if (state.pageData.length) {
-      return state.pageData.map(question => {
+    return state.pageData.map(question => {
         return question.questionType == 'ObjectiveQuestion' ? getters.question_objective(question) : question
-      })
-    } else {
-      return state.pageData
-    }
+    })
   },
 
   question_objective: (state, getters) => (question) => {

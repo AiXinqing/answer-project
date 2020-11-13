@@ -93,7 +93,6 @@
 </template>
 
 <script>
-// import spaceQuestion from '../questionContent/Precautions/fillInTheBlank'
 import spaceQuestion from '../Subassembly/fillInTheBlank'
 import { mapState, mapMutations,mapGetters } from 'vuex'
 export default {
