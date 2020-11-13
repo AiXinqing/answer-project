@@ -64,7 +64,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('pageContent', ['questionOrder', 'pageData','pageLayout']),
+    ...mapState('pageContent', ['questionOrder']),
+    ...mapState('page', ['pageData','pageLayout']),
     ...mapGetters('question', ['options']),
     ...mapGetters('page', ['questionNumber_big_exist']),
     errorMessage() {
@@ -106,7 +107,7 @@ export default {
     this.closeData = JSON.parse(JSON.stringify(this.data))
   },
   methods: {
-    ...mapMutations('pageContent', [
+    ...mapMutations('page', [
       'pageData_insert',
       'pageData_edit',
       'pageData_id_filter',

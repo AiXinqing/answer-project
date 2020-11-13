@@ -78,9 +78,13 @@ export default {
 <style lang="less">
 .NonRresponseArea_box {
   border: 1px solid #888;
-  position: relative;
   background: #ddd;
   min-height: 43px;
+  width: 100%;
+  display: flex;
+  align-items:center;
+  position: relative;
+
   &:hover {
     .question_editOrDel {
       display: block;
@@ -89,15 +93,17 @@ export default {
   .prompt_style {
     font-size: 32px;
     font-weight: bold;
-    // width: 256px;
+    width: 100%;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    left: 0;
+    text-align: center;
   }
   .question_editOrDel {
     top: 5px;
     right: 5px;
   }
+}
+.question_array{
+  width: 100%;
 }
 </style>

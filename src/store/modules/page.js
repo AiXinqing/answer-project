@@ -75,6 +75,21 @@ const mutations = {
     state.pageData.splice(index, 1)
   },
 
+  pageData_id_filter: (state, id) => {
+    // 解答题
+    state.pageData = state.pageData.filter(question => question.id != id)
+  },
+
+  add_nonAnswer: (state, obj) => {
+    // 非答题新增
+    let index = state.nonAnswer.findIndex(ele => ele.id == obj.id)
+    if (index > -1) {
+      state.nonAnswer = state.nonAnswer.splice(index, 0, obj)
+    } else {
+      state.nonAnswer.push(obj)
+    }
+  },
+
 }
 
 const actions = {
