@@ -98,7 +98,6 @@ export default {
   methods: {
     ...mapMutations('pageContent', ['pageHeight_set']),
     pageContentFunc(rects = []) {
-
       var results = []
 
       // currentPage.height 总高度
@@ -143,7 +142,8 @@ export default {
 
           //剩余高度超过一页高度
           while (height > this.page_height) {
-            let curRects = this.preliminaryQuestion(rect, this.page_height)
+            let avalibleHeight =  this.page_height - 20
+            let curRects = this.preliminaryQuestion(rect, avalibleHeight,false)
 
             if(rect.showData && rect.showData.length){
               // 切割数组
@@ -155,7 +155,7 @@ export default {
 
             results.push([{
               ...rect,
-              castHeight: this.page_height,
+              castHeight: curRects.height,
               ...backup
             }]);
             height -= this.page_height - 20
@@ -169,10 +169,14 @@ export default {
                 first:false
               }
           }
-          currentPage.height = height
+          currentPage.height = height + rect.MarginHeight
+          if(itemObj.showData){
+            currentPage.height = itemObj.showData.length * itemObj.rowHeight + rect.MarginHeight
+          }
+
           currentPage.rects.push({
             ...rect,
-            castHeight: height,
+            castHeight: currentPage.height,
             ...backup
           })
 
@@ -194,14 +198,13 @@ export default {
       return results
     },
 
-    preliminaryQuestion(question,avalibleHeight){
+    preliminaryQuestion(question,avalibleHeight,initial = true){
 
       const {MarginHeight,heightTitle,rowHeight} = question
-      const cornerHeight = MarginHeight + heightTitle
+      const cornerHeight = initial ? MarginHeight + heightTitle : MarginHeight
       const RemainingHeight = avalibleHeight - cornerHeight
       const availableRow = Math.floor(RemainingHeight / rowHeight)
       const current_height = availableRow * rowHeight + cornerHeight
-
 
       const parameter = {
         availableRow:availableRow,
@@ -246,7 +249,7 @@ html {
 }
 .page_info_itme {
   width: 785px;
-  height: 1170px;
+  height: 1115px;
   border: 1px solid #888;
   border-radius: 3px;
   margin-left: 38px;
