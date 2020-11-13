@@ -97,13 +97,11 @@ export default {
     left: 0;
     text-align: center;
   }
-  .question_editOrDel {
-    top: -56px;
-    right: 5px;
+
+  .question_array{
+    width: 100%;
     position: absolute;
+    top: 10px;
   }
-}
-.question_array{
-  width: 100%;
 }
 </style>
