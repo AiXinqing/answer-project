@@ -98,6 +98,7 @@ export default {
   methods: {
     ...mapMutations('pageContent', ['pageHeight_set']),
     pageContentFunc(rects = []) {
+
       var results = []
 
       // currentPage.height 总高度
@@ -119,19 +120,22 @@ export default {
         if(rect.height > avalibleHeight){ // 高度溢出
           let curRect = this.preliminaryQuestion(rect, avalibleHeight)
 
-          // 分页-剩余高度新建rect
-          if(rect.showData && rect.showData.length){
-            backup = {
-              showData:itemObj.showData.splice(0, curRect.availableRow),
-              first:true
+          if(!curRect.pagination){
+            // 分页-剩余高度新建rect
+            if(rect.showData && rect.showData.length){
+              backup = {
+                showData:itemObj.showData.splice(0, curRect.availableRow),
+                first:true
+              }
             }
+
+            currentPage.rects.push({
+              ...rect,
+              castHeight:curRect.height,
+              ...backup
+            })
           }
 
-          currentPage.rects.push({
-            ...rect,
-            castHeight:curRect.height,
-            ...backup
-          })
 
           results.push(currentPage.rects) // 增加一页
           resetCurrentPage()
@@ -166,11 +170,11 @@ export default {
           if(rect.showData && rect.showData.length){
               backup = {
                 showData: itemObj.showData,
-                first:false
+                first:curRect.pagination
               }
           }
           currentPage.height = height + rect.MarginHeight
-          if(itemObj.showData){
+          if(itemObj.showData && !curRect.pagination){
             currentPage.height = itemObj.showData.length * itemObj.rowHeight + rect.MarginHeight
           }
 
@@ -204,12 +208,13 @@ export default {
       const cornerHeight = initial ? MarginHeight + heightTitle : MarginHeight
       const RemainingHeight = avalibleHeight - cornerHeight
       const availableRow = Math.floor(RemainingHeight / rowHeight)
-      const current_height = availableRow * rowHeight + cornerHeight
+      const current_height = availableRow * rowHeight  + cornerHeight
+
 
       const parameter = {
         availableRow:availableRow,
-        height:current_height,
-        pagination:avalibleHeight >= current_height ? false : true
+        height:current_height >= (cornerHeight + rowHeight) ? current_height : 0,
+        pagination:current_height >= (cornerHeight + rowHeight) ? false : true,
       }
 
       return parameter
