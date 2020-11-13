@@ -31,6 +31,9 @@
           @hanlde-subtraction-non="hanldeSubtractionNon"
         />
       </div>
+      <div class="card_footer">
+          第 {{i + 1}}-{{contentData.length}} 页
+      </div>
     </div>
     <!-- 公有弹框组件 -->
     <public-dialog ref="publicDialog" />
@@ -170,7 +173,8 @@ export default {
 
           //剩余高度超过一页高度
           while (height > this.page_height) {
-            let curRects = this.preliminaryQuestion(rect, this.page_height)
+            let avalibleHeight =  this.page_height - 20
+            let curRects = this.preliminaryQuestion(rect, avalibleHeight,false)
 
             if(rect.showData && rect.showData.length){
               // 切割数组
@@ -182,7 +186,7 @@ export default {
 
             results.push([{
               ...rect,
-              castHeight: this.page_height,
+              castHeight: curRects.height,
               ...backup
             }]);
             height -= this.page_height - 20
@@ -196,10 +200,14 @@ export default {
                 first:false
               }
           }
-          currentPage.height = height
+          currentPage.height = height + rect.MarginHeight
+          if(itemObj.showData){
+            currentPage.height = itemObj.showData.length * itemObj.rowHeight + rect.MarginHeight
+          }
+
           currentPage.rects.push({
             ...rect,
-            castHeight: height,
+            castHeight: currentPage.height,
             ...backup
           })
 
@@ -221,14 +229,13 @@ export default {
       return results
     },
 
-    preliminaryQuestion(question,avalibleHeight){
+    preliminaryQuestion(question,avalibleHeight,initial = true){
 
       const {MarginHeight,heightTitle,rowHeight} = question
-      const cornerHeight = MarginHeight + heightTitle
+      const cornerHeight = initial ? MarginHeight + heightTitle : MarginHeight
       const RemainingHeight = avalibleHeight - cornerHeight
       const availableRow = Math.floor(RemainingHeight / rowHeight)
       const current_height = availableRow * rowHeight + cornerHeight
-
 
       const parameter = {
         availableRow:availableRow,
@@ -304,6 +311,16 @@ export default {
   margin-bottom: 20px;
   &:last-child {
     margin-bottom: 0;
+  }
+
+  .card_footer {
+    text-align: center;
+    font-size: 14px;
+    line-height: 35px;
+    position: absolute;
+    bottom: 0;
+    height: 70px;
+    width: 100%;
   }
 }
 </style>

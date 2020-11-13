@@ -111,9 +111,10 @@ export default {
     ...mapGetters('page', ['page_width']),
 
     heightContetn(){
-      const {castHeight,heightTitle,height} = this.questionData
+      const {castHeight,heightTitle,first} = this.questionData
+
       let obj = {
-        height: castHeight >= height  ? castHeight - heightTitle - 3 : castHeight
+        height: first ? castHeight - heightTitle : castHeight
       }
       return obj
     },
@@ -256,7 +257,7 @@ export default {
   }
 }
 .content-info{
-  padding-top: 10px;
+  padding-top: 6px;
 }
 .content-row  {
   display: flex;
