@@ -158,6 +158,14 @@
         'subTopic_number_calculate',
       ]),
 
+      change(){
+        let {start,end} = this.data
+        this.data = {
+          ...this.data,
+          start:!end ? this.subTopic_number:start,
+        }
+      },
+
       delSubtopicGroup() {
         this.$emit('del-subtopic-group',{type:this.activeName,subtopic:this.data})
       },

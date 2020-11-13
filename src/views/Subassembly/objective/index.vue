@@ -17,6 +17,7 @@
           @pre-edit-subtopic="preEditSubtopic"
           @add-group-question="addGroupQuestion"
           @del-subtopic-group="delSubtopicGroup"
+          ref="componentTabs"
         />
       </el-tab-pane>
     </template>
@@ -73,6 +74,10 @@
     methods: {
       hanldeClick(tab) {
         this.activeName = tab.name
+
+        if(this.grouptopic[tab.name].length){
+          this.$refs.componentTabs[tab.index].change()
+        }
       },
 
       groupVerifyStatus(verify){

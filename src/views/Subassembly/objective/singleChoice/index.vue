@@ -10,6 +10,7 @@
         @group-verify-status="groupVerifyStatus"
         @update-group-subTopic="updateGroupSubTopic"
         @del-subtopic-group="delSubtopicGroup"
+        ref="choiceTabs"
       />
     </div>
     <div class="add_question" @click="addGroupQuestion()">+ 分段添加小题</div>
@@ -78,6 +79,10 @@
     methods: {
       hanldeClick() {
 
+      },
+
+      change(){
+        this.$refs.choiceTabs[0].change()
       },
 
       addGroupQuestion(){

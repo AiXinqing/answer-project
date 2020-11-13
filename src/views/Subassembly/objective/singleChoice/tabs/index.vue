@@ -141,10 +141,9 @@
       group: {
         immediate: true,
         handler () {
-          let {score,start,end} = this.group
+          let {score} = this.group
           this.data = {
             ...this.group,
-            start:!end ? this.subTopic_number:start,
             score: score == 0 ? null:score
           }
         }
@@ -157,6 +156,14 @@
         'already_pid_clean',
         'subTopic_number_calculate'
       ]),
+
+      change(){
+        let {start,end} = this.data
+        this.data = {
+          ...this.data,
+          start:!end ? this.subTopic_number:start,
+        }
+      },
 
       delSubtopicGroup() {
         this.$emit('del-subtopic-group',{type:this.activeName,subtopic:this.data})
