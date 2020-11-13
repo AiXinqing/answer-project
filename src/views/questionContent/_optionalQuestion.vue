@@ -86,7 +86,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('pageContent', ['pageData']),
+    ...mapState('page', ['pageData']),
 
     heightContetn(){
       const {borderTop,heightTitle,castHeight} = this.questionData
@@ -143,7 +143,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations('pageContent', ['pageData_del','pageData_edit']),
+    ...mapMutations('page', ['pageData_del','pageData_edit']),
     ...mapMutations('questionType', [
       'subTopic_already_del',
       'subTopic_number_calculate',

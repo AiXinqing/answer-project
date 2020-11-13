@@ -135,9 +135,9 @@ export default {
       'subTopic_number',
       'subTopic_number_determine',
     ]),
-    ...mapState('pageContent', ['pageData','pageLayout']),
+    ...mapState('page', ['pageLayout']),
     ...mapState('answerQuestion', ['answerQuestionArr']),
-    ...mapGetters('pageContent', ['questionNumber_big_exist','question_order']),
+    ...mapGetters('page', ['questionNumber_big_exist','questionorder']),
     ...mapGetters('question',['options']),
 
     questionNumber_big(){
@@ -203,7 +203,7 @@ export default {
     this.subTopic_number_calculate()
   },
   methods: {
-    ...mapMutations('pageContent', [
+    ...mapMutations('page', [
       'pageData_add',
       'pageData_edit',
       'pageData_insert',
@@ -270,7 +270,7 @@ export default {
           let data = {
               obj: {
                 ...obj,
-                order: this.question_order,
+                order: this.questionorder,
               },
               bigId: select.id,
               SelfOrder: Postpone,
