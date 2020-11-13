@@ -144,8 +144,7 @@ export default {
       'pageLayout',
     ]),
 
-    ...mapGetters('pageContent', ['questionNumber_big_exist']),
-    ...mapGetters('page', ['page_width','questionOrder']),
+    ...mapGetters('page', ['page_width','questionOrder','questionNumber_big_exist']),
     ...mapGetters('question',['options']),
 
     questionNumber_big(){
@@ -199,18 +198,19 @@ export default {
     spaceTopic: {
       immediate: true,
       handler() {
-        this.objectiveData = {
-          ...this.spaceTopic,
-        }
-
+        let Increase = {}
         if (this.editQuestionId == '') {
-          this.$nextTick(() => {
-            this.objectiveData.number = this.questionNumber_big
-          })
+          Increase = {
+            number: this.questionNumber_big,
+          }
           this.existNumber =
-            this.questionNumber_big_exist.length > 0
+            this.questionNumber_big_exist.length
               ? this.questionNumber_big_exist[0].value
               : null
+        }
+        this.objectiveData = {
+          ...this.spaceTopic,
+          ...Increase
         }
       },
     },
@@ -286,7 +286,6 @@ export default {
     preCreateQuestion() {
       // 数据编辑完成添加至全局数组中---------------
       // 行高配置
-      console.log(this.questionOrder)
       let {fillRow,fillMargin,fillTitle} = this.fill
       // 计算高度
 
