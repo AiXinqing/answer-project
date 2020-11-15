@@ -117,25 +117,30 @@ export default {
 </script>
 
 <style lang="less">
-.space_group_items {
-  margin-left: 36%;
-}
-.space_group_list {
-  width: 100%;
-}
-.el-collapse {
-  border-bottom: none;
-}
-.last-group{
-  .answer-last-group{
-    background-color:#f2f2f3;
+  .space_group_items {
+    margin-left: 36%;
   }
-}
-.answer-sub-group{
-  .points-item{
-    background-color: #fcfcfc;
+  .space_group_list {
+    width: 100%;
   }
-}
+  .el-collapse {
+    border-bottom: none;
+  }
+  .last-group{
+    .answer-last-group{
+      background-color:#f2f2f3;
+    }
+  }
+  .answer-sub-group{
+    .points-item{
+      background-color: #fcfcfc;
+    }
+  }
+  .space_group_item{
+    &.el-input.el-input--mini{
+      width: 48px;
+    }
+  }
 </style>
 
 

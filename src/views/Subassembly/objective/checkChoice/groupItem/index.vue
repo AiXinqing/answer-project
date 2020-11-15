@@ -15,7 +15,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import {LETTER_LIST} from '@/models/base'
+
 export default {
   props: {
     subtopic: {
@@ -26,14 +27,12 @@ export default {
 
   data () {
     return {
-      data: {}
+      data: {},
+      letterList:LETTER_LIST
     }
   },
 
   computed: {
-    ...mapState('questionType', [
-        'letterList'
-    ]),
 
     selectBox(){
       return this.activeName == 'judgmentChoice' ? ['T','F'] :
@@ -67,7 +66,7 @@ export default {
       let lessScoreVal = lessScore ? lessScore.toString().match(/^\d+(?:\.\d{0,1})?/) : lessScore
 
       if(scoreVal !='' && select !=''){
-        console.log(this.data)
+
         this.$emit('pre-edit-subtopic', {
           type:'checkChoice',
           data:{

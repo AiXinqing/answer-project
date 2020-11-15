@@ -17,6 +17,8 @@
 
 <script>
   import { mapMutations, mapState } from 'vuex'
+  import {LETTER_LIST} from '@/models/base'
+
   export default {
     props: {
       group: {
@@ -35,7 +37,8 @@
 
     data() {
       return {
-        data: {}
+        data: {},
+        letterList:LETTER_LIST
       }
     },
 
@@ -44,7 +47,6 @@
         'subTopic_number',
         'subTopic_number_already',
         'subTopic_number_determine',
-        'letterList'
       ]),
 
       selectBox(){
@@ -144,14 +146,14 @@
       group: {
         immediate: true,
         handler () {
-          let {score,start,end,lessScore} = this.group
+          let {score,lessScore} = this.group
           this.data = {
             ...this.group,
-            start:!end ? this.subTopic_number:start,
             score: score == 0 ? null:score,
             lessScore: lessScore == 0 ? null:lessScore,
           }
-        }
+        },
+        deep:true
       }
     },
 
@@ -161,6 +163,14 @@
         'already_pid_clean',
         'subTopic_number_calculate',
       ]),
+
+      change(){
+        let {start,end} = this.data
+        this.data = {
+          ...this.data,
+          start:!end ? this.subTopic_number:start,
+        }
+      },
 
       delSubtopicGroup() {
         this.$emit('del-subtopic-group',{type:this.activeName,subtopic:this.data})
@@ -176,7 +186,7 @@
           status:this.verifyStatus
         })
 
-        if (!this.verifyStatus){
+        if (!this.verifyStatus && this.verify == ''){
 
           let itemObj = {
             type: 'checkChoice',
@@ -200,7 +210,3 @@
     },
   }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

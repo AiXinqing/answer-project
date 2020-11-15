@@ -61,18 +61,18 @@ export default {
       },
       closeData: {},
       editQuestionId: null,
-      options:[]
     }
   },
   computed: {
-    ...mapState('questionType', ['questionNumber']),
-    ...mapState('pageContent', ['questionOrder', 'pageData','pageLayout']),
-    ...mapGetters('pageContent', ['questionNumber_big_exist']),
+    ...mapState('pageContent', ['questionOrder']),
+    ...mapState('page', ['pageData','pageLayout']),
+    ...mapGetters('question', ['options']),
+    ...mapGetters('page', ['questionNumber_big_exist']),
     errorMessage() {
       return this.errorVal != '' ? true : false
     },
     isdisabledFn() {
-      return  this.questionNumber_big_exist.length > 0 && !this.errorMessage ? false:true
+      return  this.questionNumber_big_exist.length && !this.errorMessage ? false:true
     },
     tabStatusVal() {
       const { rows, positionNum } = this.data
@@ -100,7 +100,6 @@ export default {
                 : null,
           }
         }
-        this.options = this.questionNumber.map((label,value)=>({label,value}))
       },
     },
   },
@@ -108,11 +107,11 @@ export default {
     this.closeData = JSON.parse(JSON.stringify(this.data))
   },
   methods: {
-    ...mapMutations('pageContent', [
+    ...mapMutations('page', [
       'pageData_insert',
       'pageData_edit',
       'pageData_id_filter',
-      'questionOrder_add',
+      'add_nonAnswer'
     ]),
     closeFrame() {
       this.openedFrame = false
@@ -162,20 +161,32 @@ export default {
             pageLayout:this.pageLayout
           },
         }
+
+        let index = this.questionNumber_big_exist.findIndex(question => question.value == positionNum)
+
+        let select = {}
+        if(index > -1){
+          select = this.questionNumber_big_exist[index]
+        }
+
         if (this.editQuestionId == null) {
-          let select = this.questionNumber_big_exist[this.data.positionNum]
           let data = {
             obj: obj,
             bigId: select.id,
             SelfOrder: false,
           }
             this.pageData_insert(data)
-          // }
+            this.add_nonAnswer({...obj,insertIndex:select.id})
         } else {
           this.pageData_edit({
             ...obj,
             id:this.editQuestionId,
             changeOrder:positionNum + 2
+          })
+          this.add_nonAnswer({
+            ...obj,
+            id:this.editQuestionId,
+            insertIndex:select.id
           })
         }
         this.openedFrame = false

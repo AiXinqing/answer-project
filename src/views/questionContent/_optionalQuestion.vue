@@ -56,6 +56,8 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
+import { QUESTION_NUMBERS } from '@/models/base'
+
 import quillEditor from '../../components/quillEditor'
 import dragChangeHeight from '../questionContent/drag'
 export default {
@@ -80,12 +82,11 @@ export default {
       data: {},
       cotent: '',
       promptTitle: '请考生用2B铅笔将所选题目对应题号涂黑，答题区域只允许选择一题，如果多做，则按所选做的前一题计分。',
-      options:[]
+      options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
     }
   },
   computed: {
-    ...mapState('questionType', ['questionNumber', 'letterList']),
-    ...mapState('pageContent', ['pageData']),
+    ...mapState('page', ['pageData']),
 
     heightContetn(){
       const {borderTop,heightTitle,castHeight} = this.questionData
@@ -142,7 +143,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations('pageContent', ['pageData_del','pageData_edit']),
+    ...mapMutations('page', ['pageData_del','pageData_edit']),
     ...mapMutations('questionType', [
       'subTopic_already_del',
       'subTopic_number_calculate',

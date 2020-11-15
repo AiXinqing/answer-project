@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   data () {
     return {
@@ -33,10 +33,10 @@ export default {
     }
   },
   computed: {
-    ...mapState('pageContent', ['pageData']),
+    ...mapState('page', ['pageData']),
   },
   methods: {
-    ...mapMutations('titleSet', ['editTitleInfo']),
+
     closeFrame () {
       this.openedFrame = false
     },
@@ -48,7 +48,7 @@ export default {
 
     },
     preCreateTitle () {
-      this.editTitleInfo(this.studentTitle)
+
       let cur = this.pageData[0]
       this.pageData.splice(0,1,{
         ...cur,

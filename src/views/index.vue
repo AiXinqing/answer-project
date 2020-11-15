@@ -13,7 +13,8 @@
 <script>
 import answerSheetLayout from './_pageLayout'
 import answerSheetSet from './_basicSet'
-import answerSheetContent from './_pageContent'
+// import answerSheetContent from './_pageContent'
+import answerSheetContent from './pageConten'
 export default {
   components: {
     answerSheetLayout,

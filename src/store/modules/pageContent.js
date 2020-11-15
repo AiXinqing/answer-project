@@ -1,17 +1,18 @@
+import { QUESTION_NUMBERS } from '@/models/base'
+
 const state = {
-  questionNumber: ['一', '二', '三', '四', '五', '六', '七', '八',
-    '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七',
-    '十八', '十九', '二十', '二十一', '二十二', '二十三', '二十四'
-  ],
+  questionNumber: QUESTION_NUMBERS,
   pageLayout: {}, // 页面布局
   pageData: [],
-  page_size: 1170 - 60, // 一页高度
+
   pageHeight: [], // 页面高度
 
   questionOrder: 0, // 题序
   // questionNumber_big: 0, // 大题题号
 
   scoreTotal: 0, // 试卷总分
+
+  nonAnswer:[], // 非答题存在数组
 }
 
 const mutations = {
@@ -57,11 +58,17 @@ const mutations = {
   pageData_del: (state, index) => {
     state.pageData.splice(index, 1)
   },
+
   pageData_id_clean: (state, id) => {
     // 内容分页
     state.pageData = state.pageData.filter((item) => {
       return ![id].includes(item.id)
     })
+  },
+
+  pageData_nonA_clean: (state,objId) => {
+    state.pageData = state.pageData.filter((item) => item.questionType != "NonRresponseArea")
+    state.pageData = state.pageData.filter((item) => item.objId != objId)
   },
 
   pageData_insert: (state, {
@@ -102,9 +109,12 @@ const mutations = {
 
     }
   },
+
   pageData_simple_insert: (state, data) => {
     // 解答题插入
-    state.pageData.splice(data.num, 0, data.obj)
+    if (data.num > -1) {
+      state.pageData.splice(data.num + 1,0,data.obj)
+    }
   },
   pageData_order_edit: (state, data) => {
     // 解答题
@@ -140,9 +150,6 @@ const mutations = {
     state.pageHeight = results
   },
 
-  questionOrder_add: (state) => {
-    state.questionOrder += 1
-  },
   questionOrder_subtract: (state, order) => {
     state.pageData.map((item) =>
       item.order > order ? item.order - 1 : item.order
@@ -184,6 +191,33 @@ const mutations = {
       }
     })
   },
+
+  add_nonAnswer: (state, obj) => {
+    // 非答题新增
+    let index = state.nonAnswer.findIndex(ele => ele.id == obj.id)
+    if (index > -1) {
+      state.nonAnswer = state.nonAnswer.splice(index, 0, obj)
+    } else {
+      state.nonAnswer.push(obj)
+    }
+  },
+
+  del_nonAnswer: (state, obj) => {
+    // 非答题新增
+    let index = state.nonAnswer.findIndex(ele => ele.id == obj.id)
+    if (index > -1) {
+      state.nonAnswer = state.nonAnswer.splice(index, 1)
+    }
+  },
+  // 插入清空的非答题
+  nonAnswer_insert: (state) => {
+    state.nonAnswer.forEach(obj => {
+      let index = state.pageData.findIndex(question => question.id == obj.insertIndex)
+      if (index > -1) {
+        state.pageData.splice(index + 1, 0, obj)
+      }
+    })
+  },
 }
 
 const actions = {}
@@ -195,25 +229,34 @@ const getters = {
   questionNumber_big_exist: (state) => {
     // 大题号
     let obj = {}
-    return state.pageData.filter(question => question.questionType !== 'AnswerSheetTitle')
+
+    let Arr =  state.pageData.filter(question => question.questionType !== 'AnswerSheetTitle' )
       .filter(question => question.questionType !== 'NonRresponseArea')
       .map((question, index) => {
         let {
           number,
           topicName
         } = question.content
+        let objId = {}
+        if (question.objId) {
+          objId = {objId:question.objId}
+        }
         return {
           id: question.id,
+          ...objId,
           label: state.questionNumber[number] + '.' + topicName,
-          order: question.order,
-          value: index
+          order: !question.order ? index + 1 : question.order,
+          value: index,
+          type:question.questionType
         }
-      }).reduce((acc, cur) => {
+      })
+      .reduce((acc, cur) => {
         obj[cur.label] ? '' : obj[cur.label] = true && acc.push(cur)
         return acc.map(question => {
-          return question.label == cur.label ? cur : question
+          return question.label == cur.label && question.order < cur.order ? cur : question
         })
       }, [])
+    return Arr
   },
   question_order: (state) => {
     return state.pageData.filter(question => question.questionType !== 'NonRresponseArea').length

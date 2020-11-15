@@ -13,7 +13,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import {LETTER_LIST} from '@/models/base'
+
 export default {
   props: {
     subtopic: {
@@ -24,14 +25,12 @@ export default {
 
   data () {
     return {
-      data: {}
+      data: {},
+      letterList:LETTER_LIST
     }
   },
 
   computed: {
-    ...mapState('questionType', [
-        'letterList'
-    ]),
 
     selectBox(){
       return this.activeName == 'judgmentChoice' ? ['T','F'] :
@@ -62,7 +61,6 @@ export default {
       const {score,select} = this.data
       let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
       if(scoreVal !='' && select !=''){
-        console.log(this.data)
         this.$emit('pre-edit-subtopic', {
           type:'judgmentChoice',
           data:{

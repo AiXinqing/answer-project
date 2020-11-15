@@ -119,20 +119,17 @@ export default {
           childGroup: [],
         },]
       },
-      options:[],
       initScore:1, // 删除后初始分数
     }
   },
   computed: {
     ...mapState('questionType', [
-      'questionNumber',
       'subTopic_number',
       'subTopic_number_determine',
     ]),
 
     ...mapState('pageContent', [
       'pageHeight',
-      'page_size',
       'questionOrder',
       'pageData',
       'pageLayout',
@@ -141,6 +138,7 @@ export default {
     ...mapState('answerQuestion', ['answerQuestionArr',]),
 
     ...mapGetters('pageContent', ['questionNumber_big_exist','question_order']),
+    ...mapGetters('question',['options']),
 
     questionNumber_big(){
       return this.questionNumber_big_exist.length
@@ -234,7 +232,6 @@ export default {
           })
           this.existNumber = this.questionNumber_big_exist.length ? this.questionNumber_big_exist[0].value : null
         }
-        this.options = this.questionNumber.map((label,value)=>({label,value}))
       }
     },
 
@@ -256,10 +253,9 @@ export default {
       'pageData_add',
       'pageData_edit',
       'pageData_insert',
-      'questionOrder_add',
-      'questionOrder_subtract',
-      'pageData_objId_filter',
-      'pageData_simple_insert'
+      'pageData_simple_insert',
+      'nonAnswer_insert',
+      'pageData_nonA_clean'
     ]),
 
     ...mapMutations('questionType', [
@@ -336,17 +332,12 @@ export default {
         }
 
       } else {
-        this.pageData_objId_filter(this.editQuestionId)
           let previous = this.previous
           let previousTig = this.previous
           let pageObj = this.pageData[previous + 1]
+          this.pageData_nonA_clean(this.editQuestionId) // 清空非答题
 
-          if(pageObj){
-            if(pageObj.questionType ==="NonRresponseArea"){
-              previous = pageObj.order
-            }
-          }
-          this.subTopicGroup.forEach((question) => {
+          this.subTopicGroup.forEach((question,index) => {
             previous += 1
             let data = {
               obj: {
@@ -359,6 +350,12 @@ export default {
             }
 
             this.pageData_simple_insert(data)
+
+            if(index == this.subTopicGroup.length - 1){
+              this.$nextTick(()=>{
+                this.nonAnswer_insert()
+              })
+            }
           })
         this.subTopic_determine_pid_clean(this.childGroups[0].pid)
       }

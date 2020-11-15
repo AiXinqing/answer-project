@@ -150,14 +150,14 @@
       }
     },
     computed: {
-      ...mapGetters('pageContent', ['questionNumber_big_exist',
-      'question_order','options','pageWidth',]),
 
       ...mapState('questionType',['subTopic_number',
       'subTopic_number_already',
       'subTopic_number_determine',]),
 
-      ...mapState('pageContent',['pageData']),
+      ...mapState('page',['pageData']),
+      ...mapGetters('page',['page_width','questionNumber_big_exist','questionOrder']),
+      ...mapGetters('question',['options']),
 
       questionNumber_big(){
         return this.questionNumber_big_exist.length
@@ -165,14 +165,6 @@
 
       title(){
         return  !this.editQuestionId ? '新增客观题' : '编辑客观题'
-      },
-
-      isdisabledFn(){
-        return this.questionGroup.length > 0 && !this.errorMessage ? false :true
-      },
-
-      errorMessage() {
-        return this.errorVal != '' ? true : false
       },
 
       questionGroup(){
@@ -184,6 +176,15 @@
         ]
       },
 
+      isdisabledFn(){
+        return this.questionGroup.length > 0 && !this.errorMessage ? false :true
+      },
+
+      errorMessage() {
+        return this.errorVal != '' ? true : false
+      },
+
+
       rowGroup(){
         // 每行所占小题
         let result = []
@@ -192,84 +193,6 @@
           result.push(this.questionGroup.slice(i, i + rows))
         }
         return result
-      },
-
-      maxWidth(){
-        // 最大宽度
-        const maxWidthArr = []
-        this.rowGroup.filter((item) => {
-          let widthS = item.map((row) => row.width)
-          maxWidthArr.push(Math.max.apply(null, widthS))
-        })
-
-        let sum = 0,max = this.pageWidth
-        let arr = [],numberArr = []
-        maxWidthArr.forEach(num => {
-          sum += num
-          if(sum <= max){
-            arr.push(num)
-          }else{
-            numberArr.push(arr)
-            sum = num
-            arr = [num]
-          }
-        });
-        if(arr.length > 0){
-          numberArr.push(arr)
-        }
-        return numberArr.map(num => num.length)
-      },
-
-      contentHeight(){
-        // 计算题型内容所占高度
-        // 计算宽度所占数组长度
-        let heights = this.rowGroup.map((item) => item.length * 22)
-        // 根据宽度数组 和 高度数组合成高度二维数组
-        let twoDimensional = []
-        let num = 0
-        for (let i = 0; i < this.maxWidth.length; i++) {
-          num += this.maxWidth[i]
-          twoDimensional.push(heights.slice(num - this.maxWidth[i], num))
-        }
-        let heightList = twoDimensional.map((item) => {
-          return Math.max.apply(null, item)
-        })
-        if (heightList.length > 0) {
-          return (
-            heightList.reduce(
-              (accumulator, currentValue) => accumulator + currentValue
-            ) +
-            heightList.length * 10
-          )
-        } else {
-          return 0
-        }
-      },
-
-      subTopicGroup(){
-        let RowArr = []
-        let columnArr = []
-        let widthSum = 0
-
-        this.rowGroup.forEach(item => {
-          let maxWidth = Math.max.apply(Math, item.map(function(o) {return o.width}))
-          widthSum += maxWidth
-
-          if(widthSum < this.pageWidth){
-            columnArr.push(item)
-          }else{
-            RowArr.push(columnArr)
-            widthSum = maxWidth
-            columnArr = []
-            columnArr.push(item)
-          }
-
-        })
-
-        if(columnArr.length > 0){
-          RowArr.push(columnArr)
-        }
-        return RowArr
       },
 
       scoreTotal(){
@@ -290,7 +213,7 @@
               number: this.questionNumber_big,
             }
             this.existNumber =
-            this.questionNumber_big_exist.length > 0
+            this.questionNumber_big_exist.length
               ? this.questionNumber_big_exist[0].value
               : null
           }
@@ -330,7 +253,7 @@
         'subTopic_determine_pid_clean',
       ]),
 
-      ...mapMutations('pageContent', [
+      ...mapMutations('page', [
         'pageData_add',
         'pageData_edit',
         'pageData_insert',
@@ -387,7 +310,7 @@
         }
         this.preEditData.rows = rows
         this.editingData.rows = rows
-        this.$nextTick(() => {
+        this.$nextTick(()=>{
           this.preCreateQuestion()
         })
       },
@@ -408,34 +331,37 @@
         const { rows,InsertTitle,Postpone,} = this.editingData
 
         let questionId = `objective_${+new Date()}`
-
+        //this.subTopicGroup
         var questionObj = {
             heightTitle: this.heightTitle,
             MarginHeight: this.MarginHeight,
-            rowHeight: this.rowHeight * rows,
+            rowHeight: this.rowHeight * rows + 10,
             id: questionId,
-            height: this.contentHeight + this.titleH, // 32标题高度
+           // height: this.contentHeight + this.titleH, // 32标题高度
+            height:{
+              rowGroup:this.rowGroup,
+              titleH:this.heightTitle + this.MarginHeight
+            },
             questionType: 'ObjectiveQuestion',
             content: {
               ...this.editingData,
               scoreTotal:this.scoreTotal,
               pageLayout:this.pageLayout
             },
-            order: this.question_order,
-            showData:this.subTopicGroup,
+            order: this.questionOrder,
+            showData:[],
             first: true,
           }
         if (this.editQuestionId == '') {
-          if (InsertTitle && this.questionNumber_big_exist.length > 0){
+          if (InsertTitle && this.questionNumber_big_exist.length ){
               let select = this.questionNumber_big_exist[this.existNumber]
               let data = {
-              obj: {
-                ...questionObj,
-                order: this.question_order,
-              },
-              bigId: select.id,
-              SelfOrder: Postpone || false,
-            }
+                obj: {
+                  ...questionObj,
+                },
+                bigId: select.id,
+                SelfOrder: Postpone || false,
+              }
             this.pageData_insert(data)
           }else{
             this.pageData_add(questionObj)
@@ -462,24 +388,22 @@
 
       updateGroupSubTopic(groupObj){
         // 编辑题组
-        let obj = JSON.parse(JSON.stringify(this.preEditData))
+        let obj = this.editingData
         let {type,data} = groupObj
         let {group} = obj
 
         let curGroup = group[type]
         let index = curGroup.findIndex(group => group.id == data.id)
 
+
         if(index > -1){
           curGroup.splice(index,1,data)
-          this.$nextTick(()=>{
-            this.preEditData = JSON.parse(JSON.stringify(obj))
-          })
         }
       },
 
       preEditSubtopic(subtopic){
         //编辑小题号
-        let obj = JSON.parse(JSON.stringify(this.preEditData))
+        let obj = this.editingData
         let {type,data} = subtopic
 
         let curGroup = obj.group[type]
@@ -491,9 +415,6 @@
 
           if(cIndex > -1){
             childrenGroup.splice(cIndex,1,data)
-            this.$nextTick(()=>{
-              this.preEditData = JSON.parse(JSON.stringify(obj))
-            })
           }
         }
       },

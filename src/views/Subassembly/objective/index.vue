@@ -17,6 +17,7 @@
           @pre-edit-subtopic="preEditSubtopic"
           @add-group-question="addGroupQuestion"
           @del-subtopic-group="delSubtopicGroup"
+          ref="componentTabs"
         />
       </el-tab-pane>
     </template>
@@ -27,7 +28,9 @@
   import singleChoice from '../objective/singleChoice'
   import checkChoice from '../objective/checkChoice'
   import judgmentChoice from '../objective/judgmentChoice'
-  import {mapState} from 'vuex'
+
+  import {OBJECTIVE_QUESTION} from '@/models/base'
+
   export default {
     components: {
       singleChoice,
@@ -49,12 +52,11 @@
         activeName: 'singleChoice',
         grouptopic:{},
         errorStr:'',
-        verifyStatus:false
+        verifyStatus:false,
+        tabPaneData:OBJECTIVE_QUESTION
       }
     },
     computed: {
-      ...mapState('questionType',['tabPaneData']),
-
       isdisabled(){
         return this.errorStr != '' && this.verifyStatus ? true : false
       },
@@ -72,6 +74,10 @@
     methods: {
       hanldeClick(tab) {
         this.activeName = tab.name
+
+        if(this.grouptopic[tab.name].length){
+          this.$refs.componentTabs[tab.index].change()
+        }
       },
 
       groupVerifyStatus(verify){

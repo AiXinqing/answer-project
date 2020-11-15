@@ -103,6 +103,7 @@
 
 <script>
 import { mapState, mapMutations,mapGetters } from 'vuex'
+import { PAGE_HEIGHT } from '@/models/base'
 
 export default {
   components: {},
@@ -126,26 +127,26 @@ export default {
         Postpone: false,
       },
       editData: {},
-      options:[],
       changeClick:false,
+      page_height:PAGE_HEIGHT
     }
   },
   computed: {
     ...mapState('questionType', [
-      'questionNumber',
       'subTopic_number',
       'subTopic_number_determine',
     ]),
     ...mapState('pageContent', [
       'pageHeight',
-      'page_size',
       'pageData',
       'pageLayout',
     ]),
+    ...mapGetters('pageContent', ['questionNumber_big_exist','question_order']),
+    ...mapGetters('question',['options']),
+
     title(){
       return this.editQuestionId ? '编辑作文' : '设置'
     },
-    ...mapGetters('pageContent', ['questionNumber_big_exist','question_order']),
     questionNumber_big(){
       return this.questionNumber_big_exist.length
     },
@@ -216,7 +217,7 @@ export default {
           return accumulator + currentValue
         })
 
-      let currentPageHeight = this.page_size - heights - 32 // 当前页剩余可用高度
+      let currentPageHeight = this.page_height - heights - 32 // 当前页剩余可用高度
       return currentPageHeight
     },
     BeforeEditing() {
@@ -247,7 +248,6 @@ export default {
           this.questionNumber_big_exist.length > 0
             ? this.questionNumber_big_exist[0].value
             : null
-        this.options = this.questionNumber.map((label,value)=>({label,value}))
       },
     },
   },

@@ -9,10 +9,7 @@
       <div
         v-for="(topice,index) in pageList"
         :key="topice.id + '_' + i + '_' + index"
-        :class="[
-          'footer',
-          { answer: topice.first != undefined && topice.first == false },
-        ]"
+        class="footer"
         ref="box"
         :style="{ minHeight: topice.castHeight + 'px' }"
       >
@@ -34,6 +31,9 @@
           @hanlde-subtraction-non="hanldeSubtractionNon"
         />
       </div>
+      <div class="card_footer">
+          第 {{i + 1}}-{{contentData.length}} 页
+      </div>
     </div>
     <!-- 公有弹框组件 -->
     <public-dialog ref="publicDialog" />
@@ -41,18 +41,18 @@
 </template>
 
 <script>
-import { mapState, mapMutations} from 'vuex'
+import { mapMutations, mapGetters} from 'vuex'
 import { PAGE_HEIGHT } from '@/models/base'
 
-import AnswerSheetTitle from './questionContent/_answerSheetTitle' // 答题卡标题
-import ObjectiveQuestion from './questionContent/_ObjectiveQuestion' // 客观题
-import FillInTheBlank from './questionContent/_FillInTheBlank' // 填空题
-import answerQuestion from './questionContent/_answerQuestion' // 解答题
-import optionalQuestion from './questionContent/_optionalQuestion' // 选作题
-import compositionEnglish from './questionContent/_compositionEnglish' // 作文英语
-import compositionLanguage from './questionContent/_compositionLanguage' // 作文语文
-import NonRresponseArea from './questionContent/_NonRresponseAreaContent' // 非作答
-import publicDialog from './dialog/_publicDialog'
+import AnswerSheetTitle from '../questionContent/_answerSheetTitle' // 答题卡标题
+import ObjectiveQuestion from '../questionContent/_ObjectiveQuestion' // 客观题
+import FillInTheBlank from '../questionContent/_FillInTheBlank' // 填空题
+import answerQuestion from '../questionContent/_answerQuestion' // 解答题
+import optionalQuestion from '../questionContent/_optionalQuestion' // 选作题
+import compositionEnglish from '../questionContent/_compositionEnglish' // 作文英语
+import compositionLanguage from '../questionContent/_compositionLanguage' // 作文语文
+import NonRresponseArea from '../questionContent/_NonRresponseAreaContent' // 非作答
+import publicDialog from '../dialog/_publicDialog'
 
 export default {
   components: {
@@ -70,7 +70,7 @@ export default {
     return {
       contentData: [],
       heightArray: [],
-      page_height:PAGE_HEIGHT
+      page_height: PAGE_HEIGHT
     }
   },
   beforeRouteLeave(to, from, next) {
@@ -87,22 +87,17 @@ export default {
     })
   },
   computed: {
-    ...mapState('pageContent', [
-      'pageLayout',
-      'pageData',
-    ]),
+    ...mapGetters('page',['page_width','compile_pageData']),
 
     pageWidth() {
-      return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
-        ? 520
-        : 785
+      return this.page_width + 40
     },
   },
   watch: {
-    pageData: {
+    compile_pageData: {
       immediate: true,
       handler() {
-        this.contentData = this.pageContentFunc(this.pageData)
+        this.contentData = this.pageContentFunc(this.compile_pageData)
         if (this.contentData.length > 0) {
           this.$nextTick(() => {
             this.heightArray = this.$refs['box'].map(
@@ -111,7 +106,7 @@ export default {
             this.pageHeight_set(this.heightArray)
           })
         }
-        localStorage.setItem('accessToken', JSON.stringify(this.pageData))
+        localStorage.setItem('accessToken', JSON.stringify(this.compile_pageData))
       },
     },
   },
@@ -126,135 +121,129 @@ export default {
     pageContentFunc(rects = []) {
       this.scoreTotal_reset() // 试卷总分清零
 
-      let results = []
-      let SplitVal = 0 // 拆分所用
-      let curPage = {
-        height: 0,
-        rects: [],
+      var results = []
+
+      // currentPage.height 总高度
+      var currentPage = {height:0,rects:[]}
+
+      //重置高度
+      function resetCurrentPage () {
+        currentPage.height = 0;
+        currentPage.rects = [];
       }
-      function restCutPage() {
-        curPage.height = 0
-        curPage.rects = []
-      }
-      rects.forEach((rect) => {
+
+      rects.forEach(rect =>{
+        let backup = {}
         if(rect.content.scoreTotal){
           // 试卷总分叠加
           this.scoreTotal_sum(rect.content.scoreTotal)
         }
-        let ActualHeight = rect.height + 20 //
-        // avalible 剩余高度
-        let avalibleHeight = this.page_height - curPage.height
+
+        var avalibleHeight = this.page_height - currentPage.height - 20
         // 用于填空题数组切割
-        let itemObj = JSON.parse(JSON.stringify(rect))
+        const itemObj = JSON.parse(JSON.stringify(rect))
 
+        if(rect.height > avalibleHeight){ // 高度溢出
+          let curRect = this.preliminaryQuestion(rect, avalibleHeight)
 
-        // 高度溢出
-        if (ActualHeight > avalibleHeight) {
-          // 返回计算行数及最低高度
-          let curRect = this.questionType(rect, avalibleHeight)
+          if(!curRect.pagination){
+            // 分页-剩余高度新建rect
+            if(rect.showData && rect.showData.length){
+              backup = {
+                showData:itemObj.showData.splice(0, curRect.availableRow),
+                first:true
+              }
+            }
 
-          if (avalibleHeight >= 32 &&!curRect.isPage) {
-            SplitVal = avalibleHeight - curRect.height
-
-            curPage.rects.push({
+            currentPage.rects.push({
               ...rect,
-              castHeight: curRect.height,
-              showData: curRect.isArray
-                ? itemObj.showData.splice(0, curRect.row)
-                : [],
-              first: curRect.isArray ? true : rect.first,
+              castHeight:curRect.height,
+              ...backup
             })
           }
 
-          // 追加一页页面
-          results.push(curPage.rects)
-          // 重置高度
-          restCutPage()
-          // 判罚当前高度能分几页
-          let height = rect.height - avalibleHeight + SplitVal
+
+          results.push(currentPage.rects) // 增加一页
+          resetCurrentPage()
+
+
+          // 判断当前rect高度能分几页----------------------------------------
+          let height = rect.height - curRect.height
+
+          //剩余高度超过一页高度
           while (height > this.page_height) {
-            let curRects = this.questionType(rect, this.page_height)
-            results.push([
-              {
-                ...rect,
-                castHeight: curRects.height, // 追加一页高度
-                showData: curRect.isArray
-                  ? itemObj.showData.splice(0, curRects.row)
-                  : [],
-                borderTop: !curRects.isPage ? 1 : 0, // 分页第一个
-              },
-            ])
-            height -= curRects.height
+            let avalibleHeight =  this.page_height - 20
+            let curRects = this.preliminaryQuestion(rect, avalibleHeight,false)
+
+            if(rect.showData && rect.showData.length){
+              // 切割数组
+              backup = {
+                showData:itemObj.showData.splice(0, curRects.availableRow),
+                first:false
+              }
+            }
+
+            results.push([{
+              ...rect,
+              castHeight: curRects.height,
+              ...backup
+            }]);
+            height -= this.page_height - 20
           }
 
-          if (avalibleHeight >= 32 &&!curRect.isPage) {
-            curPage.height = height
-          } else {
-            curPage.height = ActualHeight
-            height = curPage.height
+          //最后剩余高度---------------------------------------------------
+
+          if(rect.showData && rect.showData.length){
+              backup = {
+                showData: itemObj.showData,
+                first:curRect.pagination
+              }
+          }
+          currentPage.height = height + rect.MarginHeight
+          if(itemObj.showData && !curRect.pagination){
+            currentPage.height = itemObj.showData.length * itemObj.rowHeight + rect.MarginHeight
           }
 
-          curPage.rects.push({
+          currentPage.rects.push({
             ...rect,
-            castHeight: height,
-            heightTitle: 0,
-            showData: itemObj.showData,
-            borderTop: !curRect.isPage ? 1 : 0,
-          }) // 追加剩余高度
-        } else {
-          curPage.height += ActualHeight
-          curPage.rects.push({
+            castHeight: currentPage.height,
+            ...backup
+          })
+
+        }else{
+
+          currentPage.height += (rect.height + 20)
+
+          currentPage.rects.push({
             ...rect,
             castHeight: rect.height,
           })
         }
       })
-      if (curPage.height) {
-        results.push(curPage.rects)
+
+      if(currentPage.height){
+        results.push(currentPage.rects)
       }
 
       return results
     },
-    questionType(obj, rectHeigth) {
 
-      let MarginHeight = obj.MarginHeight + obj.heightTitle
-      let contentHeight = rectHeigth - MarginHeight
-      //-----------当前高度可占多少行
-      let RowHeight = obj.rowHeight
-      let row = Math.floor(contentHeight / RowHeight)
+    preliminaryQuestion(question,avalibleHeight,initial = true){
 
-      let rectObj = {
-        height: row * RowHeight + MarginHeight,
-        row: row,
-        isArray: false,
-        isPage: row * RowHeight + MarginHeight < MarginHeight ? true : false,
+      const {MarginHeight,heightTitle,rowHeight} = question
+      const cornerHeight = initial ? MarginHeight + heightTitle : MarginHeight
+      const RemainingHeight = avalibleHeight - cornerHeight
+      const availableRow = Math.floor(RemainingHeight / rowHeight)
+      const current_height = availableRow * rowHeight  + cornerHeight
+
+
+      const parameter = {
+        availableRow:availableRow,
+        height:current_height >= (cornerHeight + rowHeight) ? current_height : 0,
+        pagination:current_height >= (cornerHeight + rowHeight) ? false : true,
       }
-      switch (obj.questionType) {
-        case 'FillInTheBlank':
-          return {
-            ...rectObj,
-            isPage: false,
-            isArray: true,
-          }
-        case 'ObjectiveQuestion':
-          return {
-            ...rectObj,
-            isPage: false,
-            isArray: true,
-          }
-        case 'answerQuestion':
-          return rectObj
-        case 'optionalQuestion':
-          return rectObj
-        case 'compositionEnglish':
-          return rectObj
-        case 'compositionLanguage':
-          return rectObj
-        case 'NonRresponseArea':
-          return rectObj
-        default:
-          return { height: 0, row: 0, isPage: false, isArray: false }
-      }
+
+      return parameter
     },
 
     subTopic_numberHanldeEdit(id) {
@@ -322,6 +311,16 @@ export default {
   margin-bottom: 20px;
   &:last-child {
     margin-bottom: 0;
+  }
+
+  .card_footer {
+    text-align: center;
+    font-size: 14px;
+    line-height: 35px;
+    position: absolute;
+    bottom: 0;
+    height: 70px;
+    width: 100%;
   }
 }
 </style>

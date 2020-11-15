@@ -16,12 +16,11 @@
         :style="{ width: titleWidthLeft + 'px' }"
       >
         <div class="precautions_title">注 意 事 项</div>
-        <div :class="['precautions_content', { active: rectWidth == 480 }]">
-          <div>1. 答题前请将姓名、班级、考场、座号和准考证号填写清楚。</div>
-          <div>2. 客观题答题,必须使用2B铅笔填涂,修改时用橡皮擦干净。</div>
-          <div>3. 主观题必须使用黑色签字笔书写。</div>
-          <div>4. 必须在题号对应的答题区域内作答,超出答题区域书写无效。</div>
-          <div>5. 保持答卷清洁完整。</div>
+        <div :class="['precautions_content', { active: page_width == 480 }]">
+            <div
+              v-for="(item,index) in title_percautions"
+              :key="index"
+            >{{`${index + 1}. ${item}`}}</div>
         </div>
         <div class="precautions_mark">
           <svg
@@ -95,6 +94,9 @@
 <script>
 import hjTextarea from './Precautions/_textarea'
 import studentInfo from './Precautions/_studentInfo'
+import { PRECAUTIONS } from '@/models/base'
+import { mapGetters } from 'vuex';
+
 export default {
   components: {
     hjTextarea,
@@ -122,36 +124,37 @@ export default {
       studentInfoList: [],
       data:{},
       titleRows:this.questionData.content.titleRows,
-      dataLayout:this.questionData.content.pageLayout
+      dataLayout:this.questionData.content.pageLayout,
+      title_percautions:PRECAUTIONS
     }
   },
   computed: {
+    ...mapGetters('page',['page_width']),
+
     cardData() {
       return this.contentData[0]
     },
-    rectWidth() {
-      return this.dataLayout.column === 3 && this.dataLayout.size == 'A3'
-        ? 480
-        : 745
-    },
+
     Rows() {
-      return this.data.titleRows == 9 && this.rectWidth == 480 ? 26 : 28
+      return this.data.titleRows == 9 && this.page_width == 480 ? 26 : 28
     },
+
     svg() {
-      return this.rectWidth == 480 ? true : false
+      return this.page_width == 480 ? true : false
     },
+
     titleWidthLeft() {
       if (this.titleRows * this.Rows < 224) {
-        return this.rectWidth - 224
+        return this.page_width - 224
       } else {
-        return this.rectWidth - this.titleRows * this.Rows
+        return this.page_width - this.titleRows * this.Rows
       }
     },
     titleWidthRight() {
       if (this.titleRows * this.Rows < 224) {
         return 224
       } else {
-        return this.rectWidth - this.titleWidthLeft
+        return this.page_width - this.titleWidthLeft
       }
     },
     divWidth() {

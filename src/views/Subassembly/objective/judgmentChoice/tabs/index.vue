@@ -15,6 +15,8 @@
 
 <script>
   import { mapMutations, mapState } from 'vuex'
+  import {LETTER_LIST} from '@/models/base'
+
   export default {
     props: {
       group: {
@@ -33,7 +35,8 @@
 
     data() {
       return {
-        data: {}
+        data: {},
+        letterList:LETTER_LIST
       }
     },
 
@@ -41,9 +44,7 @@
       ...mapState('questionType', [
         'subTopic_number',
         'subTopic_number_already',
-        'subTopic_number_determine',
-        'letterList'
-      ]),
+        'subTopic_number_determine',]),
 
       selectBox(){
         return this.activeName == 'judgmentChoice' ? ['T','F'] :
@@ -157,6 +158,14 @@
         'subTopic_number_calculate',
       ]),
 
+      change(){
+        let {start,end} = this.data
+        this.data = {
+          ...this.data,
+          start:!end ? this.subTopic_number:start,
+        }
+      },
+
       delSubtopicGroup() {
         this.$emit('del-subtopic-group',{type:this.activeName,subtopic:this.data})
       },
@@ -170,7 +179,7 @@
           status:this.verifyStatus
         })
 
-        if (!this.verifyStatus){
+        if (!this.verifyStatus && this.verify == ''){
 
           let itemObj = {
             type: 'judgmentChoice',

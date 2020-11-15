@@ -38,6 +38,7 @@
         >
       </div>
     </div>
+
     <drag-change-height
       :question="questionContetn"
       @height-resize="handleResize($event)"
@@ -45,68 +46,39 @@
     >
 
       <div class="content-info" ref="questionChange" >
-        <div class="content-row" v-for="(item, i) in topicGroupData" :key="i">
-          <a
-            v-for="row in item"
-            :key="row.id"
+        <div class="content-row" v-for="(subtopic, i) in subtopicGroup" :key="i">
+          <section
+            v-for="(topic,index) in subtopic"
+            :key="topic.lid ? `${topic.lid}_${index}` : `${topic.sid}_${index}`"
+            class="subtopic_a"
             :style="{ width: pageWidth / data.rows + 'px' }"
           >
-            <i v-if="row.lgTopic != undefined" ref="iWidth">
-              <template v-if="row.lgTopic < 2">{{ row.topic }}</template>
-              <template v-if="row.lgTopic != 0">({{ row.lgTopic }})</template>
-            </i>
-            <i v-else ref="iWidth"></i>
-            <span
-              v-if="row.lgTopic != undefined"
-              :style="{
-                width:
-                  row.lgTopic != 0
-                    ? 'calc(100% - ' +
-                      (row.topic.toString().length +
-                        row.lgTopic.toString().length +
-                        2) *
-                        9 +
-                      'px)'
-                    : 'calc(100% - 23px)',
-              }"
-            />
-            <span
+            <template
+              v-if="topic.lid"
+            >
+              <p>{{topic.topic}}({{topic.smallTopic}})</p>
+              <a></a>
+            </template>
+
+            <template
               v-else
-              :style="{
-                width: 'calc(100% - 22px)',
-              }"
-            />
-          </a>
+            >
+            <!-- 一级 -->
+              <p>{{topic.topic}}</p>
+              <a></a>
+            </template>
+          </section>
         </div>
-        <!-- <p v-for="(item, i) in topicGroupData" :key="i">
-          <span
-            v-for="row in item"
-            :key="row.id"
-            :style="{ width: pageWidth / data.rows + 'px',display:'inline-block' }"
-          >
-            {{ row.topic }}&nbsp;&nbsp;&nbsp;
-            <a
-              :style="{
-                width:
-                  row.lgTopic != 0
-                    ? 'calc(100% - ' +
-                      (row.topic.toString().length +
-                        row.lgTopic.toString().length +
-                        2) *
-                        9 +
-                      'px)'
-                    : 'calc(100% - 23px)',
-              }"
-            ></a>
-          </span>
-        </p> -->
+
       </div>
     </drag-change-height>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations,mapGetters } from 'vuex'
+import { QUESTION_NUMBERS } from '@/models/base'
+
 import quillEditor from '../../components/quillEditor'
 import dragChangeHeight from '../questionContent/drag'
 export default {
@@ -129,18 +101,21 @@ export default {
       data: {},
       isEditor: false,
       cotent: '',
-      options:[],
+      options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
       quilleditor:false,
       pageLayout:this.contentData.pageLayout,
     }
   },
   computed: {
     ...mapState('questionType', ['questionNumber', 'letterList']),
-    ...mapState('pageContent', ['pageData']),
+    ...mapState('page', ['pageData']),
+    ...mapGetters('page', ['page_width']),
+
     heightContetn(){
-      const {castHeight,heightTitle,height} = this.questionData
+      const {castHeight,heightTitle,first} = this.questionData
+
       let obj = {
-        height: castHeight >= height  ? castHeight - heightTitle - 3 : castHeight
+        height: first ? castHeight - heightTitle : castHeight
       }
       return obj
     },
@@ -151,11 +126,9 @@ export default {
     },
 
     pageWidth() {
-      return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
-        ? 440
-        : 695
+      return this.page_width - 50
     },
-    topicGroupData() {
+    subtopicGroup() {
       return this.questionData.showData
     },
     topicBox() {
@@ -169,7 +142,6 @@ export default {
         this.data = {
           ...this.contentData,
         }
-        this.options = this.questionNumber.map((label,value)=>({label,value}))
         this.pageLayout = this.contentData.pageLayout
       },
     },
@@ -186,9 +158,8 @@ export default {
     })
   },
   methods: {
-    ...mapMutations('pageContent', [
+    ...mapMutations('page', [
       'pageData_del',
-      'questionOrder_subtract',
       'pageData_edit',
     ]),
     ...mapMutations('questionType', [
@@ -287,32 +258,32 @@ export default {
   }
 }
 .content-info{
-  // border:1px solid @font-888;
-  padding-bottom: 15px;
+  padding-top: 6px;
 }
 .content-row  {
-  a{
-    display: inline-block;
-    height: 30px;
+  display: flex;
+
+  section{
+    display: flex;
+    height: 35px;
     margin-left: 5px;
     width: 100%;
-    i{
-      display: inline-block;
-      min-width: 22px;
-      font-size: 12px;
-      font-style: normal;
+    font-size:12px;
+    p{
+      height: 100%;
+      flex:0;
       text-align: center;
+      padding: 0 1mm 0 4mm;
+      line-height: 35px;
+      margin: 0 0;
     }
-    span{
-      display: inline-block;
-      height: 30px;
-      width: 80px;
-      top: 3px;
-      position: relative;
-      border-bottom: 1px solid #888;
-      width: calc(100% - 22px)
-    }
+    a{
+        flex:  2;
+        border-bottom: 1px solid @font-888;
+        margin-left: 5px;
+        height: 25px;
+      }
   }
-  margin-bottom: 10px;
+
 }
 </style>

@@ -112,30 +112,34 @@ export default {
           ...this.data,
           score: Number(scoreVal),
           pid: id,
-          id: `${id}_${+new Date()}_${index}`,
+          id: `subTopic_${+new Date()}_${index}`,
           topic: index,
           sum: score * space,
-          childGroup:[{
-            ...this.data,
-            id: `sid_${+new Date()}_${index}`,
-            pid: `${id}_${+new Date()}_${index}`,
-            sid:id,
-            score: Number(scoreVal),
-            smallTopic:1,
-            childGroup:[{
-              id: `${id}_${+new Date()}_${index}`,
-              pid:`sid_${+new Date()}_${index}`,
-              sid:`last_${+new Date()}_1`,
-              lid:id,
-              score: Number(scoreVal),
-              smallTopic:1,
-            }]
-          }]
+          level:false,
         }
         group.push(subtopic)
       }
       return group
-    }
+    },
+
+    subTopicSpace(){
+      return this.subTopicList.map((topic,index) => {
+        return {
+          ...topic,
+          Multistage:false,
+          childGroup:[
+            {
+                id:`sid_${+new Date()}_${index}`,
+                pid:topic.id,
+                sid:topic.pid,
+                topic:topic.topic,
+                smallTopic:1,
+                score:topic.score,
+            }
+          ]
+        }
+      })
+    },
   },
 
   watch: {
@@ -160,10 +164,14 @@ export default {
     preEditQuestionGroup () {
       this.$emit('change-status', this.verify)
 
+      const {score} = this.data
+      let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
+
       if (!this.tabStatus) {
         let obj = {
           ...this.data,
-          childGroup: this.subTopicList
+          childGroup: this.subTopicSpace,
+          score:Number(scoreVal)
         }
         this.$emit('pre-edit-question-group',obj)
         // 弹框临时小题数

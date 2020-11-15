@@ -1,10 +1,7 @@
 const state = {
-
   subTopic_number: 1,
   subTopic_number_already: [], // 已有的题组
   subTopic_number_determine: [], // 确定下的小题
-
-  largest_questionNum: 1000, // 最大题数
 }
 
 const mutations = {
@@ -96,12 +93,6 @@ const mutations = {
     })
   },
 
-  subTopic_determine_clean: (state, topic) => {
-    // 清除相同pid
-    state.subTopic_number_determine = state.subTopic_number_determine.filter((item) => {
-      return ![topic].includes(item.topic)
-    })
-  },
 
   subTopic_determine_del: (state, Arr) => {
     Arr.forEach((newTopic) => {
@@ -110,17 +101,31 @@ const mutations = {
       })
     })
   },
+  // 编辑存在大题
+  questionNumber_big_exist_edit: (state, obj) => {
+    const index = state.questionNumber_big_exist.findIndex(
+      (row) => row.id === obj.id
+    )
+    if (index > -1) {
+      state.subTopic_number_determine.splice(index, 1, obj)
+    } else {
+      state.questionNumber_big_exist.push(obj)
+    }
+  },
+}
+
+const actions = {
 
 }
 
-const actions = {}
+const getters = {
 
-const getters = {}
+}
 
 export default {
   namespaced: true,
   state,
   mutations,
   actions,
-  getters,
+  getters
 }

@@ -2,7 +2,7 @@
 <!-- 选择题 -->
   <div class="question-info">
 
-    <template v-if="questionData.first && questionData.borderTop == undefined">
+    <template v-if="questionData.first">
       <div
         class="question-title"
         ref="questionTitle"
@@ -61,7 +61,8 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations,mapGetters } from 'vuex'
+
 import quillEditor from '../../components/quillEditor'
 // import VueUeditor from '../../components/VueUeditor'
 
@@ -85,14 +86,13 @@ export default {
       data: {},
       isEditor: false,
       cotent: '',
-      options:[],
       quilleditor:false,
       pageLayout:this.contentData.pageLayout,
     }
   },
   computed: {
-    ...mapState('questionType', ['questionNumber', 'letterList']),
-    ...mapState('pageContent', ['pageData']),
+    ...mapState('page', ['pageData']),
+    ...mapGetters('question',['options']),
 
     topicBox(){
       const {singleChoice,checkChoice,judgmentChoice} = this.data.group
@@ -114,19 +114,17 @@ export default {
         this.data = {
           ...this.contentData
         }
-        this.options = this.questionNumber.map((label,value)=>({label,value}))
         this.pageLayout = this.contentData.pageLayout
       }
     }
   },
   mounted () {
-    this.$nextTick(()=>{
-      this.cotent = this.$refs.questionTitle.innerHTML
-    })
+    // this.$nextTick(()=>{
+    //   this.cotent = this.$refs.questionTitle.innerHTML
+    // })
   },
   methods: {
-    ...mapMutations('pageContent', ['pageData_del',
-      'questionOrder_subtract',]),
+    ...mapMutations('page', ['pageData_del',]),
 
     ...mapMutations('questionType', [
       'subTopic_already_del',

@@ -124,3 +124,23 @@ export default {
 }
 </script>
 
+<style lang="less">
+  @import '~@/assets/css/variables.less';
+  .space_group_item{
+    &.el-input.el-input--mini{
+      width: 48px;
+    }
+  }
+  span.add_groupTopic{
+    margin-left: 20px;
+    color: @main
+  }
+  i.el-icon-del {
+    margin-left: 20px;
+    font-size: 18px;
+    position: relative;
+    top: 3px;
+    color: @main;
+    padding: 0 10px;
+  }
+</style>

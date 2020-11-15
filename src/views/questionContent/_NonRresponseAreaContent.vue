@@ -38,7 +38,7 @@ export default {
     }
   }
   , computed: {
-    ...mapState('pageContent', ['pageData']),
+    ...mapState('page', ['pageData']),
   },
   watch: {
     contentData: {
@@ -51,7 +51,8 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('pageContent', ['pageData_del', 'questionNumber_big_subtract','pageData_order_edit']),
+    ...mapMutations('page', ['pageData_del',
+      'pageData_order_edit','del_nonAnswer']),
     delHanlde (id) {
       const index = this.pageData.findIndex((itme) => itme.id === id)
       if (index > -1) {
@@ -60,6 +61,7 @@ export default {
           this.pageData_order_edit({objId:question.objId,num:index - 1})
         }
         this.pageData_del(index)
+        this.del_nonAnswer(this.questionData)
       }
     },
     curEditNon (obj) {
@@ -75,9 +77,13 @@ export default {
 <style lang="less">
 .NonRresponseArea_box {
   border: 1px solid #888;
-  position: relative;
   background: #ddd;
   min-height: 43px;
+  width: 100%;
+  display: flex;
+  align-items:center;
+  position: relative;
+
   &:hover {
     .question_editOrDel {
       display: block;
@@ -86,15 +92,16 @@ export default {
   .prompt_style {
     font-size: 32px;
     font-weight: bold;
-    // width: 256px;
+    width: 100%;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    left: 0;
+    text-align: center;
   }
-  .question_editOrDel {
-    top: 5px;
-    right: 5px;
+
+  .question_array{
+    width: 100%;
+    position: absolute;
+    top: 10px;
   }
 }
 </style>

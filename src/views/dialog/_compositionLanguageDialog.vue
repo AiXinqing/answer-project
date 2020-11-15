@@ -78,8 +78,7 @@
               >最少字数处显示一个字数标记</el-radio
             >
             <el-radio v-model="data.mark" label="2"
-              >每100字显示一个字数标记</el-radio
-            >
+              >每100字显示一个字数标记</el-radio>
           </el-col>
         </el-row>
         <el-row>
@@ -123,14 +122,15 @@
         type="confirm"
         :disabled="isdisabledFn"
         @click="preCreateQuestion"
-        >确 定</hj-button
-      >
+        >确 定</hj-button>
     </div>
   </hj-dialog>
 </template>
 
 <script>
 import { mapState, mapMutations,mapGetters } from 'vuex'
+import { PAGE_HEIGHT } from '@/models/base'
+
 export default {
   components: {},
   data() {
@@ -156,8 +156,8 @@ export default {
         Postpone: false,
       },
       editData: {},
-      options:[],
-      changeClick:false
+      changeClick:false,
+      page_height:PAGE_HEIGHT
     }
   },
   computed: {
@@ -168,11 +168,11 @@ export default {
     ]),
     ...mapState('pageContent', [
       'pageHeight',
-      'page_size',
       'pageData',
       'pageLayout',
     ]),
     ...mapGetters('pageContent', ['questionNumber_big_exist','question_order']),
+    ...mapGetters('question',['options']),
     questionNumber_big(){
       return this.questionNumber_big_exist.length
     },
@@ -194,7 +194,7 @@ export default {
     pageRow() {
       // 一页所占用的行数
       let row = Math.floor(
-        (this.page_size - 60) / (this.latticeWidth + this.data.spacing)
+        (this.page_height - 60) / (this.latticeWidth + this.data.spacing)
       )
       return row
     },
@@ -260,7 +260,7 @@ export default {
           return accumulator + currentValue
         })
 
-      let currentPageHeight = this.page_size - heights - 32 // 当前页剩余可用高度
+      let currentPageHeight = this.page_height - heights - 32 // 当前页剩余可用高度
       return currentPageHeight
     },
     BeforeEditing() {
@@ -291,7 +291,6 @@ export default {
           this.questionNumber_big_exist.length > 0
             ? this.questionNumber_big_exist[0].value
             : null
-        this.options = this.questionNumber.map((label,value)=>({label,value}))
       },
     },
   },

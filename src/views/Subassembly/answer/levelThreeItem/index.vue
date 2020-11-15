@@ -130,4 +130,9 @@ export default {
   position: relative;
   left: 1em;
 }
+.space_group_item{
+  &.el-input.el-input--mini{
+    width: 48px;
+  }
+}
 </style>

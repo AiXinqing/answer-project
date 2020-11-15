@@ -1,27 +1,5 @@
 const state = {
   textVal: '',
-  titleInfo: [{
-      // 学生信息
-      name: '考号',
-      checked: true
-    },
-    {
-      name: '学校',
-      checked: false
-    },
-    {
-      name: '姓名',
-      checked: false
-    },
-    {
-      name: '班级',
-      checked: true
-    },
-    {
-      name: '学号',
-      checked: false
-    }
-  ],
   titleRows: 8
 }
 
