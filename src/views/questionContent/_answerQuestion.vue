@@ -74,7 +74,6 @@ export default {
   components: {
     quillEditor,
     dragChangeHeight,
-    // questionDialog,
   },
   props: {
     questionData: {
@@ -95,8 +94,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('questionType', ['questionNumber', 'letterList']),
-    ...mapState('pageContent', ['pageData']),
+    ...mapState('page', ['pageData']),
     heightContetn(){
       const {castHeight,heightTitle,height} = this.questionData
       let obj = {
@@ -149,7 +147,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('pageContent', [
+    ...mapMutations('page', [
       'pageData_del',
       'pageData_edit',
     ]),
