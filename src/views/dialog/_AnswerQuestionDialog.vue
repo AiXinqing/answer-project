@@ -128,16 +128,15 @@ export default {
       'subTopic_number_determine',
     ]),
 
-    ...mapState('pageContent', [
-      'pageHeight',
-      'questionOrder',
+    ...mapState('pageContent', ['questionOrder',]),
+    ...mapState('page', [
       'pageData',
       'pageLayout',
     ]),
 
     ...mapState('answerQuestion', ['answerQuestionArr',]),
 
-    ...mapGetters('pageContent', ['questionNumber_big_exist','question_order']),
+    ...mapGetters('page', ['questionNumber_big_exist','questionOrder']),
     ...mapGetters('question',['options']),
 
     questionNumber_big(){
@@ -249,7 +248,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('pageContent', [
+    ...mapMutations('page', [
       'pageData_add',
       'pageData_edit',
       'pageData_insert',
@@ -266,8 +265,6 @@ export default {
       'subTopic_already_add',
       'subTopic_determine_pid_clean',
     ]),
-
-    ...mapMutations('answerQuestion', ['set_answerQuestionArr']),
 
     opened () {
       this.questionData = JSON.parse(JSON.stringify({

@@ -91,6 +91,13 @@ const mutations = {
     state.pageData = state.pageData.filter(question => question.id != id)
   },
 
+  pageData_simple_insert: (state, data) => {
+    // 解答题插入
+    if (data.num > -1) {
+      state.pageData.splice(data.num + 1,0,data.obj)
+    }
+  },
+
   add_nonAnswer: (state, obj) => {
     // 非答题新增
     let index = state.nonAnswer.findIndex(ele => ele.id == obj.id)
@@ -116,6 +123,11 @@ const mutations = {
         state.pageData.splice(index + 1, 0, obj)
       }
     })
+  },
+
+  pageData_nonA_clean: (state,objId) => {
+    state.pageData = state.pageData.filter((item) => item.questionType != "NonRresponseArea")
+    state.pageData = state.pageData.filter((item) => item.objId != objId)
   },
 
 }
