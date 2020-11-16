@@ -93,7 +93,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('pageContent', ['pageData']),
+    ...mapState('page', ['pageData']),
     strLong() {
       let long = this.contentData.topic.toString().length
       return parseInt(long) * 8 + 1
@@ -152,7 +152,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations('pageContent', [
+    ...mapMutations('page', [
       'pageData_del',
       'pageData_id_clean',
     ]),

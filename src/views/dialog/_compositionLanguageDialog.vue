@@ -172,11 +172,13 @@ export default {
       'pageLayout',
     ]),
     ...mapGetters('page',['containerWidth','latticeWidth']),
-    ...mapGetters('pageContent', ['questionNumber_big_exist','question_order']),
+    ...mapGetters('page', ['questionNumber_big_exist','questionorder']),
     ...mapGetters('question',['options']),
+
     questionNumber_big(){
       return this.questionNumber_big_exist.length
     },
+
     title(){
       return this.editQuestionId ? '编辑作文' : '设置'
     },
@@ -288,7 +290,7 @@ export default {
     this.subTopic_number_calculate()
   },
   methods: {
-    ...mapMutations('pageContent', [
+    ...mapMutations('page', [
       'pageData_add',
       'pageData_edit',
       'pageData_insert',
@@ -349,6 +351,8 @@ export default {
       if (!this.tabStatus) {
         // 一行数格子 = 向下取整（总字数/格数）
         let lattice = Math.floor(this.containerWidth / this.latticeWidth)
+        console.log(this.containerWidth)
+        console.log(this.latticeWidth)
 
         // 行数 向上取整
         let row = Math.ceil(totalWordCount / lattice)
@@ -390,7 +394,7 @@ export default {
             let data = {
                 obj: {
                   ...obj,
-                  order: this.question_order,
+                  order: this.questionorder,
                 },
                 bigId: select.id,
                 SelfOrder: Postpone,

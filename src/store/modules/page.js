@@ -151,15 +151,14 @@ const getters = {
         : 745
   },
 
-  containerWidth: () => {
+  containerWidth: (state,getters) => {
     // 格子宽度
-      return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
-        ? 32.5
-        : 30
+      return getters.page_width === 480 ? 456 : 720
   },
 
-  latticeWidth: () => {
+  latticeWidth: (state,getters) => {
     //作文格子承载宽度
+      return getters.page_width === 480 ? 32.5 : 30
   },
 
   questionOrder: (state) => {
