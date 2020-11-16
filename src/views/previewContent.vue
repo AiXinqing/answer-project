@@ -98,9 +98,7 @@ export default {
   methods: {
     ...mapMutations('pageContent', ['pageHeight_set']),
     pageContentFunc(rects = []) {
-
       var results = []
-
       // currentPage.height 总高度
       var currentPage = {height:0,rects:[]}
 
@@ -111,6 +109,7 @@ export default {
       }
 
       rects.forEach(rect =>{
+        let superiorGrid = 0
         let backup = {}
 
         var avalibleHeight = this.page_height - currentPage.height - 20
@@ -125,17 +124,24 @@ export default {
             if(rect.showData && rect.showData.length){
               backup = {
                 showData:itemObj.showData.splice(0, curRect.availableRow),
+                first:true
               }
             }
 
             currentPage.rects.push({
               ...rect,
               castHeight:curRect.height,
-              first:true,
               ...backup
             })
           }
 
+          // 作文
+            if(rect.questionType == 'compositionLanguage'){
+              superiorGrid = rect.superiorGrid + curRect.availableRow * rect.lattice
+              backup = {
+                superiorGrid:superiorGrid
+              }
+            }
 
           results.push(currentPage.rects) // 增加一页
           resetCurrentPage()
@@ -163,6 +169,14 @@ export default {
               ...backup
             }]);
             height -= this.page_height - 20
+
+            // 作文
+            if(rect.questionType == 'compositionLanguage'){
+              superiorGrid += curRects.availableRow * rect.lattice
+              backup = {
+                superiorGrid:superiorGrid
+              }
+            }
           }
 
           //最后剩余高度---------------------------------------------------
@@ -172,6 +186,7 @@ export default {
                 showData: itemObj.showData,
               }
           }
+
           currentPage.height = height + rect.MarginHeight
           if(itemObj.showData && !curRect.pagination){
             currentPage.height = itemObj.showData.length * itemObj.rowHeight + rect.MarginHeight
@@ -185,7 +200,6 @@ export default {
           })
 
         }else{
-
           currentPage.height += (rect.height + 20)
 
           currentPage.rects.push({
@@ -205,7 +219,8 @@ export default {
     preliminaryQuestion(question,avalibleHeight,initial = true){
 
       const {MarginHeight,heightTitle,rowHeight} = question
-      const cornerHeight = initial ? MarginHeight + heightTitle : MarginHeight
+      const cornerHeight = initial ? MarginHeight + heightTitle :
+      question.questionType == 'compositionLanguage' ? 0 : MarginHeight
       const RemainingHeight = avalibleHeight - cornerHeight
       const availableRow = Math.floor(RemainingHeight / rowHeight)
       const current_height = availableRow * rowHeight  + cornerHeight
