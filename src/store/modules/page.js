@@ -78,6 +78,13 @@ const mutations = {
     state.pageData.splice(index, 1)
   },
 
+  pageData_id_clean: (state, id) => {
+    // 内容分页
+    state.pageData = state.pageData.filter((item) => {
+      return ![id].includes(item.id)
+    })
+  },
+
   pageData_order_edit: (state, data) => {
     // 解答题
     state.pageData = state.pageData.map(question => ({
@@ -142,6 +149,17 @@ const getters = {
     return state.pageLayout.column === 3 && state.pageLayout.size == 'A3'
         ? 480
         : 745
+  },
+
+  containerWidth: () => {
+    // 格子宽度
+      return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
+        ? 32.5
+        : 30
+  },
+
+  latticeWidth: () => {
+    //作文格子承载宽度
   },
 
   questionOrder: (state) => {

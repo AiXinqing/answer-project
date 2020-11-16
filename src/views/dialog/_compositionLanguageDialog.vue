@@ -166,27 +166,16 @@ export default {
       'subTopic_number',
       'subTopic_number_determine',
     ]),
-    ...mapState('pageContent', [
-      'pageHeight',
+    ...mapState('pageContent', ['pageHeight',]),
+    ...mapState('page', [
       'pageData',
       'pageLayout',
     ]),
+    ...mapGetters('page',['containerWidth','latticeWidth']),
     ...mapGetters('pageContent', ['questionNumber_big_exist','question_order']),
     ...mapGetters('question',['options']),
     questionNumber_big(){
       return this.questionNumber_big_exist.length
-    },
-    containerWidth() {
-      // 格子承载宽度
-      return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
-        ? 456
-        : 720
-    },
-    latticeWidth() {
-      // 格子宽度
-      return this.pageLayout.column === 3 && this.pageLayout.size == 'A3'
-        ? 32.5
-        : 30
     },
     title(){
       return this.editQuestionId ? '编辑作文' : '设置'

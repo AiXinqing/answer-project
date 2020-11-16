@@ -308,7 +308,7 @@ export default {
         // 新增
         if(InsertTitle && this.questionNumber_big_exist.length > 0){
           let select = this.questionNumber_big_exist[this.existNumber]
-          let i = this.question_order
+          let i = this.questionOrder
           this.subTopicGroup.forEach((obj) => {
             i += 1
             let data = {

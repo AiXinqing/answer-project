@@ -72,8 +72,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('questionType', ['questionNumber', 'letterList']),
-    ...mapState('pageContent', ['pageData', 'pageLayout']),
+    ...mapState('page', ['pageData']),
     strLong () {
 
       let long = this.contentData.topic.toString().length
@@ -120,7 +119,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations('pageContent', [
+    ...mapMutations('page', [
       'pageData_del',
       'pageData_id_clean',
     ]),
