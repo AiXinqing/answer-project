@@ -53,20 +53,21 @@
             class="subtopic_a"
             :style="{ width: pageWidth / data.rows + 'px' }"
           >
-            <template
-              v-if="topic.lid"
-            >
-              <p>{{topic.topic}}({{topic.smallTopic}})</p>
-              <a></a>
+
+            <template v-if="topic.lid">
+              <p v-if="topic.topic == topic.spaceTopic">
+                <template v-if="topic.smallTopic ">
+                  <template v-if=" topic.spaceTopic > topic.topic">{{topic.topic}}</template>({{topic.smallTopic}})
+                </template>
+                <template v-else-if="topic.spaceTopic <= topic.topic">{{topic.topic}}</template>
+              </p>
+            </template>
+            <template v-else>
+              <p v-if="topic.topic ">{{topic.topic}}</p>
             </template>
 
-            <template
-              v-else
-            >
-            <!-- 一级 -->
-              <p>{{topic.topic}}</p>
-              <a></a>
-            </template>
+            <a></a>
+
           </section>
         </div>
 
@@ -129,6 +130,7 @@ export default {
       return this.page_width - 50
     },
     subtopicGroup() {
+      console.log(this.questionData.showData)
       return this.questionData.showData
     },
     topicBox() {
@@ -142,6 +144,7 @@ export default {
         this.data = {
           ...this.contentData,
         }
+        console.log(this.data)
         this.pageLayout = this.contentData.pageLayout
       },
     },

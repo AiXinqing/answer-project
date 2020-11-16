@@ -38,6 +38,7 @@
         :is="isComponent"
         :subtopic-group="subtopic.childGroup"
         :subtopic="subtopic"
+        :is-topic="subtopic.isTopic"
         :edit-id="editId"
         @pre-edit-last-score="preEditLastScore"
         @pre-edit-two-last-score="preEditTwoLastScore"
@@ -99,6 +100,7 @@
         let Arr =[]
         let {space,score} = this.data
         let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
+
         for (let index = 1; index < space + 1; index++) {
           let subtopic = {
             ...this.data,
@@ -107,7 +109,9 @@
             sid:this.data.pid,
             topic:this.data.topic,
             smallTopic:index,
+            isTopic:index == 1 ? true : false,
             score:Number(scoreVal),
+
           }
           Arr.push(subtopic)
       }
@@ -240,7 +244,7 @@
             id:sid,
             pid:data.id,
             sid:data.pid,
-            smallTopic:smallTopic,
+            smallTopic:smallTopic + i,
             topic:data.topic,
             score:data.score,
             space:1,

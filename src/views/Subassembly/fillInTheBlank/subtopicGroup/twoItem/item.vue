@@ -17,6 +17,10 @@
         type: Object,
         default: ()=>{}
       },
+      isTopic:{
+        type:Boolean,
+        default:true
+      }
     },
 
     data() {
@@ -31,6 +35,7 @@
         handler () {
           this.data = {
             ...this.subtopic,
+            isTopic:this.isTopic
           }
         }
       }
