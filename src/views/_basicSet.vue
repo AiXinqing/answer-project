@@ -41,7 +41,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('pageContent', ['pageLayout', 'pageData', 'page_size']),
+    ...mapState('page', ['pageLayout', 'pageData']),
     pageWidth() {
       const {column,size} = this.pageLayout
       return column === 3 && size == 'A3'

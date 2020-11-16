@@ -151,14 +151,13 @@ const getters = {
         : 745
   },
 
-  containerWidth: (state,getters) => {
-    // 格子宽度
-      return getters.page_width === 480 ? 456 : 720
-  },
-
   latticeWidth: (state,getters) => {
     //作文格子承载宽度
-      return getters.page_width === 480 ? 32.5 : 30
+      return getters.page_width === 480 ? 31 : 31.73
+  },
+
+  latticeNum: (state, getters) => {
+    return  getters.page_width === 480 ? 15 : 23
   },
 
   questionOrder: (state) => {
@@ -167,7 +166,8 @@ const getters = {
 
   compile_pageData: (state,getters) => {
     return state.pageData.map(question => {
-        return question.questionType == 'ObjectiveQuestion' ? getters.question_objective(question) : question
+      return question.questionType == 'ObjectiveQuestion' ? getters.question_objective(question) :
+        question.questionType == 'compositionLanguage' ? getters.question_language(question) : question
     })
   },
 
@@ -198,6 +198,20 @@ const getters = {
         //计算内容高度
         let heights = titleH + RowArr.length * question.rowHeight
         return {...question,height:heights,showData:RowArr}
+  },
+
+  question_language: (state, getters) => (question) => {
+    const { totalWordCount,spacing} = question.content
+    let rows = Math.ceil(totalWordCount / getters.latticeNum)
+    let rowHeight = getters.latticeWidth + spacing.value
+    let height = rows * rowHeight + question.MarginHeight + question.heightTitle
+    return {
+      ...question,
+      height: height,
+      rowHeight: rowHeight,
+      lattice:getters.latticeNum,
+      rowWidth:getters.latticeWidth
+    }
   },
 
   questionNumber_big_exist: (state,getters) => {

@@ -258,7 +258,6 @@ export default {
 }
 .answer_question_box {
   padding: 0 10px;
-  // border: 1px solid @font-888;
   border-top: none;
   overflow: hidden;
   .question_box_title {
@@ -266,7 +265,6 @@ export default {
       font-size: 12px;
       display: inline-block;
     }
-    // margin-top: 10px;
   }
   .question_line {
     height: 34px;

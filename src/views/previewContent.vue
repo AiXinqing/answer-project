@@ -125,13 +125,13 @@ export default {
             if(rect.showData && rect.showData.length){
               backup = {
                 showData:itemObj.showData.splice(0, curRect.availableRow),
-                first:true
               }
             }
 
             currentPage.rects.push({
               ...rect,
               castHeight:curRect.height,
+              first:true,
               ...backup
             })
           }
@@ -153,13 +153,13 @@ export default {
               // 切割数组
               backup = {
                 showData:itemObj.showData.splice(0, curRects.availableRow),
-                first:false
               }
             }
 
             results.push([{
               ...rect,
               castHeight: curRects.height,
+              first:false,
               ...backup
             }]);
             height -= this.page_height - 20
@@ -170,7 +170,6 @@ export default {
           if(rect.showData && rect.showData.length){
               backup = {
                 showData: itemObj.showData,
-                first:curRect.pagination
               }
           }
           currentPage.height = height + rect.MarginHeight
@@ -181,6 +180,7 @@ export default {
           currentPage.rects.push({
             ...rect,
             castHeight: currentPage.height,
+            first:curRect.pagination,
             ...backup
           })
 

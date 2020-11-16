@@ -151,13 +151,15 @@ export default {
         minWordCount: 800,
         mark: '1', // 1 ，2
         totalWordCount: 1000,
-        spacing: 4, // 间距
+        spacing: {value:4,label:1.8}, // 间距
         InsertTitle: false,
         Postpone: false,
       },
       editData: {},
       changeClick:false,
-      page_height:PAGE_HEIGHT
+      page_height:PAGE_HEIGHT,
+      MarginHeight:45,
+      heightTitle:32
     }
   },
   computed: {
@@ -166,13 +168,15 @@ export default {
       'subTopic_number',
       'subTopic_number_determine',
     ]),
+
     ...mapState('pageContent', ['pageHeight',]),
     ...mapState('page', [
       'pageData',
       'pageLayout',
     ]),
-    ...mapGetters('page',['containerWidth','latticeWidth']),
-    ...mapGetters('page', ['questionNumber_big_exist','questionorder']),
+
+    ...mapGetters('page',['questionNumber_big_exist','questionorder']),
+
     ...mapGetters('question',['options']),
 
     questionNumber_big(){
@@ -182,13 +186,7 @@ export default {
     title(){
       return this.editQuestionId ? '编辑作文' : '设置'
     },
-    pageRow() {
-      // 一页所占用的行数
-      let row = Math.floor(
-        (this.page_height - 60) / (this.latticeWidth + this.data.spacing)
-      )
-      return row
-    },
+
     errorMessage() {
       return this.errorVal != '' ? true : false
     },
@@ -345,31 +343,16 @@ export default {
       }
     },
     preCreateQuestion() {
-      const { spacing, totalWordCount, InsertTitle, Postpone,score } = this.data
+      const { InsertTitle, Postpone,score } = this.data //  spacing, totalWordCount,
       this.errorVal = this.tabStatusVal
 
       if (!this.tabStatus) {
-        // 一行数格子 = 向下取整（总字数/格数）
-        let lattice = Math.floor(this.containerWidth / this.latticeWidth)
-        console.log(this.containerWidth)
-        console.log(this.latticeWidth)
-
-        // 行数 向上取整
-        let row = Math.ceil(totalWordCount / lattice)
-
-        //行数高度 = 格子大小 + 间距（间距同上要求）
-        let rowHeight = this.latticeWidth + 2 + spacing
-
-        let rectHeight = row * rowHeight // 当前内容高度 45(内部高度)
-        let MarginHeight = 45
-        let heights = rectHeight + MarginHeight + 32
-
         let objId = `compositionLanguage_${+new Date()}`
         //------------------------------------------------------------
         let obj = {
-          heightTitle: 32,
-          MarginHeight: MarginHeight,
-          height: heights,
+          heightTitle: this.heightTitle,
+          MarginHeight: this.MarginHeight,
+          height: 0,
           id: objId,
           questionType: 'compositionLanguage',
           content: {
@@ -378,13 +361,9 @@ export default {
             pageLayout:this.pageLayout
           },
           first: true,
-          lattice: lattice,
-          rowHeight: rowHeight,
-          rowWidth: this.latticeWidth,
-          BeforeEditing:
-            this.editQuestionId != null
-              ? this.editData.BeforeEditing
-              : this.BeforeEditing,
+          rowHeight: 0,
+          rowWidth: 0,
+          superiorGrid:0, // 上级格子数量
         }
         this.subTopic_already_add([this.data])
 

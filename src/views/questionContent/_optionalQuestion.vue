@@ -196,6 +196,7 @@ export default {
 
 <style lang="less" >
 .answer_question_box {
+  padding: 0 5px;
   &.optional_box {
     border-top: 1px solid #888;
   }

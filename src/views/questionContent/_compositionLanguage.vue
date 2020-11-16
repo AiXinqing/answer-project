@@ -50,12 +50,12 @@
               xmlns="http://www.w3.org/2000/svg"
               version="1.1"
               v-show="
-                /(^[1-9]\d*$)/.test((i * data.lattice + (a += 1)) / 100) &&
+                /(^[1-9]\d*$)/.test((i * data.lattice + (a += 1) + data.superiorGrid) / 100) &&
                   contentData.mark == '2'
               "
             >
               <text x="0" y="15" style="font-size:6px">
-                {{ i * data.lattice + (a += 1) - 1 }}字
+                {{ i * data.lattice + (a += 1) + data.superiorGrid - 1 }}字
               </text>
             </svg>
           </span>
