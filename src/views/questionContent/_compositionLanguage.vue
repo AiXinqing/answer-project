@@ -26,7 +26,7 @@
         </div>
       </template>
       <div class="compositionLanguage_box">
-        <div
+        <p
           v-for="(rowsList, i) in rowsData"
           :key="i"
           class="compositionLanguage_item"
@@ -59,7 +59,7 @@
               </text>
             </svg>
           </span>
-        </div>
+        </p>
       </div>
     </div>
   </div>
@@ -188,7 +188,7 @@ export default {
 
 <style lang="less">
 .answer_question_box.composition_box {
-  padding-top: 10px;
+  padding: 10px 5px 5px 5px;
 }
 .Language_item_title {
   height: 45px;
@@ -202,11 +202,13 @@ export default {
   border-left: 2px solid #bfbfbf;
   border-right: 2px solid #bfbfbf;
   .compositionLanguage_item {
+    margin: 0;
     span {
       display: inline-block;
       border: 1px solid #888;
       border-left: none;
     }
+
     span:last-child {
       border-right: none;
     }
