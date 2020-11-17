@@ -102,7 +102,7 @@ export default {
     },
     rowsData() {
       let Arr = []
-      for (let i = 1; i <= this.contentData.rows; i++) {
+      for (let i = 1; i <= this.data.rows; i++) {
         Arr.push(i)
       }
       return Arr
