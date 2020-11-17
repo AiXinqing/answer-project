@@ -194,7 +194,7 @@ export default {
             ...this.dataTopic,
             pageLayout:this.pageLayout,
           },
-          first: index === 0 ? true : false,
+          orderFirst: index,
           questionType: 'answerQuestion',
           objId: objId,
           row:this.dataTopic.rows,

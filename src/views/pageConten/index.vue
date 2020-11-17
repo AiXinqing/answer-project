@@ -267,11 +267,18 @@ export default {
           })
 
         }else{
+          let backup = {}
           currentPage.height += (rect.height + 20)
-
+          // 填空题
+          if(rect.questionType == 'answerQuestion'){
+            backup = {
+              rows:rect.row
+            }
+          }
           currentPage.rects.push({
             ...rect,
             castHeight: rect.height,
+            ...backup
           })
         }
       })
