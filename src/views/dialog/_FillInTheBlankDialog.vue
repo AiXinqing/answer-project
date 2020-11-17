@@ -657,7 +657,6 @@ export default {
     spaceArray(obj,space,Tpid,isT){
       // 生成小题数组
       let arr = []
-      console.log(obj.smallTopic)
       let smallTopic = obj.smallTopic - 1
       for (let i = 1; i < space + 1; i++) {
         arr.push({
@@ -671,7 +670,6 @@ export default {
           topic:obj.topic
         })
       }
-      console.log(arr)
       return arr
     },
 

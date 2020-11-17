@@ -130,7 +130,6 @@ export default {
       return this.page_width - 50
     },
     subtopicGroup() {
-      console.log(this.questionData.showData)
       return this.questionData.showData
     },
     topicBox() {
@@ -144,7 +143,6 @@ export default {
         this.data = {
           ...this.contentData,
         }
-        console.log(this.data)
         this.pageLayout = this.contentData.pageLayout
       },
     },
