@@ -55,15 +55,14 @@
           >
 
             <template v-if="topic.lid">
-              <p v-if="topic.topic == topic.spaceTopic">
-                <template v-if="topic.smallTopic ">
-                  <template v-if=" topic.spaceTopic > topic.topic">{{topic.topic}}</template>({{topic.smallTopic}})
-                </template>
-                <template v-else-if="topic.spaceTopic <= topic.topic">{{topic.topic}}</template>
+              <p>
+                <template v-if="topic.smallTopic == 1 && topic.spaceNum == 1">{{topic.topic}}</template>
+                <template v-if=" topic.spaceNum <= 1">({{topic.smallTopic}})</template>
               </p>
             </template>
+
             <template v-else>
-              <p v-if="topic.topic ">{{topic.topic}}</p>
+              <p v-if="!topic.spaceNum || topic.spaceNum == 1 ">{{topic.topic}}</p>
             </template>
 
             <a></a>

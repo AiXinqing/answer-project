@@ -109,9 +109,13 @@
             sid:this.data.pid,
             topic:this.data.topic,
             smallTopic:index,
-            isTopic:index == 1 ? true : false,
             score:Number(scoreVal),
-
+            isTopic:index == 1 ? true : false,
+            childGroup:this.data.childGroup.map(topic => ({
+              ...topic,
+              isTopic:index == 1 ? true : false,
+              spaceNum:index
+            }))
           }
           Arr.push(subtopic)
       }
@@ -152,6 +156,7 @@
             scoreVal = Number(scoreVal)
 
         if(space && space >= 1 && scoreVal >= 1){
+
           this.$emit('change-firstlevel-space', {
             ...this.data,
             score:Number(scoreVal),
@@ -259,7 +264,7 @@
               score:data.score,
               smallTopic: smallTopic,
               topic:data.topic,
-              spaceTopic:1,
+              spaceNum:1,
             }]
           })
         }

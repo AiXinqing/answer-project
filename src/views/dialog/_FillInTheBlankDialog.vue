@@ -661,13 +661,14 @@ export default {
       for (let i = 1; i < space + 1; i++) {
         arr.push({
           smallTopic: smallTopic,
-          spaceTopic: i,
+          spaceNum: i,
           lid:!isT ? obj.pid : obj.sid,
           sid:!isT ? obj.id : obj.pid,
           score:obj.score,
           pid:!isT ? Tpid : obj.id,
           id:'last_'+ +new Date() + '_' + i,
-          topic:obj.topic
+          topic:obj.topic,
+
         })
       }
       return arr
