@@ -1,6 +1,6 @@
 <template>
   <div class="question-info">
-    <template v-if="data.first && data.borderTop == undefined">
+    <template v-if="data.first">
       <div class="question-title" :style="{height: data.heightTitle - 10 + 'px'}" v-if="!isEditor" @click="hanldeEditor">
         <div class="title-span" v-html="cotent"></div>
       </div>
@@ -19,25 +19,19 @@
     </div>
     <div class="answer_question_box composition_box">
 
-      <div
+      <p
         v-for="(item,i) in rowsData"
         :key="i"
         class="compositionEnglish_item"
       >
       <template  v-if="data.first && data.borderTop == undefined">
-        <span
-        v-if="i == 0"
-        class="pre-t5"
-        :style="{'width':strLong + 'px'}">{{contentData.topic}}.</span>
-        <span
-          class="line-style"
-          :style="{'width':'calc(100% - '+ strLong +'px)'}"
-        />
+        <a v-if="i == 0" class="pre-t5">{{contentData.topic}}.</a>
+        <a class="line-style" />
       </template>
       <template v-else>
         <span class="line-style" style="width:100%"/>
       </template>
-      </div>
+      </p>
     </div>
 
   </div>
@@ -163,19 +157,19 @@ export default {
 .compositionEnglish_item {
   width: 100%;
   height: 35px;
+  line-height: 35px;
   display: flex;
-  span {
-    display: inline-block;
-  }
+  margin: 0;
+
   .pre-t5 {
-    position: relative;
-    top: 18px;
     font-size: 12px;
+    flex-shrink:0;
   }
   .line-style {
-    height: 34px;
+    width: 100%;
     border-bottom: 1px solid #888;
-    flex-basis: auto;
+    flex-shrink:1;
+    height: 25px;
   }
 }
 </style>
