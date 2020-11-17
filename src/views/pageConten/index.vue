@@ -146,6 +146,7 @@ export default {
 
         if(rect.height > avalibleHeight){ // 高度溢出
           let curRect = this.preliminaryQuestion(rect, avalibleHeight)
+          console.log(curRect)
 
           if(!curRect.pagination){
             // 分页-剩余高度新建rect

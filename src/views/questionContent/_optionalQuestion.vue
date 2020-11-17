@@ -42,11 +42,11 @@
         </template>
 
         <div v-if="contentData.HorizontalLine">
-          <div
+          <p
             v-for="(item,i) in rowsData"
             :key="i"
             class="optional-item-list"
-          ></div>
+          ><a/></p>
         </div>
       </div>
     </drag-change-height>
@@ -124,7 +124,7 @@ export default {
         this.data = {
           ...this.questionData
         }
-        this.options = this.questionNumber.map((label,value)=>({label,value}))
+
       }
     },
     TopicContent: {
@@ -196,7 +196,7 @@ export default {
 
 <style lang="less" >
 .answer_question_box {
-  padding: 0 5px;
+  padding: 0 15px;
   &.optional_box {
     border-top: 1px solid #888;
   }
@@ -218,9 +218,16 @@ export default {
   }
 }
 .optional-item-list {
-  height: 34px;
-  line-height: 34px;
-  border-bottom: 1px solid #888;
+    margin: 0 0;
+    width: 100%;
+    height: 35px;
+    line-height: 35px;
+
+  a{
+    width: 100%;
+    border-bottom: 1px solid #888;
+    display: inline-block;
+  }
 }
 .number-info {
   height: 20px;

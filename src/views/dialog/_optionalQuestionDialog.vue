@@ -125,9 +125,9 @@ export default {
           },
         ],
       },
-      MarginHeight:54,
+      MarginHeight:41,
       rowHeight:35,
-      heightTitle:54,
+      heightTitle:56,
     }
   },
   computed: {
