@@ -120,6 +120,9 @@ export default {
         },]
       },
       initScore:1, // 删除后初始分数
+      rowHeight:35,
+      MarginHeight:12,
+      heightTitle:32
     }
   },
   computed: {
@@ -180,12 +183,12 @@ export default {
       //确定信息
       let Arr = []
       let objId = `answer_${+new Date()}`
-      let rectHeight = this.dataTopic.rows * 35 + 12 + 20 // 小题初始高度
+      let rectHeight = this.dataTopic.rows * this.rowHeight + this.MarginHeight
       this.RefactorData.forEach((item, index) => {
         let obj = {
-          heightTitle: index == 0 ? 32 : 0,
-          height: index == 0 ? rectHeight + 32 : rectHeight,
-          MarginHeight: 12,
+          heightTitle: index == 0 ? this.heightTitle : 0,
+          height: index == 0 ? rectHeight + this.heightTitle : rectHeight,
+          MarginHeight: this.MarginHeight,
           ...item,
           content: {
             ...this.dataTopic,
@@ -195,7 +198,7 @@ export default {
           questionType: 'answerQuestion',
           objId: objId,
           row:this.dataTopic.rows,
-          rowHeight:35,
+          rowHeight:this.rowHeight,
           scoreTotal:this.scoreTotal,
           previousOrder:this.questionOrder - 1, // 解答题插入前的序列号
           index:index,

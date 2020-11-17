@@ -19,7 +19,7 @@
           <div
             v-for="(question, index) in pagesCrad"
             :key="index"
-            class="footer"
+            :class="['footer',{answer:topice.questionType == 'answerQuestion' && !topice.first}]"
             :style="{ minHeight: question.castHeight + 'px' }"
           >
             <component

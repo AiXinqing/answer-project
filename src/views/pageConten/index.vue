@@ -9,7 +9,7 @@
       <div
         v-for="(topice,index) in pageList"
         :key="topice.id + '_' + i + '_' + index"
-        class="footer"
+        :class="['footer',{answer:topice.questionType == 'answerQuestion' && !topice.first}]"
         ref="box"
         :style="{ minHeight: topice.castHeight + 'px' }"
       >

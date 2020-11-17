@@ -41,7 +41,7 @@
       >
 
         <p v-for="(item, i) in rowsData" :key="i" class="question_line">
-          <span class="title" v-if="i == 0">{{ data.topic }} ({{ data.score }})分</span>
+          <span class="title" v-if="i == 0">{{ data.topic }} ({{ data.score }}分)</span>
           <span class="line-style" v-if="contentData.HorizontalLine"></span>
         </p>
       </div>
@@ -259,7 +259,9 @@ export default {
 
       .title{
         font-size: 12px;
-        flex-shrink: 0;}
+        flex-shrink: 0;
+        margin-right: 5px;
+      }
 
       span.line-style {
         border-bottom: 1px solid @font-888;
