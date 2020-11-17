@@ -17,7 +17,7 @@
         <span class="layui-btn layui-btn-xs" @click="delHanlde">删除</span>
       </div>
     </div>
-    <div class="answer_question_box composition_box">
+    <div class="answer_question_box composition_box english">
 
       <p
         v-for="(item,i) in rowsData"
@@ -152,6 +152,9 @@ export default {
   &.composition_box {
     border-top: 1px solid #888;
     padding-bottom: 5px;
+  }
+  &.english{
+    padding: 0 15px !important;
   }
 }
 .compositionEnglish_item {

@@ -39,26 +39,11 @@
       <div
         class="answer_question_box"
       >
-        <div class="question_box_title" v-if="!contentData.HorizontalLine">
-          <span class="title">
-            {{ data.topic }}
-            <span v-if="contentData.ShowScore && data.score != undefined"
-              >({{ data.score }})分</span
-            >
-          </span>
-        </div>
-        <div v-else v-for="(item, i) in rowsData" :key="i" class="question_line">
-          <span class="title" v-if="i == 0">
-            {{ data.topic }}
-            <span v-if="contentData.ShowScore && data.score != undefined"
-              >({{ data.score }})分</span
-            >
-          </span>
-          <span
-            class="line-style"
-            :style="{ width: i == 0 ? 'calc(100% - 60px)' : '100%' }"
-          ></span>
-        </div>
+
+        <p v-for="(item, i) in rowsData" :key="i" class="question_line">
+          <span class="title" v-if="i == 0">{{ data.topic }} ({{ data.score }})分</span>
+          <span class="line-style" v-if="contentData.HorizontalLine"></span>
+        </p>
       </div>
     </drag-change-height>
   </div>
@@ -256,31 +241,36 @@ export default {
     }
   }
 }
-.answer_question_box {
-  padding: 0 10px;
-  border-top: none;
-  overflow: hidden;
-  .question_box_title {
-    span.title {
-      font-size: 12px;
-      display: inline-block;
+.question-container{
+
+  .answer_question_box {
+    padding: 10px 15px 0 15px;
+    .question_box_title {
+      span.title {
+        font-size: 12px;
+        display: inline-block;
+      }
     }
-  }
-  .question_line {
-    height: 34px;
-    .title {
-      width: 60px;
-      font-size: 12px;
-      text-align: center;
-    }
-    span.line-style {
-      height: 100%;
-      display: inline-block;
-      border-bottom: 1px solid @font-888;
-      width: 100%;
+    .question_line {
+      display: flex;
+      margin: 0;
+      height: 35px;
+      line-height: 35px;
+
+      .title{
+        font-size: 12px;
+        flex-shrink: 0;}
+
+      span.line-style {
+        border-bottom: 1px solid @font-888;
+        width: 100%;
+        flex-shrink: 1;
+        height: 25px;
+      }
     }
   }
 }
+
 .question-title {
   border: 1px solid #fff;
   cursor: text;
