@@ -261,7 +261,18 @@
 
       opened() {
         this.preEditData = JSON.parse(
-          JSON.stringify({ ...this.preEditData, number: this.questionNumber_big })
+          JSON.stringify({
+          ...this.preEditData,
+          number: this.questionNumber_big,
+          group:{
+              singleChoice:this.preEditData.group.singleChoice
+                .map(topic => !topic.end ? {...topic,start:this.subTopic_number}:topic),
+              checkChoice:this.preEditData.group.checkChoice
+                .map(topic => !topic.end ? {...topic,start:this.subTopic_number}:topic),
+              judgmentChoice:this.preEditData.group.judgmentChoice
+                .map(topic => !topic.end ? {...topic,start:this.subTopic_number}:topic)
+            }
+          })
         )
 
         this.openedFrame = true
