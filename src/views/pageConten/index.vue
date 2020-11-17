@@ -146,7 +146,6 @@ export default {
 
         if(rect.height > avalibleHeight){ // 高度溢出
           let curRect = this.preliminaryQuestion(rect, avalibleHeight)
-          console.log(curRect)
 
           if(!curRect.pagination){
             // 分页-剩余高度新建rect
@@ -154,6 +153,13 @@ export default {
               backup = {
                 showData:itemObj.showData.splice(0, curRect.availableRow),
                 first:true
+              }
+            }
+
+            // 选作题
+            if(rect.questionType == 'optionalQuestion'){
+              backup = {
+                rows:curRect.availableRow
               }
             }
 
@@ -191,6 +197,14 @@ export default {
               }
             }
 
+            // 选作题
+            if(rect.questionType == 'optionalQuestion'){
+              let {rows} = rect.content
+              backup = {
+                rows:rows - curRect.availableRow >= 0 ? rows - curRect.availableRow : 0
+              }
+            }
+
             results.push([{
               ...rect,
               castHeight: curRects.height,
@@ -221,6 +235,15 @@ export default {
             currentPage.height = itemObj.showData.length * itemObj.rowHeight + rect.MarginHeight
           }
 
+          // 选作题
+          if(rect.questionType == 'optionalQuestion'){
+            let {rows} = rect.content
+            backup = {
+              rows:rows - curRect.availableRow >= 0 ? rows - curRect.availableRow : 0
+            }
+            currentPage.height = height
+          }
+
           currentPage.rects.push({
             ...rect,
             castHeight: currentPage.height,
@@ -249,7 +272,7 @@ export default {
 
       const {MarginHeight,heightTitle,rowHeight} = question
       const cornerHeight = initial ? MarginHeight + heightTitle :
-      question.questionType == 'compositionLanguage' ? 0 : MarginHeight
+            question.questionType == 'compositionLanguage' ? 0 : MarginHeight
       const RemainingHeight = avalibleHeight - cornerHeight
       const availableRow = Math.floor(RemainingHeight / rowHeight)
       const current_height = availableRow * rowHeight  + cornerHeight

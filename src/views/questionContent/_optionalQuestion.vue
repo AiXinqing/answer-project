@@ -21,7 +21,7 @@
       @height-resize="handleResize($event)"
       :min-height="minHeight"
       :style="{
-        'height':data.first ? data.castHeight - data.heightTitle  + 'px':data.castHeight  + 'px',
+        'height':minHeight  + 'px',
       }"
     >
       <div class="answer_question_box optional_box">
@@ -89,16 +89,16 @@ export default {
     ...mapState('page', ['pageData']),
 
     heightContetn(){
-      const {borderTop,heightTitle,castHeight} = this.questionData
+      const {heightTitle,castHeight,first} = this.questionData
       let obj = {
-        height: !borderTop  ? castHeight - heightTitle - 3 : castHeight
+        height: first  ? castHeight - heightTitle - 3 : castHeight
       }
       return obj
     },
 
     minHeight(){
-      const {rowHeight,MarginHeight,height,content,castHeight} = this.questionData
-      return  castHeight >= height ? rowHeight * content.rows + MarginHeight - 3 : 0
+      const {first,heightTitle,castHeight} = this.questionData
+      return  first ? castHeight - heightTitle : castHeight
     },
 
     TopicContent () {
@@ -111,7 +111,7 @@ export default {
     },
     rowsData () {
       let Arr = []
-      for (let i = 1; i <= this.contentData.rows; i++) {
+      for (let i = 1; i <= this.data.rows; i++) {
         Arr.push(i)
       }
       return Arr
@@ -124,7 +124,6 @@ export default {
         this.data = {
           ...this.questionData
         }
-
       }
     },
     TopicContent: {
