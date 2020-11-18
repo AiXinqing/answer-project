@@ -17,9 +17,8 @@
       </div>
     </div>
     <drag-change-height
-      :question="questionContetn"
+      :question="questionData"
       @height-resize="handleResize($event)"
-      :min-height="minHeight"
       :style="{
         'height':minHeight  + 'px',
       }"
@@ -88,14 +87,6 @@ export default {
   computed: {
     ...mapState('page', ['pageData']),
 
-    heightContetn(){
-      const {heightTitle,castHeight,first} = this.questionData
-      let obj = {
-        height: first  ? castHeight - heightTitle - 3 : castHeight
-      }
-      return obj
-    },
-
     minHeight(){
       const {first,heightTitle,castHeight} = this.questionData
       return  first ? castHeight - heightTitle : castHeight
@@ -132,13 +123,6 @@ export default {
         this.cotent = this.TopicContent
       }
     },
-
-    heightContetn:{
-      immediate: true,
-      handler() {
-        this.questionContetn = this.heightContetn
-      },
-    }
   },
 
   methods: {
@@ -171,19 +155,14 @@ export default {
       }
 
     },
-    handleResize (rectHeight) {
-      const {castHeight,height} = this.questionData
-      let crrHeight = rectHeight
+    handleResize (height) {
 
       const index = this.pageData.findIndex(obj => this.questionData.id === obj.id)
       if(index > -1){
         let questionObj = this.pageData[index]
-        if(castHeight < height){
-          crrHeight = (height - castHeight) + rectHeight
-        }
         this.pageData_edit({
             ...questionObj,
-            height:crrHeight >= this.minHeight ? crrHeight + questionObj.heightTitle + 3:this.minHeight,
+            height:height,
           })
 
       }

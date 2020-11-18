@@ -23,9 +23,8 @@
       </div>
     </div>
     <drag-change-height
-      :question="heightContetn"
+      :question="questionData"
       @height-resize="handleResize($event)"
-      :min-height="minHeight"
       :style="{
           'border-top':
             !data.orderFirst || pageIndex == 0 ? '1px solid #888' : 'none',
@@ -82,17 +81,10 @@ export default {
   },
   computed: {
     ...mapState('page', ['pageData']),
-    heightContetn(){
-      const {castHeight,heightTitle,orderFirst} = this.questionData
-      let obj = {
-        height: !orderFirst ? castHeight - heightTitle : castHeight
-      }
-      return obj
-    },
 
     minHeight(){
       const {rowHeight, row,MarginHeight,height,castHeight} = this.questionData
-      return  castHeight >= height ? rowHeight * row + MarginHeight - 3 : 0
+      return  castHeight >= height ? rowHeight * row + MarginHeight : 0
     },
 
     TopicContent() {
@@ -214,19 +206,13 @@ export default {
       this.subTopic_number_calculate()
 
     },
-    handleResize (rectHeight) {
-      const {castHeight,height} = this.questionData
-      let crrHeight = rectHeight
-
+    handleResize (height) {
       const index = this.pageData.findIndex(obj => this.questionData.id === obj.id)
       if(index > -1){
         let questionObj = this.pageData[index]
-        if(castHeight < height){
-          crrHeight = (height - castHeight) + rectHeight
-        }
         this.pageData_edit({
             ...questionObj,
-            height:crrHeight >= this.minHeight ? crrHeight + questionObj.heightTitle + 3:this.minHeight,
+            height:height,
           })
 
       }
