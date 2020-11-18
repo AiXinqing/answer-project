@@ -122,6 +122,7 @@ export default {
 
           if(!curRect.pagination){
             // 分页-剩余高度新建rect
+            // 客观题 填空题
             if(rect.showData && rect.showData.length){
               backup = {
                 showData:itemObj.showData.splice(0, curRect.availableRow),
@@ -130,7 +131,7 @@ export default {
             }
 
             // 选作题
-            if(rect.questionType == 'optionalQuestion'){
+            if(rect.questionType == 'optionalQuestion' || rect.questionType == 'answerQuestion'){
               backup = {
                 rows:curRect.availableRow
               }
@@ -178,6 +179,13 @@ export default {
               }
             }
 
+            // 填空题
+            if(rect.questionType == 'answerQuestion'){
+              backup = {
+                rows:rect.row - curRect.availableRow >= 0 ? rect.row - curRect.availableRow : 0
+              }
+            }
+
             results.push([{
               ...rect,
               castHeight: curRects.height,
@@ -217,6 +225,13 @@ export default {
             currentPage.height = height
           }
 
+          // 填空题
+          if(rect.questionType == 'answerQuestion'){
+            backup = {
+              rows:rect.row - curRect.availableRow >= 0 ? rect.row - curRect.availableRow : 0
+            }
+          }
+
           currentPage.rects.push({
             ...rect,
             castHeight: currentPage.height,
@@ -225,11 +240,18 @@ export default {
           })
 
         }else{
+          let backup = {}
           currentPage.height += (rect.height + 20)
-
+          // 填空题
+          if(rect.questionType == 'answerQuestion'){
+            backup = {
+              rows:rect.row
+            }
+          }
           currentPage.rects.push({
             ...rect,
             castHeight: rect.height,
+            ...backup
           })
         }
       })
@@ -249,7 +271,6 @@ export default {
       const RemainingHeight = avalibleHeight - cornerHeight
       const availableRow = Math.floor(RemainingHeight / rowHeight)
       const current_height = availableRow * rowHeight  + cornerHeight
-
 
       const parameter = {
         availableRow:availableRow,
