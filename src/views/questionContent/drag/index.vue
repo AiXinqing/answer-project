@@ -2,7 +2,7 @@
   <div
     class="question-item"
     :style="{
-      height: question.height + 'px'
+      height: contentHeight + 'px'
     }"
   >
     <div class="question-container">
@@ -18,7 +18,7 @@
     <div
       class="question-handler"
       :style="{
-        top: question.height - 23 + 'px'
+        top: contentHeight - 23 + 'px'
       }"
       ref="resizeHandler"
       @mousedown="handleResizeStart"
@@ -47,7 +47,15 @@ export default {
       height: this.question.height,
       iconHeight: 23,
       startPos: null,
-      moved: false
+      moved: false,
+      data: JSON.parse(JSON.stringify(this.question))
+    }
+  },
+
+  computed: {
+    contentHeight() {
+      const {first,castHeight,heightTitle} = this.question
+      return first ? castHeight - heightTitle : castHeight
     }
   },
 
@@ -75,8 +83,9 @@ export default {
     handleResize (event) {
       this.moved = true
       const deltaY = event.clientY - this.startPos
+
       // 最小高度为40，可以修改这个最小值
-      this.height = Math.max(this.question.height + deltaY, this.minHeight)
+      this.height = Math.max(this.question.height + deltaY, this.data.height)
     },
 
     handleResizeEnd () {
@@ -85,8 +94,9 @@ export default {
       this.startPos = null
       if (!this.moved) return
       this.moved = false
+      console.log(this.height)
       this.$emit('height-resize', this.height)
-      // console.log(event)
+
     }
   }
 }

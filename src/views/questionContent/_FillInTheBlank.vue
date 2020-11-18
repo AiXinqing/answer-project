@@ -40,9 +40,8 @@
     </div>
 
     <drag-change-height
-      :question="questionContetn"
+      :question="questionData"
       @height-resize="handleResize($event)"
-      :min-height="minHeight"
     >
 
       <div class="content-info" ref="questionChange" >
@@ -111,18 +110,9 @@ export default {
     ...mapState('page', ['pageData']),
     ...mapGetters('page', ['page_width']),
 
-    heightContetn(){
-      const {castHeight,heightTitle,first} = this.questionData
-
-      let obj = {
-        height: first ? castHeight - heightTitle : castHeight
-      }
-      return obj
-    },
-
     minHeight(){
       const {rowHeight, showData,MarginHeight,height,castHeight} = this.questionData
-      return  castHeight >= height ? rowHeight * showData.length + MarginHeight - 3 : 0
+      return  castHeight >= height ? rowHeight * showData.length + MarginHeight : 0
     },
 
     pageWidth() {
@@ -145,12 +135,7 @@ export default {
         this.pageLayout = this.contentData.pageLayout
       },
     },
-    heightContetn:{
-      immediate: true,
-      handler() {
-        this.questionContetn = this.heightContetn
-      },
-    }
+
   },
   mounted () {
     this.$nextTick(()=>{
@@ -191,20 +176,15 @@ export default {
       this.isEditor = false
       this.cotent = content
     },
-    handleResize (rectHeight) {
-
-      const {castHeight,height} = this.questionData
-      let crrHeight = rectHeight
+    handleResize (height) {
 
       const index = this.pageData.findIndex(obj => this.questionData.id === obj.id)
       if(index > -1){
         let questionObj = this.pageData[index]
-        if(castHeight < height){
-          crrHeight = (height - castHeight) + rectHeight
-        }
+
         this.pageData_edit({
             ...questionObj,
-            height:crrHeight >= this.minHeight ? crrHeight + questionObj.heightTitle + 3:this.minHeight,
+            height:height,
           })
 
       }
