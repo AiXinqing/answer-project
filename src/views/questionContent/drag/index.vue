@@ -94,7 +94,7 @@ export default {
       this.startPos = null
       if (!this.moved) return
       this.moved = false
-      console.log(this.height)
+
       this.$emit('height-resize', this.height)
 
     }
