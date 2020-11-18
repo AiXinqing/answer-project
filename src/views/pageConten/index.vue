@@ -9,7 +9,7 @@
       <div
         v-for="(topice,index) in pageList"
         :key="topice.id + '_' + i + '_' + index"
-        :class="['footer',{answer:topice.questionType == 'answerQuestion' && !topice.first}]"
+        :class="['footer',{answer:topice.questionType == 'answerQuestion' && topice.orderFirst && index > 0}]"
         ref="box"
         :style="{ minHeight: topice.castHeight + 'px' }"
       >
@@ -18,6 +18,7 @@
           :is="topice.questionType"
           :content-data="topice.content"
           :question-data="topice"
+          :page-index="index"
           @hanldeStudent="hanldeStudent"
           @edit-admission-number="editAdmissionNumber"
           @current-question-hanlde-edit="subTopic_numberHanldeEdit"
@@ -298,7 +299,6 @@ export default {
       const RemainingHeight = avalibleHeight - cornerHeight
       const availableRow = Math.floor(RemainingHeight / rowHeight)
       const current_height = availableRow * rowHeight  + cornerHeight
-
 
       const parameter = {
         availableRow:availableRow,

@@ -4,7 +4,7 @@
     class="question-info"
     :style="{ 'margin-top': data.top != undefined ? data.top : 0 }"
   >
-    <template v-if="data.first && data.borderTop == undefined">
+    <template v-if="!data.orderFirst && data.borderTop == undefined">
       <div class="question-title" :style="{height: data.heightTitle - 10 + 'px'}" v-if="!isEditor" @click="hanldeEditor">
         <div class="title-span" v-html="cotent"></div>
       </div>
@@ -23,17 +23,14 @@
       </div>
     </div>
     <drag-change-height
-      :question="questionContetn"
+      :question="heightContetn"
       @height-resize="handleResize($event)"
       :min-height="minHeight"
       :style="{
-          height: data.first
-            ? data.castHeight - data.heightTitle - 2 + 'px'
-            : data.castHeight - 1 + 'px',
           'border-top':
-            data.first || data.borderTop != undefined ? '1px solid #888' : 'none',
+            !data.orderFirst || pageIndex == 0 ? '1px solid #888' : 'none',
           'margin-top':
-            data.first || data.borderTop != undefined ? '20px' : '0',
+            !data.orderFirst || data.borderTop != undefined ? '20px' : '0',
         }"
     >
       <div
@@ -69,6 +66,11 @@ export default {
       type: Object,
       default: () => {},
     },
+
+    pageIndex:{
+      type: Number,
+      default: 0,
+    }
   },
   data() {
     return {
@@ -81,9 +83,9 @@ export default {
   computed: {
     ...mapState('page', ['pageData']),
     heightContetn(){
-      const {castHeight,heightTitle,height} = this.questionData
+      const {castHeight,heightTitle,orderFirst} = this.questionData
       let obj = {
-        height: castHeight >= height  ? castHeight - heightTitle - 3 : castHeight
+        height: !orderFirst ? castHeight - heightTitle : castHeight
       }
       return obj
     },
@@ -117,17 +119,11 @@ export default {
         }
       },
     },
+
     TopicContent: {
       immediate: true,
       handler() {
         this.cotent = this.TopicContent
-      },
-    },
-
-    heightContetn:{
-      immediate: true,
-      handler() {
-        this.questionContetn = this.heightContetn
       },
     },
   },
