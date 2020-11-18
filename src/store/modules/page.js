@@ -85,6 +85,14 @@ const mutations = {
     })
   },
 
+  pageData_orderFirst: (state, objId) => {
+    // 解答题删除后续排序
+    state.pageData = state.pageData.map(question => question.objId == objId ? {
+      ...question,
+      orderFirst: question.orderFirst - 1
+    }:question)
+  },
+
   pageData_order_edit: (state, data) => {
     // 解答题
     state.pageData = state.pageData.map(question => ({

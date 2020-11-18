@@ -131,6 +131,7 @@ export default {
     ...mapMutations('page', [
       'pageData_del',
       'pageData_edit',
+      'pageData_orderFirst'
     ]),
     ...mapMutations('questionType', [
       'subTopic_already_del',
@@ -204,7 +205,13 @@ export default {
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
       if (index > -1) {
         this.pageData_del(index)
+        if(!this.data.orderFirst){
+          this.$nextTick(()=>{
+            this.pageData_orderFirst(this.data.objId)
+          })
+        }
       }
+      this.subTopic_number_calculate()
 
     },
     handleResize (rectHeight) {
