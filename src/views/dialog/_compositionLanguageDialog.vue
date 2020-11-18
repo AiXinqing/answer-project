@@ -151,7 +151,7 @@ export default {
         minWordCount: 800,
         mark: '1', // 1 ，2
         totalWordCount: 1000,
-        spacing: {value:4,label:1.8}, // 间距
+        spacing: {value:5,label:1.8}, // 间距
         InsertTitle: false,
         Postpone: false,
       },
@@ -267,6 +267,7 @@ export default {
         this.data = {
           ...this.questionData,
         }
+        console.log('lail')
         if (this.editQuestionId == null) {
           this.$nextTick(() => {
             this.data = {
@@ -294,12 +295,14 @@ export default {
       'pageData_insert',
       'pageData_id_clean',
     ]),
+
     ...mapMutations('questionType', [
       'subTopic_number_calculate',
       'subTopic_already_reset',
       'subTopic_already_add',
       'subTopic_calculate_determine',
     ]),
+
     opened() {
       this.questionData = JSON.parse(
         JSON.stringify({
@@ -314,6 +317,7 @@ export default {
       this.subTopic_already_add(this.subTopic_number_determine)
       this.subTopic_number_calculate()
     },
+
     openedEdit(obj) {
       this.editData = JSON.parse(JSON.stringify(obj))
       //编辑弹框
@@ -323,6 +327,18 @@ export default {
       this.openedFrame = true
       this.data = JSON.parse(JSON.stringify(obj.content))
     },
+
+    changeSpacing(obj){
+      this.editData = JSON.parse(JSON.stringify(obj))
+      this.editQuestionId = obj.id
+      this.orders = obj.order
+      this.data = JSON.parse(JSON.stringify(obj.content))
+
+      this.$nextTick(()=>{
+        this.preCreateQuestion()
+      })
+    },
+
     closeFrame() {
       // 关闭弹窗
       this.subTopic_number_calculate()
@@ -345,7 +361,7 @@ export default {
     preCreateQuestion() {
       const { InsertTitle, Postpone,score } = this.data //  spacing, totalWordCount,
       this.errorVal = this.tabStatusVal
-
+      console.log(this.editQuestionId)
       if (!this.tabStatus) {
         let objId = `compositionLanguage_${+new Date()}`
         //------------------------------------------------------------
@@ -385,6 +401,7 @@ export default {
           this.subTopic_calculate_determine([this.data])
 
         } else {
+          console.log(obj)
           this.pageData_edit({ ...obj, id: this.editQuestionId })
         }
         this.subTopic_number_calculate()

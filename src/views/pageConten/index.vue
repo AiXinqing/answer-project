@@ -28,6 +28,7 @@
           @current-question-optional-edit="subTopic_numberOptionalEdit"
           @composition-english-edit="compositionEnglishEdit"
           @composition-language-edit="compositionLanguageEdit"
+          @subtract-spacing="subtractSpacing"
           @cur-edit-non="curEditNon"
           @hanlde-subtraction-non="hanldeSubtractionNon"
         />
@@ -333,6 +334,9 @@ export default {
     },
     compositionLanguageEdit(obj) {
       this.$refs.publicDialog.openedEdit('compositionLanguage', obj)
+    },
+    subtractSpacing(obj){
+      this.$refs.publicDialog.changeSpacing(obj)
     },
     curEditNon(obj) {
       this.$refs.publicDialog.openedEdit('NonRresponseArea', obj)

@@ -210,9 +210,13 @@ const getters = {
 
   question_language: (state, getters) => (question) => {
     const { totalWordCount,spacing} = question.content
-    let rows = Math.ceil(totalWordCount / getters.latticeNum)
+    let rows = Math.ceil(totalWordCount / getters.latticeNum) // .toFixed(2)
+    console.log(rows)
     let rowHeight = getters.latticeWidth + spacing.value
+        rowHeight = Number(rowHeight.toFixed(2))
     let height = rows * rowHeight + question.MarginHeight + question.heightTitle
+      height = Number(height.toFixed(2))
+    console.log(height)
     return {
       ...question,
       height: height,

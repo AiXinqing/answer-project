@@ -12,7 +12,11 @@
     </template>
 
     <div class="question_arrays">
-      <div class="question_editOrDel">
+      <div class="question_editOrDel language">
+        <span  class="btn_addSub_name spacing">行间距：</span>
+        <span class="btn_addSub" @click="subtractSpacing">-</span>
+        <span class="btn_addSub_info">{{contentData.spacing.label}}</span>
+        <span class="btn_addSub" @click="addSpacing">+</span>
         <span class="layui-btn layui-btn-xs" @click="compositionLanguagehEdit"
           >编辑</span
         >
@@ -32,7 +36,7 @@
           class="compositionLanguage_item"
           :style="{
             height:
-              i != rowsData.length - 1
+              i != rowsData.length
                 ? data.rowHeight + 'px'
                 : data.rowHeight - contentData.spacing + 'px',
           }"
@@ -171,6 +175,60 @@ export default {
     compositionLanguagehEdit() {
       this.$emit('composition-language-edit', this.data)
     },
+
+    subtractSpacing(){
+      const { label,value } = this.data.content.spacing
+      let spacLabel = label - 0.2
+          spacLabel = Number(spacLabel.toFixed(2))
+      let spacVal = value - 0.5
+          spacVal =  Number(spacVal.toFixed(2))
+
+      if(spacLabel < 1){
+        this.$message({
+          message: '行间距最小值1',
+          type: 'warning'
+        });
+      }else{
+        this.$emit('subtract-spacing',{
+          ...this.data,
+          content:{
+            ...this.data.content,
+            spacing:{
+              label:spacLabel,
+              value:spacVal
+            }
+          }
+        })
+      }
+
+    },
+    addSpacing(){
+      const { label,value } = this.data.content.spacing
+
+      let spacLabel = label + 0.2
+          spacLabel = Number(spacLabel.toFixed(2))
+      let spacVal = value + 0.5
+          spacVal =  Number(spacVal.toFixed(2))
+
+      if(spacLabel <= 2.8){
+        this.$emit('subtract-spacing',{
+          ...this.data,
+          content:{
+            ...this.data.content,
+            spacing:{
+              label:spacLabel,
+              value:spacVal
+            }
+          }
+        })
+      }else{
+        this.$message({
+          message: '行间距最大值2.8',
+          type: 'warning'
+        });
+      }
+    },
+
     delHanlde() {
       // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
@@ -226,6 +284,12 @@ export default {
     top: 20px;
     left: 5px;
     z-index: 9999;
+  }
+}
+.spacing{color: #333}
+.question_editOrDel{
+  &.language{
+    top: 2px
   }
 }
 </style>
