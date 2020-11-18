@@ -267,7 +267,6 @@ export default {
         this.data = {
           ...this.questionData,
         }
-        console.log('lail')
         if (this.editQuestionId == null) {
           this.$nextTick(() => {
             this.data = {
@@ -361,7 +360,6 @@ export default {
     preCreateQuestion() {
       const { InsertTitle, Postpone,score } = this.data //  spacing, totalWordCount,
       this.errorVal = this.tabStatusVal
-      console.log(this.editQuestionId)
       if (!this.tabStatus) {
         let objId = `compositionLanguage_${+new Date()}`
         //------------------------------------------------------------
@@ -401,7 +399,6 @@ export default {
           this.subTopic_calculate_determine([this.data])
 
         } else {
-          console.log(obj)
           this.pageData_edit({ ...obj, id: this.editQuestionId })
         }
         this.subTopic_number_calculate()

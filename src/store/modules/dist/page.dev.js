@@ -240,12 +240,10 @@ var getters = {
           spacing = _question$content.spacing;
       var rows = Math.ceil(totalWordCount / getters.latticeNum); // .toFixed(2)
 
-      console.log(rows);
       var rowHeight = getters.latticeWidth + spacing.value;
       rowHeight = Number(rowHeight.toFixed(2));
       var height = rows * rowHeight + question.MarginHeight + question.heightTitle;
       height = Number(height.toFixed(2));
-      console.log(height);
       return _objectSpread({}, question, {
         height: height,
         rowHeight: rowHeight,
