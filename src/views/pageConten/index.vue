@@ -269,11 +269,13 @@ export default {
 
       //题型高度
       let question_height = availableRow * rowHeight + margin
+          question_height = availableRow == 0 ? question_height - MarginHeight : question_height
 
       let parameter = {
         availableRow:availableRow,
         height:question_height,
-        pagination:question_height >= question.height ? false : true
+        pagination:question_height >= question.height ? false :
+          question_height < heightTitle ? false: true
       }
 
       return parameter

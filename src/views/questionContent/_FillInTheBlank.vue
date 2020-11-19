@@ -38,7 +38,6 @@
         >
       </div>
     </div>
-
     <drag-change-height
       :question="questionData"
       @height-resize="handleResize($event)"

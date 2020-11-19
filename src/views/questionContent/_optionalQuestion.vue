@@ -17,6 +17,7 @@
       </div>
     </div>
     <drag-change-height
+      v-if="data.heightTitle != data.castHeight"
       :question="questionData"
       @height-resize="handleResize($event)"
       :style="{
@@ -24,7 +25,7 @@
       }"
     >
       <div class="answer_question_box optional_box">
-        <template v-if="data.first && data.borderTop == undefined || data.borderTop == 0">
+        <template v-if="data.first || data.heightTitle == (data.height - data.castHeight)">
           <span class="topic_number_box">
 
             <span class="black_icon"></span>
