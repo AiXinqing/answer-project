@@ -17,7 +17,7 @@
       </div>
     </div>
     <drag-change-height
-      v-if="data.heightTitle != data.castHeight"
+      v-if="data.heightTitle + data.MarginHeight != data.castHeight"
       :question="questionData"
       @height-resize="handleResize($event)"
       :style="{
@@ -156,7 +156,6 @@ export default {
 
     },
     handleResize (height) {
-
       const index = this.pageData.findIndex(obj => this.questionData.id === obj.id)
       if(index > -1){
         let questionObj = this.pageData[index]

@@ -17,22 +17,28 @@
         <span class="layui-btn layui-btn-xs" @click="delHanlde">删除</span>
       </div>
     </div>
-    <div class="answer_question_box composition_box english">
+    <drag-change-height
+      :question="questionData"
+      v-if="data.heightTitle != data.castHeight"
+      @height-resize="handleResize($event)"
+    >
+      <div class="answer_question_box composition_box english">
+        <p
+          v-for="(item,i) in rowsData"
+          :key="i"
+          class="compositionEnglish_item"
+        >
+        <template  v-if="data.first && data.borderTop == undefined">
+          <a v-if="i == 0" class="pre-t5">{{contentData.topic}}.</a>
+          <a class="line-style" />
+        </template>
+        <template v-else>
+          <span class="line-style" style="width:100%"/>
+        </template>
+        </p>
+      </div>
+    </drag-change-height>
 
-      <p
-        v-for="(item,i) in rowsData"
-        :key="i"
-        class="compositionEnglish_item"
-      >
-      <template  v-if="data.first && data.borderTop == undefined">
-        <a v-if="i == 0" class="pre-t5">{{contentData.topic}}.</a>
-        <a class="line-style" />
-      </template>
-      <template v-else>
-        <span class="line-style" style="width:100%"/>
-      </template>
-      </p>
-    </div>
 
   </div>
 </template>
@@ -42,9 +48,11 @@ import { mapState, mapMutations } from 'vuex'
 import { QUESTION_NUMBERS } from '@/models/base'
 
 import quillEditor from '../../components/quillEditor'
+import dragChangeHeight from '../questionContent/drag'
 export default {
   components: {
     quillEditor,
+    dragChangeHeight
   },
   props: {
     questionData: {
@@ -67,18 +75,26 @@ export default {
   },
   computed: {
     ...mapState('page', ['pageData']),
-    strLong () {
 
+    minHeight(){
+      const {first,heightTitle,castHeight} = this.questionData
+      return  first ? castHeight - heightTitle : castHeight
+    },
+
+    strLong () {
       let long = this.contentData.topic.toString().length
       return parseInt(long) * 8 + 1
     },
+
     TopicContent () {
       const {topicName,number,score} = this.contentData
       return `<span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${score})</span>分`
     },
+
     topicData () {
       return ''
     },
+
     rowsData () {
       const { heightTitle, MarginHeight, castHeight, first, borderTop } = this.data
       let row = 0
@@ -94,6 +110,7 @@ export default {
       }
       return Arr
     }
+
   },
   watch: {
     questionData: {
@@ -116,22 +133,27 @@ export default {
     ...mapMutations('page', [
       'pageData_del',
       'pageData_id_clean',
+      'pageData_edit'
     ]),
     ...mapMutations('questionType', [
       'subTopic_already_del',
       'subTopic_number_calculate',
       'subTopic_determine_clean',
     ]),
+
     hanldeCloseEsitor (content) {
       this.isEditor = false
       this.cotent = content
     },
+
     hanldeEditor () {
       this.isEditor = true
     },
+
     compositionEnglishEdit () {
       this.$emit('composition-english-edit', this.data)
     },
+
     delHanlde () { // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
       if (index > -1) {
@@ -140,8 +162,19 @@ export default {
         this.pageData_id_clean(this.data.id)
         this.subTopic_number_calculate()
       }
-
     },
+
+    handleResize (height) {
+      const index = this.pageData.findIndex(obj => this.questionData.id === obj.id)
+      if(index > -1){
+        let questionObj = this.pageData[index]
+        this.pageData_edit({
+            ...questionObj,
+            height:height,
+          })
+
+      }
+    }
   },
 }
 </script>
@@ -150,7 +183,7 @@ export default {
 <style lang="less" >
 .answer_question_box {
   &.composition_box {
-    border-top: 1px solid #888;
+    // border-top: 1px solid #888;
     padding-bottom: 5px;
   }
   &.english{
@@ -175,9 +208,6 @@ export default {
     height: 25px;
   }
 }
+
 </style>
-<style lang="less" scoped>
-  .composition_box{
-    border: 1px solid #888;
-  }
-</style>
+
