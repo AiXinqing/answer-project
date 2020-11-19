@@ -249,10 +249,9 @@ export default {
   padding: 10px 5px 5px 5px;
 }
 .Language_item_title {
-  height: 45px;
+  height: 35px;
   position: relative;
-  margin-top: -10px;
-  line-height: 45px;
+  line-height: 35px;
   font-size: 14px;
 }
 .compositionLanguage_box {

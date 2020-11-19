@@ -145,6 +145,7 @@ export default {
 
         //计算变量及对象追加
         let backup = {}
+        let superiorGrid = 0
 
         var avalibleHeight = this.page_height - currentPage.height - 20
 
@@ -181,6 +182,14 @@ export default {
               castHeight:curRect.height,
               ...backup
             })
+
+            // 作文
+            if(rect.questionType == 'compositionLanguage'){
+              superiorGrid = rect.superiorGrid + curRect.availableRow * rect.lattice
+              backup = {
+                superiorGrid:superiorGrid
+              }
+            }
 
             height = rect.height - curRect.height
           }
@@ -225,6 +234,18 @@ export default {
               height += rect.MarginHeight
             }
 
+            if(rect.questionType == 'compositionLanguage' && curRect.pagination){
+              height += rect.MarginHeight
+            }
+
+            // 作文
+            if(rect.questionType == 'compositionLanguage'){
+              superiorGrid += curRects.availableRow * rect.lattice
+              backup = {
+                superiorGrid:superiorGrid
+              }
+            }
+
           }
 
           //溢出剩余高度---------------------------------------------------
@@ -252,6 +273,10 @@ export default {
           }
 
           if(rect.questionType == 'optionalQuestion' && curRect.pagination){
+            currentPage.height += rect.MarginHeight
+          }
+
+          if(rect.questionType == 'compositionLanguage' && curRect.pagination){
             currentPage.height += rect.MarginHeight
           }
 
@@ -297,6 +322,7 @@ export default {
       // 边框高度 剩余内容
       let margin = initial ? MarginHeight + heightTitle : MarginHeight
           margin = question.questionType == 'optionalQuestion' ? margin + question.rowTitle : margin
+          margin = question.questionType == 'compositionLanguage' ? margin + question.rowTitle : margin
       let RemainingHeight = avalibleHeight - margin
 
       // 剩余可容纳行数
@@ -307,6 +333,8 @@ export default {
           // 不等于选作题的原因-选作题内部标题有一行内容的高度
           question_height =
             availableRow == 0 && question.questionType != 'optionalQuestion' ? question_height - MarginHeight : question_height
+          question_height =
+            availableRow == 0 && question.questionType != 'compositionLanguage' ? question_height - MarginHeight : question_height
 
       let parameter = {
         availableRow:availableRow,

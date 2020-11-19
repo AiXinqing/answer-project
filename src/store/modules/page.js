@@ -214,7 +214,8 @@ const getters = {
 
     let rowHeight = getters.latticeWidth + spacing.value
         rowHeight = Number(rowHeight.toFixed(2))
-    let height = rows * rowHeight + question.MarginHeight + question.heightTitle
+
+    let height = rows * rowHeight + question.MarginHeight + question.heightTitle + question.rowTitle
       height = Number(height.toFixed(2))
 
     return {

@@ -242,7 +242,7 @@ var getters = {
 
       var rowHeight = getters.latticeWidth + spacing.value;
       rowHeight = Number(rowHeight.toFixed(2));
-      var height = rows * rowHeight + question.MarginHeight + question.heightTitle;
+      var height = rows * rowHeight + question.MarginHeight + question.heightTitle + question.rowTitle;
       height = Number(height.toFixed(2));
       return _objectSpread({}, question, {
         height: height,

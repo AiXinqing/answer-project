@@ -158,7 +158,8 @@ export default {
       editData: {},
       changeClick:false,
       page_height:PAGE_HEIGHT,
-      MarginHeight:45,
+      MarginHeight:17,
+      rowTitle:35,
       heightTitle:32
     }
   },
@@ -377,6 +378,7 @@ export default {
           first: true,
           rowHeight: 0,
           rowWidth: 0,
+          rowTitle:this.rowTitle,
           superiorGrid:0, // 上级格子数量
         }
         this.subTopic_already_add([this.data])
