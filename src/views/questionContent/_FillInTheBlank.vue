@@ -237,9 +237,7 @@ export default {
     div{border-color: @main}
   }
 }
-.content-info{
-  padding-top: 6px;
-}
+
 .content-row  {
   display: flex;
 

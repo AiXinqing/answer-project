@@ -25,7 +25,7 @@
     >
       <div class="answer_question_box optional_box">
         <template v-if="data.first && data.borderTop == undefined || data.borderTop == 0">
-          <div class="topic_number_box">
+          <span class="topic_number_box">
 
             <span class="black_icon"></span>
 
@@ -34,12 +34,11 @@
               :key="i"
             >{{item.topic}}</span>
             <span class="black_icon"></span>
-          </div>
-          <div class="number-info">
+          </span>
+          <span class="number-info">
             <span>我选的题号（1分）</span>
-          </div>
+          </span>
         </template>
-
         <div v-if="contentData.HorizontalLine">
           <p
             v-for="(item,i) in rowsData"
@@ -173,10 +172,15 @@ export default {
 
 
 <style lang="less" >
-.answer_question_box {
-  padding: 0 15px;
-  &.optional_box {
-    border-top: 1px solid #888;
+.question-container{
+  margin-top: 10px;
+
+  .answer_question_box {
+    height: 35px;
+    line-height: 35px;
+    padding: 0 15px ;
+    position: relative;
+    margin: 0;
   }
 }
 .question-title {
@@ -215,8 +219,10 @@ export default {
 }
 .topic_number_box {
   height: 20px;
-  text-align: right;
-  width: 100%;
+  position: absolute;
+  right: 15px;
+  top: -13px;
+
   span {
     display: inline-block;
     margin-left: 5px;

@@ -124,109 +124,74 @@ export default {
     },
 
     pageContentFunc(rects = []) {
-
       // 试卷总分清零
       this.scoreTotal_reset()
 
+      //参数变量
       var results = []
       var currentPage = {height:0,rects:[]}
 
-      //重置高度
+      //重置参数变量
       function resetCurrentPage () {
         currentPage.height = 0;
         currentPage.rects = [];
       }
 
       rects.forEach(rect =>{
-
         // 总分叠加
         if(rect.content.scoreTotal){
           this.scoreTotal_sum(rect.content.scoreTotal)
         }
 
-        //计算变量及对象追加变量
-        // let superiorGrid = 0
+        //计算变量及对象追加
         let backup = {}
 
         var avalibleHeight = this.page_height - currentPage.height - 20
+        console.log(avalibleHeight)
 
         // 用于客观题 填空题数组分割
         const itemObj = JSON.parse(JSON.stringify(rect))
 
         // 高度溢出---------------------------------------------------------------------------
         if(rect.height > avalibleHeight){
-
+          avalibleHeight -= 20
+          let height = rect.height
           let curRect = this.preliminaryQuestion(rect, avalibleHeight)
 
-          // 剩余高度是否进行分页
-          if(!curRect.pagination){
+          // 是否分割当前题型
+          if(curRect.pagination){
 
-           // 分页-剩余高度新建rect
             // 客观题 填空题
             if(rect.showData && rect.showData.length){
               backup = {
                 showData:itemObj.showData.splice(0, curRect.availableRow),
-                first:true
+                first:curRect.pagination
               }
             }
-
-            // // 选作题
-            // if(rect.questionType == 'optionalQuestion' || rect.questionType == 'answerQuestion'){
-            //   backup = {
-            //     rows:curRect.availableRow
-            //   }
-            // }
 
             currentPage.rects.push({
               ...rect,
               castHeight:curRect.height,
               ...backup
             })
+
+            height = rect.height - curRect.height
           }
 
-          // // 作文
-          //   if(rect.questionType == 'compositionLanguage'){
-          //     superiorGrid = rect.superiorGrid + curRect.availableRow * rect.lattice
-          //     backup = {
-          //       superiorGrid:superiorGrid
-          //     }
-          //   }
-
-          results.push(currentPage.rects) // 增加一页
+          // 增加一页
+          results.push(currentPage.rects)
           resetCurrentPage()
 
-
-          // 判断当前rect高度能分几页----------------------------------------
-          let height = rect.height - curRect.height
-
-          //剩余高度超过一页高度
-          while (height > this.page_height) {
-
+          // 剩余高度可以分占几页
+          while (height > this.page_height){
             let avalibleHeight =  this.page_height - 20
             let curRects = this.preliminaryQuestion(rect, avalibleHeight,false)
 
             if(rect.showData && rect.showData.length){
-              // 切割数组
               backup = {
                 showData:itemObj.showData.splice(0, curRects.availableRow),
               }
             }
-
-            // // 选作题
-            // if(rect.questionType == 'optionalQuestion'){
-            //   let {rows} = rect.content
-            //   backup = {
-            //     rows:rows - curRect.availableRow >= 0 ? rows - curRect.availableRow : 0
-            //   }
-            // }
-
-            // // 填空题
-            // if(rect.questionType == 'answerQuestion'){
-            //   backup = {
-            //     rows:rect.row - curRect.availableRow >= 0 ? rect.row - curRect.availableRow : 0
-            //   }
-            // }
-
             results.push([{
               ...rect,
               castHeight: curRects.height,
@@ -234,64 +199,47 @@ export default {
               ...backup
             }]);
 
-            // 减去一页内容高度
-            height -= curRects.height - rect.MarginHeight
+            height -= curRects.height
 
-            // // 作文
-            // if(rect.questionType == 'compositionLanguage'){
-            //   superiorGrid += curRects.availableRow * rect.lattice
-            //   backup = {
-            //     superiorGrid:superiorGrid
-            //   }
-            // }
+            if(rect.questionType == 'FillInTheBlank' && curRect.pagination){
+              height += rect.MarginHeight
+            }
           }
 
-          //最后剩余高度---------------------------------------------------
+          //溢出剩余高度---------------------------------------------------
 
+          //剩余高度增加 rect.MarginHeight 高度
+          currentPage.height = height
+
+          //客观题 填空题
           if(rect.showData && rect.showData.length){
               backup = {
                 showData: itemObj.showData,
               }
           }
 
-          //剩余高度增加 rect.MarginHeight 高度
-          currentPage.height = height + rect.MarginHeight
-
-          // // 选作题
-          // if(rect.questionType == 'optionalQuestion'){
-          //   let {rows} = rect.content
-          //   backup = {
-          //     rows:rows - curRect.availableRow >= 0 ? rows - curRect.availableRow : 0
-          //   }
-          //   currentPage.height = height
-          // }
-
-          // // 填空题
-          // if(rect.questionType == 'answerQuestion'){
-          //   backup = {
-          //     rows:rect.row - curRect.availableRow >= 0 ? rect.row - curRect.availableRow : 0
-          //   }
-          // }
-
+          if(rect.questionType == 'FillInTheBlank' && curRect.pagination){
+            currentPage.height += rect.MarginHeight
+          }
           currentPage.rects.push({
             ...rect,
             castHeight: currentPage.height,
-            first:curRect.pagination,
+            first:!curRect.pagination,
             ...backup
           })
 
         }else{
-
+          // 变量
           let backup = {}
 
           currentPage.height += (rect.height + 20)
 
-          // // 填空题
-          // if(rect.questionType == 'answerQuestion'){
-          //   backup = {
-          //     rows:rect.row
-          //   }
-          // }
+          // 选作题
+          if(rect.questionType == 'optionalQuestion'){
+            backup = {
+              rows:rect.content.rows,
+            }
+          }
 
           currentPage.rects.push({
             ...rect,
@@ -312,24 +260,20 @@ export default {
       // 变量
       const { MarginHeight,heightTitle,rowHeight } = question
 
-      // 题型内容边框高度
-      const questionRimHeight = initial ? MarginHeight + heightTitle :
-            question.questionType == 'compositionLanguage' ? 0 : MarginHeight
+      // 边框高度 剩余内容
+      let margin = initial ? MarginHeight + heightTitle : MarginHeight
+      let RemainingHeight = avalibleHeight - margin
 
-      // 除去边框高度剩余可用高度
-      const RemainingHeight = avalibleHeight - questionRimHeight
+      // 剩余可容纳行数
+      let availableRow = Math.floor(RemainingHeight / rowHeight)
 
-      // 剩余高度可容纳内容高度行数
-      const availableRow = Math.floor(RemainingHeight / rowHeight)
+      //题型高度
+      let question_height = availableRow * rowHeight + margin
 
-      // 剩余高度可容纳内容高度
-      const current_height = availableRow * rowHeight  + questionRimHeight
-
-      // 返回剩余值
-      const parameter = {
+      let parameter = {
         availableRow:availableRow,
-        height:current_height >= (questionRimHeight + rowHeight) ? current_height : 0,
-        pagination:current_height >= (questionRimHeight + rowHeight) ? false : true,
+        height:question_height,
+        pagination:question_height >= question.height ? false : true
       }
 
       return parameter
