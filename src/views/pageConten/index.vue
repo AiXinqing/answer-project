@@ -147,7 +147,6 @@ export default {
         let backup = {}
 
         var avalibleHeight = this.page_height - currentPage.height - 20
-        console.log(avalibleHeight)
 
         // 用于客观题 填空题数组分割
         const itemObj = JSON.parse(JSON.stringify(rect))
@@ -166,6 +165,14 @@ export default {
               backup = {
                 showData:itemObj.showData.splice(0, curRect.availableRow),
                 first:curRect.pagination
+              }
+            }
+
+            // 选作题
+            if(rect.questionType == 'optionalQuestion' || rect.questionType == 'answerQuestion'){
+              backup = {
+                rows:curRect.availableRow > rect.content.rows ? rect.content.rows :
+                  curRect.availableRow > 0 ? curRect.availableRow : 0
               }
             }
 
@@ -192,6 +199,15 @@ export default {
                 showData:itemObj.showData.splice(0, curRects.availableRow),
               }
             }
+
+            // 选作题
+            if(rect.questionType == 'optionalQuestion'){
+              let {rows} = rect.content
+              backup = {
+                rows:rows - curRect.availableRow >= 0 ? rows - curRect.availableRow : 0
+              }
+            }
+
             results.push([{
               ...rect,
               castHeight: curRects.height,
@@ -204,6 +220,11 @@ export default {
             if(rect.questionType == 'FillInTheBlank' && curRect.pagination){
               height += rect.MarginHeight
             }
+
+            if(rect.questionType == 'optionalQuestion' && curRect.pagination){
+              height += rect.MarginHeight
+            }
+
           }
 
           //溢出剩余高度---------------------------------------------------
@@ -218,9 +239,22 @@ export default {
               }
           }
 
+          // 选作题
+          if(rect.questionType == 'optionalQuestion'){
+            let {rows} = rect.content
+            backup = {
+              rows:curRect.availableRow < 0  ? rows :  rows - curRect.availableRow
+            }
+          }
+
           if(rect.questionType == 'FillInTheBlank' && curRect.pagination){
             currentPage.height += rect.MarginHeight
           }
+
+          if(rect.questionType == 'optionalQuestion' && curRect.pagination){
+            currentPage.height += rect.MarginHeight
+          }
+
           currentPage.rects.push({
             ...rect,
             castHeight: currentPage.height,
@@ -262,6 +296,7 @@ export default {
 
       // 边框高度 剩余内容
       let margin = initial ? MarginHeight + heightTitle : MarginHeight
+          margin = question.questionType == 'optionalQuestion' ? margin + question.rowTitle : margin
       let RemainingHeight = avalibleHeight - margin
 
       // 剩余可容纳行数
@@ -269,7 +304,9 @@ export default {
 
       //题型高度
       let question_height = availableRow * rowHeight + margin
-          question_height = availableRow == 0 ? question_height - MarginHeight : question_height
+          // 不等于选作题的原因-选作题内部标题有一行内容的高度
+          question_height =
+            availableRow == 0 && question.questionType != 'optionalQuestion' ? question_height - MarginHeight : question_height
 
       let parameter = {
         availableRow:availableRow,
