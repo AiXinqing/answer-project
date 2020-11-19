@@ -38,7 +38,7 @@ export default {
 
     minHeight:{
       type:Number,
-      default:40
+      default:0
     }
   },
 
