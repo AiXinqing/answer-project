@@ -96,16 +96,8 @@ export default {
     },
 
     rowsData () {
-      const { heightTitle, MarginHeight, castHeight, first, borderTop } = this.data
-      let row = 0
-      if (first && borderTop == undefined) {
-        row = Math.floor((castHeight - MarginHeight - heightTitle) / 35)
-      } else {
-        row = Math.floor(castHeight / 35)
-      }
-      // console.log(row)
       let Arr = []
-      for (let i = 1; i <= row; i++) {
+      for (let i = 1; i <= this.data.rows; i++) {
         Arr.push(i)
       }
       return Arr

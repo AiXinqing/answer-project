@@ -72,7 +72,8 @@ export default {
     return {
       contentData: [],
       heightArray: [],
-      page_height: PAGE_HEIGHT
+      page_height: PAGE_HEIGHT,
+      difference: 22
     }
   },
   beforeRouteLeave(to, from, next) {
@@ -154,13 +155,13 @@ export default {
 
         // 高度溢出---------------------------------------------------------------------------
         if(rect.height > avalibleHeight){
-          if(!rect.orderFirst){
-            avalibleHeight -= 20
+          avalibleHeight -= this.difference
+          if(rect.questionType == 'answerQuestion' && rect.orderFirst > 0){
+            avalibleHeight += (this.difference - 2)
           }
 
           let height = rect.height
           let curRect = this.preliminaryQuestion(rect, avalibleHeight)
-          // console.log(curRect)
 
           // 是否分割当前题型
           if(curRect.pagination){
@@ -174,7 +175,10 @@ export default {
             }
 
             // 选作题
-            if(rect.questionType == 'optionalQuestion' || rect.questionType == 'answerQuestion'){
+            if(rect.questionType == 'optionalQuestion' ||
+              rect.questionType == 'answerQuestion' ||
+              rect.questionType == 'compositionEnglish'
+            ){
               backup = {
                 rows:curRect.availableRow > rect.content.rows ? rect.content.rows :
                   curRect.availableRow > 0 ? curRect.availableRow : 0
@@ -204,7 +208,7 @@ export default {
 
           // 剩余高度可以分占几页
           while (height > this.page_height){
-            let avalibleHeight =  this.page_height - 20
+            let avalibleHeight =  this.page_height - this.difference
             let curRects = this.preliminaryQuestion(rect, avalibleHeight,false)
 
             if(rect.showData && rect.showData.length){
@@ -214,7 +218,10 @@ export default {
             }
 
             // 选作题
-            if(rect.questionType == 'optionalQuestion' || rect.questionType == 'answerQuestion'){
+            if(rect.questionType == 'optionalQuestion' ||
+              rect.questionType == 'answerQuestion' ||
+              rect.questionType == 'compositionEnglish'
+            ){
               let {rows} = rect.content
               backup = {
                 rows:rows - curRect.availableRow >= 0 ? rows - curRect.availableRow : 0
@@ -259,7 +266,10 @@ export default {
           }
 
           // 选作题
-          if(rect.questionType == 'optionalQuestion' || rect.questionType == 'answerQuestion'){
+          if(rect.questionType == 'optionalQuestion' ||
+              rect.questionType == 'answerQuestion' ||
+              rect.questionType == 'compositionEnglish'
+            ){
             let {rows} = rect.content
             backup = {
               rows:curRect.availableRow < 0  ? rows :  rows - curRect.availableRow
@@ -282,12 +292,17 @@ export default {
         }else{
           // 变量
           let backup = {}
-          if( !rect.orderFirst){
-              currentPage.height += rect.height + 20
+          currentPage.height += rect.height + this.difference
+
+          if(rect.questionType == 'answerQuestion' && rect.orderFirst > 0){
+            currentPage.height -= (this.difference - 2)
           }
 
           // 选作题
-          if(rect.questionType == 'optionalQuestion' || rect.questionType == 'answerQuestion'){
+          if(rect.questionType == 'optionalQuestion' ||
+              rect.questionType == 'answerQuestion' ||
+              rect.questionType == 'compositionEnglish'
+            ){
             backup = {
               rows:rect.content.rows,
             }
@@ -328,6 +343,7 @@ export default {
             availableRow == 0 && question.questionType != 'optionalQuestion' ? question_height - MarginHeight : question_height
           question_height =
             availableRow == 0 && question.questionType != 'compositionLanguage' ? question_height - MarginHeight : question_height
+            console.log(question_height)
 
       let parameter = {
         availableRow:availableRow,

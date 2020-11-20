@@ -25,8 +25,6 @@
       :style="{
           'border-top':
             !data.orderFirst || pageIndex == 0 ? '1px solid #888' : 'none',
-          'margin-top':
-            !data.orderFirst || data.borderTop != undefined ? '20px' : '0',
         }"
     >
       <div class="answer_question_box">
@@ -232,7 +230,7 @@ export default {
 
 }
 .question-container{
-  margin-top: 0;
+  margin-top: 0 !important;
   .answer_question_box {
     padding: 10px 15px 0 15px;
     .question_box_title {

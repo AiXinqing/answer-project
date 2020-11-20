@@ -35,11 +35,6 @@ export default {
       type: Object,
       required: true
     },
-
-    minHeight:{
-      type:Number,
-      default:0
-    }
   },
 
   data () {
