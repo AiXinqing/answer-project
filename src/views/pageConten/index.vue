@@ -330,11 +330,12 @@ export default {
       // 边框高度 剩余内容
       let margin = initial ? MarginHeight + heightTitle : MarginHeight
           margin = question.questionType == 'optionalQuestion' ? margin + question.rowTitle : margin
-          margin = question.questionType == 'compositionLanguage' ? margin + question.rowTitle : margin
+          margin = question.questionType == 'compositionLanguage' && initial ? margin + question.rowTitle : margin
       let RemainingHeight = avalibleHeight - margin
 
       // 剩余可容纳行数
       let availableRow = Math.floor(RemainingHeight / rowHeight)
+
 
       //题型高度
       let question_height = availableRow * rowHeight + margin
@@ -343,7 +344,6 @@ export default {
             availableRow == 0 && question.questionType != 'optionalQuestion' ? question_height - MarginHeight : question_height
           question_height =
             availableRow == 0 && question.questionType != 'compositionLanguage' ? question_height - MarginHeight : question_height
-            console.log(question_height)
 
       let parameter = {
         availableRow:availableRow,

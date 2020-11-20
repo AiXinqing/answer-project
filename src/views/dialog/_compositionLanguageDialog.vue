@@ -158,7 +158,7 @@ export default {
       editData: {},
       changeClick:false,
       page_height:PAGE_HEIGHT,
-      MarginHeight:17,
+      MarginHeight:15,
       rowTitle:35,
       heightTitle:32
     }
