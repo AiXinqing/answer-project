@@ -1,10 +1,7 @@
 <template>
   <!-- 解答题 -->
-  <div
-    class="question-info"
-    :style="{ 'margin-top': data.top != undefined ? data.top : 0 }"
-  >
-    <template v-if="!data.orderFirst && data.borderTop == undefined">
+  <div class="question-info">
+    <template v-if="!data.orderFirst && data.first">
       <div class="question-title" :style="{height: data.heightTitle - 10 + 'px'}" v-if="!isEditor" @click="hanldeEditor">
         <div class="title-span" v-html="cotent"></div>
       </div>
@@ -32,12 +29,9 @@
             !data.orderFirst || data.borderTop != undefined ? '20px' : '0',
         }"
     >
-      <div
-        class="answer_question_box"
-      >
-
+      <div class="answer_question_box">
         <p v-for="(item, i) in rowsData" :key="i" class="question_line">
-          <span class="title" v-if="i == 0">{{ data.topic }} ({{ data.score }}分)</span>
+          <span class="title" v-if="i == 0 && data.first">{{ data.topic }} ({{ data.score }}分)</span>
           <span class="line-style" v-if="contentData.HorizontalLine"></span>
         </p>
       </div>
@@ -229,6 +223,13 @@ export default {
       display: block;
     }
   }
+
+  .question-container{
+    .answer_question_box{
+      padding-top: 10px;
+    }
+  }
+
 }
 .question-container{
   margin-top: 0;

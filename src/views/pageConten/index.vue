@@ -154,7 +154,10 @@ export default {
 
         // 高度溢出---------------------------------------------------------------------------
         if(rect.height > avalibleHeight){
-          avalibleHeight -= 20
+          if(!rect.orderFirst){
+            avalibleHeight -= 20
+          }
+
           let height = rect.height
           let curRect = this.preliminaryQuestion(rect, avalibleHeight)
           // console.log(curRect)
@@ -171,7 +174,7 @@ export default {
             }
 
             // 选作题
-            if(rect.questionType == 'optionalQuestion'){
+            if(rect.questionType == 'optionalQuestion' || rect.questionType == 'answerQuestion'){
               backup = {
                 rows:curRect.availableRow > rect.content.rows ? rect.content.rows :
                   curRect.availableRow > 0 ? curRect.availableRow : 0
@@ -211,7 +214,7 @@ export default {
             }
 
             // 选作题
-            if(rect.questionType == 'optionalQuestion'){
+            if(rect.questionType == 'optionalQuestion' || rect.questionType == 'answerQuestion'){
               let {rows} = rect.content
               backup = {
                 rows:rows - curRect.availableRow >= 0 ? rows - curRect.availableRow : 0
@@ -227,7 +230,7 @@ export default {
 
             height -= curRects.height
 
-            if(rect.questionType != 'ObjectiveQuestion' || rect.questionType != 'answerQuestion'){
+            if(rect.questionType != 'ObjectiveQuestion'){
               if(curRect.pagination){
                 height += rect.MarginHeight
               }
@@ -256,14 +259,14 @@ export default {
           }
 
           // 选作题
-          if(rect.questionType == 'optionalQuestion'){
+          if(rect.questionType == 'optionalQuestion' || rect.questionType == 'answerQuestion'){
             let {rows} = rect.content
             backup = {
               rows:curRect.availableRow < 0  ? rows :  rows - curRect.availableRow
             }
           }
 
-          if(rect.questionType != 'ObjectiveQuestion' || rect.questionType != 'answerQuestion'){
+          if(rect.questionType != 'ObjectiveQuestion'){
               if(curRect.pagination){
                 currentPage.height += rect.MarginHeight
               }
@@ -279,11 +282,12 @@ export default {
         }else{
           // 变量
           let backup = {}
-
-          currentPage.height += rect.height + 20
+          if( !rect.orderFirst){
+              currentPage.height += rect.height + 20
+          }
 
           // 选作题
-          if(rect.questionType == 'optionalQuestion'){
+          if(rect.questionType == 'optionalQuestion' || rect.questionType == 'answerQuestion'){
             backup = {
               rows:rect.content.rows,
             }
@@ -307,18 +311,15 @@ export default {
     preliminaryQuestion(question,avalibleHeight,initial = true){
       // 变量
       const { MarginHeight,heightTitle,rowHeight } = question
-      console.log(avalibleHeight)
 
       // 边框高度 剩余内容
       let margin = initial ? MarginHeight + heightTitle : MarginHeight
           margin = question.questionType == 'optionalQuestion' ? margin + question.rowTitle : margin
           margin = question.questionType == 'compositionLanguage' ? margin + question.rowTitle : margin
       let RemainingHeight = avalibleHeight - margin
-      console.log(RemainingHeight)
 
       // 剩余可容纳行数
       let availableRow = Math.floor(RemainingHeight / rowHeight)
-      console.log(availableRow)
 
       //题型高度
       let question_height = availableRow * rowHeight + margin
@@ -327,7 +328,6 @@ export default {
             availableRow == 0 && question.questionType != 'optionalQuestion' ? question_height - MarginHeight : question_height
           question_height =
             availableRow == 0 && question.questionType != 'compositionLanguage' ? question_height - MarginHeight : question_height
-      console.log(question_height)
 
       let parameter = {
         availableRow:availableRow,

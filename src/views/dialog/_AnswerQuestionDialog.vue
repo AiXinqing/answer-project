@@ -202,6 +202,7 @@ export default {
           scoreTotal:this.scoreTotal,
           previousOrder:this.questionOrder - 1, // 解答题插入前的序列号
           index:index,
+          first:true
         }
         Arr.push(obj)
       })
