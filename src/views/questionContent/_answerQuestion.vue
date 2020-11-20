@@ -231,7 +231,7 @@ export default {
   }
 }
 .question-container{
-
+  margin-top: 0;
   .answer_question_box {
     padding: 10px 15px 0 15px;
     .question_box_title {
