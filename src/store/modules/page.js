@@ -161,7 +161,7 @@ const getters = {
 
   latticeWidth: (state,getters) => {
     //作文格子承载宽度
-      return getters.page_width === 480 ? 31 : 31.73
+      return getters.page_width === 480 ? 31 : 32
   },
 
   latticeNum: (state, getters) => {
@@ -203,8 +203,16 @@ const getters = {
         if(columnArr.length > 0){
             RowArr.push(columnArr)
         }
+
+    let lastHeight = RowArr[RowArr.length -1]
+      .map(temp => temp.length * 21 + 10)
+      .reduce((a, b) => b > a ? b : a)
+
+    let less = lastHeight >= question.rowHeight ? 0 : question.rowHeight - lastHeight
+
+
         //计算内容高度
-        let heights = titleH + RowArr.length * question.rowHeight
+    let heights = titleH + RowArr.length * question.rowHeight - less
         return {...question,height:heights,showData:RowArr}
   },
 
