@@ -154,7 +154,7 @@ export default {
         const itemObj = JSON.parse(JSON.stringify(rect))
 
         // 高度溢出---------------------------------------------------------------------------
-        if(rect.height > avalibleHeight){
+        if(rect.height > (avalibleHeight - this.difference)){
           avalibleHeight -= this.difference
           if(rect.questionType == 'answerQuestion' && rect.orderFirst > 0){
             avalibleHeight += (this.difference - 2)
@@ -207,7 +207,7 @@ export default {
           resetCurrentPage()
 
           // 剩余高度可以分占几页
-          while (height > this.page_height){
+          while (height > (this.page_height - this.difference)){
             let avalibleHeight =  this.page_height - this.difference
             let curRects = this.preliminaryQuestion(rect, avalibleHeight,false)
 
@@ -249,8 +249,8 @@ export default {
               backup = {
                 superiorGrid:superiorGrid
               }
+              height += this.difference
             }
-
           }
 
           //溢出剩余高度---------------------------------------------------
@@ -326,11 +326,12 @@ export default {
     preliminaryQuestion(question,avalibleHeight,initial = true){
       // 变量
       const { MarginHeight,heightTitle,rowHeight } = question
-
+      console.log(avalibleHeight)
       // 边框高度 剩余内容
       let margin = initial ? MarginHeight + heightTitle : MarginHeight
           margin = question.questionType == 'optionalQuestion' ? margin + question.rowTitle : margin
           margin = question.questionType == 'compositionLanguage' && initial ? margin + question.rowTitle : margin
+
       let RemainingHeight = avalibleHeight - margin
 
       // 剩余可容纳行数
