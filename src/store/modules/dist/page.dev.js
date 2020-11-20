@@ -177,7 +177,7 @@ var getters = {
   },
   latticeWidth: function latticeWidth(state, getters) {
     //作文格子承载宽度
-    return getters.page_width === 480 ? 31 : 31.73;
+    return getters.page_width === 480 ? 31 : 32;
   },
   latticeNum: function latticeNum(state, getters) {
     return getters.page_width === 480 ? 15 : 23;
@@ -223,10 +223,16 @@ var getters = {
 
       if (columnArr.length > 0) {
         RowArr.push(columnArr);
-      } //计算内容高度
+      }
 
+      var lastHeight = RowArr[RowArr.length - 1].map(function (temp) {
+        return temp.length * 21 + 10;
+      }).reduce(function (a, b) {
+        return b > a ? b : a;
+      });
+      var less = lastHeight >= question.rowHeight ? 0 : question.rowHeight - lastHeight; //计算内容高度
 
-      var heights = titleH + RowArr.length * question.rowHeight;
+      var heights = titleH + RowArr.length * question.rowHeight - less;
       return _objectSpread({}, question, {
         height: heights,
         showData: RowArr
