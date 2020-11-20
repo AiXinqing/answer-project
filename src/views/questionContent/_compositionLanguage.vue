@@ -41,12 +41,11 @@
                 : data.rowHeight - contentData.spacing + 'px',
           }"
         >
-          <span
+          <a
             v-for="(lattices, a) in latticeData"
             :key="'id_' + (i * data.lattice + (a += 1))"
             class="svg_span"
             :style="{
-              width: data.rowWidth - 1 + 'px',
               height: data.rowWidth - 1 + 'px',
             }"
           >
@@ -62,7 +61,7 @@
                 {{ i * data.lattice + (a += 1) + data.superiorGrid - 1 }}字
               </text>
             </svg>
-          </span>
+          </a>
         </p>
       </div>
     </div>
@@ -260,18 +259,21 @@ export default {
   border-right: 2px solid #bfbfbf;
   .compositionLanguage_item {
     margin: 0;
-    span {
-      display: inline-block;
+    display: flex;
+
+    a {
+      flex-shrink:1;
       border: 1px solid #888;
       border-left: none;
+      width: 100%;
     }
 
-    span:last-child {
+    a:last-child {
       border-right: none;
     }
   }
   .compositionLanguage_item:first-child {
-    span {
+    a {
       border-top: none;
     }
   }
