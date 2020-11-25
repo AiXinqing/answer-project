@@ -38,6 +38,7 @@
         :is="isComponent"
         :subtopic-group="subtopic.childGroup"
         :subtopic="subtopic"
+        :is-topic="subtopic.isTopic"
         :edit-id="editId"
         @pre-edit-last-score="preEditLastScore"
         @pre-edit-two-last-score="preEditTwoLastScore"
@@ -99,6 +100,7 @@
         let Arr =[]
         let {space,score} = this.data
         let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
+
         for (let index = 1; index < space + 1; index++) {
           let subtopic = {
             ...this.data,
@@ -108,6 +110,12 @@
             topic:this.data.topic,
             smallTopic:index,
             score:Number(scoreVal),
+            isTopic:index == 1 ? true : false,
+            childGroup:this.data.childGroup.map(topic => ({
+              ...topic,
+              isTopic:index == 1 ? true : false,
+              spaceNum:index
+            }))
           }
           Arr.push(subtopic)
       }
@@ -148,6 +156,7 @@
             scoreVal = Number(scoreVal)
 
         if(space && space >= 1 && scoreVal >= 1){
+
           this.$emit('change-firstlevel-space', {
             ...this.data,
             score:Number(scoreVal),
@@ -240,7 +249,7 @@
             id:sid,
             pid:data.id,
             sid:data.pid,
-            smallTopic:smallTopic,
+            smallTopic:smallTopic + i,
             topic:data.topic,
             score:data.score,
             space:1,
@@ -255,7 +264,7 @@
               score:data.score,
               smallTopic: smallTopic,
               topic:data.topic,
-              spaceTopic:1,
+              spaceNum:1,
             }]
           })
         }

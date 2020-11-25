@@ -12,7 +12,11 @@
     </template>
 
     <div class="question_arrays">
-      <div class="question_editOrDel">
+      <div class="question_editOrDel language">
+        <span  class="btn_addSub_name spacing">行间距：</span>
+        <span class="btn_addSub" @click="subtractSpacing">-</span>
+        <span class="btn_addSub_info">{{contentData.spacing.label}}</span>
+        <span class="btn_addSub" @click="addSpacing">+</span>
         <span class="layui-btn layui-btn-xs" @click="compositionLanguagehEdit"
           >编辑</span
         >
@@ -26,23 +30,22 @@
         </div>
       </template>
       <div class="compositionLanguage_box">
-        <div
+        <p
           v-for="(rowsList, i) in rowsData"
           :key="i"
           class="compositionLanguage_item"
           :style="{
             height:
-              i != rowsData.length - 1
+              i != rowsData.length
                 ? data.rowHeight + 'px'
                 : data.rowHeight - contentData.spacing + 'px',
           }"
         >
-          <span
+          <a
             v-for="(lattices, a) in latticeData"
             :key="'id_' + (i * data.lattice + (a += 1))"
             class="svg_span"
             :style="{
-              width: data.rowWidth - 1 + 'px',
               height: data.rowWidth - 1 + 'px',
             }"
           >
@@ -50,16 +53,16 @@
               xmlns="http://www.w3.org/2000/svg"
               version="1.1"
               v-show="
-                /(^[1-9]\d*$)/.test((i * data.lattice + (a += 1)) / 100) &&
+                /(^[1-9]\d*$)/.test((i * data.lattice + (a += 1) + data.superiorGrid) / 100) &&
                   contentData.mark == '2'
               "
             >
               <text x="0" y="15" style="font-size:6px">
-                {{ i * data.lattice + (a += 1) - 1 }}字
+                {{ i * data.lattice + (a += 1) + data.superiorGrid - 1 }}字
               </text>
             </svg>
-          </span>
-        </div>
+          </a>
+        </p>
       </div>
     </div>
   </div>
@@ -93,7 +96,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('pageContent', ['pageData']),
+    ...mapState('page', ['pageData']),
     strLong() {
       let long = this.contentData.topic.toString().length
       return parseInt(long) * 8 + 1
@@ -152,7 +155,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations('pageContent', [
+    ...mapMutations('page', [
       'pageData_del',
       'pageData_id_clean',
     ]),
@@ -171,6 +174,60 @@ export default {
     compositionLanguagehEdit() {
       this.$emit('composition-language-edit', this.data)
     },
+
+    subtractSpacing(){
+      const { label,value } = this.data.content.spacing
+      let spacLabel = label - 0.2
+          spacLabel = Number(spacLabel.toFixed(2))
+      let spacVal = value - 0.5
+          spacVal =  Number(spacVal.toFixed(2))
+
+      if(spacLabel < 1){
+        this.$message({
+          message: '行间距最小值1',
+          type: 'warning'
+        });
+      }else{
+        this.$emit('subtract-spacing',{
+          ...this.data,
+          content:{
+            ...this.data.content,
+            spacing:{
+              label:spacLabel,
+              value:spacVal
+            }
+          }
+        })
+      }
+
+    },
+    addSpacing(){
+      const { label,value } = this.data.content.spacing
+
+      let spacLabel = label + 0.2
+          spacLabel = Number(spacLabel.toFixed(2))
+      let spacVal = value + 0.5
+          spacVal =  Number(spacVal.toFixed(2))
+
+      if(spacLabel <= 2.8){
+        this.$emit('subtract-spacing',{
+          ...this.data,
+          content:{
+            ...this.data.content,
+            spacing:{
+              label:spacLabel,
+              value:spacVal
+            }
+          }
+        })
+      }else{
+        this.$message({
+          message: '行间距最大值2.8',
+          type: 'warning'
+        });
+      }
+    },
+
     delHanlde() {
       // 删除大题-小题数
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
@@ -188,13 +245,12 @@ export default {
 
 <style lang="less">
 .answer_question_box.composition_box {
-  padding-top: 10px;
+  padding: 10px 5px 5px 5px;
 }
 .Language_item_title {
-  height: 45px;
+  height: 35px;
   position: relative;
-  margin-top: -10px;
-  line-height: 45px;
+  line-height: 35px;
   font-size: 14px;
 }
 .compositionLanguage_box {
@@ -202,17 +258,22 @@ export default {
   border-left: 2px solid #bfbfbf;
   border-right: 2px solid #bfbfbf;
   .compositionLanguage_item {
-    span {
-      display: inline-block;
+    margin: 0;
+    display: flex;
+
+    a {
+      flex-shrink:1;
       border: 1px solid #888;
       border-left: none;
+      width: 100%;
     }
-    span:last-child {
+
+    a:last-child {
       border-right: none;
     }
   }
   .compositionLanguage_item:first-child {
-    span {
+    a {
       border-top: none;
     }
   }
@@ -224,6 +285,12 @@ export default {
     top: 20px;
     left: 5px;
     z-index: 9999;
+  }
+}
+.spacing{color: #333}
+.question_editOrDel{
+  &.language{
+    top: 2px
   }
 }
 </style>

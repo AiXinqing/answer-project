@@ -1,10 +1,7 @@
 <template>
   <!-- 解答题 -->
-  <div
-    class="question-info"
-    :style="{ 'margin-top': data.top != undefined ? data.top : 0 }"
-  >
-    <template v-if="data.first && data.borderTop == undefined">
+  <div class="question-info">
+    <template v-if="!data.orderFirst && data.first">
       <div class="question-title" :style="{height: data.heightTitle - 10 + 'px'}" v-if="!isEditor" @click="hanldeEditor">
         <div class="title-span" v-html="cotent"></div>
       </div>
@@ -23,42 +20,18 @@
       </div>
     </div>
     <drag-change-height
-      :question="questionContetn"
+      :question="questionData"
       @height-resize="handleResize($event)"
-      :min-height="minHeight"
       :style="{
-          height: data.first
-            ? data.castHeight - data.heightTitle - 2 + 'px'
-            : data.castHeight - 1 + 'px',
           'border-top':
-            data.first || data.borderTop != undefined ? '1px solid #888' : 'none',
-          'margin-top':
-            data.first || data.borderTop != undefined ? '20px' : '0',
+            !data.orderFirst || pageIndex == 0 ? '1px solid #888' : 'none',
         }"
     >
-      <div
-        class="answer_question_box"
-      >
-        <div class="question_box_title" v-if="!contentData.HorizontalLine">
-          <span class="title">
-            {{ data.topic }}
-            <span v-if="contentData.ShowScore && data.score != undefined"
-              >({{ data.score }})分</span
-            >
-          </span>
-        </div>
-        <div v-else v-for="(item, i) in rowsData" :key="i" class="question_line">
-          <span class="title" v-if="i == 0">
-            {{ data.topic }}
-            <span v-if="contentData.ShowScore && data.score != undefined"
-              >({{ data.score }})分</span
-            >
-          </span>
-          <span
-            class="line-style"
-            :style="{ width: i == 0 ? 'calc(100% - 60px)' : '100%' }"
-          ></span>
-        </div>
+      <div class="answer_question_box">
+        <p v-for="(item, i) in rowsData" :key="i" class="question_line">
+          <span class="title" v-if="i == 0 && data.first">{{ data.topic }} ({{ data.score }}分)</span>
+          <span class="line-style" v-if="contentData.HorizontalLine"></span>
+        </p>
       </div>
     </drag-change-height>
   </div>
@@ -74,7 +47,6 @@ export default {
   components: {
     quillEditor,
     dragChangeHeight,
-    // questionDialog,
   },
   props: {
     questionData: {
@@ -85,6 +57,11 @@ export default {
       type: Object,
       default: () => {},
     },
+
+    pageIndex:{
+      type: Number,
+      default: 0,
+    }
   },
   data() {
     return {
@@ -95,19 +72,11 @@ export default {
     }
   },
   computed: {
-    ...mapState('questionType', ['questionNumber', 'letterList']),
-    ...mapState('pageContent', ['pageData']),
-    heightContetn(){
-      const {castHeight,heightTitle,height} = this.questionData
-      let obj = {
-        height: castHeight >= height  ? castHeight - heightTitle - 3 : castHeight
-      }
-      return obj
-    },
+    ...mapState('page', ['pageData']),
 
     minHeight(){
       const {rowHeight, row,MarginHeight,height,castHeight} = this.questionData
-      return  castHeight >= height ? rowHeight * row + MarginHeight - 3 : 0
+      return  castHeight >= height ? rowHeight * row + MarginHeight : 0
     },
 
     TopicContent() {
@@ -119,7 +88,7 @@ export default {
     },
     rowsData() {
       let Arr = []
-      for (let i = 1; i <= this.contentData.rows; i++) {
+      for (let i = 1; i <= this.data.rows; i++) {
         Arr.push(i)
       }
       return Arr
@@ -134,24 +103,19 @@ export default {
         }
       },
     },
+
     TopicContent: {
       immediate: true,
       handler() {
         this.cotent = this.TopicContent
       },
     },
-
-    heightContetn:{
-      immediate: true,
-      handler() {
-        this.questionContetn = this.heightContetn
-      },
-    },
   },
   methods: {
-    ...mapMutations('pageContent', [
+    ...mapMutations('page', [
       'pageData_del',
       'pageData_edit',
+      'pageData_orderFirst'
     ]),
     ...mapMutations('questionType', [
       'subTopic_already_del',
@@ -225,22 +189,22 @@ export default {
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
       if (index > -1) {
         this.pageData_del(index)
+        if(!this.data.orderFirst){
+          this.$nextTick(()=>{
+            this.pageData_orderFirst(this.data.objId)
+          })
+        }
       }
+      this.subTopic_number_calculate()
 
     },
-    handleResize (rectHeight) {
-      const {castHeight,height} = this.questionData
-      let crrHeight = rectHeight
-
+    handleResize (height) {
       const index = this.pageData.findIndex(obj => this.questionData.id === obj.id)
       if(index > -1){
         let questionObj = this.pageData[index]
-        if(castHeight < height){
-          crrHeight = (height - castHeight) + rectHeight
-        }
         this.pageData_edit({
             ...questionObj,
-            height:crrHeight >= this.minHeight ? crrHeight + questionObj.heightTitle + 3:this.minHeight,
+            height:height,
           })
 
       }
@@ -257,34 +221,46 @@ export default {
       display: block;
     }
   }
-}
-.answer_question_box {
-  padding: 0 10px;
-  // border: 1px solid @font-888;
-  border-top: none;
-  overflow: hidden;
-  .question_box_title {
-    span.title {
-      font-size: 12px;
-      display: inline-block;
-    }
-    // margin-top: 10px;
-  }
-  .question_line {
-    height: 34px;
-    .title {
-      width: 60px;
-      font-size: 12px;
-      text-align: center;
-    }
-    span.line-style {
-      height: 100%;
-      display: inline-block;
-      border-bottom: 1px solid @font-888;
-      width: 100%;
+
+  .question-container{
+    .answer_question_box{
+      padding-top: 10px;
     }
   }
+
 }
+.question-container{
+  margin-top: 0 !important;
+  .answer_question_box {
+    padding: 10px 15px 0 15px;
+    .question_box_title {
+      span.title {
+        font-size: 12px;
+        display: inline-block;
+      }
+    }
+    .question_line {
+      display: flex;
+      margin: 0;
+      height: 35px;
+      line-height: 35px;
+
+      .title{
+        font-size: 12px;
+        flex-shrink: 0;
+        margin-right: 5px;
+      }
+
+      span.line-style {
+        border-bottom: 1px solid @font-888;
+        width: 100%;
+        flex-shrink: 1;
+        height: 25px;
+      }
+    }
+  }
+}
+
 .question-title {
   border: 1px solid #fff;
   cursor: text;

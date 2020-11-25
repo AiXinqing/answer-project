@@ -78,6 +78,21 @@ const mutations = {
     state.pageData.splice(index, 1)
   },
 
+  pageData_id_clean: (state, id) => {
+    // 内容分页
+    state.pageData = state.pageData.filter((item) => {
+      return ![id].includes(item.id)
+    })
+  },
+
+  pageData_orderFirst: (state, objId) => {
+    // 解答题删除后续排序
+    state.pageData = state.pageData.map(question => question.objId == objId ? {
+      ...question,
+      orderFirst: question.orderFirst - 1
+    }:question)
+  },
+
   pageData_order_edit: (state, data) => {
     // 解答题
     state.pageData = state.pageData.map(question => ({
@@ -89,6 +104,13 @@ const mutations = {
   pageData_id_filter: (state, id) => {
     // 解答题
     state.pageData = state.pageData.filter(question => question.id != id)
+  },
+
+  pageData_simple_insert: (state, data) => {
+    // 解答题插入
+    if (data.num > -1) {
+      state.pageData.splice(data.num + 1,0,data.obj)
+    }
   },
 
   add_nonAnswer: (state, obj) => {
@@ -118,6 +140,11 @@ const mutations = {
     })
   },
 
+  pageData_nonA_clean: (state,objId) => {
+    state.pageData = state.pageData.filter((item) => item.questionType != "NonRresponseArea")
+    state.pageData = state.pageData.filter((item) => item.objId != objId)
+  },
+
 }
 
 const actions = {
@@ -132,13 +159,23 @@ const getters = {
         : 745
   },
 
+  latticeWidth: (state,getters) => {
+    //作文格子承载宽度
+      return getters.page_width === 480 ? 31 : 32
+  },
+
+  latticeNum: (state, getters) => {
+    return  getters.page_width === 480 ? 15 : 23
+  },
+
   questionOrder: (state) => {
     return state.pageData.filter(question => question.questionType !== 'NonRresponseArea').length
   },
 
   compile_pageData: (state,getters) => {
     return state.pageData.map(question => {
-        return question.questionType == 'ObjectiveQuestion' ? getters.question_objective(question) : question
+      return question.questionType == 'ObjectiveQuestion' ? getters.question_objective(question) :
+        question.questionType == 'compositionLanguage' ? getters.question_language(question) : question
     })
   },
 
@@ -166,9 +203,36 @@ const getters = {
         if(columnArr.length > 0){
             RowArr.push(columnArr)
         }
+
+    let lastHeight = RowArr[RowArr.length -1]
+      .map(temp => temp.length * 21 + 10)
+      .reduce((a, b) => b > a ? b : a)
+
+    let less = lastHeight >= question.rowHeight ? 0 : question.rowHeight - lastHeight
+
+
         //计算内容高度
-        let heights = titleH + RowArr.length * question.rowHeight
+    let heights = titleH + RowArr.length * question.rowHeight - less
         return {...question,height:heights,showData:RowArr}
+  },
+
+  question_language: (state, getters) => (question) => {
+    const { totalWordCount,spacing} = question.content
+    let rows = Math.ceil(totalWordCount / getters.latticeNum) // .toFixed(2)
+
+    let rowHeight = getters.latticeWidth + spacing.value
+        rowHeight = Number(rowHeight.toFixed(2))
+
+    let height = rows * rowHeight + question.MarginHeight + question.heightTitle + question.rowTitle
+      height = Number(height.toFixed(2))
+
+    return {
+      ...question,
+      height: height,
+      rowHeight: rowHeight,
+      lattice:getters.latticeNum,
+      rowWidth:getters.latticeWidth
+    }
   },
 
   questionNumber_big_exist: (state,getters) => {

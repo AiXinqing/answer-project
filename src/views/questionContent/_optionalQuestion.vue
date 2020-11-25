@@ -17,16 +17,16 @@
       </div>
     </div>
     <drag-change-height
-      :question="questionContetn"
+      v-if="data.heightTitle + data.MarginHeight != data.castHeight"
+      :question="questionData"
       @height-resize="handleResize($event)"
-      :min-height="minHeight"
       :style="{
-        'height':data.first ? data.castHeight - data.heightTitle  + 'px':data.castHeight  + 'px',
+        'height':minHeight  + 'px',
       }"
     >
       <div class="answer_question_box optional_box">
-        <template v-if="data.first && data.borderTop == undefined || data.borderTop == 0">
-          <div class="topic_number_box">
+        <template v-if="data.first || data.heightTitle == (data.height - data.castHeight)">
+          <span class="topic_number_box">
 
             <span class="black_icon"></span>
 
@@ -35,18 +35,17 @@
               :key="i"
             >{{item.topic}}</span>
             <span class="black_icon"></span>
-          </div>
-          <div class="number-info">
+          </span>
+          <span class="number-info">
             <span>我选的题号（1分）</span>
-          </div>
+          </span>
         </template>
-
         <div v-if="contentData.HorizontalLine">
-          <div
+          <p
             v-for="(item,i) in rowsData"
             :key="i"
             class="optional-item-list"
-          ></div>
+          ><a/></p>
         </div>
       </div>
     </drag-change-height>
@@ -88,17 +87,9 @@ export default {
   computed: {
     ...mapState('page', ['pageData']),
 
-    heightContetn(){
-      const {borderTop,heightTitle,castHeight} = this.questionData
-      let obj = {
-        height: !borderTop  ? castHeight - heightTitle - 3 : castHeight
-      }
-      return obj
-    },
-
     minHeight(){
-      const {rowHeight,MarginHeight,height,content,castHeight} = this.questionData
-      return  castHeight >= height ? rowHeight * content.rows + MarginHeight - 3 : 0
+      const {first,heightTitle,castHeight} = this.questionData
+      return  first ? castHeight - heightTitle : castHeight
     },
 
     TopicContent () {
@@ -111,7 +102,7 @@ export default {
     },
     rowsData () {
       let Arr = []
-      for (let i = 1; i <= this.contentData.rows; i++) {
+      for (let i = 1; i <= this.data.rows; i++) {
         Arr.push(i)
       }
       return Arr
@@ -124,7 +115,6 @@ export default {
         this.data = {
           ...this.questionData
         }
-        this.options = this.questionNumber.map((label,value)=>({label,value}))
       }
     },
     TopicContent: {
@@ -133,13 +123,6 @@ export default {
         this.cotent = this.TopicContent
       }
     },
-
-    heightContetn:{
-      immediate: true,
-      handler() {
-        this.questionContetn = this.heightContetn
-      },
-    }
   },
 
   methods: {
@@ -172,19 +155,13 @@ export default {
       }
 
     },
-    handleResize (rectHeight) {
-      const {castHeight,height} = this.questionData
-      let crrHeight = rectHeight
-
+    handleResize (height) {
       const index = this.pageData.findIndex(obj => this.questionData.id === obj.id)
       if(index > -1){
         let questionObj = this.pageData[index]
-        if(castHeight < height){
-          crrHeight = (height - castHeight) + rectHeight
-        }
         this.pageData_edit({
             ...questionObj,
-            height:crrHeight >= this.minHeight ? crrHeight + questionObj.heightTitle + 3:this.minHeight,
+            height:height,
           })
 
       }
@@ -195,9 +172,15 @@ export default {
 
 
 <style lang="less" >
-.answer_question_box {
-  &.optional_box {
-    border-top: 1px solid #888;
+.question-container{
+  margin-top: 10px;
+
+  .answer_question_box {
+    height: 35px;
+    line-height: 35px;
+    padding: 0 15px ;
+    position: relative;
+    margin: 0;
   }
 }
 .question-title {
@@ -217,9 +200,16 @@ export default {
   }
 }
 .optional-item-list {
-  height: 34px;
-  line-height: 34px;
-  border-bottom: 1px solid #888;
+    margin: 0 0;
+    width: 100%;
+    height: 35px;
+    line-height: 35px;
+
+  a{
+    width: 100%;
+    border-bottom: 1px solid #888;
+    display: inline-block;
+  }
 }
 .number-info {
   height: 20px;
@@ -229,8 +219,10 @@ export default {
 }
 .topic_number_box {
   height: 20px;
-  text-align: right;
-  width: 100%;
+  position: absolute;
+  right: 15px;
+  top: -13px;
+
   span {
     display: inline-block;
     margin-left: 5px;

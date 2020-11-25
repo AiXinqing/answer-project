@@ -128,7 +128,9 @@ export default {
       },
       editData: {},
       changeClick:false,
-      page_height:PAGE_HEIGHT
+      page_height:PAGE_HEIGHT,
+      heightTitle:32,
+      MarginHeight:17,
     }
   },
   computed: {
@@ -138,10 +140,12 @@ export default {
     ]),
     ...mapState('pageContent', [
       'pageHeight',
+    ]),
+    ...mapState('page', [
       'pageData',
       'pageLayout',
     ]),
-    ...mapGetters('pageContent', ['questionNumber_big_exist','question_order']),
+    ...mapGetters('page', ['questionNumber_big_exist','questionorder']),
     ...mapGetters('question',['options']),
 
     title(){
@@ -256,11 +260,10 @@ export default {
     this.subTopic_number_calculate()
   },
   methods: {
-    ...mapMutations('pageContent', [
+    ...mapMutations('page', [
       'pageData_add',
       'pageData_edit',
       'pageData_insert',
-      'pageData_id_clean',
     ]),
     ...mapMutations('questionType', [
       'subTopic_number_calculate',
@@ -306,16 +309,16 @@ export default {
       this.errorVal = this.tabStatusVal
 
       let rectHeight = rows * 35 // 当前内容高度 45(内部高度)
-      let MarginHeight = +17
-      let heights = rectHeight + MarginHeight + 33
+
+      let heights = rectHeight + this.MarginHeight + this.heightTitle
       if (!this.tabStatus) {
         let objId = `compositionEnglish_${+new Date()}`
         //------------------------------------------------------------
         let obj = {
           heightTitle: 32,
-          MarginHeight: MarginHeight,
+          MarginHeight: this.MarginHeight,
           height: heights,
-          rowHeight: 36,
+          rowHeight: 35,
           id: objId,
           questionType: 'compositionEnglish',
           content: {
@@ -324,10 +327,6 @@ export default {
             pageLayout:this.pageLayout,
           },
           first: true,
-          BeforeEditing:
-            this.editQuestionId != null
-              ? this.editData.BeforeEditing
-              : this.BeforeEditing,
         }
         this.subTopic_already_add([this.data])
 
@@ -337,7 +336,7 @@ export default {
             let data = {
                 obj: {
                   ...obj,
-                  order: this.question_order,
+                  order: this.questionorder,
                 },
                 bigId: select.id,
                 SelfOrder: Postpone,

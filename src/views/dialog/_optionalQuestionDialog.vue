@@ -125,9 +125,10 @@ export default {
           },
         ],
       },
-      MarginHeight:54,
+      MarginHeight:12,
       rowHeight:35,
-      heightTitle:54,
+      heightTitle:56,
+      rowTitle:35,
     }
   },
   computed: {
@@ -137,7 +138,7 @@ export default {
     ]),
     ...mapState('page', ['pageLayout']),
     ...mapState('answerQuestion', ['answerQuestionArr']),
-    ...mapGetters('page', ['questionNumber_big_exist','questionorder']),
+    ...mapGetters('page', ['questionNumber_big_exist','questionOrder']),
     ...mapGetters('question',['options']),
 
     questionNumber_big(){
@@ -245,7 +246,7 @@ export default {
       const { rows, InsertTitle, Postpone,group } = this.data
 
       let rectHeight = rows * this.rowHeight // 当前内容高度 45(内部高度)
-      let heights = rectHeight + this.MarginHeight + this.heightTitle
+      let heights = rectHeight + this.MarginHeight + this.heightTitle + this.rowTitle
 
       let objId = `optional_${+new Date()}`
 
@@ -254,6 +255,7 @@ export default {
         heightTitle: this.heightTitle,
         height: heights,
         rowHeight: this.rowHeight,
+        rowTitle:this.rowTitle,
         id: objId,
         questionType: 'optionalQuestion',
         content:{
@@ -261,6 +263,7 @@ export default {
           scoreTotal:group[0].score,
           pageLayout:this.pageLayout
         },
+        order: this.questionorder,
         first: true,
       }
 

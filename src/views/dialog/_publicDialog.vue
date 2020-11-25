@@ -126,6 +126,9 @@ export default {
           break
       }
     },
+    changeSpacing(obj){
+      this.$refs.compositionLanguage.changeSpacing(obj)
+    },
     hanldeCurQuestion () {
       this.$refs.fillInTheBlanks.hanldeCurQuestion()
     }

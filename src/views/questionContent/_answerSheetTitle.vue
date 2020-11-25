@@ -129,7 +129,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('page',['page_width']),
+
+    page_width(){
+      let {column,size} = this.contentData.pageLayout
+      return column === 3 && size == 'A3'
+          ? 480
+          : 745
+    },
 
     cardData() {
       return this.contentData[0]

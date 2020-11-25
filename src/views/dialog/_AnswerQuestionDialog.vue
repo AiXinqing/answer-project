@@ -120,6 +120,9 @@ export default {
         },]
       },
       initScore:1, // 删除后初始分数
+      rowHeight:35,
+      MarginHeight:12,
+      heightTitle:32
     }
   },
   computed: {
@@ -128,16 +131,15 @@ export default {
       'subTopic_number_determine',
     ]),
 
-    ...mapState('pageContent', [
-      'pageHeight',
-      'questionOrder',
+    ...mapState('pageContent', ['questionOrder',]),
+    ...mapState('page', [
       'pageData',
       'pageLayout',
     ]),
 
     ...mapState('answerQuestion', ['answerQuestionArr',]),
 
-    ...mapGetters('pageContent', ['questionNumber_big_exist','question_order']),
+    ...mapGetters('page', ['questionNumber_big_exist','questionOrder']),
     ...mapGetters('question',['options']),
 
     questionNumber_big(){
@@ -181,25 +183,26 @@ export default {
       //确定信息
       let Arr = []
       let objId = `answer_${+new Date()}`
-      let rectHeight = this.dataTopic.rows * 35 + 12 + 20 // 小题初始高度
+      let rectHeight = this.dataTopic.rows * this.rowHeight + this.MarginHeight
       this.RefactorData.forEach((item, index) => {
         let obj = {
-          heightTitle: index == 0 ? 32 : 0,
-          height: index == 0 ? rectHeight + 32 : rectHeight,
-          MarginHeight: 12,
+          heightTitle: index == 0 ? this.heightTitle : 0,
+          height: index == 0 ? rectHeight + this.heightTitle : rectHeight,
+          MarginHeight: this.MarginHeight,
           ...item,
           content: {
             ...this.dataTopic,
             pageLayout:this.pageLayout,
           },
-          first: index === 0 ? true : false,
+          orderFirst: index,
           questionType: 'answerQuestion',
           objId: objId,
           row:this.dataTopic.rows,
-          rowHeight:35,
+          rowHeight:this.rowHeight,
           scoreTotal:this.scoreTotal,
           previousOrder:this.questionOrder - 1, // 解答题插入前的序列号
           index:index,
+          first:true
         }
         Arr.push(obj)
       })
@@ -249,7 +252,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('pageContent', [
+    ...mapMutations('page', [
       'pageData_add',
       'pageData_edit',
       'pageData_insert',
@@ -266,8 +269,6 @@ export default {
       'subTopic_already_add',
       'subTopic_determine_pid_clean',
     ]),
-
-    ...mapMutations('answerQuestion', ['set_answerQuestionArr']),
 
     opened () {
       this.questionData = JSON.parse(JSON.stringify({
@@ -311,7 +312,7 @@ export default {
         // 新增
         if(InsertTitle && this.questionNumber_big_exist.length > 0){
           let select = this.questionNumber_big_exist[this.existNumber]
-          let i = this.question_order
+          let i = this.questionOrder
           this.subTopicGroup.forEach((obj) => {
             i += 1
             let data = {

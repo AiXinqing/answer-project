@@ -605,7 +605,6 @@ export default {
     },
 
     changeFirstlevelSpace(obj) {
-
       let temp = JSON.parse(JSON.stringify(this.objectiveData))
       let {group} = temp
       let firstLevel = this.findIndex(group,obj.pid)
@@ -658,15 +657,18 @@ export default {
     spaceArray(obj,space,Tpid,isT){
       // 生成小题数组
       let arr = []
+      let smallTopic = obj.smallTopic - 1
       for (let i = 1; i < space + 1; i++) {
         arr.push({
-          smallTopic: i,
-          spaceTopic: i,
+          smallTopic: smallTopic,
+          spaceNum: i,
           lid:!isT ? obj.pid : obj.sid,
           sid:!isT ? obj.id : obj.pid,
           score:obj.score,
           pid:!isT ? Tpid : obj.id,
-          id:'last_'+ +new Date() + '_' + i
+          id:'last_'+ +new Date() + '_' + i,
+          topic:obj.topic,
+
         })
       }
       return arr
