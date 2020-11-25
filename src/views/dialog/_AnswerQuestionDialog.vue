@@ -290,6 +290,7 @@ export default {
       //编辑弹框
       this.editQuestionId = obj.objId
       this.orders = obj.order
+      console.log(obj)
       this.previous = obj.previousOrder
       this.openedFrame = true
       this.questionData = JSON.parse(JSON.stringify(obj.content))

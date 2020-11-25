@@ -1,12 +1,14 @@
-import { QUESTION_NUMBERS } from '@/models/base'
+import {
+  QUESTION_NUMBERS
+} from '@/models/base'
 const state = {
   questionNumber: QUESTION_NUMBERS,
   pageLayout: {
     size: 'A3',
-    column:2
+    column: 2
   },
   pageData: [],
-  nonAnswer:[], // 非答题存在数组
+  nonAnswer: [], // 非答题存在数组
 }
 
 const mutations = {
@@ -43,7 +45,7 @@ const mutations = {
     const index = state.pageData.findIndex((itme) => itme.id == bigId)
     if (index > -1) {
       nums = index + 1
-      if(obj.questionType == "answerQuestion"){
+      if (obj.questionType == "answerQuestion") {
         // 解答题插入
         nums = nums + obj.index
       }
@@ -59,7 +61,7 @@ const mutations = {
         let num = {}
         if (!question.questionType !== "AnswerSheetTitle") {
           num = {
-            number:order - 2
+            number: order - 2
           }
         }
         return {
@@ -90,7 +92,7 @@ const mutations = {
     state.pageData = state.pageData.map(question => question.objId == objId ? {
       ...question,
       orderFirst: question.orderFirst - 1
-    }:question)
+    } : question)
   },
 
   pageData_order_edit: (state, data) => {
@@ -108,8 +110,9 @@ const mutations = {
 
   pageData_simple_insert: (state, data) => {
     // 解答题插入
+    console.log(data)
     if (data.num > -1) {
-      state.pageData.splice(data.num + 1,0,data.obj)
+      state.pageData.splice(data.num, 0, data.obj)
     }
   },
 
@@ -136,11 +139,13 @@ const mutations = {
       let index = state.pageData.findIndex(question => question.id == obj.insertIndex)
       if (index > -1) {
         state.pageData.splice(index + 1, 0, obj)
+      } else {
+        state.pageData.splice(1, 0, obj)
       }
     })
   },
 
-  pageData_nonA_clean: (state,objId) => {
+  pageData_nonA_clean: (state, objId) => {
     state.pageData = state.pageData.filter((item) => item.questionType != "NonRresponseArea")
     state.pageData = state.pageData.filter((item) => item.objId != objId)
   },
@@ -153,26 +158,26 @@ const actions = {
 
 const getters = {
   // 页面宽度
-  page_width:(state) => {
-    return state.pageLayout.column === 3 && state.pageLayout.size == 'A3'
-        ? 480
-        : 745
+  page_width: (state) => {
+    return state.pageLayout.column === 3 && state.pageLayout.size == 'A3' ?
+      480 :
+      745
   },
 
-  latticeWidth: (state,getters) => {
+  latticeWidth: (state, getters) => {
     //作文格子承载宽度
-      return getters.page_width === 480 ? 31 : 32
+    return getters.page_width === 480 ? 31 : 32
   },
 
   latticeNum: (state, getters) => {
-    return  getters.page_width === 480 ? 15 : 23
+    return getters.page_width === 480 ? 15 : 23
   },
 
   questionOrder: (state) => {
     return state.pageData.filter(question => question.questionType !== 'NonRresponseArea').length
   },
 
-  compile_pageData: (state,getters) => {
+  compile_pageData: (state, getters) => {
     return state.pageData.map(question => {
       return question.questionType == 'ObjectiveQuestion' ? getters.question_objective(question) :
         question.questionType == 'compositionLanguage' ? getters.question_language(question) : question
@@ -181,66 +186,78 @@ const getters = {
 
   question_objective: (state, getters) => (question) => {
     // 客观题
-    let { rowGroup, titleH } = question.height
+    let {
+      rowGroup,
+      titleH
+    } = question.height
     //题型分组
-    let RowArr = [],columnArr = [],widthSum = 0,
+    let RowArr = [],
+      columnArr = [],
+      widthSum = 0,
       max = getters.page_width
 
-        rowGroup.forEach(question => {
-          let maxWidth = question.map(subtopic => subtopic.width)
-            .reduce((a, b) => b > a ? b : a)
-            widthSum += maxWidth
-            if(widthSum < max){
-                columnArr.push(question)
-              }else{
-                RowArr.push(columnArr)
-                widthSum = maxWidth
-                columnArr = []
-                columnArr.push(question)
-              }
-        })
+    rowGroup.forEach(question => {
+      let maxWidth = question.map(subtopic => subtopic.width)
+        .reduce((a, b) => b > a ? b : a)
+      widthSum += maxWidth
+      if (widthSum < max) {
+        columnArr.push(question)
+      } else {
+        RowArr.push(columnArr)
+        widthSum = maxWidth
+        columnArr = []
+        columnArr.push(question)
+      }
+    })
 
-        if(columnArr.length > 0){
-            RowArr.push(columnArr)
-        }
+    if (columnArr.length > 0) {
+      RowArr.push(columnArr)
+    }
 
-    let lastHeight = RowArr[RowArr.length -1]
+    let lastHeight = RowArr[RowArr.length - 1]
       .map(temp => temp.length * 21 + 10)
       .reduce((a, b) => b > a ? b : a)
 
     let less = lastHeight >= question.rowHeight ? 0 : question.rowHeight - lastHeight
 
 
-        //计算内容高度
+    //计算内容高度
     let heights = titleH + RowArr.length * question.rowHeight - less
-        return {...question,height:heights,showData:RowArr}
+    return {
+      ...question,
+      height: heights,
+      showData: RowArr
+    }
   },
 
   question_language: (state, getters) => (question) => {
-    const { totalWordCount,spacing} = question.content
+    const {
+      totalWordCount,
+      spacing
+    } = question.content
     let rows = Math.ceil(totalWordCount / getters.latticeNum) // .toFixed(2)
 
     let rowHeight = getters.latticeWidth + spacing.value
-        rowHeight = Number(rowHeight.toFixed(2))
+    rowHeight = Number(rowHeight.toFixed(2))
 
     let height = rows * rowHeight + question.MarginHeight + question.heightTitle + question.rowTitle
-      height = Number(height.toFixed(2))
+    height = Number(height.toFixed(2))
 
     return {
       ...question,
       height: height,
       rowHeight: rowHeight,
-      lattice:getters.latticeNum,
-      rowWidth:getters.latticeWidth
+      lattice: getters.latticeNum,
+      rowWidth: getters.latticeWidth
     }
   },
 
-  questionNumber_big_exist: (state,getters) => {
+  questionNumber_big_exist: (state, getters) => {
     // 大题号
     let obj = {}
     let Arr = []
 
-    Arr =  getters.compile_pageData.filter(question => question.questionType !== 'AnswerSheetTitle' )
+    Arr = getters.compile_pageData.filter(question => question.questionType !== 'AnswerSheetTitle')
       .filter(question => question.questionType !== 'NonRresponseArea')
       .map((question, index) => {
         let {
@@ -249,7 +266,9 @@ const getters = {
         } = question.content
         let objId = {}
         if (question.objId) {
-          objId = {objId:question.objId}
+          objId = {
+            objId: question.objId
+          }
         }
         return {
           id: question.id,
@@ -257,7 +276,7 @@ const getters = {
           label: state.questionNumber[number] + '.' + topicName,
           order: !question.order ? index + 1 : question.order,
           value: index,
-          type:question.questionType
+          type: question.questionType
         }
       })
       .reduce((acc, cur) => {
