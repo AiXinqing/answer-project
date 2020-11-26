@@ -145,7 +145,9 @@ var mutations = {
     });
 
     if (index > -1) {
-      state.nonAnswer = state.nonAnswer.splice(index, 1);
+      state.nonAnswer.splice(index, 1);
+    } else {
+      state.nonAnswer.splice(0, 1);
     }
   },
   // 插入清空的非答题

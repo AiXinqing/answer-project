@@ -127,7 +127,9 @@ const mutations = {
     // 非答题新增
     let index = state.nonAnswer.findIndex(ele => ele.id == obj.id)
     if (index > -1) {
-      state.nonAnswer = state.nonAnswer.splice(index, 1)
+      state.nonAnswer.splice(index, 1)
+    } else {
+      state.nonAnswer.splice(0, 1)
     }
   },
   // 插入清空的非答题

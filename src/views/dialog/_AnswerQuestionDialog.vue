@@ -339,7 +339,7 @@ export default {
           this.pageData_nonA_clean(this.editQuestionId) // 清空非答题
 
           this.subTopicGroup.forEach((question,index) => {
-            previous += 1
+            previous += (index == 0 ? 0 :1)
             let data = {
               obj: {
                 ...question,
