@@ -1,9 +1,10 @@
 <template>
   <div>
-    <div class="textVal-style" v-if="previewIs">
+    <!-- <div class="textVal-style" v-if="previewIs">
       {{ data.textVal == '' ? '请输入答题卡标题' : data.textVal }}
-    </div>
-    <hj-textarea v-else :textarea-data="data.textVal" />
+    </div> -->
+    <hj-textarea :textarea-data="data.textVal" />
+
     <student-info
       @hanldeStudent="hanldeStudent"
       :title-info= "data.titleInfo"
