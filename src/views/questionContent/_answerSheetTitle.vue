@@ -1,9 +1,8 @@
 <template>
   <div>
-    <!-- <div class="textVal-style" v-if="previewIs">
-      {{ data.textVal == '' ? '请输入答题卡标题' : data.textVal }}
-    </div> -->
-    <hj-textarea :textarea-data="data.textVal" />
+    <div :class="['textVal-style',{active:previewIs}]" v-if="previewIs" v-html="data.textVal == '' ? '请输入答题卡标题' : data.textVal">
+    </div>
+    <hj-textarea v-else  :textarea-data="data.textVal" />
 
     <student-info
       @hanldeStudent="hanldeStudent"
@@ -362,5 +361,9 @@ table tr td div:last-child {
   font-weight: bold;
   height: 65px;
   line-height: 65px;
+  &.active {
+    line-height: 30px;
+    height: auto;
+  }
 }
 </style>

@@ -34,7 +34,7 @@ export default {
         ...answerTitle,
         content: {
           ...answerTitle.content,
-          textVal: e,
+          textVal: e.replace(/\n/g, '<br>'),
         },
       })
     },
