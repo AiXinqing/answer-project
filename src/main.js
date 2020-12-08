@@ -6,14 +6,15 @@ import './plugins/element-up.js'
 import Element from 'element-ui'
 import Components from './components/index'
 
-import VueQuillEditor from 'vue-quill-editor'
+// import VueQuillEditor from 'vue-quill-editor'
 import VueUeditorWrap from 'vue-ueditor-wrap'
+// import TinyVue from ''
 
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
+// import 'quill/dist/quill.core.css'
+// import 'quill/dist/quill.snow.css'
+// import 'quill/dist/quill.bubble.css'
 
-Vue.use(VueQuillEditor)
+// Vue.use(VueQuillEditor)
 Vue.component('vue-ueditor-wrap', VueUeditorWrap)
 
 Vue.config.productionTip = false

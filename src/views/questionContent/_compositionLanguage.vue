@@ -1,6 +1,6 @@
 <template>
   <div class="question-info">
-    <template v-if="data.first && data.borderTop == undefined">
+    <!-- <template v-if="data.first && data.borderTop == undefined">
       <div class="question-title" :style="{height: data.heightTitle - 10 + 'px'}" v-if="!isEditor" @click="hanldeEditor">
         <div class="title-span" v-html="cotent"></div>
       </div>
@@ -9,7 +9,7 @@
         :topic-content="TopicContent"
         @hanlde-close-esitor="hanldeCloseEsitor"
       />
-    </template>
+    </template> -->
 
     <div class="question_arrays">
       <div class="question_editOrDel language">
@@ -72,10 +72,10 @@
 import { mapState, mapMutations } from 'vuex'
 import { QUESTION_NUMBERS } from '@/models/base'
 
-import quillEditor from '../../components/quillEditor'
+// import quillEditor from '../../components/quillEditor'
 export default {
   components: {
-    quillEditor,
+    // quillEditor,
   },
   props: {
     questionData: {

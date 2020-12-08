@@ -1,7 +1,7 @@
 <template>
   <!-- 填空题 -->
   <div class="question-info">
-    <template v-if="questionData.first && questionData.borderTop == undefined">
+    <!-- <template v-if="questionData.first && questionData.borderTop == undefined">
       <div
         class="question-title"
         ref="questionTitle"
@@ -25,7 +25,7 @@
         :topic-content="cotent"
         @hanlde-close-esitor="hanldeCloseEsitor"
       />
-    </template>
+    </template> -->
     <div class="question_arrays">
       <div class="question_editOrDel">
         <span
@@ -77,11 +77,11 @@
 import { mapState, mapMutations,mapGetters } from 'vuex'
 import { QUESTION_NUMBERS } from '@/models/base'
 
-import quillEditor from '../../components/quillEditor'
+// import quillEditor from '../../components/quillEditor'
 import dragChangeHeight from '../questionContent/drag'
 export default {
   components: {
-    quillEditor,
+    // quillEditor,
     dragChangeHeight
   },
   props: {

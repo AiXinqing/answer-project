@@ -2,7 +2,7 @@
 <!-- 选择题 -->
   <div class="question-info">
 
-    <template v-if="questionData.first">
+    <!-- <template v-if="questionData.first">
       <div
         class="question-title"
         ref="questionTitle"
@@ -26,8 +26,9 @@
         :topic-content="cotent"
         @hanlde-close-esitor="hanldeCloseEsitor"
       />
-    </template>
+    </template> -->
     <!-- <vue-ueditor></vue-ueditor> -->
+    <tiny-vue/>
     <div class="question_array">
       <div class="question_editOrDel">
         <span  class="btn_addSub_name">每组题数</span>
@@ -63,12 +64,14 @@
 <script>
 import { mapState, mapMutations,mapGetters } from 'vuex'
 
-import quillEditor from '../../components/quillEditor'
+// import quillEditor from '../../components/quillEditor'
 // import VueUeditor from '../../components/VueUeditor'
+import tinyVue from '../tinyMCE'
 
 export default {
   components: {
-    quillEditor,
+    tinyVue
+    // quillEditor,
     // VueUeditor
   },
   props: {
