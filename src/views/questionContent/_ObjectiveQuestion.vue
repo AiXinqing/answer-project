@@ -28,7 +28,7 @@
       />
     </template> -->
     <!-- <vue-ueditor></vue-ueditor> -->
-    <!-- <tiny-vue/> -->
+    <tiny-vue/>
     <div class="question_array">
       <div class="question_editOrDel">
         <span  class="btn_addSub_name">每组题数</span>
@@ -66,11 +66,11 @@ import { mapState, mapMutations,mapGetters } from 'vuex'
 
 // import quillEditor from '../../components/quillEditor'
 // import VueUeditor from '../../components/VueUeditor'
-// import tinyVue from '../tinyMCE'
+import tinyVue from '../../components/tinymce'
 
 export default {
   components: {
-    // tinyVue
+    tinyVue
     // quillEditor,
     // VueUeditor
   },

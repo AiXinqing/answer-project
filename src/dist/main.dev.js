@@ -16,6 +16,12 @@ var _index = _interopRequireDefault(require("./components/index"));
 
 var _vueUeditorWrap = _interopRequireDefault(require("vue-ueditor-wrap"));
 
+require("./components/tinymce/skins/ui/oxide/skin.min.css");
+
+require("./components/tinymce/skins/ui/oxide/content.min.css");
+
+require("./components/tinymce/skins/ui/oxide/content.inline.min.css");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 // import VueQuillEditor from 'vue-quill-editor'
@@ -23,6 +29,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 // import 'quill/dist/quill.core.css'
 // import 'quill/dist/quill.snow.css'
 // import 'quill/dist/quill.bubble.css'
+//样式
 // Vue.use(VueQuillEditor)
 _vue["default"].component('vue-ueditor-wrap', _vueUeditorWrap["default"]);
 
