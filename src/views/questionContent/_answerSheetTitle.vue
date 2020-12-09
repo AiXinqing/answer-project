@@ -363,6 +363,7 @@ table tr td div:last-child {
   line-height: 65px;
   &.active {
     line-height: 30px;
+    min-height: 60px;
     height: auto;
   }
 }
