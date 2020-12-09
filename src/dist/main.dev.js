@@ -14,25 +14,12 @@ var _elementUi = _interopRequireDefault(require("element-ui"));
 
 var _index = _interopRequireDefault(require("./components/index"));
 
-var _vueUeditorWrap = _interopRequireDefault(require("vue-ueditor-wrap"));
-
-require("./components/tinymce/skins/ui/oxide/skin.min.css");
-
-require("./components/tinymce/skins/ui/oxide/content.min.css");
-
-require("./components/tinymce/skins/ui/oxide/content.inline.min.css");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-// import VueQuillEditor from 'vue-quill-editor'
-// import TinyVue from ''
-// import 'quill/dist/quill.core.css'
-// import 'quill/dist/quill.snow.css'
-// import 'quill/dist/quill.bubble.css'
-//样式
-// Vue.use(VueQuillEditor)
-_vue["default"].component('vue-ueditor-wrap', _vueUeditorWrap["default"]);
-
+// //样式
+// import './components/tinymce/skins/ui/oxide/skin.min.css'
+// import './components/tinymce/skins/ui/oxide/content.min.css'
+// import './components/tinymce/skins/ui/oxide/content.inline.min.css'
 _vue["default"].config.productionTip = false;
 
 _vue["default"].use(_index["default"]);

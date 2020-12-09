@@ -1,5 +1,5 @@
 <template>
-  <section id="tinymce-editor">tinymce-editor</section>
+  <section id="tinymce-editor" inline></section>
 </template>
 
 <script>
@@ -7,6 +7,9 @@
   import './themes/silver/theme.min.js'
   import './langs/zh_CN.js'
   import './icons/default/icons.min.js'
+  import './plugins/image/plugin.min.js'
+  import './plugins/imagetools/plugin.min.js'
+
   export default {
     props: {
       value: {
@@ -19,18 +22,21 @@
       tinymce.init({
         selector:'#tinymce-editor',
         language:'zh_CN',
-        //菜单栏
-        menubar:' ',
-        // menubar:'bar1 ',
-        // menu:{
-        //   bar1:{title:'文本',items:'copy paste cut'},
-        // }
-        // 工具栏
-        toolbar:'undo redo preview',
-        plugins:'preview',
+        menubar: false,
+        inline:true, // 内联样式
+
         setup: (editor) =>{
-          editor.on('init',(e)=>{
+          editor.on('init',()=>{
             editor.setContent(this.value)
+          })
+        },
+        // 监听input 和 change 事件，实时更新 value
+        init_instance_callback: (editor) => {
+          editor.on('input',(e) => {
+            this.$emit('input', e.target.innerHTML)
+          }),
+          editor.on('change', (e) => {
+            this.$emit('input', e.level.content)
           })
         }
       })
@@ -40,4 +46,6 @@
 
 <style lang="less" scoped>
 @import url('./skins/ui/oxide/skin.min.css');
+@import url('./skins/ui/oxide/content.min.css');
+@import url('./skins/ui/oxide/content.inline.min.css');
 </style>

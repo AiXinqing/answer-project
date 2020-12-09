@@ -2,33 +2,10 @@
 <!-- 选择题 -->
   <div class="question-info">
 
-    <!-- <template v-if="questionData.first">
-      <div
-        class="question-title"
-        ref="questionTitle"
-        :style="{height: data.heightTitle - 10 + 'px'}" v-if="!isEditor" @click="hanldeEditor">
-        <template v-if="!quilleditor">
-          <div class="title-span">
-            <span>{{options[data.number].label}}.</span>
-            <span>{{data.topicName}}</span>
-            <span>({{data.scoreTotal}})分</span>
-          </div>
-        </template>
-        <template
-          v-else
-        >
-          <div class="title-span" v-html="cotent"></div>
-        </template>
-      </div>
-      <quill-editor
-        v-if="isEditor"
-        ref="quillEditor"
-        :topic-content="cotent"
-        @hanlde-close-esitor="hanldeCloseEsitor"
-      />
-    </template> -->
-    <!-- <vue-ueditor></vue-ueditor> -->
-    <tiny-vue/>
+    <div class="question-title" >
+      <tiny-vue class="title-span"  v-model="tinyVue" />
+    </div>
+
     <div class="question_array">
       <div class="question_editOrDel">
         <span  class="btn_addSub_name">每组题数</span>
