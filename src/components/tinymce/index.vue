@@ -24,6 +24,10 @@
         language:'zh_CN',
         menubar: false,
         inline:true, // 内联样式
+        //工具栏配置
+        toolbar: [
+          'undo redo | styleselect | bold italic | link image alignleft aligncenter alignright | removeformat',
+        ],
 
         setup: (editor) =>{
           editor.on('init',()=>{
