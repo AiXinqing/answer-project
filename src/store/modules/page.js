@@ -35,13 +35,9 @@ const mutations = {
 
   //编辑题型标题
   pageData_edit_title: (state, data) => {
-    const index = state.pageData.findIndex((itme) => itme.id === data.id)
-    if (index > -1) {
-      state.pageData.splice(index, 1, {
-        ...state.pageData[index],
-        heightTitle: data.height,
-        titleContent:data.value
-      })
+    if (data.index > -1) {
+      state.pageData.splice(data.index,1,data.question)
+      console.log(state.pageData)
     }
   },
 
@@ -186,7 +182,7 @@ const getters = {
     return state.pageData.filter(question => question.questionType !== 'NonRresponseArea').length
   },
 
-  compile_pageData: (state,getters) => {
+  compile_pageData: (state, getters) => {
     return state.pageData.map(question => {
       return question.questionType == 'ObjectiveQuestion' ? getters.question_objective(question) :
         question.questionType == 'compositionLanguage' ? getters.question_language(question) : question

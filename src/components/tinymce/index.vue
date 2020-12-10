@@ -37,11 +37,14 @@
         },
         // 监听input 和 change 事件，实时更新 value
         init_instance_callback: (editor) => {
-          editor.on('input',() => {
-            // this.$emit('input', e.target.innerHTML)
-          }),
-          editor.on('change', (e) => {
-            this.$emit('input', e.level.content)
+          // editor.on('input',(e) => {
+          //   this.$emit('input', e.target.innerHTML)
+          // }),
+          // editor.on('change', (e) => {
+          //   this.$emit('input', e.level.content)
+          // }),
+          editor.on('blur', (e) => {
+            this.$emit('input', e.target.contentAreaContainer.innerHTML)
           })
         }
       })

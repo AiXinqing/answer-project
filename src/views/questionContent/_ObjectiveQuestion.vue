@@ -99,6 +99,7 @@ export default {
   },
   mounted () {
     let {titleContent} = this.questionData
+
     if(titleContent){
       this.cotent = titleContent
     }else{
@@ -144,7 +145,7 @@ export default {
     hanldeCloseEsitor (content) {
       this.isEditor = false
       this.cotent = content
-      console.log(content)
+
     },
 
     hanldeSubtraction (id, num) {
@@ -152,13 +153,28 @@ export default {
     },
 
     changeContent(val){
-      let height = this.$refs.tinyeditor.offsetHeight
-      let data = {
-        value:val,
-        height:height,
-        id:this.questionData.id
+      const index = this.pageData.findIndex(question => question.id == this.questionData.id)
+
+      if(index > -1){
+        let curObj = this.pageData[index]
+        let height = this.$refs.tinyeditor.offsetHeight
+
+        let data = {
+          question:{
+            ...curObj,
+            titleContent:val,
+            heightTitle:height,
+            height:{
+              ...curObj.height,
+              titleH:height + curObj.MarginHeight
+            }
+          },
+          index:index,
+        }
+
+        this.pageData_edit_title(data)
       }
-      this.pageData_edit_title(data)
+
     }
   },
 }
