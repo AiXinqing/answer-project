@@ -1,5 +1,5 @@
 <template>
-  <section id="tinymce-editor" inline></section>
+  <section class="tinymce-editor" inline></section>
 </template>
 
 <script>
@@ -20,7 +20,7 @@
 
     mounted() {
       tinymce.init({
-        selector:'#tinymce-editor',
+        selector:'.tinymce-editor',
         language:'zh_CN',
         menubar: false,
         inline:true, // 内联样式
@@ -28,6 +28,7 @@
         toolbar: [
           'undo redo | styleselect | bold italic | link image alignleft aligncenter alignright | removeformat',
         ],
+        plugins:['image'],
 
         setup: (editor) =>{
           editor.on('init',()=>{
@@ -36,8 +37,8 @@
         },
         // 监听input 和 change 事件，实时更新 value
         init_instance_callback: (editor) => {
-          editor.on('input',(e) => {
-            this.$emit('input', e.target.innerHTML)
+          editor.on('input',() => {
+            // this.$emit('input', e.target.innerHTML)
           }),
           editor.on('change', (e) => {
             this.$emit('input', e.level.content)

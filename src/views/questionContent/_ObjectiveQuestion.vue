@@ -2,8 +2,11 @@
 <!-- 选择题 -->
   <div class="question-info">
 
-    <div class="question-title" >
-      <tiny-vue class="title-span"  v-model="tinyVue" />
+    <div class="question-title" ref="tinyeditor">
+      <tiny-vue class="title-span"
+        v-model="cotent"
+        @input="changeContent"
+      />
     </div>
 
     <div class="question_array">
@@ -41,15 +44,11 @@
 <script>
 import { mapState, mapMutations,mapGetters } from 'vuex'
 
-// import quillEditor from '../../components/quillEditor'
-// import VueUeditor from '../../components/VueUeditor'
 import tinyVue from '../../components/tinymce'
 
 export default {
   components: {
     tinyVue
-    // quillEditor,
-    // VueUeditor
   },
   props: {
     contentData: {
@@ -65,7 +64,7 @@ export default {
     return {
       data: {},
       isEditor: false,
-      cotent: '',
+      cotent: '<p class="ce">cesho</p>',
       quilleditor:false,
       pageLayout:this.contentData.pageLayout,
     }
@@ -99,9 +98,13 @@ export default {
     }
   },
   mounted () {
-    // this.$nextTick(()=>{
-    //   this.cotent = this.$refs.questionTitle.innerHTML
-    // })
+    let {titleContent} = this.questionData
+    if(titleContent){
+      this.cotent = titleContent
+    }else{
+      let {number,topicName,scoreTotal} = this.data
+      this.cotent = `<p><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${scoreTotal})</span>分</p>`
+    }
   },
   methods: {
     ...mapMutations('page', ['pageData_del',]),
@@ -110,6 +113,10 @@ export default {
       'subTopic_already_del',
       'subTopic_number_calculate',
       'subTopic_determine_clean',
+    ]),
+
+    ...mapMutations('page', [
+      'pageData_edit_title'
     ]),
 
     delHanlde (id) { // 删除大题-小题数
@@ -142,6 +149,16 @@ export default {
 
     hanldeSubtraction (id, num) {
       this.$emit('hanlde-subtraction', id, num)
+    },
+
+    changeContent(val){
+      let height = this.$refs.tinyeditor.offsetHeight
+      let data = {
+        value:val,
+        height:height,
+        id:this.questionData.id
+      }
+      this.pageData_edit_title(data)
     }
   },
 }

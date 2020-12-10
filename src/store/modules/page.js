@@ -33,6 +33,18 @@ const mutations = {
     }
   },
 
+  //编辑题型标题
+  pageData_edit_title: (state, data) => {
+    const index = state.pageData.findIndex((itme) => itme.id === data.id)
+    if (index > -1) {
+      state.pageData.splice(index, 1, {
+        ...state.pageData[index],
+        heightTitle: data.height,
+        titleContent:data.value
+      })
+    }
+  },
+
   pageData_insert: (state, {
     obj,
     bigId,

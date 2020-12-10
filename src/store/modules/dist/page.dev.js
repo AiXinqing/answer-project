@@ -48,6 +48,19 @@ var mutations = {
       }
     }
   },
+  //编辑题型标题
+  pageData_edit_title: function pageData_edit_title(state, data) {
+    var index = state.pageData.findIndex(function (itme) {
+      return itme.id === data.id;
+    });
+
+    if (index > -1) {
+      state.pageData.splice(index, 1, _objectSpread({}, state.pageData[index], {
+        heightTitle: data.height,
+        titleContent: data.value
+      }));
+    }
+  },
   pageData_insert: function pageData_insert(state, _ref) {
     var obj = _ref.obj,
         bigId = _ref.bigId,

@@ -342,13 +342,12 @@
         const { rows,InsertTitle,Postpone,} = this.editingData
 
         let questionId = `objective_${+new Date()}`
-        //this.subTopicGroup
+
         var questionObj = {
             heightTitle: this.heightTitle,
             MarginHeight: this.MarginHeight,
             rowHeight: this.rowHeight * rows + 10,
             id: questionId,
-           // height: this.contentHeight + this.titleH, // 32标题高度
             height:{
               rowGroup:this.rowGroup,
               titleH:this.heightTitle + this.MarginHeight
@@ -362,6 +361,7 @@
             order: this.questionOrder,
             showData:[],
             first: true,
+            titleContent:''
           }
         if (this.editQuestionId == '') {
           if (InsertTitle && this.questionNumber_big_exist.length ){
@@ -380,7 +380,7 @@
         }else{
           this.subTopic_determine_pid_clean(this.questionGroup[0].pid)
           questionObj.id = this.editQuestionId
-          this.pageData_edit({...questionObj,order:this.orders})
+          this.pageData_edit({...questionObj,order:this.orders,titleContent:''})
         }
         // 小题数组追加数据
         this.subTopic_calculate_determine(this.questionGroup)
