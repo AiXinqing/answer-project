@@ -1,11 +1,11 @@
 <template>
 <!-- 选择题 -->
   <div class="question-info">
-
-    <div class="question-title" ref="tinyeditor">
+    <div class="question-title" ref="tinyeditor" v-if="questionData.first">
       <tiny-vue class="title-span"
-        v-model="cotent"
+        v-model="content"
         @input="changeContent"
+        ref="tinyMCE"
       />
     </div>
 
@@ -64,7 +64,7 @@ export default {
     return {
       data: {},
       isEditor: false,
-      cotent: '<p class="ce">cesho</p>',
+      cotent: '',
       quilleditor:false,
       pageLayout:this.contentData.pageLayout,
     }
@@ -94,14 +94,22 @@ export default {
           ...this.contentData
         }
         this.pageLayout = this.contentData.pageLayout
-        let {titleContent} = this.questionData
+      }
+    },
+    questionData:{
+      immediate: true,
+      handler () {
+        this.content = ''
+        let {number,topicName,scoreTotal} = this.data
 
-        if(titleContent != ''){
-          this.cotent = titleContent
-        }else{
-          let {number,topicName,scoreTotal} = this.data
-          this.cotent = `<p><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${scoreTotal})</span>分</p>`
-        }
+          if(!this.questionData.titleContent){
+            this.content = `<p><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${scoreTotal})</span>分</p>`
+            // this.$refs.tinyMCE.setContents(this.content)
+          }else{
+            this.content = this.questionData.titleContent
+            // this.$refs.tinyMCE.setContents(this.content)
+          }
+
       }
     }
   },
