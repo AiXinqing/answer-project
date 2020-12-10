@@ -94,18 +94,19 @@ export default {
           ...this.contentData
         }
         this.pageLayout = this.contentData.pageLayout
+        let {titleContent} = this.questionData
+
+        if(titleContent != ''){
+          this.cotent = titleContent
+        }else{
+          let {number,topicName,scoreTotal} = this.data
+          this.cotent = `<p><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${scoreTotal})</span>分</p>`
+        }
       }
     }
   },
   mounted () {
-    let {titleContent} = this.questionData
 
-    if(titleContent){
-      this.cotent = titleContent
-    }else{
-      let {number,topicName,scoreTotal} = this.data
-      this.cotent = `<p><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${scoreTotal})</span>分</p>`
-    }
   },
   methods: {
     ...mapMutations('page', ['pageData_del',]),
