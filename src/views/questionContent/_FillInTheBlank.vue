@@ -26,6 +26,19 @@
         @hanlde-close-esitor="hanldeCloseEsitor"
       />
     </template> -->
+
+    <div
+      class="question-title"
+      ref="tinyeditor"
+      v-if="questionData.first && questionData.borderTop == undefined"
+    >
+      <tiny-vue class="title-span"
+        v-model="content"
+        @input="changeContent"
+        ref="tinyMCE"
+      />
+    </div>
+
     <div class="question_arrays">
       <div class="question_editOrDel">
         <span
@@ -77,11 +90,11 @@
 import { mapState, mapMutations,mapGetters } from 'vuex'
 import { QUESTION_NUMBERS } from '@/models/base'
 
-// import quillEditor from '../../components/quillEditor'
+import tinyVue from '../../components/tinymce'
 import dragChangeHeight from '../questionContent/drag'
 export default {
   components: {
-    // quillEditor,
+    tinyVue,
     dragChangeHeight
   },
   props: {
@@ -135,6 +148,20 @@ export default {
       },
     },
 
+    questionData:{
+      immediate: true,
+      handler () {
+        this.content = ''
+        let {number,topicName,scoreTotal} = this.data
+
+          if(!this.questionData.titleContent){
+            this.content = `<p><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${scoreTotal})</span>分</p>`
+          }else{
+            this.content = this.questionData.titleContent
+          }
+      }
+    }
+
   },
   mounted () {
     this.$nextTick(()=>{
@@ -151,6 +178,8 @@ export default {
       'subTopic_number_calculate',
       'subTopic_determine_clean',
     ]),
+    ...mapMutations('page',['pageData_edit_title']),
+
     delfillTheBlank() {
       // 删除大题-小题数
       let {id} = this.questionData
@@ -171,10 +200,8 @@ export default {
     hanldeEditor() {
       this.isEditor = true
     },
-    hanldeCloseEsitor(content) {
-      this.isEditor = false
-      this.cotent = content
-    },
+
+
     handleResize (height) {
 
       const index = this.pageData.findIndex(obj => this.questionData.id === obj.id)
@@ -187,7 +214,27 @@ export default {
           })
 
       }
+    },
 
+    changeContent(val){
+      const index = this.pageData.findIndex(question => question.id == this.questionData.id)
+
+      if(index > -1){
+        let curObj = this.pageData[index]
+        let height = this.$refs.tinyeditor.offsetHeight
+
+        let data = {
+          question:{
+            ...curObj,
+            titleContent:val,
+            heightTitle:height,
+            height:(curObj.height - curObj.heightTitle) + height
+          },
+          index:index,
+        }
+
+        this.pageData_edit_title(data)
+      }
     }
   },
 }
