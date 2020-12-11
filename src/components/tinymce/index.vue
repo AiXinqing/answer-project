@@ -52,28 +52,6 @@
           menubar: false,
           setup: function(editor) {
               // 创建工具栏按钮
-              // // 添加填空按钮
-              // editor.addButton('fitb', { icon: 'code', title: '插入填空', onclick: () => {
-              //     editor.insertContent('<abbr class="fitb"> (________) </abbr>');
-              // } });
-
-              // // 添加上传图片按钮
-              // editor.addButton('image', { icon: 'image', title: '插入图片', onclick: () => {
-              //     this.uploadMode = 0;
-              //     // show uploader
-              // } });
-
-              // // 添加上传 MP3, MP4 按钮
-              // editor.addButton('media', { icon: 'media', title: '插入 MP3 或 MP4', onclick: () => {
-              //     this.uploadMode = 1;
-              //     // show uploader
-              // } });
-
-              // // 添加上传附件按钮
-              // editor.addButton('attachment', { icon: 'upload', title: '上传附件', onclick: () => {
-              //     this.uploadMode = 2;
-              //     // show uploader
-              // } });
 
               // 编辑器内容发生变化后更新 html 的内容
               editor.on('blur', () => {
