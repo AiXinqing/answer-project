@@ -1,12 +1,5 @@
 <template>
   <div class="question-info">
-    <!-- <template v-if="data.first">
-      <div class="question-title" :style="{height: data.heightTitle - 10 + 'px'}" v-if="!isEditor" @click="hanldeEditor">
-        <div class="title-span" v-html="cotent"></div>
-      </div>
-
-    </template> -->
-
     <div
       class="question-title"
       ref="tinyeditor"

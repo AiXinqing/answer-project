@@ -380,6 +380,7 @@ export default {
           rowWidth: 0,
           rowTitle:this.rowTitle,
           superiorGrid:0, // 上级格子数量
+          titleContent:''
         }
         this.subTopic_already_add([this.data])
 
@@ -401,7 +402,7 @@ export default {
           this.subTopic_calculate_determine([this.data])
 
         } else {
-          this.pageData_edit({ ...obj, id: this.editQuestionId })
+          this.pageData_edit({ ...obj, id: this.editQuestionId ,titleContent:''})
         }
         this.subTopic_number_calculate()
         this.data = JSON.parse(JSON.stringify(this.closeData))
