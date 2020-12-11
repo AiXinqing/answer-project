@@ -265,6 +265,7 @@ export default {
         },
         order: this.questionorder,
         first: true,
+        titleContent:''
       }
 
       if (this.editQuestionId == null) {
@@ -288,7 +289,7 @@ export default {
         // 编辑
         this.subTopic_determine_pid_clean(this.childGroups[0].pid)
         obj.id = this.editQuestionId
-        this.pageData_edit({...obj,order:this.orders})
+        this.pageData_edit({...obj,order:this.orders,titleContent:''})
       }
       //------------------------------------
       this.openedFrame = false // 关闭弹窗

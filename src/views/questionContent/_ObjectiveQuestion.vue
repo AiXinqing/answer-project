@@ -104,10 +104,8 @@ export default {
 
           if(!this.questionData.titleContent){
             this.content = `<p><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${scoreTotal})</span>分</p>`
-            // this.$refs.tinyMCE.setContents(this.content)
           }else{
             this.content = this.questionData.titleContent
-            // this.$refs.tinyMCE.setContents(this.content)
           }
 
       }
