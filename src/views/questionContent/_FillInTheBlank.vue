@@ -17,20 +17,17 @@
       <div class="question_editOrDel">
         <span
           class="layui-btn layui-btn-xs"
-          @click="subTopic_numberFillEdit(questionData.id)"
-          >编辑</span
-        >
-        <span class="layui-btn layui-btn-xs" @click="delfillTheBlank"
-          >删除</span
+          @click="subTopic_numberFillEdit(questionData.id)">编辑</span>
+        <span class="layui-btn layui-btn-xs" @click="delfillTheBlank">删除</span
         >
       </div>
     </div>
     <drag-change-height
       :question="questionData"
       @height-resize="handleResize($event)"
+      ref="tinyDrag"
     >
-
-      <div class="content-info" ref="questionChange" >
+      <div class="content-info" ref="questionChange">
         <div class="content-row" v-for="(subtopic, i) in subtopicGroup" :key="i">
           <section
             v-for="(topic,index) in subtopic"
@@ -89,6 +86,7 @@ export default {
       options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
       quilleditor:false,
       pageLayout:this.contentData.pageLayout,
+      richText:''
     }
   },
   computed: {
@@ -138,9 +136,9 @@ export default {
 
   },
   mounted () {
-    this.$nextTick(()=>{
-      this.cotent = this.$refs.questionChange.innerHTML
-    })
+    // this.$nextTick(()=>{
+    //   this.richText = this.$refs.questionChange.innerHTML
+    // })
   },
   methods: {
     ...mapMutations('page', [
@@ -209,7 +207,11 @@ export default {
 
         this.pageData_edit_title(data)
       }
-    }
+    },
+
+    // changeTextFunc(){
+    //   this.richText = this.$refs.questionChange.innerHTML
+    // }
   },
 }
 </script>
