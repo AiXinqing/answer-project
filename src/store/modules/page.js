@@ -37,7 +37,6 @@ const mutations = {
   pageData_edit_title: (state, data) => {
     if (data.index > -1) {
       state.pageData.splice(data.index,1,data.question)
-      console.log(state.pageData)
     }
   },
 

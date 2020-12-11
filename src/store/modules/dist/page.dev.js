@@ -52,7 +52,6 @@ var mutations = {
   pageData_edit_title: function pageData_edit_title(state, data) {
     if (data.index > -1) {
       state.pageData.splice(data.index, 1, data.question);
-      console.log(state.pageData);
     }
   },
   pageData_insert: function pageData_insert(state, _ref) {
