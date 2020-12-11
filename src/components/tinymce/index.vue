@@ -12,6 +12,7 @@
   import './plugins/charmap/plugin.min.js'
   import './plugins/code/plugin.min.js'
   import './plugins/mathjax/plugin.min.js'
+  import './plugins/mathjax/config.js'
 
   export default {
     props: {
@@ -31,7 +32,7 @@
     data() {
       return {
         editor: null,
-        toolbar:'attachment undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image mathjax',
+        toolbar:'attachment undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image ',
 
         uploadMode : 0,
       }
@@ -60,7 +61,7 @@
           selector:'.tinymce-editor',
           inline: this.inline,
           toolbar: this.toolbar,
-          plugins: ' image code charmap mathjax' ,
+          plugins: ' image code charmap' ,
           language: 'zh_CN',
           branding: false,
           elementpath: false,
