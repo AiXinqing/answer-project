@@ -27,6 +27,10 @@
         'height':minHeight  + 'px',
       }"
     >
+    <trigger-tinymce
+      :max-height="questionData.castHeight - 26"
+      @tinymce-change="tinymceChangeFunc"
+    >
       <div class="answer_question_box optional_box">
         <template v-if="data.first || data.heightTitle == (data.height - data.castHeight)">
           <span class="topic_number_box">
@@ -51,6 +55,7 @@
           ><a/></p>
         </div>
       </div>
+    </trigger-tinymce>
     </drag-change-height>
 
   </div>
@@ -62,10 +67,13 @@ import { QUESTION_NUMBERS } from '@/models/base'
 
 import dragChangeHeight from '../questionContent/drag'
 import tinyVue from '../../components/tinymce'
+import triggerTinymce from '../../components/tinymce/triggerEditor'
+
 export default {
   components: {
     dragChangeHeight,
-    tinyVue
+    tinyVue,
+    triggerTinymce
   },
   props: {
     questionData: {
@@ -191,6 +199,28 @@ export default {
         this.pageData_edit_title(data)
       }
 
+    },
+    tinymceChangeFunc(val){
+      const index = this.pageData.findIndex(question => question.id == this.questionData.id)
+      let height = val.length
+      this.maxHeight = val.length // 最大高度
+      console.log(val)
+      console.log(height)
+
+      if(index > -1){
+        let curObj = this.pageData[index]
+
+        let data = {
+          question:{
+            ...curObj,
+            editorContent:val,
+            height: height + curObj.heightTitle
+          },
+          index:index,
+        }
+
+        this.pageData_edit_title(data)
+      }
     }
   },
 }

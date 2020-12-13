@@ -203,7 +203,8 @@ export default {
           previousOrder:this.questionOrder - 1, // 解答题插入前的序列号
           index:index,
           first:true,
-          titleContent:''
+          titleContent:'',
+          editorContent:''
         }
         Arr.push(obj)
       })
@@ -347,6 +348,7 @@ export default {
                 order: previous,
                 objId:this.editQuestionId,
                 previousOrder:  pageObj && pageObj.questionType ==="NonRresponseArea" ? pageObj.order :previousTig,
+                editorContent:''
               },
               num: previous,
             }

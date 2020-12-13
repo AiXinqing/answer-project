@@ -29,7 +29,7 @@
       ref="tinyDrag"
     >
       <trigger-tinymce
-        :max-height="questionData.height"
+        :max-height="questionData.castHeight"
         @tinymce-change="tinymceChangeFunc"
       >
         <div class="content-info" ref="questionChange">

@@ -46,10 +46,12 @@
 import { mapState, mapMutations,mapGetters } from 'vuex'
 
 import tinyVue from '../../components/tinymce'
+import triggerTinymce from '../../components/tinymce/triggerEditor'
 
 export default {
   components: {
-    tinyVue
+    tinyVue,
+    triggerTinymce
   },
   props: {
     contentData: {

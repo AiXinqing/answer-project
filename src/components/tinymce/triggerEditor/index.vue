@@ -1,6 +1,9 @@
 <template>
   <section :id="'tinymce_'+ editorId"
-  :style="{maxHeight:maxHeight + 'px',overflow:'scroll'}">
+  :style="{
+    maxHeight:maxHeight - 30 + 'px',
+    overflow:'scroll',
+    height:maxHeight - 30 + 'px'}">
     <slot></slot>
   </section>
 </template>
@@ -63,7 +66,7 @@
           toolbar: this.toolbar,
           plugins: ' image code charmap',
           autoresize_max_height: 20,
-          height:40 + this.maxHeight,
+          // height:40 + this.maxHeight,
           language: 'zh_CN',
           menubar: false,
           paste_data_images: true,
