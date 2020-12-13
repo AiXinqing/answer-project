@@ -81,8 +81,7 @@
                   console.log('上传测试')
               } });
               // 编辑器内容发生变化后更新 html 的内容
-              editor.on('blur', (e) => {
-                  console.log(e.target)
+              editor.on('blur', () => {
                   self.$emit('input', editor.getContent())
               })
           },
