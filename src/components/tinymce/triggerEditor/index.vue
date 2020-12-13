@@ -1,27 +1,24 @@
 <template>
-  <section class="tinymce-editor" inline
-  :style="{maxHeight:maxHeight + 'px',overflow:'scroll'}"></section>
+  <section :id="'tinymce_'+ editorId"
+  :style="{maxHeight:maxHeight + 'px',overflow:'scroll'}">
+    <slot></slot>
+  </section>
 </template>
 
 <script>
-  import './tinymce.min.js'
-  import './themes/silver/theme.min.js'
-  import './langs/zh_CN.js'
-  import './icons/default/icons.min.js'
-  import './plugins/image/plugin.min.js'
-  import './plugins/imagetools/plugin.min.js'
-  import './plugins/charmap/plugin.min.js'
-  import './plugins/code/plugin.min.js'
-  import './plugins/mathjax/plugin.min.js'
-  import './plugins/mathjax/config.js'
+  import '../tinymce.min.js'
+  import '../themes/silver/theme.min.js'
+  import '../langs/zh_CN.js'
+  import '../icons/default/icons.min.js'
+  import '../plugins/image/plugin.min.js'
+  import '../plugins/imagetools/plugin.min.js'
+  import '../plugins/charmap/plugin.min.js'
+  import '../plugins/code/plugin.min.js'
+  import '../plugins/mathjax/plugin.min.js'
+  import '../plugins/mathjax/config.js'
 
   export default {
     props: {
-      inline:{ type: Boolean, default: true },     // 是否 inline 模式
-      html:{
-        type: String,
-        default: ''
-      },
       maxHeight:{ type: Number,  default: 30 },
     },
 
@@ -34,8 +31,8 @@
       return {
         editor: null,
         toolbar:'attachment undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image ',
-
         uploadMode : 0,
+        editorId:new Date().getTime()
       }
     },
 
@@ -46,31 +43,28 @@
 
     watch: {
         // 外部修改 v-model 绑定的 html 的值时更新编辑器的内容
-        value(newValue, oldValue) {
-            if (newValue != this.editor.getContent()) {
-                this.editor.setContent(newValue || oldValue);
-            }
-        }
+        // value(newValue, oldValue) {
+        //     if (newValue != this.editor.getContent()) {
+        //         this.editor.setContent(newValue || oldValue);
+        //     }
+        // }
     },
     mounted() {
-      this.initEditor()
+      this.initTiny()
 
     },
     methods: {
-      initEditor(){
+      initTiny(){
         const self = this
         tinymce.init({
-          selector:'.tinymce-editor',
-          inline: this.inline,
+          selector:`#tinymce_${this.editorId}`,
+          // auto_focus: true,
+          inline:true,
           toolbar: this.toolbar,
           plugins: ' image code charmap',
           autoresize_max_height: 20,
+          height:40 + this.maxHeight,
           language: 'zh_CN',
-          // height:200,
-          // branding: false,
-          // elementpath: false,
-          // statusbar:false,
-          // relative_urls: false, // 不把绝对路径转换为相对路径
           menubar: false,
           paste_data_images: true,
           setup: function(editor) {
@@ -82,7 +76,8 @@
               } });
               // 编辑器内容发生变化后更新 html 的内容
               editor.on('blur', () => {
-                  self.$emit('input', editor.getContent())
+                  self.$emit('tinymce-change', editor.getContent())
+                  editor.setContent(editor.getContent())
               })
           },
           images_upload_handler: function (blobInfo, success, failure){
@@ -105,7 +100,7 @@
 
         }).then(editors => {
             this.editor = editors[0];
-            this.editor.setContent(this.html);
+            // this.editor.setContent(this.html);
 
         })
       },
@@ -115,9 +110,9 @@
 </script>
 
 <style lang="less">
-@import url('./skins/ui/oxide/skin.min.css');
-@import url('./skins/ui/oxide/content.min.css');
-@import url('./skins/ui/oxide/content.inline.min.css');
+@import url('../skins/ui/oxide/skin.min.css');
+@import url('../skins/ui/oxide/content.min.css');
+@import url('../skins/ui/oxide/content.inline.min.css');
 
 .tox {
   .tox-tbtn--bespoke{

@@ -2,7 +2,7 @@
   <!-- 填空题 -->
   <div class="question-info">
     <div
-      class="question-title"
+      id="question-title"
       ref="tinyeditor"
       v-if="questionData.first && questionData.borderTop == undefined"
     >
@@ -28,32 +28,37 @@
       @height-resize="handleResize($event)"
       ref="tinyDrag"
     >
-      <div class="content-info" ref="questionChange">
-        <div class="content-row" v-for="(subtopic, i) in subtopicGroup" :key="i">
-          <section
-            v-for="(topic,index) in subtopic"
-            :key="topic.lid ? `${topic.lid}_${index}` : `${topic.sid}_${index}`"
-            class="subtopic_a"
-            :style="{ width: pageWidth / data.rows + 'px' }"
-          >
+      <trigger-tinymce
+        :max-height="questionData.height"
+        @tinymce-change="tinymceChangeFunc"
+      >
+        <div class="content-info" ref="questionChange">
+          <div class="content-row" v-for="(subtopic, i) in subtopicGroup" :key="i">
+            <div
+              v-for="(topic,index) in subtopic"
+              :key="topic.lid ? `${topic.lid}_${index}` : `${topic.sid}_${index}`"
+              class="subtopic_a"
+              :style="{ width: pageWidth / data.rows + 'px' }"
+            >
 
-            <template v-if="topic.lid">
-              <p>
-                <template v-if="topic.smallTopic == 1 && topic.spaceNum == 1">{{topic.topic}}</template>
-                <template v-if=" topic.spaceNum <= 1">({{topic.smallTopic}})</template>
-              </p>
-            </template>
+              <template v-if="topic.lid">
+                <div class="s_p">
+                  <template v-if="topic.smallTopic == 1 && topic.spaceNum == 1">{{topic.topic}}</template>
+                  <template v-if=" topic.spaceNum <= 1">({{topic.smallTopic}})</template>
+                </div>
+              </template>
 
-            <template v-else>
-              <p v-if="!topic.spaceNum || topic.spaceNum == 1 ">{{topic.topic}}</p>
-            </template>
+              <template v-else>
+                <div class="s_p" v-if="!topic.spaceNum || topic.spaceNum == 1 ">{{topic.topic}}</div>
+              </template>
 
-            <a></a>
+              <div class="a_p"></div>
 
-          </section>
+            </div>
+          </div>
+
         </div>
-
-      </div>
+      </trigger-tinymce>
     </drag-change-height>
   </div>
 </template>
@@ -63,10 +68,12 @@ import { mapState, mapMutations,mapGetters } from 'vuex'
 import { QUESTION_NUMBERS } from '@/models/base'
 
 import tinyVue from '../../components/tinymce'
+import triggerTinymce from '../../components/tinymce/triggerEditor'
 import dragChangeHeight from '../questionContent/drag'
 export default {
   components: {
     tinyVue,
+    triggerTinymce,
     dragChangeHeight
   },
   props: {
@@ -208,12 +215,18 @@ export default {
         this.pageData_edit_title(data)
       }
     },
+    tinymceChangeFunc(val){
+      // console.log(val) 
+    }
   },
 }
 </script>
 
 <style lang="less">
 @import '~@/assets/css/variables.less';
+.question-item{
+  margin-top: 10px;
+}
 .question-title {
   margin-bottom: 10px;
   span {
@@ -259,13 +272,13 @@ export default {
 .content-row  {
   display: flex;
 
-  section{
+  div.subtopic_a{
     display: flex;
     height: 35px;
     margin-left: 5px;
     width: 100%;
     font-size:12px;
-    p{
+    .s_p{
       height: 100%;
       flex:0;
       text-align: center;
@@ -273,10 +286,12 @@ export default {
       line-height: 35px;
       margin: 0 0;
     }
-    a{
+    .a_p{
         flex:  2;
         border-bottom: 1px solid @font-888;
         margin-left: 5px;
+        display: inline-block;
+        line-height: 25px;
         height: 25px;
       }
   }
