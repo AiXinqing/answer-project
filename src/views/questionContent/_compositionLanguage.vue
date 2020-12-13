@@ -1,15 +1,5 @@
 <template>
   <div class="question-info">
-    <!-- <template v-if="data.first && data.borderTop == undefined">
-      <div class="question-title" :style="{height: data.heightTitle - 10 + 'px'}" v-if="!isEditor" @click="hanldeEditor">
-        <div class="title-span" v-html="cotent"></div>
-      </div>
-      <quill-editor
-        v-show="isEditor"
-        :topic-content="TopicContent"
-        @hanlde-close-esitor="hanldeCloseEsitor"
-      />
-    </template> -->
     <div
       class="question-title"
       ref="tinyeditor"
@@ -18,6 +8,7 @@
       <tiny-vue class="title-span"
         v-model="content"
         @input="changeContent"
+        :max-height="maxHeight"
         ref="tinyMCE"
       />
     </div>
@@ -104,6 +95,7 @@ export default {
       data: {},
       cotent: '',
       options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
+      maxHeight:28,
     }
   },
   computed: {
@@ -113,10 +105,6 @@ export default {
       let long = this.contentData.topic.toString().length
       return parseInt(long) * 8 + 1
     },
-    // TopicContent() {
-    //   const {topicName,number,score} = this.contentData
-    //   return `<span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${score})</span>分`
-    // },
     topicData() {
       return ''
     },
@@ -263,10 +251,11 @@ export default {
 
     changeContent(val){
       const index = this.pageData.findIndex(question => question.id == this.questionData.id)
+       let height = val.length
+      this.maxHeight = val.length // 最大高度
 
       if(index > -1){
         let curObj = this.pageData[index]
-        let height = this.$refs.tinyeditor.offsetHeight
 
         let data = {
           question:{

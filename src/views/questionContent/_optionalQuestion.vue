@@ -8,6 +8,7 @@
       <tiny-vue class="title-span"
         v-model="content"
         @input="changeContent"
+        :max-height="maxHeight"
         ref="tinyMCE"
       />
     </div>
@@ -84,6 +85,7 @@ export default {
       cotent: '',
       promptTitle: '请考生用2B铅笔将所选题目对应题号涂黑，答题区域只允许选择一题，如果多做，则按所选做的前一题计分。',
       options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
+      maxHeight:28
     }
   },
   computed: {
@@ -170,9 +172,11 @@ export default {
 
     changeContent(val){
       const index = this.pageData.findIndex(question => question.id == this.questionData.id)
+      let height = val.length
+      this.maxHeight = val.length // 最大高度
+
       if(index > -1){
         let curObj = this.pageData[index]
-        let height = this.$refs.tinyeditor.offsetHeight
 
         let data = {
           question:{
