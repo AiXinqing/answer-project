@@ -1,5 +1,6 @@
 <template>
-  <section class="tinymce-editor" inline></section>
+  <section class="tinymce-editor" inline
+  :style="{maxHeight:maxHeight + 'px',overflow:'scroll'}"></section>
 </template>
 
 <script>
@@ -21,7 +22,7 @@
         type: String,
         default: ''
       },
-      minHeight:{ type: Number,  default: 23 },
+      maxHeight:{ type: Number,  default: 30 },
     },
 
     model: {
@@ -53,6 +54,7 @@
     },
     mounted() {
       this.initEditor()
+
     },
     methods: {
       initEditor(){
@@ -61,12 +63,14 @@
           selector:'.tinymce-editor',
           inline: this.inline,
           toolbar: this.toolbar,
-          plugins: ' image code charmap' ,
+          plugins: ' image code charmap',
+          autoresize_max_height: 20,
           language: 'zh_CN',
-          branding: false,
-          elementpath: false,
-          statusbar:false,
-          relative_urls: false, // 不把绝对路径转换为相对路径
+          // height:200,
+          // branding: false,
+          // elementpath: false,
+          // statusbar:false,
+          // relative_urls: false, // 不把绝对路径转换为相对路径
           menubar: false,
           paste_data_images: true,
           setup: function(editor) {
@@ -77,7 +81,8 @@
                   console.log('上传测试')
               } });
               // 编辑器内容发生变化后更新 html 的内容
-              editor.on('blur', () => {
+              editor.on('blur', (e) => {
+                  console.log(e.target)
                   self.$emit('input', editor.getContent())
               })
           },
