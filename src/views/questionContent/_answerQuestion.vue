@@ -1,16 +1,23 @@
 <template>
   <!-- 解答题 -->
   <div class="question-info">
-    <template v-if="!data.orderFirst && data.first">
+    <!-- <template v-if="!data.orderFirst && data.first">
       <div class="question-title" :style="{height: data.heightTitle - 10 + 'px'}" v-if="!isEditor" @click="hanldeEditor">
         <div class="title-span" v-html="cotent"></div>
       </div>
-      <quill-editor
-        v-show="isEditor"
-        :topic-content="TopicContent"
-        @hanlde-close-esitor="hanldeCloseEsitor"
+    </template> -->
+    <div
+      class="question-title"
+      ref="tinyeditor"
+      v-if="!data.orderFirst && data.first"
+    >
+      <tiny-vue class="title-span"
+        v-model="content"
+        @input="changeContent"
+        ref="tinyMCE"
       />
-    </template>
+    </div>
+
     <div class="question_arrays">
       <div class="question_editOrDel">
         <span class="layui-btn layui-btn-xs" @click="subTopic_numberAnswerEdit"
@@ -41,11 +48,11 @@
 import { mapState, mapMutations } from 'vuex'
 import { QUESTION_NUMBERS } from '@/models/base'
 
-import quillEditor from '../../components/quillEditor'
+import tinyVue from '../../components/tinymce'
 import dragChangeHeight from '../questionContent/drag'
 export default {
   components: {
-    quillEditor,
+    tinyVue,
     dragChangeHeight,
   },
   props: {
@@ -79,10 +86,6 @@ export default {
       return  castHeight >= height ? rowHeight * row + MarginHeight : 0
     },
 
-    TopicContent() {
-      const {number,topicName} = this.contentData
-      return `<span>${this.options[number].label}.</span><span>${topicName}</span><span>(${this.questionData.scoreTotal})分</span>`
-    },
     topicData() {
       return this.contentData.group
     },
@@ -101,15 +104,18 @@ export default {
         this.data = {
           ...this.questionData,
         }
+
+        this.content = ''
+        let {number,topicName} = this.contentData
+
+          if(!this.questionData.titleContent){
+            this.content = `<p><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${this.questionData.scoreTotal})</span>分</p>`
+          }else{
+            this.content = this.questionData.titleContent
+          }
       },
     },
 
-    TopicContent: {
-      immediate: true,
-      handler() {
-        this.cotent = this.TopicContent
-      },
-    },
   },
   methods: {
     ...mapMutations('page', [
@@ -117,24 +123,24 @@ export default {
       'pageData_edit',
       'pageData_orderFirst'
     ]),
+
     ...mapMutations('questionType', [
       'subTopic_already_del',
       'subTopic_number_calculate',
       'subTopic_determine_clean',
     ]),
-    hanldeCloseEsitor(content) {
-      this.isEditor = false
-      this.cotent = content
-    },
+
+    ...mapMutations('page', [
+      'pageData_edit_title'
+    ]),
+
     hanldeEditor() {
       this.isEditor = true
     },
     subTopic_numberAnswerEdit() {
-
       this.$emit('current-question-answer-edit', this.data)
     },
     delHanlde() {
-
       let {group} = this.data.content
       let questionGroup = group[0]
 
@@ -208,6 +214,27 @@ export default {
           })
 
       }
+    },
+
+    changeContent(val){
+      const index = this.pageData.findIndex(question => question.id == this.questionData.id && question.first)
+
+      if(index > -1){
+        let curObj = this.pageData[index]
+        let height = this.$refs.tinyeditor.offsetHeight
+
+        let data = {
+          question:{
+            ...curObj,
+            titleContent:val,
+            heightTitle:height,
+            height:(curObj.height - curObj.heightTitle) + height
+          },
+          index:index,
+        }
+        this.pageData_edit_title(data)
+      }
+
     }
   },
 }

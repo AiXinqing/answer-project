@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { mapMutations,mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 export default {
   props: {
     textareaData: {
@@ -18,27 +18,26 @@ export default {
       default: '',
     },
   },
-  data () {
+  data() {
     return {
       textareaVal: this.textareaData,
     }
   },
   computed: {
-    ...mapState('pageContent', ['pageData']),
+    ...mapState('page', ['pageData']),
   },
   methods: {
-    ...mapMutations('pageContent', ['pageData_edit']),
-    editPrecautionsTitile (e) {
+    ...mapMutations('page', ['pageData_edit']),
+    editPrecautionsTitile(e) {
       let answerTitle = this.pageData[0]
       this.pageData_edit({
         ...answerTitle,
-        content:{
+        content: {
           ...answerTitle.content,
-          textVal:e
-        }
+          textVal: e.replace(/\n/g, '<br>'),
+        },
       })
     },
   },
 }
 </script>
-

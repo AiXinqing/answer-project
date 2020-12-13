@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="textVal-style" v-if="previewIs">
-      {{ data.textVal == '' ? '请输入答题卡标题' : data.textVal }}
+    <div :class="['textVal-style',{active:previewIs}]" v-if="previewIs" v-html="data.textVal == '' ? '请输入答题卡标题' : data.textVal">
     </div>
-    <hj-textarea v-else :textarea-data="data.textVal" />
+    <hj-textarea v-else  :textarea-data="data.textVal" />
+
     <student-info
       @hanldeStudent="hanldeStudent"
       :title-info= "data.titleInfo"
@@ -95,7 +95,8 @@
 import hjTextarea from './Precautions/_textarea'
 import studentInfo from './Precautions/_studentInfo'
 import { PRECAUTIONS } from '@/models/base'
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
+
 
 export default {
   components: {
@@ -124,18 +125,12 @@ export default {
       studentInfoList: [],
       data:{},
       titleRows:this.questionData.content.titleRows,
-      dataLayout:this.questionData.content.pageLayout,
       title_percautions:PRECAUTIONS
     }
   },
   computed: {
+    ...mapGetters('page', ['page_width']),
 
-    page_width(){
-      let {column,size} = this.contentData.pageLayout
-      return column === 3 && size == 'A3'
-          ? 480
-          : 745
-    },
 
     cardData() {
       return this.contentData[0]
@@ -176,7 +171,6 @@ export default {
         this.data = {
           ...this.questionData.content
         }
-        this.dataLayout = this.questionData.content.pageLayout
         this.titleRows = this.questionData.content.titleRows
       }
     }
@@ -311,7 +305,7 @@ export default {
   line-height: 31px;
   font-size: 23px;
   border-color: @font-888;
-  color: @font-666;
+  color: @font-333;
   max-height: 65px;
 }
 table tr td div:last-child {
@@ -367,5 +361,10 @@ table tr td div:last-child {
   font-weight: bold;
   height: 65px;
   line-height: 65px;
+  &.active {
+    line-height: 30px;
+    min-height: 60px;
+    height: auto;
+  }
 }
 </style>

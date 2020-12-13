@@ -1,49 +1,33 @@
 <template>
   <!-- 填空题 -->
   <div class="question-info">
-    <template v-if="questionData.first && questionData.borderTop == undefined">
-      <div
-        class="question-title"
-        ref="questionTitle"
-        :style="{height: data.heightTitle - 10 + 'px'}" v-if="!isEditor" @click="hanldeEditor">
-        <template v-if="!quilleditor">
-          <div class="title-span">
-            <span>{{options[data.number].label}}.</span>
-            <span>{{data.topicName}}</span>
-            <span>({{data.scoreTotal}})分</span>
-          </div>
-        </template>
-        <template
-          v-else
-        >
-          <div class="title-span" v-html="cotent"></div>
-        </template>
-      </div>
-      <quill-editor
-        v-if="isEditor"
-        ref="quillEditor"
-        :topic-content="cotent"
-        @hanlde-close-esitor="hanldeCloseEsitor"
+    <div
+      class="question-title"
+      ref="tinyeditor"
+      v-if="questionData.first && questionData.borderTop == undefined"
+    >
+      <tiny-vue class="title-span"
+        v-model="content"
+        @input="changeContent"
+        ref="tinyMCE"
       />
-    </template>
+    </div>
+
     <div class="question_arrays">
       <div class="question_editOrDel">
         <span
           class="layui-btn layui-btn-xs"
-          @click="subTopic_numberFillEdit(questionData.id)"
-          >编辑</span
-        >
-        <span class="layui-btn layui-btn-xs" @click="delfillTheBlank"
-          >删除</span
+          @click="subTopic_numberFillEdit(questionData.id)">编辑</span>
+        <span class="layui-btn layui-btn-xs" @click="delfillTheBlank">删除</span
         >
       </div>
     </div>
     <drag-change-height
       :question="questionData"
       @height-resize="handleResize($event)"
+      ref="tinyDrag"
     >
-
-      <div class="content-info" ref="questionChange" >
+      <div class="content-info" ref="questionChange">
         <div class="content-row" v-for="(subtopic, i) in subtopicGroup" :key="i">
           <section
             v-for="(topic,index) in subtopic"
@@ -77,11 +61,11 @@
 import { mapState, mapMutations,mapGetters } from 'vuex'
 import { QUESTION_NUMBERS } from '@/models/base'
 
-import quillEditor from '../../components/quillEditor'
+import tinyVue from '../../components/tinymce'
 import dragChangeHeight from '../questionContent/drag'
 export default {
   components: {
-    quillEditor,
+    tinyVue,
     dragChangeHeight
   },
   props: {
@@ -102,6 +86,7 @@ export default {
       options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
       quilleditor:false,
       pageLayout:this.contentData.pageLayout,
+      richText:''
     }
   },
   computed: {
@@ -135,11 +120,25 @@ export default {
       },
     },
 
+    questionData:{
+      immediate: true,
+      handler () {
+        this.content = ''
+        let {number,topicName,scoreTotal} = this.data
+
+          if(!this.questionData.titleContent){
+            this.content = `<p><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${scoreTotal})</span>分</p>`
+          }else{
+            this.content = this.questionData.titleContent
+          }
+      }
+    }
+
   },
   mounted () {
-    this.$nextTick(()=>{
-      this.cotent = this.$refs.questionChange.innerHTML
-    })
+    // this.$nextTick(()=>{
+    //   this.richText = this.$refs.questionChange.innerHTML
+    // })
   },
   methods: {
     ...mapMutations('page', [
@@ -151,6 +150,8 @@ export default {
       'subTopic_number_calculate',
       'subTopic_determine_clean',
     ]),
+    ...mapMutations('page',['pageData_edit_title']),
+
     delfillTheBlank() {
       // 删除大题-小题数
       let {id} = this.questionData
@@ -171,10 +172,8 @@ export default {
     hanldeEditor() {
       this.isEditor = true
     },
-    hanldeCloseEsitor(content) {
-      this.isEditor = false
-      this.cotent = content
-    },
+
+
     handleResize (height) {
 
       const index = this.pageData.findIndex(obj => this.questionData.id === obj.id)
@@ -187,8 +186,32 @@ export default {
           })
 
       }
+    },
 
-    }
+    changeContent(val){
+      const index = this.pageData.findIndex(question => question.id == this.questionData.id)
+
+      if(index > -1){
+        let curObj = this.pageData[index]
+        let height = this.$refs.tinyeditor.offsetHeight
+
+        let data = {
+          question:{
+            ...curObj,
+            titleContent:val,
+            heightTitle:height,
+            height:(curObj.height - curObj.heightTitle) + height
+          },
+          index:index,
+        }
+
+        this.pageData_edit_title(data)
+      }
+    },
+
+    // changeTextFunc(){
+    //   this.richText = this.$refs.questionChange.innerHTML
+    // }
   },
 }
 </script>

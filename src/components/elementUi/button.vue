@@ -11,11 +11,11 @@ import { Button } from 'element-ui'
 export default {
   name: 'hjButton',
   props: {},
-  data () {
+  data() {
     return {}
   },
   methods: {},
-  mounted () { },
+  mounted() {},
   components: {
     elButton: Button,
   },
@@ -149,15 +149,6 @@ export default {
   background-color: #d65555;
 }
 .el-checkbox__inner:hover {
-  border-color: #1ab394 !important;
-}
-button.el-button.el-button--confirm.el-button--medium.is-disabled{
-  :hover{
-    color: #C0C4CC;
-    cursor: not-allowed;
-    background-image: none;
-    background-color: #FFF;
-    border-color: #EBEEF5;
-  }
+  border-color: #1ab394;
 }
 </style>

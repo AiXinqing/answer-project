@@ -326,7 +326,7 @@ export default {
     preliminaryQuestion(question,avalibleHeight,initial = true){
       // 变量
       const { MarginHeight,heightTitle,rowHeight } = question
-
+      console.log(avalibleHeight)
       // 边框高度 剩余内容
       let margin = initial ? MarginHeight + heightTitle : MarginHeight
           margin = question.questionType == 'optionalQuestion' ? margin + question.rowTitle : margin

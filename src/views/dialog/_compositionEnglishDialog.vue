@@ -327,6 +327,7 @@ export default {
             pageLayout:this.pageLayout,
           },
           first: true,
+          titleContent:''
         }
         this.subTopic_already_add([this.data])
 
@@ -348,7 +349,7 @@ export default {
           this.subTopic_calculate_determine([this.data])
 
         } else {
-          this.pageData_edit({ ...obj, id: this.editQuestionId })
+          this.pageData_edit({ ...obj, id: this.editQuestionId, titleContent:'' })
         }
 
         this.subTopic_number_calculate()

@@ -1,6 +1,6 @@
 <template>
   <div class="question-info">
-    <template v-if="data.first && data.borderTop == undefined">
+    <!-- <template v-if="data.first && data.borderTop == undefined">
       <div class="question-title" :style="{height: data.heightTitle - 10 + 'px'}" v-if="!isEditor" @click="hanldeEditor">
         <div class="title-span" v-html="cotent"></div>
       </div>
@@ -9,7 +9,18 @@
         :topic-content="TopicContent"
         @hanlde-close-esitor="hanldeCloseEsitor"
       />
-    </template>
+    </template> -->
+    <div
+      class="question-title"
+      ref="tinyeditor"
+      v-if="data.first && data.borderTop == undefined"
+    >
+      <tiny-vue class="title-span"
+        v-model="content"
+        @input="changeContent"
+        ref="tinyMCE"
+      />
+    </div>
 
     <div class="question_arrays">
       <div class="question_editOrDel language">
@@ -72,10 +83,10 @@
 import { mapState, mapMutations } from 'vuex'
 import { QUESTION_NUMBERS } from '@/models/base'
 
-import quillEditor from '../../components/quillEditor'
+import tinyVue from '../../components/tinymce'
 export default {
   components: {
-    quillEditor,
+    tinyVue,
   },
   props: {
     questionData: {
@@ -97,14 +108,15 @@ export default {
   },
   computed: {
     ...mapState('page', ['pageData']),
+
     strLong() {
       let long = this.contentData.topic.toString().length
       return parseInt(long) * 8 + 1
     },
-    TopicContent() {
-      const {topicName,number,score} = this.contentData
-      return `<span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${score})</span>分`
-    },
+    // TopicContent() {
+    //   const {topicName,number,score} = this.contentData
+    //   return `<span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${score})</span>分`
+    // },
     topicData() {
       return ''
     },
@@ -144,33 +156,42 @@ export default {
         this.data = {
           ...this.questionData,
         }
-      },
-    },
-    TopicContent: {
-      immediate: true,
-      handler() {
-        this.cotent = this.TopicContent
+        this.content = ''
+        const {topicName,number,score} = this.contentData
+
+          if(!this.questionData.titleContent){
+            this.content = `<span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${score})</span>分`
+          }else{
+            this.content = this.questionData.titleContent
+          }
       },
     },
   },
 
   methods: {
+
     ...mapMutations('page', [
       'pageData_del',
       'pageData_id_clean',
     ]),
+
     ...mapMutations('questionType', [
       'subTopic_already_del',
       'subTopic_number_calculate',
       'subTopic_determine_clean',
     ]),
+
+    ...mapMutations('page',['pageData_edit_title']),
+
     hanldeCloseEsitor(content) {
       this.isEditor = false
       this.cotent = content
     },
+
     hanldeEditor() {
       this.isEditor = true
     },
+
     compositionLanguagehEdit() {
       this.$emit('composition-language-edit', this.data)
     },
@@ -199,8 +220,8 @@ export default {
           }
         })
       }
-
     },
+
     addSpacing(){
       const { label,value } = this.data.content.spacing
 
@@ -239,6 +260,27 @@ export default {
         this.subTopic_number_calculate()
       }
     },
+
+    changeContent(val){
+      const index = this.pageData.findIndex(question => question.id == this.questionData.id)
+
+      if(index > -1){
+        let curObj = this.pageData[index]
+        let height = this.$refs.tinyeditor.offsetHeight
+
+        let data = {
+          question:{
+            ...curObj,
+            titleContent:val,
+            heightTitle:height,
+            height:(curObj.height - curObj.heightTitle) + height
+          },
+          index:index,
+        }
+
+        this.pageData_edit_title(data)
+      }
+    }
   },
 }
 </script>

@@ -48,6 +48,12 @@ var mutations = {
       }
     }
   },
+  //编辑题型标题
+  pageData_edit_title: function pageData_edit_title(state, data) {
+    if (data.index > -1) {
+      state.pageData.splice(data.index, 1, data.question);
+    }
+  },
   pageData_insert: function pageData_insert(state, _ref) {
     var obj = _ref.obj,
         bigId = _ref.bigId,
@@ -145,7 +151,9 @@ var mutations = {
     });
 
     if (index > -1) {
-      state.nonAnswer = state.nonAnswer.splice(index, 1);
+      state.nonAnswer.splice(index, 1);
+    } else {
+      state.nonAnswer.splice(0, 1);
     }
   },
   // 插入清空的非答题

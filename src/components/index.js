@@ -3,9 +3,9 @@ import {
   MessageBox,
   Message
 } from 'element-ui'
-import HjDialog from './dialog'
-import HjButton from './button'
-import HjSelect from './select'
+import HjDialog from './elementUi/dialog.vue'
+import HjButton from './elementUi/button'
+import HjSelect from './elementUi/select'
 // import quillEditor from './quillEditor'
 
 

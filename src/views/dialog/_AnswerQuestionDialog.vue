@@ -202,7 +202,8 @@ export default {
           scoreTotal:this.scoreTotal,
           previousOrder:this.questionOrder - 1, // 解答题插入前的序列号
           index:index,
-          first:true
+          first:true,
+          titleContent:''
         }
         Arr.push(obj)
       })
@@ -290,7 +291,6 @@ export default {
       //编辑弹框
       this.editQuestionId = obj.objId
       this.orders = obj.order
-      console.log(obj)
       this.previous = obj.previousOrder
       this.openedFrame = true
       this.questionData = JSON.parse(JSON.stringify(obj.content))
@@ -340,7 +340,7 @@ export default {
           this.pageData_nonA_clean(this.editQuestionId) // 清空非答题
 
           this.subTopicGroup.forEach((question,index) => {
-            previous += 1
+            previous += (index == 0 ? 0 :1)
             let data = {
               obj: {
                 ...question,

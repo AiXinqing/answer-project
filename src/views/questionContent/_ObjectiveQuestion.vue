@@ -1,33 +1,14 @@
 <template>
 <!-- 选择题 -->
   <div class="question-info">
-
-    <template v-if="questionData.first">
-      <div
-        class="question-title"
-        ref="questionTitle"
-        :style="{height: data.heightTitle - 10 + 'px'}" v-if="!isEditor" @click="hanldeEditor">
-        <template v-if="!quilleditor">
-          <div class="title-span">
-            <span>{{options[data.number].label}}.</span>
-            <span>{{data.topicName}}</span>
-            <span>({{data.scoreTotal}})分</span>
-          </div>
-        </template>
-        <template
-          v-else
-        >
-          <div class="title-span" v-html="cotent"></div>
-        </template>
-      </div>
-      <quill-editor
-        v-if="isEditor"
-        ref="quillEditor"
-        :topic-content="cotent"
-        @hanlde-close-esitor="hanldeCloseEsitor"
+    <div class="question-title" ref="tinyeditor" v-if="questionData.first">
+      <tiny-vue class="title-span"
+        v-model="content"
+        @input="changeContent"
+        ref="tinyMCE"
       />
-    </template>
-    <!-- <vue-ueditor></vue-ueditor> -->
+    </div>
+
     <div class="question_array">
       <div class="question_editOrDel">
         <span  class="btn_addSub_name">每组题数</span>
@@ -63,13 +44,11 @@
 <script>
 import { mapState, mapMutations,mapGetters } from 'vuex'
 
-import quillEditor from '../../components/quillEditor'
-// import VueUeditor from '../../components/VueUeditor'
+import tinyVue from '../../components/tinymce'
 
 export default {
   components: {
-    quillEditor,
-    // VueUeditor
+    tinyVue
   },
   props: {
     contentData: {
@@ -116,12 +95,24 @@ export default {
         }
         this.pageLayout = this.contentData.pageLayout
       }
+    },
+    questionData:{
+      immediate: true,
+      handler () {
+        this.content = ''
+        let {number,topicName,scoreTotal} = this.data
+
+          if(!this.questionData.titleContent){
+            this.content = `<p><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${scoreTotal})</span>分</p>`
+          }else{
+            this.content = this.questionData.titleContent
+          }
+
+      }
     }
   },
   mounted () {
-    // this.$nextTick(()=>{
-    //   this.cotent = this.$refs.questionTitle.innerHTML
-    // })
+
   },
   methods: {
     ...mapMutations('page', ['pageData_del',]),
@@ -130,6 +121,10 @@ export default {
       'subTopic_already_del',
       'subTopic_number_calculate',
       'subTopic_determine_clean',
+    ]),
+
+    ...mapMutations('page', [
+      'pageData_edit_title'
     ]),
 
     delHanlde (id) { // 删除大题-小题数
@@ -157,11 +152,36 @@ export default {
     hanldeCloseEsitor (content) {
       this.isEditor = false
       this.cotent = content
-      console.log(content)
+
     },
 
     hanldeSubtraction (id, num) {
       this.$emit('hanlde-subtraction', id, num)
+    },
+
+    changeContent(val){
+      const index = this.pageData.findIndex(question => question.id == this.questionData.id)
+
+      if(index > -1){
+        let curObj = this.pageData[index]
+        let height = this.$refs.tinyeditor.offsetHeight
+
+        let data = {
+          question:{
+            ...curObj,
+            titleContent:val,
+            heightTitle:height,
+            height:{
+              ...curObj.height,
+              titleH:height + curObj.MarginHeight
+            }
+          },
+          index:index,
+        }
+
+        this.pageData_edit_title(data)
+      }
+
     }
   },
 }
