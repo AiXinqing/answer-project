@@ -220,11 +220,25 @@ export default {
       }
     },
     tinymceChangeFunc(val){
-      const length = (val.split('<div class="content-row">')).length - 1
-      console.log(length)
-      let height = length * 35 + 15
+      const index = this.pageData.findIndex(question => question.id == this.questionData.id)
+      const length = (val.split('<p class="content-row">')).length - 1
+      let height = length * 35 + this.questionData.MarginHeight
       this.tinymceHeight = height // 最大高度
-      console.log(height)
+
+      if(index > -1){
+        let curObj = this.pageData[index]
+
+        let data = {
+          question:{
+            ...curObj,
+            editorContent:val,
+            height:height + this.questionData.heightTitle - this.questionData.MarginHeight
+          },
+          index:index,
+        }
+
+        this.pageData_edit_title(data)
+      }
     }
   },
 }
