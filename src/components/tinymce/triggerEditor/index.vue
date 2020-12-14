@@ -1,9 +1,8 @@
 <template>
   <section :id="'tinymce_'+ editorId"
   :style="{
-    maxHeight:maxHeight - 30 + 'px',
-    overflowY:'scroll',
-    height:maxHeight - 30 + 'px'}">
+    maxHeight:maxHeight + 'px',
+    height:maxHeight + 'px'}">
     <slot></slot>
   </section>
 </template>

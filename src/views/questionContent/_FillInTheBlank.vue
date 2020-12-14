@@ -28,37 +28,37 @@
       @height-resize="handleResize($event)"
       ref="tinyDrag"
     >
-      <trigger-tinymce
-        :max-height="questionData.castHeight"
-        @tinymce-change="tinymceChangeFunc"
-      >
-        <div class="content-info" ref="questionChange">
-          <div class="content-row" v-for="(subtopic, i) in subtopicGroup" :key="i">
-            <div
+      <div class="content-info" ref="questionChange">
+        <trigger-tinymce
+          :max-height="tinymceHeight"
+          @tinymce-change="tinymceChangeFunc"
+        >
+          <p class="content-row" v-for="(subtopic, i) in subtopicGroup" :key="i">
+
+            <a
               v-for="(topic,index) in subtopic"
               :key="topic.lid ? `${topic.lid}_${index}` : `${topic.sid}_${index}`"
               class="subtopic_a"
               :style="{ width: pageWidth / data.rows + 'px' }"
             >
-
               <template v-if="topic.lid">
-                <div class="s_p">
+                <span class="s_p">
                   <template v-if="topic.smallTopic == 1 && topic.spaceNum == 1">{{topic.topic}}</template>
                   <template v-if=" topic.spaceNum <= 1">({{topic.smallTopic}})</template>
-                </div>
-              </template>
+                </span>
+            </template>
 
-              <template v-else>
-                <div class="s_p" v-if="!topic.spaceNum || topic.spaceNum == 1 ">{{topic.topic}}</div>
-              </template>
+            <template v-else>
+                <span class="s_p" v-if="!topic.spaceNum || topic.spaceNum == 1 ">{{topic.topic}}</span>
+            </template>
 
-              <div class="a_p"></div>
+              <span class="a_p"><span class="dis">.</span></span>
 
-            </div>
-          </div>
+            </a>
+          </p>
 
-        </div>
-      </trigger-tinymce>
+        </trigger-tinymce>
+      </div>
     </drag-change-height>
   </div>
 </template>
@@ -95,7 +95,8 @@ export default {
       quilleditor:false,
       pageLayout:this.contentData.pageLayout,
       richText:'',
-      maxHeight:28
+      maxHeight:28,
+      tinymceHeight:28
     }
   },
   computed: {
@@ -135,11 +136,13 @@ export default {
         this.content = ''
         let {number,topicName,scoreTotal} = this.data
 
-          if(!this.questionData.titleContent){
-            this.content = `<p><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${scoreTotal})</span>分</p>`
-          }else{
-            this.content = this.questionData.titleContent
-          }
+        if(!this.questionData.titleContent){
+          this.content = `<p><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${scoreTotal})</span>分</p>`
+        }else{
+          this.content = this.questionData.titleContent
+        }
+        this.tinymceHeight = this.questionData.castHeight - this.questionData.heightTitle
+        console.log(this.questionData)
       }
     }
 
@@ -216,8 +219,12 @@ export default {
         this.pageData_edit_title(data)
       }
     },
-    tinymceChangeFunc(){
-      // console.log(val)
+    tinymceChangeFunc(val){
+      const length = (val.split('<div class="content-row">')).length - 1
+      console.log(length)
+      let height = length * 35 + 15
+      this.tinymceHeight = height // 最大高度
+      console.log(height)
     }
   },
 }
@@ -275,8 +282,10 @@ export default {
 
 .content-row  {
   display: flex;
+  height: 35px;
+  margin: 0;
 
-  div.subtopic_a{
+  .subtopic_a{
     display: flex;
     height: 35px;
     margin-left: 5px;
@@ -297,6 +306,9 @@ export default {
         display: inline-block;
         line-height: 25px;
         height: 25px;
+        span.dis{
+          display: none
+        }
       }
   }
 
