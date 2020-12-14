@@ -8,6 +8,7 @@
       <tiny-vue class="title-span"
         v-model="content"
         @input="changeContent"
+        :max-height="maxHeight"
         ref="tinyMCE"
       />
     </div>
@@ -72,6 +73,7 @@ export default {
       data: {},
       cotent: '',
       options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
+      maxHeight:28,
     }
   },
   computed: {
@@ -167,10 +169,11 @@ export default {
 
     changeContent(val){
       const index = this.pageData.findIndex(question => question.id == this.questionData.id)
+       let height = val.length
+      this.maxHeight = val.length // 最大高度
 
       if(index > -1){
         let curObj = this.pageData[index]
-        let height = this.$refs.tinyeditor.offsetHeight
 
         let data = {
           question:{

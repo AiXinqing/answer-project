@@ -2,13 +2,14 @@
   <!-- 填空题 -->
   <div class="question-info">
     <div
-      class="question-title"
+      id="question-title"
       ref="tinyeditor"
       v-if="questionData.first && questionData.borderTop == undefined"
     >
       <tiny-vue class="title-span"
         v-model="content"
         @input="changeContent"
+        :max-height="maxHeight"
         ref="tinyMCE"
       />
     </div>
@@ -27,32 +28,37 @@
       @height-resize="handleResize($event)"
       ref="tinyDrag"
     >
-      <div class="content-info" ref="questionChange">
-        <div class="content-row" v-for="(subtopic, i) in subtopicGroup" :key="i">
-          <section
-            v-for="(topic,index) in subtopic"
-            :key="topic.lid ? `${topic.lid}_${index}` : `${topic.sid}_${index}`"
-            class="subtopic_a"
-            :style="{ width: pageWidth / data.rows + 'px' }"
-          >
+      <trigger-tinymce
+        :max-height="questionData.castHeight"
+        @tinymce-change="tinymceChangeFunc"
+      >
+        <div class="content-info" ref="questionChange">
+          <div class="content-row" v-for="(subtopic, i) in subtopicGroup" :key="i">
+            <div
+              v-for="(topic,index) in subtopic"
+              :key="topic.lid ? `${topic.lid}_${index}` : `${topic.sid}_${index}`"
+              class="subtopic_a"
+              :style="{ width: pageWidth / data.rows + 'px' }"
+            >
 
-            <template v-if="topic.lid">
-              <p>
-                <template v-if="topic.smallTopic == 1 && topic.spaceNum == 1">{{topic.topic}}</template>
-                <template v-if=" topic.spaceNum <= 1">({{topic.smallTopic}})</template>
-              </p>
-            </template>
+              <template v-if="topic.lid">
+                <div class="s_p">
+                  <template v-if="topic.smallTopic == 1 && topic.spaceNum == 1">{{topic.topic}}</template>
+                  <template v-if=" topic.spaceNum <= 1">({{topic.smallTopic}})</template>
+                </div>
+              </template>
 
-            <template v-else>
-              <p v-if="!topic.spaceNum || topic.spaceNum == 1 ">{{topic.topic}}</p>
-            </template>
+              <template v-else>
+                <div class="s_p" v-if="!topic.spaceNum || topic.spaceNum == 1 ">{{topic.topic}}</div>
+              </template>
 
-            <a></a>
+              <div class="a_p"></div>
 
-          </section>
+            </div>
+          </div>
+
         </div>
-
-      </div>
+      </trigger-tinymce>
     </drag-change-height>
   </div>
 </template>
@@ -62,10 +68,12 @@ import { mapState, mapMutations,mapGetters } from 'vuex'
 import { QUESTION_NUMBERS } from '@/models/base'
 
 import tinyVue from '../../components/tinymce'
+import triggerTinymce from '../../components/tinymce/triggerEditor'
 import dragChangeHeight from '../questionContent/drag'
 export default {
   components: {
     tinyVue,
+    triggerTinymce,
     dragChangeHeight
   },
   props: {
@@ -86,7 +94,8 @@ export default {
       options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
       quilleditor:false,
       pageLayout:this.contentData.pageLayout,
-      richText:''
+      richText:'',
+      maxHeight:28
     }
   },
   computed: {
@@ -136,9 +145,6 @@ export default {
 
   },
   mounted () {
-    // this.$nextTick(()=>{
-    //   this.richText = this.$refs.questionChange.innerHTML
-    // })
   },
   methods: {
     ...mapMutations('page', [
@@ -190,10 +196,11 @@ export default {
 
     changeContent(val){
       const index = this.pageData.findIndex(question => question.id == this.questionData.id)
+      let height = val.length
+      this.maxHeight = val.length // 最大高度
 
       if(index > -1){
         let curObj = this.pageData[index]
-        let height = this.$refs.tinyeditor.offsetHeight
 
         let data = {
           question:{
@@ -208,16 +215,18 @@ export default {
         this.pageData_edit_title(data)
       }
     },
-
-    // changeTextFunc(){
-    //   this.richText = this.$refs.questionChange.innerHTML
-    // }
+    tinymceChangeFunc(val){
+      // console.log(val) 
+    }
   },
 }
 </script>
 
 <style lang="less">
 @import '~@/assets/css/variables.less';
+.question-item{
+  margin-top: 10px;
+}
 .question-title {
   margin-bottom: 10px;
   span {
@@ -263,13 +272,13 @@ export default {
 .content-row  {
   display: flex;
 
-  section{
+  div.subtopic_a{
     display: flex;
     height: 35px;
     margin-left: 5px;
     width: 100%;
     font-size:12px;
-    p{
+    .s_p{
       height: 100%;
       flex:0;
       text-align: center;
@@ -277,10 +286,12 @@ export default {
       line-height: 35px;
       margin: 0 0;
     }
-    a{
+    .a_p{
         flex:  2;
         border-bottom: 1px solid @font-888;
         margin-left: 5px;
+        display: inline-block;
+        line-height: 25px;
         height: 25px;
       }
   }

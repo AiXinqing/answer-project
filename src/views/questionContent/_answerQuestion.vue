@@ -1,11 +1,6 @@
 <template>
   <!-- 解答题 -->
   <div class="question-info">
-    <!-- <template v-if="!data.orderFirst && data.first">
-      <div class="question-title" :style="{height: data.heightTitle - 10 + 'px'}" v-if="!isEditor" @click="hanldeEditor">
-        <div class="title-span" v-html="cotent"></div>
-      </div>
-    </template> -->
     <div
       class="question-title"
       ref="tinyeditor"
@@ -14,6 +9,7 @@
       <tiny-vue class="title-span"
         v-model="content"
         @input="changeContent"
+        :max-height="maxHeight"
         ref="tinyMCE"
       />
     </div>
@@ -34,12 +30,17 @@
             !data.orderFirst || pageIndex == 0 ? '1px solid #888' : 'none',
         }"
     >
-      <div class="answer_question_box">
-        <p v-for="(item, i) in rowsData" :key="i" class="question_line">
-          <span class="title" v-if="i == 0 && data.first">{{ data.topic }} ({{ data.score }}分)</span>
-          <span class="line-style" v-if="contentData.HorizontalLine"></span>
-        </p>
-      </div>
+      <trigger-tinymce
+          :max-height="questionData.castHeight"
+          @tinymce-change="tinymceChangeFunc"
+        >
+        <div class="answer_question_box">
+          <p v-for="(item, i) in rowsData" :key="i" class="question_line">
+            <span class="title" v-if="i == 0 && data.first">{{ data.topic }} ({{ data.score }}分)</span>
+            <span class="line-style" v-if="contentData.HorizontalLine"></span>
+          </p>
+        </div>
+      </trigger-tinymce>
     </drag-change-height>
   </div>
 </template>
@@ -49,10 +50,12 @@ import { mapState, mapMutations } from 'vuex'
 import { QUESTION_NUMBERS } from '@/models/base'
 
 import tinyVue from '../../components/tinymce'
+import triggerTinymce from '../../components/tinymce/triggerEditor'
 import dragChangeHeight from '../questionContent/drag'
 export default {
   components: {
     tinyVue,
+    triggerTinymce,
     dragChangeHeight,
   },
   props: {
@@ -76,6 +79,7 @@ export default {
       data: {},
       cotent: '',
       options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
+      maxHeight:28,
     }
   },
   computed: {
@@ -218,10 +222,11 @@ export default {
 
     changeContent(val){
       const index = this.pageData.findIndex(question => question.id == this.questionData.id && question.first)
+      let height = val.length
+      this.maxHeight = val.length // 最大高度
 
       if(index > -1){
         let curObj = this.pageData[index]
-        let height = this.$refs.tinyeditor.offsetHeight
 
         let data = {
           question:{
@@ -235,6 +240,26 @@ export default {
         this.pageData_edit_title(data)
       }
 
+    },
+    //改变内容
+    tinymceChangeFunc(val){
+      const index = this.pageData.findIndex(question => question.id == this.questionData.id && question.first)
+      let height = val.length
+      this.maxHeight = val.length // 最大高度
+      if(index > -1){
+        let curObj = this.pageData[index]
+        console.log(curObj)
+
+        let data = {
+          question:{
+            ...curObj,
+            editorContent:val,
+            height:(curObj.height - this.questionData.castHeight - curObj.heightTitle) + height
+          },
+          index:index,
+        }
+        this.pageData_edit_title(data)
+      }
     }
   },
 }
