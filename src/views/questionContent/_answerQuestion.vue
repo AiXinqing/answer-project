@@ -222,8 +222,9 @@ export default {
 
     changeContent(val){
       const index = this.pageData.findIndex(question => question.id == this.questionData.id && question.first)
-      let height = val.length
-      this.maxHeight = val.length // 最大高度
+      const length = (val.split('<p>')).length - 1
+      let height = length * 21
+      this.maxHeight = height // 最大高度
 
       if(index > -1){
         let curObj = this.pageData[index]
@@ -244,8 +245,10 @@ export default {
     //改变内容
     tinymceChangeFunc(val){
       const index = this.pageData.findIndex(question => question.id == this.questionData.id && question.first)
-      let height = val.length
-      this.maxHeight = val.length // 最大高度
+      const length = (val.split('<p>')).length - 1
+      let height = length * 21
+      this.maxHeight = height // 最大高度
+
       if(index > -1){
         let curObj = this.pageData[index]
         console.log(curObj)

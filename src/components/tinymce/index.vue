@@ -1,6 +1,7 @@
 <template>
   <section class="tinymce-editor" inline
-  :style="{maxHeight:maxHeight + 'px',overflowY:'scroll'}"></section>
+  :style="{maxHeight:maxHeight + 'px',}"></section>
+  <!-- overflowY:'scroll' -->
 </template>
 
 <script>

@@ -196,8 +196,9 @@ export default {
 
     changeContent(val){
       const index = this.pageData.findIndex(question => question.id == this.questionData.id)
-      let height = val.length
-      this.maxHeight = val.length // 最大高度
+      const length = (val.split('<p>')).length - 1
+      let height = length * 21
+      this.maxHeight = height // 最大高度
 
       if(index > -1){
         let curObj = this.pageData[index]
@@ -215,8 +216,8 @@ export default {
         this.pageData_edit_title(data)
       }
     },
-    tinymceChangeFunc(val){
-      // console.log(val) 
+    tinymceChangeFunc(){
+      // console.log(val)
     }
   },
 }
@@ -226,6 +227,9 @@ export default {
 @import '~@/assets/css/variables.less';
 .question-item{
   margin-top: 10px;
+}
+#question-title{
+  overflow: auto;
 }
 .question-title {
   margin-bottom: 10px;
