@@ -246,6 +246,9 @@ export default {
 
 <style lang="less">
 @import '~@/assets/css/variables.less';
+.content-info{
+  overflow: auto;
+}
 .question-item{
   margin-top: 10px;
 }
