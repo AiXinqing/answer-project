@@ -33,29 +33,32 @@
           :max-height="tinymceHeight"
           @tinymce-change="tinymceChangeFunc"
         >
-          <p class="content-row" v-for="(subtopic, i) in subtopicGroup" :key="i">
+          <template v-if="!questionData.editorContent">
+            <p class="content-row" v-for="(subtopic, i) in subtopicGroup" :key="i">
 
-            <a
-              v-for="(topic,index) in subtopic"
-              :key="topic.lid ? `${topic.lid}_${index}` : `${topic.sid}_${index}`"
-              class="subtopic_a"
-              :style="{ width: pageWidth / data.rows + 'px' }"
-            >
-              <template v-if="topic.lid">
-                <span class="s_p">
-                  <template v-if="topic.smallTopic == 1 && topic.spaceNum == 1">{{topic.topic}}</template>
-                  <template v-if=" topic.spaceNum <= 1">({{topic.smallTopic}})</template>
-                </span>
-            </template>
+              <a
+                v-for="(topic,index) in subtopic"
+                :key="topic.lid ? `${topic.lid}_${index}` : `${topic.sid}_${index}`"
+                class="subtopic_a"
+                :style="{ width: pageWidth / data.rows + 'px' }"
+              >
+                <template v-if="topic.lid">
+                  <span class="s_p">
+                    <template v-if="topic.smallTopic == 1 && topic.spaceNum == 1">{{topic.topic}}</template>
+                    <template v-if=" topic.spaceNum <= 1">({{topic.smallTopic}})</template>
+                  </span>
+              </template>
 
-            <template v-else>
-                <span class="s_p" v-if="!topic.spaceNum || topic.spaceNum == 1 ">{{topic.topic}}</span>
-            </template>
+              <template v-else>
+                  <span class="s_p" v-if="!topic.spaceNum || topic.spaceNum == 1 ">{{topic.topic}}</span>
+              </template>
 
-              <span class="a_p"><span class="dis">.</span></span>
+                <span class="a_p"><span class="dis">.</span></span>
 
-            </a>
-          </p>
+              </a>
+            </p>
+          </template>
+          <template v-else v-html="questionData.editorContent"></template>
 
         </trigger-tinymce>
       </div>
