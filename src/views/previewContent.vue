@@ -27,6 +27,7 @@
               :content-data="question.content"
               :question-data="question"
               :preview-is="true"
+              :preview-content="true"
             />
           </div>
         </div>
@@ -360,7 +361,6 @@ html {
   border-radius: 3px;
   margin-left: 38px;
   margin-top: 50px;
-  // padding-top: 20px;
 }
 .card_footer {
   width: 100%;

@@ -32,8 +32,9 @@
         <trigger-tinymce
           :max-height="tinymceHeight"
           @tinymce-change="tinymceChangeFunc"
-        >
-          <template v-if="!questionData.editorContent">
+          v-if="!previewContent"
+        >{{questionData}}
+          <template v-if="questionData.editorContent==''">
             <p class="content-row" v-for="(subtopic, i) in subtopicGroup" :key="i">
 
               <a
@@ -59,8 +60,8 @@
             </p>
           </template>
           <template v-else v-html="questionData.editorContent"></template>
-
         </trigger-tinymce>
+        <section v-else v-html="questionData.editorContent"></section>
       </div>
     </drag-change-height>
   </div>
@@ -87,6 +88,10 @@ export default {
     questionData: {
       type: Object,
       default: () => {},
+    },
+    previewContent:{
+      type:Boolean,
+      default:false
     },
   },
   data() {
