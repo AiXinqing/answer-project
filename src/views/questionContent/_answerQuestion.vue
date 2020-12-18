@@ -31,14 +31,14 @@
         }"
     >
       <trigger-tinymce
-          :max-height="questionData.castHeight"
+          :max-height="tinymceHeight"
           @tinymce-change="tinymceChangeFunc"
         >
         <div class="answer_question_box">
-          <p v-for="(item, i) in rowsData" :key="i" class="question_line">
-            <span class="title" v-if="i == 0 && data.first">{{ data.topic }} ({{ data.score }}分)</span>
-            <span class="line-style" v-if="contentData.HorizontalLine"></span>
-          </p>
+            <p v-for="(item, i) in rowsData" :key="i" class="question_line">
+              <span class="title" v-if="i == 0 && data.first">{{ data.topic }} ({{ data.score }}分)</span>
+              <span class="line-style" v-if="contentData.HorizontalLine"></span>
+            </p>
         </div>
       </trigger-tinymce>
     </drag-change-height>
@@ -80,6 +80,7 @@ export default {
       cotent: '',
       options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
       maxHeight:28,
+      tinymceHeight:28
     }
   },
   computed: {
@@ -108,7 +109,7 @@ export default {
         this.data = {
           ...this.questionData,
         }
-
+        this.tinymceHeight = this.questionData.castHeight - this.questionData.heightTitle
         this.content = ''
         let {number,topicName} = this.contentData
 
@@ -244,20 +245,23 @@ export default {
     },
     //改变内容
     tinymceChangeFunc(val){
-      const index = this.pageData.findIndex(question => question.id == this.questionData.id && question.first)
+      const {id,height,castHeight} = this.questionData
+      console.log(this.questionData)
+      const index = this.pageData.findIndex(question => question.id == id && question.first)
       const length = (val.split('<p>')).length - 1
-      let height = length * 21
+      let heights = length * 21
+          heights = heights > height ? heights : height
+          console.log(heights)
       this.maxHeight = height // 最大高度
 
       if(index > -1){
         let curObj = this.pageData[index]
-        console.log(curObj)
 
         let data = {
           question:{
             ...curObj,
             editorContent:val,
-            height:(curObj.height - this.questionData.castHeight - curObj.heightTitle) + height
+            height:heights > height ? (curObj.height - castHeight - curObj.heightTitle) + heights:height
           },
           index:index,
         }

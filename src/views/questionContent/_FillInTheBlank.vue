@@ -150,7 +150,7 @@ export default {
           this.content = this.questionData.titleContent
         }
         this.tinymceHeight = this.questionData.castHeight - this.questionData.heightTitle
-        console.log(this.questionData)
+
       }
     }
 
