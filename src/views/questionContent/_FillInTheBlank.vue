@@ -33,7 +33,7 @@
           :max-height="tinymceHeight"
           @tinymce-change="tinymceChangeFunc"
           v-if="!previewContent"
-        >{{questionData}}
+        >
           <template v-if="questionData.editorContent==''">
             <p class="content-row" v-for="(subtopic, i) in subtopicGroup" :key="i">
 
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations,mapGetters } from 'vuex'
+import { mapState, mapMutations, mapGetters } from 'vuex'
 import { QUESTION_NUMBERS } from '@/models/base'
 
 import tinyVue from '../../components/tinymce'
@@ -83,28 +83,28 @@ export default {
   props: {
     contentData: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
     questionData: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
-    previewContent:{
-      type:Boolean,
-      default:false
+    previewContent: {
+      type: Boolean,
+      default: false
     },
   },
-  data() {
+  data () {
     return {
       data: {},
       isEditor: false,
       cotent: '',
-      options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
-      quilleditor:false,
-      pageLayout:this.contentData.pageLayout,
-      richText:'',
-      maxHeight:28,
-      tinymceHeight:28
+      options: QUESTION_NUMBERS.map((label, value) => ({ label, value })),
+      quilleditor: false,
+      pageLayout: this.contentData.pageLayout,
+      richText: '',
+      maxHeight: 28,
+      tinymceHeight: 28
     }
   },
   computed: {
@@ -112,25 +112,25 @@ export default {
     ...mapState('page', ['pageData']),
     ...mapGetters('page', ['page_width']),
 
-    minHeight(){
-      const {rowHeight, showData,MarginHeight,height,castHeight} = this.questionData
-      return  castHeight >= height ? rowHeight * showData.length + MarginHeight : 0
+    minHeight () {
+      const { rowHeight, showData, MarginHeight, height, castHeight } = this.questionData
+      return castHeight >= height ? rowHeight * showData.length + MarginHeight : 0
     },
 
-    pageWidth() {
+    pageWidth () {
       return this.page_width - 50
     },
-    subtopicGroup() {
+    subtopicGroup () {
       return this.questionData.showData
     },
-    topicBox() {
+    topicBox () {
       return this.data.group.map(question => question.childGroup).flat()
     },
   },
   watch: {
     contentData: {
       immediate: true,
-      handler() {
+      handler () {
         this.data = {
           ...this.contentData,
         }
@@ -138,15 +138,15 @@ export default {
       },
     },
 
-    questionData:{
+    questionData: {
       immediate: true,
       handler () {
         this.content = ''
-        let {number,topicName,scoreTotal} = this.data
+        let { number, topicName, scoreTotal } = this.data
 
-        if(!this.questionData.titleContent){
+        if (!this.questionData.titleContent) {
           this.content = `<p><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${scoreTotal})</span>分</p>`
-        }else{
+        } else {
           this.content = this.questionData.titleContent
         }
         this.tinymceHeight = this.questionData.castHeight - this.questionData.heightTitle
@@ -167,11 +167,11 @@ export default {
       'subTopic_number_calculate',
       'subTopic_determine_clean',
     ]),
-    ...mapMutations('page',['pageData_edit_title']),
+    ...mapMutations('page', ['pageData_edit_title']),
 
-    delfillTheBlank() {
+    delfillTheBlank () {
       // 删除大题-小题数
-      let {id} = this.questionData
+      let { id } = this.questionData
       const index = this.pageData.findIndex((itme) => itme.id === id)
       if (index > -1) {
         this.subTopic_already_del(this.topicBox)
@@ -183,10 +183,10 @@ export default {
         this.subTopic_number_calculate()
       }
     },
-    subTopic_numberFillEdit(id) {
+    subTopic_numberFillEdit (id) {
       this.$emit('current-question-fill-edit', id)
     },
-    hanldeEditor() {
+    hanldeEditor () {
       this.isEditor = true
     },
 
@@ -194,55 +194,55 @@ export default {
     handleResize (height) {
 
       const index = this.pageData.findIndex(obj => this.questionData.id === obj.id)
-      if(index > -1){
+      if (index > -1) {
         let questionObj = this.pageData[index]
 
         this.pageData_edit({
-            ...questionObj,
-            height:height,
-          })
+          ...questionObj,
+          height: height,
+        })
 
       }
     },
 
-    changeContent(val){
+    changeContent (val) {
       const index = this.pageData.findIndex(question => question.id == this.questionData.id)
       const length = (val.split('<p>')).length - 1
       let height = length * 21
       this.maxHeight = height // 最大高度
 
-      if(index > -1){
+      if (index > -1) {
         let curObj = this.pageData[index]
 
         let data = {
-          question:{
+          question: {
             ...curObj,
-            titleContent:val,
-            heightTitle:height,
-            height:(curObj.height - curObj.heightTitle) + height
+            titleContent: val,
+            heightTitle: height,
+            height: (curObj.height - curObj.heightTitle) + height
           },
-          index:index,
+          index: index,
         }
 
         this.pageData_edit_title(data)
       }
     },
-    tinymceChangeFunc(val){
+    tinymceChangeFunc (val) {
       const index = this.pageData.findIndex(question => question.id == this.questionData.id)
       const length = (val.split('<p class="content-row">')).length - 1
       let height = length * 35 + this.questionData.MarginHeight
       this.tinymceHeight = height // 最大高度
 
-      if(index > -1){
+      if (index > -1) {
         let curObj = this.pageData[index]
 
         let data = {
-          question:{
+          question: {
             ...curObj,
-            editorContent:val,
-            height:height + this.questionData.heightTitle - this.questionData.MarginHeight
+            editorContent: val,
+            height: height + this.questionData.heightTitle - this.questionData.MarginHeight
           },
-          index:index,
+          index: index,
         }
 
         this.pageData_edit_title(data)
