@@ -282,7 +282,7 @@ export default {
           }
           this.pageData_insert(data)
         } else {
-          this.pageData_add(obj)
+          this.pageData_add({...obj,editorContent:''})
 
         }
 

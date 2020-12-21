@@ -28,13 +28,13 @@
       :style="{
           'border-top':
             !data.orderFirst || pageIndex == 0 ? '1px solid #888' : 'none',
-          'margin-top':!data.orderFirst || pageIndex == 0 ? '10px' : '0px',
+          'margin-top':!data.orderFirst && pageIndex == 0 ? '10px' : '0px',
         }"
-      v-if="!previewContent"
     >
       <trigger-tinymce
           :max-height="tinymceHeight"
           @tinymce-change="tinymceChangeFunc"
+          v-if="!previewContent"
         >
         <div class="answer_question_box">
             <p v-for="(item, i) in rowsData" :key="i" class="question_line">
@@ -43,18 +43,7 @@
             </p>
         </div>
       </trigger-tinymce>
-    </drag-change-height>
-    <drag-change-height
-      :question="questionData"
-      @height-resize="handleResize($event)"
-      :style="{
-          'border-top':
-            !data.orderFirst || pageIndex == 0 ? '1px solid #888' : 'none',
-          'margin-top':!data.orderFirst || pageIndex == 0 ? '-1px' : '10px',
-        }"
-      v-else
-    >
-      <div class="question-container" v-html="questionData.editorContent"></div>
+      <template v-else v-html="questionData.editorContent"></template>
     </drag-change-height>
 
   </div>

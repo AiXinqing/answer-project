@@ -20,54 +20,48 @@
       </div>
     </div>
     <drag-change-height
-      v-if="!previewContent"
       :question="questionData"
       @height-resize="handleResize($event)"
       :style="{
         'height':minHeight  + 'px',
       }"
     >
+
       <trigger-tinymce
         :max-height="tinymceHeight"
         @tinymce-change="tinymceChangeFunc"
+        v-if="questionData.editorContent===''"
       >
-        <div class="answer_question_box optional_box">
-          <template v-if="data.first || data.heightTitle == (data.height - data.castHeight)">
-            <span class="topic_number_box">
+        <template v-if="questionData.editorContent===''">
+          <div class="answer_question_box optional_box" >
+            <template v-if="data.first || data.heightTitle == (data.height - data.castHeight)">
+              <span class="topic_number_box">
 
-              <span class="black_icon"></span>
+                <span class="black_icon"></span>
 
-              <span class="digital"
-                v-for="(item,i) in topicData"
+                <span class="digital"
+                  v-for="(item,i) in topicData"
+                  :key="i"
+                >{{item.topic}}</span>
+                <span class="black_icon"></span>
+              </span>
+              <span class="number-info">
+                <span>我选的题号（1分）</span>
+              </span>
+            </template>
+            <div v-if="contentData.HorizontalLine">
+              <p
+                v-for="(item,i) in rowsData"
                 :key="i"
-              >{{item.topic}}</span>
-              <span class="black_icon"></span>
-            </span>
-            <span class="number-info">
-              <span>我选的题号（1分）</span>
-            </span>
-          </template>
-          <div v-if="contentData.HorizontalLine">
-            <p
-              v-for="(item,i) in rowsData"
-              :key="i"
-              class="optional-item-list"
-            ><a/></p>
+                class="optional-item-list"
+              ><a/></p>
+            </div>
           </div>
-        </div>
+        </template>
+        <template v-else v-html="questionData.editorContent"></template>
       </trigger-tinymce>
+      <section v-else v-html="questionData.editorContent"></section>
     </drag-change-height>
-    <drag-change-height
-      v-else
-      :question="questionData"
-      @height-resize="handleResize($event)"
-      :style="{
-        'height':minHeight  + 'px',
-      }"
-    >
-      <div class="answer_question_box optional_box"  v-html="questionData.editorContent"></div>
-    </drag-change-height>
-
 
   </div>
 </template>
