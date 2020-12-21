@@ -20,43 +20,54 @@
       </div>
     </div>
     <drag-change-height
-      v-if="data.heightTitle + data.MarginHeight != data.castHeight"
+      v-if="!previewContent"
       :question="questionData"
       @height-resize="handleResize($event)"
       :style="{
         'height':minHeight  + 'px',
       }"
     >
-    <trigger-tinymce
-      :max-height="questionData.castHeight - 26"
-      @tinymce-change="tinymceChangeFunc"
-    >
-      <div class="answer_question_box optional_box">
-        <template v-if="data.first || data.heightTitle == (data.height - data.castHeight)">
-          <span class="topic_number_box">
+      <trigger-tinymce
+        :max-height="tinymceHeight"
+        @tinymce-change="tinymceChangeFunc"
+      >
+        <div class="answer_question_box optional_box">
+          <template v-if="data.first || data.heightTitle == (data.height - data.castHeight)">
+            <span class="topic_number_box">
 
-            <span class="black_icon"></span>
+              <span class="black_icon"></span>
 
-            <span class="digital"
-              v-for="(item,i) in topicData"
+              <span class="digital"
+                v-for="(item,i) in topicData"
+                :key="i"
+              >{{item.topic}}</span>
+              <span class="black_icon"></span>
+            </span>
+            <span class="number-info">
+              <span>我选的题号（1分）</span>
+            </span>
+          </template>
+          <div v-if="contentData.HorizontalLine">
+            <p
+              v-for="(item,i) in rowsData"
               :key="i"
-            >{{item.topic}}</span>
-            <span class="black_icon"></span>
-          </span>
-          <span class="number-info">
-            <span>我选的题号（1分）</span>
-          </span>
-        </template>
-        <div v-if="contentData.HorizontalLine">
-          <p
-            v-for="(item,i) in rowsData"
-            :key="i"
-            class="optional-item-list"
-          ><a/></p>
+              class="optional-item-list"
+            ><a/></p>
+          </div>
         </div>
-      </div>
-    </trigger-tinymce>
+      </trigger-tinymce>
     </drag-change-height>
+    <drag-change-height
+      v-else
+      :question="questionData"
+      @height-resize="handleResize($event)"
+      :style="{
+        'height':minHeight  + 'px',
+      }"
+    >
+      <div class="answer_question_box optional_box"  v-html="questionData.editorContent"></div>
+    </drag-change-height>
+
 
   </div>
 </template>
@@ -84,7 +95,10 @@ export default {
       type: Object,
       default: () => { }
     },
-
+    previewContent: {
+      type: Boolean,
+      default: false
+    },
   },
   data () {
     return {
@@ -93,7 +107,8 @@ export default {
       cotent: '',
       promptTitle: '请考生用2B铅笔将所选题目对应题号涂黑，答题区域只允许选择一题，如果多做，则按所选做的前一题计分。',
       options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
-      maxHeight:28
+      maxHeight:28,
+      tinymceHeight:28
     }
   },
   computed: {
@@ -122,6 +137,7 @@ export default {
         this.data = {
           ...this.questionData
         }
+        this.tinymceHeight = this.questionData.castHeight - this.questionData.heightTitle
         this.content = ''
         let {number,topicName} = this.contentData
 
@@ -202,9 +218,11 @@ export default {
 
     },
     tinymceChangeFunc(val){
-      const index = this.pageData.findIndex(question => question.id == this.questionData.id)
+      const {id,height,castHeight} = this.questionData
+      const index = this.pageData.findIndex(question => question.id == id)
       const length = (val.split('<p>')).length - 1
-      let height = length * 21
+      let heights = length * 21
+          heights = heights > height ? heights : height
       this.maxHeight = height // 最大高度
 
       if(index > -1){
@@ -214,7 +232,7 @@ export default {
           question:{
             ...curObj,
             editorContent:val,
-            height: height + curObj.heightTitle
+            height:heights > height ? (curObj.height - castHeight - curObj.heightTitle) + heights:height
           },
           index:index,
         }

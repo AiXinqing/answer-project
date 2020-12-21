@@ -265,12 +265,11 @@ export default {
     //改变内容
     tinymceChangeFunc(val){
       const {id,height,castHeight} = this.questionData
-      console.log(this.questionData)
       const index = this.pageData.findIndex(question => question.id == id && question.first)
       const length = (val.split('<p>')).length - 1
       let heights = length * 21
           heights = heights > height ? heights : height
-          console.log(heights)
+
       this.maxHeight = height // 最大高度
 
       if(index > -1){
