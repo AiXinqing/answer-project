@@ -28,6 +28,7 @@
       :style="{
           'border-top':
             !data.orderFirst || pageIndex == 0 ? '1px solid #888' : 'none',
+          'margin-top':!data.orderFirst || pageIndex == 0 ? '10px' : '0px',
         }"
       v-if="!previewContent"
     >
@@ -49,6 +50,7 @@
       :style="{
           'border-top':
             !data.orderFirst || pageIndex == 0 ? '1px solid #888' : 'none',
+          'margin-top':!data.orderFirst || pageIndex == 0 ? '-1px' : '10px',
         }"
       v-else
     >
