@@ -29,6 +29,7 @@
           'border-top':
             !data.orderFirst || pageIndex == 0 ? '1px solid #888' : 'none',
         }"
+      v-if="!previewContent"
     >
       <trigger-tinymce
           :max-height="tinymceHeight"
@@ -42,6 +43,18 @@
         </div>
       </trigger-tinymce>
     </drag-change-height>
+    <drag-change-height
+      :question="questionData"
+      @height-resize="handleResize($event)"
+      :style="{
+          'border-top':
+            !data.orderFirst || pageIndex == 0 ? '1px solid #888' : 'none',
+        }"
+      v-else
+    >
+      <div class="question-container" v-html="questionData.editorContent"></div>
+    </drag-change-height>
+
   </div>
 </template>
 
@@ -71,7 +84,11 @@ export default {
     pageIndex:{
       type: Number,
       default: 0,
-    }
+    },
+    previewContent: {
+      type: Boolean,
+      default: false
+    },
   },
   data() {
     return {
