@@ -4,7 +4,7 @@
     <div
       class="question-title"
       ref="tinyeditor"
-      v-if="!data.orderFirst && data.first"
+      v-if="!data.orderFirst"
     >
       <tiny-vue class="title-span"
         v-model="content"
@@ -26,16 +26,15 @@
       :question="questionData"
       @height-resize="handleResize($event)"
       :style="{
-          'border-top':
-            !data.orderFirst || pageIndex == 0 ? '1px solid #888' : 'none',
-          'margin-top':!data.orderFirst && pageIndex == 0 ? '10px' : '0px',
+          'border-top':!data.orderFirst ? '1px solid #888' : 'none',
+          'margin-top':!data.orderFirst  ? '10px' : '0px',
         }"
     >
       <trigger-tinymce
-          :max-height="tinymceHeight"
-          @tinymce-change="tinymceChangeFunc"
-          v-if="!previewContent"
-        >
+        :max-height="tinymceHeight"
+        @tinymce-change="tinymceChangeFunc"
+        v-if="questionData.editorContent ==''"
+      >
         <div class="answer_question_box">
             <p v-for="(item, i) in rowsData" :key="i" class="question_line">
               <span class="title" v-if="i == 0 && data.first">{{ data.topic }} ({{ data.score }}分)</span>
@@ -43,7 +42,8 @@
             </p>
         </div>
       </trigger-tinymce>
-      <template v-else v-html="questionData.editorContent"></template>
+      <section v-else v-html="questionData.editorContent"></section>
+
     </drag-change-height>
 
   </div>
