@@ -28,6 +28,7 @@
               :question-data="question"
               :preview-is="true"
               :preview-content="true"
+              :page-index="index"
             />
           </div>
         </div>
