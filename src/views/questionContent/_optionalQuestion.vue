@@ -30,10 +30,10 @@
       <trigger-tinymce
         :max-height="tinymceHeight"
         @tinymce-change="tinymceChangeFunc"
-        v-if="questionData.editorContent===''"
+        v-if="!previewContent"
       >
         <template v-if="questionData.editorContent===''">
-          <div class="answer_question_box optional_box" >
+          <div class="answer_question_box optional_box s" >
             <template v-if="data.first || data.heightTitle == (data.height - data.castHeight)">
               <span class="topic_number_box">
 
@@ -60,7 +60,38 @@
         </template>
         <template v-else v-html="questionData.editorContent"></template>
       </trigger-tinymce>
-      <section v-else v-html="questionData.editorContent"></section>
+
+      <template v-else>
+        <section v-if="questionData.editorContent == ''" :style="{height:tinymceHeight + 'px'}">
+          <div class="answer_question_box optional_box" >
+            <template v-if="data.first || data.heightTitle == (data.height - data.castHeight)">
+              <span class="topic_number_box">
+
+                <span class="black_icon"></span>
+
+                <span class="digital"
+                  v-for="(item,i) in topicData"
+                  :key="i"
+                >{{item.topic}}</span>
+                <span class="black_icon"></span>
+              </span>
+              <span class="number-info">
+                <span>我选的题号（1分）</span>
+              </span>
+            </template>
+            <div v-if="contentData.HorizontalLine">
+              <p
+                v-for="(item,i) in rowsData"
+                :key="i"
+                class="optional-item-list"
+              ><a/></p>
+            </div>
+          </div>
+        </section>
+        <section v-else v-html="questionData.editorContent" :style="{height:tinymceHeight + 'px'}"></section>
+      </template>
+
+
     </drag-change-height>
 
   </div>
