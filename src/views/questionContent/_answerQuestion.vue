@@ -85,7 +85,7 @@ export default {
     return {
       isEditor: false,
       data: {},
-      cotent: '',
+      content: '',
       options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
       maxHeight:28,
       tinymceHeight:28

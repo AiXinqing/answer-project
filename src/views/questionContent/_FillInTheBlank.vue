@@ -325,16 +325,16 @@ export default {
       margin: 0 0;
     }
     .a_p{
-        flex:  2;
-        border-bottom: 1px solid @font-888;
-        margin-left: 5px;
-        display: inline-block;
-        line-height: 25px;
-        height: 25px;
-        span.dis{
-          display: none
-        }
+      flex:  2;
+      border-bottom: 1px solid @font-888;
+      margin-left: 5px;
+      display: inline-block;
+      line-height: 25px;
+      height: 25px;
+      span.dis{
+        display: none
       }
+    }
   }
 
 }

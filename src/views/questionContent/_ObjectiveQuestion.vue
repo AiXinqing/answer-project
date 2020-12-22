@@ -65,7 +65,7 @@ export default {
     return {
       data: {},
       isEditor: false,
-      cotent: '',
+      content: '',
       quilleditor:false,
       pageLayout:this.contentData.pageLayout,
       maxHeight:28
@@ -109,7 +109,7 @@ export default {
           }else{
             this.content = this.questionData.titleContent
           }
-
+          console.log(this.content)
       }
     }
   },
@@ -149,12 +149,6 @@ export default {
     hanldeEditor () {
       this.isEditor = true
       this.quilleditor = true
-    },
-
-    hanldeCloseEsitor (content) {
-      this.isEditor = false
-      this.cotent = content
-
     },
 
     hanldeSubtraction (id, num) {
