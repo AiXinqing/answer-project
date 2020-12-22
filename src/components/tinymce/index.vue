@@ -1,5 +1,6 @@
 <template>
-  <section class="tinymce-editor" inline
+  <section :id="'tinymce_title_'+ editorId"
+  inline
   :style="{maxHeight:maxHeight + 'px',}"></section>
   <!-- overflowY:'scroll' -->
 </template>
@@ -35,8 +36,8 @@
       return {
         editor: null,
         toolbar:'attachment undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image ',
-
         uploadMode : 0,
+        editorId:new Date().getTime()
       }
     },
 
@@ -47,11 +48,11 @@
 
     watch: {
         // 外部修改 v-model 绑定的 html 的值时更新编辑器的内容
-        value(newValue, oldValue) {
-            if (newValue != this.editor.getContent()) {
-                this.editor.setContent(newValue || oldValue);
-            }
-        }
+        // value(newValue, oldValue) {
+        //     if (newValue != this.editor.getContent()) {
+        //         this.editor.setContent(newValue || oldValue);
+        //     }
+        // }
     },
     mounted() {
       this.initEditor()
@@ -61,17 +62,12 @@
       initEditor(){
         const self = this
         tinymce.init({
-          selector:'.tinymce-editor',
+          selector:`#tinymce_title_${this.editorId}`,
           inline: this.inline,
           toolbar: this.toolbar,
           plugins: ' image code charmap',
           autoresize_max_height: 20,
           language: 'zh_CN',
-          // height:200,
-          // branding: false,
-          // elementpath: false,
-          // statusbar:false,
-          // relative_urls: false, // 不把绝对路径转换为相对路径
           menubar: false,
           paste_data_images: true,
           setup: function(editor) {

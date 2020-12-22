@@ -44,12 +44,6 @@
     },
 
     watch: {
-        // 外部修改 v-model 绑定的 html 的值时更新编辑器的内容
-        // value(newValue, oldValue) {
-        //     if (newValue != this.editor.getContent()) {
-        //         this.editor.setContent(newValue || oldValue);
-        //     }
-        // }
     },
     mounted() {
       this.initTiny()
