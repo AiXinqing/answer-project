@@ -26,6 +26,7 @@
         'height':minHeight  + 'px',
       }"
     >
+      <!-- 富文本编辑区 -->
       <trigger-tinymce
         :max-height="tinymceHeight"
         @tinymce-change="tinymceChangeFunc"

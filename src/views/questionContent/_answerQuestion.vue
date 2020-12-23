@@ -4,7 +4,7 @@
     <div
       class="question-title"
       ref="tinyeditor"
-      v-if="!data.orderFirst"
+      v-if="!data.orderFirst && data.first"
     >
       <tiny-vue class="title-span"
         v-model="content"
@@ -30,36 +30,13 @@
           'margin-top':!data.orderFirst  ? '10px' : '0px',
         }"
     >
+      <!-- 富文本编辑区 -->
       <trigger-tinymce
         :max-height="tinymceHeight"
         @tinymce-change="tinymceChangeFunc"
-        v-if="!previewContent"
+        v-model="editorDetail"
       >
-        <div class="answer_question_box" v-if="questionData.editorContent == ''">
-            <p v-for="(item, i) in rowsData" :key="i" class="question_line" v-show="rowsData.length">
-              <span class="title" v-if="i == 0 && data.first">{{ data.topic }} ({{ data.score }}分)</span>
-              <span class="line-style" v-if="contentData.HorizontalLine"></span>
-            </p>
-        </div>
-        <template v-else v-html="questionData.editorContent"></template>
       </trigger-tinymce>
-
-      <template v-else>
-        <section
-          :style="{height:tinymceHeight + 'px'}"
-          v-if="questionData.editorContent == ''"
-        >
-          <div class="answer_question_box" >
-              <p v-for="(item, i) in rowsData" :key="i" class="question_line">
-                <span class="title" v-if="i == 0 && data.first">{{ data.topic }} ({{ data.score }}分)</span>
-                <span class="line-style" v-if="contentData.HorizontalLine"></span>
-              </p>
-          </div>
-        </section>
-        <section :style="{height:tinymceHeight + 'px'}" v-else v-html="questionData.editorContent"></section>
-      </template>
-
-
     </drag-change-height>
 
   </div>
@@ -104,7 +81,8 @@ export default {
       content: '',
       options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
       maxHeight:28,
-      tinymceHeight:28
+      tinymceHeight:28,
+      str:' '
     }
   },
   computed: {
@@ -125,6 +103,19 @@ export default {
       }
       return Arr
     },
+
+    editorDetail(){
+      const {first,content,editorContent,score,topic,orderFirst} = this.data
+      let pList = ''
+      this.rowsData.forEach((item,i) =>{
+        let span1 =  i == 0 && first && !orderFirst ? `<a class="title">${this.str} ${topic} (${ score }分) </a>` : ''
+        let span2 = content.HorizontalLine ? `<a class="line-style"> ${this.str} </a>` :''
+
+        pList += `<p class="question_line">${span1}${span2}</p>`
+      })
+      let questionInfo = `<div class="answer_question_box" >${pList}</div>`
+      return editorContent == '' ? `${questionInfo}` : editorContent
+    }
   },
   watch: {
     questionData: {
@@ -271,7 +262,7 @@ export default {
     tinymceChangeFunc(val){
       const {id,height,castHeight,heightTitle,rowHeight} = this.questionData
       const index = this.pageData.findIndex(question => question.id == id && question.first)
-      const length = (val.split('<p class="question_line">')).length - 1
+      const length = (val.split('</p>')).length - 1
 
       let heights = length * rowHeight
       this.tinymceHeight = heights // 最大高度
@@ -326,6 +317,7 @@ export default {
       margin: 0;
       height: 35px;
       line-height: 35px;
+      font-size: 14px;
 
       .title{
         font-size: 12px;
@@ -333,11 +325,11 @@ export default {
         margin-right: 5px;
       }
 
-      span.line-style {
+      .line-style {
         border-bottom: 1px solid @font-888;
         width: 100%;
         flex-shrink: 1;
-        height: 25px;
+        height: 23px;
       }
     }
   }
