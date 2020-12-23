@@ -26,72 +26,35 @@
         'height':minHeight  + 'px',
       }"
     >
-
       <trigger-tinymce
         :max-height="tinymceHeight"
         @tinymce-change="tinymceChangeFunc"
-        v-if="!previewContent"
+        v-model="editorDetail"
       >
-        <template v-if="questionData.editorContent===''">
-          <div class="answer_question_box optional_box s" >
-            <template v-if="data.first || data.heightTitle == (data.height - data.castHeight)">
-              <span class="topic_number_box">
+        <!-- <p class="answer_question_box optional_box " >
+          <template v-if="data.first || data.heightTitle == (data.height - data.castHeight)">
+            <span class="topic_number_box">
 
-                <span class="black_icon"></span>
+              <span class="black_icon">.</span>
 
-                <span class="digital"
-                  v-for="(item,i) in topicData"
-                  :key="i"
-                >{{item.topic}}</span>
-                <span class="black_icon"></span>
-              </span>
-              <span class="number-info">
-                <span>我选的题号（1分）</span>
-              </span>
-            </template>
-            <div v-if="contentData.HorizontalLine">
-              <p
-                v-for="(item,i) in rowsData"
+              <span class="digital"
+                v-for="(item,i) in topicData"
                 :key="i"
-                class="optional-item-list"
-              ><a/></p>
-            </div>
-          </div>
-        </template>
-        <template v-else v-html="questionData.editorContent"></template>
+              >{{item.topic}}</span>
+
+              <span class="black_icon">.</span>
+            </span>
+            <span class="number-info">
+              <span>我选的题号（1分）</span>
+            </span>
+          </template>
+        </p>
+        <p
+          v-for="(item,i) in rowsData"
+          :key="i"
+          :class="['optional-item-list',{'outline':questionData.content.HorizontalLine}]"
+        ><a> {{str}} </a></p> -->
       </trigger-tinymce>
-
-      <template v-else>
-        <section v-if="questionData.editorContent == ''" :style="{height:tinymceHeight + 'px'}">
-          <div class="answer_question_box optional_box" >
-            <template v-if="data.first || data.heightTitle == (data.height - data.castHeight)">
-              <span class="topic_number_box">
-
-                <span class="black_icon"></span>
-
-                <span class="digital"
-                  v-for="(item,i) in topicData"
-                  :key="i"
-                >{{item.topic}}</span>
-                <span class="black_icon"></span>
-              </span>
-              <span class="number-info">
-                <span>我选的题号（1分）</span>
-              </span>
-            </template>
-            <div v-if="contentData.HorizontalLine">
-              <p
-                v-for="(item,i) in rowsData"
-                :key="i"
-                class="optional-item-list"
-              ><a/></p>
-            </div>
-          </div>
-        </section>
-        <section v-else v-html="questionData.editorContent" :style="{height:tinymceHeight + 'px'}"></section>
-      </template>
-
-
     </drag-change-height>
 
   </div>
@@ -133,7 +96,8 @@ export default {
       promptTitle: '请考生用2B铅笔将所选题目对应题号涂黑，答题区域只允许选择一题，如果多做，则按所选做的前一题计分。',
       options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
       maxHeight:28,
-      tinymceHeight:28
+      tinymceHeight:28,
+      str:' '
     }
   },
   computed: {
@@ -149,10 +113,37 @@ export default {
     },
     rowsData () {
       let Arr = []
-      for (let i = 1; i <= this.data.rows; i++) {
+      for (let i = 1; i <= this.contentData.rows; i++) {
         Arr.push(i)
       }
       return Arr
+    },
+
+    editorDetail() {
+      // 内容详情编译
+      const {first,heightTitle,height,castHeight,content,editorContent} = this.data
+
+      let boxP = ''
+      if(first || heightTitle == (height - castHeight)){
+        let spans = ''
+        this.topicData.forEach(item =>{
+          spans += `<span class="digital">${item.topic}</span>`
+        })
+        boxP = `<p class="answer_question_box optional_box">
+                  <span class="topic_number_box">
+                    <span class="black_icon">.</span>${spans}<span class="black_icon">.</span>
+                  </span>
+                  <span class="number-info">
+                    <span>我选的题号（1分）</span>
+                  </span>
+                </p>`
+      }
+      let pList = ''
+      this.rowsData.forEach(() =>{
+        let classS = content.HorizontalLine ? 'outline':''
+        pList += `<p class="optional-item-list ${classS}"><a> ${this.str} </a></p>`
+      })
+      return editorContent == '' ? `${boxP}${pList}` : editorContent
     }
   },
   watch: {
@@ -162,6 +153,7 @@ export default {
         this.data = {
           ...this.questionData
         }
+
         this.tinymceHeight = this.questionData.castHeight - this.questionData.heightTitle
         this.content = ''
         let {number,topicName} = this.contentData
@@ -173,6 +165,7 @@ export default {
         }
       }
     },
+
   },
 
   methods: {
@@ -300,14 +293,21 @@ export default {
 }
 .optional-item-list {
     margin: 0 0;
-    width: 100%;
     height: 35px;
     line-height: 35px;
+    width: calc(100% - 30px);
+    margin-left: 15px;
+
+  &.outline{
+    a{
+      border-bottom: 1px solid #888;
+    }
+  }
 
   a{
     width: 100%;
-    border-bottom: 1px solid #888;
     display: inline-block;
+    height: 23px;
   }
 }
 .number-info {
@@ -319,17 +319,21 @@ export default {
 .topic_number_box {
   height: 20px;
   position: absolute;
+  line-height: 20px;
   right: 15px;
-  top: -13px;
+  top: 0;
 
   span {
     display: inline-block;
     margin-left: 5px;
   }
   .black_icon {
-    width: 16px;
-    height: 10px;
+    width: 18px;
+    height: 8px;
     background-color: #000;
+    display: inline-table;
+    overflow: hidden;
+    line-height: 8px;
   }
   .digital {
     min-width: 26px;

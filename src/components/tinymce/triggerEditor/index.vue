@@ -3,7 +3,7 @@
   :style="{
     maxHeight:maxHeight + 'px',
     height:maxHeight + 'px'}">
-    <slot></slot>
+    <!-- <slot></slot> -->
   </section>
 </template>
 
@@ -22,6 +22,10 @@
   export default {
     props: {
       maxHeight:{ type: Number,  default: 30 },
+      html:{
+        type: String,
+        default: ''
+      },
     },
 
     model: {
@@ -44,6 +48,14 @@
     },
 
     watch: {
+      html:{
+        immediate: true,
+        handler () {
+          if(this.editor){
+            this.editor.setContent(this.html)
+          }
+        }
+      }
     },
     mounted() {
       this.initTiny()
@@ -73,7 +85,6 @@
               // 编辑器内容发生变化后更新 html 的内容
               editor.on('blur', () => {
                   self.$emit('tinymce-change', editor.getContent())
-                  editor.setContent(editor.getContent())
               })
           },
           images_upload_handler: function (blobInfo, success, failure){
@@ -96,8 +107,7 @@
 
         }).then(editors => {
             this.editor = editors[0];
-            // this.editor.setContent(this.html);
-
+            this.editor.setContent(this.html);
         })
       },
 
