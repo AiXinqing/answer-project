@@ -82,7 +82,7 @@ export default {
       options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
       maxHeight:28,
       tinymceHeight:28,
-      str:' '
+      str:'&nbsp;'
     }
   },
   computed: {

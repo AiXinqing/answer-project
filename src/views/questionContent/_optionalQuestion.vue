@@ -109,7 +109,7 @@ export default {
         })
         boxP = `<p data-i="p" class="answer_question_box optional_box">
                   <span class="topic_number_box">
-                    <span class="black_icon">.</span>${spans}<span class="black_icon">.</span>
+                    <span class="black_icon">&nbsp;</span>${spans}<span class="black_icon">&nbsp;</span>
                   </span>
                   <span class="number-info">
                     <span>我选的题号（1分）</span>
