@@ -31,29 +31,6 @@
         @tinymce-change="tinymceChangeFunc"
         v-model="editorDetail"
       >
-        <!-- <p class="answer_question_box optional_box " >
-          <template v-if="data.first || data.heightTitle == (data.height - data.castHeight)">
-            <span class="topic_number_box">
-
-              <span class="black_icon">.</span>
-
-              <span class="digital"
-                v-for="(item,i) in topicData"
-                :key="i"
-              >{{item.topic}}</span>
-
-              <span class="black_icon">.</span>
-            </span>
-            <span class="number-info">
-              <span>我选的题号（1分）</span>
-            </span>
-          </template>
-        </p>
-        <p
-          v-for="(item,i) in rowsData"
-          :key="i"
-          :class="['optional-item-list',{'outline':questionData.content.HorizontalLine}]"
-        ><a> {{str}} </a></p> -->
       </trigger-tinymce>
     </drag-change-height>
 
@@ -129,7 +106,7 @@ export default {
         this.topicData.forEach(item =>{
           spans += `<span class="digital">${item.topic}</span>`
         })
-        boxP = `<p class="answer_question_box optional_box">
+        boxP = `<p data-i="p" class="answer_question_box optional_box">
                   <span class="topic_number_box">
                     <span class="black_icon">.</span>${spans}<span class="black_icon">.</span>
                   </span>
@@ -141,7 +118,7 @@ export default {
       let pList = ''
       this.rowsData.forEach(() =>{
         let classS = content.HorizontalLine ? 'outline':''
-        pList += `<p class="optional-item-list ${classS}"><a> ${this.str} </a></p>`
+        pList += `<p data-i="p" class="optional-item-list ${classS}"><a> ${this.str} </a></p>`
       })
       return editorContent == '' ? `${boxP}${pList}` : editorContent
     }
@@ -236,12 +213,12 @@ export default {
 
     },
     tinymceChangeFunc(val){
-      const {id,height,castHeight} = this.questionData
+      const {id,height,rowHeight,MarginHeight,heightTitle} = this.questionData
       const index = this.pageData.findIndex(question => question.id == id)
-      const length = (val.split('<p>')).length - 1
-      let heights = length * 21
-          heights = heights > height ? heights : height
-      this.maxHeight = height // 最大高度
+      const length = (val.split('</p>')).length - 1
+      let heights = length * rowHeight + MarginHeight + heightTitle
+      this.tinymceHeight = heights // 最大高度
+          heights = heights > height ? heights:height
 
       if(index > -1){
         let curObj = this.pageData[index]
@@ -250,7 +227,7 @@ export default {
           question:{
             ...curObj,
             editorContent:val,
-            height:heights > height ? (curObj.height - castHeight - curObj.heightTitle) + heights:height
+            height:heights
           },
           index:index,
         }
