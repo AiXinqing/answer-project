@@ -32,36 +32,9 @@
         <trigger-tinymce
           :max-height="tinymceHeight"
           @tinymce-change="tinymceChangeFunc"
-          v-if="!previewContent"
+          v-model="editorDetail"
         >
-          <template v-if="questionData.editorContent==''">
-            <p class="content-row" v-for="(subtopic, i) in subtopicGroup" :key="i">
-
-              <a
-                v-for="(topic,index) in subtopic"
-                :key="topic.lid ? `${topic.lid}_${index}` : `${topic.sid}_${index}`"
-                class="subtopic_a"
-                :style="{ width: pageWidth / data.rows + 'px' }"
-              >
-                <template v-if="topic.lid">
-                  <span class="s_p">
-                    <template v-if="topic.smallTopic == 1 && topic.spaceNum == 1">{{topic.topic}}</template>
-                    <template v-if=" topic.spaceNum <= 1">({{topic.smallTopic}})</template>
-                  </span>
-              </template>
-
-              <template v-else>
-                  <span class="s_p" v-if="!topic.spaceNum || topic.spaceNum == 1 ">{{topic.topic}}</span>
-              </template>
-
-                <span class="a_p"><span class="dis">.</span></span>
-
-              </a>
-            </p>
-          </template>
-          <template v-else v-html="questionData.editorContent"></template>
         </trigger-tinymce>
-        <section v-else v-html="questionData.editorContent"></section>
       </div>
     </drag-change-height>
   </div>
@@ -104,7 +77,8 @@ export default {
       pageLayout: this.contentData.pageLayout,
       richText: '',
       maxHeight: 28,
-      tinymceHeight: 28
+      tinymceHeight: 28,
+      str:'&nbsp;'
     }
   },
   computed: {
@@ -120,12 +94,36 @@ export default {
     pageWidth () {
       return this.page_width - 50
     },
-    subtopicGroup () {
-      return this.questionData.showData
-    },
+
     topicBox () {
       return this.data.group.map(question => question.childGroup).flat()
     },
+
+    editorDetail(){
+      const {editorContent,showData} = this.questionData
+      let questionInfo = ''
+
+      showData.forEach(subtopic =>{
+        let aList = ''
+        subtopic.forEach((topic) =>{
+          let spanBox = ''
+          if(topic.lid){
+            let li1 = topic.smallTopic == 1 && topic.spaceNum == 1 ? topic.topic : ''
+            let li2 = topic.spaceNum <= 1 ? topic.smallTopic : ''
+            spanBox = `<span class="s_p">${li1}${li2}</span>`
+          }else{
+            let li3 = !topic.spaceNum || topic.spaceNum == 1 ? topic.topic : ''
+            spanBox = `<span class="s_p">${li3}</span>`
+          }
+          aList += `<a class="subtopic_a" style="width:${this.pageWidth /this.data.rows}px">
+                      ${spanBox}
+                      <span class="a_p"><span class="dis">${this.str}</span></span>
+                    </a>`
+        })
+        questionInfo +=  `<p class="content-row">${aList}</p>`
+      })
+      return editorContent == '' ? questionInfo : editorContent
+    }
   },
   watch: {
     contentData: {
@@ -228,9 +226,11 @@ export default {
       }
     },
     tinymceChangeFunc (val) {
-      const index = this.pageData.findIndex(question => question.id == this.questionData.id)
-      const length = (val.split('<p class="content-row">')).length - 1
-      let height = length * 35 + this.questionData.MarginHeight
+      const{rowHeight,id,MarginHeight,heightTitle} = this.questionData
+      const index = this.pageData.findIndex(question => question.id == id)
+      const length = (val.split('</p>')).length - 1
+
+      let height = length * rowHeight + MarginHeight
       this.tinymceHeight = height // 最大高度
 
       if (index > -1) {
@@ -240,7 +240,7 @@ export default {
           question: {
             ...curObj,
             editorContent: val,
-            height: height + this.questionData.heightTitle - this.questionData.MarginHeight
+            height: height + heightTitle - MarginHeight
           },
           index: index,
         }
