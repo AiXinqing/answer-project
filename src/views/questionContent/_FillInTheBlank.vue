@@ -78,7 +78,8 @@ export default {
       richText: '',
       maxHeight: 28,
       tinymceHeight: 28,
-      str:'&nbsp;'
+      str:'&nbsp;',
+      aWidth:1,
     }
   },
   computed: {
@@ -99,7 +100,17 @@ export default {
       return this.data.group.map(question => question.childGroup).flat()
     },
 
+    strBox(){
+      let num = Math.ceil(Math.ceil(this.pageWidth /this.data.rows) / 5)
+      let strBox = ''
+          for(let x = 0; x < num ;x++){
+            strBox += this.str
+          }
+      return strBox
+    },
+
     editorDetail(){
+
       const {editorContent,showData} = this.questionData
       let questionInfo = ''
 
@@ -115,9 +126,10 @@ export default {
             let li3 = !topic.spaceNum || topic.spaceNum == 1 ? topic.topic : ''
             spanBox = `<span class="s_p">${li3}</span>`
           }
-          aList += `<a class="subtopic_a" style="width:${this.pageWidth /this.data.rows}px">
+
+          aList += `<a class="subtopic_a" style="width:${this.aWidth}px">
                       ${spanBox}
-                      <span class="a_p"><span class="dis">${this.str}</span></span>
+                      <span class="a_p">${this.strBox}</span>
                     </a>`
         })
         questionInfo +=  `<p class="content-row">${aList}</p>`
@@ -149,6 +161,13 @@ export default {
         }
         this.tinymceHeight = this.questionData.castHeight - this.questionData.heightTitle
 
+      }
+    },
+
+    pageWidth:{
+      immediate: true,
+      handler () {
+        this.aWidth = this.pageWidth /this.data.rows
       }
     }
 
