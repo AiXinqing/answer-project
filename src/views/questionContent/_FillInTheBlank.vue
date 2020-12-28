@@ -259,7 +259,7 @@ export default {
           question: {
             ...curObj,
             editorContent: val,
-            height: height + heightTitle - MarginHeight
+            height: height + heightTitle - MarginHeight + 10
           },
           index: index,
         }
@@ -328,6 +328,9 @@ export default {
   display: flex;
   height: 35px;
   margin: 0;
+  &:first-child{
+    margin-top: 10px;
+  }
 
   .subtopic_a{
     display: flex;
@@ -335,6 +338,8 @@ export default {
     margin-left: 5px;
     width: 100%;
     font-size:12px;
+    overflow: hidden;
+
     .s_p{
       height: 100%;
       flex:0;

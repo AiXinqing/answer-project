@@ -16,7 +16,7 @@
         :style="{ width: titleWidthLeft + 'px' }"
       >
         <div class="precautions_title">注 意 事 项</div>
-        <div :class="['precautions_content', { active: page_width == 480 }]">
+        <div :class="['precautions_content', { active: pageWidth == 480 }]">
             <div
               v-for="(item,index) in title_percautions"
               :key="index"
@@ -98,6 +98,7 @@ import { PRECAUTIONS } from '@/models/base'
 import { mapGetters } from 'vuex'
 
 
+
 export default {
   components: {
     hjTextarea,
@@ -131,31 +132,36 @@ export default {
   computed: {
     ...mapGetters('page', ['page_width']),
 
+    pageWidth(){
+      let width =this.$route.query.pageWidth
+      return width !== undefined && parseInt(width) - 40 != this.page_width ? parseInt(width) - 40 : this.page_width
+    },
 
     cardData() {
       return this.contentData[0]
     },
 
     Rows() {
-      return this.data.titleRows == 9 && this.page_width == 480 ? 26 : 28
+      return this.data.titleRows == 9 && this.pageWidth == 480 ? 26 : 28
     },
 
     svg() {
-      return this.page_width == 480 ? true : false
+      return this.pageWidth == 480 ? true : false
     },
 
     titleWidthLeft() {
+
       if (this.titleRows * this.Rows < 224) {
-        return this.page_width - 224
+        return this.pageWidth - 224
       } else {
-        return this.page_width - this.titleRows * this.Rows
+        return this.pageWidth - this.titleRows * this.Rows
       }
     },
     titleWidthRight() {
       if (this.titleRows * this.Rows < 224) {
         return 224
       } else {
-        return this.page_width - this.titleWidthLeft
+        return this.pageWidth - this.titleWidthLeft
       }
     },
     divWidth() {
