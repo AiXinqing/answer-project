@@ -147,6 +147,7 @@ export default {
         //计算变量及对象追加
         let backup = {}
         let superiorGrid = 0
+        let segmented = 1
 
         var avalibleHeight = this.page_height - currentPage.height
 
@@ -170,7 +171,7 @@ export default {
             if(rect.showData && rect.showData.length){
               backup = {
                 showData:itemObj.showData.splice(0, curRect.availableRow),
-                first:curRect.pagination
+                first:curRect.pagination,
               }
             }
 
@@ -188,7 +189,8 @@ export default {
             currentPage.rects.push({
               ...rect,
               castHeight:curRect.height,
-              ...backup
+              ...backup,
+              segmented:segmented
             })
 
             // 作文
@@ -208,6 +210,9 @@ export default {
 
           // 剩余高度可以分占几页
           while (height > (this.page_height - this.difference)){
+
+            segmented += 1
+
             let avalibleHeight =  this.page_height - this.difference
             let curRects = this.preliminaryQuestion(rect, avalibleHeight,false)
 
@@ -232,7 +237,8 @@ export default {
               ...rect,
               castHeight: curRects.height,
               first:false,
-              ...backup
+              ...backup,
+              segmented:segmented
             }]);
 
             height -= curRects.height
@@ -277,16 +283,18 @@ export default {
           }
 
           if(rect.questionType != 'ObjectiveQuestion'){
-              if(curRect.pagination){
-                currentPage.height += rect.MarginHeight
-              }
+            if(curRect.pagination){
+              currentPage.height += rect.MarginHeight
             }
+          }
+          segmented += 1
 
           currentPage.rects.push({
             ...rect,
             castHeight: currentPage.height,
             first:!curRect.pagination,
-            ...backup
+            ...backup,
+            segmented:segmented
           })
 
         }else{
@@ -311,7 +319,8 @@ export default {
           currentPage.rects.push({
             ...rect,
             castHeight: rect.height,
-            ...backup
+            ...backup,
+            segmented:segmented
           })
         }
       })
@@ -326,7 +335,7 @@ export default {
     preliminaryQuestion(question,avalibleHeight,initial = true){
       // 变量
       const { MarginHeight,heightTitle,rowHeight } = question
-      console.log(avalibleHeight)
+
       // 边框高度 剩余内容
       let margin = initial ? MarginHeight + heightTitle : MarginHeight
           margin = question.questionType == 'optionalQuestion' ? margin + question.rowTitle : margin

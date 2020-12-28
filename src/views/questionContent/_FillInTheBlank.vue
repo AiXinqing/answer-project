@@ -111,7 +111,7 @@ export default {
 
     editorDetail(){
 
-      const {editorContent,showData} = this.questionData
+      const {editorContent,showData,segmented,selectStr} = this.questionData
       let questionInfo = ''
 
       showData.forEach(subtopic =>{
@@ -134,7 +134,9 @@ export default {
         })
         questionInfo +=  `<p class="content-row">${aList}</p>`
       })
-      return editorContent == '' ? questionInfo : editorContent
+
+      return editorContent == '' ? questionInfo :
+            segmented != selectStr ? questionInfo : editorContent
     }
   },
   watch: {
@@ -159,7 +161,8 @@ export default {
         } else {
           this.content = this.questionData.titleContent
         }
-        this.tinymceHeight = this.questionData.castHeight - this.questionData.heightTitle
+        this.tinymceHeight = this.questionData.first ? this.questionData.castHeight - this.questionData.heightTitle :
+          this.questionData.castHeight - this.questionData.MarginHeight
 
       }
     },
@@ -245,12 +248,13 @@ export default {
       }
     },
     tinymceChangeFunc (val) {
-      const{rowHeight,id,MarginHeight,heightTitle} = this.questionData
+      const{height,rowHeight,id,MarginHeight,castHeight,first,heightTitle,segmented} = this.questionData
       const index = this.pageData.findIndex(question => question.id == id)
       const length = (val.split('</p>')).length - 1
 
-      let height = length * rowHeight + MarginHeight
-      this.tinymceHeight = height // 最大高度
+
+      let heights = first ? length * rowHeight + heightTitle + MarginHeight : length * rowHeight + MarginHeight
+      this.tinymceHeight =  heights // 最大高度
 
       if (index > -1) {
         let curObj = this.pageData[index]
@@ -259,7 +263,9 @@ export default {
           question: {
             ...curObj,
             editorContent: val,
-            height: height + heightTitle - MarginHeight + 10
+            height: (height - castHeight) + heights,
+            strLength:length,
+            selectStr:segmented
           },
           index: index,
         }
@@ -329,7 +335,7 @@ export default {
   height: 35px;
   margin: 0;
   &:first-child{
-    margin-top: 10px;
+    padding-top: 10px;
   }
 
   .subtopic_a{

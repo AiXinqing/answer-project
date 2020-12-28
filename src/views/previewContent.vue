@@ -116,6 +116,7 @@ export default {
         //计算变量及对象追加
         let backup = {}
         let superiorGrid = 0
+        let segmented = 1
 
         var avalibleHeight = this.page_height - currentPage.height
 
@@ -157,7 +158,8 @@ export default {
             currentPage.rects.push({
               ...rect,
               castHeight:curRect.height,
-              ...backup
+              ...backup,
+              segmented:segmented
             })
 
             // 作文
@@ -177,6 +179,9 @@ export default {
 
           // 剩余高度可以分占几页
           while (height > (this.page_height - this.difference)){
+
+            segmented += 1
+
             let avalibleHeight =  this.page_height - this.difference
             let curRects = this.preliminaryQuestion(rect, avalibleHeight,false)
 
@@ -201,7 +206,8 @@ export default {
               ...rect,
               castHeight: curRects.height,
               first:false,
-              ...backup
+              ...backup,
+              segmented:segmented
             }]);
 
             height -= curRects.height
@@ -254,7 +260,8 @@ export default {
             ...rect,
             castHeight: currentPage.height,
             first:!curRect.pagination,
-            ...backup
+            ...backup,
+            segmented:segmented
           })
 
         }else{
@@ -279,7 +286,8 @@ export default {
           currentPage.rects.push({
             ...rect,
             castHeight: rect.height,
-            ...backup
+            ...backup,
+            segmented:segmented
           })
         }
       })
