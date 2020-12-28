@@ -162,7 +162,7 @@ export default {
           this.content = this.questionData.titleContent
         }
         this.tinymceHeight = this.questionData.first ? this.questionData.castHeight - this.questionData.heightTitle :
-          this.questionData.castHeight - this.questionData.MarginHeight
+          this.questionData.castHeight
 
       }
     },
