@@ -111,7 +111,10 @@ export default {
 
     editorDetail(){
 
-      const {editorContent,showData,segmented,selectStr} = this.questionData
+      const {editorContent,
+      showData,segmented,
+      selectStr,castHeight,
+      heightTitle,MarginHeight,rowHeight} = this.questionData
       let questionInfo = ''
 
       showData.forEach(subtopic =>{
@@ -135,8 +138,22 @@ export default {
         questionInfo +=  `<p class="content-row">${aList}</p>`
       })
 
+      let convertArray = this.convertArray(editorContent,',','</p>')
+      let strLong = Math.floor((castHeight - heightTitle - MarginHeight + 2) / rowHeight)
+      let strContent = ''
+      if(convertArray.length){
+        convertArray.length = strLong
+        for(let i = 0; i < convertArray.length;i++){
+          if(convertArray[i] != undefined){
+            strContent += convertArray[i]
+          }
+        }
+
+      }
+
+
       return editorContent == '' ? questionInfo :
-            segmented != selectStr ? questionInfo : editorContent
+            segmented != selectStr ? questionInfo : strContent
     }
   },
   watch: {
@@ -225,6 +242,14 @@ export default {
       }
     },
 
+    //转换富文本编辑的内容为数组
+
+    convertArray(oldStr, addItem, afterWhich) {  var strArr = oldStr.split('')
+        strArr.splice(oldStr.indexOf(afterWhich) + afterWhich.length, 0, addItem)
+        return strArr.join('').split(",")
+    },
+    //转换富文本编辑的内容为数组
+
     changeContent (val) {
       const index = this.pageData.findIndex(question => question.id == this.questionData.id)
       const length = (val.split('<p>')).length - 1
@@ -239,7 +264,7 @@ export default {
             ...curObj,
             titleContent: val,
             heightTitle: height,
-            height: (curObj.height - curObj.heightTitle) + height
+            height: (curObj.height - curObj.heightTitle) + height,
           },
           index: index,
         }
@@ -265,7 +290,7 @@ export default {
             editorContent: val,
             height: (height - castHeight) + heights,
             strLength:length,
-            selectStr:segmented
+            selectStr:segmented // 判断当前编辑对象所在位置
           },
           index: index,
         }
