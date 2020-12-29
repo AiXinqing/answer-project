@@ -148,6 +148,7 @@ export default {
         let backup = {}
         let superiorGrid = 0
         let segmented = 0
+        let segmentedArr = []
 
         var avalibleHeight = this.page_height - currentPage.height
 
@@ -190,7 +191,8 @@ export default {
               ...rect,
               castHeight:curRect.height,
               ...backup,
-              segmented:segmented
+              segmented:segmented,
+              segmentedArr:segmentedArr
             })
 
             // 作文
@@ -212,6 +214,7 @@ export default {
           while (height > (this.page_height - this.difference)){
 
             segmented += 1
+            segmentedArr.push(curRect.availableRow)
 
             let avalibleHeight =  this.page_height - this.difference
             let curRects = this.preliminaryQuestion(rect, avalibleHeight,false)
@@ -232,13 +235,13 @@ export default {
                 rows:rows - curRect.availableRow >= 0 ? rows - curRect.availableRow : 0
               }
             }
-
             results.push([{
               ...rect,
               castHeight: curRects.height,
               first:false,
               ...backup,
-              segmented:segmented
+              segmented:segmented,
+              segmentedArr:segmentedArr
             }]);
 
             height -= curRects.height
@@ -289,12 +292,16 @@ export default {
           }
           segmented += 1
 
+          // 分页段所占行数
+          segmentedArr.push(curRect.availableRow)
+
           currentPage.rects.push({
             ...rect,
             castHeight: currentPage.height,
             first:!curRect.pagination,
             ...backup,
-            segmented:segmented
+            segmented:segmented,
+            segmentedArr:segmentedArr
           })
 
         }else{
@@ -315,12 +322,12 @@ export default {
               rows:rect.content.rows,
             }
           }
-
           currentPage.rects.push({
             ...rect,
             castHeight: rect.height,
             ...backup,
-            segmented:segmented
+            segmented:segmented,
+            segmentedArr:segmentedArr
           })
         }
       })

@@ -113,7 +113,7 @@ export default {
 
       const {editorContent,
       showData,segmented,
-      selectStr,castHeight,
+      segmentedArr,castHeight,
       heightTitle,MarginHeight,rowHeight} = this.questionData
       let questionInfo = ''
 
@@ -138,9 +138,22 @@ export default {
         questionInfo +=  `<p class="content-row">${aList}</p>`
       })
       let strContent = ''
+      let editorStrContent = ''
       let strLong = Math.floor((castHeight - heightTitle - MarginHeight + 2) / rowHeight)
 
       if(editorContent[segmented] != undefined){
+        let prevStr = ''
+        if(editorContent[segmented - 1] != undefined){
+          let prevArr = this.convertArray(editorContent[segmented - 1],',','</p>')
+          console.log(prevArr)
+          if(prevArr.length > segmentedArr[segmented - 1]){
+            for(let i = segmentedArr[segmented - 1] ; i < prevArr.length;i++){
+              if(prevArr[i] != undefined){
+                prevStr += prevArr[i]
+              }
+            }
+          }
+        }
         let convertArray = this.convertArray(editorContent[segmented],',','</p>')
         convertArray.length = strLong
         for(let i = 0; i < convertArray.length;i++){
@@ -148,11 +161,10 @@ export default {
             strContent += convertArray[i]
           }
         }
-
+        editorStrContent = prevStr + strContent
       }
 
-
-      return strContent == '' ? questionInfo : strContent
+      return editorStrContent == '' ? questionInfo : editorStrContent
     }
   },
   watch: {

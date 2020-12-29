@@ -316,6 +316,7 @@ export default {
         editorContent:[],
         strLength:0,
         selectStr:null,
+        segmentedArr:[],
         // 此题总分
       }
 
@@ -342,7 +343,7 @@ export default {
       } else {
         this.subTopic_determine_pid_clean(this.childGroups[0].pid)
         obj.id = this.editQuestionId
-        this.pageData_edit({...obj,order:this.orders,titleContent:'',editorContent:[],strLength:0,selectStr:null})
+        this.pageData_edit({...obj,order:this.orders,titleContent:'',editorContent:[],strLength:0,selectStr:null,segmentedArr:[]})
       }
       this.subTopic_already_add(this.childGroups)
       this.subTopic_calculate_determine(this.childGroups)
