@@ -116,7 +116,7 @@ export default {
         //计算变量及对象追加
         let backup = {}
         let superiorGrid = 0
-        let segmented = 1
+        let segmented = 0
 
         var avalibleHeight = this.page_height - currentPage.height
 

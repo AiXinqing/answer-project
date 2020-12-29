@@ -137,11 +137,11 @@ export default {
         })
         questionInfo +=  `<p class="content-row">${aList}</p>`
       })
-
-      let convertArray = this.convertArray(editorContent,',','</p>')
-      let strLong = Math.floor((castHeight - heightTitle - MarginHeight + 2) / rowHeight)
       let strContent = ''
-      if(convertArray.length){
+      let strLong = Math.floor((castHeight - heightTitle - MarginHeight + 2) / rowHeight)
+
+      if(editorContent[segmented] != undefined){
+        let convertArray = this.convertArray(editorContent[segmented],',','</p>')
         convertArray.length = strLong
         for(let i = 0; i < convertArray.length;i++){
           if(convertArray[i] != undefined){
@@ -152,8 +152,7 @@ export default {
       }
 
 
-      return editorContent == '' ? questionInfo :
-            segmented != selectStr ? questionInfo : strContent
+      return strContent == '' ? questionInfo : strContent
     }
   },
   watch: {
@@ -229,7 +228,6 @@ export default {
 
 
     handleResize (height) {
-
       const index = this.pageData.findIndex(obj => this.questionData.id === obj.id)
       if (index > -1) {
         let questionObj = this.pageData[index]
@@ -244,9 +242,12 @@ export default {
 
     //转换富文本编辑的内容为数组
 
-    convertArray(oldStr, addItem, afterWhich) {  var strArr = oldStr.split('')
-        strArr.splice(oldStr.indexOf(afterWhich) + afterWhich.length, 0, addItem)
-        return strArr.join('').split(",")
+    convertArray(oldStr, addItem, afterWhich) {
+      if(oldStr !=undefined){
+        let strArr = oldStr.split('')
+          strArr.splice(oldStr.indexOf(afterWhich) + afterWhich.length, 0, addItem)
+          return strArr.join('').split(",")
+      }
     },
     //转换富文本编辑的内容为数组
 
@@ -273,9 +274,11 @@ export default {
       }
     },
     tinymceChangeFunc (val) {
-      const{height,rowHeight,id,MarginHeight,castHeight,first,heightTitle,segmented} = this.questionData
+      const{height,rowHeight,id,MarginHeight,castHeight,first,heightTitle,segmented,editorContent} = this.questionData
       const index = this.pageData.findIndex(question => question.id == id)
       const length = (val.split('</p>')).length - 1
+      console.log(editorContent)
+      editorContent[segmented] = val
 
 
       let heights = first ? length * rowHeight + heightTitle + MarginHeight : length * rowHeight + MarginHeight
@@ -287,7 +290,7 @@ export default {
         let data = {
           question: {
             ...curObj,
-            editorContent: val,
+            editorContent: editorContent,
             height: (height - castHeight) + heights,
             strLength:length,
             selectStr:segmented // 判断当前编辑对象所在位置
