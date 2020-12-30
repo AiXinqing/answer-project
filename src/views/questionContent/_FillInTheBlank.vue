@@ -114,7 +114,7 @@ export default {
       const {editorContent,
       showData,segmented,
       segmentedArr,castHeight,
-      heightTitle,MarginHeight,rowHeight} = this.questionData
+      heightTitle,MarginHeight,rowHeight,first,id} = this.questionData
       let questionInfo = ''
 
       showData.forEach(subtopic =>{
@@ -138,31 +138,35 @@ export default {
         questionInfo +=  `<p class="content-row">${aList}</p>`
       })
       let strContent = ''
-      let editorStrContent = ''
+      let prevStr = ''
+      let editorStrContent = '' // 字符串内容综合
       let strLong = Math.floor((castHeight - heightTitle - MarginHeight + 2) / rowHeight)
-
       if(editorContent[segmented] != undefined){
-        let prevStr = ''
-        if(editorContent[segmented - 1] != undefined){
-          let prevArr = this.convertArray(editorContent[segmented - 1],',','</p>')
-          console.log(prevArr)
-          if(prevArr.length > segmentedArr[segmented - 1]){
-            for(let i = segmentedArr[segmented - 1] ; i < prevArr.length;i++){
-              if(prevArr[i] != undefined){
-                prevStr += prevArr[i]
+        let convertArray = this.convertArray(editorContent[segmented])
+            convertArray.length = strLong
+            for(let i = 0; i < segmentedArr[segmented];i++){
+              if(convertArray[i] != undefined){
+                strContent += convertArray[i]
               }
+            }
+          // 分页判断上一部分是否剩余字符
+      }
+      if(!first){
+          if(editorContent[segmented - 1] != undefined){
+
+            let prevArr = this.convertArray(editorContent[segmented - 1])
+            if(prevArr.length > segmentedArr[segmented - 1]){
+              for(let i = segmentedArr[segmented - 1] ; i < prevArr.length;i++){
+                if(prevArr[i] != undefined){
+                  prevStr += prevArr[i]
+                }
+              }
+              editorContent[segmented] = prevStr + editorContent[segmented]
+              this.pageData_editorStr({id:id,content:editorContent})
             }
           }
         }
-        let convertArray = this.convertArray(editorContent[segmented],',','</p>')
-        convertArray.length = strLong
-        for(let i = 0; i < convertArray.length;i++){
-          if(convertArray[i] != undefined){
-            strContent += convertArray[i]
-          }
-        }
         editorStrContent = prevStr + strContent
-      }
 
       return editorStrContent == '' ? questionInfo : editorStrContent
     }
@@ -185,7 +189,7 @@ export default {
         let { number, topicName, scoreTotal } = this.data
 
         if (!this.questionData.titleContent) {
-          this.content = `<p><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${scoreTotal})</span>分</p>`
+          this.content = `<><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${scoreTotal})</span>分</>`
         } else {
           this.content = this.questionData.titleContent
         }
@@ -209,6 +213,7 @@ export default {
     ...mapMutations('page', [
       'pageData_del',
       'pageData_edit',
+      'pageData_editorStr',
     ]),
     ...mapMutations('questionType', [
       'subTopic_already_del',
@@ -254,11 +259,12 @@ export default {
 
     //转换富文本编辑的内容为数组
 
-    convertArray(oldStr, addItem, afterWhich) {
-      if(oldStr !=undefined){
-        let strArr = oldStr.split('')
-          strArr.splice(oldStr.indexOf(afterWhich) + afterWhich.length, 0, addItem)
-          return strArr.join('').split(",")
+    convertArray(oldStr) {
+      if(oldStr != undefined){
+        let arr = oldStr.split("</p>")
+            arr = arr.map(item => item == '' ? '' : item + '</p>')
+                      .filter(item => item !='')
+        return arr
       }
     },
     //转换富文本编辑的内容为数组
@@ -289,8 +295,22 @@ export default {
       const{height,rowHeight,id,MarginHeight,castHeight,first,heightTitle,segmented,editorContent} = this.questionData
       const index = this.pageData.findIndex(question => question.id == id)
       const length = (val.split('</p>')).length - 1
-      console.log(editorContent)
+     // let prevStr =''
       editorContent[segmented] = val
+
+      //判断富文本编辑内容是否超出容器
+      // let prevArr = this.convertArray(val)
+      // console.log(segmentedArr[segmented])
+      // console.log(prevArr)
+      // if(prevArr.length > segmentedArr[segmented]){
+      //   for(let i = segmentedArr[segmented] ; i < prevArr.length;i++){
+      //     if(prevArr[i] != undefined){
+      //       prevStr += prevArr[i]
+      //     }
+      //   }
+      //   editorContent[segmented + 1] = prevStr
+      // }
+
 
 
       let heights = first ? length * rowHeight + heightTitle + MarginHeight : length * rowHeight + MarginHeight
