@@ -117,6 +117,7 @@ export default {
         let backup = {}
         let superiorGrid = 0
         let segmented = 0
+        let segmentedArr = []
 
         var avalibleHeight = this.page_height - currentPage.height
 
@@ -159,7 +160,8 @@ export default {
               ...rect,
               castHeight:curRect.height,
               ...backup,
-              segmented:segmented
+              segmented:segmented,
+              segmentedArr:segmentedArr
             })
 
             // 作文
@@ -181,6 +183,7 @@ export default {
           while (height > (this.page_height - this.difference)){
 
             segmented += 1
+            segmentedArr.push(curRect.availableRow)
 
             let avalibleHeight =  this.page_height - this.difference
             let curRects = this.preliminaryQuestion(rect, avalibleHeight,false)
@@ -207,7 +210,8 @@ export default {
               castHeight: curRects.height,
               first:false,
               ...backup,
-              segmented:segmented
+              segmented:segmented,
+              segmentedArr:segmentedArr
             }]);
 
             height -= curRects.height
@@ -255,13 +259,15 @@ export default {
                 currentPage.height += rect.MarginHeight
               }
             }
-
+          segmented += 1
+          segmentedArr.push(curRect.availableRow)
           currentPage.rects.push({
             ...rect,
             castHeight: currentPage.height,
             first:!curRect.pagination,
             ...backup,
-            segmented:segmented
+            segmented:segmented,
+            segmentedArr:segmentedArr
           })
 
         }else{
