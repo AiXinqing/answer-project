@@ -89,6 +89,10 @@ const mutations = {
         ...state.pageData[index],
         editorContent:obj.content
       }
+      //  state.pageData.splice(index, 1, {
+      //   ...state.pageData[index],
+      //   editorContent:obj.content
+      // })
     }
   },
 

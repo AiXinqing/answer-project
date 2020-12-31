@@ -47,6 +47,7 @@ import { QUESTION_NUMBERS } from '@/models/base'
 import tinyVue from '../../components/tinymce'
 import triggerTinymce from '../../components/tinymce/triggerEditor'
 import dragChangeHeight from '../questionContent/drag'
+
 export default {
   components: {
     tinyVue,
@@ -111,10 +112,7 @@ export default {
 
     editorDetail(){
 
-      const {editorContent,
-      showData,segmented,
-      segmentedArr,castHeight,
-      heightTitle,MarginHeight,rowHeight,first,id} = this.questionData
+      const {editorContent,showData,segmented,segmentedArr,first,id} = this.questionData
       let questionInfo = ''
 
       showData.forEach(subtopic =>{
@@ -137,36 +135,55 @@ export default {
         })
         questionInfo +=  `<p class="content-row">${aList}</p>`
       })
+
       let strContent = ''
       let prevStr = ''
       let editorStrContent = '' // 字符串内容综合
-      let strLong = Math.floor((castHeight - heightTitle - MarginHeight + 2) / rowHeight)
+      let difference = 0 // 上级小于容器高度差值
+      let differenceStr = '' // 上级小于容器高度差值
+
+
       if(editorContent[segmented] != undefined){
         let convertArray = this.convertArray(editorContent[segmented])
-            convertArray.length = strLong
-            for(let i = 0; i < segmentedArr[segmented];i++){
+        // 判断长度
+        let long = segmentedArr[segmented] != undefined ? segmentedArr[segmented]:convertArray.length
+            for(let i = 0; i < long;i++){
               if(convertArray[i] != undefined){
                 strContent += convertArray[i]
               }
             }
+            if(convertArray.length < long){
+              difference = long - convertArray.length
+              if(editorContent[segmented + 1] != undefined){
+                let nextArray = this.convertArray(editorContent[segmented + 1])
+                for(let i = 0; i < difference;i++){
+                  if(nextArray[i] != undefined){
+                    differenceStr += nextArray[i]
+                  }
+                }
+                strContent = strContent + differenceStr
+              }
+            }
+           // editorContent[segmented] = strContent
+
           // 分页判断上一部分是否剩余字符
       }
       if(!first){
-          if(editorContent[segmented - 1] != undefined){
+        if(editorContent[segmented - 1] != undefined){
 
-            let prevArr = this.convertArray(editorContent[segmented - 1])
-            if(prevArr.length > segmentedArr[segmented - 1]){
-              for(let i = segmentedArr[segmented - 1] ; i < prevArr.length;i++){
-                if(prevArr[i] != undefined){
-                  prevStr += prevArr[i]
-                }
+          let prevArr = this.convertArray(editorContent[segmented - 1])
+          if(prevArr.length > segmentedArr[segmented - 1]){
+            for(let i = segmentedArr[segmented - 1] ; i < prevArr.length;i++){
+              if(prevArr[i] != undefined){
+                prevStr += prevArr[i]
               }
-              editorContent[segmented] = prevStr + editorContent[segmented]
-              this.pageData_editorStr({id:id,content:editorContent})
             }
+            editorContent[segmented] = prevStr + editorContent[segmented]
+            this.pageData_editorStr({id:id,content:editorContent})
           }
         }
-        editorStrContent = prevStr + strContent
+      }
+      editorStrContent = prevStr  + strContent
 
       return editorStrContent == '' ? questionInfo : editorStrContent
     }
@@ -261,9 +278,10 @@ export default {
 
     convertArray(oldStr) {
       if(oldStr != undefined){
-        let arr = oldStr.split("</p>")
-            arr = arr.map(item => item == '' ? '' : item + '</p>')
+        let arr = oldStr.split(/[(\r\n)\r\n]+/) // 回车换行
+            arr = arr.map(item => item == '' || item == 'undefined' ? '' : item + '\n')
                       .filter(item => item !='')
+            // arr = arr.filter(item => item !='')
         return arr
       }
     },
@@ -295,23 +313,7 @@ export default {
       const{height,rowHeight,id,MarginHeight,castHeight,first,heightTitle,segmented,editorContent} = this.questionData
       const index = this.pageData.findIndex(question => question.id == id)
       const length = (val.split('</p>')).length - 1
-     // let prevStr =''
       editorContent[segmented] = val
-
-      //判断富文本编辑内容是否超出容器
-      // let prevArr = this.convertArray(val)
-      // console.log(segmentedArr[segmented])
-      // console.log(prevArr)
-      // if(prevArr.length > segmentedArr[segmented]){
-      //   for(let i = segmentedArr[segmented] ; i < prevArr.length;i++){
-      //     if(prevArr[i] != undefined){
-      //       prevStr += prevArr[i]
-      //     }
-      //   }
-      //   editorContent[segmented + 1] = prevStr
-      // }
-
-
 
       let heights = first ? length * rowHeight + heightTitle + MarginHeight : length * rowHeight + MarginHeight
       this.tinymceHeight =  heights // 最大高度
