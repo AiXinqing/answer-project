@@ -204,7 +204,10 @@ export default {
           index:index,
           first:true,
           titleContent:'',
-          editorContent:''
+          editorContent:[],
+          strLength:0,
+          selectStr:null,
+          segmentedArr:[],
         }
         Arr.push(obj)
       })
@@ -348,7 +351,10 @@ export default {
                 order: previous,
                 objId:this.editQuestionId,
                 previousOrder:  pageObj && pageObj.questionType ==="NonRresponseArea" ? pageObj.order :previousTig,
-                editorContent:''
+                editorContent:[],
+                strLength:0,
+                selectStr:null,
+                segmentedArr:[]
               },
               num: previous,
             }

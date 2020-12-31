@@ -164,7 +164,6 @@ export default {
                 strContent = strContent + differenceStr
               }
             }
-
           // 分页判断上一部分是否剩余字符
       }
       editorStrContent = prevStr  + strContent

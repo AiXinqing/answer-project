@@ -105,16 +105,80 @@ export default {
     },
 
     editorDetail(){
-      const {first,content,editorContent,score,topic,orderFirst} = this.data
+      const {first,content,editorContent,score,topic,orderFirst,segmented,segmentedArr,objId} = this.data
+      console.log(this.data)
       let pList = ''
       this.rowsData.forEach((item,i) =>{
-        let span1 =  i == 0 && first && !orderFirst ? `<a class="title">${this.str} ${topic} (${ score }分) </a>` : ''
+        let span1 =  i == 0 && first && !orderFirst ? `<a class="title">${this.str} ${topic}. (${ score }分) </a>` : ''
         let span2 = content.HorizontalLine ? `<a class="line-style"> ${this.str} </a>` :''
 
         pList += `<p class="question_line">${span1}${span2}</p>`
       })
       let questionInfo = `<div class="answer_question_box" >${pList}</div>`
-      return editorContent == '' ? `${questionInfo}` : editorContent
+
+      let strContent = ''
+      let prevStr = ''
+      let editorStrContent = '' // 字符串内容综合
+      let difference = 0 // 上级小于容器高度差值
+      let differenceStr = '' // 上级小于容器高度差值
+
+      if(editorContent[segmented] != undefined){
+        let convertArray = this.convertArray(editorContent[segmented])
+        // 判断长度
+        let long = segmentedArr[segmented] != undefined ? segmentedArr[segmented]:convertArray.length
+            for(let i = 0; i < long;i++){
+              if(convertArray[i] != undefined){
+                strContent += convertArray[i]
+              }
+            }
+            if(convertArray.length < long){
+              difference = long - convertArray.length
+              if(editorContent[segmented + 1] != undefined){
+                let nextArray = this.convertArray(editorContent[segmented + 1])
+                for(let i = 0; i < difference;i++){
+                  if(nextArray[i] != undefined){
+                    differenceStr += nextArray[i]
+                  }
+                }
+                strContent = strContent + differenceStr
+              }
+            }
+          // 分页判断上一部分是否剩余字符
+      }
+      editorStrContent = prevStr  + strContent
+      if(!first){
+        let prevArr = this.convertArray(editorContent[segmented - 1])
+        if(editorContent[segmented - 1] != undefined){
+
+          if(prevArr.length > segmentedArr[segmented - 1]){
+            for(let i = segmentedArr[segmented - 1] ; i < prevArr.length;i++){
+              if(prevArr[i] != undefined){
+                prevStr += prevArr[i]
+              }
+            }
+            editorContent[segmented] = prevStr + editorContent[segmented]
+            this.pageData_editorStr({id:objId,content:editorContent,answer:true})
+          }
+        }
+        editorStrContent = prevStr  + strContent
+        if(editorContent[segmented] != undefined){
+          let curArr = this.convertArray(editorContent[segmented])
+          if(prevArr.length < segmentedArr[segmented - 1]){
+            let index = segmentedArr[segmented - 1] - prevArr.length
+            for(let i = index ; i < curArr.length;i++){
+                if(curArr[i] != undefined){
+                  prevStr += curArr[i]
+                }
+              }
+              editorContent[segmented] = prevStr
+              this.pageData_editorStr({id:objId,content:editorContent,answer:true})
+          }
+          editorStrContent = prevStr
+        }
+      }
+
+
+      return editorStrContent == '' ? questionInfo : editorStrContent
     }
   },
   watch: {
@@ -141,7 +205,8 @@ export default {
     ...mapMutations('page', [
       'pageData_del',
       'pageData_edit',
-      'pageData_orderFirst'
+      'pageData_orderFirst',
+      'pageData_editorStr',
     ]),
 
     ...mapMutations('questionType', [
@@ -157,9 +222,11 @@ export default {
     hanldeEditor() {
       this.isEditor = true
     },
+
     subTopic_numberAnswerEdit() {
       this.$emit('current-question-answer-edit', this.data)
     },
+
     delHanlde() {
       let {group} = this.data.content
       let questionGroup = group[0]
@@ -224,6 +291,7 @@ export default {
       this.subTopic_number_calculate()
 
     },
+
     handleResize (height) {
       const index = this.pageData.findIndex(obj => this.questionData.id === obj.id)
       if(index > -1){
@@ -258,14 +326,16 @@ export default {
       }
 
     },
+
     //改变内容
     tinymceChangeFunc(val){
-      const {id,height,castHeight,heightTitle,rowHeight} = this.questionData
+      const {id,height,castHeight,heightTitle,rowHeight,segmented,editorContent,MarginHeight,first} = this.questionData
       const index = this.pageData.findIndex(question => question.id == id && question.first)
       const length = (val.split('</p>')).length - 1
 
-      let heights = length * rowHeight
+      let heights = first ? length * rowHeight + heightTitle + MarginHeight : length * rowHeight + MarginHeight
       this.tinymceHeight = heights // 最大高度
+      editorContent[segmented] = val
 
       if(index > -1){
         let curObj = this.pageData[index]
@@ -273,14 +343,28 @@ export default {
         let data = {
           question:{
             ...curObj,
-            editorContent:val,
-            height:heights > (castHeight - heightTitle) ? curObj.heightTitle + curObj.MarginHeight + heights:height
+            editorContent:editorContent,
+            height:(height - castHeight) + heights,
+            strLength:length,
+            selectStr:segmented // 判断当前编辑对象所在位置
           },
           index:index,
         }
         this.pageData_edit_title(data)
       }
-    }
+    },
+
+    convertArray(oldStr) {
+      //转换富文本编辑的内容为数组
+      if(oldStr != undefined){
+        let arr = oldStr.split(/[(\r\n)\r\n]+/) // 回车换行
+            arr = arr.map(item => item == '' || item == 'undefined' ? '' : item + '\n')
+                      .filter(item => item !='')
+        return arr
+      }
+      //转换富文本编辑的内容为数组
+    },
+
   },
 }
 </script>

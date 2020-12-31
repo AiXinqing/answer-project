@@ -83,16 +83,15 @@ const mutations = {
 
   pageData_editorStr: (state, obj) => {
     // 富文本编辑后字符串
-    const index = state.pageData.findIndex((itme) => itme.id == obj.id)
+    let index = state.pageData.findIndex((itme) => itme.id == obj.id)
+    if (obj.answer != undefined) {
+      index = state.pageData.findIndex((itme) => itme.objId == obj.id)
+    }
     if (index > -1) {
       state.pageData[index] = {
         ...state.pageData[index],
         editorContent:obj.content
       }
-      //  state.pageData.splice(index, 1, {
-      //   ...state.pageData[index],
-      //   editorContent:obj.content
-      // })
     }
   },
 
