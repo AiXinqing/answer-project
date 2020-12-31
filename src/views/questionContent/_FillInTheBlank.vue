@@ -164,14 +164,14 @@ export default {
                 strContent = strContent + differenceStr
               }
             }
-           // editorContent[segmented] = strContent
 
           // 分页判断上一部分是否剩余字符
       }
+      editorStrContent = prevStr  + strContent
       if(!first){
+        let prevArr = this.convertArray(editorContent[segmented - 1])
         if(editorContent[segmented - 1] != undefined){
 
-          let prevArr = this.convertArray(editorContent[segmented - 1])
           if(prevArr.length > segmentedArr[segmented - 1]){
             for(let i = segmentedArr[segmented - 1] ; i < prevArr.length;i++){
               if(prevArr[i] != undefined){
@@ -182,8 +182,23 @@ export default {
             this.pageData_editorStr({id:id,content:editorContent})
           }
         }
+        editorStrContent = prevStr  + strContent
+        if(editorContent[segmented] != undefined){
+          let curArr = this.convertArray(editorContent[segmented])
+          if(prevArr.length < segmentedArr[segmented - 1]){
+            let index = segmentedArr[segmented - 1] - prevArr.length
+            for(let i = index ; i < curArr.length;i++){
+                if(curArr[i] != undefined){
+                  prevStr += curArr[i]
+                }
+              }
+              editorContent[segmented] = prevStr
+              this.pageData_editorStr({id:id,content:editorContent})
+          }
+          editorStrContent = prevStr
+        }
       }
-      editorStrContent = prevStr  + strContent
+
 
       return editorStrContent == '' ? questionInfo : editorStrContent
     }
@@ -281,7 +296,6 @@ export default {
         let arr = oldStr.split(/[(\r\n)\r\n]+/) // 回车换行
             arr = arr.map(item => item == '' || item == 'undefined' ? '' : item + '\n')
                       .filter(item => item !='')
-            // arr = arr.filter(item => item !='')
         return arr
       }
     },
