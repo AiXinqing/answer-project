@@ -36,7 +36,7 @@
     data() {
       return {
         editor: null,
-        toolbar:'attachment undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image ',
+        toolbar:'attachment undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image nonbreaking',
         uploadMode : 0,
         editorId:new Date().getTime()
       }

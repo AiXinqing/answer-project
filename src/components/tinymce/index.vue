@@ -16,6 +16,7 @@
   import './plugins/code/plugin.min.js'
   import './plugins/mathjax/plugin.min.js'
   import './plugins/mathjax/config.js'
+  // import './plugins/'
 
   export default {
     props: {
@@ -35,7 +36,7 @@
     data() {
       return {
         editor: null,
-        toolbar:'attachment undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image ',
+        toolbar:'attachment undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image nonbreaking',
         uploadMode : 0,
         editorId:new Date().getTime()
       }
@@ -65,7 +66,7 @@
           selector:`#tinymce_title_${this.editorId}`,
           inline: this.inline,
           toolbar: this.toolbar,
-          plugins: ' image code charmap',
+          plugins: ' image code charmap underline',
           autoresize_max_height: 20,
           language: 'zh_CN',
           menubar: false,
@@ -103,7 +104,6 @@
         }).then(editors => {
             this.editor = editors[0];
             this.editor.setContent(this.html);
-
         })
       },
 
