@@ -3,7 +3,7 @@
  * table (Enhancement 1.1v)
  * The tinymce-plugins is used to set up the conversion table (Enhancement)
  * 
- * https://github.com/Five-great/tinymce-plugins 
+ * https://github.com/Five-great/tinymce-plugins
  * 
  * Copyright 2020, Five(Li Hailong) The Chengdu, China https://www.fivecc.cn/
  *

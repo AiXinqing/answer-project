@@ -18,6 +18,7 @@
   import '../plugins/code/plugin.min.js'
   import '../plugins/mathjax/plugin.min.js'
   import '../plugins/mathjax/config.js'
+  // import '../plugins/importword'
 
   export default {
     props: {
@@ -36,7 +37,7 @@
     data() {
       return {
         editor: null,
-        toolbar:'attachment undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image nonbreaking',
+        toolbar:'advlist attachment undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image nonbreaking importword',
         uploadMode : 0,
         editorId:new Date().getTime()
       }
@@ -69,7 +70,8 @@
           // auto_focus: true,
           inline:true,
           toolbar: this.toolbar,
-          plugins: ' image code charmap',
+          plugins: 'advlist image code charmap importword',
+          advlist_bullet_styles: "circle, square",
           autoresize_max_height: 20,
           // height:40 + this.maxHeight,
           language: 'zh_CN',
