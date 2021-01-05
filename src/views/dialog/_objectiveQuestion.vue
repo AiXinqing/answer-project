@@ -151,13 +151,15 @@
     },
     computed: {
 
-      ...mapState('questionType',['subTopic_number',
+      ...mapState('questionType',[
+        'subTopic_number',
       'subTopic_number_already',
       'subTopic_number_determine',]),
 
       ...mapState('page',['pageData']),
       ...mapGetters('page',['page_width','questionNumber_big_exist','questionOrder']),
       ...mapGetters('question',['options']),
+      // ...mapGetters('questionType',['subTopic_number']),
 
       questionNumber_big(){
         return this.questionNumber_big_exist.length
@@ -434,6 +436,7 @@
         //添加分段小题组
         let {type,groupTopic} = groupSubTopic
         let obj = JSON.parse(JSON.stringify(this.preEditData))
+        console.log(groupTopic)
 
         obj.group[type].push(groupTopic)
 
