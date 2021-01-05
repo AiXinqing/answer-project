@@ -18,7 +18,6 @@
   import '../plugins/code/plugin.min.js'
   import '../plugins/mathjax/plugin.min.js'
   import '../plugins/mathjax/config.js'
-  // import '../plugins/importword'
 
   export default {
     props: {
@@ -37,7 +36,7 @@
     data() {
       return {
         editor: null,
-        toolbar:'advlist attachment undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image nonbreaking importword',
+        toolbar:'undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image  basicDateButton underscoreButton',
         uploadMode : 0,
         editorId:new Date().getTime()
       }
@@ -70,8 +69,9 @@
           // auto_focus: true,
           inline:true,
           toolbar: this.toolbar,
-          plugins: 'advlist image code charmap importword',
+          plugins: 'advlist image code charmap',
           advlist_bullet_styles: "circle, square",
+          content_style: "img {max-width:100%;}",
           autoresize_max_height: 20,
           // height:40 + this.maxHeight,
           language: 'zh_CN',
@@ -88,6 +88,24 @@
               editor.on('blur', () => {
                   self.$emit('tinymce-change', editor.getContent())
               })
+
+              /* Basic button that just inserts the date  切换下划线 */
+              editor.ui.registry.addButton('basicDateButton', {
+                icon: 'break-line',
+                tooltip: '切换下划线',
+                onAction: () => {
+                  editor.insertContent('<a>&#8203;</a>');
+                }
+              });
+
+              /* underscore button that just inserts the date  自动添加下划线 */
+              editor.ui.registry.addButton('underscoreButton', {
+                icon: 'straight-line',
+                tooltip: '自动添加下划线',
+                onAction: () => {
+                  editor.insertContent('<a class="subtopic_a">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</a>');
+                }
+              });
           },
           images_upload_handler: function (blobInfo, success, failure){
             let formData = new FormData()
