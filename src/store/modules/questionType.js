@@ -1,5 +1,4 @@
 const state = {
-
   subTopic_number: 1,
   subTopic_number_already: [], // 已有的题组
   subTopic_number_determine: [], // 确定下的小题
@@ -66,13 +65,14 @@ const mutations = {
     for (let i = 1; i < state.largest_questionNum; i++) {
       //
       const index = state.subTopic_number_already.findIndex((item) => item.topic === i)
-      if (index <= -1) {
+      const determineIndex = state.subTopic_number_determine.findIndex((item) => item.topic === i)
+
+      if (index <= -1 && determineIndex <= -1) {
         state.subTopic_number = i
         break
-      } else {
-        state.subTopic_number = 1
       }
     }
+
   },
 
   subTopic_calculate_determine: (state, Arr) => {
