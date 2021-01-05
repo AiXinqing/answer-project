@@ -109,7 +109,6 @@ export default {
           }else{
             this.content = this.questionData.titleContent
           }
-          console.log(this.content)
       }
     }
   },
