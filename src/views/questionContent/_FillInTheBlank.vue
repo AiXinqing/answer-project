@@ -102,7 +102,6 @@ export default {
     },
 
     strBox(){
-      console.log(this.data.rows)
       let num = Math.ceil(Math.ceil(this.pageWidth /this.data.rows) / 5)
       let strBox = []
           for(let x = 0; x < num;x++){
@@ -129,12 +128,12 @@ export default {
             let li3 = !topic.spaceNum || topic.spaceNum == 1 ? topic.topic : ''
             spanBox = `${li3}`
           }
-          let numLong = spanBox.length * 2 + 3
+          let numLong = spanBox.length * 2 + 4
           let spaceStr = ''
           for(let x = 0; x < this.strBox.length - numLong ;x++){
             spaceStr +=  this.strBox[x]
           }
-          aList += `&nbsp;${spanBox}&nbsp;&nbsp;<a class="subtopic_a" style="flex:${subtopic.length >= 4 ? 1:0}">${spaceStr}</a>`
+          aList += `&nbsp;&nbsp;${spanBox}&nbsp;&nbsp;<a class="subtopic_a" style="flex:${subtopic.length >= 4 ? 1:0}">${spaceStr}</a>`
         })
         questionInfo +=  `<p class="content-row">${aList}</p>`
       })
@@ -413,7 +412,7 @@ export default {
   margin: 0;
 
   &:first-child{
-    padding-top: 10px;
+    padding-top: 7px;
   }
 
   .subtopic_a{
