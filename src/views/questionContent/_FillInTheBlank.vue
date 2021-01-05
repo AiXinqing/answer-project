@@ -94,7 +94,7 @@ export default {
     },
 
     pageWidth () {
-      return this.page_width - 50
+      return this.page_width - 23
     },
 
     topicBox () {
@@ -102,10 +102,11 @@ export default {
     },
 
     strBox(){
-      let num = Math.ceil(Math.ceil(this.pageWidth /this.data.rows) / 6)
-      let strBox = ''
-          for(let x = 0; x < num ;x++){
-            strBox += this.str
+      console.log(this.data.rows)
+      let num = Math.ceil(Math.ceil(this.pageWidth /this.data.rows) / 5)
+      let strBox = []
+          for(let x = 0; x < num;x++){
+            strBox.push(this.str)
           }
       return strBox
     },
@@ -123,19 +124,17 @@ export default {
           if(topic.lid){
             let li1 = topic.smallTopic == 1 && topic.spaceNum == 1 ? topic.topic : ''
             let li2 = topic.spaceNum <= 1 ? topic.smallTopic : ''
-            // spanBox = `<span class="s_p">${li1}${li2}</span>`
             spanBox = `${li1}${li2}`
           }else{
             let li3 = !topic.spaceNum || topic.spaceNum == 1 ? topic.topic : ''
-            // spanBox = `<span class="s_p">${li3}</span>`
             spanBox = `${li3}`
           }
-
-          // aList += `<a class="subtopic_a" style="width:${this.aWidth}px">
-          //             ${spanBox}
-          //             <span class="a_p">${this.strBox}</span>
-          //           </a>`
-          aList += `&nbsp;${spanBox}&nbsp;&nbsp;<a class="subtopic_a" style="flex:${subtopic.length >= 4 ? 1:0}">${this.strBox}</a>`
+          let numLong = spanBox.length * 2 + 3
+          let spaceStr = ''
+          for(let x = 0; x < this.strBox.length - numLong ;x++){
+            spaceStr +=  this.strBox[x]
+          }
+          aList += `&nbsp;${spanBox}&nbsp;&nbsp;<a class="subtopic_a" style="flex:${subtopic.length >= 4 ? 1:0}">${spaceStr}</a>`
         })
         questionInfo +=  `<p class="content-row">${aList}</p>`
       })
@@ -224,7 +223,7 @@ export default {
         let { number, topicName, scoreTotal } = this.data
 
         if (!this.questionData.titleContent) {
-          this.content = `<><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${scoreTotal})</span>分</>`
+          this.content = `<p><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${scoreTotal})</span>分</p>`
         } else {
           this.content = this.questionData.titleContent
         }
@@ -390,7 +389,6 @@ export default {
     position: absolute;
     right: 0;
     top: -10px;
-    // display: block;
     z-index: 99;
     span {
       margin-left: 10px;
@@ -410,45 +408,16 @@ export default {
 }
 
 .content-row  {
-  display: flex;
   line-height: 35px;
-  // height: 35px;
   padding: 0 3mm 0 3mm;
   margin: 0;
+
   &:first-child{
     padding-top: 10px;
   }
 
   .subtopic_a{
     border-bottom: 1px solid #888;
-    flex:1;
-    height: 25px;
-    // display: flex;
-    // height: 35px;
-    // margin-left: 5px;
-    // width: 100%;
-    // font-size:12px;
-    // overflow: hidden;
-
-    // .s_p{
-    //   height: 100%;
-    //   flex:0;
-    //   text-align: center;
-    //   padding: 0 1mm 0 4mm;
-    //   line-height: 35px;
-    //   margin: 0 0;
-    // }
-    // .a_p{
-    //   flex:  2;
-    //   border-bottom: 1px solid @font-888;
-    //   margin-left: 5px;
-    //   display: inline-block;
-    //   line-height: 25px;
-    //   height: 25px;
-    //   span.dis{
-    //     display: none
-    //   }
-    // }
   }
 
 }
