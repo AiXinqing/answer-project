@@ -28,7 +28,10 @@
       @height-resize="handleResize($event)"
       ref="tinyDrag"
     >
-      <div class="content-info" ref="questionChange" >
+      <div class="content-info" ref="questionChange"
+        :style="{
+          height:tinymceHeight + 'px'}"
+      >
         <trigger-tinymce
           :max-height="tinymceHeight"
           @tinymce-change="tinymceChangeFunc"
@@ -93,7 +96,7 @@ export default {
   },
   computed: {
     ...mapState('questionType', ['questionNumber', 'letterList']),
-    ...mapState('page', ['pageData','pageLayout']),
+    ...mapState('page', ['pageData']),
     ...mapGetters('page', ['page_width']),
 
     minHeight () {
@@ -234,8 +237,8 @@ export default {
         } else {
           this.content = this.questionData.titleContent
         }
-        this.tinymceHeight = this.questionData.first ? this.questionData.castHeight - this.questionData.heightTitle :
-          this.questionData.castHeight
+        this.tinymceHeight = this.questionData.first ? this.questionData.castHeight - this.questionData.heightTitle - 2 :
+          this.questionData.castHeight - 2
 
       }
     },
@@ -332,14 +335,17 @@ export default {
         this.pageData_edit_title(data)
       }
     },
-    tinymceChangeFunc (val) {
-      const{height,rowHeight,id,MarginHeight,castHeight,first,heightTitle,segmented,editorContent} = this.questionData
+    tinymceChangeFunc (obj) {
+      // 富文本参数
+      const {val,tinyHeight} = obj
+
+      const{height,id,MarginHeight,castHeight,first,heightTitle,segmented,editorContent} = this.questionData
       const index = this.pageData.findIndex(question => question.id == id)
-      const length = (val.split('</p>')).length - 1
+
       editorContent[segmented] = val
 
-      let heights = first ? length * rowHeight + heightTitle + MarginHeight : length * rowHeight + MarginHeight
-      this.tinymceHeight =  heights // 最大高度
+      let heights = first ? tinyHeight + heightTitle + MarginHeight : tinyHeight + MarginHeight
+      this.tinymceHeight =  tinyHeight  // 最大高度
 
       if (index > -1) {
         let curObj = this.pageData[index]

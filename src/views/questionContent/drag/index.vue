@@ -2,7 +2,7 @@
   <div
     class="question-item"
     :style="{
-      height: contentHeight + 'px'
+      height: contentHeight - 2 + 'px'
     }"
   >
     <div class="question-container">

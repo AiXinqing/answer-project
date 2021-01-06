@@ -1,8 +1,6 @@
 <template>
   <section :id="'tinymce_'+ editorId"
-  :style="{
-    maxHeight:maxHeight + 'px',
-    height:maxHeight + 'px'}">
+  >
     <!-- <slot></slot> -->
   </section>
 </template>
@@ -87,8 +85,12 @@
                   console.log('上传测试')
               } });
               // 编辑器内容发生变化后更新 html 的内容
-              editor.on('blur', () => {
-                  self.$emit('tinymce-change', editor.getContent())
+              editor.on('blur', (e) => {
+                  let obj = {
+                    val:editor.getContent(),
+                    tinyHeight:document.getElementById(e.target.id).offsetHeight
+                  }
+                  self.$emit('tinymce-change', obj)
               })
 
               /* Basic button that just inserts the date  切换下划线 */
