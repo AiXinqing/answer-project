@@ -20,7 +20,6 @@
 
   export default {
     props: {
-      maxHeight:{ type: Number,  default: 30 },
       html:{
         type: String,
         default: ''
@@ -73,7 +72,6 @@
           advlist_bullet_styles: "circle, square",
           content_style: "img {max-width:100%;}",
           autoresize_max_height: 20,
-          // height:40 + this.maxHeight,
           language: 'zh_CN',
           menubar: false,
           paste_data_images: true,
