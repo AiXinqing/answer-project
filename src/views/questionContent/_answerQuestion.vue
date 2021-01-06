@@ -30,20 +30,32 @@
           'margin-top':!data.orderFirst  ? '10px' : '0px',
         }"
     >
+    <div
+      class="content-info"
+      :style="{
+          height:tinymceHeight + 'px'}"
+    >
       <!-- 富文本编辑区 -->
       <trigger-tinymce
-        :max-height="tinymceHeight"
         @tinymce-change="tinymceChangeFunc"
         v-model="editorDetail"
+        v-if="pageLayout.column == 3"
       >
       </trigger-tinymce>
+      <trigger-tinymce
+        @tinymce-change="tinymceChangeFunc"
+        v-model="editorDetail"
+        v-else
+      >
+      </trigger-tinymce>
+    </div>
     </drag-change-height>
 
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapGetters} from 'vuex'
 import { QUESTION_NUMBERS } from '@/models/base'
 
 import tinyVue from '../../components/tinymce'
@@ -86,7 +98,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('page', ['pageData']),
+    ...mapState('page', ['pageData','pageLayout']),
+    ...mapGetters('page', ['page_width']),
 
     minHeight(){
       const {rowHeight, row,MarginHeight,height,castHeight} = this.questionData
@@ -105,16 +118,28 @@ export default {
     },
 
     editorDetail(){
-      const {first,content,editorContent,score,topic,orderFirst,segmented,segmentedArr,objId} = this.data
-      console.log(this.data)
+      const {first,content,editorContent,score,topic,segmented,segmentedArr,objId} = this.data
+
       let pList = ''
       this.rowsData.forEach((item,i) =>{
-        let span1 =  i == 0 && first && !orderFirst ? `<a class="title">${this.str} ${topic}. (${ score }分) </a>` : ''
-        let span2 = content.HorizontalLine ? `<a class="line-style"> ${this.str} </a>` :''
+        let titleStr = `${topic} (${ score }分)`
+        let span1 =  i == 0 && first  ? `&nbsp;${titleStr}&nbsp;` : ''
+
+        let titleStrLong = i == 0 ? titleStr.length * 10 : 0
+        console.log(titleStrLong)
+
+        let spaceLong = Math.ceil((this.page_width - 23 - titleStrLong ) / 4.25)
+
+        let spaceSum = ''
+        for(let x = 0; x < spaceLong;x++){
+            spaceSum += this.str
+        }
+
+        let span2 = content.HorizontalLine ? `<a class="line-style"> ${spaceSum} </a>` :''
 
         pList += `<p class="question_line">${span1}${span2}</p>`
       })
-      let questionInfo = `<div class="answer_question_box" >${pList}</div>`
+      let questionInfo = pList
 
       let strContent = ''
       let prevStr = ''
@@ -328,13 +353,15 @@ export default {
     },
 
     //改变内容
-    tinymceChangeFunc(val){
-      const {id,height,castHeight,heightTitle,rowHeight,segmented,editorContent,MarginHeight,first} = this.questionData
-      const index = this.pageData.findIndex(question => question.id == id && question.first)
-      const length = (val.split('</p>')).length - 1
+    tinymceChangeFunc(obj){
+      // 富文本参数
+      const {val,tinyHeight} = obj
 
-      let heights = first ? length * rowHeight + heightTitle + MarginHeight : length * rowHeight + MarginHeight
-      this.tinymceHeight = heights // 最大高度
+      const {id,height,castHeight,heightTitle,segmented,editorContent,MarginHeight,first} = this.questionData
+      const index = this.pageData.findIndex(question => question.id == id && question.first)
+
+      let heights = first ? tinyHeight + heightTitle + MarginHeight : tinyHeight + MarginHeight
+      this.tinymceHeight = tinyHeight // 最大高度
       editorContent[segmented] = val
 
       if(index > -1){
@@ -378,8 +405,36 @@ export default {
     }
   }
 
+  p{
+    margin: 0;
+  }
+  .question_line {
+    &:first-child{
+      margin-top: 8px;
+    }
+
+    // display: flex;
+    margin: 0;
+    line-height: 35px;
+    font-size: 14px;
+    padding: 0 3mm;
+
+    .title{
+      font-size: 12px;
+      flex-shrink: 0;
+      margin-right: 5px;
+    }
+
+    .line-style {
+      border-bottom: 1px solid @font-888;
+      width: 100%;
+      // flex-shrink: 1;
+      height: 23px;
+    }
+  }
+
   .question-container{
-    overflow: auto;
+
     .answer_question_box{
       padding-top: 10px;
     }
@@ -394,26 +449,6 @@ export default {
       span.title {
         font-size: 12px;
         display: inline-block;
-      }
-    }
-    .question_line {
-      display: flex;
-      margin: 0;
-      height: 35px;
-      line-height: 35px;
-      font-size: 14px;
-
-      .title{
-        font-size: 12px;
-        flex-shrink: 0;
-        margin-right: 5px;
-      }
-
-      .line-style {
-        border-bottom: 1px solid @font-888;
-        width: 100%;
-        flex-shrink: 1;
-        height: 23px;
       }
     }
   }
