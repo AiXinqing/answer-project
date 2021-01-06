@@ -33,14 +33,12 @@
           height:tinymceHeight + 'px'}"
       >
         <trigger-tinymce
-          :max-height="tinymceHeight"
           @tinymce-change="tinymceChangeFunc"
           v-model="editorDetail"
           v-if="pageLayout.column == 3"
         >
         </trigger-tinymce>
         <trigger-tinymce
-          :max-height="tinymceHeight"
           @tinymce-change="tinymceChangeFunc"
           v-model="editorDetail"
           v-else
