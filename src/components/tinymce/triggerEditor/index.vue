@@ -19,6 +19,7 @@
   import '../plugins/mathjax/plugin.min.js'
   import '../plugins/mathjax/config.js'
 
+
   export default {
     props: {
       maxHeight:{ type: Number,  default: 30 },
@@ -36,7 +37,7 @@
     data() {
       return {
         editor: null,
-        toolbar:'undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image  basicDateButton underscoreButton',
+        toolbar:'fontsizeselect undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image  basicDateButton underscoreButton',
         uploadMode : 0,
         editorId:new Date().getTime()
       }
@@ -69,6 +70,7 @@
           // auto_focus: true,
           inline:true,
           toolbar: this.toolbar,
+          fontsize_formats: '11px 12px 14px 16px 18px 24px 36px 48px',
           plugins: 'advlist image code charmap',
           advlist_bullet_styles: "circle, square",
           content_style: "img {max-width:100%;}",
