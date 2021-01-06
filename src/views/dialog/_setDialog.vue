@@ -163,7 +163,8 @@ export default {
           pageLayout:this.pageLayout
         },
         order: this.questionOrder,
-        first: true
+        first: true,
+        layoutChange:true
       }
 
       if (this.change) {
