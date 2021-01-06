@@ -1,8 +1,5 @@
 <template>
-  <section :id="'tinymce_title_'+ editorId"
-  inline
-  :style="{maxHeight:maxHeight + 'px',}"></section>
-  <!-- overflowY:'scroll' -->
+  <section :id="'tinymce_title_'+ editorId" inline></section>
 </template>
 
 <script>
