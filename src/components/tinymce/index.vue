@@ -79,8 +79,12 @@
                   console.log('上传测试')
               } });
               // 编辑器内容发生变化后更新 html 的内容
-              editor.on('blur', () => {
-                  self.$emit('input', editor.getContent())
+              editor.on('blur', (e) => {
+                  let obj = {
+                    val:editor.getContent(),
+                    tinyHeight:document.getElementById(e.target.id).offsetHeight
+                  }
+                  self.$emit('input', obj)
               })
           },
           images_upload_handler: function (blobInfo, success, failure){

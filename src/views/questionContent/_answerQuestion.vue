@@ -126,7 +126,7 @@ export default {
         let span1 =  i == 0 && first  ? `&nbsp;${titleStr}&nbsp;` : ''
 
         let titleStrLong = i == 0 ? titleStr.length * 10 : 0
-        console.log(titleStrLong)
+
 
         let spaceLong = Math.ceil((this.page_width - 23 - titleStrLong ) / 4.25)
 
@@ -329,10 +329,12 @@ export default {
       }
     },
 
-    changeContent(val){
+    changeContent(obj){
+      const {val,tinyHeight} = obj
+
       const index = this.pageData.findIndex(question => question.id == this.questionData.id && question.first)
-      const length = (val.split('<p>')).length - 1
-      let height = length * 21
+
+      let height = tinyHeight
       this.maxHeight = height // 最大高度
 
       if(index > -1){
