@@ -215,11 +215,13 @@ export default {
       }
 
     },
-    tinymceChangeFunc(val){
-      const {id,height,rowHeight,MarginHeight,heightTitle} = this.questionData
+    tinymceChangeFunc(obj){
+      const {val,tinyHeight} = obj
+
+      const {id,height,MarginHeight,heightTitle} = this.questionData
       const index = this.pageData.findIndex(question => question.id == id)
-      const length = (val.split('</p>')).length - 1
-      let heights = length * rowHeight + MarginHeight + heightTitle
+
+      let heights = tinyHeight + MarginHeight + heightTitle
       this.tinymceHeight = heights // 最大高度
           heights = heights > height ? heights:height
 
@@ -234,7 +236,6 @@ export default {
           },
           index:index,
         }
-
         this.pageData_edit_title(data)
       }
     }
