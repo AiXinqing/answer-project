@@ -31,6 +31,24 @@ const mutations = {
         state.pageData.splice(index, 1, question)
       }
     }
+    if (question.layoutChange) {
+      state.pageData = state.pageData.map(item => {
+        let obj = {}
+        if (item.editorContent != undefined) {
+          obj = {
+            titleContent: '',
+            editorContent: [],
+            segmentedArr: [],
+            strLength: 0,
+            selectStr: null,
+          }
+        }
+        return {
+          ...item,
+          ...obj
+        }
+      })
+    }
   },
 
   //编辑题型标题
