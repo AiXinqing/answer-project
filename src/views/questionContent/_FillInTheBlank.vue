@@ -28,11 +28,19 @@
       @height-resize="handleResize($event)"
       ref="tinyDrag"
     >
-      <div class="content-info" ref="questionChange">
+      <div class="content-info" ref="questionChange" >
         <trigger-tinymce
           :max-height="tinymceHeight"
           @tinymce-change="tinymceChangeFunc"
           v-model="editorDetail"
+          v-if="pageLayout.column == 3"
+        >
+        </trigger-tinymce>
+        <trigger-tinymce
+          :max-height="tinymceHeight"
+          @tinymce-change="tinymceChangeFunc"
+          v-model="editorDetail"
+          v-else
         >
         </trigger-tinymce>
       </div>
@@ -85,7 +93,7 @@ export default {
   },
   computed: {
     ...mapState('questionType', ['questionNumber', 'letterList']),
-    ...mapState('page', ['pageData']),
+    ...mapState('page', ['pageData','pageLayout']),
     ...mapGetters('page', ['page_width']),
 
     minHeight () {
