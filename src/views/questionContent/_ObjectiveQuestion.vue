@@ -1,7 +1,12 @@
 <template>
 <!-- 选择题 -->
   <div class="question-info">
-    <div class="question-title" ref="tinyeditor" v-if="questionData.first">
+    <div
+      class="question-title"
+      ref="tinyeditor"
+      v-if="questionData.first"
+      :style="{'height':maxHeight + 'px'}"
+    >
       <tiny-vue class="title-span"
         v-model="content"
         @input="changeContent"

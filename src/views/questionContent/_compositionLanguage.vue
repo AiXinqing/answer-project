@@ -4,6 +4,7 @@
       class="question-title"
       ref="tinyeditor"
       v-if="data.first && data.borderTop == undefined"
+      :style="{'height':maxHeight + 'px'}"
     >
       <tiny-vue class="title-span"
         v-model="content"
