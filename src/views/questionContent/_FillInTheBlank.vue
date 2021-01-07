@@ -108,7 +108,7 @@ export default {
     },
 
     pageWidth () {
-      return this.previewWidth == 0 ? this.page_width - 23 : this.previewWidth - 23
+      return this.previewWidth == 0 ? this.page_width - 23 : this.previewWidth - 63
     },
 
     topicBox () {
