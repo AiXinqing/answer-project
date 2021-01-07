@@ -95,11 +95,12 @@ export default {
       options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
       maxHeight:28,
       tinymceHeight:28,
-      str:'&nbsp;'
+      str:'&nbsp;',
+      pageLayout: this.contentData.pageLayout,
     }
   },
   computed: {
-    ...mapState('page', ['pageData','pageLayout']),
+    ...mapState('page', ['pageData']),
     ...mapGetters('page', ['page_width']),
 
     minHeight(){
@@ -218,11 +219,12 @@ export default {
         this.content = ''
         let {number,topicName} = this.contentData
 
-          if(!this.questionData.titleContent){
-            this.content = `<p><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${this.questionData.scoreTotal})</span>分</p>`
-          }else{
-            this.content = this.questionData.titleContent
-          }
+        if(!this.questionData.titleContent){
+          this.content = `<p><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${this.questionData.scoreTotal})</span>分</p>`
+        }else{
+          this.content = this.questionData.titleContent
+        }
+        this.pageLayout = this.contentData.pageLayout
       },
     },
 
