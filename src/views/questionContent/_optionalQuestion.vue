@@ -27,20 +27,32 @@
         'height':minHeight  + 'px',
       }"
     >
-      <!-- 富文本编辑区 -->
-      <trigger-tinymce
-        :max-height="tinymceHeight"
-        @tinymce-change="tinymceChangeFunc"
-        v-model="editorDetail"
+      <div
+        class="content-info"
+        :style="{
+          height:tinymceHeight + 'px'}"
       >
-      </trigger-tinymce>
+          <!-- 富文本编辑区 -->
+          <trigger-tinymce
+            @tinymce-change="tinymceChangeFunc"
+            v-model="editorDetail"
+            v-if="pageLayout.column == 3"
+          >
+          </trigger-tinymce>
+          <trigger-tinymce
+            @tinymce-change="tinymceChangeFunc"
+            v-model="editorDetail"
+            v-else
+          >
+          </trigger-tinymce>
+      </div>
     </drag-change-height>
 
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations ,mapGetters} from 'vuex'
 import { QUESTION_NUMBERS } from '@/models/base'
 
 import dragChangeHeight from '../questionContent/drag'
@@ -76,11 +88,13 @@ export default {
       options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
       maxHeight:28,
       tinymceHeight:28,
-      str:' '
+      str:'&nbsp;',
+      pageLayout: this.contentData.pageLayout,
     }
   },
   computed: {
     ...mapState('page', ['pageData']),
+    ...mapGetters('page', ['page_width']),
 
     minHeight(){
       const {first,heightTitle,castHeight} = this.questionData
@@ -90,12 +104,23 @@ export default {
     topicData () {
       return this.contentData.group.map(question => question.childGroup).flat()
     },
+
     rowsData () {
       let Arr = []
       for (let i = 1; i <= this.contentData.rows; i++) {
         Arr.push(i)
       }
       return Arr
+    },
+
+    spaceStr () {
+      let sum = Math.ceil((this.page_width - 23) / 5)
+      let space = ''
+
+      for(let x = 0; x < sum;x++){
+          space += this.str
+      }
+      return space
     },
 
     editorDetail() {
@@ -120,8 +145,9 @@ export default {
       let pList = ''
       this.rowsData.forEach(() =>{
         let classS = content.HorizontalLine ? 'outline':''
-        pList += `<p data-i="p" class="optional-item-list ${classS}"><a> ${this.str} </a></p>`
+        pList += `<p data-i="p" class="optional-item-list ${classS}"><a> ${this.spaceStr} </a></p>`
       })
+
       return editorContent == '' ? `${boxP}${pList}` : editorContent
     }
   },
@@ -132,7 +158,6 @@ export default {
         this.data = {
           ...this.questionData
         }
-
         this.tinymceHeight = this.questionData.castHeight - this.questionData.heightTitle
         this.content = ''
         let {number,topicName} = this.contentData
@@ -142,6 +167,7 @@ export default {
         }else{
           this.content = this.questionData.titleContent
         }
+        this.pageLayout = this.contentData.pageLayout
       }
     },
 
@@ -217,13 +243,14 @@ export default {
     },
     tinymceChangeFunc(obj){
       const {val,tinyHeight} = obj
+      console.log(tinyHeight)
 
-      const {id,height,MarginHeight,heightTitle} = this.questionData
+      const {id,first,height,MarginHeight,castHeight,heightTitle,segmented,editorContent} = this.questionData
       const index = this.pageData.findIndex(question => question.id == id)
+      editorContent[segmented] = val
 
-      let heights = tinyHeight + MarginHeight + heightTitle
-      this.tinymceHeight = heights // 最大高度
-          heights = heights > height ? heights:height
+      let heights = first ? tinyHeight + heightTitle + MarginHeight : tinyHeight + MarginHeight
+      this.tinymceHeight =  tinyHeight  // 最大高度
 
       if(index > -1){
         let curObj = this.pageData[index]
@@ -231,14 +258,27 @@ export default {
         let data = {
           question:{
             ...curObj,
-            editorContent:val,
-            height:heights
+            editorContent:editorContent,
+            height:(height - castHeight) + heights,
+            strLength:length,
+            selectStr:segmented // 判断当前编辑对象所在位置
           },
           index:index,
         }
         this.pageData_edit_title(data)
       }
-    }
+    },
+
+    convertArray(oldStr) {
+      //转换富文本编辑的内容为数组
+      if(oldStr != undefined){
+        let arr = oldStr.split(/[(\r\n)\r\n]+/) // 回车换行
+            arr = arr.map(item => item == '' || item == 'undefined' ? '' : item + '\n')
+                      .filter(item => item !='')
+        return arr
+      }
+      //转换富文本编辑的内容为数组
+    },
   },
 }
 </script>
@@ -254,6 +294,7 @@ export default {
     padding: 0 15px ;
     position: relative;
     margin: 0;
+    padding-top: 7px !important;
   }
 }
 .question-title {
@@ -274,10 +315,10 @@ export default {
 }
 .optional-item-list {
     margin: 0 0;
-    height: 35px;
     line-height: 35px;
     width: calc(100% - 30px);
     margin-left: 15px;
+    padding: 0 3mm;
 
   &.outline{
     a{
@@ -287,8 +328,7 @@ export default {
 
   a{
     width: 100%;
-    display: inline-block;
-    height: 23px;
+    border-bottom: 1px solid #888;
   }
 }
 .number-info {
