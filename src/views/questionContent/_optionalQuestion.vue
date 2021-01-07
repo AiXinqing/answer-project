@@ -133,7 +133,7 @@ export default {
 
     editorDetail() {
       // 内容详情编译
-      const {first,heightTitle,height,castHeight,content,editorContent} = this.data
+      const {first,heightTitle,height,castHeight,content,editorContent,segmented,segmentedArr,id} = this.data
 
       let boxP = ''
       if(first || heightTitle == (height - castHeight)){
@@ -156,7 +156,70 @@ export default {
         pList += `<p data-i="p" class="optional-item-list ${classS}"><a> ${this.spaceStr} </a></p>`
       })
 
-      return editorContent == '' ? `${boxP}${pList}` : editorContent
+      let questionInfo = `${boxP}${pList}`
+
+      let strContent = ''
+      let prevStr = ''
+      let editorStrContent = '' // 字符串内容综合
+      let difference = 0 // 上级小于容器高度差值
+      let differenceStr = '' // 上级小于容器高度差值
+
+      if(editorContent[segmented] != undefined){
+        let convertArray = this.convertArray(editorContent[segmented])
+        // 判断长度
+        let long = segmentedArr[segmented] != undefined ? segmentedArr[segmented]:convertArray.length
+            for(let i = 0; i < long;i++){
+              if(convertArray[i] != undefined){
+                strContent += convertArray[i]
+              }
+            }
+            if(convertArray.length < long){
+              difference = long - convertArray.length
+              if(editorContent[segmented + 1] != undefined){
+                let nextArray = this.convertArray(editorContent[segmented + 1])
+                for(let i = 0; i < difference;i++){
+                  if(nextArray[i] != undefined){
+                    differenceStr += nextArray[i]
+                  }
+                }
+                strContent = strContent + differenceStr
+              }
+            }
+          // 分页判断上一部分是否剩余字符
+      }
+      editorStrContent = prevStr  + strContent
+      if(!first){
+        let prevArr = this.convertArray(editorContent[segmented - 1])
+        if(editorContent[segmented - 1] != undefined){
+
+          if(prevArr.length > segmentedArr[segmented - 1]){
+            for(let i = segmentedArr[segmented - 1] ; i < prevArr.length;i++){
+              if(prevArr[i] != undefined){
+                prevStr += prevArr[i]
+              }
+            }
+            editorContent[segmented] = prevStr + editorContent[segmented]
+            this.pageData_editorStr({id:id,content:editorContent})
+          }
+        }
+        editorStrContent = prevStr  + strContent
+        if(editorContent[segmented] != undefined){
+          let curArr = this.convertArray(editorContent[segmented])
+          if(prevArr.length < segmentedArr[segmented - 1]){
+            let index = segmentedArr[segmented - 1] - prevArr.length
+            for(let i = index ; i < curArr.length;i++){
+                if(curArr[i] != undefined){
+                  prevStr += curArr[i]
+                }
+              }
+              editorContent[segmented] = prevStr
+              this.pageData_editorStr({id:id,content:editorContent})
+          }
+          editorStrContent = prevStr
+        }
+      }
+      // editorContent == '' ? `${boxP}${pList}` : editorContent
+      return  editorStrContent == '' ? questionInfo : editorStrContent
     }
   },
   watch: {
