@@ -82,10 +82,16 @@ export default {
       type: Number,
       default: 0,
     },
+
     previewContent: {
       type: Boolean,
       default: false
     },
+
+    previewWidth:{
+      type: Number,
+      default: 0
+    }
   },
   data() {
     return {
@@ -119,6 +125,10 @@ export default {
       return Arr
     },
 
+    pageWidth () {
+      return this.previewWidth == 0 ? this.page_width - 23 : this.previewWidth - 23
+    },
+
     editorDetail(){
       const {first,content,editorContent,score,topic,segmented,segmentedArr,objId} = this.data
 
@@ -130,7 +140,7 @@ export default {
         let titleStrLong = i == 0 ? titleStr.length * 10 : 0
 
 
-        let spaceLong = Math.ceil((this.page_width - 23 - titleStrLong ) / 4.25)
+        let spaceLong = Math.ceil((this.pageWidth - 23 - titleStrLong ) / 4.25)
 
         let spaceSum = ''
         for(let x = 0; x < spaceLong;x++){

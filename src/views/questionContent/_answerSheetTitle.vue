@@ -118,6 +118,10 @@ export default {
     questionData: {
       type: Object,
       default: () => { }
+    },
+    previewWidth:{
+      type: Number,
+      default: 0
     }
   },
   data() {

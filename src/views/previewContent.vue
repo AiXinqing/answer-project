@@ -29,6 +29,7 @@
               :preview-is="true"
               :preview-content="true"
               :page-index="index"
+              :preview-width="pageWidth"
             />
           </div>
         </div>

@@ -77,6 +77,10 @@ export default {
       type: Boolean,
       default: false
     },
+    previewWidth:{
+      type: Number,
+      default: 0
+    }
   },
   data () {
     return {
@@ -104,7 +108,7 @@ export default {
     },
 
     pageWidth () {
-      return this.page_width - 23
+      return this.previewWidth == 0 ? this.page_width - 23 : this.previewWidth - 23
     },
 
     topicBox () {
