@@ -216,7 +216,9 @@ const getters = {
   compile_pageData: (state, getters) => {
     return state.pageData.map(question => {
       return question.questionType == 'ObjectiveQuestion' ? getters.question_objective(question) :
-        question.questionType == 'compositionLanguage' ? getters.question_language(question) : question
+        question.questionType == 'compositionLanguage' ? getters.question_language(question) : {
+          ...question, content: { ...question.content, pageLayout:state.pageLayout }
+        }
     })
   },
 
@@ -254,7 +256,7 @@ const getters = {
 
         //计算内容高度
     let heights = titleH + RowArr.length * question.rowHeight - less
-        return {...question,height:heights,showData:RowArr}
+        return {...question,height:heights,showData:RowArr,content:{...question.content,pageLayout:state.pageLayout}}
   },
 
   question_language: (state, getters) => (question) => {

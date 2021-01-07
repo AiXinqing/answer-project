@@ -112,6 +112,7 @@ export default {
     },
 
     strBox(){
+      console.log(this.pageWidth)
       let num = Math.ceil(Math.ceil(this.pageWidth /this.data.rows) / 5)
       let strBox = []
           for(let x = 0; x < num;x++){
