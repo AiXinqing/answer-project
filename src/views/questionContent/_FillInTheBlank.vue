@@ -236,13 +236,14 @@ export default {
         this.content = ''
         let { number, topicName, scoreTotal } = this.data
 
-        if (!this.questionData.titleContent) {
+        const {first,castHeight,heightTitle,titleContent} = this.questionData
+
+        if (!titleContent) {
           this.content = `<p><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${scoreTotal})</span>分</p>`
         } else {
-          this.content = this.questionData.titleContent
+          this.content = titleContent
         }
-        this.tinymceHeight = this.questionData.first ? this.questionData.castHeight - this.questionData.heightTitle - 2 :
-          this.questionData.castHeight - 2
+        this.tinymceHeight = first ? castHeight - heightTitle - 2 : castHeight - 2
 
       }
     },
