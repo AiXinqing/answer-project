@@ -285,7 +285,7 @@ export default {
           }
           this.pageData_insert(data)
         } else {
-          this.pageData_add({...obj,editorContent:''})
+          this.pageData_add({...obj,editorContent:[],strLength:0,selectStr:null,segmentedArr:[]})
 
         }
 
