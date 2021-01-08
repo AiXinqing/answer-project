@@ -225,14 +225,16 @@ export default {
         this.data = {
           ...this.questionData,
         }
-        this.tinymceHeight = this.questionData.castHeight - this.questionData.heightTitle
+
+        const {castHeight,heightTitle,first,titleContent,scoreTotal} = this.questionData
+        this.tinymceHeight = first ? castHeight - heightTitle : castHeight
         this.content = ''
         let {number,topicName} = this.contentData
 
-        if(!this.questionData.titleContent){
-          this.content = `<p><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${this.questionData.scoreTotal})</span>分</p>`
+        if(!titleContent){
+          this.content = `<p><span>${this.options[number].label}.</span><span>${topicName}</span><span class='p-5'>(${scoreTotal})</span>分</p>`
         }else{
-          this.content = this.questionData.titleContent
+          this.content = titleContent
         }
         this.pageLayout = this.contentData.pageLayout
       },
