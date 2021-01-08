@@ -122,7 +122,7 @@ export default {
     },
 
     spaceStr () {
-      let sum = Math.ceil((this.pageWidth - 23) / 5)
+      let sum = Math.ceil((this.pageWidth - 23) / 4.8)
       let space = ''
 
       for(let x = 0; x < sum;x++){
