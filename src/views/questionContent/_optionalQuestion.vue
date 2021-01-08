@@ -229,7 +229,7 @@ export default {
         this.data = {
           ...this.questionData
         }
-        console.log(this.questionData)
+
         const {castHeight,heightTitle,content,titleContent,first} = this.questionData
         this.tinymceHeight = first ? castHeight - heightTitle : castHeight
         this.content = ''
@@ -316,7 +316,6 @@ export default {
     },
     tinymceChangeFunc(obj){
       const {val,tinyHeight} = obj
-      console.log(tinyHeight)
 
       const {id,first,height,MarginHeight,castHeight,heightTitle,segmented,editorContent} = this.questionData
       const index = this.pageData.findIndex(question => question.id == id)

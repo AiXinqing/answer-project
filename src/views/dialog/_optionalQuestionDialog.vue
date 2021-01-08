@@ -266,7 +266,10 @@ export default {
         order: this.questionorder,
         first: true,
         titleContent:'',
-        editorContent:''
+        editorContent:[],
+        strLength:0,
+        selectStr:null,
+        segmentedArr:[],
       }
 
       if (this.editQuestionId == null) {
@@ -290,7 +293,7 @@ export default {
         // 编辑
         this.subTopic_determine_pid_clean(this.childGroups[0].pid)
         obj.id = this.editQuestionId
-        this.pageData_edit({...obj,order:this.orders,titleContent:'',editorContent:''})
+        this.pageData_edit({...obj,order:this.orders,titleContent:'',editorContent:[],strLength:0,selectStr:null,segmentedArr:[]})
       }
       //------------------------------------
       this.openedFrame = false // 关闭弹窗
