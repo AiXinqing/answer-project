@@ -111,7 +111,7 @@ export default {
 
     rowsData () {
       let Arr = []
-      for (let i = 1; i <= this.contentData.rows; i++) {
+      for (let i = 1; i <= this.questionData.rows; i++) {
         Arr.push(i)
       }
       return Arr
@@ -229,7 +229,7 @@ export default {
         this.data = {
           ...this.questionData
         }
-
+        console.log(this.questionData)
         const {castHeight,heightTitle,content,titleContent,first} = this.questionData
         this.tinymceHeight = first ? castHeight - heightTitle : castHeight
         this.content = ''
