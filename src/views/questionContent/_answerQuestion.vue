@@ -131,7 +131,7 @@ export default {
 
     editorDetail(){
       const {first,content,editorContent,score,topic,segmented,segmentedArr,objId} = this.data
-
+      //-------------------------------------数据自动渲染------------------------------------//
       let pList = ''
       this.rowsData.forEach((item,i) =>{
         let titleStr = `${topic} (${ score }分)`
@@ -153,14 +153,18 @@ export default {
       })
       let questionInfo = pList
 
+    //-------------------------------------数据自动渲染end---------------------------------//
       let strContent = ''
       let prevStr = ''
       let editorStrContent = '' // 字符串内容综合
       let difference = 0 // 上级小于容器高度差值
       let differenceStr = '' // 上级小于容器高度差值
 
+        // 判断是否有富文本生成内容
       if(editorContent[segmented] != undefined){
+        // 获取当前（富文本生成）内容
         let convertArray = this.convertArray(editorContent[segmented])
+
         // 判断长度
         let long = segmentedArr[segmented] != undefined ? segmentedArr[segmented]:convertArray.length
             for(let i = 0; i < long;i++){
@@ -181,6 +185,7 @@ export default {
               }
             }
           // 分页判断上一部分是否剩余字符
+
       }
       editorStrContent = prevStr  + strContent
       if(!first){
