@@ -185,19 +185,6 @@ export default {
       editorStrContent = prevStr  + strContent
       if(!first){
         let prevArr = this.convertArray(editorContent[segmented - 1])
-        if(editorContent[segmented - 1] != undefined){
-
-          if(prevArr.length > segmentedArr[segmented - 1]){
-            for(let i = segmentedArr[segmented - 1] ; i < prevArr.length;i++){
-              if(prevArr[i] != undefined){
-                prevStr += prevArr[i]
-              }
-            }
-            editorContent[segmented] = prevStr + editorContent[segmented]
-            this.pageData_editorStr({id:objId,content:editorContent,answer:true})
-          }
-        }
-        editorStrContent = prevStr  + strContent
         if(editorContent[segmented] != undefined){
           let curArr = this.convertArray(editorContent[segmented])
           if(prevArr.length < segmentedArr[segmented - 1]){
@@ -212,8 +199,26 @@ export default {
           }
           editorStrContent = prevStr
         }
-      }
 
+        if(editorContent[segmented - 1] != undefined){
+
+          if(prevArr.length > segmentedArr[segmented - 1]){
+            for(let i = segmentedArr[segmented - 1] ; i < prevArr.length;i++){
+              if(prevArr[i] != undefined){
+                prevStr += prevArr[i]
+              }
+            }
+            editorContent[segmented] = prevStr + editorContent[segmented]
+            this.pageData_editorStr({id:objId,content:editorContent,answer:true})
+          }
+        }
+        if(prevStr == ''){
+          editorStrContent = prevStr  + strContent
+        }else{
+          editorStrContent = prevStr
+        }
+
+      }
 
       return editorStrContent == '' ? questionInfo : editorStrContent
     }
