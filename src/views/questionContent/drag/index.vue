@@ -54,7 +54,7 @@ export default {
     },
 
     minHeight() {
-      const {editorContent,rowHeight,MarginHeight,rows} = this.question
+      const {editorContent,rowHeight,MarginHeight,rows,questionType} = this.question
       let curHright = rowHeight * rows + MarginHeight
       let long = 0
       let strHeight = 0
@@ -63,6 +63,9 @@ export default {
           let objArr = this.convertArray(element)
           long += objArr.length
         })
+        if(questionType == 'answerQuestion'){
+          long -= 2
+        }
         strHeight = long * rowHeight + MarginHeight
       }
 
@@ -95,10 +98,10 @@ export default {
     handleResize (event) {
       this.moved = true
       const deltaY = event.clientY - this.startPos
-      console.log(deltaY)
+
 
       // 最小高度为40，可以修改这个最小值
-      console.log(this.minHeight)
+
       this.height = Math.max(this.question.height + deltaY, this.minHeight)
     },
 
@@ -108,8 +111,8 @@ export default {
       this.startPos = null
       if (!this.moved) return
       this.moved = false
-
-      this.$emit('height-resize', this.height)
+      let curHeight = this.height < this.question.height ? this.height +  this.question.heightTitle : this.height
+      this.$emit('height-resize', curHeight)
 
     },
 
