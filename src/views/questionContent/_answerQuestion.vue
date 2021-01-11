@@ -31,25 +31,25 @@
           'margin-top':!data.orderFirst  ? '10px' : '0px',
         }"
     >
-    <div
-      class="content-info"
-      :style="{
-          height:tinymceHeight + 'px'}"
-    >
-      <!-- 富文本编辑区 -->
-      <trigger-tinymce
-        @tinymce-change="tinymceChangeFunc"
-        v-model="editorDetail"
-        v-if="pageLayout.column == 3"
+      <div
+        class="content-info"
+        :style="{
+            height:tinymceHeight + 'px'}"
       >
-      </trigger-tinymce>
-      <trigger-tinymce
-        @tinymce-change="tinymceChangeFunc"
-        v-model="editorDetail"
-        v-else
-      >
-      </trigger-tinymce>
-    </div>
+        <!-- 富文本编辑区 -->
+        <trigger-tinymce
+          @tinymce-change="tinymceChangeFunc"
+          v-model="editorDetail"
+          v-if="pageLayout.column == 3"
+        >
+        </trigger-tinymce>
+        <trigger-tinymce
+          @tinymce-change="tinymceChangeFunc"
+          v-model="editorDetail"
+          v-else
+        >
+        </trigger-tinymce>
+      </div>
     </drag-change-height>
 
   </div>
