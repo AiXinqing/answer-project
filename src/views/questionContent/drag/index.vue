@@ -51,7 +51,24 @@ export default {
     contentHeight() {
       const {first,castHeight,heightTitle} = this.question
       return first ? castHeight - heightTitle : castHeight
-    }
+    },
+
+    minHeight() {
+      const {editorContent,rowHeight,MarginHeight,rows} = this.question
+      let curHright = rowHeight * rows + MarginHeight
+      let long = 0
+      let strHeight = 0
+      if(editorContent && editorContent.length) {
+        editorContent.forEach(element => {
+          let objArr = this.convertArray(element)
+          long += objArr.length
+        })
+        strHeight = long * rowHeight + MarginHeight
+      }
+
+      return  !strHeight ? curHright : strHeight
+    },
+
   },
 
   watch: {
@@ -78,9 +95,11 @@ export default {
     handleResize (event) {
       this.moved = true
       const deltaY = event.clientY - this.startPos
+      console.log(deltaY)
 
       // 最小高度为40，可以修改这个最小值
-      this.height = Math.max(this.question.height + deltaY, this.data.height)
+      console.log(this.minHeight)
+      this.height = Math.max(this.question.height + deltaY, this.minHeight)
     },
 
     handleResizeEnd () {
@@ -92,7 +111,17 @@ export default {
 
       this.$emit('height-resize', this.height)
 
-    }
+    },
+
+    //转换富文本编辑的内容为数组
+    convertArray(oldStr) {
+      if(oldStr != undefined){
+        let arr = oldStr.split(/[(\r\n)\r\n]+/) // 回车换行
+            arr = arr.map(item => item == '' || item == 'undefined' ? '' : item + '\n')
+                      .filter(item => item !='')
+        return arr
+      }
+    },
   }
 }
 </script>
