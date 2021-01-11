@@ -27,9 +27,8 @@
     <drag-change-height
       :question="questionData"
       @height-resize="handleResize($event)"
-      ref="tinyDrag"
     >
-      <div class="content-info" ref="questionChange"
+      <div class="content-info"
         :style="{
           height:tinymceHeight + 'px'}"
       >
