@@ -324,7 +324,14 @@ export default {
 
       const {id,first,height,MarginHeight,castHeight,heightTitle,segmented,editorContent} = this.questionData
       const index = this.pageData.findIndex(question => question.id == id)
-      editorContent[segmented] = val
+      if(editorContent[segmented] == undefined){
+        editorContent.length = segmented
+        editorContent[segmented] = val
+      }else{
+        editorContent[segmented] = val
+      }
+
+      console.log(editorContent[segmented])
 
       let heights = first ? tinyHeight + heightTitle + MarginHeight : tinyHeight + MarginHeight
       this.tinymceHeight =  tinyHeight  // 最大高度
