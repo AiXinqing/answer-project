@@ -331,8 +331,6 @@ export default {
         editorContent[segmented] = val
       }
 
-      console.log(editorContent[segmented])
-
       let heights = first ? tinyHeight + heightTitle + MarginHeight : tinyHeight + MarginHeight
       this.tinymceHeight =  tinyHeight  // 最大高度
 
