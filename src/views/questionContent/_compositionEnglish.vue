@@ -217,6 +217,10 @@ export default {
   display: flex;
   margin: 0;
 
+  &:first-child{
+    margin-top: 7px;
+  }
+
   .pre-t5 {
     font-size: 12px;
     flex-shrink:0;

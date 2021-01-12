@@ -74,6 +74,7 @@ export default {
         strHeight = long * rowHeight + MarginHeight
       }
       return first ? !strHeight ? curHright : strHeight : castHeight
+      // return first ? castHeight - heightTitle  : castHeight
     },
 
   },
