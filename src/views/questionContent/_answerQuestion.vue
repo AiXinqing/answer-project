@@ -389,7 +389,13 @@ export default {
 
       let heights = first ? tinyHeight + heightTitle + MarginHeight : tinyHeight + MarginHeight
       this.tinymceHeight = tinyHeight // 最大高度
-      editorContent[segmented] = val
+
+      if(editorContent[segmented] == undefined){
+        editorContent.length = segmented
+        editorContent[segmented] = val
+      }else{
+        editorContent[segmented] = val
+      }
 
       if(index > -1){
         let curObj = this.pageData[index]
