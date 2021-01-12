@@ -303,7 +303,7 @@ export default {
 
         this.pageData_edit({
           ...questionObj,
-          height: height,
+          height: isNaN(height) ? questionObj.height : height,
         })
 
       }
