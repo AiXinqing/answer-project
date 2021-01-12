@@ -28,7 +28,7 @@
       }"
     >
       <div
-        class="content-info"
+        class="content-info info_pLIst"
         :style="{
           height:tinymceHeight + 'px'}"
       >
@@ -189,6 +189,7 @@ export default {
       }
       editorStrContent = prevStr  + strContent
       if(!first){
+        // 获取分列后上一个渲染框所占内容
         let prevArr = this.convertArray(editorContent[segmented - 1])
         if(editorContent[segmented - 1] != undefined){
 
@@ -203,6 +204,7 @@ export default {
           }
         }
         editorStrContent = prevStr  + strContent
+
         if(editorContent[segmented] != undefined){
           let curArr = this.convertArray(editorContent[segmented])
           if(prevArr.length < segmentedArr[segmented - 1]){
@@ -218,7 +220,7 @@ export default {
           editorStrContent = prevStr
         }
       }
-      // editorContent == '' ? `${boxP}${pList}` : editorContent
+
       return  editorStrContent == '' ? questionInfo : editorStrContent
     }
   },
@@ -247,7 +249,10 @@ export default {
   },
 
   methods: {
-    ...mapMutations('page', ['pageData_del','pageData_edit']),
+    ...mapMutations('page', [
+      'pageData_del',
+      'pageData_edit',
+      'pageData_editorStr',]),
 
     ...mapMutations('questionType', [
       'subTopic_already_del',
@@ -357,6 +362,15 @@ export default {
 
 
 <style lang="less" >
+
+.info_pLIst {
+  p{
+    &:first-child{
+      padding-top: 7px !important
+    }
+  }
+}
+
 .question-container{
   margin-top: 10px;
 
@@ -366,7 +380,6 @@ export default {
     padding: 0 15px ;
     position: relative;
     margin: 0;
-    padding-top: 7px !important;
   }
 }
 .question-title {
