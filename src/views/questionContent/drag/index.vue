@@ -107,7 +107,7 @@ export default {
 
       // 最小高度为40，可以修改这个最小值
       this.height = Math.max(height + deltaY, this.minHeight)
-      this.maskHeight = first ? (castHeight - heightTitle)  + deltaY : castHeight + deltaY
+      this.maskHeight = Math.max( first ? (castHeight - heightTitle)  + deltaY : castHeight + deltaY, this.minHeight)
     },
 
     handleResizeEnd () {
