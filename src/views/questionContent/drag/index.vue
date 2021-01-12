@@ -55,7 +55,11 @@ export default {
 
     minHeight() {
       const {editorContent,rowHeight,MarginHeight,rows,questionType} = this.question
-      let curHright = rowHeight * rows + MarginHeight
+      let curRows= rows
+      if(questionType == 'optionalQuestion'){
+          curRows += 1
+      }
+      let curHright = rowHeight * curRows + MarginHeight
       let long = 0
       let strHeight = 0
       if(editorContent && editorContent.length) {
@@ -65,6 +69,9 @@ export default {
         })
         if(questionType == 'answerQuestion'){
           long -= 2
+        }
+        if(questionType == 'optionalQuestion'){
+          long += 1
         }
         strHeight = long * rowHeight + MarginHeight
       }
@@ -152,6 +159,7 @@ export default {
     height: 18px;
     background-color: transparent;
     cursor: move;
+    z-index: 999;
 
     svg{
       width: 120%;
