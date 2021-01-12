@@ -12,7 +12,7 @@
       v-if="moved"
       class="question-resize-mask"
       :style="{
-        height: height + 'px'
+        height: maskHeight + 'px'
       }"
     />
     <div
@@ -40,6 +40,7 @@ export default {
   data () {
     return {
       height: this.question.height,
+      maskHeight: this.question.first ? this.question.castHeight - this.question.heightTitle : this.question.castHeight,
       iconHeight: 23,
       startPos: null,
       moved: false,
@@ -54,7 +55,7 @@ export default {
     },
 
     minHeight() {
-      const {editorContent,rowHeight,MarginHeight,rows,questionType} = this.question
+      const {editorContent,rowHeight,MarginHeight,rows,questionType,first,castHeight} = this.question
       let curRows= rows
       if(questionType == 'optionalQuestion'){
           curRows += 1
@@ -70,13 +71,9 @@ export default {
         if(questionType == 'answerQuestion'){
           long -= 2
         }
-        if(questionType == 'optionalQuestion'){
-          long += 1
-        }
         strHeight = long * rowHeight + MarginHeight
       }
-
-      return  !strHeight ? curHright : strHeight
+      return first ? !strHeight ? curHright : strHeight : castHeight
     },
 
   },
@@ -103,13 +100,14 @@ export default {
     },
 
     handleResize (event) {
+      const {first,heightTitle,height,castHeight} = this.question
       this.moved = true
       const deltaY = event.clientY - this.startPos
 
 
       // 最小高度为40，可以修改这个最小值
-
-      this.height = Math.max(this.question.height + deltaY, this.minHeight)
+      this.height = Math.max(height + deltaY, this.minHeight)
+      this.maskHeight = first ? (castHeight - heightTitle)  + deltaY : castHeight + deltaY
     },
 
     handleResizeEnd () {
@@ -119,6 +117,7 @@ export default {
       if (!this.moved) return
       this.moved = false
       let curHeight = this.height < this.question.height ? this.height +  this.question.heightTitle : this.height
+
       this.$emit('height-resize', curHeight)
 
     },
