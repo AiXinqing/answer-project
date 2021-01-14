@@ -187,6 +187,8 @@ export default {
               }
             }
 
+            segmentedArr.push(curRect.availableRow)
+
             currentPage.rects.push({
               ...rect,
               castHeight:curRect.height,
@@ -214,11 +216,10 @@ export default {
           while (height > (this.page_height - this.difference)){
 
             segmented += 1
-            segmentedArr.push(curRect.availableRow)
 
             let avalibleHeight =  this.page_height - this.difference
             let curRects = this.preliminaryQuestion(rect, avalibleHeight,false)
-
+            segmentedArr.push(curRects.availableRow)
             if(rect.showData && rect.showData.length){
               backup = {
                 showData:itemObj.showData.splice(0, curRects.availableRow),
@@ -273,7 +274,7 @@ export default {
                 showData: itemObj.showData,
               }
           }
-
+          segmentedArr.push(itemObj.showData.length)
           // 选作题
           if(rect.questionType == 'optionalQuestion' ||
               rect.questionType == 'answerQuestion' ||
@@ -293,7 +294,6 @@ export default {
           segmented += 1
 
           // 分页段所占行数
-          segmentedArr.push(curRect.availableRow)
 
           currentPage.rects.push({
             ...rect,
@@ -312,7 +312,6 @@ export default {
           if(rect.questionType == 'answerQuestion' && rect.orderFirst > 0){
             currentPage.height -= (this.difference - 2)
           }
-
           // 选作题
           if(rect.questionType == 'optionalQuestion' ||
               rect.questionType == 'answerQuestion' ||
