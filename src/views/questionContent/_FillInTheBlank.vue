@@ -117,7 +117,6 @@ export default {
     },
 
     strBox(){
-
       let num = Math.ceil(Math.ceil(this.pageWidth /this.data.rows) / 5)
       let strBox = []
           for(let x = 0; x < num;x++){
@@ -126,11 +125,9 @@ export default {
       return strBox
     },
 
-    editorDetail(){
-
-      const {editorContent,showData,segmented,segmentedArr,first,id,MarginHeight,rowHeight} = this.questionData
+    questionInfo(){
+      const {showData} = this.questionData
       let questionInfo = ''
-
       showData.forEach(subtopic =>{
         let aList = ''
         subtopic.forEach((topic) =>{
@@ -151,124 +148,24 @@ export default {
           }
           aList += `&nbsp;&nbsp;${spanBox}&nbsp;&nbsp;<a class="subtopic_a" style="flex:${subtopic.length >= 4 ? 1:0}">${spaceStr}</a>`
         })
-        questionInfo +=  `<p class="content-row">${aList}</p>`
-      })
-      let strContent= ''
-      let Redundant = '' // 多出的内容
-      let nextIndex = segmented + 1
+      questionInfo +=  `<p class="content-row">${aList}</p>`
+    })
+      return questionInfo
+    },
 
-      if(editorContent[segmented] != undefined) {
-        // 当前数据
-        let convertArray = this.convertArray(editorContent[segmented])
-        let maxLong = segmentedArr[segmented] != undefined || !first ? segmentedArr[segmented]: Math.floor((this.page_height - 20 - MarginHeight) / rowHeight)
-            strContent = ''
-            if(convertArray.length > maxLong){
-              // 超出部分截取
-              for(let a = 0; a < maxLong;a++){
-                if(convertArray[a] != undefined){
-                  strContent += convertArray[a]
-                }
-              }
-              questionInfo = strContent
-              segmentedArr[segmented] = questionInfo
-              // 多余部分
-              for(let i = maxLong; i < convertArray.length;i++){
-                if(convertArray[i] != undefined){
-                  Redundant += convertArray[i]
-                }
-              }
+    editorDetail(){
 
-              if(editorContent[nextIndex] != undefined){
-                editorContent[nextIndex] = Redundant + editorContent[nextIndex]
-              }else{
-                editorContent[nextIndex] = Redundant
-              }
-
-              this.pageData_editorStr({id:id,content:editorContent})
-            }else if(convertArray.length < maxLong){
-                console.log(2)
-            }else {
-              let convertArray = this.convertArray(editorContent[segmented])
-              for(let a = 0; a < convertArray.length;a++){
-                if(convertArray[a] != undefined){
-                  strContent += convertArray[a]
-                }
-              }
-              questionInfo = strContent + questionInfo
-            }
+      const {editorContent,segmented,segmentedArr,first,id,MarginHeight,rowHeight,operating} = this.questionData
+      let tinycmeContent = ''
+      if(editorContent[segmented] != undefined){
+        //第一次赋值，内容高度未超出内容框，未低于内容框
+        tinycmeContent = editorContent[segmented]
 
       }
 
+      //渲染数据
 
-      // let strContent = ''
-      // let prevStr = ''
-      // let editorStrContent = '' // 字符串内容综合
-      // let difference = 0 // 上级小于容器高度差值
-      // let differenceStr = '' // 上级小于容器高度差值
-
-
-      // if(editorContent[segmented] != undefined){
-      //   let convertArray = this.convertArray(editorContent[segmented])
-      //   // 判断长度
-      //   let long = segmentedArr[segmented] != undefined ? segmentedArr[segmented]:convertArray.length
-      //       for(let i = 0; i < long;i++){
-      //         if(convertArray[i] != undefined){
-      //           strContent += convertArray[i]
-      //         }
-      //       }
-      //       if(convertArray.length < long){
-      //         difference = long - convertArray.length
-      //         if(editorContent[segmented + 1] != undefined){
-      //           let nextArray = this.convertArray(editorContent[segmented + 1])
-      //           for(let i = 0; i < difference;i++){
-      //             if(nextArray[i] != undefined){
-      //               differenceStr += nextArray[i]
-      //             }
-      //           }
-      //           strContent = strContent + differenceStr
-      //         }
-      //       }
-      //     // 分页判断上一部分是否剩余字符
-      // }
-      // editorStrContent = prevStr  + strContent
-      // if(!first){
-      //   let prevArr = this.convertArray(editorContent[segmented - 1])
-      //   if(editorContent[segmented] != undefined){
-      //     let curArr = this.convertArray(editorContent[segmented])
-      //     if(prevArr.length < segmentedArr[segmented - 1]){
-      //       let index = segmentedArr[segmented - 1] - prevArr.length
-      //       for(let i = index ; i < curArr.length;i++){
-      //           if(curArr[i] != undefined){
-      //             prevStr += curArr[i]
-      //           }
-      //         }
-      //         editorContent[segmented] = prevStr
-      //         this.pageData_editorStr({id:id,content:editorContent})
-      //     }
-      //     editorStrContent = prevStr
-      //   }
-
-      //   if(editorContent[segmented - 1] != undefined){
-
-      //     if(prevArr.length > segmentedArr[segmented - 1]){
-      //       for(let i = segmentedArr[segmented - 1] ; i < prevArr.length;i++){
-      //         if(prevArr[i] != undefined){
-      //           prevStr += prevArr[i]
-      //         }
-      //       }
-      //       editorContent[segmented] = prevStr + editorContent[segmented]
-      //       this.pageData_editorStr({id:id,content:editorContent})
-      //     }
-      //   }
-      //   if(prevStr == ''){
-      //     editorStrContent = prevStr  + (!strContent  ? '' : strContent)
-      //   }else{
-      //     editorStrContent = prevStr
-      //   }
-      // }
-
-      // return editorStrContent == '' ? questionInfo : editorStrContent
-      return questionInfo
+      return tinycmeContent == '' ? this.questionInfo : tinycmeContent
     }
   },
   watch: {
@@ -397,8 +294,10 @@ export default {
     tinymceChangeFunc (obj) {
       // 富文本参数
       const {val,tinyHeight} = obj
+      // 首个p向下top7px
+      let tinyContentH = tinyHeight - 7
 
-      const{height,id,MarginHeight,castHeight,first,heightTitle,segmented,editorContent} = this.questionData
+      const{height,id,MarginHeight,castHeight,first,heightTitle,segmented,editorContent,operating} = this.questionData
       const index = this.pageData.findIndex(question => question.id == id)
 
       if(editorContent[segmented] == undefined){
@@ -407,9 +306,12 @@ export default {
       }else{
         editorContent[segmented] = val
       }
+      operating[segmented] = 1
 
-      let heights = first ? tinyHeight + heightTitle + MarginHeight : tinyHeight + MarginHeight
-      this.tinymceHeight =  tinyHeight  // 最大高度
+      let heights = first ? tinyContentH + heightTitle + MarginHeight : tinyContentH + MarginHeight
+      console.log(heights)
+      console.log((height - castHeight) + heights)
+      this.tinymceHeight =  tinyContentH  // 最大高度
 
       if (index > -1) {
         let curObj = this.pageData[index]
@@ -420,7 +322,8 @@ export default {
             editorContent: editorContent,
             height: (height - castHeight) + heights,
             strLength:length,
-            selectStr:segmented // 判断当前编辑对象所在位置
+            selectStr:segmented, // 判断当前编辑对象所在位置
+            operating:operating // 是否操作
           },
           index: index,
         }
