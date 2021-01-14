@@ -148,18 +148,56 @@ export default {
           }
           aList += `&nbsp;&nbsp;${spanBox}&nbsp;&nbsp;<a class="subtopic_a" style="flex:${subtopic.length >= 4 ? 1:0}">${spaceStr}</a>`
         })
-      questionInfo +=  `<p class="content-row">${aList}</p>`
+      questionInfo +=  `<p class="content-row">${aList}</p>
+      `
     })
       return questionInfo
     },
 
     editorDetail(){
 
-      const {editorContent,segmented,segmentedArr,first,id,MarginHeight,rowHeight,operating} = this.questionData
+      const {editorContent,segmented,segmentedArr,first,id,MarginHeight,operating,rowHeight} = this.questionData
+      // 富文本编辑后内容
       let tinycmeContent = ''
+      // 溢出多余内容
+      let extraContent = ''
       if(editorContent[segmented] != undefined){
         //第一次赋值，内容高度未超出内容框，未低于内容框
-        tinycmeContent = editorContent[segmented]
+        if(operating[segmented] == undefined) {
+          tinycmeContent = editorContent[segmented] + this.questionInfo
+          // 变更后改变数据
+          editorContent[segmented] = tinycmeContent
+          this.pageData_editorStr({id:id,content:editorContent})
+        }else{
+          tinycmeContent = editorContent[segmented]
+        }
+
+        // 当前内容数组
+        let currentContentArr = this.convertArray(tinycmeContent)
+        console.log(currentContentArr)
+        // 当前内容框能承受的最高长度
+        let maxLong = first ? segmentedArr[segmented]:Math.floor((this.page_height - 20 - MarginHeight) / rowHeight)
+        console.log(maxLong)
+        //内容溢出处理---------------------------------------------------------
+        if(currentContentArr.length > maxLong){
+          // 当前内容框显示内容
+          tinycmeContent = ''
+          for(let a = 0; a < maxLong;a++){
+            if(currentContentArr[a] != undefined){
+              tinycmeContent += currentContentArr[a]
+            }
+          }
+          editorContent[segmented] = tinycmeContent
+          // 溢出内容
+          for(let i = maxLong; i < currentContentArr.length;i++){
+            if(currentContentArr[i] != undefined){
+              extraContent += currentContentArr[i]
+            }
+          }
+          editorContent[segmented + 1] = extraContent
+          this.pageData_editorStr({id:id,content:editorContent})
+        }
+        //内容溢出处理---------------------------------------------------------end
 
       }
 
@@ -309,8 +347,7 @@ export default {
       operating[segmented] = 1
 
       let heights = first ? tinyContentH + heightTitle + MarginHeight : tinyContentH + MarginHeight
-      console.log(heights)
-      console.log((height - castHeight) + heights)
+
       this.tinymceHeight =  tinyContentH  // 最大高度
 
       if (index > -1) {
