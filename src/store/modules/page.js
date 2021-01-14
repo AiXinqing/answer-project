@@ -106,9 +106,14 @@ const mutations = {
       index = state.pageData.findIndex((itme) => itme.objId == obj.id)
     }
     if (index > -1) {
+      let operatings = state.pageData[index].operating
+      if (obj.operating != undefined) {
+        operatings.push(obj.operating)
+      }
       state.pageData[index] = {
         ...state.pageData[index],
-        editorContent:obj.content
+        editorContent: obj.content,
+        operating: operatings
       }
     }
   },
