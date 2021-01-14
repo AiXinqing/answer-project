@@ -161,23 +161,28 @@ export default {
       let tinycmeContent = ''
       // 溢出多余内容
       let extraContent = ''
+      // 数组中-当前位置之后一位
+      let nextSegmented = segmented + 1
+
       if(editorContent[segmented] != undefined){
         //第一次赋值，内容高度未超出内容框，未低于内容框
-        if(operating[segmented] == undefined) {
+
+        if(operating[segmented] == undefined ) {
           tinycmeContent = editorContent[segmented] + this.questionInfo
           // 变更后改变数据
-          editorContent[segmented] = tinycmeContent
-          this.pageData_editorStr({id:id,content:editorContent})
+          // editorContent[segmented] = tinycmeContent
+          editorContent.splice(segmented,1,tinycmeContent)
+          this.pageData_editorStr({id:id,content:editorContent,operating:segmented})
         }else{
           tinycmeContent = editorContent[segmented]
         }
 
         // 当前内容数组
         let currentContentArr = this.convertArray(tinycmeContent)
-        console.log(currentContentArr)
+
         // 当前内容框能承受的最高长度
         let maxLong = first ? segmentedArr[segmented]:Math.floor((this.page_height - 20 - MarginHeight) / rowHeight)
-        console.log(maxLong)
+
         //内容溢出处理---------------------------------------------------------
         if(currentContentArr.length > maxLong){
           // 当前内容框显示内容
@@ -194,11 +199,21 @@ export default {
               extraContent += currentContentArr[i]
             }
           }
-          editorContent[segmented + 1] = extraContent
+          if(editorContent[nextSegmented] == undefined){
+            editorContent.splice(nextSegmented, 1, extraContent)
+          }else{
+            editorContent.splice(nextSegmented, 1, extraContent + editorContent[nextSegmented])
+          }
           this.pageData_editorStr({id:id,content:editorContent})
         }
         //内容溢出处理---------------------------------------------------------end
 
+        // 内容低于内容框高度
+
+        if(currentContentArr.length < maxLong && editorContent[nextSegmented] != undefined){
+          let nextContentArr = this.convertArray(editorContent[nextSegmented])
+          console.log(nextContentArr)
+        }
       }
 
       //渲染数据
