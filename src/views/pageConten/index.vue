@@ -274,7 +274,7 @@ export default {
                 showData: itemObj.showData,
               }
           }
-          segmentedArr.push(itemObj.showData.length)
+          segmentedArr.push(itemObj.showData != undefined ? itemObj.showData.length : 30)
           // 选作题
           if(rect.questionType == 'optionalQuestion' ||
               rect.questionType == 'answerQuestion' ||
