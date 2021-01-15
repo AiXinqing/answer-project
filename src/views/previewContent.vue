@@ -244,7 +244,7 @@ export default {
                 showData: itemObj.showData,
               }
           }
-          segmentedArr.push(itemObj.showData != undefined ? itemObj.showData.length : 30)
+          segmentedArr.push(itemObj.showData != undefined ? itemObj.showData.length : Math.floor((this.page_height - 20 - curRect.MarginHeight) / curRect.rowHeight))
           // 选作题
           if(rect.questionType == 'optionalQuestion' ||
               rect.questionType == 'answerQuestion' ||
@@ -333,7 +333,9 @@ export default {
         availableRow:availableRow,
         height:question_height,
         pagination:question_height >= question.height ? false :
-          question_height < heightTitle ? false: true
+          question_height < heightTitle ? false: true,
+          MarginHeight:MarginHeight,
+          rowHeight:rowHeight
       }
 
       return parameter
