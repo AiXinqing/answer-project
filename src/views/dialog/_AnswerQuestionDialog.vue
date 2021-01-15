@@ -208,6 +208,7 @@ export default {
           strLength:0,
           selectStr:null,
           segmentedArr:[],
+          operating:[]
         }
         Arr.push(obj)
       })
@@ -354,7 +355,8 @@ export default {
                 editorContent:[],
                 strLength:0,
                 selectStr:null,
-                segmentedArr:[]
+                segmentedArr:[],
+                operating:[]
               },
               num: previous,
             }
