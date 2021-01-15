@@ -57,6 +57,7 @@ import { PAGE_HEIGHT } from '@/models/base'
 import tinyVue from '../../components/tinymce'
 import triggerTinymce from '../../components/tinymce/triggerEditor'
 import dragChangeHeight from '../questionContent/drag'
+import { constants } from 'zlib';
 
 export default {
   components: {
@@ -170,7 +171,7 @@ export default {
         if(operating[segmented] == undefined ) {
           tinycmeContent = editorContent[segmented] + this.questionInfo
           // 变更后改变数据
-          // editorContent[segmented] = tinycmeContent
+
           editorContent.splice(segmented,1,tinycmeContent)
           this.pageData_editorStr({id:id,content:editorContent,operating:segmented})
         }else{
@@ -212,7 +213,29 @@ export default {
 
         if(currentContentArr.length < maxLong && editorContent[nextSegmented] != undefined){
           let nextContentArr = this.convertArray(editorContent[nextSegmented])
-          console.log(nextContentArr)
+
+              //减去不给当前内容的字符
+              tinycmeContent = ''
+              let long = maxLong - currentContentArr.length
+              for(let i = long; i < nextContentArr.length - 1;i++){
+                if(nextContentArr[i] != undefined){
+                  tinycmeContent += nextContentArr[i]
+                }
+              }
+              editorContent[nextSegmented] = tinycmeContent
+
+
+              //计算出差值
+              tinycmeContent = ''
+              for(let a = 0; a < long;a++){
+                if(nextContentArr[a] != undefined){
+                  extraContent += nextContentArr[a]
+                }
+              }
+              tinycmeContent = editorContent[segmented] + extraContent
+              editorContent[segmented] = tinycmeContent
+              this.pageData_editorStr({id:id,content:editorContent})
+
         }
       }
 
