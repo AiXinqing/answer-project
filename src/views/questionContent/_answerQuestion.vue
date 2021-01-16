@@ -159,7 +159,6 @@ export default {
     },
 
     editorDetail(){
-      console.log(this.questionInfo)
       const {editorContent,segmented,segmentedArr,first,objId,MarginHeight,operating,rowHeight} = this.questionData
       // 富文本编辑后内容
       let tinycmeContent = ''
@@ -191,13 +190,15 @@ export default {
         if(currentContentArr.length > maxLong){
           // 当前内容框显示内容
           tinycmeContent = ''
+
           for(let a = 0; a < maxLong;a++){
             if(currentContentArr[a] != undefined){
               tinycmeContent += currentContentArr[a]
             }
           }
           editorContent[segmented] = tinycmeContent
-          // 溢出内容
+
+         // 溢出内容
           for(let i = maxLong; i < currentContentArr.length;i++){
             if(currentContentArr[i] != undefined){
               extraContent += currentContentArr[i]
@@ -365,7 +366,7 @@ export default {
       const index = this.pageData.findIndex(obj => this.questionData.objId === obj.objId)
       if(index > -1){
         let questionObj = this.pageData[index]
-        console,log(questionObj)
+
         this.pageData_edit({
             ...questionObj,
             height:height,
@@ -406,7 +407,8 @@ export default {
 
       const {objId,height,castHeight,heightTitle,segmented,editorContent,MarginHeight,first,operating} = this.questionData
       const index = this.pageData.findIndex(question => question.objId == objId)
-      console.log(index)
+
+      console.log(val)
 
       let heights = first ? tinyHeight + heightTitle + MarginHeight : tinyHeight + MarginHeight
       this.tinymceHeight = tinyHeight // 最大高度
@@ -439,9 +441,12 @@ export default {
     convertArray(oldStr) {
       //转换富文本编辑的内容为数组
       if(oldStr != undefined){
-        let arr = oldStr.split(/[(\r\n)\r\n]+/) // 回车换行
-            arr = arr.map(item => item == '' || item == 'undefined' ? '' : item + '\n')
-                      .filter(item => item !='')
+        // let arr = oldStr.split(/[(\r\n)\r\n]+/) // 回车换行
+        //     arr = arr.map(item => item == '' || item == 'undefined' ? '' : item + '\n')
+        //               .filter(item => item !='')
+        let arr = oldStr.split('</p>') // 回车换行
+            arr = arr.map(item => item == '' || item == 'undefined' ? '' : item + '</p>')
+                  .filter(item => item !='')
         return arr
       }
       //转换富文本编辑的内容为数组
