@@ -408,8 +408,6 @@ export default {
       const {objId,height,castHeight,heightTitle,segmented,editorContent,MarginHeight,first,operating} = this.questionData
       const index = this.pageData.findIndex(question => question.objId == objId)
 
-      console.log(val)
-
       let heights = first ? tinyHeight + heightTitle + MarginHeight : tinyHeight + MarginHeight
       this.tinymceHeight = tinyHeight // 最大高度
 
