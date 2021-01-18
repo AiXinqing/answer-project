@@ -150,7 +150,7 @@ export default {
           aList += `&nbsp;&nbsp;${spanBox}&nbsp;&nbsp;<a class="subtopic_a" style="flex:${subtopic.length >= 4 ? 1:0}">${spaceStr}</a>`
         })
       questionInfo +=  `<p class="content-row">${aList}</p>
-      `
+      `// 需要空一行回车，这样才能筛选行数，不能删除
     })
       return questionInfo
     },
