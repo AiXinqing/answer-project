@@ -345,13 +345,14 @@ export default {
 
       // 边框高度 剩余内容
       let margin = initial ? MarginHeight + heightTitle : MarginHeight
-          margin = question.questionType == 'optionalQuestion' ? margin + question.rowTitle : margin
+          // margin = question.questionType == 'optionalQuestion' ? margin + question.rowTitle : margin
           margin = question.questionType == 'compositionLanguage' && initial ? margin + question.rowTitle : margin
 
       let RemainingHeight = avalibleHeight - margin
 
       // 剩余可容纳行数
       let availableRow = Math.floor(RemainingHeight / rowHeight)
+          // 选作题默认有行分数栏
 
 
       //题型高度
