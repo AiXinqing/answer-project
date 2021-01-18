@@ -134,9 +134,12 @@ export default {
 
     questionInfo() {
       const {first,content,score,topic} = this.data
+
       let pList = ''
       this.rowsData.forEach((item,i) =>{
-        let titleStr = `${topic} (${ score }分)`
+
+        let titleStr = `${topic}` + (content.ShowScore ? ` (${ score }分)` : '')
+
         let span1 =  i == 0 && first  ? `&nbsp;${titleStr}&nbsp;` : ''
 
         let titleStrLong = i == 0 ? titleStr.length * 10 : 0
@@ -149,7 +152,7 @@ export default {
             spaceSum += this.str
         }
 
-        let span2 = content.HorizontalLine ? `<a class="line-style"> ${spaceSum} </a>` :''
+        let span2 = content.HorizontalLine ? `<a class="line-style"> (${spaceSum}) </a>` :''
 
         pList += `<p class="question_line">${span1}${span2}</p>
         ` // 需要空一行回车，这样才能筛选行数，不能删除
