@@ -270,6 +270,7 @@ export default {
         strLength:0,
         selectStr:null,
         segmentedArr:[],
+        operating:[],
       }
 
       if (this.editQuestionId == null) {
@@ -285,7 +286,7 @@ export default {
           }
           this.pageData_insert(data)
         } else {
-          this.pageData_add({...obj,editorContent:[],strLength:0,selectStr:null,segmentedArr:[]})
+          this.pageData_add({...obj,editorContent:[],strLength:0,selectStr:null,segmentedArr:[],operating:[]})
 
         }
 
@@ -293,7 +294,7 @@ export default {
         // 编辑
         this.subTopic_determine_pid_clean(this.childGroups[0].pid)
         obj.id = this.editQuestionId
-        this.pageData_edit({...obj,order:this.orders,titleContent:'',editorContent:[],strLength:0,selectStr:null,segmentedArr:[]})
+        this.pageData_edit({...obj,order:this.orders,titleContent:'',editorContent:[],strLength:0,selectStr:null,segmentedArr:[],operating:[]})
       }
       //------------------------------------
       this.openedFrame = false // 关闭弹窗
