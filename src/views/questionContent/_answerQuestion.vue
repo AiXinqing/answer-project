@@ -63,7 +63,7 @@ import { PAGE_HEIGHT } from '@/models/base'
 import tinyVue from '../../components/tinymce'
 import triggerTinymce from '../../components/tinymce/triggerEditor'
 import dragChangeHeight from '../questionContent/drag'
-import { log } from 'util';
+
 export default {
   components: {
     tinyVue,
