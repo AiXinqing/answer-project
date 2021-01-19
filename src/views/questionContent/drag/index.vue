@@ -55,26 +55,21 @@ export default {
     },
 
     minHeight() {
-      const {editorContent,rowHeight,MarginHeight,rows,questionType,first,castHeight} = this.question
-      let curRows= rows
-      if(questionType == 'optionalQuestion'){
-          curRows += 1
-      }
-      let curHright = rowHeight * curRows + MarginHeight
-      let long = 0
-      let strHeight = 0
-      if(editorContent && editorContent.length) {
-        editorContent.forEach(element => {
-          let objArr = this.convertArray(element)
-          long += objArr.length
-        })
-        if(questionType == 'answerQuestion'){
-          long -= 2
+      const {showData,editorContent,segmented,rowHeight,MarginHeight,rows} = this.question
+      let height = 0
+      if(editorContent[segmented] == undefined){
+        if(showData && showData.length){
+          height =  showData.length * rowHeight + MarginHeight
+        }else{
+          height = rows * rowHeight + MarginHeight
         }
-        strHeight = long * rowHeight + MarginHeight
+      }else{
+        let currentTinymceArr = this.convertArray(editorContent[segmented])
+
+            height = currentTinymceArr.length * rowHeight + MarginHeight
       }
-      return first ? !strHeight ? curHright : strHeight : castHeight
-      // return first ? castHeight - heightTitle  : castHeight
+
+      return height
     },
 
   },
@@ -107,8 +102,13 @@ export default {
 
 
       // 最小高度为40，可以修改这个最小值
-      this.height = Math.max(height + deltaY, this.minHeight)
+      // this.height = Math.max(height + deltaY, this.minHeight)
+      this.height = (first ? (castHeight - heightTitle)  + deltaY : castHeight + deltaY) < this.minHeight ?
+        first ? height - castHeight + this.minHeight  : height - castHeight - heightTitle + this.minHeight
+        : height + deltaY
+
       this.maskHeight = Math.max( first ? (castHeight - heightTitle)  + deltaY : castHeight + deltaY, this.minHeight)
+
     },
 
     handleResizeEnd () {
