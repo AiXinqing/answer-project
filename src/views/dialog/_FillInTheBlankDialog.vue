@@ -318,6 +318,7 @@ export default {
         selectStr:null,
         segmentedArr:[],
         operating:[],
+        tinymceCHeight:[]
         // 此题总分
       }
 
@@ -344,7 +345,7 @@ export default {
       } else {
         this.subTopic_determine_pid_clean(this.childGroups[0].pid)
         obj.id = this.editQuestionId
-        this.pageData_edit({...obj,order:this.orders,titleContent:'',editorContent:[],strLength:0,selectStr:null,segmentedArr:[],operating:[]})
+        this.pageData_edit({...obj,order:this.orders,titleContent:'',editorContent:[],strLength:0,selectStr:null,segmentedArr:[],operating:[],tinymceCHeight:[]})
       }
       this.subTopic_already_add(this.childGroups)
       this.subTopic_calculate_determine(this.childGroups)
