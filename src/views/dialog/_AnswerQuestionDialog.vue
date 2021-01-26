@@ -208,7 +208,8 @@ export default {
           strLength:0,
           selectStr:null,
           segmentedArr:[],
-          operating:[]
+          operating:[],
+          tinymceCHeight:[]
         }
         Arr.push(obj)
       })
@@ -356,7 +357,8 @@ export default {
                 strLength:0,
                 selectStr:null,
                 segmentedArr:[],
-                operating:[]
+                operating:[],
+                tinymceCHeight:[]
               },
               num: previous,
             }
