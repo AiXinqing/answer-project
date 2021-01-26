@@ -204,7 +204,6 @@ export default {
         // 当前内容数组
         let currentContentArr = this.convertArray(tinymceContent)
 
-
         // 当前内容框能承受的最高长度
         let maxLong = first ? segmentedArr[segmented]:Math.floor((this.page_height - 20 - MarginHeight) / rowHeight)
         let tinymceCLong = tinymceCHeight[segmented] / rowHeight
@@ -213,7 +212,6 @@ export default {
         //内容溢出处理---------------------------------------------------------
         // if(currentContentArr.length > maxLong){
         if(tinymceCLong > maxLong){
-          console.log(sumPLong)
           // 当前内容框显示内容
           tinymceContent = ''
           for(let a = 0; a < currentContentArr.length - sumPLong;a++){
@@ -245,7 +243,7 @@ export default {
 
         // 内容低于内容框高度
 
-        if(currentContentArr.length < maxLong && editorContent[nextSegmented] != undefined){
+        if(tinymceCLong < maxLong && editorContent[nextSegmented] != undefined){
           let nextContentArr = this.convertArray(editorContent[nextSegmented])
 
               //减去不给当前内容的字符
@@ -274,7 +272,7 @@ export default {
       }
 
       //渲染数据
-
+      // console.log(tinymceContent)
       return tinymceContent == '' ? this.questionInfo : tinymceContent
     }
   },
