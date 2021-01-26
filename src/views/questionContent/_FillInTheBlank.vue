@@ -36,12 +36,14 @@
           @tinymce-change="tinymceChangeFunc"
           v-model="editorDetail"
           v-if="pageLayout.column == 3"
+          class="fillTinymce"
           ref="tinymceBox"
         >
         </trigger-tinymce>
         <trigger-tinymce
           @tinymce-change="tinymceChangeFunc"
           v-model="editorDetail"
+          class="fillTinymce"
           ref="tinymceBox"
           v-else
         >
@@ -99,6 +101,7 @@ export default {
       str:'&nbsp;',
       aWidth:1,
       page_height: PAGE_HEIGHT,
+      tinymceId: [],
     }
   },
   computed: {
@@ -170,6 +173,7 @@ export default {
 
       // 计算超出高度的行数
       let sumPLong = 0
+      // 内容最后一个高度
 
       if(editorContent[segmented] != undefined){
         //第一次赋值，内容高度未超出内容框，未低于内容框
@@ -186,11 +190,10 @@ export default {
         }
 
         // 计算超出长度行数----------------------------------------------------------------------
-        let tinymceBox = this.$refs['tinymceBox']
-        let editorId =  tinymceBox.editorId
 
-        if(editorId){
-          let tinymcePList = document.querySelectorAll(`#tinymce_${editorId} p`)
+        if(this.tinymceId[segmented] !=undefined){
+          let tinymcePList = document.querySelectorAll(`#${this.tinymceId[segmented]} p`)
+
             tinymcePList.forEach((itme,index) => {
               let val = index == 0 ? itme.offsetHeight - 7 : itme.offsetHeight
               sumPLong = val > 35 && index < tinymcePList.length - 1 ? sumPLong + (val - 35) / 35 :
@@ -301,7 +304,12 @@ export default {
           this.content = titleContent
         }
         this.tinymceHeight = first ? castHeight - heightTitle - 2 : castHeight - 2
-
+        // 获取富文本生id
+        let fillTinymceArr = document.querySelectorAll('.fillTinymce')
+        this.tinymceId = []
+          fillTinymceArr.forEach(item => {
+            this.tinymceId.push(item.id)
+          })
       }
     },
 
@@ -315,6 +323,7 @@ export default {
   },
   mounted () {
   },
+
   methods: {
     ...mapMutations('page', [
       'pageData_del',

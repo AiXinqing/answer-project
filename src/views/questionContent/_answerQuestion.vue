@@ -41,11 +41,13 @@
           @tinymce-change="tinymceChangeFunc"
           v-model="editorDetail"
           v-if="pageLayout.column == 3"
+          ref="tinymceBox"
         >
         </trigger-tinymce>
         <trigger-tinymce
           @tinymce-change="tinymceChangeFunc"
           v-model="editorDetail"
+          ref="tinymceBox"
           v-else
         >
         </trigger-tinymce>
@@ -170,6 +172,9 @@ export default {
       // 数组中-当前位置之后一位
       let nextSegmented = segmented + 1
 
+      // 计算超出高度的行数
+      let sumPLong = 0
+
       if(editorContent[segmented] != undefined){
         //第一次赋值，内容高度未超出内容框，未低于内容框
 
@@ -183,6 +188,22 @@ export default {
           tinycmeContent = editorContent[segmented]
         }
         //----------------------------------------------------------------end
+
+        // 计算超出长度行数----------------------------------------------------------------------
+          let tinymceBox = this.$refs['tinymceBox']
+          let editorId =  tinymceBox.editorId
+
+          if(editorId){
+            let tinymcePList = document.querySelectorAll(`#tinymce_${editorId} p`)
+              tinymcePList.forEach((itme,index) => {
+                let val = index == 0 ? itme.offsetHeight - 7 : itme.offsetHeight
+                sumPLong = val > 35 && index < tinymcePList.length - 1 ? sumPLong + (val - 35) / 35 :
+                                val > 35 && index == tinymcePList.length - 1 ? sumPLong + 1 :
+                                    index >= segmentedArr[segmented] ? sumPLong + 1 : sumPLong + 0
+              })
+          }
+       // 计算超出长度行数----------------------------------------------------------------------
+
         // 当前内容数组
         let currentContentArr = this.convertArray(tinycmeContent)
 
@@ -408,7 +429,7 @@ export default {
       // 富文本参数
       const {val,tinyHeight} = obj
 
-      const {objId,height,castHeight,heightTitle,segmented,editorContent,MarginHeight,first,operating} = this.questionData
+      const {objId,height,castHeight,heightTitle,segmented,editorContent,MarginHeight,first,operating,tinymceCHeight} = this.questionData
       const index = this.pageData.findIndex(question => question.objId == objId)
 
       let heights = first ? tinyHeight + heightTitle + MarginHeight : tinyHeight + MarginHeight
@@ -420,6 +441,7 @@ export default {
       }else{
         editorContent[segmented] = val
       }
+      tinymceCHeight[segmented] = tinyHeight
       operating[segmented] = 1
       if(index > -1){
         let curObj = this.pageData[index]
@@ -431,7 +453,8 @@ export default {
             height:(height - castHeight) + heights,
             strLength:length,
             selectStr:segmented, // 判断当前编辑对象所在位置
-            operating:operating // 是否操作
+            operating:operating, // 是否操作
+            tinymceCHeight:tinymceCHeight
           },
           index:index,
         }
