@@ -61,6 +61,7 @@ import { PAGE_HEIGHT } from '@/models/base'
 import tinyVue from '../../components/tinymce'
 import triggerTinymce from '../../components/tinymce/triggerEditor'
 import dragChangeHeight from '../questionContent/drag'
+import { constants } from 'zlib';
 
 
 export default {
@@ -163,7 +164,7 @@ export default {
 
     editorDetail(){
 
-      const {editorContent,segmented,segmentedArr,first,id,MarginHeight,operating,rowHeight,tinymceCHeight,height} = this.questionData
+      const {editorContent,segmented,segmentedArr,first,id,MarginHeight,operating,rowHeight,tinymceCHeight,height,heightArr} = this.questionData
       // 富文本编辑后内容
       let tinymceContent = ''
       // 溢出多余内容
@@ -173,11 +174,17 @@ export default {
 
       // 计算超出高度的行数
       let sumPLong = 0
-      // 内容最后一个高度
+      // 内容行高度
+      let contentArrH = []
+      let heightArrs = []
+      let overflowHeight = 0 // 溢出高度
+
+      if(heightArr.length){
+        contentArrH = contentArrH.concat(heightArr)
+      }
 
       if(editorContent[segmented] != undefined){
         //第一次赋值，内容高度未超出内容框，未低于内容框
-
 
         if(operating[segmented] == undefined ) {
           tinymceContent = editorContent[segmented] + this.questionInfo
@@ -189,17 +196,31 @@ export default {
           tinymceContent = editorContent[segmented]
         }
 
+        // 当前内容框能承受的最高长度
+        let maxLong = first ? segmentedArr[segmented]:Math.floor((this.page_height - 20 - MarginHeight) / rowHeight)
+
         // 计算超出长度行数----------------------------------------------------------------------
 
-        if(this.tinymceId[segmented] !=undefined){
+        if(this.tinymceId[segmented] != undefined){
           let tinymcePList = document.querySelectorAll(`#${this.tinymceId[segmented]} p`)
+          let Arr1 = []
+              tinymcePList.forEach((itme,index) => {
+                  Arr1.push(index == 0 ? itme.offsetHeight - 7 : itme.offsetHeight)
+              })
 
-            tinymcePList.forEach((itme,index) => {
-              let val = index == 0 ? itme.offsetHeight - 7 : itme.offsetHeight
-              sumPLong = val > 35 && index < tinymcePList.length - 1 ? sumPLong + (val - 35) / 35 :
-                              val > 35 && index == tinymcePList.length - 1 ? sumPLong + 1 :
-                                  index >= segmentedArr[segmented] ? sumPLong + 1 : sumPLong + 0
-            })
+              contentArrH = contentArrH.concat(Arr1)
+
+              contentArrH.forEach((itme,index) => {
+                  sumPLong = itme > 35 && index < tinymcePList.length - 1 ? sumPLong + (itme - 35) / 35 :
+                                  itme > 35 && index == tinymcePList.length - 1 ? sumPLong + 1 :
+                                      index >= segmentedArr[segmented] ? sumPLong + 1 : sumPLong + 0
+              })
+              // 截取溢出的行
+              heightArrs = contentArrH.slice(contentArrH.length - sumPLong, contentArrH.length)
+              // 溢出行的总高
+              heightArrs.forEach(item =>{
+                overflowHeight += item
+              })
         }
 
        // 计算超出长度行数----------------------------------------------------------------------
@@ -207,13 +228,10 @@ export default {
         // 当前内容数组
         let currentContentArr = this.convertArray(tinymceContent)
 
-        // 当前内容框能承受的最高长度
-        let maxLong = first ? segmentedArr[segmented]:Math.floor((this.page_height - 20 - MarginHeight) / rowHeight)
         let tinymceCLong = tinymceCHeight[segmented] / rowHeight
-        let heights = tinymceCLong - maxLong
 
         //内容溢出处理---------------------------------------------------------
-        // if(currentContentArr.length > maxLong){
+
         if(tinymceCLong > maxLong){
           // 当前内容框显示内容
           tinymceContent = ''
@@ -231,18 +249,27 @@ export default {
               extraContent += currentContentArr[i]
             }
           }
+
           if(editorContent[nextSegmented] == undefined){
             editorContent.splice(nextSegmented, 1, extraContent)
           }else{
             editorContent.splice(nextSegmented, 1, extraContent + editorContent[nextSegmented])
           }
 
-          this.pageData_editorStr({id:id,content:editorContent,height:height - sumPLong * rowHeight + heights * rowHeight})
+          tinymceCHeight[segmented] = maxLong * rowHeight
+
+          //更新数组对象参数值不刷新
+          this.pageData_editorStr({
+            id:id,
+            content:editorContent,
+            height:height - sumPLong * rowHeight + overflowHeight, // 总高度 = 总 - 超出高度 + 超出行总高度
+            heightArr:heightArrs,
+            tinymceCHeight:tinymceCHeight
+          })
             sumPLong = 0
-            tinymceCHeight[segmented] = maxLong * rowHeight
 
         }
-        //内容溢出处理---------------------------------------------------------end
+        //内容溢出处理--------------------------------------------------------------------------------end
 
         // 内容低于内容框高度
 
