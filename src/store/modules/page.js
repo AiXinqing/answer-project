@@ -115,7 +115,7 @@ const mutations = {
       }
       state.pageData[index] = {
         ...state.pageData[index],
-        editorContent: obj.content,
+        editorContent: obj.content != undefined ? obj.content : state.pageData[index].content,
         operating: operatings,
         height: obj.height != undefined ? obj.height : state.pageData[index].height,
         heightArr: obj.heightArr != undefined ? obj.heightArr : state.pageData[index].heightArr,
