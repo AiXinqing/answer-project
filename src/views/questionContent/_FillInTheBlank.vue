@@ -211,8 +211,8 @@ export default {
               contentArrH = contentArrH.concat(Arr1)
 
               contentArrH.forEach((itme,index) => {
-                  sumPLong = itme > 35 && index < tinymcePList.length - 1 ? sumPLong + (itme - 35) / 35 :
-                                  itme > 35 && index == tinymcePList.length - 1 ? sumPLong + 1 :
+                  sumPLong = itme > rowHeight && index < tinymcePList.length - 1 ? sumPLong + (itme - rowHeight) / rowHeight :
+                                  itme > rowHeight && index == tinymcePList.length - 1 ? sumPLong + 1 :
                                       index >= segmentedArr[segmented] ? sumPLong + 1 : sumPLong + 0
               })
               // 截取溢出的行
@@ -273,30 +273,41 @@ export default {
 
         // 内容低于内容框高度
 
+
         if(tinymceCLong < maxLong && editorContent[nextSegmented] != undefined){
-          let nextContentArr = this.convertArray(editorContent[nextSegmented])
+          // 计算富文本与最大高度之间差值
+          let difference = maxLong * rowHeight -  tinymceCHeight[segmented]
+          let differenceLong = 0
+          overflowHeight = 0
+          heightArr.forEach(val =>{
+            difference -= val
+            differenceLong = difference >= 0 ? differenceLong + 1: differenceLong + 0
+            // 差值高度
+            overflowHeight += val
+          })
 
-              //减去不给当前内容的字符
-              tinymceContent = ''
-              let long = maxLong - currentContentArr.length
-              for(let i = long; i < nextContentArr.length - 1;i++){
-                if(nextContentArr[i] != undefined){
-                  tinymceContent += nextContentArr[i]
+          if(differenceLong > 0){
+            let nextContentArr = this.convertArray(editorContent[nextSegmented])
+                //减去不给当前内容的字符
+                tinymceContent = ''
+                for(let i = differenceLong; i < nextContentArr.length - 1;i++){
+                  if(nextContentArr[i] != undefined){
+                    tinymceContent += nextContentArr[i]
+                  }
                 }
-              }
-              editorContent[nextSegmented] = tinymceContent
+                editorContent[nextSegmented] = tinymceContent
 
-
-              //计算出差值
-              tinymceContent = ''
-              for(let a = 0; a < long;a++){
-                if(nextContentArr[a] != undefined){
-                  extraContent += nextContentArr[a]
+                //计算出差值
+                tinymceContent = ''
+                for(let a = 0; a < differenceLong;a++){
+                  if(nextContentArr[a] != undefined){
+                    extraContent += nextContentArr[a]
+                  }
                 }
-              }
-              tinymceContent = editorContent[segmented] + extraContent
-              editorContent[segmented] = tinymceContent
-              this.pageData_editorStr({id:id,content:editorContent})
+                tinymceContent = editorContent[segmented] + extraContent
+                editorContent[segmented] = tinymceContent
+                this.pageData_editorStr({id:id,content:editorContent,height: height + overflowHeight})
+          }
 
         }
       }
@@ -441,7 +452,7 @@ export default {
       // 首个p向下top7px
       let tinyContentH = tinyHeight - 7
 
-      const{height,id,MarginHeight,castHeight,first,heightTitle,segmented,editorContent,operating,tinymceCHeight} = this.questionData
+      const{height,id,MarginHeight,castHeight,first,heightTitle,segmented,editorContent,operating,tinymceCHeight,segmentedArr,rowHeight,heightArr} = this.questionData
       const index = this.pageData.findIndex(question => question.id == id)
 
       if(editorContent[segmented] == undefined){
@@ -457,6 +468,26 @@ export default {
 
       this.tinymceHeight =  tinyContentH  // 最大高度
 
+      let contentHeight = (height - castHeight) + heights
+
+      //判断是否更改高度
+
+      // 当前内容框能承受的最高长度
+      let maxLong = first ? segmentedArr[segmented]:Math.floor((this.page_height - 20 - MarginHeight) / rowHeight)
+      let difference = maxLong * rowHeight -  tinymceCHeight[segmented]
+          let differenceLong = 0
+          if(difference > 0){
+            heightArr.forEach(val =>{
+              difference -= val
+              differenceLong = difference >= 0 ? differenceLong + 1: differenceLong + 0
+            })
+            if(differenceLong > 0){
+              contentHeight = (height - castHeight) + heights
+            }else{
+              contentHeight = height
+            }
+          }
+
       if (index > -1) {
         let curObj = this.pageData[index]
 
@@ -464,7 +495,7 @@ export default {
           question: {
             ...curObj,
             editorContent: editorContent,
-            height: (height - castHeight) + heights,
+            height: contentHeight,
             strLength:length,
             selectStr:segmented, // 判断当前编辑对象所在位置
             operating:operating, // 是否操作
