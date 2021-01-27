@@ -117,7 +117,8 @@ const mutations = {
         ...state.pageData[index],
         editorContent: obj.content,
         operating: operatings,
-        height:obj.height != undefined ? obj.height : state.pageData[index].height
+        height: obj.height != undefined ? obj.height : state.pageData[index].height,
+        heightArr: obj.heightArr != undefined ? obj.heightArr : state.pageData[index].heightArr,
       }
     }
   },
