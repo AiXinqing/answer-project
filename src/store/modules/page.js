@@ -119,6 +119,7 @@ const mutations = {
         operating: operatings,
         height: obj.height != undefined ? obj.height : state.pageData[index].height,
         heightArr: obj.heightArr != undefined ? obj.heightArr : state.pageData[index].heightArr,
+        tinymceCHeight: obj.tinymceCHeight != undefined ? obj.tinymceCHeight : state.pageData[index].tinymceCHeight,
       }
     }
   },
