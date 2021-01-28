@@ -193,6 +193,10 @@ export default {
           // 溢出行高
           let overflowArr = []
 
+          // 内容高度小于内容框高度差值
+          let impairment = 0
+          let impairmentLong = 0
+
           // 当前内容数组
           currentContentArr = this.convertArray(editorContent[segmented]).filter(item => item.indexOf(this.strP) != -1)
 
@@ -266,9 +270,50 @@ export default {
           }
 
           //内容低于内容高度
+          if(difference < accommodateHeight){
+            impairment = accommodateHeight - difference
 
-          if(differenceLong <= 0){
-            console.log('jianlai')
+            if(rowHeightArr[nextSegmented] != undefined){
+
+              rowHeightArr[nextSegmented].forEach(val => {
+                  impairment -= val
+                  impairmentLong = impairment >= 0 ? impairmentLong + 1 : impairmentLong + 0
+              })
+              console.log(impairmentLong)
+            }
+
+            if(impairmentLong > 0){
+              let nextContentArr = this.convertArray(editorContent[nextSegmented])
+
+              //减去不给当前内容的字符
+              tinymceContent = ''
+              for(let i = impairmentLong; i < nextContentArr.length - 1;i++){
+                if(nextContentArr[i] != undefined){
+                  tinymceContent += nextContentArr[i]
+                }
+              }
+              editorContent[nextSegmented] = tinymceContent
+              rowHeightArr[nextSegmented] = rowHeightArr[nextSegmented].slice(impairmentLong, rowHeightArr[nextSegmented].length)
+
+              //追加差值
+              for(let a = 0; a < impairmentLong;a++){
+                if(nextContentArr[a] != undefined){
+                  extraContent += nextContentArr[a]
+                }
+              }
+              tinymceContent = editorContent[segmented] + extraContent
+              rowHeightArr[segmented] = rowHeightArr[segmented].concat(rowHeightArr[nextSegmented].slice(0,impairmentLong))
+              operatTinymce[nextSegmented] = 1
+
+              // 更新数组
+              this.pageData_editorStr({
+                id:id,
+                content:editorContent,
+                // height:height + overflowHeight, // 总高度 = 总 - 超出高度 + 超出行总高度
+                rowHeightArr:rowHeightArr,
+                operatTinymce:operatTinymce
+              })
+            }
           }
         }
       }
