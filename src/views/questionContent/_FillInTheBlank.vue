@@ -101,6 +101,7 @@ export default {
       str:'&nbsp;',
       aWidth:1,
       page_height: PAGE_HEIGHT,
+      strP:'</p>'
     }
   },
   computed: {
@@ -175,7 +176,7 @@ export default {
         })
       }else{
         if(editorContent[segmented] != undefined){
-
+          let currentContentArr = []
           // 初始参数----------------------------------------------------------------------------------------
           // 当前内容框能容纳高度
           let maxLong = first ? segmentedArr[segmented]:Math.floor((this.page_height - 20 - MarginHeight) / rowHeight)
@@ -192,8 +193,12 @@ export default {
           // 溢出行高
           let overflowArr = []
 
+          // 当前内容数组
+          currentContentArr = this.convertArray(editorContent[segmented]).filter(item => item.indexOf(this.strP) != -1)
+
           // 当前富文本编辑后内容行高数组与容纳高度差值
           if(rowHeightArr[segmented] != undefined){
+
             rowHeightArr[segmented].forEach(val => {
                 difference += val
                 differenceLong = difference > accommodateHeight ? differenceLong + 1 : differenceLong + 0
@@ -207,13 +212,10 @@ export default {
           let extraContent = ''
           let overflowHeight = ''
 
-          // 当前内容数组
-          let currentContentArr = this.convertArray(editorContent[segmented])
-
           //高度溢出
-          if(differenceLong > 0 && differenceLong != 0) {
-
+          if(differenceLong > 0) {
               // 截取溢出的高度
+
               for(let a = 0; a < currentContentArr.length - differenceLong;a++){
                 if(currentContentArr[a] != undefined){
                   tinymceContent += currentContentArr[a]
@@ -221,9 +223,6 @@ export default {
               }
               // 赋值
               editorContent[segmented] = tinymceContent
-              // 更新行高值
-              rowHeightArr[segmented] = rowHeightArr[segmented].slice(0, rowHeightArr[segmented].length - differenceLong)
-
 
               // 溢出内容
               for(let i = currentContentArr.length - differenceLong; i < currentContentArr.length;i++){
@@ -247,11 +246,14 @@ export default {
                 overflowHeight += val
               })
 
+
               if(rowHeightArr[nextSegmented] != undefined){
                 rowHeightArr[nextSegmented] = overflowArr.concat(rowHeightArr[nextSegmented])
               }else {
                 rowHeightArr[nextSegmented] = overflowArr
               }
+              // 更新行高数组
+              rowHeightArr[segmented] = rowHeightArr[segmented].slice(0, rowHeightArr[segmented].length - differenceLong)
 
               // 更新数组
               this.pageData_editorStr({
@@ -262,162 +264,15 @@ export default {
                 operatTinymce:operatTinymce
               })
           }
+
+          //内容低于内容高度
+
+          if(differenceLong <= 0){
+            console.log('jianlai')
+          }
         }
       }
-
       return editorContent[segmented]
-
-      // const {editorContent,segmented,segmentedArr,first,id,MarginHeight,operatTinymce,rowHeight,tinymceCHeight,height,heightArr} = this.questionData
-      // // 富文本编辑后内容
-      // let tinymceContent = ''
-      // // 溢出多余内容
-      // let extraContent = ''
-      // // 数组中-当前位置之后一位
-      // let nextSegmented = segmented + 1
-
-      // // 计算超出高度的行数
-      // let sumPLong = 0
-      // // 内容行高度
-      // let contentArrH = []
-      // let heightArrs = []
-      // let overflowHeight = 0 // 溢出高度
-
-      // if(heightArr.length){
-      //   contentArrH = contentArrH.concat(heightArr)
-      // }
-
-      // if(editorContent[segmented] != undefined){
-      //   //第一次赋值，内容高度未超出内容框，未低于内容框
-
-      //   if(operatTinymce[segmented] == undefined ) {
-      //     tinymceContent = editorContent[segmented] + this.questionInfo
-      //     // 变更后改变数据
-
-      //     editorContent.splice(segmented,1,tinymceContent)
-      //     this.pageData_editorStr({id:id,content:editorContent,operatTinymce:segmented})
-      //   }else{
-      //     tinymceContent = editorContent[segmented]
-      //   }
-
-      //   // 当前内容框能承受的最高长度
-      //   let maxLong = first ? segmentedArr[segmented]:Math.floor((this.page_height - 20 - MarginHeight) / rowHeight)
-
-      //   // 计算超出长度行数----------------------------------------------------------------------
-
-      //   if(this.tinymceId[segmented] != undefined){
-      //     let tinymcePList = document.querySelectorAll(`#${this.tinymceId[segmented]} p`)
-      //     let Arr1 = []
-      //         tinymcePList.forEach((itme,index) => {
-      //             Arr1.push(index == 0 ? itme.offsetHeight - 7 : itme.offsetHeight)
-      //         })
-
-      //         contentArrH = contentArrH.concat(Arr1)
-
-      //         contentArrH.forEach((itme,index) => {
-      //             sumPLong = itme > rowHeight && index < tinymcePList.length - 1 ? sumPLong + (itme - rowHeight) / rowHeight :
-      //                             itme > rowHeight && index == tinymcePList.length - 1 ? sumPLong + 1 :
-      //                                 index >= segmentedArr[segmented] ? sumPLong + 1 : sumPLong + 0
-      //         })
-      //         // 截取溢出的行
-      //         heightArrs = contentArrH.slice(contentArrH.length - sumPLong, contentArrH.length)
-      //         // 溢出行的总高
-      //         heightArrs.forEach(item =>{
-      //           overflowHeight += item
-      //         })
-      //   }
-
-      //  // 计算超出长度行数----------------------------------------------------------------------
-
-      //   // 当前内容数组
-      //   let currentContentArr = this.convertArray(tinymceContent)
-
-      //   let tinymceCLong = tinymceCHeight[segmented] / rowHeight
-
-      //   //内容溢出处理---------------------------------------------------------
-
-      //   if(tinymceCLong > maxLong){
-      //     // 当前内容框显示内容
-      //     tinymceContent = ''
-      //     for(let a = 0; a < currentContentArr.length - sumPLong;a++){
-      //       if(currentContentArr[a] != undefined){
-      //         tinymceContent += currentContentArr[a]
-      //       }
-      //     }
-
-      //     editorContent.splice(segmented, 1, tinymceContent)
-
-      //     // 溢出内容
-      //     for(let i = currentContentArr.length - sumPLong; i < currentContentArr.length;i++){
-      //       if(currentContentArr[i] != undefined){
-      //         extraContent += currentContentArr[i]
-      //       }
-      //     }
-
-          // if(editorContent[nextSegmented] == undefined){
-          //   editorContent.splice(nextSegmented, 1, extraContent)
-          // }else{
-          //   editorContent.splice(nextSegmented, 1, extraContent + editorContent[nextSegmented])
-          // }
-
-      //     tinymceCHeight[segmented] = maxLong * rowHeight
-
-      //     //更新数组对象参数值不刷新
-      //     this.pageData_editorStr({
-      //       id:id,
-      //       content:editorContent,
-      //       height:height - sumPLong * rowHeight + overflowHeight, // 总高度 = 总 - 超出高度 + 超出行总高度
-      //       heightArr:heightArrs,
-      //       tinymceCHeight:tinymceCHeight
-      //     })
-      //       sumPLong = 0
-
-      //   }
-      //   //内容溢出处理--------------------------------------------------------------------------------end
-
-      //   // 内容低于内容框高度
-
-
-      //   if(tinymceCLong < maxLong && editorContent[nextSegmented] != undefined){
-      //     // 计算富文本与最大高度之间差值
-      //     let difference = maxLong * rowHeight -  tinymceCHeight[segmented]
-      //     let differenceLong = 0
-      //     overflowHeight = 0
-      //     heightArr.forEach(val =>{
-      //       difference -= val
-      //       differenceLong = difference >= 0 ? differenceLong + 1: differenceLong + 0
-      //       // 差值高度
-      //       overflowHeight += val
-      //     })
-
-      //     if(differenceLong > 0){
-      //       let nextContentArr = this.convertArray(editorContent[nextSegmented])
-      //           //减去不给当前内容的字符
-      //           tinymceContent = ''
-      //           for(let i = differenceLong; i < nextContentArr.length - 1;i++){
-      //             if(nextContentArr[i] != undefined){
-      //               tinymceContent += nextContentArr[i]
-      //             }
-      //           }
-      //           editorContent[nextSegmented] = tinymceContent
-
-      //           //计算出差值
-      //           tinymceContent = ''
-      //           for(let a = 0; a < differenceLong;a++){
-      //             if(nextContentArr[a] != undefined){
-      //               extraContent += nextContentArr[a]
-      //             }
-      //           }
-      //           tinymceContent = editorContent[segmented] + extraContent
-      //           editorContent[segmented] = tinymceContent
-      //           this.pageData_editorStr({id:id,content:editorContent,height: height + overflowHeight})
-      //     }
-
-      //   }
-      // }
-
-      // //渲染数据
-      // // console.log(tinymceContent)
-      // return tinymceContent == '' ? this.questionInfo : tinymceContent
     }
   },
   watch: {
@@ -598,7 +453,8 @@ export default {
 
         this.pageData_edit_title(data)
       }
-    }
+    },
+
   },
 }
 </script>
