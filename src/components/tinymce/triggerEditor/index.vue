@@ -86,7 +86,8 @@
               editor.on('blur', (e) => {
                   let obj = {
                     val:editor.getContent(),
-                    tinyHeight:document.getElementById(e.target.id).offsetHeight
+                    tinyHeight:document.getElementById(e.target.id).offsetHeight,
+                    id:e.target.id
                   }
                   self.$emit('tinymce-change', obj)
               })
