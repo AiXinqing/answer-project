@@ -550,7 +550,7 @@ export default {
       // 首个p向下top7px
       let tinyContentH = tinyHeight - 7
       // 参数
-      const {id,segmented,editorContent,operatTinymce,rowHeightArr,} = this.questionData
+      const {first,segmentedArr,rowHeight,id,segmented,editorContent,operatTinymce,rowHeightArr,MarginHeight,height} = this.questionData
       const index = this.pageData.findIndex(question => question.id == id)
 
       // 更改富文本编辑后行高数组--------------------------------------------------
@@ -566,6 +566,19 @@ export default {
       editorContent[segmented] = val
       // 标记富文本进行过编辑
       operatTinymce[segmented] = 1
+      // 计算高度
+      let difference = 0
+
+      let tinyHeights = 0
+      if(operatTinymce[segmented]){
+        let maxLong = first ? segmentedArr[segmented]:Math.floor((this.page_height - 20 - MarginHeight) / rowHeight)
+        let accommodateHeight = maxLong * rowHeight
+
+        rowHeightArr[segmented].forEach(val => {
+              difference += val
+              tinyHeights = difference > accommodateHeight ? tinyHeights + val : tinyHeights + 0
+          })
+      }
 
       this.tinymceHeight =  tinyContentH  // 最大高度
 
@@ -575,6 +588,7 @@ export default {
           question: {
             ...curObj,
             editorContent: editorContent,
+            height: tinyHeights > 0 ? height + tinyHeights : height,
             selectStr:segmented, // 判断当前编辑对象所在位置
             operatTinymce:operatTinymce, // 是否操作
             rowHeightArr: rowHeightArr,
