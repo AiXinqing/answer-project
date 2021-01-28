@@ -87,7 +87,7 @@
                   let obj = {
                     val:editor.getContent(),
                     tinyHeight:document.getElementById(e.target.id).offsetHeight,
-                    id:e.target.id
+                    tinyId:e.target.id
                   }
                   self.$emit('tinymce-change', obj)
               })
