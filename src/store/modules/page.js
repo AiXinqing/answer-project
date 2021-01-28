@@ -109,17 +109,13 @@ const mutations = {
       index = state.pageData.findIndex((itme) => itme.objId == obj.id)
     }
     if (index > -1) {
-      let operatings = state.pageData[index].operating
-      if (obj.operating != undefined) {
-        operatings.push(obj.operating)
-      }
+
       state.pageData[index] = {
         ...state.pageData[index],
-        editorContent: obj.content != undefined ? obj.content : state.pageData[index].content,
-        operating: operatings,
+        editorContent: obj.content != undefined ? obj.content : state.pageData[index].editorContent,
+        operatTinymce: obj.operatTinymce != undefined ? obj.operatTinymce : state.pageData[index].operatTinymce,
         height: obj.height != undefined ? obj.height : state.pageData[index].height,
-        heightArr: obj.heightArr != undefined ? obj.heightArr : state.pageData[index].heightArr,
-        tinymceCHeight: obj.tinymceCHeight != undefined ? obj.tinymceCHeight : state.pageData[index].tinymceCHeight,
+        rowHeightArr: obj.rowHeightArr != undefined ? obj.rowHeightArr : state.pageData[index].rowHeightArr,
       }
     }
   },
