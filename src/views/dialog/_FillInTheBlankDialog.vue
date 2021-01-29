@@ -318,6 +318,7 @@ export default {
         operatTinymce:[], // 判断富文本是否操作过
         tinymceCHeight:[],
         rowHeightArr:[], // 内容行高数组
+        initialHeigh:height, // 初始高度
         // 此题总分
       }
 

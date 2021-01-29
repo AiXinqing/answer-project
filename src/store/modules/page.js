@@ -44,6 +44,7 @@ const mutations = {
             segmentedArr: [],
             operatTinymce:[],
             rowHeightArr: [],
+            height: item.initialHeigh != undefined ? item.initialHeigh:item.height
           }
         }
         return {
