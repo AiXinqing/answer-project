@@ -279,40 +279,46 @@ export default {
                   impairment -= val
                   impairmentLong = impairment >= 0 ? impairmentLong + 1 : impairmentLong + 0
               })
-              console.log(impairmentLong)
             }
 
             if(impairmentLong > 0){
-              let nextContentArr = this.convertArray(editorContent[nextSegmented])
+              if(editorContent[nextSegmented] != undefined){
 
-              //减去不给当前内容的字符
-              tinymceContent = ''
-              for(let i = impairmentLong; i < nextContentArr.length - 1;i++){
-                if(nextContentArr[i] != undefined){
-                  tinymceContent += nextContentArr[i]
+                let nextContentArr = this.convertArray(editorContent[nextSegmented])
+
+                console.log(nextContentArr)
+
+                //追加差值
+                for(let a = 0; a < impairmentLong;a++){
+                  if(nextContentArr[a] != undefined){
+                    extraContent += nextContentArr[a]
+                  }
                 }
-              }
-              editorContent[nextSegmented] = tinymceContent
-              rowHeightArr[nextSegmented] = rowHeightArr[nextSegmented].slice(impairmentLong, rowHeightArr[nextSegmented].length)
+                editorContent[segmented] += extraContent
 
-              //追加差值
-              for(let a = 0; a < impairmentLong;a++){
-                if(nextContentArr[a] != undefined){
-                  extraContent += nextContentArr[a]
+                rowHeightArr[segmented] = rowHeightArr[segmented].concat(rowHeightArr[nextSegmented].slice(0,impairmentLong))
+                console.log(rowHeightArr[segmented])
+                operatTinymce[nextSegmented] = 1
+
+                //减去不给当前内容的字符
+                tinymceContent = ''
+                for(let i = impairmentLong; i < nextContentArr.length - 1;i++){
+                  if(nextContentArr[i] != undefined){
+                    tinymceContent += nextContentArr[i]
+                  }
                 }
-              }
-              tinymceContent = editorContent[segmented] + extraContent
-              rowHeightArr[segmented] = rowHeightArr[segmented].concat(rowHeightArr[nextSegmented].slice(0,impairmentLong))
-              operatTinymce[nextSegmented] = 1
+                editorContent[nextSegmented] = tinymceContent
+                rowHeightArr[nextSegmented] = rowHeightArr[nextSegmented].slice(impairmentLong, rowHeightArr[nextSegmented].length)
 
-              // 更新数组
-              this.pageData_editorStr({
-                id:id,
-                content:editorContent,
-                // height:height + overflowHeight, // 总高度 = 总 - 超出高度 + 超出行总高度
-                rowHeightArr:rowHeightArr,
-                operatTinymce:operatTinymce
-              })
+                // 更新数组
+                this.pageData_editorStr({
+                  id:id,
+                  content:editorContent,
+                  // height:height + overflowHeight, // 总高度 = 总 - 超出高度 + 超出行总高度
+                  rowHeightArr:rowHeightArr,
+                  operatTinymce:operatTinymce
+                })
+              }
             }
           }
         }
