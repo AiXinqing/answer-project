@@ -283,8 +283,6 @@ export default {
                 })
               }
 
-              console.log(impairmentLong)
-
               if(impairmentLong > 0 && segmented < editorContent.length){
                 if(editorContent[nextSegmented] != undefined){
 
@@ -316,7 +314,6 @@ export default {
                   this.pageData_editorStr({
                     id:id,
                     content:editorContent,
-                    // height:height + overflowHeight, // 总高度 = 总 - 超出高度 + 超出行总高度
                     rowHeightArr:rowHeightArr,
                     operatTinymce:operatTinymce
                   })
@@ -463,6 +460,7 @@ export default {
 
       // 更改富文本编辑后行高数组--------------------------------------------------
       let tinymcePList = document.querySelectorAll(`#${tinyId} p`)
+      let nextSegmented = segmented + 1
       let tinyMceRowHeight = []
           tinymcePList.forEach((itme,index) => {
               tinyMceRowHeight.push(index == 0 ? itme.offsetHeight - 7 : itme.offsetHeight)
@@ -485,7 +483,18 @@ export default {
         rowHeightArr[segmented].forEach(val => {
               difference += val
               tinyHeights = difference > accommodateHeight ? tinyHeights + val : tinyHeights + 0
-          })
+        })
+        if(difference < accommodateHeight){
+          //内容框高度 - 内容
+            let  impairment = accommodateHeight - difference
+
+              if(rowHeightArr[nextSegmented] != undefined && impairment > 0){
+                rowHeightArr[nextSegmented].forEach(val => {
+                    impairment -= val
+                    tinyHeights = impairment >= 0 ? tinyHeights - val : tinyHeights + 0
+                })
+              }
+        }
       }
 
       this.tinymceHeight =  tinyContentH  // 最大高度
@@ -496,7 +505,7 @@ export default {
           question: {
             ...curObj,
             editorContent: editorContent,
-            height: tinyHeights > 0 ? height + tinyHeights : height,
+            height: height + tinyHeights,
             selectStr:segmented, // 判断当前编辑对象所在位置
             operatTinymce:operatTinymce, // 是否操作
             rowHeightArr: rowHeightArr,
