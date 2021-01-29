@@ -380,6 +380,7 @@
             this.pageData_add(questionObj)
           }
         }else{
+          console.log(questionObj)
           this.subTopic_determine_pid_clean(this.questionGroup[0].pid)
           questionObj.id = this.editQuestionId
           this.pageData_edit({...questionObj,order:this.orders,titleContent:''})
@@ -436,7 +437,6 @@
         //添加分段小题组
         let {type,groupTopic} = groupSubTopic
         let obj = JSON.parse(JSON.stringify(this.preEditData))
-        console.log(groupTopic)
 
         obj.group[type].push(groupTopic)
 
