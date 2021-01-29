@@ -47,6 +47,18 @@
       this.initEditor()
     },
 
+    watch: {
+      html: {
+        immediate: true,
+        handler () {
+          if(this.editor){
+            this.editor.setContent(this.html)
+          }
+        },
+        deep:true
+      }
+    },
+
     methods: {
       initEditor(){
         const self = this
