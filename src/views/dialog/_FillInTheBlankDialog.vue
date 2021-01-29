@@ -165,7 +165,13 @@ export default {
         arr.push(obj)
         return arr
       }
-      return recursion(this.objectiveData.group[0])
+
+      let Arr = []
+      this.objectiveData.group.forEach(obj => {
+        Arr.push(recursion(obj))
+      })
+
+      return Arr.flat()
     },
 
     topicGroupData() {
@@ -182,6 +188,7 @@ export default {
     },
 
     childGroups(){
+
       return this.objectiveData.group.map(item => item.childGroup).flat()
     },
 
@@ -284,6 +291,7 @@ export default {
     },
 
     preCreateQuestion() {
+
       // 数据编辑完成添加至全局数组中---------------
       // 行高配置
       let {fillRow,fillMargin,fillTitle} = this.fill
@@ -372,7 +380,6 @@ export default {
       this.errorVal = val
     },
     preEditQuestionGroup(obj) {
-
       //添加题组
       let {group} = this.spaceTopic
       const index = group.findIndex((item) => item.id === obj.id)
