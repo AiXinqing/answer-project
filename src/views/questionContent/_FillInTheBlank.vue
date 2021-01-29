@@ -454,7 +454,7 @@ export default {
       // 首个p向下top7px
       let tinyContentH = tinyHeight - 7
       // 参数
-      const {first,segmentedArr,rowHeight,id,segmented,editorContent,operatTinymce,rowHeightArr,MarginHeight,height} = this.questionData
+      const {first,segmentedArr,rowHeight,id,segmented,editorContent,operatTinymce,rowHeightArr,MarginHeight,height,heightTitle,castHeight} = this.questionData
       const index = this.pageData.findIndex(question => question.id == id)
 
       // 更改富文本编辑后行高数组--------------------------------------------------
@@ -496,7 +496,12 @@ export default {
         }
       }
 
+        let heights = first ? tinyContentH + heightTitle + MarginHeight : tinyContentH + MarginHeight
+
       this.tinymceHeight =  tinyContentH  // 最大高度
+
+      let contentHeight = (height - castHeight) + heights
+
 
       if (index > -1) {
         let curObj = this.pageData[index]
@@ -504,7 +509,7 @@ export default {
           question: {
             ...curObj,
             editorContent: editorContent,
-            height: height + tinyHeights,
+            height: tinyHeights == 0 ? contentHeight : height + tinyHeights,
             selectStr:segmented, // 判断当前编辑对象所在位置
             operatTinymce:operatTinymce, // 是否操作
             rowHeightArr: rowHeightArr,
