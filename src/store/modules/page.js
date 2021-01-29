@@ -43,7 +43,7 @@ const mutations = {
             editorContent: [],
             segmentedArr: [],
             operatTinymce:[],
-            selectStr: null,
+            rowHeightArr: [],
           }
         }
         return {

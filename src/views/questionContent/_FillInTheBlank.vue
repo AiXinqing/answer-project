@@ -444,7 +444,6 @@ export default {
           },
           index: index,
         }
-
         this.pageData_edit_title(data)
       }
     },
