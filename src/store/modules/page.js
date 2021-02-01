@@ -222,6 +222,8 @@ const getters = {
   },
 
   compile_pageData: (state, getters) => {
+    // 清空缓存
+    window.localStorage.clear()
     return state.pageData.map(question => {
       return question.questionType == 'ObjectiveQuestion' ? getters.question_objective(question) :
         question.questionType == 'compositionLanguage' ? getters.question_language(question) : {
