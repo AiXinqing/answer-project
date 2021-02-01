@@ -52,10 +52,10 @@ export default {
         if(determine.length){
           let start_d_val = determine.find(item => item.topic == start)
           let end_d_val = determine.find(item => item.topic == end)
-          if(start_d_val != undefined){
+          if(start_d_val != undefined && start_d_val.pid != this.data.id){
               strStart = `${start_d_val.topic}题已经存在，请勿重复添加`
           }
-          if(end_d_val != undefined){
+          if(end_d_val != undefined && end_d_val.pid != this.data.id){
             strEnd = `${end_d_val.topic}题已经存在，请勿重复添加`
           }
         }
