@@ -63,54 +63,34 @@
         let strStart = ''
         let strEnd = ''
 
-        if (already.length > 0) {
-          let d_s_index = determine.findIndex(item => item.topic == start)
-          let d_e_index = determine.findIndex(item => item.topic == end)
-          let a_s_index = already.findIndex(item => item.topic == start)
-          let a_e_index = already.findIndex(item => item.topic == end)
-
-          if(!this.editId){
-            if(d_s_index > -1){
-                strStart = `${start}题已经存在，请勿重复添加`
-              }else{
-                if(a_s_index > -1){
-                  if(already[a_s_index].pid != this.data.id){
-                    strStart = `${start}题已经存在，请勿重复添加`
-                  }else { strStart = '' }
-                }else{ strStart = '' }
-              }
-              if(d_e_index > -1){
-                strEnd = `${end}题已经存在，请勿重复添加`
-              }else{
-                if(a_e_index > -1){
-                  if(already[a_e_index].pid != this.data.id){
-                    strEnd = `${end}题已经存在，请勿重复添加`
-                  }else { strEnd = '' }
-                }else{ strEnd = '' }
-              }
-            }else{
-              if(a_s_index > -1){
-                if(already[a_s_index].pid != this.data.id){
-                  strStart = `${start}题已经存在，请勿重复添加`
-                }else { strStart = '' }
-              }else{ strStart = '' }
-
-              if(a_e_index > -1){
-                if(already[a_e_index].pid != this.data.id){
-                  strEnd = `${end}题已经存在，请勿重复添加`
-                }else { strEnd = '' }
-              }else{ strEnd = '' }
+          if(determine.length){
+            let start_d_val = determine.find(item => item.topic == start)
+            let end_d_val = determine.find(item => item.topic == end)
+            if(start_d_val != undefined){
+                strStart = `${start_d_val.topic}题已经存在，请勿重复添加`
             }
-        }
+            if(end_d_val != undefined){
+              strEnd = `${end_d_val.topic}题已经存在，请勿重复添加`
+            }
+          }
 
+          if(already.length){
+            let start_a_val = already.find(item => item.topic == start)
+            let end_a_val = already.find(item => item.topic == end)
+            if(start_a_val != undefined && start_a_val.pid != this.data.id){
+              strStart = `${start_a_val.topic}题已经存在，请勿重复添加`
+            }
+            if(end_a_val != undefined && end_a_val.pid != this.data.id){
+              strEnd = `${end_a_val.topic}题已经存在，请勿重复添加`
+            }
+          }
 
-        return start == 0 ? '开始题号必须大于0' :
-          end == 0 ? '结束题号必须大于0' :
-            start == 0 && end != null ? '开始题号不能大于结束题号' :
-              start > end && end != null ? '开始题号不能大于结束题号' :
-                start != 0 && end != null && scoreVal == null ? '分数不能为空' :
-                  strStart.length > 0 ? strStart :
-                    strEnd.length > 0 ? strEnd : ''
+        return strStart != '' ? strStart :
+                strEnd != '' ? strEnd :
+                  start == 0 ? '开始题号必须大于0':
+                    start > end ? '开始题号不能大于结束题号':
+                      end == 0 ? '结束题号必须大于0' :
+                        scoreVal == null ? '分数不能为空' : ''
       },
 
       verifyStatus(){
