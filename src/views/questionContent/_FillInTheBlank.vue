@@ -496,7 +496,7 @@ export default {
         }
       }
 
-        let heights = first ? tinyContentH + heightTitle + MarginHeight : tinyContentH + MarginHeight
+      let heights = first ? tinyContentH + heightTitle + MarginHeight : tinyContentH + MarginHeight
 
       this.tinymceHeight =  tinyContentH  // 最大高度
 
