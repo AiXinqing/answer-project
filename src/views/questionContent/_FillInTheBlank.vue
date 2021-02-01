@@ -139,16 +139,18 @@ export default {
         let aList = ''
         subtopic.forEach((topic) =>{
           let spanBox = ''
+          let sLeng = 0
 
           if(topic.lid){
             let li1 = topic.smallTopic == 1 && topic.spaceNum == 1 ? topic.topic : ''
-            let li2 = topic.spaceNum <= 1 ? topic.smallTopic : ''
+            let li2 = topic.spaceNum <= 1 ? `(${topic.smallTopic})` : ''
+            sLeng = li2 != '' ? 1 : 0
             spanBox = `${li1}${li2}`
           }else{
             let li3 = !topic.spaceNum || topic.spaceNum == 1 ? topic.topic : ''
             spanBox = `${li3}`
           }
-          let numLong = spanBox.length * 2 + 4
+          let numLong = (spanBox.length - sLeng) * 2 + 4
           let spaceStr = ''
           for(let x = 0; x < this.strBox.length - numLong ;x++){
             spaceStr +=  this.strBox[x]
