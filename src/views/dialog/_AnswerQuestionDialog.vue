@@ -205,11 +205,11 @@ export default {
           first:true,
           titleContent:'',
           editorContent:[],
-          strLength:0,
-          selectStr:null,
           segmentedArr:[],
-          operating:[],
-          tinymceCHeight:[]
+          operatTinymce:[], // 判断富文本是否操作过
+          tinymceCHeight:[],
+          rowHeightArr:[], // 内容行高数组
+          initialHeigh:index == 0 ? rectHeight + this.heightTitle : rectHeight, // 初始高度
         }
         Arr.push(obj)
       })
@@ -353,12 +353,7 @@ export default {
                 order: previous,
                 objId:this.editQuestionId,
                 previousOrder:  pageObj && pageObj.questionType ==="NonRresponseArea" ? pageObj.order :previousTig,
-                editorContent:[],
-                strLength:0,
-                selectStr:null,
-                segmentedArr:[],
-                operating:[],
-                tinymceCHeight:[]
+                editorContent:[],segmentedArr:[],operatTinymce:[],tinymceCHeight:[],rowHeightArr:[]
               },
               num: previous,
             }
