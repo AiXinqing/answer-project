@@ -267,10 +267,11 @@ export default {
         first: true,
         titleContent:'',
         editorContent:[],
-        strLength:0,
-        selectStr:null,
         segmentedArr:[],
-        operating:[],
+        operatTinymce:[], // 判断富文本是否操作过
+        tinymceCHeight:[],
+        rowHeightArr:[], // 内容行高数组
+        initialHeigh:heights, // 初始高度
       }
 
       if (this.editQuestionId == null) {
@@ -286,7 +287,7 @@ export default {
           }
           this.pageData_insert(data)
         } else {
-          this.pageData_add({...obj,editorContent:[],strLength:0,selectStr:null,segmentedArr:[],operating:[]})
+          this.pageData_add({...obj,editorContent:[],segmentedArr:[],operatTinymce:[],tinymceCHeight:[],rowHeightArr:[]})
 
         }
 
@@ -294,7 +295,7 @@ export default {
         // 编辑
         this.subTopic_determine_pid_clean(this.childGroups[0].pid)
         obj.id = this.editQuestionId
-        this.pageData_edit({...obj,order:this.orders,titleContent:'',editorContent:[],strLength:0,selectStr:null,segmentedArr:[],operating:[]})
+        this.pageData_edit({...obj,order:this.orders,titleContent:'',editorContent:[],segmentedArr:[],operatTinymce:[],tinymceCHeight:[],rowHeightArr:[]})
       }
       //------------------------------------
       this.openedFrame = false // 关闭弹窗
