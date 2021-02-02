@@ -23,9 +23,6 @@ const mutations = {
   // 编辑页面数据
   pageData_edit: (state, question) => {
     let index = state.pageData.findIndex((itme) => itme.id === question.id)
-    if (question.questionType == 'answerQuestion') {
-        index = state.pageData.findIndex((itme) => itme.objId === question.objId)
-    }
     if (index > -1) {
       if (question.changeOrder) { // 非作答题
         state.pageData.splice(index, 1)
