@@ -156,7 +156,7 @@ export default {
             spaceSum += this.str
         }
 
-        let span2 = content.HorizontalLine ? `<a class="line-style"> ${spaceSum} </a>` :''
+        let span2 = content.HorizontalLine ? `<a class="line-style"> ${spaceSum} </a>` :`<a> ${spaceSum} </a>`
 
         pList += `<p class="question_line">${span1}${span2}</p>
         ` // 需要空一行回车，这样才能筛选行数，不能删除
@@ -167,14 +167,14 @@ export default {
     },
 
     editorDetail(){
-      const {editorContent,segmented,segmentedArr,first,objId,MarginHeight,operatTinymce,rowHeight,height,rowHeightArr} = this.questionData
+      const {editorContent,segmented,segmentedArr,first,id,MarginHeight,operatTinymce,rowHeight,height,rowHeightArr} = this.questionData
 
       // 判断是否进行过富文本编辑
       if(operatTinymce[segmented] == undefined){
         editorContent[segmented] = this.questionInfo.data
         rowHeightArr[segmented] = this.questionInfo.Arr
         this.pageData_editorStr({
-          objId:objId,
+          id:id,
           content:editorContent,
           rowHeightArr:rowHeightArr,
         })
@@ -224,14 +224,15 @@ export default {
             //高度溢出
             if(differenceLong > 0) {
                 // 截取溢出的高度
-
+                console.log(differenceLong)
                 for(let a = 0; a < currentContentArr.length - differenceLong;a++){
                   if(currentContentArr[a] != undefined){
                     tinymceContent += currentContentArr[a]
                   }
                 }
                 // 赋值
-                editorContent[segmented] = tinymceContent
+                // editorContent[segmented] = tinymceContent
+                editorContent.splice(segmented,1,tinymceContent)
 
                 // 溢出内容
                 for(let i = currentContentArr.length - differenceLong; i < currentContentArr.length;i++){
@@ -266,7 +267,7 @@ export default {
 
                 // 更新数组
                 this.pageData_editorStr({
-                  objId:objId,
+                  id:id,
                   content:editorContent,
                   height:height + overflowHeight, // 总高度 = 总 - 超出高度 + 超出行总高度
                   rowHeightArr:rowHeightArr,
@@ -316,7 +317,7 @@ export default {
                   operatTinymce[nextSegmented] = 1
                   // 更新数组
                   this.pageData_editorStr({
-                    objId:objId,
+                    id:id,
                     content:editorContent,
                     rowHeightArr:rowHeightArr,
                     operatTinymce:operatTinymce
@@ -435,7 +436,7 @@ export default {
         this.pageData_del(index)
         if(!this.data.orderFirst){
           this.$nextTick(()=>{
-            this.pageData_orderFirst(this.data.objId)
+            this.pageData_orderFirst(this.data.id)
           })
         }
       }
@@ -444,14 +445,15 @@ export default {
     },
 
     handleResize (height) {
-      const index = this.pageData.findIndex(obj => this.questionData.objId === obj.objId)
+      const index = this.pageData.findIndex(obj => this.questionData.id === obj.id)
       if(index > -1){
         let questionObj = this.pageData[index]
 
+        questionObj.answerArrHeight[index - 1] = height
         this.pageData_edit({
             ...questionObj,
-            height:height,
-          })
+            answerArrHeight: questionObj.answerArrHeight,
+        })
 
       }
     },
@@ -459,7 +461,7 @@ export default {
     changeContent(obj){
       const {val,tinyHeight} = obj
 
-      const index = this.pageData.findIndex(question => question.objId == this.questionData.objId && question.first)
+      const index = this.pageData.findIndex(question => question.id == this.questionData.id && question.first)
 
       let height = tinyHeight
       this.maxHeight = height // 最大高度
@@ -486,8 +488,9 @@ export default {
       // 富文本参数
       const {val,tinyHeight,tinyId} = obj
 
-      const {objId,height,castHeight,heightTitle,segmented,editorContent,MarginHeight,first,operatTinymce,rowHeightArr,segmentedArr,rowHeight} = this.questionData
-      const index = this.pageData.findIndex(question => question.objId == objId)
+      const {id,height,castHeight,heightTitle,segmented,editorContent,MarginHeight,first,operatTinymce,rowHeightArr,segmentedArr,rowHeight,
+              answerArrHeight,orderFirst} = this.questionData
+      const index = this.pageData.findIndex(question => question.id == id)
 
       let heights = first ? tinyHeight + heightTitle + MarginHeight : tinyHeight + MarginHeight
       this.tinymceHeight = tinyHeight // 最大高度
@@ -535,6 +538,7 @@ export default {
       }
 
       let contentHeight = (height - castHeight) + heights
+      answerArrHeight[orderFirst] = tinyHeights == 0 && less == 0 ? contentHeight : height + tinyHeights
 
       if(index > -1){
         let curObj = this.pageData[index]
@@ -543,10 +547,11 @@ export default {
           question:{
             ...curObj,
             editorContent:editorContent,
-            height:tinyHeights == 0 && less == 0 ? contentHeight : height + tinyHeights,
+            // height:tinyHeights == 0 && less == 0 ? contentHeight : height + tinyHeights,
             selectStr:segmented, // 判断当前编辑对象所在位置
             operatTinymce:operatTinymce, // 是否操作
             rowHeightArr: rowHeightArr,
+            answerArrHeight:answerArrHeight,
           },
           index:index,
         }
