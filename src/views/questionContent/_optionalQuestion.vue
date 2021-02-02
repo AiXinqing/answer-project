@@ -447,6 +447,7 @@ export default {
       let difference = 0
 
       let tinyHeights = 0
+      let less = 0 // 用于判断内容低于内容框高度
       if(operatTinymce[segmented]){
         let maxLong = first ? segmentedArr[segmented]:Math.floor((this.page_height - 20 - MarginHeight) / rowHeight)
         let accommodateHeight = maxLong * rowHeight
@@ -458,6 +459,7 @@ export default {
         if(difference < accommodateHeight){
           //内容框高度 - 内容
             let  impairment = accommodateHeight - difference
+                  less = impairment
 
               if(rowHeightArr[nextSegmented] != undefined && impairment > 0){
                 rowHeightArr[nextSegmented].forEach(val => {
@@ -479,7 +481,7 @@ export default {
           question:{
             ...curObj,
             editorContent:editorContent,
-            height: tinyHeights == 0 ? contentHeight : height + tinyHeights,
+            height: tinyHeights == 0 && less == 0 ? contentHeight : height + tinyHeights,
             selectStr:segmented, // 判断当前编辑对象所在位置
             operatTinymce:operatTinymce, // 是否操作
             rowHeightArr: rowHeightArr,
