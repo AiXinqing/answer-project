@@ -449,9 +449,8 @@ export default {
       if(index > -1){
         let questionObj = this.pageData[index]
 
-        console.log(questionObj)
         questionObj.answerArrHeight[questionObj.orderFirst] = height
-        console.log(questionObj.answerArrHeight)
+
         this.pageData_edit({
             ...questionObj,
             answerArrHeight: questionObj.answerArrHeight,
