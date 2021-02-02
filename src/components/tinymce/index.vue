@@ -22,6 +22,11 @@
         default: ''
       },
       maxHeight:{ type: Number,  default: 30 },
+
+      readonly: {
+        type: Number,
+        default: 0
+      }
     },
 
     model: {
@@ -64,6 +69,7 @@
         const self = this
         tinymce.init({
           selector:`#tinymce_title_${this.editorId}`,
+          readonly:this.readonly,
           inline: this.inline,
           toolbar: this.toolbar,
           plugins: ' image code charmap underline',

@@ -24,6 +24,11 @@
         type: String,
         default: ''
       },
+
+      readonly: {
+        type: Number,
+        default: 0
+      }
     },
 
     model: {
@@ -64,6 +69,7 @@
         const self = this
         tinymce.init({
           selector:`#tinymce_${this.editorId}`,
+          readonly:this.readonly,
           inline:true,
           toolbar: this.toolbar,
           fontsize_formats: '11px 12px 14px 16px 18px 24px 36px 48px',

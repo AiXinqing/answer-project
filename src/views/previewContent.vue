@@ -30,6 +30,7 @@
               :preview-content="true"
               :page-index="index"
               :preview-width="parseInt(pageWidth)"
+              :readonly="1"
             />
           </div>
         </div>
