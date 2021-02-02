@@ -182,9 +182,11 @@ export default {
     subTopicGroup(){
       //确定信息
       let Arr = []
+      let answerArr = []
       let objId = `answer_${+new Date()}`
       let rectHeight = this.dataTopic.rows * this.rowHeight + this.MarginHeight
       this.RefactorData.forEach((item, index) => {
+        answerArr.push(index == 0 ? rectHeight + this.heightTitle : rectHeight)
         let obj = {
           heightTitle: index == 0 ? this.heightTitle : 0,
           height: index == 0 ? rectHeight + this.heightTitle : rectHeight,
@@ -210,6 +212,7 @@ export default {
           tinymceCHeight:[],
           rowHeightArr:[], // 内容行高数组
           initialHeigh:index == 0 ? rectHeight + this.heightTitle : rectHeight, // 初始高度
+          answerArrHeight:answerArr, // 编辑后高度
         }
         Arr.push(obj)
       })
