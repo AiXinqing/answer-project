@@ -12,6 +12,7 @@
         @input="changeContent"
         ref="tinyMCE"
         :max-height="maxHeight"
+        :readonly="readonly"
       />
     </div>
 
@@ -66,6 +67,10 @@ export default {
       default: () => { }
     },
     previewWidth:{
+      type: Number,
+      default: 0
+    },
+    readonly: {
       type: Number,
       default: 0
     }

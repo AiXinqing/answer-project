@@ -11,6 +11,7 @@
         v-model="content"
         @input="changeContent"
         :max-height="maxHeight"
+        :readonly="readonly"
         ref="tinyMCE"
       />
     </div>
@@ -37,6 +38,7 @@
           v-model="editorDetail"
           v-if="pageLayout.column == 3"
           class="fillTinymce"
+          :readonly="readonly"
           ref="tinymceBox"
         >
         </trigger-tinymce>
@@ -44,6 +46,7 @@
           @tinymce-change="tinymceChangeFunc"
           v-model="editorDetail"
           class="fillTinymce"
+          :readonly="readonly"
           ref="tinymceBox"
           v-else
         >
@@ -83,6 +86,10 @@ export default {
       default: false
     },
     previewWidth:{
+      type: Number,
+      default: 0
+    },
+    readonly: {
       type: Number,
       default: 0
     }

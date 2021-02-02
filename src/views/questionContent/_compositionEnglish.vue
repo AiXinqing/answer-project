@@ -10,6 +10,7 @@
         v-model="content"
         @input="changeContent"
         :max-height="maxHeight"
+        :readonly="readonly"
         ref="tinyMCE"
       />
     </div>
@@ -67,6 +68,10 @@ export default {
       default: () => { }
     },
     previewWidth:{
+      type: Number,
+      default: 0
+    },
+    readonly: {
       type: Number,
       default: 0
     }
