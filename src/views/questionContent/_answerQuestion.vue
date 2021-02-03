@@ -29,7 +29,6 @@
       @height-resize="handleResize($event)"
       :style="{
           'border-top':!data.orderFirst || !pageIndex ? '1px solid #888' : 'none',
-          'margin-top':!data.orderFirst  ? '10px' : '0px',
         }"
     >
       <div

@@ -121,8 +121,8 @@ export default {
       },
       initScore:1, // 删除后初始分数
       rowHeight:35,
-      MarginHeight:12,
-      heightTitle:32
+      MarginHeight:17,
+      heightTitle:40
     }
   },
   computed: {
