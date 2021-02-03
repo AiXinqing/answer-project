@@ -204,7 +204,7 @@ export default {
   padding: 0 8px;
 }
 .question-title {
-  margin-bottom: 10px;
+  // margin-bottom: 10px;
   overflow: auto;
   span {
     color: @font-333;
