@@ -17,11 +17,13 @@ const mutations = {
 
   //新增页面数据
   pageData_add: (state, question) => {
+    window.localStorage.clear()
     state.pageData.push(question)
   },
 
   // 编辑页面数据
   pageData_edit: (state, question) => {
+    window.localStorage.clear()
     let index = state.pageData.findIndex((itme) => itme.id === question.id)
     if (index > -1) {
       if (question.changeOrder) { // 非作答题
@@ -222,14 +224,10 @@ const getters = {
 
     // 清空缓存
     window.localStorage.clear()
-    return state.pageData.map((question,index) => {
+    return state.pageData.map((question) => {
       return question.questionType == 'ObjectiveQuestion' ? getters.question_objective(question) :
         question.questionType == 'compositionLanguage' ? getters.question_language(question) :
-          question.questionType == 'answerQuestion' ? {
-            ...question, content: { ...question.content, pageLayout: state.pageLayout },
-            orderFirst:index - 1,
-            height:question.answerArrHeight[index - 1]
-          } : {
+          {
           ...question, content: { ...question.content, pageLayout:state.pageLayout }
         }
     })
