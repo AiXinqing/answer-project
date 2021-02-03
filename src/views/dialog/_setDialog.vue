@@ -152,7 +152,7 @@ export default {
 
       const TestData = {
         id: 'AnswerSheet',
-        height: 380,
+        height: 378,
         questionType: 'AnswerSheetTitle',
         MarginHeight: 0,
         heightTitle: 0,
