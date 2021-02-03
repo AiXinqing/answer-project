@@ -130,7 +130,7 @@ export default {
       fill:{
         fillRow:35, // 内容行高
         fillMargin:12, // 间隔
-        fillTitle:32, // 标题高度
+        fillTitle:38, // 标题高度
       }
     }
   },

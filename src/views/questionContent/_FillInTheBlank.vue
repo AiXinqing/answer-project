@@ -540,11 +540,12 @@ export default {
 .content-info{
   overflow: auto;
 }
-.question-item{
-  margin-top: 10px;
-}
+// .question-item{
+//   margin-top: 10px;
+// }
 #question-title{
   overflow: auto;
+  margin-bottom: 10px;
 }
 .question-title {
   margin-bottom: 10px;
