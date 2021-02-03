@@ -142,7 +142,7 @@
         errorVal: '',
         ContentHeight: 0, // 内容高度
         //标题附加高度
-        heightTitle:23,
+        heightTitle:30,
         MarginHeight:10,
         rowHeight:21,
         titleH:32,
