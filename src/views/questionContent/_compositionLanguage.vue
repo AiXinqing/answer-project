@@ -129,7 +129,7 @@ export default {
       } = this.data
       let row = 0
       if (first && borderTop == undefined) {
-        row = Math.floor((castHeight - MarginHeight - heightTitle) / rowHeight)
+        row = Math.floor((castHeight - MarginHeight - heightTitle) / rowHeight) - 1
       } else {
         row = Math.floor(castHeight / rowHeight)
       }
@@ -137,6 +137,7 @@ export default {
       for (let i = 1; i <= row; i++) {
         Arr.push(i)
       }
+
       return Arr
     },
     latticeData() {
@@ -291,9 +292,9 @@ export default {
   padding: 10px 5px 5px 5px;
 }
 .Language_item_title {
-  height: 35px;
+  height: 37px;
   position: relative;
-  line-height: 35px;
+  line-height: 37px;
   font-size: 14px;
 }
 .compositionLanguage_box {

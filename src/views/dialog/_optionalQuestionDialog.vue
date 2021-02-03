@@ -127,7 +127,7 @@ export default {
       },
       MarginHeight:12,
       rowHeight:35,
-      heightTitle:56,
+      heightTitle:40,
       rowTitle:35,
     }
   },

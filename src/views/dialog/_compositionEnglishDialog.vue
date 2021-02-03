@@ -129,7 +129,7 @@ export default {
       editData: {},
       changeClick:false,
       page_height:PAGE_HEIGHT,
-      heightTitle:32,
+      heightTitle:40,
       MarginHeight:17,
     }
   },
