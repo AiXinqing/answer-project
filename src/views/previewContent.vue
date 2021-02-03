@@ -73,7 +73,7 @@ export default {
       pageWidth:this.$route.query.pageWidth,
       pageNum:this.$route.query.pageNum,
       page_height:PAGE_HEIGHT,
-      difference:22,
+      difference:20,
     }
   },
 
@@ -129,9 +129,6 @@ export default {
         // 高度溢出---------------------------------------------------------------------------
         if(rect.height > (avalibleHeight - this.difference)){
           avalibleHeight -= this.difference
-          if(rect.questionType == 'answerQuestion' && rect.orderFirst > 0){
-            avalibleHeight += (this.difference - 2)
-          }
 
           let height = rect.height
           let curRect = this.preliminaryQuestion(rect, avalibleHeight)
@@ -236,8 +233,8 @@ export default {
 
           //溢出剩余高度---------------------------------------------------
 
-          //剩余高度增加 rect.MarginHeight 高度
-          currentPage.height = height
+          //剩余高度增加 rect.MarginHeight 高度 分段后加入高度差值
+          currentPage.height = height + this.difference
 
           //客观题 填空题
           if(rect.showData && rect.showData.length){
@@ -266,7 +263,7 @@ export default {
 
           currentPage.rects.push({
             ...rect,
-            castHeight: currentPage.height,
+            castHeight: currentPage.height - this.difference, // 分段后减去加入的差值
             first:!curRect.pagination,
             ...backup,
             segmented:segmented,
@@ -277,10 +274,6 @@ export default {
           // 变量
           let backup = {}
           currentPage.height += rect.height + this.difference
-
-          if(rect.questionType == 'answerQuestion' && rect.orderFirst > 0){
-            currentPage.height -= (this.difference - 2)
-          }
 
           // 选作题
           if(rect.questionType == 'optionalQuestion' ||
@@ -314,7 +307,6 @@ export default {
 
       // 边框高度 剩余内容
       let margin = initial ? MarginHeight + heightTitle : MarginHeight
-          // margin = question.questionType == 'optionalQuestion' ? margin + question.rowTitle : margin
           margin = question.questionType == 'compositionLanguage' && initial ? margin + question.rowTitle : margin
       let RemainingHeight = avalibleHeight - margin
 

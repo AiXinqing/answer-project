@@ -74,7 +74,7 @@ export default {
       contentData: [],
       heightArray: [],
       page_height: PAGE_HEIGHT,
-      difference: 22,
+      difference: 20,
     }
   },
   beforeRouteLeave(to, from, next) {
@@ -155,22 +155,20 @@ export default {
 
         var avalibleHeight = this.page_height - currentPage.height
 
+        console.log(currentPage)
+        console.log(avalibleHeight)
         // 用于客观题 填空题数组分割
         const itemObj = JSON.parse(JSON.stringify(rect))
 
         // 高度溢出---------------------------------------------------------------------------
         if(rect.height > (avalibleHeight - this.difference)){
           avalibleHeight -= this.difference
-          if(rect.questionType == 'answerQuestion' && rect.orderFirst > 0){
-            avalibleHeight += (this.difference - 2)
-          }
 
           let height = rect.height
           let curRect = this.preliminaryQuestion(rect, avalibleHeight)
 
           // 是否分割当前题型
           if(curRect.pagination){
-
             // 客观题 填空题
             if(rect.showData && rect.showData.length){
               backup = {
@@ -209,6 +207,7 @@ export default {
             }
 
             height = rect.height - curRect.height
+
           }
 
           // 增加一页
@@ -217,7 +216,6 @@ export default {
 
           // 剩余高度可以分占几页
           while (height > (this.page_height - this.difference)){
-
             segmented += 1
 
             let avalibleHeight =  this.page_height - this.difference
@@ -268,8 +266,8 @@ export default {
 
           //溢出剩余高度---------------------------------------------------
 
-          //剩余高度增加 rect.MarginHeight 高度
-          currentPage.height = height
+          //剩余高度增加 rect.MarginHeight 高度 分段后加入高度差值
+          currentPage.height = height + this.difference
 
           //客观题 填空题
           if(rect.showData && rect.showData.length){
@@ -300,7 +298,7 @@ export default {
 
           currentPage.rects.push({
             ...rect,
-            castHeight: currentPage.height,
+            castHeight: currentPage.height - this.difference, // 分段后减去加入的差值
             first:!curRect.pagination,
             ...backup,
             segmented:segmented,
@@ -310,11 +308,9 @@ export default {
         }else{
           // 变量
           let backup = {}
+
           currentPage.height += rect.height + this.difference
 
-          if(rect.questionType == 'answerQuestion' && rect.orderFirst > 0){
-            currentPage.height -= (this.difference - 2)
-          }
           // 选作题
           if(rect.questionType == 'optionalQuestion' ||
               rect.questionType == 'answerQuestion' ||
