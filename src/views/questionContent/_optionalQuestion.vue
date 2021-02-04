@@ -149,6 +149,7 @@ export default {
       const {first,heightTitle,height,castHeight,content,rowHeight} = this.data
       let boxP = ''
       let Arr = []
+
       if(first || heightTitle == (height - castHeight)){
         let spans = ''
         this.topicData.forEach(item =>{
@@ -163,13 +164,19 @@ export default {
                   </span>
                 </p>`
       }
+
       let pList = ''
-      this.rowsData.forEach(() =>{
+      this.rowsData.forEach((e,index) =>{
         let classS = content.HorizontalLine ? 'outline':''
-        pList += `<p data-i="p" class="optional-item-list ${classS}"><a> ${this.spaceStr} </a></p>`
+        if(first && index == 0 || heightTitle == (height - castHeight) && index == 0){
+          pList += boxP
+        }else{
+
+          pList += `<p data-i="p" class="optional-item-list ${classS}"><a> ${this.spaceStr} </a></p>`
+        }
         Arr.push(rowHeight)
       })
-      return  {data:`${boxP}${pList}`,Arr:Arr}
+      return  {data:pList,Arr:Arr}
     },
 
     editorDetail() {
