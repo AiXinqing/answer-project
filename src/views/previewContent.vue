@@ -331,7 +331,6 @@ export default {
 
       // 边框高度 剩余内容
       let margin = initial ? MarginHeight + heightTitle : MarginHeight
-          margin = question.questionType == 'optionalQuestion' && initial ? margin + question.rowTitle : margin
           margin = question.questionType == 'compositionLanguage' && initial ? margin + question.rowTitle : margin
       let RemainingHeight = avalibleHeight - margin
 
