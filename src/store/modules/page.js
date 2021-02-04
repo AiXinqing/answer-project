@@ -227,7 +227,11 @@ const getters = {
     return state.pageData.map((question) => {
       return question.questionType == 'ObjectiveQuestion' ? getters.question_objective(question) :
         question.questionType == 'compositionLanguage' ? getters.question_language(question) :
-          {
+        question.questionType == 'answerQuestion' ? {
+          ...question, content: { ...question.content, pageLayout: state.pageLayout },
+          height:question.answerArrHeight[question.orderFirst]
+        } :
+        {
           ...question, content: { ...question.content, pageLayout:state.pageLayout }
         }
     })
@@ -273,13 +277,13 @@ const getters = {
   question_language: (state, getters) => (question) => {
     const { totalWordCount,spacing} = question.content
     let rows = Math.ceil(totalWordCount / getters.latticeNum) // .toFixed(2)
-    console.log(totalWordCount + '----' + getters.latticeNum)
+
 
     let rowHeight = getters.latticeWidth + spacing.value
         rowHeight = Number(rowHeight.toFixed(2))
 
     let height = rows * rowHeight + question.MarginHeight + question.heightTitle + question.rowTitle
-    // console.log(rows + '----' + rowHeight + '---' + question.MarginHeight + ' ----' + question.heightTitle + '---' + question.rowTitle)
+
       height = Number(height.toFixed(2))
 
     return {
