@@ -27,11 +27,13 @@
       :style="{
         'height':minHeight  + 'px',
       }"
+      v-if="tinymceHeight > 0"
     >
       <div
         class="content-info info_pLIst"
         :style="{
-          height:tinymceHeight + 'px'}"
+          height:tinymceHeight + 'px',
+        }"
       >
           <!-- 富文本编辑区 -->
           <trigger-tinymce
