@@ -30,6 +30,7 @@
           <el-input
             v-model.number="objectiveData.rows"
             size="mini"
+            @input="changeInput"
             placeholder="请输入内容"
           />
           <div class="label m-5" style="padding-left:5px">空</div>
@@ -215,6 +216,7 @@ export default {
               ? this.questionNumber_big_exist[0].value
               : null
         }
+
         this.objectiveData = {
           ...this.spaceTopic,
           ...Increase
@@ -257,6 +259,13 @@ export default {
       'pageData_edit',
       'pageData_insert',
     ]),
+
+    changeInput(val){
+      // 切换行数
+      let data = JSON.parse(JSON.stringify(this.spaceTopic))
+          data.rows = val
+      this.spaceTopic = data
+    },
 
     closeFrame() {
       // 关闭弹框
