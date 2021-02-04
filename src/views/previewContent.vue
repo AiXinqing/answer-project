@@ -165,15 +165,16 @@ export default {
               segmentedArr:segmentedArr
             })
 
+            height = rect.height - curRect.height
             // 作文
             if(rect.questionType == 'compositionLanguage'){
               superiorGrid = rect.superiorGrid + curRect.availableRow * rect.lattice
               backup = {
                 superiorGrid:superiorGrid
               }
+              height += this.difference
             }
 
-            height = rect.height - curRect.height
           }
 
           // 增加一页
@@ -228,6 +229,7 @@ export default {
               backup = {
                 superiorGrid:superiorGrid
               }
+              height += this.difference
             }
           }
 
@@ -235,6 +237,9 @@ export default {
 
           //剩余高度增加 rect.MarginHeight 高度 分段后加入高度差值
           currentPage.height = height + this.difference
+          if(rect.questionType == 'compositionLanguage'){
+            currentPage.height = height - this.difference
+          }
 
           //客观题 填空题
           if(rect.showData && rect.showData.length){
