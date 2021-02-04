@@ -121,11 +121,6 @@ export default {
     ...mapState('page', ['pageData']),
     ...mapGetters('page', ['page_width']),
 
-    minHeight(){
-      const {rowHeight, row,MarginHeight,height,castHeight} = this.questionData
-      return  castHeight >= height ? rowHeight * row + MarginHeight : 0
-    },
-
     topicData() {
       return this.contentData.group
     },
