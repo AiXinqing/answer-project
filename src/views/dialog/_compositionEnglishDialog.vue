@@ -325,6 +325,7 @@ export default {
             ...this.data,
             scoreTotal:parseFloat(score),
             pageLayout:this.pageLayout,
+            initRow:rows
           },
           first: true,
           titleContent:''

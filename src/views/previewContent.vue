@@ -272,7 +272,7 @@ export default {
 
           if(rect.questionType == 'compositionEnglish'){
             backup = {
-              rows: contentRows > curRect.availableRow ? curRect.availableRow : contentRows
+              rows: contentRows > curRect.availableRow && !curRect.pagination ? curRect.availableRow : contentRows
             }
             contentRows = contentRows > curRect.availableRow ? contentRows - curRect.availableRow : 0
           }

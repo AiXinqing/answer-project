@@ -107,6 +107,7 @@ export default {
       for (let i = 1; i <= this.data.rows; i++) {
         Arr.push(i)
       }
+      console.log(this.data.rows)
       return Arr
     }
 
