@@ -88,10 +88,7 @@ export default {
   computed: {
     ...mapState('page', ['pageData']),
 
-    minHeight(){
-      const {first,heightTitle,castHeight} = this.questionData
-      return  first ? castHeight - heightTitle : castHeight
-    },
+
 
     strLong () {
       let long = this.contentData.topic.toString().length
@@ -107,7 +104,6 @@ export default {
       for (let i = 1; i <= this.data.rows; i++) {
         Arr.push(i)
       }
-      console.log(this.data.rows)
       return Arr
     }
 
@@ -173,7 +169,6 @@ export default {
             ...questionObj,
             height:height,
           })
-
       }
     },
 
