@@ -108,7 +108,7 @@ export default {
       questionData: {
         number: 0,
         topicName: '选作题',
-        rows: 6,
+        rows: 7,
         startQuestion: 1,
         HorizontalLine: false, // 横行
         InsertTitle: false,
@@ -128,7 +128,6 @@ export default {
       MarginHeight:12,
       rowHeight:35,
       heightTitle:40,
-      rowTitle:35,
     }
   },
   computed: {
@@ -246,7 +245,7 @@ export default {
       const { rows, InsertTitle, Postpone,group } = this.data
 
       let rectHeight = rows * this.rowHeight // 当前内容高度 45(内部高度)
-      let heights = rectHeight + this.MarginHeight + this.heightTitle + this.rowTitle
+      let heights = rectHeight + this.MarginHeight + this.heightTitle
 
       let objId = `optional_${+new Date()}`
 
@@ -255,7 +254,6 @@ export default {
         heightTitle: this.heightTitle,
         height: heights,
         rowHeight: this.rowHeight,
-        rowTitle:this.rowTitle,
         id: objId,
         questionType: 'optionalQuestion',
         content:{
