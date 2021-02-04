@@ -152,6 +152,7 @@ export default {
         let superiorGrid = 0
         let segmented = 0
         let segmentedArr = []
+        let contentRows = rect.content.rows // 用于英语作文
 
         var avalibleHeight = this.page_height - currentPage.height
 
@@ -178,14 +179,21 @@ export default {
 
             // 选作题
             if(rect.questionType == 'optionalQuestion' ||
-              rect.questionType == 'answerQuestion' ||
-              rect.questionType == 'compositionEnglish'
+              rect.questionType == 'answerQuestion'
             ){
               backup = {
                 rows:curRect.availableRow > rect.content.rows ? rect.content.rows :
                   curRect.availableRow > 0 ? curRect.availableRow : 0
               }
             }
+
+            if(rect.questionType == 'compositionEnglish'){
+              backup = {
+                rows: contentRows > curRect.availableRow ? curRect.availableRow : contentRows
+              }
+              contentRows = contentRows > curRect.availableRow ? contentRows - curRect.availableRow : 0
+            }
+            console.log(contentRows)
 
             segmentedArr.push(curRect.availableRow)
 
@@ -228,14 +236,21 @@ export default {
 
             // 选作题
             if(rect.questionType == 'optionalQuestion' ||
-              rect.questionType == 'answerQuestion' ||
-              rect.questionType == 'compositionEnglish'
+              rect.questionType == 'answerQuestion'
             ){
               let {rows} = rect.content
               backup = {
                 rows:rows - curRect.availableRow >= 0 ? rows - curRect.availableRow : 0
               }
             }
+
+            if(rect.questionType == 'compositionEnglish'){
+              backup = {
+                rows: contentRows > curRects.availableRow ? curRects.availableRow : contentRows
+              }
+              contentRows = contentRows > curRects.availableRow ? contentRows - curRects.availableRow : 0
+            }
+
             results.push([{
               ...rect,
               castHeight: curRects.height,
@@ -280,13 +295,19 @@ export default {
           segmentedArr.push(itemObj.showData != undefined ? itemObj.showData.length : Math.floor((this.page_height - 20 - curRect.MarginHeight) / curRect.rowHeight))
           // 选作题
           if(rect.questionType == 'optionalQuestion' ||
-              rect.questionType == 'answerQuestion' ||
-              rect.questionType == 'compositionEnglish'
+              rect.questionType == 'answerQuestion'
             ){
             let {rows} = rect.content
             backup = {
               rows:curRect.availableRow < 0  ? rows :  rows - curRect.availableRow
             }
+          }
+
+          if(rect.questionType == 'compositionEnglish'){
+            backup = {
+              rows: contentRows > curRect.availableRow ? curRect.availableRow : contentRows
+            }
+            contentRows = contentRows > curRect.availableRow ? contentRows - curRect.availableRow : 0
           }
 
           if(rect.questionType != 'ObjectiveQuestion'){
