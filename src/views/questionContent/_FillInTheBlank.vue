@@ -116,11 +116,6 @@ export default {
     ...mapState('page', ['pageData']),
     ...mapGetters('page', ['page_width']),
 
-    minHeight () {
-      const { rowHeight, showData, MarginHeight, height, castHeight } = this.questionData
-      return castHeight >= height ? rowHeight * showData.length + MarginHeight : 0
-    },
-
     pageWidth () {
       return this.previewWidth == 0 ? this.page_width - 23 : this.previewWidth - 63
     },
