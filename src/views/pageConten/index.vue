@@ -156,7 +156,6 @@ export default {
 
         var avalibleHeight = this.page_height - currentPage.height
 
-        console.log(avalibleHeight)
         // 用于客观题 填空题数组分割
         const itemObj = JSON.parse(JSON.stringify(rect))
 
