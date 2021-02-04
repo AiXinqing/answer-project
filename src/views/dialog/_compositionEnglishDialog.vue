@@ -315,7 +315,7 @@ export default {
         let objId = `compositionEnglish_${+new Date()}`
         //------------------------------------------------------------
         let obj = {
-          heightTitle: 32,
+          heightTitle: this.heightTitle,
           MarginHeight: this.MarginHeight,
           height: heights,
           rowHeight: 35,
