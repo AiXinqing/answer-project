@@ -308,6 +308,9 @@ export default {
             }
           }
 
+          if(rect.questionType == 'answerQuestion' && rect.orderFirst > 0){
+            currentPage.height -= this.difference
+          }
           currentPage.rects.push({
             ...rect,
             castHeight: rect.height,
