@@ -34,7 +34,7 @@
       <div
         class="content-info"
         :style="{
-            height:tinymceHeight + 'px'}"
+            height: data.first ? tinymceHeight + 8 + 'px' : tinymceHeight + 'px'}"
       >
         <!-- 富文本编辑区 -->
         <trigger-tinymce
