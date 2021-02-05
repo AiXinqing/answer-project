@@ -374,6 +374,7 @@ export default {
 
       // 剩余可容纳行数
       let availableRow = Math.floor(RemainingHeight / rowHeight)
+      console.log(availableRow)
 
       //题型高度
       let question_height = availableRow * rowHeight + margin
@@ -381,7 +382,8 @@ export default {
           question_height =
             availableRow == 0 && question.questionType != 'optionalQuestion' ? question_height - MarginHeight : question_height
           question_height =
-            availableRow == 0 && question.questionType != 'compositionLanguage' ? question_height - MarginHeight : question_height
+              question.questionType == 'compositionLanguage' && initial ? question_height : question_height - MarginHeight
+
 
       let parameter = {
         availableRow:availableRow,

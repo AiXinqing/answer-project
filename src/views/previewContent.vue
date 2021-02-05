@@ -347,7 +347,7 @@ export default {
           question_height =
             availableRow == 0 && question.questionType != 'optionalQuestion' ? question_height - MarginHeight : question_height
           question_height =
-            availableRow == 0 && question.questionType != 'compositionLanguage' ? question_height - MarginHeight : question_height
+              question.questionType == 'compositionLanguage' && initial ? question_height : question_height - MarginHeight
 
       let parameter = {
         availableRow:availableRow,
