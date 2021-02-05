@@ -340,6 +340,8 @@
       },
 
       preCreateQuestion(){
+        // 清空缓存
+        window.localStorage.clear()
         // 保存题型
         const { rows,InsertTitle,Postpone,} = this.editingData
 
