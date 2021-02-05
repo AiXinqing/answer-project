@@ -192,7 +192,7 @@ export default {
               }
               contentRows = contentRows > curRect.availableRow ? contentRows - curRect.availableRow : 0
             }
-            console.log(contentRows)
+
             segmentedArr.push(curRect.availableRow)
 
             currentPage.rects.push({
