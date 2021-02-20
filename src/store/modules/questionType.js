@@ -97,10 +97,15 @@ const mutations = {
   },
 
   subTopic_determine_clean: (state, topic) => {
-    // 清除相同pid
+    // 清除topic
     state.subTopic_number_determine = state.subTopic_number_determine.filter((item) => {
       return ![topic].includes(item.topic)
     })
+  },
+
+  subTopic_determine_AllClean: (state) => {
+    // 清除topic
+    state.subTopic_number_determine = []
   },
 
   subTopic_determine_del: (state, Arr) => {

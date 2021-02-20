@@ -253,6 +253,7 @@
         'subTopic_calculate_determine', // 储存确定题型
         'subTopic_already_reset', // 清空
         'subTopic_determine_pid_clean',
+        'subTopic_determine_AllClean',
       ]),
 
       ...mapMutations('page', [
@@ -387,6 +388,7 @@
           this.pageData_edit({...questionObj,order:this.orders,titleContent:''})
         }
         // 小题数组追加数据
+        this.subTopic_determine_AllClean()
         this.subTopic_calculate_determine(this.questionGroup)
         this.subTopic_already_add(this.questionGroup)
 

@@ -224,6 +224,7 @@ const getters = {
 
     // 清空缓存
     window.localStorage.clear()
+    sessionStorage.clear()
     return state.pageData.map((question) => {
       return question.questionType == 'ObjectiveQuestion' ? getters.question_objective(question) :
         question.questionType == 'compositionLanguage' ? getters.question_language(question) :
@@ -238,6 +239,7 @@ const getters = {
   },
 
   question_objective: (state, getters) => (question) => {
+    window.localStorage.clear()
     // 客观题
     let { rowGroup, titleH } = question.height
     //题型分组
