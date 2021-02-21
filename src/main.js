@@ -6,15 +6,6 @@ import './plugins/element-up.js'
 import Element from 'element-ui'
 import Components from './components/index'
 
-
-
-// //样式
-// import './components/tinymce/skins/ui/oxide/skin.min.css'
-// import './components/tinymce/skins/ui/oxide/content.min.css'
-// import './components/tinymce/skins/ui/oxide/content.inline.min.css'
-
-
-
 Vue.config.productionTip = false
 Vue.use(Components)
 
