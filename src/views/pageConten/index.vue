@@ -11,7 +11,6 @@
         :key="topice.id + '_' + i + '_' + index"
         :class="['footer',{answer:topice.questionType == 'answerQuestion' && topice.orderFirst && index > 0}]"
         ref="box"
-        :style="{ minHeight: topice.castHeight + 'px' }"
       >
         <component
           ref="answerComponent"
@@ -56,6 +55,7 @@ import compositionEnglish from '../questionContent/_compositionEnglish' // 作�
 import compositionLanguage from '../questionContent/_compositionLanguage' // 作文语文
 import NonRresponseArea from '../questionContent/_NonRresponseAreaContent' // 非作答
 import publicDialog from '../dialog/_publicDialog'
+
 
 export default {
   components: {
@@ -160,8 +160,12 @@ export default {
         const itemObj = JSON.parse(JSON.stringify(rect))
 
         // 高度溢出---------------------------------------------------------------------------
-        if(rect.height > (avalibleHeight - this.difference)){
+
+        if(rect.height > avalibleHeight){
           avalibleHeight -= this.difference
+          if(rect.questionType == 'answerQuestion' && rect.orderFirst){
+            avalibleHeight += this.difference
+          }
 
           let height = rect.height
           let curRect = this.preliminaryQuestion(rect, avalibleHeight)
@@ -213,9 +217,13 @@ export default {
               height += this.difference
             }
 
+            if(rect.questionType == 'answerQuestion' && rect.orderFirst){
+              avalibleHeight -= this.difference
+            }
           }
 
           // 增加一页
+
           results.push(currentPage.rects)
           resetCurrentPage()
 
@@ -374,15 +382,29 @@ export default {
 
       // 剩余可容纳行数
       let availableRow = Math.floor(RemainingHeight / rowHeight)
-      console.log(availableRow)
 
       //题型高度
       let question_height = availableRow * rowHeight + margin
           // 不等于选作题的原因-选作题内部标题有一行内容的高度
-          question_height =
-            availableRow == 0 && question.questionType != 'optionalQuestion' ? question_height - MarginHeight : question_height
-          question_height =
-              question.questionType == 'compositionLanguage' && initial ? question_height : question_height - MarginHeight
+          switch(question.questionType) {
+              case 'optionalQuestion':
+                  question_height = question_height - MarginHeight
+                  break;
+              case 'compositionLanguage':
+                  question_height = !initial ? question_height - MarginHeight : question_height
+                  break;
+              case 'answerQuestion':
+                  question_height = !question.orderFirst ? question_height - 2 : question_height - 1
+                  break;
+              default:
+          }
+
+          // question_height =
+          //   availableRow == 0 && question.questionType != 'optionalQuestion' ? question_height - MarginHeight : question_height
+          // question_height =
+          //     question.questionType == 'compositionLanguage' && initial ? question_height : question_height - MarginHeight
+          // question_height =
+          //     question.questionType == 'answerQuestion'  ? question_height : question_height - MarginHeight
 
 
       let parameter = {
@@ -393,7 +415,6 @@ export default {
           MarginHeight:MarginHeight,
           rowHeight:rowHeight
       }
-
       return parameter
     },
 

@@ -34,7 +34,7 @@
       <div
         class="content-info"
         :style="{
-            height: tinymceHeight - 2 + 'px'}"
+            height: !data.orderFirst ? tinymceHeight - 2 + 'px' : tinymceHeight - 1 + 'px'}"
       >
       <!-- height: data.first && data.orderFirst  ? tinymceHeight + 8 + 'px' : tinymceHeight - 2 + 'px'}" -->
         <!-- 富文本编辑区 -->
@@ -226,7 +226,6 @@ export default {
             //高度溢出
             if(differenceLong > 0) {
                 // 截取溢出的高度
-                console.log(differenceLong)
                 for(let a = 0; a < currentContentArr.length - differenceLong;a++){
                   if(currentContentArr[a] != undefined){
                     tinymceContent += currentContentArr[a]

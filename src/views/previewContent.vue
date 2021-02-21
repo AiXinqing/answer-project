@@ -128,8 +128,12 @@ export default {
         const itemObj = JSON.parse(JSON.stringify(rect))
 
         // 高度溢出---------------------------------------------------------------------------
-        if(rect.height > (avalibleHeight - this.difference)){
+
+        if(rect.height > avalibleHeight){
           avalibleHeight -= this.difference
+          if(rect.questionType == 'answerQuestion' && rect.orderFirst){
+            avalibleHeight += this.difference
+          }
 
           let height = rect.height
           let curRect = this.preliminaryQuestion(rect, avalibleHeight)
@@ -344,10 +348,23 @@ export default {
       //题型高度
       let question_height = availableRow * rowHeight + margin
           // 不等于选作题的原因-选作题内部标题有一行内容的高度
-          question_height =
-            availableRow == 0 && question.questionType != 'optionalQuestion' ? question_height - MarginHeight : question_height
-          question_height =
-              question.questionType == 'compositionLanguage' && initial ? question_height : question_height - MarginHeight
+          switch(question.questionType) {
+              case 'optionalQuestion':
+                  question_height = question_height - MarginHeight
+                  break;
+              case 'compositionLanguage':
+                  question_height = !initial ? question_height - MarginHeight : question_height
+                  break;
+              case 'answerQuestion':
+                  question_height = !question.orderFirst ? question_height - 2 : question_height - 1
+                  break;
+              default:
+          }
+          // // 不等于选作题的原因-选作题内部标题有一行内容的高度
+          // question_height =
+          //   availableRow == 0 && question.questionType != 'optionalQuestion' ? question_height - MarginHeight : question_height
+          // question_height =
+          //     question.questionType == 'compositionLanguage' && initial ? question_height : question_height - MarginHeight
 
       let parameter = {
         availableRow:availableRow,
