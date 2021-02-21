@@ -437,7 +437,7 @@ export default {
         this.pageData_del(index)
         if(!this.data.orderFirst){
           this.$nextTick(()=>{
-            this.pageData_orderFirst(this.data.id)
+            this.pageData_orderFirst(this.data.objId)
           })
         }
       }
