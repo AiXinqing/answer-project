@@ -139,12 +139,13 @@ export default {
         first,
         borderTop,
         rowHeight,
+        rowTitle
       } = this.data
       let row = 0
       if (first && borderTop == undefined) {
-        row = Math.floor((castHeight - MarginHeight - heightTitle) / rowHeight) - 1
+        row = Math.floor((castHeight - MarginHeight - heightTitle - rowTitle) / rowHeight)
       } else {
-        row = Math.floor(castHeight / rowHeight)
+        row = Math.ceil(castHeight / rowHeight)
       }
       let Arr = []
       for (let i = 1; i <= row; i++) {

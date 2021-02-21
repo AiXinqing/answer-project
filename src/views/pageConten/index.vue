@@ -208,6 +208,7 @@ export default {
             })
 
             height = rect.height - curRect.height
+
             // 作文
             if(rect.questionType == 'compositionLanguage'){
               superiorGrid = rect.superiorGrid + curRect.availableRow * rect.lattice
@@ -376,36 +377,37 @@ export default {
 
       // 边框高度 剩余内容
       let margin = initial ? MarginHeight + heightTitle : MarginHeight
-          margin = question.questionType == 'compositionLanguage' && initial ? margin + question.rowTitle : margin
+      let RemainingHeight
 
-      let RemainingHeight = avalibleHeight - margin
+      switch(question.questionType){
+          case 'compositionLanguage':
+            RemainingHeight = question.first ?  avalibleHeight - margin - question.rowTitle : avalibleHeight - margin
+            break;
+          default:
+            RemainingHeight = avalibleHeight - margin
+      }
 
       // 剩余可容纳行数
       let availableRow = Math.floor(RemainingHeight / rowHeight)
 
+
+
       //题型高度
       let question_height = availableRow * rowHeight + margin
+
           // 不等于选作题的原因-选作题内部标题有一行内容的高度
           switch(question.questionType) {
               case 'optionalQuestion':
                   question_height = question_height - MarginHeight
                   break;
               case 'compositionLanguage':
-                  question_height = !initial ? question_height - MarginHeight : question_height
+                  question_height = initial ?  question_height + question.rowTitle : question_height
                   break;
               case 'answerQuestion':
                   question_height = !question.orderFirst ? question_height - 2 : question_height - 1
                   break;
               default:
           }
-
-          // question_height =
-          //   availableRow == 0 && question.questionType != 'optionalQuestion' ? question_height - MarginHeight : question_height
-          // question_height =
-          //     question.questionType == 'compositionLanguage' && initial ? question_height : question_height - MarginHeight
-          // question_height =
-          //     question.questionType == 'answerQuestion'  ? question_height : question_height - MarginHeight
-
 
       let parameter = {
         availableRow:availableRow,

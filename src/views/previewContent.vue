@@ -186,6 +186,9 @@ export default {
               height += this.difference
             }
 
+            if(rect.questionType == 'answerQuestion' && rect.orderFirst){
+              avalibleHeight -= this.difference
+            }
           }
 
           // 增加一页
@@ -338,8 +341,15 @@ export default {
 
       // 边框高度 剩余内容
       let margin = initial ? MarginHeight + heightTitle : MarginHeight
-          margin = question.questionType == 'compositionLanguage' && initial ? margin + question.rowTitle : margin
-      let RemainingHeight = avalibleHeight - margin
+      let RemainingHeight
+
+      switch(question.questionType){
+          case 'compositionLanguage':
+            RemainingHeight = question.first ?  avalibleHeight - margin - question.rowTitle : avalibleHeight - margin
+            break;
+          default:
+            RemainingHeight = avalibleHeight - margin
+      }
 
       // 剩余可容纳行数
       let availableRow = Math.floor(RemainingHeight / rowHeight)
@@ -353,18 +363,13 @@ export default {
                   question_height = question_height - MarginHeight
                   break;
               case 'compositionLanguage':
-                  question_height = !initial ? question_height - MarginHeight : question_height
+                  question_height = initial ?  question_height + question.rowTitle : question_height
                   break;
               case 'answerQuestion':
                   question_height = !question.orderFirst ? question_height - 2 : question_height - 1
                   break;
               default:
           }
-          // // 不等于选作题的原因-选作题内部标题有一行内容的高度
-          // question_height =
-          //   availableRow == 0 && question.questionType != 'optionalQuestion' ? question_height - MarginHeight : question_height
-          // question_height =
-          //     question.questionType == 'compositionLanguage' && initial ? question_height : question_height - MarginHeight
 
       let parameter = {
         availableRow:availableRow,
