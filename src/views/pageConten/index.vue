@@ -397,9 +397,6 @@ export default {
 
           // 不等于选作题的原因-选作题内部标题有一行内容的高度
           switch(question.questionType) {
-              case 'optionalQuestion':
-                  question_height = question_height - MarginHeight
-                  break;
               case 'compositionLanguage':
                   question_height = initial ?  question_height + question.rowTitle : question_height
                   break;
