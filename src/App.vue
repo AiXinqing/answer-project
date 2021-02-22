@@ -1,11 +1,22 @@
 <template>
   <div id="app">
     <div class="group_heads">
-      <span>制作答题卡</span>
+      <span>{{title}}</span>
     </div>
     <router-view />
   </div>
 </template>
+
+<script>
+export default {
+  computed:{
+    title() {
+      return this.$route.name == 'preview' ? '答题卡预览' : '制作答题卡'
+    }
+  },
+}
+</script>
+
 
 <style lang="less">
 @import '~@/assets/css/variables.less';
