@@ -131,12 +131,20 @@ const mutations = {
     })
   },
 
-  pageData_orderFirst: (state, objId) => {
+  pageData_orderFirst: (state, data) => {
     // 解答题删除后续排序
-    state.pageData = state.pageData.map(question => question.objId == objId ? {
-      ...question,
-      orderFirst: question.orderFirst - 1
-    }:question)
+    let index = -1
+    state.pageData = state.pageData.map(question => {
+      if (question.objId == data.objId) {
+        index += 1
+        return {
+          ...question,
+          orderFirst: index,
+          scoreTotal: data.scoreTotal,
+          heightTitle:index == 0 ? 40 : question.heightTitle
+        }
+      }else{return question}
+    })
   },
 
   pageData_order_edit: (state, data) => {

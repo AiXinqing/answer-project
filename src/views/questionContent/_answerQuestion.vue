@@ -18,9 +18,7 @@
 
     <div class="question_arrays">
       <div class="question_editOrDel">
-        <span class="layui-btn layui-btn-xs" @click="subTopic_numberAnswerEdit"
-          >编辑</span
-        >
+        <span class="layui-btn layui-btn-xs" @click="subTopic_numberAnswerEdit">编辑</span>
         <span class="layui-btn layui-btn-xs" @click="delHanlde">删除</span>
       </div>
     </div>
@@ -339,8 +337,9 @@ export default {
           ...this.questionData,
         }
 
-        const {castHeight,heightTitle,first,titleContent,scoreTotal} = this.questionData
-        this.tinymceHeight = first ? castHeight - heightTitle : castHeight
+        const {castHeight,heightTitle,orderFirst,titleContent,scoreTotal} = this.questionData
+        this.tinymceHeight = orderFirst == 0 ? castHeight - heightTitle : castHeight
+
         this.content = ''
         let {number,topicName} = this.contentData
 
@@ -388,7 +387,6 @@ export default {
 
       if(sid){
         //三节
-
         let index = questionGroup.childGroup.findIndex(question => question.id === fid)
         if(index > -1){
           let levelTwo = questionGroup.childGroup[index]
@@ -435,11 +433,7 @@ export default {
       const index = this.pageData.findIndex((itme) => itme.id === this.data.id)
       if (index > -1) {
         this.pageData_del(index)
-        if(!this.data.orderFirst){
-          this.$nextTick(()=>{
-            this.pageData_orderFirst(this.data.objId)
-          })
-        }
+        this.pageData_orderFirst({objId:this.data.objId,scoreTotal:this.data.scoreTotal - this.data.score})
       }
       this.subTopic_number_calculate()
 
@@ -494,7 +488,7 @@ export default {
               answerArrHeight,orderFirst} = this.questionData
       const index = this.pageData.findIndex(question => question.id == id)
 
-      let heights = first ? tinyHeight + heightTitle + MarginHeight : tinyHeight + MarginHeight
+      let heights = orderFirst == 0 ? tinyHeight + heightTitle + MarginHeight : tinyHeight + MarginHeight
       this.tinymceHeight = tinyHeight // 最大高度
 
       // 更改富文本编辑后行高数组--------------------------------------------------
