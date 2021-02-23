@@ -337,8 +337,8 @@ export default {
           ...this.questionData,
         }
 
-        const {castHeight,heightTitle,orderFirst,titleContent,scoreTotal} = this.questionData
-        this.tinymceHeight = orderFirst == 0 ? castHeight - heightTitle : castHeight
+        const {castHeight,heightTitle,orderFirst,titleContent,scoreTotal,first} = this.questionData
+        this.tinymceHeight = orderFirst == 0 && first ? castHeight - heightTitle : castHeight
 
         this.content = ''
         let {number,topicName} = this.contentData
