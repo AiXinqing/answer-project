@@ -7,7 +7,7 @@
           :key="a"
           :style="{
             width: pageWidth + 'px',
-            marginLeft: pageWidth == 520 ? '25px' : '38px',
+            marginLeft:'30px',
           }"
           :class="[
             'page_info_itme',
@@ -70,7 +70,7 @@ export default {
       contentData: [],
       ces: '',
       pageData:JSON.parse(localStorage.getItem('accessToken')),
-      pageWidth:this.$route.query.pageWidth,
+      pageWidth:this.$route.query.pageWidth - 25,
       pageNum:this.$route.query.pageNum,
       page_height:PAGE_HEIGHT,
       difference:20,
@@ -404,8 +404,8 @@ html {
 .page_info_itme{
   .footer {
     position: relative;
-    left: 20px;
-    width: calc(100% - 40px);
+    left: 8px;
+    // width: calc(100% - 40px);
     margin-top: 20px;
     &.answer{
       margin-top:0;
@@ -413,7 +413,7 @@ html {
   }
 }
 .page_info_itme {
-  width: 785px;
+  width: 760px;
   height: 1115px;
   border: 1px solid #888;
   border-radius: 3px;
@@ -434,6 +434,7 @@ html {
 <style lang="less">
   .preview-content{
     .question-info{
+      width: calc(100% - 16px);
       &:hover{
         .question_arrays{
           display: none !important;
