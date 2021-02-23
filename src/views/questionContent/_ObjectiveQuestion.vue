@@ -5,7 +5,7 @@
       class="question-title"
       ref="tinyeditor"
       v-if="questionData.first"
-      :style="{'height':maxHeight + 'px'}"
+      :style="{'height':maxHeight - 2 + 'px'}"
     >
       <tiny-vue class="title-span"
         v-model="content"
@@ -82,7 +82,7 @@ export default {
       content: '',
       quilleditor:false,
       pageLayout:this.contentData.pageLayout,
-      maxHeight:28
+      maxHeight:30
     }
   },
   computed: {
@@ -123,6 +123,7 @@ export default {
           }else{
             this.content = this.questionData.titleContent
           }
+          this.maxHeight = this.questionData.heightTitle
       }
     }
   },
@@ -171,7 +172,7 @@ export default {
     changeContent(obj){
       const {val,tinyHeight} = obj
       const index = this.pageData.findIndex(question => question.id == this.questionData.id)
-      let height = tinyHeight
+      let height = tinyHeight + 2
       this.maxHeight = height // 最大高度
 
       if(index > -1){
