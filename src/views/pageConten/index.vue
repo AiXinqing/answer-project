@@ -465,9 +465,9 @@ export default {
   float: left;
 }
 .page-contents {
-  // padding-top: 20px;
+  padding-top: 20px;
   width: 785px;
-  height: 1170px;
+  height: 1090px;
   border: 1px solid @font-333;
   overflow: hidden;
   background: @white;
