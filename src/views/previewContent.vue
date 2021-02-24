@@ -1,13 +1,25 @@
 <template>
-  <div class="page-content preview-content">
+  <div class="page-content preview-content" >
     <div class="main-info">
-      <div v-for="(pages, i) in contentData" :key="i" class="page_card">
+      <div v-for="(pages, i) in contentData" :key="i" class="page_card" :style="{width:pageNum == 1 ? '875px' : '1650px'}">
+        <div class="previewCanvas">
+          <div class="left">
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="30">
+              <rect x="0" y="0" width="27" height="17" style="fill-opacity: 1;" stroke="#000000" fill="#000000"></rect>
+            </svg>
+          </div>
+          <div class="right">
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="30" height="30">
+              <rect x="0" y="0" width="27" height="17" style="fill-opacity: 1;" stroke="#000000" fill="#000000"></rect>
+            </svg>
+          </div>
+        </div>
         <div
           v-for="(pagesCrad, a) in pages"
           :key="a"
           :style="{
             width: pageWidth + 'px',
-            marginLeft:'30px',
+            marginLeft:a == 0 ? '50px' :'30px',
           }"
           :class="[
             'page_info_itme',
@@ -33,8 +45,21 @@
             />
           </div>
         </div>
-        <div class="card_footer" :style="{width:pageNum == 1 ? '826px' : '100%'}">
-          第 {{ i + 1 }} 页 共 {{ contentData.length }} 页
+
+        <div class="previewCanvas bottom">
+          <div class="left">
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="60">
+              <rect x="0" y="30" width="27" height="17" style="fill-opacity: 1;" stroke="#000000" fill="#000000"></rect>
+            </svg>
+          </div>
+          <div class="card_footer" :style="{width:pageNum == 1 ? '826px' : '100%',position:'relative'}">
+              第 {{ i + 1 }} 页 共 {{ contentData.length }} 页
+          </div>
+          <div class="right">
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="30" height="60">
+              <rect x="0" y="30" width="27" height="17" style="fill-opacity: 1;" stroke="#000000" fill="#000000"></rect>
+            </svg>
+          </div>
         </div>
       </div>
     </div>
@@ -73,6 +98,7 @@ export default {
       pageNum:this.$route.query.pageNum,
       page_height:PAGE_HEIGHT,
       difference:20,
+      svgWidth:110
     }
   },
 
@@ -398,6 +424,45 @@ html {
     flex-wrap: wrap;
     width: 1650px;
     justify-content: left;
+    position: relative;
+
+    // &:nth-child(n+2){
+    //   margin-top: 60px;
+    // }
+  }
+
+  .previewCanvas{
+    width: 100%;
+    height: 60px;
+    // display: flex;
+    // align-items:center;
+
+    div{
+      float: left;
+      margin-top: 20px;
+
+      &.left{
+        margin-left: 20px
+      }
+
+      &.right{
+        float: right;
+        margin-right: 20px;
+      }
+    }
+
+    &::after{
+      content: "020";
+      display: block;
+      height: 0;
+      clear: both;
+      visibility: hidden;
+    }
+    // &.bottom{
+    //   position: absolute;
+    //   bottom: 0;
+    //   text-align: left
+    // }
   }
 }
 .page_info_itme{
@@ -413,11 +478,11 @@ html {
 }
 .page_info_itme {
   width: 760px;
-  height: 1115px;
+  height: 1020px;
   border: 1px solid #888;
   border-radius: 3px;
   margin-left: 38px;
-  margin-top: 50px;
+  // margin-top: 50px;
 }
 .card_footer {
   width: 100%;

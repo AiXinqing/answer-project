@@ -316,7 +316,7 @@ export default {
   font-size: 23px;
   border-color: @font-888;
   color: @font-333;
-  max-height: 65px;
+  max-height: 40px;
 }
 table tr td div:last-child {
   margin-bottom: 6px;
@@ -369,11 +369,9 @@ table tr td div:last-child {
   text-align: center;
   font-size: 22px;
   font-weight: bold;
-  height: 65px;
-  line-height: 65px;
+
   &.active {
-    line-height: 30px;
-    min-height: 60px;
+    line-height: 40px;
     height: auto;
   }
 }
