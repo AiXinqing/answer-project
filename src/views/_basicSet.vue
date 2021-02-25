@@ -17,10 +17,7 @@
     </div>
     <div class="basis_checkbox basic_btn save-btn">
       <el-button type="primary" @click="previewLinkFunc">预览</el-button>
-      <!-- <el-button type="primary">
-        <router-link to="/preview">预览</router-link>
-      </el-button> -->
-      <el-button type="primary">保存</el-button>
+      <el-button type="primary" @click="saveBtn">保存</el-button>
       <el-button type="primary">下载</el-button>
     </div>
     <public-dialog ref="publicDialog" />
@@ -28,7 +25,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState,mapGetters} from 'vuex'
 import publicDialog from './dialog/_publicDialog'
 export default {
   components: {
@@ -42,17 +39,77 @@ export default {
   },
   computed: {
     ...mapState('page', ['pageLayout', 'pageData']),
+    ...mapState('pageContent', ['scoreTotal']),
+    ...mapGetters('page',['page_width','compile_pageData']),
+
     pageWidth() {
       const {column,size} = this.pageLayout
       return column === 3 && size == 'A3'
         ? 520
         : 785
     },
+
     pageNum() {
       const {column,size} = this.pageLayout
       return column === 3 && size == 'A3' ? 3 :
       column === 1 && size == 'A4' ? 1 :2
     },
+
+    answerSheetData() {
+      let obj = {}
+      let questionArr = []
+
+      this.compile_pageData.forEach(question => {
+        if(question.questionType == 'AnswerSheetTitle'){
+          let {content} = question
+          obj = {
+            'name': content.textVal,
+            'tscore': this.scoreTotal,
+            'exnum': content.titleRows,
+            'studentInfos': content.titleInfo.filter(item => item.checked).map(item => item.name).toString(),
+            'content': JSON.stringify(this.compile_pageData),
+            'QBAnswCardPartition':[
+              {
+                'seq': 1,
+                'describe': "第1卷选择题",
+                'tscore': this.scoreTotal,
+                'QBAnswCardTopic':[]
+              }
+            ]
+          }
+        }else {
+          switch(question.questionType){
+            case 'ObjectiveQuestion':
+              questionArr.push(this.objectiveTopic(question))
+              break;
+            case 'FillInTheBlank':
+              questionArr.push(this.FillInTheBlankTopic(question))
+              break;
+            case 'optionalQuestion':
+              questionArr.push(this.optionalTopic(question))
+              break;
+            case 'compositionEnglish':
+              questionArr.push(this.compositionTopic(question))
+              break;
+            case 'compositionLanguage':
+              questionArr.push(this.languageTopic(question))
+              break;
+            default:
+              questionArr.push(this.answerTopic(question))
+          }
+        }
+      })
+      obj = {
+        ...obj,
+        QBAnswCardPartition:[
+          {
+            ...obj.QBAnswCardPartition[0],
+          QBAnswCardTopic:questionArr
+          }
+        ]
+      }
+      return obj
+    }
   },
 
   methods: {
@@ -87,6 +144,173 @@ export default {
       )
       window.open(routeTwo.href, '_blank')
     },
+
+    saveBtn(){
+      // console.log(this.pageData)
+      // var obj={},newArr=[];
+      // this.compile_pageData.forEach(function(item,suffix){
+      //     //根据对象的属性是唯一的，将值作为对象的属性名
+      //     if(!obj[item.sex]){
+      //         var arr=[];
+      //         arr.push(item);
+      //         newArr.push(arr);
+      //         obj[item.sex]=item;
+      //     }else{
+      //         newArr.forEach(function(value,index){
+      //             //如果已经存在  就循环新组的值将值插入属性相同的数组里   为了防止重复添加   只要和第一个比较就可以了
+      //             if(value[0].sex==item.sex){
+      //                 value.push(item)
+      //             }
+      //         })
+      //     }
+      // })
+
+      console.log(JSON.stringify(this.answerSheetData))
+    },
+
+    objectiveTopic(question){
+      // 客观题
+      let {content,showData} = question
+      let obj = {
+        'num':content.number,
+        'name':content.topicName,
+        'type':"客观题",
+        'tscore':content.scoreTotal,
+      }
+      let topicList = showData.flat().flat()
+      obj = {
+        ...obj,
+        QBAnswCardQuestions:topicList.map(item => {
+            let type = '单选题'
+            if(item.id.indexOf('check') != -1){
+              type = '多选题'
+            }else if(item.id.indexOf('judgment') != -1){
+              type = '判断题'
+            }else{
+              type = '单选题'
+            }
+
+            return {
+              'qnum':item.topic,
+              'type':type,
+              'score': item.score,
+              'optionnum':item.select
+            }
+        })
+      }
+      return obj
+    },
+
+    FillInTheBlankTopic(question){
+      // 客观题
+      let {content,showData} = question
+      let obj = {
+        'num':content.number,
+        'name':content.topicName,
+        'type':'主观题',
+        'tscore':content.scoreTotal,
+      }
+      let topicList = showData.flat().flat()
+      obj = {
+        ...obj,
+        QBAnswCardQuestions:topicList.map(item => {
+
+            return {
+              'qnum':item.spaceNum !=undefined ? `${item.topic}.${item.smallTopic}.${item.spaceNum}` : `${item.topic}`,
+              'type':'填空题',
+              'score': item.score,
+            }
+        })
+      }
+
+      return obj
+    },
+
+    optionalTopic(question){
+      // 选作题
+      let {content} = question
+      let obj = {
+        'num':content.number,
+        'name':content.topicName,
+        'type':'主观题',
+        'tscore':content.scoreTotal,
+      }
+      let topicList = content.group.map(question => question.childGroup).flat().map(item => item.topic)
+
+      obj = {
+        ...obj,
+        QBAnswCardQuestions:[{
+          'qnum':`${topicList[0]}-${topicList[topicList.length - 1]}`,
+          'type':'选作题',
+          'score': content.scoreTotal,
+        }]
+      }
+
+      return obj
+    },
+
+    compositionTopic(question){
+      // 作文（英）
+      let {content} = question
+      let obj = {
+        'num':content.number,
+        'name':content.topicName,
+        'type':'主观题',
+        'tscore':content.scoreTotal,
+      }
+
+      obj = {
+        ...obj,
+        QBAnswCardQuestions:[{
+          'qnum':content.topic,
+          'type':'作文(英)',
+          'score': content.scoreTotal,
+        }]
+      }
+
+      return obj
+    },
+
+    languageTopic(question){
+      // 作文（语）
+      let {content} = question
+      let obj = {
+        'num':content.number,
+        'name':content.topicName,
+        'type':'主观题',
+        'tscore':content.scoreTotal,
+      }
+
+      obj = {
+        ...obj,
+        QBAnswCardQuestions:[{
+          'qnum':content.topic,
+          'type':'作文(语)',
+          'score': content.scoreTotal,
+        }]
+      }
+      return obj
+    },
+
+    answerTopic(question) {
+      let {content} = question
+      let obj = {
+        'num':content.number,
+        'name':content.topicName,
+        'type':'主观题',
+        'tscore':question.scoreTotal,
+      }
+
+      obj = {
+        ...obj,
+        QBAnswCardQuestions:[{
+          'qnum':question.topic,
+          'type':'解答题',
+          'score': question.score,
+        }]
+      }
+      return obj
+    }
   },
 }
 </script>
