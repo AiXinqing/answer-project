@@ -478,7 +478,7 @@ html {
 }
 .page_info_itme {
   width: 760px;
-  height: 1020px;
+  height: 1025px;
   border: 1px solid #888;
   border-radius: 3px;
   margin-left: 38px;

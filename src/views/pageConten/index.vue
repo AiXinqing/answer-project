@@ -465,7 +465,7 @@ export default {
 .page-contents {
   padding-top: 20px;
   width: 785px;
-  height: 1080px;
+  height: 1085px;
   border: 1px solid @font-333;
   overflow: hidden;
   background: @white;
