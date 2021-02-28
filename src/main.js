@@ -6,6 +6,9 @@ import './plugins/element-up.js'
 import Element from 'element-ui'
 import Components from './components/index'
 
+import lodash from 'lodash'
+Vue.prototype.$lodash = lodash
+
 Vue.config.productionTip = false
 Vue.use(Components)
 
