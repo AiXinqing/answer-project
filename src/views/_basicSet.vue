@@ -55,11 +55,33 @@ export default {
       column === 1 && size == 'A4' ? 1 :2
     },
 
+    questionLsit () {
+      // 重新结构数据
+      let sorted = this.$lodash.groupBy(this.compile_pageData, function(item){
+        return item.questionType == 'answerQuestion' && item.objId
+
+      })
+
+      let Arr = []
+      Object.values(sorted).forEach(element => {
+        if(element[0].questionType == 'answerQuestion'){
+          let obj = {
+            ...element[0],
+            showData:element
+          }
+          Arr.push(obj)
+        }else{
+          Arr = [...Arr,...element]
+        }
+      })
+      return Arr
+    },
+
     answerSheetData() {
       let obj = {}
       let questionArr = []
 
-      this.compile_pageData.forEach(question => {
+      this.questionLsit.forEach(question => {
         if(question.questionType == 'AnswerSheetTitle'){
           let {content} = question
           obj = {
@@ -112,6 +134,10 @@ export default {
     }
   },
 
+  mounted() {
+
+  },
+
   methods: {
     questionDialog() {
       this.$refs.publicDialog.opened('questionDialogs')
@@ -146,24 +172,6 @@ export default {
     },
 
     saveBtn(){
-      // console.log(this.pageData)
-      // var obj={},newArr=[];
-      // this.compile_pageData.forEach(function(item,suffix){
-      //     //根据对象的属性是唯一的，将值作为对象的属性名
-      //     if(!obj[item.sex]){
-      //         var arr=[];
-      //         arr.push(item);
-      //         newArr.push(arr);
-      //         obj[item.sex]=item;
-      //     }else{
-      //         newArr.forEach(function(value,index){
-      //             //如果已经存在  就循环新组的值将值插入属性相同的数组里   为了防止重复添加   只要和第一个比较就可以了
-      //             if(value[0].sex==item.sex){
-      //                 value.push(item)
-      //             }
-      //         })
-      //     }
-      // })
 
       console.log(JSON.stringify(this.answerSheetData))
     },
@@ -293,7 +301,7 @@ export default {
     },
 
     answerTopic(question) {
-      let {content} = question
+      let {content,showData} = question
       let obj = {
         'num':content.number,
         'name':content.topicName,
@@ -303,11 +311,13 @@ export default {
 
       obj = {
         ...obj,
-        QBAnswCardQuestions:[{
-          'qnum':question.topic,
-          'type':'解答题',
-          'score': question.score,
-        }]
+        QBAnswCardQuestions:showData.map(ele => {
+          return {
+            'qnum':ele.topic,
+            'type':'解答题',
+            'score': ele.score,
+          }
+        })
       }
       return obj
     }
