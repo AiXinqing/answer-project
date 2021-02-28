@@ -146,7 +146,6 @@ export default {
         if(rect.content.scoreTotal){
           this.scoreTotal_sum(rect.content.scoreTotal)
         }
-        console.log(rect.height)
 
         //计算变量及对象追加
         let backup = {}
@@ -156,7 +155,6 @@ export default {
         let contentRows = rect.content.rows // 用于英语作文
 
         var avalibleHeight = this.page_height - currentPage.height
-        console.log(avalibleHeight)
 
         // 用于客观题 填空题数组分割
         const itemObj = JSON.parse(JSON.stringify(rect))
@@ -467,7 +465,7 @@ export default {
 .page-contents {
   padding-top: 20px;
   width: 785px;
-  height: 1090px;
+  height: 1080px;
   border: 1px solid @font-333;
   overflow: hidden;
   background: @white;
