@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="group_heads">
+    <div class="group_heads" v-show="!down">
       <span>{{title}}</span>
     </div>
     <router-view />
@@ -11,7 +11,12 @@
 export default {
   computed:{
     title() {
+      console.log(this.$route.query)
       return this.$route.name == 'preview' ? '答题卡预览' : '制作答题卡'
+    },
+
+    down() {
+      return this.$route.query.down ? 1 : 0
     }
   },
 }
