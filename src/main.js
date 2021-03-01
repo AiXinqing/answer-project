@@ -5,9 +5,13 @@ import store from './store'
 import './plugins/element-up.js'
 import Element from 'element-ui'
 import Components from './components/index'
-import htmlToPdf from './utils/htmlToPdf'
-// 使用Vue.use()方法就会调用工具方法中的install方法
-Vue.use(htmlToPdf)
+
+import axios from 'axios';
+// 服务器连接地址
+axios.defaults.baseURL = 'http://localhost:60044'
+
+Vue.prototype.$http = axios
+
 
 
 import lodash from 'lodash'
