@@ -1,5 +1,5 @@
 <template>
-  <div class="page-content preview-content" >
+  <div class="page-content preview-content" :class="downs ? 'down_style' : ''" ref="pageContent" >
     <div class="main-info">
       <div v-for="(pages, i) in contentData" :key="i" class="page_card" :style="{width:pageNum == 1 ? '875px' : '1650px'}">
         <div class="previewCanvas">
@@ -78,6 +78,8 @@ import optionalQuestion from './questionContent/_optionalQuestion' // 选作题
 import compositionEnglish from './questionContent/_compositionEnglish' // 作文英语
 import compositionLanguage from './questionContent/_compositionLanguage' // 作文语文
 import NonRresponseArea from './questionContent/_NonRresponseAreaContent' // 非作答
+
+// import htmlToPdf from 'html2canvas';
 export default {
   components: {
     AnswerSheetTitle,
@@ -96,9 +98,16 @@ export default {
       pageData:JSON.parse(localStorage.getItem('accessToken')),
       pageWidth:this.$route.query.pageWidth - 25,
       pageNum:this.$route.query.pageNum,
+      down:this.$route.query.down,
       page_height:PAGE_HEIGHT,
       difference:20,
       svgWidth:110
+    }
+  },
+
+  computed: {
+    downs() {
+      return this.$route.query.down ? 1 : 0
     }
   },
 
@@ -123,7 +132,9 @@ export default {
 
   },
   mounted() {
-
+    if(this.downs){
+      this.generatorImage()
+    }
   },
   methods: {
     ...mapMutations('pageContent', ['pageHeight_set']),
@@ -404,6 +415,19 @@ export default {
 
       return parameter
     },
+
+    generatorImage(){
+
+      // htmlToPdf(this.$refs.pageContent).then(canvas => {
+      //   // this.$refs.addImage.append(canvas);//在下面添加canvas节点
+      //   let link = document.createElement("a");
+      //   link.href = canvas.toDataURL();//下载链接
+      //   link.setAttribute("download","答题卡.png");
+      //   link.style.display = "none";//a标签隐藏
+      //   document.body.appendChild(link);
+      //   link.click();
+      // })
+    }
   },
 }
 </script>
@@ -425,17 +449,15 @@ html {
     width: 1650px;
     justify-content: left;
     position: relative;
+  }
 
-    // &:nth-child(n+2){
-    //   margin-top: 60px;
-    // }
+  &.down_style{
+    margin-top:0
   }
 
   .previewCanvas{
     width: 100%;
     height: 60px;
-    // display: flex;
-    // align-items:center;
 
     div{
       float: left;
@@ -458,11 +480,6 @@ html {
       clear: both;
       visibility: hidden;
     }
-    // &.bottom{
-    //   position: absolute;
-    //   bottom: 0;
-    //   text-align: left
-    // }
   }
 }
 .page_info_itme{
