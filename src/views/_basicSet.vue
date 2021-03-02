@@ -27,6 +27,7 @@
 <script>
 import { mapState,mapGetters} from 'vuex'
 import publicDialog from './dialog/_publicDialog'
+import qs from 'qs'
 export default {
   components: {
     publicDialog,
@@ -85,6 +86,7 @@ export default {
         if(question.questionType == 'AnswerSheetTitle'){
           let {content} = question
           obj = {
+            'IsNew':true,// 新增
             'name': content.textVal,
             'tscore': this.scoreTotal,
             'exnum': content.titleRows,
@@ -183,11 +185,12 @@ export default {
     },
 
     saveBtn(){
-
+      let params = {
+        prmQBAnswCard:JSON.stringify(this.answerSheetData)
+      }
       this.$http.post('/Api/Assembly/QBAnswCardBLL/SaveQBAnswCardNew',
-        {prmQBAnswCard:JSON.stringify(this.answerSheetData)},
+        qs.stringify(params),
         {headers:{
-          'X-Requested-With': 'XMLHttpRequest',
           'Content-type': 'application/x-www-form-urlencoded',
         }}
       )
