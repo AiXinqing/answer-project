@@ -5,10 +5,11 @@ import store from './store'
 import './plugins/element-up.js'
 import Element from 'element-ui'
 import Components from './components/index'
+import { URL } from './utils/config'
 
 import axios from 'axios';
 // 服务器连接地址
-axios.defaults.baseURL = 'http://localhost:60044'
+axios.defaults.baseURL = URL.SERVICE_CONTEXT_PATH
 
 Vue.prototype.$http = axios
 
