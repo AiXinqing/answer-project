@@ -18,7 +18,7 @@
     <div class="basis_checkbox basic_btn save-btn">
       <el-button type="primary" @click="previewLinkFunc">预览</el-button>
       <el-button type="primary" @click="saveBtn">保存</el-button>
-      <el-button type="primary">下载</el-button>
+      <el-button type="primary" @click="downloadFunc">下载</el-button>
     </div>
     <public-dialog ref="publicDialog" />
   </div>
@@ -171,9 +171,32 @@ export default {
       window.open(routeTwo.href, '_blank')
     },
 
+    downloadFunc(){
+      // 下载
+      let routeTwo = this.$router.resolve(
+        {
+          name: 'preview',
+          query: {pageWidth: this.pageWidth,pageNum:this.pageNum,down:1}
+        }
+      )
+      window.open(routeTwo.href, '_blank')
+    },
+
     saveBtn(){
 
-      console.log(JSON.stringify(this.answerSheetData))
+      this.$http.post('/Api/Assembly/QBAnswCardBLL/SaveQBAnswCardNew',
+        {prmQBAnswCard:JSON.stringify(this.answerSheetData)},
+        {headers:{
+          'X-Requested-With': 'XMLHttpRequest',
+          'Content-type': 'application/x-www-form-urlencoded',
+        }}
+      )
+      .then(({ response }) => {
+        console.log(response)
+      })
+      .catch((error) => { // 请求失败处理
+        console.log(error);
+      })
     },
 
     objectiveTopic(question){
