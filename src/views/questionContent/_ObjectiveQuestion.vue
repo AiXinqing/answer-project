@@ -241,6 +241,7 @@ export default {
         margin-left: 5px;
       }
     }
+    border-bottom: none;
   }
   .question_editOrDel {
     position: absolute;
