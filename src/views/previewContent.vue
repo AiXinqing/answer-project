@@ -3,14 +3,14 @@
     <div class="main-info">
       <div v-for="(pages, i) in contentData" :key="i" class="page_card" :style="{width:pageNum == 1 ? '875px' : '1650px'}">
         <div class="previewCanvas">
-          <div class="left">
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="30">
-              <rect x="0" y="0" width="27" height="17" style="fill-opacity: 1;" stroke="#000000" fill="#000000"></rect>
+          <div class="left" style="flex-shrink:1">
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="30" height="30">
+              <rect x="0" y="1" width="27" height="17" style="fill-opacity: 1;" stroke="#000000" fill="#000000"></rect>
             </svg>
           </div>
-          <div class="right">
+          <div class="right" style="flex-shrink:1">
             <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="30" height="30">
-              <rect x="0" y="0" width="27" height="17" style="fill-opacity: 1;" stroke="#000000" fill="#000000"></rect>
+              <rect x="0" y="1" width="27" height="17" style="fill-opacity: 1;" stroke="#000000" fill="#000000"></rect>
             </svg>
           </div>
         </div>
@@ -48,16 +48,16 @@
 
         <div class="previewCanvas bottom">
           <div class="left">
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="60">
-              <rect x="0" y="30" width="27" height="17" style="fill-opacity: 1;" stroke="#000000" fill="#000000"></rect>
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="30" height="30">
+              <rect x="0" y="1" width="27" height="17" style="fill-opacity: 1;" stroke="#000000" fill="#000000"></rect>
             </svg>
           </div>
           <div class="card_footer" :style="{width:pageNum == 1 ? '826px' : '100%',position:'relative'}">
               第 {{ i + 1 }} 页 共 {{ contentData.length }} 页
           </div>
           <div class="right">
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="30" height="60">
-              <rect x="0" y="30" width="27" height="17" style="fill-opacity: 1;" stroke="#000000" fill="#000000"></rect>
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="30" height="30">
+              <rect x="0" y="1" width="27" height="17" style="fill-opacity: 1;" stroke="#000000" fill="#000000"></rect>
             </svg>
           </div>
         </div>
@@ -458,27 +458,23 @@ html {
   .previewCanvas{
     width: 100%;
     height: 60px;
+    display: flex;
+    justify-content: space-between;
 
     div{
-      float: left;
       margin-top: 20px;
+      flex-shrink:0;
 
       &.left{
-        margin-left: 20px
+        margin-left: 5px
       }
 
+      &.card_footer{
+        flex-shrink:1;
+      }
       &.right{
-        float: right;
-        margin-right: 20px;
+        margin-right: 0px;
       }
-    }
-
-    &::after{
-      content: "020";
-      display: block;
-      height: 0;
-      clear: both;
-      visibility: hidden;
     }
   }
 }
