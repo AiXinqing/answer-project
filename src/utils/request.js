@@ -6,9 +6,9 @@ import { URL } from './config'
 var service = axios.create({
   baseURL: URL.SERVICE_CONTEXT_PATH,
   withCredentials: true,
-  timeout: 1000,
+  timeout: 50000,
   headers: {
-    'Content-type': 'application/x-www-form-urlencoded',
+    'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
   }
 });
 
