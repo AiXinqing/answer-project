@@ -5,21 +5,14 @@ import store from './store'
 import './plugins/element-up.js'
 import Element from 'element-ui'
 import Components from './components/index'
-import { URL } from './utils/config'
-
-import axios from 'axios';
-// 服务器连接地址
-axios.defaults.baseURL = URL.SERVICE_CONTEXT_PATH
-
-Vue.prototype.$http = axios
-
-
-
+import httpRequest from './utils/request'
 import lodash from 'lodash'
-Vue.prototype.$lodash = lodash
 
+Vue.prototype.$http = httpRequest
+Vue.prototype.$lodash = lodash
 Vue.config.productionTip = false
 Vue.use(Components)
+Vue.use(httpRequest)
 
 
 Vue.use(Element, {
