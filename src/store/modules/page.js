@@ -15,6 +15,10 @@ const mutations = {
     state.pageLayout = obj
   },
 
+  reset_pageData: (state, Arr) => {
+    state.pageData = Arr
+  },
+
   //新增页面数据
   pageData_add: (state, question) => {
     window.localStorage.clear()
