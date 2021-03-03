@@ -90,7 +90,7 @@ const mutations = {
   },
 
   subTopic_determine: (state,obj) => {
-    state.subTopic_number_determine = state.subTopic_number_determine.map(ele => ele.number != obj.number)
+    state.subTopic_number_determine = state.subTopic_number_determine.filter(ele => ele.number != obj.number)
   },
 
   subTopic_determine_pid_clean: (state, pid) => {

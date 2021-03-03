@@ -50,6 +50,11 @@ export default {
         : 785
     },
 
+    textVal(){
+      const {content} = this.compile_pageData[0]
+      return content.textVal
+    },
+
     pageNum() {
       const {column,size} = this.pageLayout
       return column === 3 && size == 'A3' ? 3 :
@@ -185,22 +190,28 @@ export default {
     },
 
     saveBtn(){
-      let params = {
-        prmQBAnswCard:JSON.stringify(this.answerSheetData)
+      // 保存
+      if(this.textVal !=''){
+          let params = {
+            prmQBAnswCard:JSON.stringify(this.answerSheetData)
+          }
+          this.$http.post('/Api/Assembly/QBAnswCardBLL/SaveQBAnswCardNew',
+            qs.stringify(params)).then(({ response }) => {
+            console.log(response)
+            this.$message({
+              message: '保存成功',
+              type: 'success'
+            })
+          })
+          .catch((error) => { // 请求失败处理
+            console.log(error);
+          })
+      }else{
+        this.$message({
+          message: '答题卡标题不能为空!',
+          type: 'warning'
+        });
       }
-      this.$http.post('/Api/Assembly/QBAnswCardBLL/SaveQBAnswCardNew',
-        qs.stringify(params),
-        {
-          withCredentials:true,
-          // headers: { cookie: 'ExamEmpSessionID=519d5085b94e4b1c8bcfffa56f0f566b' }
-        }
-      )
-      .then(({ response }) => {
-        console.log(response)
-      })
-      .catch((error) => { // 请求失败处理
-        console.log(error);
-      })
     },
 
     objectiveTopic(question){
