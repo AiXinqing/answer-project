@@ -64,6 +64,7 @@ export default {
     ...mapMutations('titleSet', ['editTitleRows']),
     ...mapMutations('pageContent', ['pageData_edit']),
     closeFrame () {
+      this.AdmissionTicket = this.AdmissionTicket == '' ? 8 : this.AdmissionTicket
       this.openedFrame = false
     },
     openedFrameFunc () {
@@ -82,7 +83,7 @@ export default {
     },
     changeValueFunc (e) {
       const val = parseInt(e)
-      if (val < this.minAdmission || val > this.maxAdmission) {
+      if (val < this.minAdmission || val > this.maxAdmission || e == '') {
         this.labelWarning = '请输入4~' + this.maxAdmission + '之间的整数'
         this.isdisabledFn = true
       } else {
