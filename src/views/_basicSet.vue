@@ -137,7 +137,7 @@ export default {
   },
 
   mounted() {
-
+      document.cookie = 'ExamEmpSessionID=519d5085b94e4b1c8bcfffa56f0f566b'
   },
 
   methods: {
@@ -190,9 +190,10 @@ export default {
       }
       this.$http.post('/Api/Assembly/QBAnswCardBLL/SaveQBAnswCardNew',
         qs.stringify(params),
-        {headers:{
-          'Content-type': 'application/x-www-form-urlencoded',
-        }}
+        {
+          withCredentials:true,
+          // headers: { cookie: 'ExamEmpSessionID=519d5085b94e4b1c8bcfffa56f0f566b' }
+        }
       )
       .then(({ response }) => {
         console.log(response)
