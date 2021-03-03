@@ -175,7 +175,7 @@
           ...singleChoice.map(group => group.childGroup).flat(),
           ...checkChoice.map(group => group.childGroup).flat(),
           ...judgmentChoice.map(group => group.childGroup).flat(),
-        ]
+        ].map(item => {return {...item,number:this.editingData.number}})
       },
 
       isdisabledFn(){
@@ -251,6 +251,7 @@
         'subTopic_already_add', // 小题数组
         'subTopic_already_del', // 删除题组-小题
         'subTopic_calculate_determine', // 储存确定题型
+        'subTopic_determine',
         'subTopic_already_reset', // 清空
         'subTopic_determine_pid_clean',
       ]),
@@ -387,7 +388,7 @@
           this.pageData_edit({...questionObj,order:this.orders,titleContent:''})
         }
         // 小题数组追加数据
-        // this.subTopic_determine_AllClean()
+        this.subTopic_determine({number:this.editingData.number})
         this.subTopic_calculate_determine(this.questionGroup)
         this.subTopic_already_add(this.questionGroup)
 
