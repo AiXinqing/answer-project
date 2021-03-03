@@ -172,7 +172,7 @@ export default {
         Arr.push(recursion(obj))
       })
 
-      return Arr.flat()
+      return Arr.flat().map(item => ({...item,number:this.objectiveData.number}))
     },
 
     topicGroupData() {
@@ -251,6 +251,7 @@ export default {
       'subTopic_calculate_determine', // 储存确定题型
       'subTopic_already_reset', // 清空
       'subTopic_already_pid_clean',
+      'subTopic_determine',
       'subTopic_determine_pid_clean',
     ]),
 
@@ -364,6 +365,7 @@ export default {
         obj.id = this.editQuestionId
         this.pageData_edit({...obj,order:this.orders,titleContent:'',editorContent:[],segmentedArr:[],operatTinymce:[],tinymceCHeight:[],rowHeightArr:[]})
       }
+      this.subTopic_determine({number:this.objectiveData.number})
       this.subTopic_already_add(this.childGroups)
       this.subTopic_calculate_determine(this.childGroups)
       //------------------------------------
