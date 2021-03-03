@@ -285,7 +285,6 @@ export default {
 
       this.openedFrame = true
       //-------------------打开
-      this.subTopic_already_reset() // 清空
       this.subTopic_already_add(this.subTopic_number_determine)
       this.subTopic_number_calculate()
     },
