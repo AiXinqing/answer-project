@@ -96,7 +96,7 @@ export default {
             'tscore': this.scoreTotal,
             'exnum': content.titleRows,
             'studentInfos': content.titleInfo.filter(item => item.checked).map(item => item.name).toString(),
-            'content': JSON.stringify(this.compile_pageData),
+            'content': JSON.stringify(this.pageData),
             'QBAnswCardPartition':[
               {
                 'seq': 1,

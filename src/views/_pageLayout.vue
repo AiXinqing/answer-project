@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <set-dialog ref="editorLayout" :prop-layout="pageLayout" />
+    <set-dialog ref="editorLayout" :prop-layout="pageLayout"/>
 
     <hj-dialog title="提示" :visible.sync="openedPrompt" :width="'400px'">
       <div class="Prompt_info">
@@ -32,8 +32,9 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState,mapMutations} from 'vuex'
 import { LAYOUT_COLUMNS,LAYOUT_SIZE } from '@/models/base'
+import qs from 'qs'
 
 import setDialog from './dialog/_setDialog'
 export default {
@@ -43,6 +44,7 @@ export default {
   data () {
     return {
       openedPrompt: false,
+      ids:'359'
     }
   },
   computed: {
@@ -65,9 +67,15 @@ export default {
     }
   },
   mounted () {
-    this.$refs.editorLayout.openRForm(1)
+    if(this.ids == ''){
+      this.$refs.editorLayout.openRForm(1)
+    }else{
+      this.editAnswerSheet()
+    }
+
   },
   methods: {
+    ...mapMutations('page', ['reset_pageData']),
 
     closePrompt () {
       this.openedPrompt = false
@@ -86,6 +94,20 @@ export default {
       // 打开修改弹出框
       this.openPrompt()
     },
+
+    editAnswerSheet() {
+      // 编辑答题卡
+      this.$http.get('Api/Assembly/QBAnswCardBLL/GetQBAnswCard', {params:{ 'acid': this.ids }}
+      ).then((res) => {
+        const {data} = res
+        if(data.ResponseCode =='Success'){
+          let obj = data.ResponseContent
+          this.reset_pageData(obj.content)
+        }
+      }).catch(function (error) {
+          console.log(error)
+      });
+    }
   },
 }
 </script>
