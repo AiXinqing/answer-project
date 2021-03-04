@@ -11,7 +11,6 @@
 export default {
   computed:{
     title() {
-      console.log(this.$route.query)
       return this.$route.name == 'preview' ? '答题卡预览' : '制作答题卡'
     },
 
