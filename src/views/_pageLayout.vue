@@ -43,7 +43,7 @@ export default {
   data () {
     return {
       openedPrompt: false,
-      ids:'359'
+      ids:''
     }
   },
   computed: {
