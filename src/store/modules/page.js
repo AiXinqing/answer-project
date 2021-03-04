@@ -6,13 +6,18 @@ const state = {
     column:2
   },
   pageData: [],
-  nonAnswer:[], // 非答题存在数组
+  nonAnswer: [], // 非答题存在数组
+  IsNew:true
 }
 
 const mutations = {
   //编辑页面布局
   pageLayout_change: (state, obj) => {
     state.pageLayout = obj
+  },
+
+  change_isNew: (state, status) => {
+    state.IsNew = status
   },
 
   reset_pageData: (state, Arr) => {
