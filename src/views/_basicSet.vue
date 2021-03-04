@@ -39,7 +39,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('page', ['pageLayout', 'pageData']),
+    ...mapState('page', ['pageLayout', 'pageData','IsNew']),
     ...mapState('pageContent', ['scoreTotal']),
     ...mapGetters('page',['page_width','compile_pageData']),
 
@@ -91,7 +91,7 @@ export default {
         if(question.questionType == 'AnswerSheetTitle'){
           let {content} = question
           obj = {
-            'IsNew':true,// 新增
+            'IsNew':this.IsNew,// 新增
             'name': content.textVal,
             'tscore': this.scoreTotal,
             'exnum': content.titleRows,
@@ -196,7 +196,8 @@ export default {
             prmQBAnswCard:JSON.stringify(this.answerSheetData)
           }
           this.$http.post('/Api/Assembly/QBAnswCardBLL/SaveQBAnswCardNew',
-            qs.stringify(params)).then(({ response }) => {
+            qs.stringify(params)
+          ).then(({ response }) => {
             console.log(response)
             this.$message({
               message: '保存成功',
