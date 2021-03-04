@@ -431,8 +431,8 @@ export default {
         this.$http.post('/Assembly/AnswerCard/DynamicHtmlToStaticHtml',
             qs.stringify({'htmlText':htmlText,'AnswerCardName':this.titleVal})
             ).then(({data}) => {
-              if(data.ReturnCode == 9998){
-                window.location.href = `http://localhost:60044/Assembly/AnswerCard/HtmlToPdf?htmlName=${data.ReturnInfo}&AnswerCardName=${this.titleVal}&PageSize=${this.pageSize}&filename=${this.titleVal}`
+              if(data.ReturnCode == 9998){ // http://localhost:60044
+                window.location.href = `/Assembly/AnswerCard/HtmlToPdf?htmlName=${data.ReturnInfo}&AnswerCardName=${this.titleVal}&PageSize=${this.pageSize}&filename=${this.titleVal}`
               }
             })
           .catch((error) => { // 请求失败处理
