@@ -180,13 +180,15 @@ export default {
 
     downloadFunc(){
       // 下载
-      let routeTwo = this.$router.resolve(
-        {
-          name: 'preview',
-          query: {pageWidth: this.pageWidth,pageNum:this.pageNum,down:1}
-        }
-      )
-      window.open(routeTwo.href, '_blank')
+      if(this.saveBtn()){
+        let routeTwo = this.$router.resolve(
+          {
+            name: 'preview',
+            query: {pageWidth: this.pageWidth,pageNum:this.pageNum,down:1}
+          }
+        )
+        window.open(routeTwo.href, '_blank')
+      }
     },
 
     saveBtn(){
@@ -197,21 +199,23 @@ export default {
           }
           this.$http.post('/Api/Assembly/QBAnswCardBLL/SaveQBAnswCardNew',
             qs.stringify(params)
-          ).then(({ response }) => {
-            console.log(response)
+          ).then(() => {
             this.$message({
               message: '保存成功',
               type: 'success'
             })
+            return true
           })
           .catch((error) => { // 请求失败处理
             console.log(error);
+            return false
           })
       }else{
         this.$message({
           message: '答题卡标题不能为空!',
           type: 'warning'
         });
+        return false
       }
     },
 
