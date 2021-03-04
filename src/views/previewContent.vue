@@ -69,6 +69,7 @@
 <script>
 import { mapMutations } from 'vuex'
 import { PAGE_HEIGHT } from '@/models/base'
+import qs from 'qs'
 
 import AnswerSheetTitle from './questionContent/_answerSheetTitle' // 答题卡标题
 import ObjectiveQuestion from './questionContent/_ObjectiveQuestion' // 客观题
@@ -79,7 +80,6 @@ import compositionEnglish from './questionContent/_compositionEnglish' // 作文
 import compositionLanguage from './questionContent/_compositionLanguage' // 作文语文
 import NonRresponseArea from './questionContent/_NonRresponseAreaContent' // 非作答
 
-// import htmlToPdf from 'html2canvas';
 export default {
   components: {
     AnswerSheetTitle,
@@ -101,14 +101,16 @@ export default {
       down:this.$route.query.down,
       page_height:PAGE_HEIGHT,
       difference:20,
-      svgWidth:110
+      svgWidth:110,
+      titleVal:'',
+      pageSize:'A3'
     }
   },
 
   computed: {
     downs() {
       return this.$route.query.down ? 1 : 0
-    }
+    },
   },
 
   watch: {
@@ -118,6 +120,9 @@ export default {
         let data = this.pageContentFunc(this.pageData)
         let index = 0
         let newArray = []
+        const {content} = this.pageData[0]
+        this.titleVal = content.textVal
+        this.pageSize = content.pageLayout.size
         if(this.pageNum == 1){
           this.contentData = data.map(obj => ([obj]))
         }else{
@@ -418,15 +423,23 @@ export default {
 
     generatorImage(){
 
-      // htmlToPdf(this.$refs.pageContent).then(canvas => {
-      //   // this.$refs.addImage.append(canvas);//在下面添加canvas节点
-      //   let link = document.createElement("a");
-      //   link.href = canvas.toDataURL();//下载链接
-      //   link.setAttribute("download","答题卡.png");
-      //   link.style.display = "none";//a标签隐藏
-      //   document.body.appendChild(link);
-      //   link.click();
-      // })
+
+      let htmlText = document.getElementsByTagName('html')[0].outerHTML
+
+      if(this.htmlText != ''){
+
+        this.$http.post('/Assembly/AnswerCard/DynamicHtmlToStaticHtml',
+            qs.stringify({'htmlText':htmlText,'AnswerCardName':this.titleVal})
+            ).then(({data}) => {
+              if(data.ReturnCode == 9998){
+                window.location.href = `http://localhost:60044/Assembly/AnswerCard/HtmlToPdf?htmlName=${data.ReturnInfo}&AnswerCardName=${this.titleVal}&PageSize=${this.pageSize}&filename=${this.titleVal}`
+              }
+            })
+          .catch((error) => { // 请求失败处理
+            console.log(error);
+          })
+      }
+
     }
   },
 }

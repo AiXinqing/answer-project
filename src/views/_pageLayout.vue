@@ -34,7 +34,6 @@
 <script>
 import { mapState,mapMutations} from 'vuex'
 import { LAYOUT_COLUMNS,LAYOUT_SIZE } from '@/models/base'
-import qs from 'qs'
 
 import setDialog from './dialog/_setDialog'
 export default {
@@ -75,7 +74,7 @@ export default {
 
   },
   methods: {
-    ...mapMutations('page', ['reset_pageData']),
+    ...mapMutations('page', ['reset_pageData','change_isNew']),
 
     closePrompt () {
       this.openedPrompt = false
@@ -102,7 +101,12 @@ export default {
         const {data} = res
         if(data.ResponseCode =='Success'){
           let obj = data.ResponseContent
-          this.reset_pageData(obj.content)
+          let content = JSON.parse(obj.content)
+          let layout = content[0].content.pageLayout // 页面布局
+
+          this.reset_pageData(content) // 重新赋值
+          this.pageLayout_change(layout)
+          this.change_isNew(obj.IsNew)
         }
       }).catch(function (error) {
           console.log(error)
