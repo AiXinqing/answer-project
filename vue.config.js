@@ -26,6 +26,6 @@ module.exports = {
     }
   },
 
-  publicPath: '/Areas/Assembly/dist/',
+  publicPath: '/AnswerCardWeb/',
 
 }
