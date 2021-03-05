@@ -28,6 +28,7 @@
 import { mapState,mapGetters} from 'vuex'
 import publicDialog from './dialog/_publicDialog'
 import qs from 'qs'
+
 export default {
   components: {
     publicDialog,
@@ -180,6 +181,7 @@ export default {
 
     downloadFunc(){
       // 下载
+      // console.log(this.saveBtn())
       if(this.saveBtn()){
         let routeTwo = this.$router.resolve(
           {
@@ -187,6 +189,7 @@ export default {
             query: {pageWidth: this.pageWidth,pageNum:this.pageNum,down:1}
           }
         )
+        console.log(routeTwo)
         window.open(routeTwo.href, '_blank')
       }
     },
