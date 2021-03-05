@@ -104,20 +104,34 @@ export default {
     },
 
     subTopicSpace(){
-      return this.subTopicList.map((topic,index) => {
+      return this.subTopicList.map((topic) => {
+        let Arr = []
+        for(let a= 1; a < topic.space + 1;a++){
+          Arr.push(a)
+        }
         return {
           ...topic,
           Multistage:false,
-          childGroup:[
-            {
-                id:`sid_${+new Date()}_${index}`,
+          childGroup:Arr.map((i) => {
+            return {
+                ...topic,
+                Multistage:false,
+                id:`sid_${+new Date()}_${i}`,
                 pid:topic.id,
                 sid:topic.pid,
-                topic:topic.topic,
-                smallTopic:1,
-                score:topic.score,
+                isTopic:true,
+                childGroup:[{
+                  id:`sid_${+new Date()}_${i}`,
+                  isTopic:true,
+                  pid:topic.id,
+                  score:topic.score,
+                  sid:topic.pid,
+                  smallTopic:topic.topic,
+                  spaceNum:i,
+                  topic:topic.topic,
+                }]
             }
-          ]
+          })
         }
       })
     },
@@ -143,6 +157,7 @@ export default {
     ]),
 
     preEditQuestionGroup () {
+
       this.$emit('change-status', this.verify)
 
       const {score} = this.data
@@ -154,6 +169,7 @@ export default {
           childGroup: this.subTopicSpace,
           score:Number(scoreVal)
         }
+
         this.$emit('pre-edit-question-group',obj)
         // 弹框临时小题数
         const temporaryArr = this.subTopicList.map(item => ({ ...item, subtopic: 1 }))
