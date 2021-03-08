@@ -98,12 +98,14 @@
       },
 
       subTopicList(){
-        const {start,end,score} = this.data
+        const {start,end,score,select} = this.data
         let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
         let group = []
         for (let index = start; index <= end; index++) {
           let subtopic = {
-            ...this.data,
+            select:select,
+            end:end,
+            start:start,
             score:Number(scoreVal),
             pid: this.data.id,
             id: 'judgment_' + index,
