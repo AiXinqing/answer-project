@@ -105,31 +105,37 @@ export default {
 
     subTopicSpace(){
       return this.subTopicList.map((topic) => {
+        const {end,start,id,sum,space,score,level,pid} = topic
+
         let Arr = []
         for(let a= 1; a < topic.space + 1;a++){
           Arr.push(a)
         }
+
+        // console.log(topic)
         return {
-          ...topic,
+          end:end,
+          start:start,
+          id:id,
+          pid:pid,
+          level:level,
+          score:score,
+          space:space,
+          sum:sum,
+          topic:topic.topic,
           Multistage:false,
           childGroup:Arr.map((i) => {
             return {
-                ...topic,
+
                 Multistage:false,
                 id:`sid_${+new Date()}_${i}`,
                 pid:topic.id,
                 sid:topic.pid,
                 isTopic:true,
-                childGroup:[{
-                  id:`sid_${+new Date()}_${i}`,
-                  isTopic:true,
-                  pid:topic.id,
-                  score:topic.score,
-                  sid:topic.pid,
-                  smallTopic:topic.topic,
-                  spaceNum:i,
-                  topic:topic.topic,
-                }]
+                spaceNum:i,
+                smallTopic:topic.topic,
+                topic:topic.topic,
+                score:topic.score,
             }
           })
         }
@@ -169,6 +175,8 @@ export default {
           childGroup: this.subTopicSpace,
           score:Number(scoreVal)
         }
+
+        console.log(obj)
 
         this.$emit('pre-edit-question-group',obj)
         // 弹框临时小题数
