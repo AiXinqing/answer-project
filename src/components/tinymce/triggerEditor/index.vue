@@ -16,6 +16,8 @@
   import '../plugins/code/plugin.min.js'
   import '../plugins/mathjax/plugin.min.js'
   import '../plugins/mathjax/config.js'
+  import { URL } from '../../../utils/config.js'
+
 
 
   export default {
@@ -73,7 +75,7 @@
           inline:true,
           toolbar: this.toolbar,
           fontsize_formats: '11px 12px 14px 16px 18px 24px 36px 48px',
-          plugins: 'advlist image code charmap',
+          plugins: 'image code charmap',
           advlist_bullet_styles: "circle, square",
           content_style: "img {max-width:100%;}",
           autoresize_max_height: 20,
@@ -117,20 +119,14 @@
               });
           },
 
-          images_upload_handler: function (blobInfo, success, failure){
+          images_upload_handler: async (blobInfo, success, failure) =>{
             let formData = new FormData()
-
-            formData.append('img',blobInfo.blob())
-            self.$axios.post('http://127.0.0.1:8000/upload/',formData)
-                .then(response =>{
-                    console.log(response.data['url'])
-
-                    if(response.data['code']==200){
-                        success(response.data['url'])
-                    }else{
-                        failure('上传失败！')
-                    }
-                })
+            formData.append('file',blobInfo.blob(),blobInfo.name())
+            const { data : res } = await self.$http.post('/FileUpLoad/AnswerCardImageUpload',formData,{
+              baseURL: URL.SERVICE_UPLOAD_PICTURE,
+            })
+            success(res.ReturnInfo.WebPath)
+            failure('上传失败！')
           }
 
         }).then(editors => {
@@ -146,7 +142,7 @@
 <style lang="less">
   @import url('../skins/ui/oxide/skin.min.css');
   @import url('../skins/ui/oxide/content.min.css');
-  @import url('../skins/ui/oxide/content.inline.min.css');
+  // @import url('../skins/ui/oxide/content.inline.min.css');
 
   .tox {
     .tox-tbtn--bespoke{
