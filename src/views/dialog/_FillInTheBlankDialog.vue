@@ -666,6 +666,7 @@ export default {
             threeLevel.data.childGroup = subtopicGroup
 
             this.spaceTopic = JSON.parse(JSON.stringify(temp))
+            this.objectiveData = JSON.parse(JSON.stringify(temp))
             this.errorVal = ''
           }
         }

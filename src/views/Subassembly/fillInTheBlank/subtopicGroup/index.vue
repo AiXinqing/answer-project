@@ -98,24 +98,18 @@
 
       spaceGroup (){
         let Arr =[]
-        let {space,score} = this.data
+        let {space,score,pid,id,topic} = this.data
         let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
 
         for (let index = 1; index < space + 1; index++) {
           let subtopic = {
-            ...this.data,
-            id:`sid_${+new Date()}_${index}`,
-            pid:this.data.id,
-            sid:this.data.pid,
-            topic:this.data.topic,
-            smallTopic:index,
+            topic:topic,
             score:Number(scoreVal),
-            isTopic:index == 1 ? true : false,
-            childGroup:this.data.childGroup.map(topic => ({
-              ...topic,
+              id:`sid_${+new Date()}_${index}`,
+              pid:id,
+              sid:pid,
               isTopic:index == 1 ? true : false,
-              spaceNum:index
-            }))
+              spaceNum:index,
           }
           Arr.push(subtopic)
       }
@@ -185,7 +179,7 @@
 
       addSubtopicCollection(){
 
-        let {childGroup,level,Multistage} = this.data
+        let {childGroup,level,Multistage,end,id,pid,score,space,start,sum,topic} = this.data
 
         if(!level){
           this.switch_s = 'down'
@@ -193,7 +187,14 @@
 
         if(!Multistage){
           this.$emit('add-subTopic-collection',{
-            ...this.data,
+            end:end,
+            id:id,
+            pid:pid,
+            score:score,
+            space:space,
+            start:start,
+            sum:sum,
+            topic:topic,
             level:true,
             childGroup:this.subtopicGroup(this.data),
             Multistage:true

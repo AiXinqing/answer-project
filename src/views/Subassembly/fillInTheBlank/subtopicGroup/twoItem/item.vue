@@ -1,7 +1,7 @@
 <template>
   <div class="last-topic_boxs">
     <span>第</span>
-    <span> {{ data.spaceTopic }} </span>
+    <span> {{ data.spaceNum }} </span>
     <span> 空 </span>
     <el-input v-model="data.score" size="mini" @blur="preEditLastScore"
       onkeyup="this.value = this.value.replace(/(\.\d{1,1})(?:.*)|[^\d.]/g, ($0, $1) => {return $1 || '';})"

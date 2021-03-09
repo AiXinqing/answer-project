@@ -112,7 +112,6 @@ export default {
           Arr.push(a)
         }
 
-        // console.log(topic)
         return {
           end:end,
           start:start,
@@ -126,7 +125,6 @@ export default {
           Multistage:false,
           childGroup:Arr.map((i) => {
             return {
-
                 Multistage:false,
                 id:`sid_${+new Date()}_${i}`,
                 pid:topic.id,
