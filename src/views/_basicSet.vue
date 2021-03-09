@@ -37,6 +37,7 @@ export default {
     return {
       checked: false,
       openedFrame: true,
+      saveBtnStuta:false
     }
   },
   computed: {
@@ -139,7 +140,8 @@ export default {
         ]
       }
       return obj
-    }
+    },
+
   },
 
   mounted() {
@@ -181,17 +183,8 @@ export default {
 
     downloadFunc(){
       // 下载
-      // console.log(this.saveBtn())
-      if(this.saveBtn()){
-        let routeTwo = this.$router.resolve(
-          {
-            name: 'preview',
-            query: {pageWidth: this.pageWidth,pageNum:this.pageNum,down:1}
-          }
-        )
-        console.log(routeTwo)
-        window.open(routeTwo.href, '_blank')
-      }
+      this.saveBtnStuta = true
+      this.saveBtn()
     },
 
     saveBtn(){
@@ -207,18 +200,27 @@ export default {
               message: '保存成功',
               type: 'success'
             })
-            return true
+            if(this.saveBtnStuta){
+              // 下载
+              let routeTwo = this.$router.resolve(
+                {
+                  name: 'preview',
+                  query: {pageWidth: this.pageWidth,pageNum:this.pageNum,down:1}
+                }
+              )
+              window.open(routeTwo.href, '_blank')
+              this.saveBtnStuta = false
+            }
           })
           .catch((error) => { // 请求失败处理
+            this.saveBtnStuta = false
             console.log(error);
-            return false
           })
       }else{
         this.$message({
           message: '答题卡标题不能为空!',
           type: 'warning'
         });
-        return false
       }
     },
 
