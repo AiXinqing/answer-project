@@ -110,8 +110,6 @@ export default {
             this.pageHeight_set(this.heightArray)
           })
         }
-        // 清空缓存
-        window.localStorage.clear()
         localStorage.setItem('accessToken', JSON.stringify(this.compile_pageData))
       },
     },
