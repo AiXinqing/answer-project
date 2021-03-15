@@ -1,6 +1,7 @@
 <template>
   <div class="page-content preview-content" :class="downs ? 'down_style' : ''" ref="pageContent" >
     <div class="main-info">
+
       <div v-for="(pages, i) in contentData" :key="i" class="page_card" :style="{width:pageNum == 1 ? '875px' : '1650px'}">
         <div class="previewCanvas">
           <div class="left" style="flex-shrink:1">
@@ -14,6 +15,7 @@
             </svg>
           </div>
         </div>
+
         <div
           v-for="(pagesCrad, a) in pages"
           :key="a"
@@ -52,6 +54,7 @@
               <rect x="0" y="1" width="27" height="17" style="fill-opacity: 1;" stroke="#000000" fill="#000000"></rect>
             </svg>
           </div>
+
           <div class="card_footer" :style="{width:pageNum == 1 ? '826px' : '100%',position:'relative'}">
               第 {{ i + 1 }} 页 共 {{ contentData.length }} 页
           </div>
@@ -118,18 +121,24 @@ export default {
       immediate: true,
       handler() {
         let data = this.pageContentFunc(this.pageData)
-        let index = 0
-        let newArray = []
+
         const {content} = this.pageData[0]
         this.titleVal = content.textVal
         this.pageSize = content.pageLayout.size
         if(this.pageNum == 1){
           this.contentData = data.map(obj => ([obj]))
         }else{
-          while (index < data.length) {
-            newArray.push(data.slice(index, (index += this.pageNum)))
+
+          const num = this.pageNum //分割长度
+          const times = Math.ceil(data.length / num)
+          const newArr = []
+          for(let i = 0; i <= times; i++){
+            if(i*num >= data.length){
+            break
           }
-          this.contentData = newArray
+          newArr.push(data.slice(i*num, (i+1)*num))
+          }
+          this.contentData = newArr
         }
 
       },
@@ -422,8 +431,6 @@ export default {
     },
 
     generatorImage(){
-
-
       let htmlText = document.getElementsByTagName('html')[0].outerHTML
 
       if(this.htmlText != ''){
