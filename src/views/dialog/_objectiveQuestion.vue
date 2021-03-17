@@ -256,6 +256,11 @@
         'subTopic_determine_pid_clean',
       ]),
 
+      ...mapMutations('pageContent', [
+        'Add_bulletArray',
+        'clear_bulletArray'
+      ]),
+
       ...mapMutations('page', [
         'pageData_add',
         'pageData_edit',
@@ -279,6 +284,7 @@
         )
 
         this.openedFrame = true
+        this.clear_bulletArray()
         this.subTopic_already_reset() // 清空
         this.subTopic_already_add(this.subTopic_number_determine)
         this.subTopic_number_calculate()
@@ -290,6 +296,7 @@
         this.editQuestionId = id
         this.orders = current.order
         this.openedFrame = true
+        this.clear_bulletArray()
         this.subTopic_number_calculate()
       },
 
@@ -449,7 +456,6 @@
       },
 
       delSubtopicGroup(groupSubTopic){
-
         // 删除题组
         let {type,subtopic} = groupSubTopic
         let obj = JSON.parse(JSON.stringify(this.preEditData))
@@ -460,6 +466,8 @@
         if(index > -1){
           curGroup.splice(index,1)
           this.$nextTick(()=>{
+
+            this.Add_bulletArray(groupSubTopic.subtopic.childGroup)
             this.preEditData = JSON.parse(JSON.stringify(obj))
           })
           this.errorVal = ''

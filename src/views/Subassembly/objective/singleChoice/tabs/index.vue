@@ -46,6 +46,8 @@
         'subTopic_number_already',
         'subTopic_number_determine',]),
 
+      ...mapState('pageContent',['bulletArray']),
+
       selectBox(){
         return this.activeName == 'judgmentChoice' ? ['T','F'] :
                 this.letterList.slice(0,this.data.select)
@@ -71,6 +73,17 @@
             }
             if(end_d_val != undefined && end_d_val.pid != this.data.id){
               strEnd = `${end_d_val.topic}题已经存在，请勿重复添加`
+            }
+
+            if(this.bulletArray.length){
+              let start_b_val = this.bulletArray.find(item => item.topic == start)
+              let end_b_val = this.bulletArray.find(item => item.topic == end)
+                  if(start_b_val != undefined){
+                      strStart = ''
+                  }
+                  if(end_b_val != undefined){
+                    strEnd = ''
+                  }
             }
           }
 
