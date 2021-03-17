@@ -37,7 +37,8 @@ export default {
     return {
       checked: false,
       openedFrame: true,
-      saveBtnStuta:false
+      saveBtnStuta:false,
+      acid:''
     }
   },
   computed: {
@@ -144,6 +145,18 @@ export default {
 
   },
 
+  watch: {
+    $route: {
+      handler: function(route) {
+        const query = route.query
+        if (query) {
+          this.acid = query.acid
+        }
+      },
+      immediate: true
+    }
+  },
+
   mounted() {
       document.cookie = 'ExamEmpSessionID=519d5085b94e4b1c8bcfffa56f0f566b'
   },
@@ -190,32 +203,43 @@ export default {
     saveBtn(){
       // 保存
       if(this.textVal !=''){
-          let params = {
-            prmQBAnswCard:JSON.stringify(this.answerSheetData)
-          }
-          this.$http.post('/Api/Assembly/QBAnswCardBLL/SaveQBAnswCardNew',
-            qs.stringify(params)
-          ).then(() => {
-            this.$message({
-              message: '保存成功',
-              type: 'success'
-            })
-            if(this.saveBtnStuta){
-              // 下载
-              let routeTwo = this.$router.resolve(
-                {
-                  name: 'preview',
-                  query: {pageWidth: this.pageWidth,pageNum:this.pageNum,down:1}
-                }
-              )
-              window.open(routeTwo.href, '_blank')
-              this.saveBtnStuta = false
+          if(this.acid == ''){
+            let params = {
+              prmQBAnswCard:JSON.stringify(this.answerSheetData)
             }
-          })
-          .catch((error) => { // 请求失败处理
+            this.$http.post('/Api/Assembly/QBAnswCardBLL/SaveQBAnswCardNew',
+              qs.stringify(params)
+            ).then(() => {
+              this.$message({
+                message: '保存成功',
+                type: 'success'
+              })
+              if(this.saveBtnStuta){
+                // 下载
+                let routeTwo = this.$router.resolve(
+                  {
+                    name: 'preview',
+                    query: {pageWidth: this.pageWidth,pageNum:this.pageNum,down:1}
+                  }
+                )
+                window.open(routeTwo.href, '_blank')
+                this.saveBtnStuta = false
+              }
+            })
+            .catch(() => { // 请求失败处理
+              this.saveBtnStuta = false
+            })
+          }else{
+            // 下载
+            let routeTwo = this.$router.resolve(
+              {
+                name: 'preview',
+                query: {pageWidth: this.pageWidth,pageNum:this.pageNum,down:1}
+              }
+            )
+            window.open(routeTwo.href, '_blank')
             this.saveBtnStuta = false
-            console.log(error);
-          })
+          }
       }else{
         this.$message({
           message: '答题卡标题不能为空!',
