@@ -43,7 +43,7 @@ export default {
   data () {
     return {
       openedPrompt: false,
-      ids:''
+      acid:''
     }
   },
   computed: {
@@ -65,14 +65,23 @@ export default {
       } return 'A3/B4/8K纸'
     }
   },
-  mounted () {
-    if(this.ids == ''){
-      this.$refs.editorLayout.openRForm(1)
-    }else{
-      this.editAnswerSheet()
+  watch: {
+    $route: {
+      handler: function(route) {
+        const query = route.query
+        if (query) {
+          this.acid = query.acid
+          if(this.acid == ''){
+            this.$refs.editorLayout.openRForm(1)
+          }else{
+            this.editAnswerSheet()
+          }
+        }
+      },
+      immediate: true
     }
-
   },
+
   methods: {
     ...mapMutations('page', ['reset_pageData','change_isNew']),
 
@@ -96,7 +105,7 @@ export default {
 
     editAnswerSheet() {
       // 编辑答题卡
-      this.$http.get('Api/Assembly/QBAnswCardBLL/GetQBAnswCard', {params:{ 'acid': this.ids }}
+      this.$http.get('Api/Assembly/QBAnswCardBLL/GetQBAnswCard', {params:{ 'acid': this.acid }}
       ).then((res) => {
         const {data} = res
         if(data.ResponseCode =='Success'){
