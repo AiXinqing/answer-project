@@ -434,16 +434,22 @@ export default {
       let htmlText = document.getElementsByTagName('html')[0].outerHTML
 
       if(this.htmlText != ''){
-
+        const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
         this.$http.post('/Assembly/AnswerCard/DynamicHtmlToStaticHtml',
             qs.stringify({'htmlText':htmlText,'AnswerCardName':this.titleVal})
             ).then(({data}) => {
               if(data.ReturnCode == 9998){ // http://localhost:60044
                 window.location.href = `/Assembly/AnswerCard/HtmlToPdf?htmlName=${data.ReturnInfo}&AnswerCardName=${this.titleVal}&PageSize=${this.pageSize}&filename=${this.titleVal}`
+                loading.close()
               }
             })
-          .catch((error) => { // 请求失败处理
-            console.log(error);
+          .catch(() => { // 请求失败处理
+            loading.close()
           })
       }
 
@@ -477,7 +483,7 @@ html {
 
   .previewCanvas{
     width: 100%;
-    height: 60px;
+    height: 69px;
     display: flex;
     justify-content: space-between;
 

@@ -69,16 +69,19 @@ export default {
     $route: {
       handler: function(route) {
         const query = route.query
-        if (query) {
+        if (query.acid) {
           this.acid = query.acid
-          if(this.acid == ''){
-            this.$refs.editorLayout.openRForm(1)
-          }else{
-            this.editAnswerSheet()
-          }
         }
       },
       immediate: true
+    },
+  },
+
+  mounted () {
+    if(this.acid == ''){
+      this.$refs.editorLayout.openRForm(1)
+    }else{
+      this.editAnswerSheet()
     }
   },
 
@@ -105,6 +108,12 @@ export default {
 
     editAnswerSheet() {
       // 编辑答题卡
+      const loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       this.$http.get('Api/Assembly/QBAnswCardBLL/GetQBAnswCard', {params:{ 'acid': this.acid }}
       ).then((res) => {
         const {data} = res
@@ -116,9 +125,10 @@ export default {
           this.reset_pageData(content) // 重新赋值
           this.pageLayout_change(layout)
           this.change_isNew(obj.IsNew)
+          loading.close()
         }
-      }).catch(function (error) {
-          console.log(error)
+      }).catch(function () {
+          loading.close()
       });
     }
   },

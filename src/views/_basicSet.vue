@@ -17,7 +17,7 @@
     </div>
     <div class="basis_checkbox basic_btn save-btn">
       <el-button type="primary" @click="previewLinkFunc">预览</el-button>
-      <el-button type="primary" @click="saveBtn">保存</el-button>
+      <el-button type="primary" @click="saveBtn" >保存</el-button>
       <el-button type="primary" @click="downloadFunc">下载</el-button>
     </div>
     <public-dialog ref="publicDialog" />
@@ -28,6 +28,7 @@
 import { mapState,mapGetters} from 'vuex'
 import publicDialog from './dialog/_publicDialog'
 import qs from 'qs'
+
 
 export default {
   components: {
@@ -203,33 +204,23 @@ export default {
     saveBtn(){
       // 保存
       if(this.textVal !=''){
-          if(this.acid == ''){
-            let params = {
-              prmQBAnswCard:JSON.stringify(this.answerSheetData)
-            }
-            this.$http.post('/Api/Assembly/QBAnswCardBLL/SaveQBAnswCardNew',
-              qs.stringify(params)
-            ).then(() => {
-              this.$message({
-                message: '保存成功',
-                type: 'success'
-              })
-              if(this.saveBtnStuta){
-                // 下载
-                let routeTwo = this.$router.resolve(
-                  {
-                    name: 'preview',
-                    query: {pageWidth: this.pageWidth,pageNum:this.pageNum,down:1}
-                  }
-                )
-                window.open(routeTwo.href, '_blank')
-                this.saveBtnStuta = false
-              }
-            })
-            .catch(() => { // 请求失败处理
-              this.saveBtnStuta = false
-            })
-          }else{
+        const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
+        let params = {
+          prmQBAnswCard:JSON.stringify(this.answerSheetData)
+        }
+        this.$http.post('/Api/Assembly/QBAnswCardBLL/SaveQBAnswCardNew',
+          qs.stringify(params)
+        ).then(() => {
+          this.$message({
+            message: '保存成功',
+            type: 'success'
+          })
+          if(this.saveBtnStuta){
             // 下载
             let routeTwo = this.$router.resolve(
               {
@@ -240,6 +231,12 @@ export default {
             window.open(routeTwo.href, '_blank')
             this.saveBtnStuta = false
           }
+          loading.close()
+        })
+        .catch(() => { // 请求失败处理
+          this.saveBtnStuta = false
+          loading.close()
+        })
       }else{
         this.$message({
           message: '答题卡标题不能为空!',
