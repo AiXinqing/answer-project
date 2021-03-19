@@ -43,7 +43,6 @@
           @pre-edit-two-subtopic="preEditTwoSubtopic"
           @pre-edit-points-answer-group="preEditPointsAnswerGroup"
           @pre-edit-last-subtopic="preEditLastSubtopic"
-
           @pre-edit-last-answer-item="preEditLastAnswerItem"
         />
         <!-- 小题显示区 -->
