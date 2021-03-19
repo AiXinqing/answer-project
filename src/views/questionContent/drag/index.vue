@@ -57,28 +57,30 @@ export default {
     minHeight() {
       const {showData,editorContent,segmented,rowHeight,MarginHeight,rows,rowHeightArr,questionType} = this.question
       let height = 0
-      if(questionType == 'compositionEnglish'){
-        height = rows * rowHeight + MarginHeight
-      }else{
-        if(editorContent[segmented] == undefined){
-          if(showData && showData.length){
-            height =  showData.length * rowHeight + MarginHeight
-          }else{
+      switch (questionType) {
+        case 'compositionEnglish':
             height = rows * rowHeight + MarginHeight
-          }
-        }else{
-          let currentTinymceArr = this.convertArray(editorContent[segmented])
-          if(rowHeightArr[segmented].length){
-            rowHeightArr[segmented].forEach(val =>{
-              height += val
-            })
-            height +=  MarginHeight
-          }else{
-            height = currentTinymceArr.length * rowHeight + MarginHeight
-          }
-        }
+          break;
+        default:
+            if(editorContent[segmented] == undefined){
+              if(showData && showData.length){
+                height =  showData.length * rowHeight + MarginHeight
+              }else{
+                height = rows * rowHeight + MarginHeight
+              }
+            }else{
+              let currentTinymceArr = this.convertArray(editorContent[segmented])
+              if(rowHeightArr[segmented].length){
+                rowHeightArr[segmented].forEach(val =>{
+                  height += val
+                })
+                height +=  MarginHeight
+              }else{
+                height = currentTinymceArr.length * rowHeight + MarginHeight
+              }
+            }
+          break;
       }
-
       return height
     },
 
