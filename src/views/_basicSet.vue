@@ -45,6 +45,7 @@ export default {
   computed: {
     ...mapState('page', ['pageLayout', 'pageData','IsNew']),
     ...mapState('pageContent', ['scoreTotal']),
+    ...mapState('questionType',['subTopic_number_determine']),
     ...mapGetters('page',['page_width','compile_pageData']),
 
     pageWidth() {
@@ -108,7 +109,8 @@ export default {
                 'tscore': this.scoreTotal,
                 'QBAnswCardTopic':[]
               }
-            ]
+            ],
+            'remark':JSON.stringify(this.subTopic_number_determine)
           }
         }else {
           switch(question.questionType){
@@ -203,47 +205,46 @@ export default {
 
     saveBtn(){
       // 保存
-      console.log(this.answerSheetData)
-      // if(this.textVal !=''){
-      //   const loading = this.$loading({
-      //     lock: true,
-      //     text: 'Loading',
-      //     spinner: 'el-icon-loading',
-      //     background: 'rgba(0, 0, 0, 0.7)'
-      //   })
-      //   let params = {
-      //     prmQBAnswCard:JSON.stringify(this.answerSheetData)
-      //   }
-      //   this.$http.post('/Api/Assembly/QBAnswCardBLL/SaveQBAnswCardNew',
-      //     qs.stringify(params)
-      //   ).then(() => {
-      //     this.$message({
-      //       message: '保存成功',
-      //       type: 'success'
-      //     })
-      //     if(this.saveBtnStuta){
-      //       // 下载
-      //       let routeTwo = this.$router.resolve(
-      //         {
-      //           name: 'preview',
-      //           query: {pageWidth: this.pageWidth,pageNum:this.pageNum,down:1}
-      //         }
-      //       )
-      //       window.open(routeTwo.href, '_blank')
-      //       this.saveBtnStuta = false
-      //     }
-      //     loading.close()
-      //   })
-      //   .catch(() => { // 请求失败处理
-      //     this.saveBtnStuta = false
-      //     loading.close()
-      //   })
-      // }else{
-      //   this.$message({
-      //     message: '答题卡标题不能为空!',
-      //     type: 'warning'
-      //   });
-      // }
+      if(this.textVal !=''){
+        const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
+        let params = {
+          prmQBAnswCard:JSON.stringify(this.answerSheetData)
+        }
+        this.$http.post('/Api/Assembly/QBAnswCardBLL/SaveQBAnswCardNew',
+          qs.stringify(params)
+        ).then(() => {
+          this.$message({
+            message: '保存成功',
+            type: 'success'
+          })
+          if(this.saveBtnStuta){
+            // 下载
+            let routeTwo = this.$router.resolve(
+              {
+                name: 'preview',
+                query: {pageWidth: this.pageWidth,pageNum:this.pageNum,down:1}
+              }
+            )
+            window.open(routeTwo.href, '_blank')
+            this.saveBtnStuta = false
+          }
+          loading.close()
+        })
+        .catch(() => { // 请求失败处理
+          this.saveBtnStuta = false
+          loading.close()
+        })
+      }else{
+        this.$message({
+          message: '答题卡标题不能为空!',
+          type: 'warning'
+        });
+      }
     },
 
     objectiveTopic(question){

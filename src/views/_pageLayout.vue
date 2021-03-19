@@ -87,6 +87,7 @@ export default {
 
   methods: {
     ...mapMutations('page', ['reset_pageData','change_isNew']),
+    ...mapMutations('questionType',['subTopic_calculate_determine']),
 
     closePrompt () {
       this.openedPrompt = false
@@ -120,10 +121,11 @@ export default {
         if(data.ResponseCode =='Success'){
           let obj = data.ResponseContent
           let content = JSON.parse(obj.content)
-          console.log(content)
           let layout = content[0].content.pageLayout // 页面布局
+          let remark = JSON.parse(obj.remark)
 
           this.reset_pageData(content) // 重新赋值
+          this.subTopic_calculate_determine(remark)
           this.pageLayout_change(layout)
           this.change_isNew(obj.IsNew)
 
