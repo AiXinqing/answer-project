@@ -431,7 +431,7 @@ export default {
     },
 
     generatorImage(){
-      let htmlText = document.getElementsByTagName('html')[0].outerHTML
+      let htmlText = document.documentElement.outerHTML //document.getElementsByTagName('html')[0].outerHTML
 
       if(this.htmlText != ''){
         const loading = this.$loading({
