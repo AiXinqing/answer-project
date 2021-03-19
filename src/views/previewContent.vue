@@ -147,18 +147,21 @@ export default {
 
   mounted () {
     let slef = this
-    const loading = this.$loading({
-      lock: true,
-      text: 'Loading',
-      spinner: 'el-icon-loading',
-      background: 'rgba(0, 0, 0, 0.7)'
-    })
-    setTimeout( () => {
-      loading.close()
-      if(slef.downs){
-        slef.generatorImage()
-      }
-    },5000);
+
+    if(slef.downs){
+      const loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      setTimeout( () => {
+        loading.close()
+
+          slef.generatorImage()
+      },5000);
+    }
+
   },
 
   methods: {
