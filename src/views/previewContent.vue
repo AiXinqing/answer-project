@@ -1,7 +1,6 @@
 <template>
   <div class="page-content preview-content" :class="downs ? 'down_style' : ''" ref="pageContent" >
     <div class="main-info">
-
       <div v-for="(pages, i) in contentData" :key="i" class="page_card" :style="{width:pageNum == 1 ? '875px' : '1650px'}">
         <div class="previewCanvas">
           <div class="left" style="flex-shrink:1">
@@ -145,13 +144,26 @@ export default {
     },
 
   },
-  mounted() {
-    if(this.downs){
-      this.generatorImage()
-    }
+
+  mounted () {
+    let slef = this
+    const loading = this.$loading({
+      lock: true,
+      text: 'Loading',
+      spinner: 'el-icon-loading',
+      background: 'rgba(0, 0, 0, 0.7)'
+    })
+    setTimeout( () => {
+      if(slef.downs){
+        slef.generatorImage()
+        loading.close()
+      }
+    },5000);
   },
+
   methods: {
     ...mapMutations('pageContent', ['pageHeight_set']),
+
     pageContentFunc(rects = []) {
       var results = []
 
@@ -432,26 +444,28 @@ export default {
 
     generatorImage(){
       let htmlText = document.documentElement.outerHTML //document.getElementsByTagName('html')[0].outerHTML
-
-      if(this.htmlText != ''){
-        const loading = this.$loading({
-          lock: true,
-          text: 'Loading',
-          spinner: 'el-icon-loading',
-          background: 'rgba(0, 0, 0, 0.7)'
-        })
-        this.$http.post('/Assembly/AnswerCard/DynamicHtmlToStaticHtml',
-            qs.stringify({'htmlText':htmlText,'AnswerCardName':this.titleVal})
-            ).then(({data}) => {
-              if(data.ReturnCode == 9998){ // http://localhost:60044
-                window.location.href = `/Assembly/AnswerCard/HtmlToPdf?htmlName=${data.ReturnInfo}&AnswerCardName=${this.titleVal}&PageSize=${this.pageSize}&filename=${this.titleVal}`
-                loading.close()
-              }
-            })
-          .catch(() => { // 请求失败处理
-            loading.close()
+      this.$nextTick(()=>{
+        if(this.htmlText != ''){
+          const loading = this.$loading({
+            lock: true,
+            text: 'Loading',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
           })
-      }
+          htmlText = document.documentElement.outerHTML
+          this.$http.post('/Assembly/AnswerCard/DynamicHtmlToStaticHtml',
+              qs.stringify({'htmlText':htmlText,'AnswerCardName':this.titleVal})
+              ).then(({data}) => {
+                if(data.ReturnCode == 9998){ // http://localhost:60044
+                  window.location.href = `/Assembly/AnswerCard/HtmlToPdf?htmlName=${data.ReturnInfo}&AnswerCardName=${this.titleVal}&PageSize=${this.pageSize}&filename=${this.titleVal}`
+                  loading.close()
+                }
+              })
+            .catch(() => { // 请求失败处理
+              loading.close()
+            })
+        }
+      })
 
     }
   },
