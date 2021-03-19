@@ -203,46 +203,47 @@ export default {
 
     saveBtn(){
       // 保存
-      if(this.textVal !=''){
-        const loading = this.$loading({
-          lock: true,
-          text: 'Loading',
-          spinner: 'el-icon-loading',
-          background: 'rgba(0, 0, 0, 0.7)'
-        })
-        let params = {
-          prmQBAnswCard:JSON.stringify(this.answerSheetData)
-        }
-        this.$http.post('/Api/Assembly/QBAnswCardBLL/SaveQBAnswCardNew',
-          qs.stringify(params)
-        ).then(() => {
-          this.$message({
-            message: '保存成功',
-            type: 'success'
-          })
-          if(this.saveBtnStuta){
-            // 下载
-            let routeTwo = this.$router.resolve(
-              {
-                name: 'preview',
-                query: {pageWidth: this.pageWidth,pageNum:this.pageNum,down:1}
-              }
-            )
-            window.open(routeTwo.href, '_blank')
-            this.saveBtnStuta = false
-          }
-          loading.close()
-        })
-        .catch(() => { // 请求失败处理
-          this.saveBtnStuta = false
-          loading.close()
-        })
-      }else{
-        this.$message({
-          message: '答题卡标题不能为空!',
-          type: 'warning'
-        });
-      }
+      console.log(this.answerSheetData)
+      // if(this.textVal !=''){
+      //   const loading = this.$loading({
+      //     lock: true,
+      //     text: 'Loading',
+      //     spinner: 'el-icon-loading',
+      //     background: 'rgba(0, 0, 0, 0.7)'
+      //   })
+      //   let params = {
+      //     prmQBAnswCard:JSON.stringify(this.answerSheetData)
+      //   }
+      //   this.$http.post('/Api/Assembly/QBAnswCardBLL/SaveQBAnswCardNew',
+      //     qs.stringify(params)
+      //   ).then(() => {
+      //     this.$message({
+      //       message: '保存成功',
+      //       type: 'success'
+      //     })
+      //     if(this.saveBtnStuta){
+      //       // 下载
+      //       let routeTwo = this.$router.resolve(
+      //         {
+      //           name: 'preview',
+      //           query: {pageWidth: this.pageWidth,pageNum:this.pageNum,down:1}
+      //         }
+      //       )
+      //       window.open(routeTwo.href, '_blank')
+      //       this.saveBtnStuta = false
+      //     }
+      //     loading.close()
+      //   })
+      //   .catch(() => { // 请求失败处理
+      //     this.saveBtnStuta = false
+      //     loading.close()
+      //   })
+      // }else{
+      //   this.$message({
+      //     message: '答题卡标题不能为空!',
+      //     type: 'warning'
+      //   });
+      // }
     },
 
     objectiveTopic(question){
@@ -291,9 +292,8 @@ export default {
       obj = {
         ...obj,
         QBAnswCardQuestions:topicList.map(item => {
-
             return {
-              'qnum':item.spaceNum !=undefined ? `${item.topic}.${item.smallTopic}.${item.spaceNum}` : `${item.topic}`,
+              'qnum':item.lid !=undefined ? `${item.topic}.${item.spaceNum}.${item.smallTopic}` : item.Multistage != undefined ? `${item.topic}` : `${item.topic}.${item.spaceNum}`,
               'type':'填空题',
               'score': item.score,
             }

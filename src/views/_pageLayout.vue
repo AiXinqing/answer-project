@@ -120,6 +120,7 @@ export default {
         if(data.ResponseCode =='Success'){
           let obj = data.ResponseContent
           let content = JSON.parse(obj.content)
+          console.log(content)
           let layout = content[0].content.pageLayout // 页面布局
 
           this.reset_pageData(content) // 重新赋值

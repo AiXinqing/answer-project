@@ -154,9 +154,9 @@ export default {
       background: 'rgba(0, 0, 0, 0.7)'
     })
     setTimeout( () => {
+      loading.close()
       if(slef.downs){
         slef.generatorImage()
-        loading.close()
       }
     },5000);
   },
