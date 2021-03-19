@@ -157,9 +157,16 @@ export default {
         }
 
         let span2 = content.HorizontalLine ? `<a class="line-style"> ${spaceSum} </a>` :`<a> ${spaceSum} </a>`
+        console.log(span1)
 
-        pList += `<p class="question_line">${span1}${span2}</p>
-        ` // 需要空一行回车，这样才能筛选行数，不能删除
+        if(content.HorizontalLine || i == 0){
+          pList += `<p class="question_line">${span1}${span2}</p>
+          ` // 需要空一行回车，这样才能筛选行数，不能删除
+        }
+        // else{
+        //   pList += `<p class="question_line"></p>
+        //   ` // 需要空一行回车，这样才能筛选行数，不能删除
+        // }
         Arr.push(rowHeight)
       })
 
