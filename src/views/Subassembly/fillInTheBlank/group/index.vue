@@ -174,8 +174,6 @@ export default {
           score:Number(scoreVal)
         }
 
-        console.log(obj)
-
         this.$emit('pre-edit-question-group',obj)
         // 弹框临时小题数
         const temporaryArr = this.subTopicList.map(item => ({ ...item, subtopic: 1 }))

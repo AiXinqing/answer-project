@@ -46,7 +46,6 @@ export default {
   watch: {
     titleInfo(val) {
       this.studentInfoList = JSON.parse(JSON.stringify(val))
-      window.console.log(val)
     },
   },
   mounted() {

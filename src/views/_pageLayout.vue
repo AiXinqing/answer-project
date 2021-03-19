@@ -125,6 +125,7 @@ export default {
           this.reset_pageData(content) // 重新赋值
           this.pageLayout_change(layout)
           this.change_isNew(obj.IsNew)
+
           loading.close()
         }
       }).catch(function () {

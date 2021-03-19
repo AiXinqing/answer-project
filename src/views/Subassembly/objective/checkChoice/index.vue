@@ -100,7 +100,6 @@
 
       preEditSubtopic(subtopic){
         this.$emit('pre-edit-subtopic',subtopic)
-        console.log(subtopic)
       },
 
       groupVerifyStatus(verify){
