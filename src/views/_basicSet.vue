@@ -95,6 +95,13 @@ export default {
       this.questionLsit.forEach(question => {
         if(question.questionType == 'AnswerSheetTitle'){
           let {content} = question
+
+          let edit = {}
+          if(!this.IsNew){
+            edit = {
+              'acid':this.acid
+            }
+          }
           obj = {
             'IsNew':this.IsNew,// 新增
             'name': content.textVal,
@@ -110,7 +117,9 @@ export default {
                 'QBAnswCardTopic':[]
               }
             ],
-            'remark':JSON.stringify(this.subTopic_number_determine)
+            'remark':JSON.stringify(this.subTopic_number_determine),
+            'psize':this.pageLayout.size,
+            ...edit
           }
         }else {
           switch(question.questionType){
