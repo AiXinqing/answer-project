@@ -25,7 +25,6 @@ const mutations = {
       } else {
         state.subTopic_number_already.push(item)
       }
-
     })
   },
 
@@ -87,6 +86,7 @@ const mutations = {
         state.subTopic_number_determine.push(item)
       }
     })
+
   },
 
   subTopic_determine: (state,obj) => {
