@@ -141,13 +141,18 @@ export default {
         first,
         borderTop,
         rowHeight,
-        rowTitle
+        rowTitle,
+        segmented,
+        segmentedArr
       } = this.data
       let row = 0
       if (first && borderTop == undefined) {
         row = Math.floor((castHeight - MarginHeight - heightTitle - rowTitle) / rowHeight)
       } else {
         row = Math.ceil(castHeight / rowHeight)
+        if(segmented == segmentedArr.length){
+          row = Math.floor(castHeight / rowHeight)
+        }
       }
       let Arr = []
       for (let i = 1; i <= row; i++) {
