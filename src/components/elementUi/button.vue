@@ -67,6 +67,7 @@ export default {
 .el-button--confirm {
   padding: 0 0;
   height: 30px;
+  line-height: 30px;
   width: 60px;
   border: 1px solid #1ab394;
   color: white;
@@ -108,6 +109,7 @@ export default {
 .el-button--cancel {
   padding: 0 0;
   height: 30px;
+  line-height:30px;
   width: 60px;
   border: 1px solid transparent;
   color: #333;
