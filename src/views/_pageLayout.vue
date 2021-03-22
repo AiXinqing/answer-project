@@ -87,7 +87,8 @@ export default {
 
   methods: {
     ...mapMutations('page', ['reset_pageData','change_isNew']),
-    ...mapMutations('questionType',['subTopic_calculate_determine']),
+    ...mapMutations('questionType',['subTopic_calculate_determine',
+    'subTopic_number_calculate','subTopic_already_add']),
 
     closePrompt () {
       this.openedPrompt = false
@@ -126,8 +127,13 @@ export default {
 
           this.reset_pageData(content) // 重新赋值
           this.subTopic_calculate_determine(remark)
+          this.subTopic_already_add(remark)
           this.pageLayout_change(layout)
           this.change_isNew(obj.IsNew)
+          let slef = this
+          setTimeout( () => {
+            slef.subTopic_number_calculate()
+          },3000);
 
           loading.close()
         }
