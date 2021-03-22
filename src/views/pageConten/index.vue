@@ -160,6 +160,7 @@ export default {
         // 高度溢出---------------------------------------------------------------------------
 
         if(rect.height > avalibleHeight){
+
           avalibleHeight -= this.difference
           if(rect.questionType == 'answerQuestion' && rect.orderFirst){
             avalibleHeight += this.difference
@@ -214,6 +215,7 @@ export default {
                 superiorGrid:superiorGrid
               }
               height += this.difference
+              segmented += 1
             }
 
             if(rect.questionType == 'answerQuestion' && rect.orderFirst){
@@ -224,14 +226,18 @@ export default {
           // 增加一页
 
           results.push(currentPage.rects)
+
           resetCurrentPage()
 
           // 剩余高度可以分占几页
           while (height > (this.page_height - this.difference)){
+            let avalibleHeight =  this.page_height - this.difference
+            backup = {
+              first: !segmented
+            }
+            let curRects = this.preliminaryQuestion(rect, avalibleHeight,backup.first)
             segmented += 1
 
-            let avalibleHeight =  this.page_height - this.difference
-            let curRects = this.preliminaryQuestion(rect, avalibleHeight,false)
             segmentedArr.push(curRects.availableRow)
             if(rect.showData && rect.showData.length){
               backup = {
@@ -328,7 +334,7 @@ export default {
           currentPage.rects.push({
             ...rect,
             castHeight: currentPage.height - this.difference, // 分段后减去加入的差值
-            first:!curRect.pagination,
+            first:rect.questionType == 'compositionLanguage' ? false : !curRect.pagination,
             ...backup,
             segmented:segmented,
             segmentedArr:segmentedArr
@@ -352,6 +358,7 @@ export default {
           if(rect.questionType == 'answerQuestion' && rect.orderFirst > 0){
             currentPage.height -= this.difference
           }
+
           currentPage.rects.push({
             ...rect,
             castHeight: rect.height,
@@ -363,6 +370,7 @@ export default {
       })
 
       if(currentPage.height){
+
         results.push(currentPage.rects)
       }
 
