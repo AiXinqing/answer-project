@@ -56,6 +56,7 @@
             <svg
               xmlns="http://www.w3.org/2000/svg"
               version="1.1"
+              height="30"
               v-show="
                 /(^[1-9]\d*$)/.test((i * data.lattice + a + data.superiorGrid) / 100) &&
                 contentData.mark == '2'
@@ -69,6 +70,7 @@
             <svg
               xmlns="http://www.w3.org/2000/svg"
               version="1.1"
+              height="30"
               v-show="
                 (i * data.lattice + (a += 1) + data.superiorGrid - 1) == contentData.minWordCount &&
                 contentData.mark == '1'
