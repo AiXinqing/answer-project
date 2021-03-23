@@ -97,7 +97,7 @@ export default {
           let {content} = question
 
           let edit = {}
-          if(!this.IsNew){
+          if(this.acid){
             edit = {
               'acid':this.acid
             }
@@ -119,6 +119,7 @@ export default {
             ],
             'remark':JSON.stringify(this.subTopic_number_determine),
             'psize':this.pageLayout.size,
+            'layout':this.pageLayout.column,
             ...edit
           }
         }else {
@@ -214,6 +215,7 @@ export default {
 
     saveBtn(){
       // 保存
+
       if(this.textVal !=''){
         const loading = this.$loading({
           lock: true,
@@ -226,23 +228,25 @@ export default {
         }
         this.$http.post('/Api/Assembly/QBAnswCardBLL/SaveQBAnswCardNew',
           qs.stringify(params)
-        ).then(() => {
-          this.$message({
-            message: '保存成功',
-            type: 'success'
-          })
-          if(this.saveBtnStuta){
-            // 下载
-            let routeTwo = this.$router.resolve(
-              {
-                name: 'preview',
-                query: {pageWidth: this.pageWidth,pageNum:this.pageNum,down:1}
-              }
-            )
-            window.open(routeTwo.href, '_blank')
-            this.saveBtnStuta = false
+        ).then((res) => {
+          if(res.ResponseCode == 'Success'){
+            this.$message({
+              message: '保存成功',
+              type: 'success'
+            })
+            if(this.saveBtnStuta){
+              // 下载
+              let routeTwo = this.$router.resolve(
+                {
+                  name: 'preview',
+                  query: {pageWidth: this.pageWidth,pageNum:this.pageNum,down:1}
+                }
+              )
+              window.open(routeTwo.href, '_blank')
+              this.saveBtnStuta = false
+            }
+            loading.close()
           }
-          loading.close()
         })
         .catch(() => { // 请求失败处理
           this.saveBtnStuta = false

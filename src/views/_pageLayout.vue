@@ -89,6 +89,7 @@ export default {
     ...mapMutations('page', ['reset_pageData','change_isNew']),
     ...mapMutations('questionType',['subTopic_calculate_determine',
     'subTopic_number_calculate','subTopic_already_add']),
+    ...mapMutations('titleSet',['editTextarea']),
 
     closePrompt () {
       this.openedPrompt = false
@@ -101,6 +102,8 @@ export default {
     PromptFunc () {
       this.$refs.editorLayout.openRForm(2)
       this.closePrompt()
+      // 编辑后更改标题
+      this.editTextarea(this.pageData[0].content.textVal)
     },
 
     modifyLayoutFunc () {
