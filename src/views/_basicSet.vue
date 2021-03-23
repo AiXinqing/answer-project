@@ -103,7 +103,7 @@ export default {
             }
           }
           obj = {
-            'IsNew':this.IsNew,// 新增
+            'IsNew':this.acid ? !this.IsNew : this.IsNew,// 新增
             'name': content.textVal,
             'tscore': this.scoreTotal,
             'exnum': content.titleRows,
