@@ -162,6 +162,7 @@ export default {
         if(rect.height > avalibleHeight){
 
           avalibleHeight -= this.difference
+
           if(rect.questionType == 'answerQuestion' && rect.orderFirst){
             avalibleHeight += this.difference
           }
@@ -203,7 +204,7 @@ export default {
               castHeight:curRect.height,
               ...backup,
               segmented:segmented,
-              segmentedArr:segmentedArr
+              segmentedArr:segmentedArr,
             })
 
             height = rect.height - curRect.height
@@ -221,10 +222,10 @@ export default {
             if(rect.questionType == 'answerQuestion' && rect.orderFirst){
               avalibleHeight -= this.difference
             }
+
           }
 
           // 增加一页
-
           results.push(currentPage.rects)
 
           resetCurrentPage()
@@ -235,6 +236,12 @@ export default {
             backup = {
               first: !segmented
             }
+            if(rect.questionType == 'FillInTheBlank' && avalibleHeight == 1000){
+              backup = {
+                first: false
+              }
+            }
+
             let curRects = this.preliminaryQuestion(rect, avalibleHeight,backup.first)
             segmented += 1
 
@@ -386,16 +393,15 @@ export default {
       let RemainingHeight
 
       switch(question.questionType){
-          case 'compositionLanguage':
-            RemainingHeight = question.first ?  avalibleHeight - margin - question.rowTitle : avalibleHeight - margin
-            break;
-          default:
-            RemainingHeight = avalibleHeight - margin
+        case 'compositionLanguage':
+          RemainingHeight = question.first ?  avalibleHeight - margin - question.rowTitle : avalibleHeight - margin
+          break;
+        default:
+          RemainingHeight = avalibleHeight - margin
       }
 
       // 剩余可容纳行数
       let availableRow = Math.floor(RemainingHeight / rowHeight)
-
 
 
       //题型高度
@@ -414,12 +420,13 @@ export default {
 
       let parameter = {
         availableRow:availableRow,
-        height:question_height,
+        height:question_height < rowHeight ? 0 : question_height,
         pagination:question_height >= question.height ? false :
-          question_height < heightTitle ? false: true,
+          question_height < heightTitle ? false: question_height < rowHeight ? false : true,
           MarginHeight:MarginHeight,
           rowHeight:rowHeight
       }
+
       return parameter
     },
 
