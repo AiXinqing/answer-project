@@ -328,7 +328,12 @@ export default {
             initRow:rows
           },
           first: true,
-          titleContent:''
+          titleContent:'',
+          editorContent:[],
+          segmentedArr:[],
+          operatTinymce:[], // 判断富文本是否操作过
+          tinymceCHeight:[],
+          rowHeightArr:[], // 内容行高数组
         }
         this.subTopic_already_add([this.data])
 
@@ -350,7 +355,7 @@ export default {
           this.subTopic_calculate_determine([this.data])
 
         } else {
-          this.pageData_edit({ ...obj, id: this.editQuestionId, titleContent:'' })
+          this.pageData_edit({ ...obj, id: this.editQuestionId, titleContent:'',editorContent:[],segmentedArr:[],operatTinymce:[],tinymceCHeight:[],rowHeightArr:[] })
         }
 
         this.subTopic_number_calculate()
