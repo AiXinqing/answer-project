@@ -46,6 +46,8 @@
         'subTopic_number_already',
         'subTopic_number_determine',]),
 
+      ...mapState('pageContent',['bulletArray']),
+
       selectBox(){
         return this.activeName == 'judgmentChoice' ? ['T','F'] :
                 this.letterList.slice(0,this.data.select)
@@ -72,6 +74,7 @@
             if(end_d_val != undefined && end_d_val.pid != this.data.id){
               strEnd = `${end_d_val.topic}题已经存在，请勿重复添加`
             }
+
             if(this.bulletArray.length){
               let start_b_val = this.bulletArray.find(item => item.topic == start)
               let end_b_val = this.bulletArray.find(item => item.topic == end)
@@ -108,14 +111,12 @@
       },
 
       subTopicList(){
-        const {start,end,score,select} = this.data
+        const {start,end,score} = this.data
         let scoreVal = score ? score.toString().match(/^\d+(?:\.\d{0,1})?/) : score
         let group = []
         for (let index = start; index <= end; index++) {
           let subtopic = {
-            select:select,
-            end:end,
-            start:start,
+            ...this.data,
             score:Number(scoreVal),
             pid: this.data.id,
             id: 'judgment_' + index,
