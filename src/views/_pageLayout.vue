@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <set-dialog ref="editorLayout" :prop-layout="pageLayout"/>
+    <set-dialog ref="editorLayout" :prop-layout="layouts ? layouts :pageLayout"/>
 
     <hj-dialog title="提示" :visible.sync="openedPrompt" :width="'400px'">
       <div class="Prompt_info">
@@ -43,7 +43,8 @@ export default {
   data () {
     return {
       openedPrompt: false,
-      acid:''
+      acid:'',
+      layouts:null
     }
   },
   computed: {
@@ -86,7 +87,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations('page', ['reset_pageData','change_isNew']),
+    ...mapMutations('page', ['reset_pageData','change_isNew','pageLayout_change']),
     ...mapMutations('questionType',['subTopic_calculate_determine',
     'subTopic_number_calculate','subTopic_already_add']),
     ...mapMutations('titleSet',['editTextarea']),
@@ -125,18 +126,24 @@ export default {
         if(data.ResponseCode =='Success'){
           let obj = data.ResponseContent
           let content = JSON.parse(obj.content)
-          let layout = content[0].content.pageLayout // 页面布局
           let remark = JSON.parse(obj.remark)
-
           this.reset_pageData(content) // 重新赋值
           this.subTopic_calculate_determine(remark)
           this.subTopic_already_add(remark)
-          this.pageLayout_change(layout)
+
           this.change_isNew(obj.IsNew)
+          this.pageLayout_change({
+            size: obj.psize,
+            column:Number(obj.layout)
+          })
+          this.layouts = {
+            size: obj.psize,
+            column:Number(obj.layout)
+          }
           let slef = this
           setTimeout( () => {
             slef.subTopic_number_calculate()
-          },3000);
+          },2000);
 
           loading.close()
         }

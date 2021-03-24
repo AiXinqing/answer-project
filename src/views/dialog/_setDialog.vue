@@ -121,6 +121,15 @@ export default {
       return this.createLayout ? 0 : 1
     },
   },
+  watch: {
+    propLayout: {
+      immediate: true,
+      handler () {
+        this.size = this.propLayout.size
+        this.layout = this.propLayout.column
+      },
+    },
+  },
   methods: {
     ...mapMutations('pageContent', [
       'pageLayout_launch_page',]),

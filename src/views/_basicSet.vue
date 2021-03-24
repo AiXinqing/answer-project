@@ -103,7 +103,7 @@ export default {
             }
           }
           obj = {
-            'IsNew':this.acid ? !this.IsNew : this.IsNew,// 新增
+            'IsNew':this.IsNew,// 新增
             'name': content.textVal,
             'tscore': this.scoreTotal,
             'exnum': content.titleRows,
@@ -229,7 +229,8 @@ export default {
         this.$http.post('/Api/Assembly/QBAnswCardBLL/SaveQBAnswCardNew',
           qs.stringify(params)
         ).then((res) => {
-          if(res.ResponseCode == 'Success'){
+
+          if(res.data.ResponseCode == 'Success'){
             this.$message({
               message: '保存成功',
               type: 'success'
