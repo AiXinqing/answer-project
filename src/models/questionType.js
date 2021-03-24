@@ -41,7 +41,6 @@ export function question_language (question, latticeNum, latticeWidth) {
     const { totalWordCount,spacing} = question.content
     let rows = Math.ceil(totalWordCount / latticeNum) // .toFixed(2)
 
-
     let rowHeight = latticeWidth + spacing.value
         rowHeight = Number(rowHeight.toFixed(2))
 
@@ -54,6 +53,7 @@ export function question_language (question, latticeNum, latticeWidth) {
       height: height,
       rowHeight: rowHeight,
       lattice:latticeNum,
-      rowWidth:latticeWidth
+      rowWidth: latticeWidth,
+      totalRow:Math.ceil(totalWordCount/latticeNum)
     }
 }
