@@ -242,7 +242,7 @@ export default {
               }
             }
 
-            let curRects = this.preliminaryQuestion(rect, avalibleHeight,backup.first)
+            let curRects = this.preliminaryQuestion(rect, avalibleHeight,backup.first,segmented)
             segmented += 1
 
             segmentedArr.push(curRects.availableRow)
@@ -384,7 +384,7 @@ export default {
       return results
     },
 
-    preliminaryQuestion(question,avalibleHeight,initial = true){
+    preliminaryQuestion(question,avalibleHeight,initial = true,segmented = 0){
       // 变量
       const { MarginHeight,heightTitle,rowHeight } = question
 
@@ -394,7 +394,7 @@ export default {
 
       switch(question.questionType){
         case 'compositionLanguage':
-          RemainingHeight = question.first ?  avalibleHeight - margin - question.rowTitle : avalibleHeight - margin
+          RemainingHeight = question.first && segmented == 0 ?  avalibleHeight - margin - question.rowTitle : avalibleHeight - margin
           break;
         default:
           RemainingHeight = avalibleHeight - margin
@@ -402,6 +402,7 @@ export default {
 
       // 剩余可容纳行数
       let availableRow = Math.floor(RemainingHeight / rowHeight)
+      console.log(availableRow)
 
 
       //题型高度

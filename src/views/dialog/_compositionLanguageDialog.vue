@@ -380,7 +380,7 @@ export default {
           rowWidth: 0,
           rowTitle:this.rowTitle,
           superiorGrid:0, // 上级格子数量
-          titleContent:''
+          titleContent:'',
         }
         this.subTopic_already_add([this.data])
 
