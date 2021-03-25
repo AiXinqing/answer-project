@@ -201,7 +201,7 @@ export default {
           }
 
           let height = rect.height
-          let curRect = this.preliminaryQuestion(rect, avalibleHeight)
+          let curRect = this.preliminaryQuestion(rect, avalibleHeight,rect.first,segmented)
 
           // 是否分割当前题型
           if(curRect.pagination){
@@ -249,7 +249,7 @@ export default {
                 superiorGrid:superiorGrid
               }
               height += this.difference
-              segmented += 1
+              // segmented += 1
             }
 
             if(rect.questionType == 'answerQuestion' && rect.orderFirst){
@@ -267,8 +267,14 @@ export default {
             backup = {
               first: !segmented
             }
-            let curRects = this.preliminaryQuestion(rect, avalibleHeight,backup.first)
+
+            if(rect.questionType == 'FillInTheBlank' && avalibleHeight == 1000){
+              backup = {
+                first: false
+              }
+            }
             segmented += 1
+            let curRects = this.preliminaryQuestion(rect, avalibleHeight,backup.first,segmented)
 
             segmentedArr.push(curRects.availableRow)
             if(rect.showData && rect.showData.length){
@@ -404,28 +410,28 @@ export default {
       return results
     },
 
-    preliminaryQuestion(question,avalibleHeight,initial = true){
+    preliminaryQuestion(question,avalibleHeight,initial = true,segmented){
       // 变量
       const { MarginHeight,heightTitle,rowHeight } = question
 
       // 边框高度 剩余内容
-      let margin = initial ? MarginHeight + heightTitle : MarginHeight
+      let margin = initial  ? MarginHeight + heightTitle : MarginHeight
       let RemainingHeight
 
       switch(question.questionType){
-          case 'compositionLanguage':
-            RemainingHeight = question.first ?  avalibleHeight - margin - question.rowTitle : avalibleHeight - margin
-            break;
-          default:
-            RemainingHeight = avalibleHeight - margin
+        case 'compositionLanguage':
+          RemainingHeight = question.first && segmented == 0 ?  avalibleHeight - margin - question.rowTitle : avalibleHeight - MarginHeight
+          break;
+        default:
+          RemainingHeight = avalibleHeight - margin
       }
 
       // 剩余可容纳行数
       let availableRow = Math.floor(RemainingHeight / rowHeight)
 
-
       //题型高度
       let question_height = availableRow * rowHeight + margin
+
           // 不等于选作题的原因-选作题内部标题有一行内容的高度
           switch(question.questionType) {
               case 'compositionLanguage':
@@ -439,9 +445,9 @@ export default {
 
       let parameter = {
         availableRow:availableRow,
-        height:question_height,
+        height:question_height < rowHeight ? 0 : question_height,
         pagination:question_height >= question.height ? false :
-          question_height < heightTitle ? false: true,
+          question_height < heightTitle ? false: question_height < rowHeight ? false : true,
           MarginHeight:MarginHeight,
           rowHeight:rowHeight
       }

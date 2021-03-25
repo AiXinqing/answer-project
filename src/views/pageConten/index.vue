@@ -377,7 +377,6 @@ export default {
       })
 
       if(currentPage.height){
-
         results.push(currentPage.rects)
       }
 
