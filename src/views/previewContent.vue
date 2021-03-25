@@ -81,6 +81,7 @@ import optionalQuestion from './questionContent/_optionalQuestion' // 选作题
 import compositionEnglish from './questionContent/_compositionEnglish' // 作文英语
 import compositionLanguage from './questionContent/_compositionLanguage' // 作文语文
 import NonRresponseArea from './questionContent/_NonRresponseAreaContent' // 非作答
+import { URL } from '../utils/config.js'
 
 export default {
   components: {
@@ -466,11 +467,14 @@ export default {
             background: 'rgba(0, 0, 0, 0.7)'
           })
           htmlText = document.documentElement.outerHTML
-          this.$http.post('/Assembly/AnswerCard/DynamicHtmlToStaticHtml',
-              qs.stringify({'htmlText':htmlText,'AnswerCardName':this.titleVal})
+          this.$http.post('/FileUpLoad/SaveHtml',
+              qs.stringify({'htmlText':htmlText,'AnswerCardName':this.titleVal}),
+              {
+                baseURL: URL.SERVICE_UPLOAD_PICTURE,
+              }
               ).then(({data}) => {
                 if(data.ReturnCode == 9998){ // http://localhost:60044
-                  window.location.href = `/Assembly/AnswerCard/HtmlToPdf?htmlName=${data.ReturnInfo}&AnswerCardName=${this.titleVal}&PageSize=${this.pageSize}&filename=${this.titleVal}`
+                  window.location.href = `/Assembly/AnswerCard/DownLoadAnswerCard?htmlUrl=${data.ReturnInfo}&AnswerCardName=${this.titleVal}&PageSize=${this.pageSize}`
                   loading.close()
                 }
               })
