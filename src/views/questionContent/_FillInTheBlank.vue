@@ -116,6 +116,10 @@ export default {
     ...mapState('page', ['pageData']),
     ...mapGetters('page', ['page_width']),
 
+    airStr(){
+      return this.previewContent ? 3 : 4
+    },
+
     pageWidth () {
       return this.previewWidth == 0 ? this.page_width - 23 : this.previewWidth - 63
     },
@@ -152,7 +156,8 @@ export default {
             let li3 = !topic.spaceNum || topic.spaceNum == 1 ? topic.topic : ''
             spanBox = `${li3}`
           }
-          let numLong = (spanBox.length - sLeng) * 2 + 4
+          // + this.airStr
+          let numLong = (spanBox.length - sLeng) * 2 + this.airStr
           let spaceStr = ''
           for(let x = 0; x < this.strBox.length - numLong ;x++){
             spaceStr +=  this.strBox[x]
