@@ -3,7 +3,7 @@
     <div
       class="question-title"
       ref="tinyeditor"
-      v-if="data.first && data.borderTop == undefined"
+      v-if="data.first && data.borderTop == undefined && !data.segmented"
       :style="{'height':maxHeight + 'px'}"
     >
       <tiny-vue class="title-span"
@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="answer_question_box composition_box">
-      <template v-if="data.first && data.borderTop == undefined">
+      <template v-if="data.first && data.borderTop == undefined && !data.segmented">
         <div class="Language_item_title">
           <span>{{contentData.topic}}.</span>
         </div>
@@ -58,12 +58,12 @@
               version="1.1"
               height="30"
               v-show="
-                /(^[1-9]\d*$)/.test((i * data.lattice + a + data.superiorGrid) / 100) &&
+                /(^[1-9]\d*$)/.test((i * data.lattice + a + superiorGrid) / 100) &&
                 contentData.mark == '2'
               "
             >
               <text x="0" y="15" style="font-size:6px">
-                {{ i * data.lattice + (a += 1) + data.superiorGrid - 1 }}字
+                {{ i * data.lattice + (a += 1) + superiorGrid - 1 }}字
               </text>
             </svg>
 
@@ -72,7 +72,7 @@
               version="1.1"
               height="30"
               v-show="
-                (i * data.lattice + (a += 1) + data.superiorGrid - 1) == contentData.minWordCount &&
+                (i * data.lattice + (a += 1) + superiorGrid - 1) == contentData.minWordCount &&
                 contentData.mark == '1'
               "
             >
@@ -142,13 +142,25 @@ export default {
         borderTop,
         rowHeight,
         rowTitle,
+        segmentedArr,
+        segmented,
+        totalRow,
       } = this.data
       let row = 0
       if (first && borderTop == undefined) {
         row = Math.floor((castHeight - MarginHeight - heightTitle - rowTitle) / rowHeight)
       } else {
         row = Math.floor(castHeight / rowHeight)
+        if(segmentedArr.length - 1 == segmented){
+          row = totalRow
+          segmentedArr.forEach((num,i) => {
+            if(i != segmented){
+              row -= num
+            }
+          })
+        }
       }
+
       let Arr = []
       for (let i = 1; i <= row; i++) {
         Arr.push(i)
@@ -163,6 +175,18 @@ export default {
       }
       return Arr
     },
+    superiorGrid(){
+      const {segmentedArr,lattice,segmented} = this.data
+      let nums = 0
+      // 解析格子总数
+      for(let i = 1 ; i <= segmentedArr.length;i++){
+        if(i <= segmented){
+          nums += segmentedArr[i - 1]
+        }
+      }
+
+      return nums * lattice
+    }
   },
   watch: {
     questionData: {

@@ -168,7 +168,7 @@ export default {
           }
 
           let height = rect.height
-          let curRect = this.preliminaryQuestion(rect, avalibleHeight)
+          let curRect = this.preliminaryQuestion(rect, avalibleHeight,rect.first,segmented)
 
           // 是否分割当前题型
           if(curRect.pagination){
@@ -216,7 +216,7 @@ export default {
                 superiorGrid:superiorGrid
               }
               height += this.difference
-              segmented += 1
+              // segmented += 1
             }
 
             if(rect.questionType == 'answerQuestion' && rect.orderFirst){
@@ -242,8 +242,8 @@ export default {
               }
             }
 
-            let curRects = this.preliminaryQuestion(rect, avalibleHeight,backup.first,segmented)
             segmented += 1
+            let curRects = this.preliminaryQuestion(rect, avalibleHeight,backup.first,segmented)
 
             segmentedArr.push(curRects.availableRow)
             if(rect.showData && rect.showData.length){
@@ -384,17 +384,17 @@ export default {
       return results
     },
 
-    preliminaryQuestion(question,avalibleHeight,initial = true,segmented = 0){
+    preliminaryQuestion(question,avalibleHeight,initial = true,segmented){
       // 变量
       const { MarginHeight,heightTitle,rowHeight } = question
 
       // 边框高度 剩余内容
-      let margin = initial ? MarginHeight + heightTitle : MarginHeight
+      let margin = initial  ? MarginHeight + heightTitle : MarginHeight
       let RemainingHeight
 
       switch(question.questionType){
         case 'compositionLanguage':
-          RemainingHeight = question.first && segmented == 0 ?  avalibleHeight - margin - question.rowTitle : avalibleHeight - margin
+          RemainingHeight = question.first && segmented == 0 ?  avalibleHeight - margin - question.rowTitle : avalibleHeight - MarginHeight
           break;
         default:
           RemainingHeight = avalibleHeight - margin
@@ -402,8 +402,6 @@ export default {
 
       // 剩余可容纳行数
       let availableRow = Math.floor(RemainingHeight / rowHeight)
-      console.log(availableRow)
-
 
       //题型高度
       let question_height = availableRow * rowHeight + margin
