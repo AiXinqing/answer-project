@@ -20,7 +20,7 @@ const routes = [{
   {
     // 阅卷
     path: '/exam',
-    name: 'preview',
+    name: 'exam',
     component:() => import('@/views/exam/')
   }
 ]
