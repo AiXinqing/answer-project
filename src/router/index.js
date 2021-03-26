@@ -15,13 +15,14 @@ const routes = [{
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import( /* webpackChunkName: "about" */ '@/views/answerCard/previewContent.vue')
+    component: () => import('@/views/answerCard/previewContent.vue')
   },
   {
     // 阅卷
     path: '/exam',
     name: 'exam',
-    component:() => import('@/views/exam/')
+    component: () => import('@/views/exam/'),
+    children:[]
   }
 ]
 

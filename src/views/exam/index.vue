@@ -1,6 +1,7 @@
 <template>
-  <div>
-    df
+  <div class="exam_content">
+    <div class="dorm-head-nav"></div>
+    <router-view/>
   </div>
 </template>
 
