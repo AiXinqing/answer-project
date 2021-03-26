@@ -1,5 +1,6 @@
 <template>
   <div class="NonRresponseArea_box"
+    :class="{'active':previewIs}"
     :style="{
       'height':questionData.castHeight + 'px'
     }"
@@ -30,7 +31,11 @@ export default {
     questionData: {
       type: Object,
       default: () => { }
-    }
+    },
+    previewIs: {
+      type: Boolean,
+      default: false
+    },
   },
   data () {
     return {
@@ -79,10 +84,14 @@ export default {
   border: 1px solid #888;
   background: #ddd;
   min-height: 43px;
-  width: 100%;
+  width: calc(100% - 1px);
   display: flex;
   align-items:center;
   position: relative;
+
+  &.active{
+    width: calc(100% - 18px);
+  }
 
   &:hover {
     .question_editOrDel {
