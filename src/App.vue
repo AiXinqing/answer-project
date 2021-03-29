@@ -15,9 +15,8 @@ export default {
     },
 
     down() {
-      console.log(this.$route)
       return this.$route.query.down ? 1 :
-        this.$route.name == 'exam' ? 1 : 0
+        this.$route.name != '/' ? 1 : 0
     }
   },
 }
