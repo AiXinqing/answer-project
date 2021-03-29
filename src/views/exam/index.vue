@@ -38,9 +38,12 @@
   @import '~@/assets/css/variables.less';
   .dorm_head_nav{
     display: flex;
-    height: 60px;
-    line-height: 60px;
-    background-color: #ddd;
+    height: 59px;
+    line-height: 59px;
+    background-color: #fff;
+    box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+    -webkit-box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+    border: 1px solid #ebeef5;
 
     .nav_logo{
       flex-shrink:0;
