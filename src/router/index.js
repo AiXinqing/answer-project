@@ -2,6 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '@/views/answerCard/'
 
+// 阅卷分析
+import examHome from '@/views/exam/examContent/'
+
 Vue.use(VueRouter)
 
 const routes = [{
@@ -12,17 +15,20 @@ const routes = [{
   {
     path: '/preview',
     name: 'preview',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import('@/views/answerCard/previewContent.vue')
   },
   {
     // 阅卷
     path: '/exam',
     name: 'exam',
-    component: () => import('@/views/exam/'),
-    children:[]
+    component: () => import('@/views/exam'),
+    children: [
+      {
+          path: '/',
+          name: 'examHome',
+          component: examHome,
+      },
+    ]
   }
 ]
 
