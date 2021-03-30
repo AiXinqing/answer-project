@@ -36,13 +36,14 @@
 
 <style lang="less">
   @import '~@/assets/css/variables.less';
+  .exam_content{
+    height: calc(100% - 50px);
+  }
   .dorm_head_nav{
     display: flex;
-    height: 59px;
-    line-height: 59px;
+    height: 39px;
+    line-height: 39px;
     background-color: #fff;
-    box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
-    -webkit-box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
     border: 1px solid #ebeef5;
 
     .nav_logo{
@@ -55,7 +56,6 @@
       flex-shrink:1;
 
       a{
-
         &.router-link-active{
           span{
             color: @font-303;
