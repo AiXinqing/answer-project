@@ -1,7 +1,7 @@
 export const API_VERSION = 'v1'
 
 let BASEURL = 'http://localhost:60044'
-
+console.log(process.env.NODE_ENV)
 if(process.env.NODE_ENV === 'development'){
     BASEURL = 'http://192.168.0.54:8094'
 }
