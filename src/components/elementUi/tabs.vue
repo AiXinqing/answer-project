@@ -5,7 +5,7 @@
       :key="index"
       :label="item.label"
       :name="item.name"
-    >{{item.label}}
+    >
       <slot></slot>
     </el-tab-pane>
   </el-tabs>
