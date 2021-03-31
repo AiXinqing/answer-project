@@ -4,6 +4,9 @@ import Home from '@/views/answerCard/'
 
 // 阅卷分析
 import examHome from '@/views/exam/examContent/'
+import classAnalysis from '@/views/exam/examContent/classAnalysis'
+import schoolAnalysis from '@/views/exam/examContent/schoolAnalysis'
+import jointExam from '@/views/exam/examContent/jointExamAnalysis'
 
 Vue.use(VueRouter)
 
@@ -27,6 +30,21 @@ const routes = [{
           path: '/',
           name: 'examHome',
           component: examHome,
+      },
+      {
+          path: '/classAnalysis',
+          name: 'classAnalysis',
+          component: classAnalysis,
+      },
+      {
+          path: '/schoolAnalysis',
+          name: 'schoolAnalysis',
+          component: schoolAnalysis,
+      },
+      {
+          path: '/jointExam',
+          name: 'jointExam',
+          component: jointExam,
       },
     ]
   }
