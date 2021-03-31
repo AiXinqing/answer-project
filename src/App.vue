@@ -16,7 +16,7 @@ export default {
 
     down() {
       return this.$route.query.down ? 1 :
-        this.$route.name != '/' ? 1 : 0
+        this.$route.name != '/' && this.$route.name != 'Home' && this.$route.name != 'preview' ? 1 : 0
     }
   },
 }
