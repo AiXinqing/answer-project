@@ -6,6 +6,7 @@ import {
 import HjDialog from './elementUi/dialog.vue'
 import HjButton from './elementUi/button'
 import HjSelect from './elementUi/select'
+import HjTabs from './elementUi/tabs'
 // import quillEditor from './quillEditor'
 
 
@@ -21,6 +22,7 @@ export default {
     Vue.component('hj-dialog', HjDialog)
     Vue.component('hj-button', HjButton)
     Vue.component('hj-select', HjSelect)
+    Vue.component('hj-tabs', HjTabs)
     // Vue.component('quill-editor', quillEditor)
 
   }
