@@ -27,24 +27,24 @@ const routes = [{
     component: () => import('@/views/exam'),
     children: [
       {
-          path: '/',
-          name: 'examHome',
-          component: examHome,
+        path: '/',
+        name: 'examHome',
+        component: examHome,
       },
       {
-          path: '/classAnalysis',
-          name: 'classAnalysis',
-          component: classAnalysis,
+        path: '/classAnalysis',
+        name: 'classAnalysis',
+        component: classAnalysis,
       },
       {
-          path: '/schoolAnalysis',
-          name: 'schoolAnalysis',
-          component: schoolAnalysis,
+        path: '/schoolAnalysis',
+        name: 'schoolAnalysis',
+        component: schoolAnalysis,
       },
       {
-          path: '/jointExam',
-          name: 'jointExam',
-          component: jointExam,
+        path: '/jointExam',
+        name: 'jointExam',
+        component: jointExam,
       },
     ]
   }
