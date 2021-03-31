@@ -54,7 +54,8 @@
 <style lang="less">
   @import '~@/assets/css/variables.less';
   .exam_content{
-    // height: calc(100% - 50px);
+    height: calc(100% - 65px);
+
     .head_wapper{
       background-color: #fff;
       width: 100%;
@@ -79,8 +80,14 @@
     .nav_menu{
       width: 100%;
       flex-shrink:1;
+      display: flex;
 
       a{
+        flex-shrink:1;
+        margin: 0 10px;
+        width: 100%;
+        text-align: center;
+
         &.router-link-active{
           span{
             color: @mainFont;
