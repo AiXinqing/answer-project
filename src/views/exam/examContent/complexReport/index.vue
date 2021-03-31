@@ -33,6 +33,5 @@
     margin: 5px;
     transform: translateX(-50%);
     height: 100%;
-    background: #fff;
   }
 </style>

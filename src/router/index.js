@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '@/views/answerCard/'
 
 // 阅卷分析
-import examHome from '@/views/exam/examContent/'
+import examHome from '@/views/exam/examContent/complexReport'
 import classAnalysis from '@/views/exam/examContent/classAnalysis'
 import schoolAnalysis from '@/views/exam/examContent/schoolAnalysis'
 import jointExam from '@/views/exam/examContent/jointExamAnalysis'
