@@ -50,5 +50,13 @@
   padding: 0 0;
   margin: 0 5px 0 15px;
 }
+.el-tabs__header{
+  margin:  0 0
+}
+.el-tabs__nav-wrap{
+  &::after{
+    height: 0;
+  }
+}
 
 </style>
