@@ -23,6 +23,7 @@ export default {
 </script>
 
 <style lang="less">
+@import '~@/assets/css/variables.less';
 .hj-button {
   display: inline-block;
 }
@@ -36,14 +37,14 @@ export default {
   background-size: 14px;
   background-repeat: no-repeat;
   background-position: 8px center;
-  border: 1px solid #1ab394;
-  color: #1ab394;
+  border: 1px solid @main;
+  color: @mainFont;
 }
 .el-button--function:focus,
 .el-button--function:hover {
-  color: #1ab394;
-  border-color: #1ab394;
-  background-color: #d1f0ea;
+  color: @mainFont;
+  border-color: @mainFont;
+  background-color: @main;
 }
 
 /* 搜索按钮 */
@@ -53,15 +54,15 @@ export default {
   background-size: 14px;
   background-repeat: no-repeat;
   background-position: 14px center;
-  border: 1px solid #1ab394;
-  color: white;
-  background-color: #1ab394;
+  border: 1px solid @mainFont;
+  color: @white;
+  background-color: @main;
 }
 .el-button--search:focus,
 .el-button--search:hover {
-  color: white;
-  border-color: #16957b;
-  background-color: #16957b;
+  color: @white;
+  border-color: @mainFont;
+  background-color: @main;
 }
 /* 确定按钮 */
 .el-button--confirm {
@@ -69,41 +70,41 @@ export default {
   height: 30px;
   line-height: 30px;
   width: 60px;
-  border: 1px solid #1ab394;
-  color: white;
-  background-color: #1ab394;
+  border: 1px solid @mainFont;
+  color: @white;
+  background-color: @main;
 }
 .el-button--confirm:focus,
 .el-button--confirm:hover {
-  color: white;
-  border-color: #16957b;
-  background-color: #16957b;
+  color: @white;
+  border-color: @mainFont;
+  background-color: @main;
 }
 /* 透明按钮 */
 .el-button--transparent {
   padding: 6px 13px;
-  border: 1px solid #e6e6e6;
-  color: #333;
-  background-color: #fff;
+  border: 1px solid @font-909;
+  color: @font-333;
+  background-color: @white;
 }
 .el-button--transparent:focus,
 .el-button--transparent:hover {
-  color: #333;
-  border-color: #e6e6e6;
-  background-color: #fff;
+  color: @font-333;
+  border-color: @font-909;
+  background-color: @white;
 }
 /*删除按钮 */
 .el-button--del {
   padding: 6px 13px;
   border: 1px solid #f56262;
   color: #f56262;
-  background-color: #fff;
+  background-color: @white;
 }
 .el-button--del:focus,
 .el-button--del:hover {
   color: #f56262;
   border-color: #f56262;
-  background-color: #fff; //del
+  background-color: @white; //del
 }
 /* 取消按钮 */
 .el-button--cancel {
@@ -112,14 +113,14 @@ export default {
   line-height:30px;
   width: 60px;
   border: 1px solid transparent;
-  color: #333;
-  background-color: #f1f1f1;
+  color: @font-333;
+  background-color: @font-f1f1;
 }
 .el-button--cancel:focus,
 .el-button--cancel:hover {
-  color: #333;
-  border-color: #cccccc;
-  background-color: #cccccc;
+  color: @font-333;
+  border-color: @font-909;
+  background-color: @font-909;
 }
 /* 返回按钮 */
 .el-button--return {
@@ -128,29 +129,29 @@ export default {
   background-size: 14px;
   background-repeat: no-repeat;
   background-position: 9px center;
-  border: 1px solid #1ab394;
-  color: #1ab394;
+  border: 1px solid @mainFont;
+  color: @mainFont;
 }
 .el-button--return:focus,
 .el-button--return:hover {
-  color: #1ab394;
-  border-color: #1ab394;
-  background-color: #d1f0ea;
+  color: @mainFont;
+  border-color: @mainFont;
+  background-color: @mainHover;
 }
 /* 删除按钮 */
 .el-button--delete {
   padding: 6px 18px;
   border: 1px solid transparent;
-  color: #ffffff;
+  color:  @white;
   background-color: #fc6969;
 }
 .el-button--delete:focus,
 .el-button--delete:hover {
-  color: #ffffff;
+  color:  @white;
   border-color: #d65555;
   background-color: #d65555;
 }
 .el-checkbox__inner:hover {
-  border-color: #1ab394;
+  border-color: @mainFont;
 }
 </style>

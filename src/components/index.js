@@ -9,6 +9,8 @@ import HjSelect from './elementUi/select'
 import HjTabs from './elementUi/tabs'
 import stretch from './stretch'
 import checkbox from './elementUi/checkbox'
+import input from './elementUi/input'
+import examButton from './elementUi/examButton'
 
 
 export default {
@@ -26,6 +28,8 @@ export default {
     Vue.component('hj-tabs', HjTabs)
     Vue.component('hj-stretch', stretch)
     Vue.component('hj-checkbox', checkbox)
+    Vue.component('hj-input', input)
+    Vue.component('exam-button', examButton)
     // Vue.component('quill-editor', quillEditor)
 
   }
