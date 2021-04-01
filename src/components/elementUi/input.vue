@@ -1,5 +1,5 @@
 <template>
-    <el-input v-bind="$attrs" v-on="$listeners" class="hj-input" v-bind:class="{'has-error':error}"></el-input>
+    <el-input v-bind="$attrs" v-on="$listeners" class="hj-input" v-bind:class="{'has-error':error}"><slot></slot></el-input>
 </template>
 
 <script>
@@ -27,10 +27,6 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>
 
 <style lang="less">
   @import '~@/assets/css/variables.less';
