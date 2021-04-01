@@ -43,6 +43,7 @@
       width: 100%;
       padding: 0 8px;
       line-height: 26px;
+      font-size: 14px;
   }
   .hj-input.el-input input:focus {
       border-color: @mainFont;
