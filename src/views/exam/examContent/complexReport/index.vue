@@ -76,5 +76,8 @@
   }
   .el-tabs__content{
     height: 100%;
+    &>div{
+      height: 100%;
+    }
   }
 </style>
