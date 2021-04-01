@@ -68,6 +68,13 @@
     left: 50%;
     margin: 5px;
     transform: translateX(-50%);
+    height: calc(100% - 40px);
+
+    &>div{
+      height: 100%;
+    }
+  }
+  .el-tabs__content{
     height: 100%;
   }
 </style>
