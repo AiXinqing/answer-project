@@ -16,13 +16,15 @@
   import classGrades from './classGrades'
   import question from './question'
   import gradesStatistics from './gradesStatistics'
+  import ranking from './ranking'
   export default {
     components: {
       gradebook,
       subTable,
       classGrades,
       question,
-      gradesStatistics
+      gradesStatistics,
+      ranking
     },
     data() {
       return {
