@@ -14,7 +14,6 @@ var service = axios.create({
 
 // 添加请求拦截器
 service.interceptors.request.use(config => {
-  console.log(config)
     // 在发送请求之前做什么
     // console.log(process.env.NODE_ENV)
 
