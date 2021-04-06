@@ -12,6 +12,7 @@ import checkbox from './elementUi/checkbox'
 import input from './elementUi/input'
 import examButton from './elementUi/examButton'
 import table from './elementUi/table'
+import examTable from './elementUi/table/index'
 
 
 export default {
@@ -32,6 +33,7 @@ export default {
     Vue.component('hj-input', input)
     Vue.component('exam-button', examButton)
     Vue.component('hj-table', table)
+    Vue.component('exam-table', examTable)
     // Vue.component('quill-editor', quillEditor)
 
   }
