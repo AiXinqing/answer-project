@@ -13,10 +13,12 @@
 <script>
   import gradebook from './gradebook'
   import subTable from './subTable'
+  import classGrades from './classGrades'
   export default {
     components: {
       gradebook,
-      subTable
+      subTable,
+      classGrades
     },
     data() {
       return {
