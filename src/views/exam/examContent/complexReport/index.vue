@@ -12,9 +12,11 @@
 
 <script>
   import gradebook from './gradebook'
+  import subTable from './subTable'
   export default {
     components: {
       gradebook,
+      subTable
     },
     data() {
       return {
