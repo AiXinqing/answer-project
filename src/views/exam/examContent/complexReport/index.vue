@@ -1,7 +1,7 @@
 <template>
   <div class="exam_wapper">
     <hj-tabs
-      :v-model="activeName"
+      v-model="activeName"
       :tab-pane="tabPaneBox"
       @tab-click="handleClick"
     >

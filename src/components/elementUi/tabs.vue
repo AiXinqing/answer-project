@@ -1,5 +1,5 @@
 <template>
-  <el-tabs v-bind="$attrs" v-on="$listeners" v-model="vModel">
+  <el-tabs v-bind="$attrs" v-on="$listeners">
     <el-tab-pane
       v-for="(item,index) in tabPane"
       :key="index"
@@ -18,14 +18,6 @@
         type: Array,
         default: () => []
       },
-      activeName:{
-        type:String,
-        default:''
-      },
-      vModel:{
-        type:String,
-        default:''
-      }
     },
   }
 </script>
