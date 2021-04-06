@@ -105,7 +105,8 @@ export default {
       layout: this.propLayout.column,
       titleInfo:TITLE_SUDENTINFO,
       color:'#00B494',
-      activeColor:'#666'
+      activeColor:'#666',
+      titleHeight:40,
     }
   },
   computed: {
@@ -159,12 +160,15 @@ export default {
       }
       this.pageLayout_change(obj)
 
+      if(this.pageData[0] != undefined){
+        this.titleHeight = this.pageData[0].heightTitle
+      }
       const TestData = {
         id: 'AnswerSheet',
-        height: 353,
+        contentHeight: 313,
         questionType: 'AnswerSheetTitle',
         MarginHeight: 0,
-        heightTitle: 0,
+        heightTitle: this.titleHeight,
         content: {
           textVal: this.textVal,
           titleInfo: this.titleInfo,

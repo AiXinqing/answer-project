@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div :class="['textVal-style',{active:previewIs}]" v-if="previewIs" v-html="data.textVal == '' ? '请输入答题卡标题' : data.textVal">
+    <div :class="['textVal-style',{active:previewIs}]" v-if="previewIs" v-html="data.textVal == '' ? '请输入答题卡标题' : data.textVal" :style="{'height':heightTitle+'px'}">
     </div>
-    <hj-textarea v-else  :textarea-data="data.textVal" />
+    <hj-textarea v-else  :textarea-data="data.textVal" :style="{'height':heightTitle+'px'}" />
 
     <student-info
       @hanldeStudent="hanldeStudent"
@@ -130,7 +130,8 @@ export default {
       studentInfoList: [],
       data:{},
       titleRows:this.questionData.content.titleRows,
-      title_percautions:PRECAUTIONS
+      title_percautions:PRECAUTIONS,
+      heightTitle:40
     }
   },
   computed: {
@@ -181,7 +182,9 @@ export default {
         this.data = {
           ...this.questionData.content
         }
+
         this.titleRows = this.questionData.content.titleRows
+        this.heightTitle = this.questionData.heightTitle
       }
     }
   },
@@ -316,7 +319,6 @@ export default {
   font-size: 23px;
   border-color: @font-888;
   color: @font-333;
-  max-height: 40px;
 }
 table tr td div:last-child {
   margin-bottom: 6px;
@@ -360,7 +362,6 @@ table tr td div:last-child {
   padding: 0 0 !important;
   border-style: dashed !important;
   border-color: @font-888 !important;
-  height: 65px;
 }
 .table_box td:first-child {
   height: 186px;
@@ -373,6 +374,11 @@ table tr td div:last-child {
   &.active {
     line-height: 40px;
     height: auto;
+  }
+}
+.el-textarea.el-input--medium{
+  textarea.el-textarea__inner{
+    height: 100% !important;
   }
 }
 </style>

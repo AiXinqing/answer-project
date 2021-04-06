@@ -241,6 +241,11 @@ const getters = {
     return state.pageData.map((question) => {
 
       switch (question.questionType) {
+        case 'AnswerSheetTitle':
+          return {
+              height:question.contentHeight + question.heightTitle,
+              ...question, content: { ...question.content, pageLayout:state.pageLayout }
+            }
         case  'ObjectiveQuestion':
           return question_objective(question, getters.page_width,state.pageLayout)
         case  'compositionLanguage':

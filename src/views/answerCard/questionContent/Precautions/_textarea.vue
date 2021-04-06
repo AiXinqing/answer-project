@@ -6,6 +6,7 @@
     v-model="textareaVal"
     @change="editPrecautionsTitile"
     resize="none"
+    id="inputs"
   />
 </template>
 
@@ -29,9 +30,13 @@ export default {
   methods: {
     ...mapMutations('page', ['pageData_edit']),
     editPrecautionsTitile(e) {
+      var long=(e.replace(/\n/g, '<br>').split('<br>')).length-1
+      let height = long * 40 + 40
+
       let answerTitle = this.pageData[0]
       this.pageData_edit({
         ...answerTitle,
+        heightTitle:height,
         content: {
           ...answerTitle.content,
           textVal: e.replace(/\n/g, '<br>'),
