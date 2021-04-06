@@ -42,7 +42,7 @@ export default {
 .el-dialog__header {
   text-align: center;
   padding: 10px 0;
-  background-color: @font-909;
+  // background-color: @main;
 }
 .el-dialog__headerbtn {
   top: 10px;

@@ -16,6 +16,7 @@
   import '../plugins/code/plugin.min.js'
   import '../plugins/mathjax/plugin.min.js'
   import '../plugins/mathjax/config.js'
+  import '../plugins/paste/plugin.min.js'
   import { URL } from '../../../utils/config.js'
 
 
@@ -41,7 +42,7 @@
     data() {
       return {
         editor: null,
-        toolbar:'fontsizeselect undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image  basicDateButton underscoreButton',
+        toolbar:'fontsizeselect undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image  basicDateButton underscoreButton paste',
         uploadMode : 0,
         editorId:new Date().getTime()
       }
@@ -69,13 +70,14 @@
     methods: {
       initTiny(){
         const self = this
+
         tinymce.init({
           selector:`#tinymce_${this.editorId}`,
           readonly:this.readonly,
           inline:true,
           toolbar: this.toolbar,
           fontsize_formats: '11px 12px 14px 16px 18px 24px 36px 48px',
-          plugins: 'image code charmap',
+          plugins: 'image code charmap paste',
           advlist_bullet_styles: "circle, square",
           content_style: "img {max-width:100%;}",
           autoresize_max_height: 20,
