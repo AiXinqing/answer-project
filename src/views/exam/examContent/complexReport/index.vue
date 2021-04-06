@@ -14,11 +14,13 @@
   import gradebook from './gradebook'
   import subTable from './subTable'
   import classGrades from './classGrades'
+  import question from './question'
   export default {
     components: {
       gradebook,
       subTable,
-      classGrades
+      classGrades,
+      question
     },
     data() {
       return {

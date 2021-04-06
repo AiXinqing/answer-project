@@ -8,7 +8,7 @@
     <div class="table_wapper">
       <div class="table_search">
         <div class="search_left is_active">
-          <span>得分率说明：优秀：90% - 100% 良好：80% - 100% 及格：60% - 100% 低分：0% - 30%</span>
+          <span>得分率说明：优秀：90% - 100% 良好：80% - 100% 及格：60% - 100% 低分：0% - 30%<a href="###" class="set_parameter">设置参数</a></span>
         </div>
         <div class="search_right">
           <exam-button type="primary">下载表格</exam-button>
@@ -162,6 +162,10 @@
     }
     .el_table_wapper{
       margin-top: 10px;
+    }
+    .set_parameter{
+      color: @main;
+      margin-left: 10px;
     }
   }
 </style>
