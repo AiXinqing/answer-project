@@ -596,6 +596,9 @@ export default {
       padding-top: 8px;
       padding-bottom: 6px;
     }
+    span{
+      font-size: 14px !important;
+    }
 
     // display: flex;
     margin: 0;
