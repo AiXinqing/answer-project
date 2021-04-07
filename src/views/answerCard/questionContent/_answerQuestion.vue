@@ -26,13 +26,13 @@
       :question="questionData"
       @height-resize="handleResize($event)"
       :style="{
-          'border-top':!data.orderFirst || !pageIndex ? '1px solid #888' : 'none',
-        }"
+        'border-top':!data.orderFirst || !pageIndex ? '1px solid #888' : 'none',
+      }"
     >
       <div
         class="content-info"
         :style="{
-            height: !data.orderFirst ? tinymceHeight - 2 + 'px' : tinymceHeight - 1 + 'px'}"
+          height: !data.orderFirst ? tinymceHeight - 2 + 'px' : tinymceHeight - 1 + 'px'}"
       >
       <!-- height: data.first && data.orderFirst  ? tinymceHeight + 8 + 'px' : tinymceHeight - 2 + 'px'}" -->
         <!-- 富文本编辑区 -->
@@ -488,13 +488,14 @@ export default {
     tinymceChangeFunc(obj){
       // 富文本参数
       const {val,tinyHeight,tinyId} = obj
+      let tinys = tinyHeight - 14
 
       const {id,height,castHeight,heightTitle,segmented,editorContent,MarginHeight,first,operatTinymce,rowHeightArr,segmentedArr,rowHeight,
               answerArrHeight,orderFirst} = this.questionData
       const index = this.pageData.findIndex(question => question.id == id)
 
-      let heights = orderFirst == 0 ? tinyHeight + heightTitle + MarginHeight : tinyHeight + MarginHeight
-      this.tinymceHeight = tinyHeight // 最大高度
+      let heights = orderFirst == 0 ? tinys + heightTitle + MarginHeight : tinys + MarginHeight
+      this.tinymceHeight = tinys // 最大高度
 
       // 更改富文本编辑后行高数组--------------------------------------------------
       let tinymcePList = document.querySelectorAll(`#${tinyId} p`)
@@ -592,7 +593,8 @@ export default {
   }
   .question_line {
     &:first-child{
-      margin-top: 8px;
+      padding-top: 8px;
+      padding-bottom: 6px;
     }
 
     // display: flex;
@@ -643,4 +645,5 @@ export default {
 .question-title:hover {
   border-color: @main;
 }
+
 </style>

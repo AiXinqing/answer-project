@@ -17,6 +17,7 @@
   import '../plugins/mathjax/plugin.min.js'
   import '../plugins/mathjax/config.js'
   import '../plugins/paste/plugin.min.js'
+  import '../plugins/powerpaste/plugin.min.js'
   import { URL } from '../../../utils/config.js'
 
 
@@ -84,6 +85,11 @@
           language: 'zh_CN',
           menubar: false,
           paste_data_images: true,
+          paste_retain_style_properties: "color",
+          paste_word_valid_elements: "table[width],tr,td[colspan|rowspan|width],th[colspan|rowspan|width],thead,tfoot,tbody,h1,h2,h3,h4,h5,img,p",
+          // powerpaste_word_import: 'propmt',// 参数可以是propmt, merge, clear，效果自行切换对比
+          // powerpaste_html_import: 'propmt',// propmt, merge, clear
+          // powerpaste_allow_local_images: true,
 
           setup: function(editor) {
               // 创建工具栏按钮
