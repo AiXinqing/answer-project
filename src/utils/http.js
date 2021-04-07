@@ -53,12 +53,12 @@ export function post(url, data = {}, deep = false) {
       }).then(response => {
           if (response.data.result.code !== 0) {
               if (response.data.result.code === 4001) {
-                let url = document.referrer;
-                  if(url.indexOf("localhost") == -1){
-                      window.location.href = url.replace('/AnswerCardWeb/#/exam', '/Manage/Login')
-                  }else{
-                      window.location.href = window.location.host + '/Manage/Login';
-                  }
+                // let url = document.referrer;
+                //   if(url.indexOf("localhost") == -1){
+                //       window.location.href = url.replace('/AnswerCardWeb/#/exam', '/Manage/Login')
+                //   }else{
+                //       window.location.href = window.location.host + '/Manage/Login';
+                //   }
               }else{
                 this.$message({
                   message: '操作失败：' + response.data.result.message,
@@ -99,12 +99,12 @@ export function fetch(url, params = {}) {
             .then(response => {
                 if (response.data.result.code !== 0) {
                     if (response.data.result.code === 4001) {
-                        let url = document.referrer;
-                            if(url.indexOf("localhost") == -1){
-                                window.location.href = url.replace('/AnswerCardWeb/#/exam', '/Manage/Login')
-                            }else{
-                                window.location.href = window.location.host + '/Manage/Login';
-                            }
+                        // let url = document.referrer;
+                        //     if(url.indexOf("localhost") == -1){
+                        //         window.location.href = url.replace('/AnswerCardWeb/#/exam', '/Manage/Login')
+                        //     }else{
+                        //         window.location.href = window.location.host + '/Manage/Login';
+                        //     }
                     }else{
                       this.$message({
                         message: '操作失败：' + response.data.result.message,
