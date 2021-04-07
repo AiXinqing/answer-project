@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '@/views/answerCard/'
-import { URL, getCookie } from '../utils/config'
+import axios from 'axios';
+import { URL } from '../utils/config'
 
 // 阅卷分析
 import examHome from '@/views/exam/examContent/complexReport'
@@ -57,20 +58,19 @@ const router = new VueRouter({
 })
 
 // router.beforeEach((to,from,next)=>{
-//   const localSessionID = getCookie('ExamEmpSessionID')
-//   const url = URL.SERVICE_CONTEXT_PATH +'Api/Common/UsloginBLL/TokenLogin?token=' + localSessionID
-
-//   fetch(url,{}).then((user) => {
-//     if (user.permit) {
+//   const url = URL.SERVICE_CONTEXT_PATH + 'Api/Common/UsloginBLL/JudgeLogin'
+//   axios.get(url).then((res) => {
+//     if (res.data.ResponseCode == 'Success') {
 //       next()
 //     } else {
-//       location.href = URL.SERVICE_CONTEXT_PATH + '/Manage/login'
+//       location.href = URL.SERVICE_CONTEXT_PATH + 'Manage/login'
 //       next()
 //     }
-//   }).catch(() => {
-//     location.href = URL.SERVICE_CONTEXT_PATH + '/Manage/login'
+//   }).catch(function () {
+//     location.href = URL.SERVICE_CONTEXT_PATH + 'Manage/login'
 //     next()
 //   })
+
 // })
 
 

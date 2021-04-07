@@ -91,37 +91,36 @@ export function fetch(url, params = {}) {
       params['version'] = API_VERSION
 
       let headers = getHeader()
-      console.log(headers)
         axios.get(url, {
-                params: params,
-                headers:headers
-            })
-            .then(response => {
-                if (response.data.result.code !== 0) {
-                    if (response.data.result.code === 4001) {
-                        // let url = document.referrer;
-                        //     if(url.indexOf("localhost") == -1){
-                        //         window.location.href = url.replace('/AnswerCardWeb/#/exam', '/Manage/Login')
-                        //     }else{
-                        //         window.location.href = window.location.host + '/Manage/Login';
-                        //     }
-                    }else{
-                      this.$message({
-                        message: '操作失败：' + response.data.result.message,
-                        type: 'warning'
-                      });
-                    }
-                    reject(response)
+          params: params,
+          headers:headers
+        })
+        .then(response => {
+            if (response.data.result.code !== 0) {
+                if (response.data.result.code === 4001) {
+                    // let url = document.referrer;
+                    //     if(url.indexOf("localhost") == -1){
+                    //         window.location.href = url.replace('/AnswerCardWeb/#/exam', '/Manage/Login')
+                    //     }else{
+                    //         window.location.href = window.location.host + '/Manage/Login';
+                    //     }
                 }else{
-                    resolve(response.data.result);
+                  this.$message({
+                    message: '操作失败：' + response.data.result.message,
+                    type: 'warning'
+                  });
                 }
-            }, err => {
-              this.$message({
-                message: '网络连接错误',
-                type: 'warning'
-              })
-              reject(err.response)
-            })
+                reject(response)
+            }else{
+                resolve(response.data.result);
+            }
+        }, err => {
+          this.$message({
+            message: '网络连接错误',
+            type: 'warning'
+          })
+          reject(err.response)
+        })
     })
 }
 
