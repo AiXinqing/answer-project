@@ -99,13 +99,7 @@
           paste_merge_formats: true,
 
           paste_postprocess: function(plugin, args) {
-            // console.log(plugin)
-            // console.log(args)
             args.node.childNodes.forEach(item => {
-              console.log(item.node)
-              // if(item){
-
-              // }
               item.setAttribute('class','question_line')
               item.removeAttribute('style')
               console.log(item.childNodes)

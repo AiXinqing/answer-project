@@ -91,15 +91,11 @@
           paste_remove_styles_if_webkit: true,
           paste_strip_class_attributes: true,
           paste_convert_word_fake_lists: false,
+          // extended_valid_elements:'ul li',
 
           paste_merge_formats: true,
-
-          // extended_valid_elements:'ul li',
           paste_postprocess: function(plugin, args) {
-            console.log(plugin)
-            console.log(args)
             args.node.childNodes.forEach(item =>{
-              console.log(item)
               item.setAttribute('class','question_line')
               item.removeAttribute('style')
             })
