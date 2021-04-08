@@ -107,6 +107,7 @@ export default {
       color:'#00B494',
       activeColor:'#666',
       titleHeight:40,
+      checkHeight:40,
     }
   },
   computed: {
@@ -165,10 +166,11 @@ export default {
       }
       const TestData = {
         id: 'AnswerSheet',
-        contentHeight: 313,
+        contentHeight: 273,
         questionType: 'AnswerSheetTitle',
         MarginHeight: 0,
         heightTitle: this.titleHeight,
+        checkHeight:this.checkHeight,
         content: {
           textVal: this.textVal,
           titleInfo: this.titleInfo,

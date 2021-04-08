@@ -34,6 +34,7 @@ export default {
   },
   computed: {
     ...mapState('page', ['pageData']),
+    ...mapState('page', ['pageLayout']),
   },
   methods: {
 
@@ -48,10 +49,19 @@ export default {
 
     },
     preCreateTitle () {
-
+      const {column,size} = this.pageLayout
       let cur = this.pageData[0]
+      let obj = {}
+      if(column == 3 && size == "A3"){
+        let long = this.studentTitle.filter(item => item.checked).length
+            long = Math.ceil(long / 3)
+        obj = {
+          checkHeight:long * 40
+        }
+      }
       this.pageData.splice(0,1,{
         ...cur,
+        ...obj,
         content:{
           ...cur.content,
           titleInfo:this.studentTitle

@@ -243,7 +243,7 @@ const getters = {
       switch (question.questionType) {
         case 'AnswerSheetTitle':
           return {
-              height:question.contentHeight + question.heightTitle,
+              height:question.contentHeight + question.heightTitle + question.checkHeight,
               ...question, content: { ...question.content, pageLayout:state.pageLayout }
             }
         case  'ObjectiveQuestion':
