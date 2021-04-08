@@ -81,17 +81,25 @@
           autoresize_max_height: 20,
           language: 'zh_CN',
           menubar: false,
-          paste_data_images: true,
+          paste_data_images: false,
           paste_retain_style_properties: "color",
           paste_webkit_styles: "color",
+          paste_enable_default_filters: true,
           paste_word_valid_elements: "table[width],tr,td[colspan|rowspan|width],th[colspan|rowspan|width],thead,tfoot,tbody,h1,h2,h3,h4,h5,img,p",
           paste_auto_cleanup_on_paste : true,
           paste_remove_styles: true,
           paste_remove_styles_if_webkit: true,
           paste_strip_class_attributes: true,
-          paste_merge_formats: false,
+          paste_convert_word_fake_lists: false,
+
+          paste_merge_formats: true,
+
+          // extended_valid_elements:'ul li',
           paste_postprocess: function(plugin, args) {
+            console.log(plugin)
+            console.log(args)
             args.node.childNodes.forEach(item =>{
+              console.log(item)
               item.setAttribute('class','question_line')
               item.removeAttribute('style')
             })
