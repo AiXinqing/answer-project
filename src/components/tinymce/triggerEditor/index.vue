@@ -102,7 +102,6 @@
             args.node.childNodes.forEach(item => {
               item.setAttribute('class','question_line')
               item.removeAttribute('style')
-              console.log(item.childNodes)
               args.content = item.childNodes
             })
           },

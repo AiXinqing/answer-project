@@ -172,74 +172,77 @@ export default {
     },
 
     editorDetail(){
-      const {editorContent,segmented,segmentedArr,first,id,MarginHeight,operatTinymce,rowHeight,height,rowHeightArr} = this.questionData
+      const {editorContent,segmented,segmentedArr,first,id,MarginHeight,operatTinymce,rowHeight,height,rowHeightArr,remainderHeight,heightTitle} = this.questionData
 
       // 判断是否进行过富文本编辑
       if(operatTinymce[segmented] == undefined){
         editorContent[segmented] = this.questionInfo.data
         rowHeightArr[segmented] = this.questionInfo.Arr
+
         this.pageData_editorStr({
           id:id,
           content:editorContent,
           rowHeightArr:rowHeightArr,
         })
       }else{
+        let maxLong = first ? segmentedArr[segmented] != undefined ? segmentedArr[segmented] : Math.floor((remainderHeight - 20 - MarginHeight - heightTitle) / rowHeight)
+            : Math.floor((this.page_height - 20 - MarginHeight) / rowHeight)
+        // 差值
+        let difference = 0
+
+        // 差值长度
+        let differenceLong = 0
+
+        // 数组中-当前位置之后一位
+        let nextSegmented = segmented + 1
+        // 溢出行高
+        let overflowArr = []
+
+        // 内容高度小于内容框高度差值
+        let impairment = 0
+        let impairmentLong = 0
+        let currentContentArr = []
+        let accommodateHeight = maxLong * rowHeight
+            accommodateHeight = accommodateHeight + MarginHeight
+            currentContentArr = this.convertArray(editorContent[segmented]).filter(item => item.indexOf(this.strP) != -1)
+            // 当前富文本编辑后内容行高数组与容纳高度差值
+
+            if(rowHeightArr[segmented] != undefined){
+              rowHeightArr[segmented].forEach((val,i) => {
+                  if(rowHeightArr[segmented].length == i){
+                    difference += (val - 5 )
+                  }else{
+                    difference += val
+                  }
+                  differenceLong = difference > accommodateHeight ? differenceLong + 1 : differenceLong + 0
+              })
+            }
+            // 富文本字符串
+
+            let tinymceContent =''
+            let extraContent = ''
+            let overflowHeight = ''
+
         if(editorContent[segmented] != undefined){
-          let currentContentArr = []
-          // 初始参数----------------------------------------------------------------------------------------
-          // 当前内容框能容纳高度
-          let maxLong = first ? segmentedArr[segmented]:Math.floor((this.page_height - 20 - MarginHeight) / rowHeight)
-          let accommodateHeight = maxLong * rowHeight
-
-          // 差值
-          let difference = 0
-
-          // 差值长度
-          let differenceLong = 0
-
-          // 数组中-当前位置之后一位
-          let nextSegmented = segmented + 1
-          // 溢出行高
-          let overflowArr = []
-
-          // 内容高度小于内容框高度差值
-          let impairment = 0
-          let impairmentLong = 0
-
           // 当前内容数组
-          currentContentArr = this.convertArray(editorContent[segmented]).filter(item => item.indexOf(this.strP) != -1)
-
-          // 当前富文本编辑后内容行高数组与容纳高度差值
-          if(rowHeightArr[segmented] != undefined){
-
-            rowHeightArr[segmented].forEach(val => {
-                difference += val
-                differenceLong = difference > accommodateHeight ? differenceLong + 1 : differenceLong + 0
-            })
-          }
-          // 初始参数----------------------------------------------------------------------------------------
-
-          // 富文本字符串
-
-          let tinymceContent =''
-          let extraContent = ''
-          let overflowHeight = ''
 
           if(difference > accommodateHeight){
             //高度溢出
-            if(differenceLong > 0) {
-                // 截取溢出的高度
-                for(let a = 0; a < currentContentArr.length - differenceLong;a++){
+            if(differenceLong > 0){
+              // 截取溢出的高度
+              let Remaining = currentContentArr.length - differenceLong
+                for(let a = 0; a < Remaining; a++){
                   if(currentContentArr[a] != undefined){
                     tinymceContent += currentContentArr[a]
                   }
                 }
+
                 // 赋值
-                // editorContent[segmented] = tinymceContent
+                editorContent[segmented] = tinymceContent
                 editorContent.splice(segmented,1,tinymceContent)
 
                 // 溢出内容
-                for(let i = currentContentArr.length - differenceLong; i < currentContentArr.length;i++){
+                for(let i = Remaining; i < currentContentArr.length;i++){
                   if(currentContentArr[i] != undefined){
                     extraContent += currentContentArr[i]
                   }
@@ -250,6 +253,7 @@ export default {
                 }else{
                   editorContent[nextSegmented] = extraContent + editorContent[nextSegmented]
                 }
+
                 // 富文本编辑标识
                 operatTinymce[nextSegmented] = 1
                 // 截取溢出行高追加进下一个数组
@@ -260,7 +264,6 @@ export default {
                   overflowHeight += val
                 })
 
-
                 if(rowHeightArr[nextSegmented] != undefined){
                   rowHeightArr[nextSegmented] = overflowArr.concat(rowHeightArr[nextSegmented])
                 }else {
@@ -268,7 +271,6 @@ export default {
                 }
                 // 更新行高数组
                 rowHeightArr[segmented] = rowHeightArr[segmented].slice(0, rowHeightArr[segmented].length - differenceLong)
-
                 // 更新数组
                 this.pageData_editorStr({
                   id:id,
@@ -278,59 +280,62 @@ export default {
                   operatTinymce:operatTinymce
                 })
             }
-
-          }else{
+          }else if(difference < accommodateHeight){
             //内容低于内容高度
-           //内容框高度 - 内容
-              impairment = accommodateHeight - difference
+            //内容框高度 - 内容
 
-              if(rowHeightArr[nextSegmented] != undefined && impairment > 0){
+            impairment = accommodateHeight - difference
 
-                rowHeightArr[nextSegmented].forEach(val => {
-                    impairment -= val
-                    impairmentLong = impairment >= 0 ? impairmentLong + 1 : impairmentLong + 0
+            if(rowHeightArr[nextSegmented] != undefined && impairment > 0){
+
+              rowHeightArr[nextSegmented].forEach(val => {
+                  impairment -= val
+                  impairmentLong = impairment >= 0 ? impairmentLong + 1 : impairmentLong + 0
+              })
+            }
+
+            if(impairmentLong > 0 && segmented < editorContent.length){
+              if(editorContent[nextSegmented] != undefined){
+
+                let nextContentArr = this.convertArray(editorContent[nextSegmented])
+
+                //追加差值
+                for(let a = 0; a < impairmentLong;a++){
+                  if(nextContentArr[a] != undefined){
+                    extraContent += nextContentArr[a]
+                  }
+                }
+                editorContent[segmented] += extraContent
+                rowHeightArr[segmented] = rowHeightArr[segmented].concat(rowHeightArr[nextSegmented].slice(0,impairmentLong))
+
+
+                //减去不给当前内容的字符
+                tinymceContent = ''
+                for(let i = impairmentLong; i < nextContentArr.length;i++){
+                  if(nextContentArr[i] != undefined){
+                    tinymceContent += nextContentArr[i]
+                  }
+                }
+
+                editorContent[nextSegmented] = tinymceContent
+                rowHeightArr[nextSegmented] = rowHeightArr[nextSegmented].slice(impairmentLong, rowHeightArr[nextSegmented].length)
+
+                operatTinymce[nextSegmented] = 1
+                // 更新数组
+                this.pageData_editorStr({
+                  id:id,
+                  content:editorContent,
+                  rowHeightArr:rowHeightArr,
+                  operatTinymce:operatTinymce
                 })
               }
+            }
 
-              if(impairmentLong > 0 && segmented < editorContent.length){
-                if(editorContent[nextSegmented] != undefined){
-
-                  let nextContentArr = this.convertArray(editorContent[nextSegmented])
-
-                  //追加差值
-                  for(let a = 0; a < impairmentLong;a++){
-                    if(nextContentArr[a] != undefined){
-                      extraContent += nextContentArr[a]
-                    }
-                  }
-                  editorContent[segmented] += extraContent
-                  rowHeightArr[segmented] = rowHeightArr[segmented].concat(rowHeightArr[nextSegmented].slice(0,impairmentLong))
-
-
-                  //减去不给当前内容的字符
-                  tinymceContent = ''
-                  for(let i = impairmentLong; i < nextContentArr.length;i++){
-                    if(nextContentArr[i] != undefined){
-                      tinymceContent += nextContentArr[i]
-                    }
-                  }
-
-                  editorContent[nextSegmented] = tinymceContent
-                  rowHeightArr[nextSegmented] = rowHeightArr[nextSegmented].slice(impairmentLong, rowHeightArr[nextSegmented].length)
-
-                  operatTinymce[nextSegmented] = 1
-                  // 更新数组
-                  this.pageData_editorStr({
-                    id:id,
-                    content:editorContent,
-                    rowHeightArr:rowHeightArr,
-                    operatTinymce:operatTinymce
-                  })
-                }
-              }
           }
+
         }
       }
+
       return editorContent[segmented]
     }
   },
@@ -594,7 +599,9 @@ export default {
   .question_line {
     &:first-child{
       padding-top: 8px;
-      padding-bottom: 6px;
+    }
+    &:last-child{
+      padding-bottom: 5px;
     }
     span{
       font-size: 14px !important;

@@ -399,7 +399,8 @@ export default {
             castHeight: rect.height,
             ...backup,
             segmented:segmented,
-            segmentedArr:segmentedArr
+            segmentedArr:segmentedArr,
+            remainderHeight:avalibleHeight, // 剩余高度
           })
         }
       })
