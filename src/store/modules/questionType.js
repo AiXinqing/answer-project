@@ -1,5 +1,4 @@
 const state = {
-
   subTopic_number: 1,
   subTopic_number_already: [], // 已有的题组
   subTopic_number_determine: [], // 确定下的小题
@@ -26,7 +25,6 @@ const mutations = {
       } else {
         state.subTopic_number_already.push(item)
       }
-
     })
   },
 
@@ -66,13 +64,14 @@ const mutations = {
     for (let i = 1; i < state.largest_questionNum; i++) {
       //
       const index = state.subTopic_number_already.findIndex((item) => item.topic === i)
-      if (index <= -1) {
+      const determineIndex = state.subTopic_number_determine.findIndex((item) => item.topic === i)
+
+      if (index <= -1 && determineIndex <= -1) {
         state.subTopic_number = i
         break
-      } else {
-        state.subTopic_number = 1
       }
     }
+
   },
 
   subTopic_calculate_determine: (state, Arr) => {
@@ -87,6 +86,11 @@ const mutations = {
         state.subTopic_number_determine.push(item)
       }
     })
+
+  },
+
+  subTopic_determine: (state,obj) => {
+    state.subTopic_number_determine = state.subTopic_number_determine.filter(ele => ele.number != obj.number)
   },
 
   subTopic_determine_pid_clean: (state, pid) => {
@@ -97,11 +101,12 @@ const mutations = {
   },
 
   subTopic_determine_clean: (state, topic) => {
-    // 清除相同pid
+    // 清除topic
     state.subTopic_number_determine = state.subTopic_number_determine.filter((item) => {
       return ![topic].includes(item.topic)
     })
   },
+
 
   subTopic_determine_del: (state, Arr) => {
     Arr.forEach((newTopic) => {
@@ -115,7 +120,8 @@ const mutations = {
 
 const actions = {}
 
-const getters = {}
+const getters = {
+}
 
 export default {
   namespaced: true,

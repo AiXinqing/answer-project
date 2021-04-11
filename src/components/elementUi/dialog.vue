@@ -37,18 +37,19 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less">
+@import '~@/assets/css/variables.less';
 .el-dialog__header {
   text-align: center;
   padding: 10px 0;
-  background-color: #f8f8f8;
+  // background-color: @main;
 }
 .el-dialog__headerbtn {
   top: 10px;
   right: 12px;
 }
 .el-dialog__title {
-  color: #333;
+  color: @font-333;
 }
 .el-dialog__headerbtn .el-dialog__close {
   /* color: white; */

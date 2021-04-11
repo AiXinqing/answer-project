@@ -45,8 +45,8 @@ export default {
 
 <style lang="less" >
 .el-input--medium .el-input__inner {
-  height: 28px !important;
-  line-height: 28px !important;
+  height: 28px;
+  line-height: 28px;
   text-align: center;
 }
 </style>

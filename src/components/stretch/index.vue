@@ -1,0 +1,138 @@
+<template>
+  <section>
+    <div
+      :class="['fold_list',{'stretch':stretch}]">
+        <div class="fold_name">{{data.subject}}：</div>
+        <div class="fold_box">
+          <!-- 单选题 -->
+          <template v-if="data.type == 'single'">
+            <div class="change_menu"
+              v-for="(item,a) in data.subjectList"
+              :key="a"
+              :class="{'is_active':item.check}"
+              @click="singleChange(a)"
+            >{{item.name}}</div>
+          </template>
+          <!-- 单选题 -->
+          <!-- 多选题 -->
+          <template v-if="data.type == 'multiple'">
+            <hj-checkbox
+              v-for="(item,a) in data.subjectList"
+              :key="a"
+              :title="item.name"
+              v-model="item.check"
+            ></hj-checkbox>
+          </template>
+          <!-- 多选题 -->
+        </div>
+        <div class="fold_stretch" @click="handleStretch()">
+          <template v-if="!stretch">
+            <span>收起</span>
+            <i class="el-icon-arrow-up"></i>
+          </template>
+          <template v-else>
+            <span>展开</span>
+            <i class="el-icon-arrow-down"></i>
+          </template>
+        </div>
+      </div>
+  </section>
+</template>
+
+<script>
+  export default {
+    props: {
+      chooseList: {
+        type: Object,
+        default:() => {}
+      },
+    },
+    data() {
+      return {
+        data: {},
+        stretch:false
+      }
+    },
+    watch: {
+      chooseList: {
+        immediate: true,
+        handler () {
+            this.data = this.chooseList
+            this.stretch = this.chooseList.stretch
+        },
+      },
+    },
+    methods: {
+      handleStretch() {
+        this.stretch = !this.stretch
+      },
+      singleChange(index){
+        this.data.subjectList = this.data.subjectList.map((item,i) => {
+          return i == index ? {...item,check:!item.check} : {...item,check:false}
+        })
+      }
+    },
+  }
+</script>
+
+<style lang="less">
+@import '~@/assets/css/variables.less';
+.fold_list{
+    display: flex;
+    font-size: 14px;
+    min-height: 40px;
+    line-height: 40px;
+    overflow: hidden;
+    width: calc(100% - 30px);
+    margin-left: 15px;
+    border-bottom: 1px dotted @font-909;
+    margin-top: 10px;
+
+    &.stretch{
+      height: 40px;
+    }
+
+    .fold_name{
+      flex-shrink:0;
+      width: 50px;
+    }
+
+    .fold_box{
+      flex-shrink:1;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+
+      .change_menu {
+        padding: 0 15px;
+        height: 28px;
+        line-height: 28px;
+        margin-top: 6px;
+        border-radius: 4px;
+        margin: 6px 10px;
+        cursor: pointer;
+
+        &.is_active{
+          background-color: @main;
+          color: @white
+        }
+
+        &:hover{
+          background-color: @main;
+          color: @white
+        }
+      }
+    }
+    .fold_stretch{
+      color: @mainFont;
+      width: 60px;
+      flex-shrink:0;
+      cursor: pointer;
+
+      i{
+        margin-left: 5px;
+      }
+    }
+  }
+
+</style>

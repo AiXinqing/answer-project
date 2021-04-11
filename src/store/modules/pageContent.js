@@ -12,7 +12,9 @@ const state = {
 
   scoreTotal: 0, // 试卷总分
 
-  nonAnswer:[], // 非答题存在数组
+  nonAnswer: [], // 非答题存在数组
+
+  bulletArray:[] // 弹框数组临时存放删除题型用于判断题型修改及新增
 }
 
 const mutations = {
@@ -218,6 +220,20 @@ const mutations = {
       }
     })
   },
+
+  Add_bulletArray: (state, Arr) => {
+    // 临时删除数组
+    Arr.forEach(ele => {
+      let index = state.bulletArray.findIndex(item => ele.topic == item.topic)
+      if(index == -1){
+        state.bulletArray.splice(state.bulletArray.length, 0, ele)
+      }
+    })
+  },
+
+  clear_bulletArray: (state) => {
+    state.bulletArray = []
+  }
 }
 
 const actions = {}

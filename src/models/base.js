@@ -1,5 +1,5 @@
 // 页面高度
-export const PAGE_HEIGHT = 1100
+export const PAGE_HEIGHT = 1020
 
 //页面布局
 export const LAYOUT_COLUMNS = [

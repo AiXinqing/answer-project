@@ -1,4 +1,6 @@
 import { QUESTION_NUMBERS } from '@/models/base'
+import { question_objective,question_language } from '@/models/questionType'
+
 const state = {
   questionNumber: QUESTION_NUMBERS,
   pageLayout: {
@@ -6,13 +8,22 @@ const state = {
     column:2
   },
   pageData: [],
-  nonAnswer:[], // 非答题存在数组
+  nonAnswer: [], // 非答题存在数组
+  IsNew:true
 }
 
 const mutations = {
   //编辑页面布局
   pageLayout_change: (state, obj) => {
     state.pageLayout = obj
+  },
+
+  change_isNew: (state, status) => {
+    state.IsNew = status
+  },
+
+  reset_pageData: (state, Arr) => {
+    state.pageData = Arr
   },
 
   //新增页面数据
@@ -22,7 +33,7 @@ const mutations = {
 
   // 编辑页面数据
   pageData_edit: (state, question) => {
-    const index = state.pageData.findIndex((itme) => itme.id === question.id)
+    let index = state.pageData.findIndex((itme) => itme.id === question.id)
     if (index > -1) {
       if (question.changeOrder) { // 非作答题
         state.pageData.splice(index, 1)
@@ -30,6 +41,25 @@ const mutations = {
       } else {
         state.pageData.splice(index, 1, question)
       }
+    }
+    if (question.layoutChange) {
+      state.pageData = state.pageData.map(item => {
+        let obj = {}
+        if (item.editorContent != undefined) {
+          obj = {
+            titleContent: '',
+            editorContent: [],
+            segmentedArr: [],
+            operatTinymce:[],
+            rowHeightArr: [],
+            height: item.initialHeigh != undefined ? item.initialHeigh:item.height
+          }
+        }
+        return {
+          ...item,
+          ...obj
+        }
+      })
     }
   },
 
@@ -81,6 +111,24 @@ const mutations = {
     }
   },
 
+  pageData_editorStr: (state, obj) => {
+    // 富文本编辑后字符串
+    let index = state.pageData.findIndex((itme) => itme.id == obj.id)
+    if (obj.answer != undefined) {
+      index = state.pageData.findIndex((itme) => itme.objId == obj.id)
+    }
+    if (index > -1) {
+
+      state.pageData[index] = {
+        ...state.pageData[index],
+        editorContent: obj.content != undefined ? obj.content : state.pageData[index].editorContent,
+        operatTinymce: obj.operatTinymce != undefined ? obj.operatTinymce : state.pageData[index].operatTinymce,
+        height: obj.height != undefined ? obj.height : state.pageData[index].height,
+        rowHeightArr: obj.rowHeightArr != undefined ? obj.rowHeightArr : state.pageData[index].rowHeightArr,
+      }
+    }
+  },
+
   pageData_del: (state, index) => {
     state.pageData.splice(index, 1)
   },
@@ -92,12 +140,20 @@ const mutations = {
     })
   },
 
-  pageData_orderFirst: (state, objId) => {
+  pageData_orderFirst: (state, data) => {
     // 解答题删除后续排序
-    state.pageData = state.pageData.map(question => question.objId == objId ? {
-      ...question,
-      orderFirst: question.orderFirst - 1
-    }:question)
+    let index = -1
+    state.pageData = state.pageData.map(question => {
+      if (question.objId == data.objId) {
+        index += 1
+        return {
+          ...question,
+          orderFirst: index,
+          scoreTotal: data.scoreTotal,
+          heightTitle:index == 0 ? 40 : question.heightTitle
+        }
+      }else{return question}
+    })
   },
 
   pageData_order_edit: (state, data) => {
@@ -182,66 +238,29 @@ const getters = {
   },
 
   compile_pageData: (state, getters) => {
-    return state.pageData.map(question => {
-      return question.questionType == 'ObjectiveQuestion' ? getters.question_objective(question) :
-        question.questionType == 'compositionLanguage' ? getters.question_language(question) : question
+    return state.pageData.map((question) => {
+
+      switch (question.questionType) {
+        case 'AnswerSheetTitle':
+          return {
+              height:question.contentHeight + question.heightTitle + question.checkHeight,
+              ...question, content: { ...question.content, pageLayout:state.pageLayout }
+            }
+        case  'ObjectiveQuestion':
+          return question_objective(question, getters.page_width,state.pageLayout)
+        case  'compositionLanguage':
+          return question_language(question,getters.latticeNum,getters.latticeWidth)
+        case  'answerQuestion':
+          return {
+              ...question, content: { ...question.content, pageLayout: state.pageLayout },
+              height:question.answerArrHeight[question.orderFirst]
+            }
+        default:
+          return {
+              ...question, content: { ...question.content, pageLayout:state.pageLayout }
+            }
+      }
     })
-  },
-
-  question_objective: (state, getters) => (question) => {
-    // 客观题
-    let { rowGroup, titleH } = question.height
-    //题型分组
-    let RowArr = [],columnArr = [],widthSum = 0,
-      max = getters.page_width
-
-        rowGroup.forEach(question => {
-          let maxWidth = question.map(subtopic => subtopic.width)
-            .reduce((a, b) => b > a ? b : a)
-            widthSum += maxWidth
-            if(widthSum < max){
-                columnArr.push(question)
-              }else{
-                RowArr.push(columnArr)
-                widthSum = maxWidth
-                columnArr = []
-                columnArr.push(question)
-              }
-        })
-
-        if(columnArr.length > 0){
-            RowArr.push(columnArr)
-        }
-
-    let lastHeight = RowArr[RowArr.length -1]
-      .map(temp => temp.length * 21 + 10)
-      .reduce((a, b) => b > a ? b : a)
-
-    let less = lastHeight >= question.rowHeight ? 0 : question.rowHeight - lastHeight
-
-
-        //计算内容高度
-    let heights = titleH + RowArr.length * question.rowHeight - less
-        return {...question,height:heights,showData:RowArr}
-  },
-
-  question_language: (state, getters) => (question) => {
-    const { totalWordCount,spacing} = question.content
-    let rows = Math.ceil(totalWordCount / getters.latticeNum) // .toFixed(2)
-
-    let rowHeight = getters.latticeWidth + spacing.value
-        rowHeight = Number(rowHeight.toFixed(2))
-
-    let height = rows * rowHeight + question.MarginHeight + question.heightTitle + question.rowTitle
-      height = Number(height.toFixed(2))
-
-    return {
-      ...question,
-      height: height,
-      rowHeight: rowHeight,
-      lattice:getters.latticeNum,
-      rowWidth:getters.latticeWidth
-    }
   },
 
   questionNumber_big_exist: (state,getters) => {

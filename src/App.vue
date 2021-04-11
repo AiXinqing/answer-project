@@ -1,11 +1,27 @@
 <template>
   <div id="app">
-    <div class="group_heads">
-      <span>制作答题卡</span>
+    <div class="group_heads" v-show="!down">
+      <span>{{title}}</span>
     </div>
     <router-view />
   </div>
 </template>
+
+<script>
+export default {
+  computed:{
+    title() {
+      return this.$route.name == 'preview' ? '答题卡预览' : '制作答题卡'
+    },
+
+    down() {
+      return this.$route.query.down ? 1 :
+        this.$route.name != '/' && this.$route.name != 'Home' && this.$route.name != 'preview' ? 1 : 0
+    }
+  },
+}
+</script>
+
 
 <style lang="less">
 @import '~@/assets/css/variables.less';
