@@ -114,6 +114,7 @@ export default {
       },
     },
   },
+
   methods: {
     ...mapMutations('pageContent', ['pageHeight_set','scoreTotal_reset','scoreTotal_sum']),
 

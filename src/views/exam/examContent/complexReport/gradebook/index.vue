@@ -31,66 +31,12 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
   export default {
     data() {
       return {
         stretch: false,
-        stretchBox:[
-          {
-            subject:'科目',
-            type:'single',
-            stretch:false,
-            subjectList:[
-              {
-                name:'总分',
-                id:1,
-                check:true,
-              },
-              {
-                name:'语文',
-                id:2,
-                check:false,
-              },
-              {
-                name:'数学',
-                id:3,
-                check:false,
-              },
-              {
-                name:'英语',
-                id:4,
-                check:false,
-              }
-            ]
-          },
-          {
-            subject:'班级',
-            type:'multiple',
-            stretch:false,
-            subjectList:[
-              {
-                name:'全部',
-                id:1,
-                check:true,
-              },
-              {
-                name:'高中2020级01班',
-                id:2,
-                check:false,
-              },
-              {
-                name:'高中2020级01班',
-                id:3,
-                check:false,
-              },
-              {
-                name:'高中2020级01班',
-                id:4,
-                check:false,
-              }
-            ]
-          }
-        ],
+        stretchBox:[],
         text:'',
         tableColumn:[
           {
@@ -192,12 +138,70 @@
           //   address: '上海市普陀区金沙江路 1518 弄',
           //   zip: 200333
           // }
-        ]
+        ],
+        prmTid: ''
       }
     },
+
+    computed: {
+      ...mapState('getExam', ['examInfo']),
+    },
+
+    mounted () {
+      if(this.prmTid != ''){
+        this.getExamFunc(this.prmTid)
+      }
+    },
+
+    watch: {
+      $route: {
+        handler: function(route) {
+          const query = route.query
+          if (query.prmTid) {
+            this.prmTid = query.prmTid
+          }
+        },
+        immediate: true
+      },
+    },
+
     methods: {
       handleStretch() {
         this.stretch = !this.stretch
+      },
+
+      getExamFunc(prmTid) {
+
+        this.$store.dispatch('getExam/getExamInfo', {
+          prmTid: prmTid
+        }).then((res)=>{
+          if(res.ResponseCode =="Success"){
+            this.stretchBox = this.examInfo
+            // let data = res.ResponseContent
+            // this.stretchBox = [
+            //   {
+            //     subject:'科目',
+            //     type:'single',
+            //     stretch:false,
+            //     subjectList:data.subjects.map(item => ({
+            //       ...item,
+            //       check: item.sid == 'totalScore' ? true : false,
+            //       name: item.sname
+            //     }))
+            //   },
+            //   {
+            //     subject:'班级',
+            //     type:'multiple',
+            //     stretch:false,
+            //     subjectList:data.classes.map(item => ({
+            //       ...item,
+            //       check: item.cid == 'all' ? true : false,
+            //       name: item.cname
+            //     }))
+            //   }
+            // ]
+          }
+        })
       }
     },
   }

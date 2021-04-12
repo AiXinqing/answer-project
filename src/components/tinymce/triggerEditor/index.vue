@@ -43,7 +43,7 @@
     data() {
       return {
         editor: null,
-        toolbar:'fontsizeselect undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image  basicDateButton underscoreButton paste',
+        toolbar:'fontsizeselect undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image  basicDateButton underscoreButton paste mathjax',
         uploadMode : 0,
         editorId:new Date().getTime()
       }
@@ -78,13 +78,13 @@
           inline:true,
           toolbar: this.toolbar,
           fontsize_formats: '11px 12px 14px 16px 18px 24px 36px 48px',
-          plugins: 'image code charmap paste',
+          plugins: 'image code charmap paste mathjax',
           advlist_bullet_styles: "circle, square",
           content_style: "img {max-width:100%;}",
           autoresize_max_height: 20,
           language: 'zh_CN',
           menubar: false,
-          paste_data_images: false,
+          paste_data_images: true,
           paste_enable_default_filters: true,
           paste_word_valid_elements: "table[width],tr,td[colspan|rowspan|width],th[colspan|rowspan|width],thead,tfoot,tbody,h1,h2,h3,h4,h5,img,p",
           paste_auto_cleanup_on_paste : true,
@@ -95,6 +95,9 @@
           paste_webkit_styles: "color",
           paste_convert_word_fake_lists: false,
           // extended_valid_elements:'ul li',
+          // mathjax: {
+          //   lib: '/mathjax/es6/tex-mml-chtml.js'
+          // },
 
           paste_merge_formats: true,
 
@@ -140,6 +143,7 @@
                   editor.insertContent('<a class="subtopic_a">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</a>');
                 }
               });
+
           },
 
           images_upload_handler: async (blobInfo, success, failure) =>{

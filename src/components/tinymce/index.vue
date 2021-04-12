@@ -41,7 +41,7 @@
     data() {
       return {
         editor: null,
-        toolbar:'attachment undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image nonbreaking paste',
+        toolbar:'attachment undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image nonbreaking paste mathjax',
         uploadMode : 0,
         editorId:new Date().getTime()
       }
@@ -77,11 +77,11 @@
           readonly:this.readonly,
           inline: this.inline,
           toolbar: this.toolbar,
-          plugins: ' image code charmap paste',
+          plugins: ' image code charmap paste mathjax',
           autoresize_max_height: 20,
           language: 'zh_CN',
           menubar: false,
-          paste_data_images: false,
+          paste_data_images: true,
           paste_retain_style_properties: "color",
           paste_webkit_styles: "color",
           paste_enable_default_filters: true,
@@ -92,6 +92,9 @@
           paste_strip_class_attributes: true,
           paste_convert_word_fake_lists: false,
           // extended_valid_elements:'ul li',
+          // mathjax: {
+          //   lib: '/mathjax/es6/tex-mml-chtml.js'
+          // },
 
           paste_merge_formats: true,
           paste_postprocess: function(plugin, args) {

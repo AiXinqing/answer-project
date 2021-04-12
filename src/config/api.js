@@ -6,6 +6,8 @@ if(process.env.NODE_ENV === 'development'){
 }
 
 export const URL = {
-  setCookies: BASEURL + '/api/services/common/user/refreshtoken', //cookies获取覆盖
-  setLogin:BASEURL +'/api/services/common/user/login',
+  // setCookies: BASEURL + '/api/services/common/user/refreshtoken', //cookies获取覆盖
+  // setLogin:BASEURL +'/api/services/common/user/login',
+  GetExamInfo: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetExamInfo', // 获取查询列表
+  GetStuResults: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetStuResults', // 获取tablel列表
 }

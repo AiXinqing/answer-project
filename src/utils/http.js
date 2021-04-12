@@ -2,11 +2,18 @@ import axios from 'axios';
 import Qs from 'qs'
 import {API_VERSION} from '../config/api'
 import Cookie from '../utils/cookie'
+import { URL } from '@/config/api'
 
 // axios.defaults.timeout = 5000;
 axios.defaults.baseURL = '';
+
+const service = axios.create({
+    baseURL: '',
+    timeout: 50000
+})
+
 //http request 拦截器
-axios.interceptors.request.use(
+service.interceptors.request.use(
   config => {
     if(config.method === 'get') {
         //如果是get请求，且params是数组类型如arr=[1,2]，则转换成arr=1&arr=2
@@ -14,6 +21,13 @@ axios.interceptors.request.use(
             return Qs.stringify(params, {arrayFormat: 'repeat'})
         }
     }
+    if (!config.data) config.data = {}
+    if (!config.data.version) config.data.version = 'v1'
+    // if (store.getters.token) {
+    //   config.headers['Authorization'] = 'Bearer ' + getToken()
+    // }
+    config.headers['X-Requested-With'] = 'XMLHttpRequest'
+    config.headers['Content-Type'] = 'application/json'
     return config;
   },
   error => {
@@ -23,9 +37,26 @@ axios.interceptors.request.use(
 
 
 //http response 拦截器
-axios.interceptors.response.use(
+service.interceptors.response.use(
     response => {
-        return response;
+        const res = response
+        // if (res.status !== 0) {
+        //   if (res.status === 4001) {
+        //       // router.push({ name: 'login' })
+        //       location.href = URL.SERVICE_CONTEXT_PATH + 'Manage/login'
+        //   } else {
+        //     // this.$message({
+        //     //   message: '操作失败：' + response.data.ResponseCode,
+        //     //   type: 'error',
+        //     //   duration: 5 * 1000
+        //     // });
+        //     console.log(res.data.ResponseCode)
+        //   }
+        //   return Promise.reject(new Error(res.data.ResponseCode || 'Error'))
+        // } else {
+        //   return response.data
+        // }
+        return res.data
     },
     error => {
         return Promise.reject(error)
@@ -51,8 +82,8 @@ export function post(url, data = {}, deep = false) {
       axios.post(url, JSON.stringify(data), {
           headers
       }).then(response => {
-          if (response.data.result.code !== 0) {
-              if (response.data.result.code === 4001) {
+          if (response.status !== 0) {
+              if (response.status === 4001) {
                 // let url = document.referrer;
                 //   if(url.indexOf("localhost") == -1){
                 //       window.location.href = url.replace('/AnswerCardWeb/#/exam', '/Manage/Login')
@@ -61,13 +92,13 @@ export function post(url, data = {}, deep = false) {
                 //   }
               }else{
                 this.$message({
-                  message: '操作失败：' + response.data.result.message,
+                  message: '操作失败：' + response.data.ResponseCode,
                   type: 'warning'
                 });
               }
-              reject(response)
+              reject(response.data)
           }else{
-              resolve(response.data.result);
+              resolve(response.data);
           }
       }, err => {
         this.$message({
@@ -96,8 +127,8 @@ export function fetch(url, params = {}) {
           headers:headers
         })
         .then(response => {
-            if (response.data.result.code !== 0) {
-                if (response.data.result.code === 4001) {
+            if (response.status !== 0) {
+                if (response.status === 4001) {
                     // let url = document.referrer;
                     //     if(url.indexOf("localhost") == -1){
                     //         window.location.href = url.replace('/AnswerCardWeb/#/exam', '/Manage/Login')
@@ -106,13 +137,13 @@ export function fetch(url, params = {}) {
                     //     }
                 }else{
                   this.$message({
-                    message: '操作失败：' + response.data.result.message,
+                    message: '操作失败：' + response.data.ResponseCode,
                     type: 'warning'
                   });
                 }
                 reject(response)
             }else{
-                resolve(response.data.result);
+              resolve(response.data);
             }
         }, err => {
           this.$message({
@@ -142,7 +173,7 @@ export function postForm(url, data = {}) {
                 }]
             })
             .then(response => {
-                resolve(response.data.result);
+                resolve(response.data);
             }, err => {
                 reject(err)
             })
@@ -197,3 +228,5 @@ function getHeader() {
   }
   return headers
 }
+
+export default service

@@ -19,6 +19,7 @@
       padding: 0 0;
       margin: 0 0 !important;
       height: 28px;
+      line-height: 28px;
     }
   }
 </style>
