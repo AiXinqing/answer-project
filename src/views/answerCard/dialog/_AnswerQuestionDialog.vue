@@ -47,7 +47,26 @@
         />
         <!-- 小题显示区 -->
       </div>
-      <div class="condition_box">
+      <div class="manual_box" v-if="editQuestionId != ''">
+        <el-col :span="24" class="select-item">
+          <div class="label" style="width:100px;top: -3px;">内容是否保存:</div>
+          <el-radio v-model="manual" label="1">保留手动编辑的内容</el-radio>
+          <el-radio v-model="manual" label="2">重置编辑区</el-radio>
+          <div class="ask_box">
+            <div class="ask_box_icon">?</div>
+            <div class="ask_box_content">
+              <i class="el-icon-caret-left"></i>
+              <p>
+                1、【保留手动编辑的内容】用于修改结构或分数等想保留内容继续编辑的情况。填空题直接保留编辑的内容不变，解答题相同题号的内容保留，不同题号的进行增加或删除相应题目区域；
+              </p>
+              <p>
+                2、【重置编辑区】用于舍弃内容重置编辑区的情况。手动修改的内容会清空，变为默认初始状态。
+              </p>
+            </div>
+          </div>
+        </el-col>
+      </div>
+      <div v-if='manual_show' class="condition_box" :style="editQuestionId == '' ? 'margin-top:15px' : 'margin-top:10px'">
         <el-checkbox v-model="dataTopic.ShowScore">小题显示分数</el-checkbox>
         <el-checkbox v-model="dataTopic.HorizontalLine">生成解答题横线</el-checkbox>
         <span class="answer_rows" v-show="dataTopic.HorizontalLine">
@@ -100,6 +119,7 @@ export default {
       existNumber: null,
       orders:0,
       previous:null,
+      manual:'1', // 手动编辑内容
       questionData: {
         number: 0,
         topicName: '解答题',
@@ -140,6 +160,10 @@ export default {
 
     ...mapGetters('page', ['questionNumber_big_exist','questionOrder']),
     ...mapGetters('question',['options']),
+
+    manual_show(){
+      return this.editQuestionId == '' ? true : this.manual == '2' ? true : false
+    },
 
     questionNumber_big(){
       return this.questionNumber_big_exist.length
@@ -345,7 +369,9 @@ export default {
           let previous = this.previous
           let previousTig = this.previous
           let pageObj = this.pageData[previous + 1]
-          this.pageData_nonA_clean(this.editQuestionId) // 清空非答题
+          if(this.manual != '1'){
+            this.pageData_nonA_clean(this.editQuestionId) // 清空非答题
+          }
 
           this.subTopicGroup.forEach((question,index) => {
             previous += (index == 0 ? 0 :1)
@@ -360,7 +386,10 @@ export default {
               num: previous,
             }
 
-            this.pageData_simple_insert(data)
+            if(this.manual != '1'){
+              this.pageData_simple_insert(data)
+            }
+
 
             if(index == this.subTopicGroup.length - 1){
               this.$nextTick(()=>{
@@ -609,6 +638,69 @@ export default {
 </script>
 
 <style lang="less" >
+@import '~@/assets/css/variables.less';
+.ask_box{
+  display: inline-block;
+  position: relative;
+
+  .ask_box_icon{
+    border: 1px solid;
+    height: 16px;
+    width: 16px;
+    display: inline-block;
+    line-height: 16px;
+    text-align: center;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 12px;
+    color: @font-666;
+    cursor: pointer;
+    position: relative;
+    top: -4px;
+  }
+
+  .ask_box_content{
+    visibility: hidden;
+    width: 360px;
+    background-color: @font-666;
+    color: @white;
+    border-radius: 3px;
+    padding: 5px;
+    position: absolute;
+    text-align: left;
+    z-index: 1;
+    top: -5px;
+    left: 180%;
+    font-weight: 400;
+    p{
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  &:hover{
+    .ask_box_content{
+      visibility: visible;
+    }
+  }
+
+  i{
+    &.el-icon-caret-left{
+      position: absolute;
+      left: -13px;
+      color: @font-666;
+      font-size: 20px;
+
+      &:hover{
+        color: @font-666;
+      }
+    }
+  }
+}
+.manual_box{
+  height: 15px;
+  margin-top: 15px;
+}
 .answer_box {
   .select-item:last-child {
     margin-top: 0;
