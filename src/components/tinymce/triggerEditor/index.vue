@@ -96,7 +96,7 @@
           paste_convert_word_fake_lists: false,
           // extended_valid_elements:'ul li',
           // mathjax: {
-          //   lib: '/mathjax/es6/tex-mml-chtml.js'
+          //   lib: '/mathjax/es5/tex-mml-chtml.js',
           // },
 
           paste_merge_formats: true,

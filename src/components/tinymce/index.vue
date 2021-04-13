@@ -77,7 +77,7 @@
           readonly:this.readonly,
           inline: this.inline,
           toolbar: this.toolbar,
-          plugins: ' image code charmap paste mathjax',
+          plugins: 'image code charmap paste mathjax',
           autoresize_max_height: 20,
           language: 'zh_CN',
           menubar: false,
@@ -93,7 +93,7 @@
           paste_convert_word_fake_lists: false,
           // extended_valid_elements:'ul li',
           // mathjax: {
-          //   lib: '/mathjax/es6/tex-mml-chtml.js'
+          //   lib: '/mathjax/es5/tex-mml-chtml.js'
           // },
 
           paste_merge_formats: true,
