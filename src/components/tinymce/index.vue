@@ -77,7 +77,7 @@
           readonly:this.readonly,
           inline: this.inline,
           toolbar: this.toolbar,
-          plugins: 'image code charmap paste mathjax',
+          plugins: 'image code charmap paste ',
           autoresize_max_height: 20,
           language: 'zh_CN',
           menubar: false,

@@ -58,7 +58,9 @@
       html:{
         immediate: true,
         handler () {
-          this.editorHtml()
+          if(this.editor){
+            this.editor.setContent(this.html)
+          }
         }
       }
     },
@@ -75,7 +77,7 @@
           inline:true,
           toolbar: this.toolbar,
           fontsize_formats: '11px 12px 14px 16px 18px 24px 36px 48px',
-          plugins: 'image code charmap paste mathjax',
+          plugins: 'image code charmap paste',
           advlist_bullet_styles: "circle, square",
           content_style: "img {max-width:100%;}",
           autoresize_max_height: 20,

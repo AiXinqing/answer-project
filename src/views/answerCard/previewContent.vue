@@ -455,6 +455,9 @@ export default {
         case 'compositionLanguage':
           RemainingHeight = question.first && segmented == 0 ?  avalibleHeight - margin - question.rowTitle : avalibleHeight - MarginHeight
           break;
+        case 'answerQuestion':
+          RemainingHeight = avalibleHeight != 1000 ? avalibleHeight - heightTitle : avalibleHeight
+          break;
         default:
           RemainingHeight = avalibleHeight - margin
       }
@@ -471,8 +474,8 @@ export default {
                   question_height = initial ?  question_height + question.rowTitle : question_height
                   break;
               case 'answerQuestion':
-                  question_height = !question.orderFirst ? question_height - 2 : question_height - 1
-                  break;
+                question_height = avalibleHeight != 1000 ? question_height - 2 : question_height - margin + 13
+                break;
               default:
           }
 
