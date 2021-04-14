@@ -152,8 +152,11 @@ export default {
         let segmented = 0
         let segmentedArr = []
         let contentRows = rect.content.rows // 用于英语作文
+        let remainderHeight = 0
 
         var avalibleHeight = this.page_height - currentPage.height
+
+            remainderHeight = avalibleHeight
 
         // 用于客观题 填空题数组分割
         const itemObj = JSON.parse(JSON.stringify(rect))
@@ -196,6 +199,13 @@ export default {
                 rows: contentRows > curRect.availableRow ? curRect.availableRow : contentRows
               }
               contentRows = contentRows > curRect.availableRow ? contentRows - curRect.availableRow : 0
+            }
+
+            if(rect.questionType == 'answerQuestion'){
+              backup = {
+                ...backup,
+                remainderHeight:remainderHeight
+              }
             }
 
             segmentedArr.push(curRect.availableRow)
@@ -270,6 +280,13 @@ export default {
               contentRows = contentRows > curRects.availableRow ? contentRows - curRects.availableRow : 0
             }
 
+            if(rect.questionType == 'answerQuestion'){
+              backup = {
+                ...backup,
+                remainderHeight:remainderHeight
+              }
+            }
+
             results.push([{
               ...rect,
               castHeight: curRects.height,
@@ -330,6 +347,13 @@ export default {
             contentRows = contentRows > curRect.availableRow ? contentRows - curRect.availableRow : 0
           }
 
+          if(rect.questionType == 'answerQuestion'){
+            backup = {
+              ...backup,
+              remainderHeight:remainderHeight
+            }
+          }
+
           if(rect.questionType != 'ObjectiveQuestion'){
             if(curRect.pagination){
               currentPage.height += rect.MarginHeight
@@ -365,6 +389,13 @@ export default {
 
           if(rect.questionType == 'answerQuestion' && rect.orderFirst > 0){
             currentPage.height -= this.difference
+          }
+
+          if(rect.questionType == 'answerQuestion'){
+            backup = {
+              ...backup,
+              remainderHeight:remainderHeight
+            }
           }
 
           currentPage.rects.push({

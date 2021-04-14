@@ -58,15 +58,12 @@
       html:{
         immediate: true,
         handler () {
-          if(this.editor){
-            this.editor.setContent(this.html)
-          }
+          this.editorHtml()
         }
       }
     },
     mounted() {
       this.initTiny()
-
     },
     methods: {
       initTiny(){
@@ -162,6 +159,11 @@
         })
       },
 
+      editorHtml(){
+        if(this.editor){
+          this.editor.setContent(this.html)
+        }
+      }
     },
   }
 </script>

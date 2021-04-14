@@ -337,6 +337,7 @@ export default {
       this.openedFrame = false
       this.subTopic_already_reset() // 清空临时小题group
       this.errorVal = ''
+      this.manual = '1'
     },
 
     preCreateQuestion () {
@@ -408,6 +409,7 @@ export default {
       this.subTopic_number_calculate()
       // 清空弹框数据
       this.questionData = JSON.parse(JSON.stringify(this.closeData))
+      this.manual = '1'
     },
     hanldeStatus (val) {
       this.errorVal = val

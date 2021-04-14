@@ -138,6 +138,11 @@
         })
       },
 
+      editorHtml(){
+        if(this.editor){
+          this.editor.setContent(this.html)
+        }
+      }
     },
   }
 </script>
