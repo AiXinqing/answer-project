@@ -520,14 +520,12 @@ export default {
                   }else{
                     overflowHeight = height - castHeight + tinyHeight
                   }
-                  console.log(2)
               }else{
                 if(first && !orderFirst){
                   overflowHeight = tinyHeight + heightTitle + 4
                 }else{
                   overflowHeight = height - castHeight + tinyHeight
                 }
-                console.log(3)
               }
             }
           }
@@ -587,6 +585,10 @@ export default {
     }
     span{
       font-size: 14px !important;
+    }
+
+    img{
+      max-width: 97%;
     }
 
     // display: flex;

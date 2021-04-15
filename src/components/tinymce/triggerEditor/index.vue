@@ -18,6 +18,8 @@
   import '../plugins/mathjax/config.js'
   import '../plugins/paste/plugin.min.js'
   import '../plugins/powerpaste/plugin.min.js'
+  import '../plugins/tiny_mce_wiris/plugin.js'
+  import '../plugins/tiny_mce_wiris/plugin.min.js'
   import { URL } from '../../../utils/config.js'
 
 
@@ -43,9 +45,10 @@
     data() {
       return {
         editor: null,
-        toolbar:'fontsizeselect undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image  basicDateButton underscoreButton paste mathjax',
+        toolbar:'fontsizeselect undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image  basicDateButton underscoreButton paste mathjax tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry',
         uploadMode : 0,
-        editorId:new Date().getTime()
+        editorId:new Date().getTime(),
+        obj:{}
       }
     },
 
@@ -78,10 +81,14 @@
           toolbar: this.toolbar,
           fontsize_formats: '11px 12px 14px 16px 18px 24px 36px 48px',
           plugins: 'image code charmap paste',
+          external_plugins: {
+            'tiny_mce_wiris' : URL.SERVICE_CONTEXT_PATH +'answer-project/node_modules/@wiris/mathtype-tinymce5/plugin.min.js'
+          },
           advlist_bullet_styles: "circle, square",
           content_style: "img {max-width:100%;}",
           autoresize_max_height: 20,
           language: 'zh_CN',
+          // auto_focus: true,
           menubar: false,
           paste_data_images: true,
           paste_enable_default_filters: true,
@@ -93,12 +100,11 @@
           paste_retain_style_properties: "color",
           paste_webkit_styles: "color",
           paste_convert_word_fake_lists: false,
-          // extended_valid_elements:'ul li',
-          // mathjax: {
-          //   lib: '/mathjax/es5/tex-mml-chtml.js',
-          // },
 
           paste_merge_formats: true,
+          // formats:{
+          //   tiny_mce_wiris_formulaEditor: { inline: 'p', classes: 'class1' }
+          // },
 
           paste_postprocess: function(plugin, args) {
             args.node.childNodes.forEach(item => {
@@ -117,12 +123,17 @@
 
               // 编辑器内容发生变化后更新 html 的内容
               editor.on('blur', (e) => {
+
                   let obj = {
                     val:editor.getContent(),
                     tinyHeight:document.getElementById(e.target.id).offsetHeight,
                     tinyId:e.target.id
                   }
-                  self.$emit('tinymce-change', obj)
+                  // 判断是否使用了公式插件
+                  let wrs_stack = document.querySelectorAll("div.wrs_stack")
+                  if(wrs_stack.length <= 0){
+                    self.$emit('tinymce-change', obj)
+                  }
               })
 
               /* Basic button that just inserts the date  切换下划线 */
@@ -142,6 +153,15 @@
                   editor.insertContent('<a class="subtopic_a">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</a>');
                 }
               });
+
+              // 注册一个工具栏按钮名称
+              editor.ui.registry.addButton('tiny_mce_wiris', {
+                tooltip: '公式插件',
+                onAction: function () {
+                  console.log()
+                }
+              });
+
 
           },
 
@@ -165,7 +185,7 @@
         if(this.editor){
           this.editor.setContent(this.html)
         }
-      }
+      },
     },
   }
 </script>
