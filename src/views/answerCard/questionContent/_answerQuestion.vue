@@ -372,22 +372,22 @@ export default {
             }
             tinyMceRowHeight.push(height)
           })
-          rowHeightArr[segmented] = tinyMceRowHeight
+
         this.tinymceHeight = tinys // 最大高度
       //-------------------------------------------------------------------------
 
       // 富文本编辑后内容赋值
-      editorContent[segmented] = val
+      // editorContent[segmented] = val
       //-------------------------------------------------------------------------
 
       // 标记富文本进行过编辑
       operatTinymce[segmented] = 1
       //-------------------------------------------------------------------------
-      this.editConten(eidtObj,tinyHeight)
+      this.editConten(eidtObj,tinyHeight,val,tinyMceRowHeight)
     },
 
 
-    editConten(eidtObj,tinyHeight){
+    editConten(eidtObj,tinyHeight,val,tinyMceRowHeight){
 
       let tinymceEditObj = JSON.parse(JSON.stringify(eidtObj))
 
@@ -402,7 +402,6 @@ export default {
           difference = 0, // 差值
           differenceLong = 0, // 差值长度
           nextSegmented = segmented + 1,// 数组中-当前位置之后一位
-          overflowArr = [], // 溢出行高
           setArrContent = [],
           overflowArrs = [],
           operatTinymceArr = [],
@@ -410,12 +409,10 @@ export default {
           impairment = 0,
           impairmentLong = 0,
           // 富文本字符串
-          tinymceContent ='',
-          extraContent = '',
           overflowHeight = 0,
           RemainingDiff = 0,
           currentContentArr = []
-          currentContentArr = this.convertArray(editorContent[segmented]).filter(item => item.indexOf(this.strP) != -1)
+          currentContentArr = this.convertArray(val).filter(item => item.indexOf(this.strP) != -1)
            //计算容器容纳高度
           if(first && !orderFirst){
             containerHeight = (remainderHeight - 20 - MarginHeight - heightTitle)
@@ -423,7 +420,7 @@ export default {
             containerHeight = this.page_height - 20 - MarginHeight
           }
           // 计算当前容器内容高度
-          rowHeightArr[segmented].forEach(num =>{
+          tinyMceRowHeight.forEach(num =>{
             difference += num
             if (num >= rowHeight && !(num % rowHeight == 0)) {
               difference += 13
@@ -446,14 +443,20 @@ export default {
 
             if(differenceLong > 0){
               // 截取溢出的高度
-              let Remaining = RemainingDiff
+              let Remaining
               let additional = Math.floor(containerHeight / rowHeight)
-                  additional -= Remaining
-                  availableRow -= additional
+              if(first && segmented == 0){
+                Remaining = RemainingDiff
+                additional -= Remaining
+                availableRow -= additional
+              }else{
+                Remaining =  rowHeightArr[0].length
+              }
               // 测试-------------------------------------------------
                 let editorContentArrData = editorContent.map(strArr => {
                   return this.convertArray(strArr).filter(item => item.indexOf(this.strP) != -1)
                 })
+                console.log(availableRow)
                 let { setArr } = useArrayCutHook(editorContentArrData,{ defaultLength: Remaining, additional: availableRow },)
 
                 setArrContent = setArr(segmented, currentContentArr)
@@ -466,8 +469,8 @@ export default {
                 })
               // 测试-------------------------------------------------
 
-              let overflowArr = useArrayCutHook(rowHeightArr,{ defaultLength: Remaining, additional: availableRow },)
-                  overflowArrs = overflowArr.setArr(segmented, rowHeightArr[segmented])
+              let overflowArr = useArrayCutHook(rowHeightArr,{ defaultLength: Remaining, additional: availableRow })
+                  overflowArrs = overflowArr.setArr(segmented, tinyMceRowHeight)
                   operatTinymceArr = overflowArrs.map(() => {return 1})
 
               if(first && !orderFirst){
@@ -496,33 +499,33 @@ export default {
                       impairmentHeight += num
                     }
                   })
-                  let nextContentArr = this.convertArray(editorContent[nextSegmented])
 
                 // 测试-------------------------------------------------
                 let editorContentArrData = editorContent.map(strArr => {
                   return this.convertArray(strArr).filter(item => item.indexOf(this.strP) != -1)
                 })
-                let { getArr } = useArrayCutHook(editorContentArrData,{ defaultLength: Remaining, additional: availableRow },)
+                let { setArr } = useArrayCutHook(editorContentArrData,{ defaultLength: Remaining, additional: availableRow },)
+                    setArrContent = setArr(segmented, currentContentArr)
+                    setArrContent = setArrContent.map(item => {
+                      let strArr = ''
+                      item.forEach(eleStr => {
+                        strArr += eleStr
+                      })
+                      return strArr
+                    })
 
-                setArrContent = getArr(segmented, nextContentArr)
-                setArrContent = setArrContent.map(item => {
-                  let strArr = ''
-                  item.forEach(eleStr => {
-                    strArr += eleStr
-                  })
-                  return strArr
-                })
-              // 测试-------------------------------------------------
                 let overflowArr = useArrayCutHook(rowHeightArr,{ defaultLength: Remaining, additional: availableRow },)
-                    overflowArrs = overflowArr.getArr(segmented, rowHeightArr[segmented])
+                    overflowArrs = overflowArr.setArr(segmented, tinyMceRowHeight)
                     operatTinymceArr = overflowArrs.map(() => {return 1})
 
-                  if(first && !orderFirst){
-                    overflowHeight = height - impairmentHeight
-                  }else{
-                    overflowHeight = height - castHeight + tinyHeight
-                  }
+                if(first && !orderFirst){
+                  overflowHeight = height - impairmentHeight
+                }else{
+                  overflowHeight = height - castHeight + tinyHeight
+                }
               }else{
+                editorContent[segmented] = val
+                rowHeightArr[segmented] = tinyMceRowHeight
                 if(first && !orderFirst){
                   overflowHeight = tinyHeight + heightTitle + 4
                 }else{
