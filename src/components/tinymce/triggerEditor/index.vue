@@ -80,10 +80,10 @@
           inline:true,
           toolbar: this.toolbar,
           fontsize_formats: '11px 12px 14px 16px 18px 24px 36px 48px',
-          plugins: 'image code charmap paste',
-          external_plugins: {
-            'tiny_mce_wiris' : URL.SERVICE_CONTEXT_PATH +'answer-project/node_modules/@wiris/mathtype-tinymce5/plugin.min.js'
-          },
+          plugins: 'image code charmap paste tiny_mce_wiris',
+          // external_plugins: {
+          //   'tiny_mce_wiris' : URL.SERVICE_CONTEXT_PATH +'answer-project/node_modules/@wiris/mathtype-tinymce5/plugin.min.js'
+          // },
           advlist_bullet_styles: "circle, square",
           content_style: "img {max-width:100%;}",
           autoresize_max_height: 20,

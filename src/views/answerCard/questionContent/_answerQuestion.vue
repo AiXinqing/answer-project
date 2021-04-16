@@ -62,6 +62,7 @@
 import { mapState, mapMutations, mapGetters} from 'vuex'
 import { QUESTION_NUMBERS } from '@/models/base'
 import { PAGE_HEIGHT } from '@/models/base'
+import { useArrayCutHook } from '@/assets/js/useArrayCutHook'
 
 import tinyVue from '@/components/tinymce'
 import triggerTinymce from '@/components/tinymce/triggerEditor'
@@ -402,6 +403,9 @@ export default {
           differenceLong = 0, // 差值长度
           nextSegmented = segmented + 1,// 数组中-当前位置之后一位
           overflowArr = [], // 溢出行高
+          setArrContent = [],
+          overflowArrs = [],
+          operatTinymceArr = [],
           // 内容高度小于内容框高度差值
           impairment = 0,
           impairmentLong = 0,
@@ -434,49 +438,45 @@ export default {
             }
           })
 
+            // 下一级长度
+          let RemainingHeight =  this.page_height - 20 - MarginHeight
+          let availableRow = Math.floor(RemainingHeight / rowHeight)
+
           if(editorContent[segmented] != undefined){
 
             if(differenceLong > 0){
               // 截取溢出的高度
               let Remaining = RemainingDiff
-                for(let a = 0; a < Remaining; a++){
-                  if(currentContentArr[a] != undefined){
-                    tinymceContent += currentContentArr[a]
-                  }
-                }
-              // 赋值
-              editorContent[segmented] = tinymceContent
-              editorContent.splice(segmented,1,tinymceContent)
-              // 溢出内容
-              for(let i = Remaining; i < currentContentArr.length;i++){
-                if(currentContentArr[i] != undefined){
-                  extraContent += currentContentArr[i]
-                }
-              }
-              if(editorContent[nextSegmented] == undefined){
-                editorContent[nextSegmented] = extraContent
-              }else{
-                editorContent[nextSegmented] = extraContent + editorContent[nextSegmented]
-              }
+              let additional = Math.floor(containerHeight / rowHeight)
+                  additional -= Remaining
+                  availableRow -= additional
+              // 测试-------------------------------------------------
+                let editorContentArrData = editorContent.map(strArr => {
+                  return this.convertArray(strArr).filter(item => item.indexOf(this.strP) != -1)
+                })
+                let { setArr } = useArrayCutHook(editorContentArrData,{ defaultLength: Remaining, additional: availableRow },)
 
-              // 富文本编辑标识
-              operatTinymce[nextSegmented] = 1
-              // 截取溢出行高追加进下一个数组
-              overflowArr = rowHeightArr[segmented].slice(rowHeightArr[segmented].length - differenceLong, rowHeightArr[segmented].length)
-              // 更新行高数组
-              rowHeightArr[segmented] = rowHeightArr[segmented].slice(0, rowHeightArr[segmented].length - differenceLong)
+                setArrContent = setArr(segmented, currentContentArr)
+                setArrContent = setArrContent.map(item => {
+                  let strArr = ''
+                  item.forEach(eleStr => {
+                    strArr += eleStr
+                  })
+                  return strArr
+                })
+              // 测试-------------------------------------------------
 
-              if(rowHeightArr[nextSegmented] != undefined){
-                rowHeightArr[nextSegmented] = overflowArr.concat(rowHeightArr[nextSegmented])
-              }else {
-                rowHeightArr[nextSegmented] = overflowArr
-              }
+              let overflowArr = useArrayCutHook(rowHeightArr,{ defaultLength: Remaining, additional: availableRow },)
+                  overflowArrs = overflowArr.setArr(segmented, rowHeightArr[segmented])
+                  operatTinymceArr = overflowArrs.map(() => {return 1})
 
               if(first && !orderFirst){
                 let nextHeight = 0
-                rowHeightArr[nextSegmented].forEach(num => {
-                  nextHeight += num
-                })
+                let nextArr = overflowArrs.slice(nextSegmented,overflowArrs.length)
+                    nextArr = nextArr.flat()
+                    nextArr.forEach(num => {
+                      nextHeight += num
+                    })
                 overflowHeight = (remainderHeight - 20 - 12) + nextHeight
               }else{
                 overflowHeight = height - castHeight + tinyHeight //8 + 5  第一个p标签向下移动8像素，最后一个p标签向下移动5像素
@@ -485,8 +485,11 @@ export default {
               if(containerHeight > difference && editorContent[nextSegmented] != undefined){
                //内容低于内容高度
                //内容框高度 - 内容
-                  let impairmentHeight = 0
-                  rowHeightArr[nextSegmented].forEach(num => {
+                let impairmentHeight = 0
+                    containerHeight = (remainderHeight - 20 - MarginHeight - heightTitle)
+                let Remaining = Math.floor(containerHeight / rowHeight)
+
+                rowHeightArr[nextSegmented].forEach(num => {
                     impairment += num
                     if(containerHeightNext > impairment){
                       impairmentLong += 1
@@ -494,26 +497,25 @@ export default {
                     }
                   })
                   let nextContentArr = this.convertArray(editorContent[nextSegmented])
-                    //追加差值
-                    for(let a = 0; a < impairmentLong;a++){
-                      if(nextContentArr[a] != undefined){
-                        extraContent += nextContentArr[a]
-                      }
-                    }
-                    editorContent[segmented] += extraContent
-                    rowHeightArr[segmented] = rowHeightArr[segmented].concat(rowHeightArr[nextSegmented].slice(0,impairmentLong))
 
-                  //减去不给当前内容的字符
-                    tinymceContent = ''
-                    for(let i = impairmentLong; i < nextContentArr.length;i++){
-                      if(nextContentArr[i] != undefined){
-                        tinymceContent += nextContentArr[i]
-                      }
-                    }
+                // 测试-------------------------------------------------
+                let editorContentArrData = editorContent.map(strArr => {
+                  return this.convertArray(strArr).filter(item => item.indexOf(this.strP) != -1)
+                })
+                let { getArr } = useArrayCutHook(editorContentArrData,{ defaultLength: Remaining, additional: availableRow },)
 
-                  editorContent[nextSegmented] = tinymceContent
-                  rowHeightArr[nextSegmented] = rowHeightArr[nextSegmented].slice(impairmentLong, rowHeightArr[nextSegmented].length)
-                  operatTinymce[nextSegmented] = 1
+                setArrContent = getArr(segmented, nextContentArr)
+                setArrContent = setArrContent.map(item => {
+                  let strArr = ''
+                  item.forEach(eleStr => {
+                    strArr += eleStr
+                  })
+                  return strArr
+                })
+              // 测试-------------------------------------------------
+                let overflowArr = useArrayCutHook(rowHeightArr,{ defaultLength: Remaining, additional: availableRow },)
+                    overflowArrs = overflowArr.getArr(segmented, rowHeightArr[segmented])
+                    operatTinymceArr = overflowArrs.map(() => {return 1})
 
                   if(first && !orderFirst){
                     overflowHeight = height - impairmentHeight
@@ -534,10 +536,10 @@ export default {
             let data = {
               question:{
                 ...curObj,
-                editorContent:editorContent,
+                editorContent: setArrContent.length ? setArrContent : editorContent,
                 answerArrHeight:answerArrHeight,
-                operatTinymce:operatTinymce, // 是否操作
-                rowHeightArr: rowHeightArr,
+                operatTinymce:operatTinymceArr.length ? operatTinymceArr : operatTinymce, // 是否操作
+                rowHeightArr: overflowArrs.length ? overflowArrs : rowHeightArr,
                 height:overflowHeight
               },
               index:index,
