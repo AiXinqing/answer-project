@@ -1,45 +1,49 @@
-// 内容分页
-export function useArrayCutHook (initial, options) {
-  const arr = initial.reduce((acc, item) => acc.concat(item), [])
-
+export function useArrayCutHook(initial, options) {
   const runtimeOptions = {
-    defaultLength: 4,
-    additional: 3,
+    height: 197,
+    perpageHeight: 197,
+    rowHeight:35,
     ...(options || {}),
   }
 
-  function getArr() {
+  let arr = initial.reduce((acc, item) => acc.concat(item), [])
+  let cache = getArr()
+
+  function getArr () {
+    let beyond = 0
     const { results } = arr.reduce(
-      (acc, item, index) => {
-        if (index < runtimeOptions.defaultLength) {
-          acc.results[0][index] = item
-          return acc
+      (acc, item) => {
+        if (item.height >= runtimeOptions.rowHeight && !(item.height % runtimeOptions.rowHeight == 0)) {
+          beyond = 13
+        }
+        acc.totalHeight += item.height
+
+        if (acc.totalHeight <= acc.arrLen) {
+          acc.results[acc.results.length - 1].push(item)
         }
 
-        if (index === acc.arrLen) {
-          acc.arrLen += runtimeOptions.additional
+        if (acc.totalHeight > acc.arrLen) {
+          acc.totalHeight = item.height
+          acc.arrLen = runtimeOptions.perpageHeight - beyond
+          beyond = 0
           acc.results.push([item])
-
-          return acc
         }
 
-        acc.results[acc.results.length - 1].push(item)
         return acc
-      }, { arrLen: runtimeOptions.defaultLength, results: [[]] },
+      }, { arrLen: runtimeOptions.height, results: [[]], totalHeight: 0 },
     )
-
+    window.a = {results:results}
     return results
   }
 
   function setArr(index, newArray) {
-    const arrIndex = index === 0
-      ? 0
-      : runtimeOptions.defaultLength + (index - 1) * runtimeOptions.additional
-    const length = index === 0 ? runtimeOptions.defaultLength : runtimeOptions.additional
+    cache[index] = newArray
+    arr = cache.reduce((acc, item) => acc.concat(item), [])
+    cache = getArr()
 
-    arr.splice(arrIndex, length, ...newArray)
-
-    return getArr()
+    return cache.map(item => {
+      return [...item]
+    })
   }
 
   function updateOptions(opts) {
@@ -54,3 +58,4 @@ export function useArrayCutHook (initial, options) {
     updateOptions,
   }
 }
+
