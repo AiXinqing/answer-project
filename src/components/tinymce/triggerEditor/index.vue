@@ -14,12 +14,12 @@
   import '../plugins/imagetools/plugin.min.js'
   import '../plugins/charmap/plugin.min.js'
   import '../plugins/code/plugin.min.js'
-  import '../plugins/mathjax/plugin.min.js'
-  import '../plugins/mathjax/config.js'
+  // import '../plugins/mathjax/plugin.min.js'
+  // import '../plugins/mathjax/config.js'
   import '../plugins/paste/plugin.min.js'
   import '../plugins/powerpaste/plugin.min.js'
-  import '../plugins/tiny_mce_wiris/plugin.js'
-  import '../plugins/tiny_mce_wiris/plugin.min.js'
+  // import '../plugins/tiny_mce_wiris/plugin.js'
+  // import '../plugins/tiny_mce_wiris/plugin.min.js'
   import { URL } from '../../../utils/config.js'
 
 
@@ -45,7 +45,7 @@
     data() {
       return {
         editor: null,
-        toolbar:'fontsizeselect undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image  basicDateButton underscoreButton paste mathjax tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry',
+        toolbar:'fontsizeselect undo redo bold italic underline indent outdent superscript subscript  alignleft aligncenter alignright removeformat charmap code image  basicDateButton underscoreButton paste  tiny_mce_wiris_formulaEditor tiny_mce_wiris_formulaEditorChemistry',
         uploadMode : 0,
         editorId:new Date().getTime(),
         obj:{}
@@ -80,7 +80,10 @@
           inline:true,
           toolbar: this.toolbar,
           fontsize_formats: '11px 12px 14px 16px 18px 24px 36px 48px',
-          plugins: 'image code charmap paste tiny_mce_wiris',
+          plugins: 'image code charmap paste ', //tiny_mce_wiris',
+          external_plugins: {
+            'tiny_mce_wiris' : 'https://www.wiris.net/demo/plugins/tiny_mce/plugin.js'
+          },
           // external_plugins: {
           //   'tiny_mce_wiris' : URL.SERVICE_CONTEXT_PATH +'answer-project/node_modules/@wiris/mathtype-tinymce5/plugin.min.js'
           // },

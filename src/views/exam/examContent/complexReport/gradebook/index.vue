@@ -21,9 +21,6 @@
       </div>
 
       <div class="el_table_wapper">
-        <!-- <hj-table
-          :tablecols='tableColumn'
-        ></hj-table> -->
         <exam-table :is-combination="true" :tablecols="tableColumn"></exam-table>
       </div>
     </div>

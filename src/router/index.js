@@ -70,6 +70,5 @@ const router = new VueRouter({
 //     location.href = URL.SERVICE_CONTEXT_PATH + 'Manage/login'
 //     next()
 //   })
-
 // })
 export default router
