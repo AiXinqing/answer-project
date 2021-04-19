@@ -16,23 +16,23 @@ export function useArrayCutHook(initial, options) {
         if (item.height >= runtimeOptions.rowHeight && !(item.height % runtimeOptions.rowHeight == 0)) {
           beyond = 13
         }
+
         acc.totalHeight += item.height
 
-        if (acc.totalHeight <= acc.arrLen) {
+        if (acc.totalHeight <= (acc.arrLen - beyond)) {
           acc.results[acc.results.length - 1].push(item)
         }
 
-        if (acc.totalHeight > acc.arrLen) {
+        if (acc.totalHeight > (acc.arrLen - beyond)) {
           acc.totalHeight = item.height
-          acc.arrLen = runtimeOptions.perpageHeight - beyond
           beyond = 0
+          acc.arrLen = runtimeOptions.perpageHeight
           acc.results.push([item])
         }
 
         return acc
       }, { arrLen: runtimeOptions.height, results: [[]], totalHeight: 0 },
     )
-    window.a = {results:results}
     return results
   }
 
