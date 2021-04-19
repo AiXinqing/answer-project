@@ -8,6 +8,7 @@ import Components from './components/index'
 import httpRequest from './utils/request'
 import { post, fetch, patch, put, postForm } from './utils/http'
 import { URL} from './config/api'
+import { convertArray, convertArray_p } from './config/convertArray'
 import lodash from 'lodash'
 
 Vue.prototype.$http = httpRequest
@@ -19,6 +20,8 @@ Vue.prototype.$patch = patch
 Vue.prototype.$put = put
 Vue.prototype.$postForm = postForm
 Vue.prototype.URL = URL
+Vue.prototype.convertArray = convertArray
+Vue.prototype.convertArray_p = convertArray_p
 
 Vue.use(Components)
 Vue.use(httpRequest)

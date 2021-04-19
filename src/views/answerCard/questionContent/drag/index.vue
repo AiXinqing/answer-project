@@ -69,7 +69,7 @@ export default {
                 height = rows * rowHeight + MarginHeight
               }
             }else{
-              let currentTinymceArr = this.convertArray(editorContent[segmented])
+              let currentTinymceArr = this.convertArray_p(editorContent[segmented])
               if(rowHeightArr[segmented].length){
                 rowHeightArr[segmented].forEach(val =>{
                   height += val
@@ -135,15 +135,6 @@ export default {
 
     },
 
-    //转换富文本编辑的内容为数组
-    convertArray(oldStr) {
-      if(oldStr != undefined){
-        let arr = oldStr.split("</p>")
-            arr = arr.map(item => item == '' ? '' : item + '</p>')
-                      .filter(item => item !='')
-        return arr
-      }
-    },
   }
 }
 </script>

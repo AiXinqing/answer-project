@@ -403,7 +403,7 @@ export default {
           // 富文本字符串
           overflowHeight = 0,
           currentContentArr = []
-          currentContentArr = this.convertArray(val).filter(item => item.indexOf(this.strP) != -1)
+          currentContentArr = this.convertArray_p(val).filter(item => item.indexOf(this.strP) != -1)
            //计算容器容纳高度
           if(first && !orderFirst){
             containerHeight = (remainderHeight - 20 - MarginHeight - heightTitle)
@@ -430,7 +430,7 @@ export default {
           if(editorContent[segmented] != undefined){
 
             let editorArr = editorContent.map( item => {
-              return this.convertArray(item).filter(ele => ele.indexOf(this.strP) != -1)
+              return this.convertArray_p(item).filter(ele => ele.indexOf(this.strP) != -1)
             }).map((ele,index) =>{
               return ele.map((item,i) => {
                 return {str:item,height: rowHeightArr[index][i]}
@@ -552,20 +552,6 @@ export default {
             }
             this.pageData_edit_title(data)
           }
-    },
-
-    convertArray(oldStr) {
-      //转换富文本编辑的内容为数组
-      if(oldStr != undefined){
-        // let arr = oldStr.split(/[(\r\n)\r\n]+/) // 回车换行
-        //     arr = arr.map(item => item == '' || item == 'undefined' ? '' : item + '\n')
-        //               .filter(item => item !='')
-        let arr = oldStr.split('</p>') // 回车换行
-            arr = arr.map(item => item == '' || item == 'undefined' ? '' : item + '</p>')
-                  .filter(item => item !='')
-        return arr
-      }
-      //转换富文本编辑的内容为数组
     },
 
   },
