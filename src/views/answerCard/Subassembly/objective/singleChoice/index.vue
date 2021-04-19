@@ -117,73 +117,73 @@
 </script>
 
 <style lang="less">
-@import '~@/assets/css/variables.less';
-.add_question {
-  color: @main;
-  cursor: pointer;
-  width: 100px;
-}
-.big-question-box {
-  margin-bottom: 20px;
-}
-.big-item,
-.group_item_right {
-  position: relative;
-  display: flex;
-  input {
-    width: 48px;
-    height: 28px;
-  }
-  .el-input--mini {
-    width: 48px;
-  }
-  span {
-    position: relative;
-    top: 5px;
-    margin: 0 3px;
-  }
-  .el-icon-delete {
-    position: absolute;
-    right: 0;
-    top: 5px;
-    font-size: 18px;
+  @import '~@/assets/css/variables.less';
+  .add_question {
+    color: @main;
     cursor: pointer;
+    width: 100px;
   }
-}
-.group_item {
-  width: 100%;
-  height: 39px;
-  line-height: 39px;
-  border-bottom: 1px solid #888;
-  display: contents;
-}
-.group_item:last-child {
-  .el-row:last-child {
-    border-bottom: none;
+  .big-question-box {
+    margin-bottom: 20px;
   }
-}
+  .big-item,
+  .group_item_right {
+    position: relative;
+    display: flex;
+    input {
+      width: 48px;
+      height: 28px;
+    }
+    .el-input--mini {
+      width: 48px;
+    }
+    span {
+      position: relative;
+      top: 5px;
+      margin: 0 3px;
+    }
+    .el-icon-delete {
+      position: absolute;
+      right: 0;
+      top: 5px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+  }
+  .group_item {
+    width: 100%;
+    height: 39px;
+    line-height: 39px;
+    border-bottom: 1px solid #888;
+    display: contents;
+  }
+  .group_item:last-child {
+    .el-row:last-child {
+      border-bottom: none;
+    }
+  }
 
-.group_item_right {
-  text-align: right;
-  position: relative;
-  span {
-    top: 0px;
-    margin: 0 5px;
+  .group_item_right {
+    text-align: right;
+    position: relative;
+    span {
+      top: 0px;
+      margin: 0 5px;
+    }
+    > div {
+      position: absolute;
+      right: 0;
+    }
   }
-  > div {
-    position: absolute;
-    right: 0;
+  .question_tabtitle {
+    text-indent: 1em;
   }
-}
-.question_tabtitle {
-  text-indent: 1em;
-}
-.big-item:nth-child(n + 2) {
-  margin-top: 10px;
-}
-.el-tabs__header.is-top {
-  .el-input--mini .el-input__inner {
-    text-align: center;
+  .big-item:nth-child(n + 2) {
+    margin-top: 10px;
   }
-}
+  .el-tabs__header.is-top {
+    .el-input--mini .el-input__inner {
+      text-align: center;
+    }
+  }
 </style>
