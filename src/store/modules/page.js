@@ -253,7 +253,7 @@ const getters = {
         case  'answerQuestion':
           return {
               ...question, content: { ...question.content, pageLayout: state.pageLayout },
-              // height:question.answerArrHeight[question.orderFirst]
+              height:question.answerArrHeight[question.orderFirst]
             }
         default:
           return {

@@ -32,7 +32,7 @@
       <div
         class="content-info"
         :style="{
-          height: !data.orderFirst ? tinymceHeight - 0 + 'px' : tinymceHeight - 1 + 'px'}"
+          height: tinymceHeight - 0 + 'px'}"
       >
       <!-- height: data.first && data.orderFirst  ? tinymceHeight + 8 + 'px' : tinymceHeight - 2 + 'px'}" -->
         <!-- 富文本编辑区 -->
@@ -174,13 +174,14 @@ export default {
     editorDetail(){
       const {
         editorContent,segmented,id,operatTinymce,
-        rowHeightArr
+        rowHeightArr,
       } = this.tinymceEditObj
 
       // 判断是否进行过富文本编辑
       if (operatTinymce[segmented] == undefined) {
           editorContent[segmented] = this.questionInfo.data
           rowHeightArr[segmented] = this.questionInfo.Arr
+          console.log(segmented)
 
           this.pageData_editorStr({
             id:id,
@@ -390,7 +391,7 @@ export default {
       const index = this.pageData.findIndex(question => question.id == id)
 
       let containerHeight, // 容器高度
-          containerHeightNext,
+          // containerHeightNext,
           difference = 0, // 差值
           differenceLong = 0, // 差值长度
           nextSegmented = segmented + 1,// 数组中-当前位置之后一位
@@ -398,7 +399,7 @@ export default {
           overflowArrs = [],
           operatTinymceArr = [],
           // 内容高度小于内容框高度差值
-          impairment = 0,
+          // impairment = 0,
           // 富文本字符串
           overflowHeight = 0,
           currentContentArr = []
@@ -418,9 +419,9 @@ export default {
             if(containerHeight < difference){
               differenceLong += 1
             }
-            if(containerHeight > difference){
-              containerHeightNext = containerHeight - difference
-            }
+            // if(containerHeight > difference){
+            //   containerHeightNext = containerHeight - difference
+            // }
           })
 
           // 下一级长度
@@ -477,15 +478,16 @@ export default {
                     }
                   })
               overflowHeight = (remainderHeight - 20 - 12) + nextHeight
+              answerArrHeight[orderFirst] = overflowHeight
             }else{
               if(containerHeight > difference && editorContent[nextSegmented] != undefined){
                //内容低于内容高度
                //内容框高度 - 内容
                 containerHeight = (remainderHeight - 20 - MarginHeight - heightTitle)
 
-                rowHeightArr[nextSegmented].forEach(num => {
-                    impairment += num
-                  })
+                // rowHeightArr[nextSegmented].forEach(num => {
+                //     impairment += num
+                //   })
 
                 let testH =  (remainderHeight - 20 - MarginHeight - heightTitle)
                 let textCo = useArrayCutHook(editorArr,{ height: testH, perpageHeight: RemainingHeight,rowHeight:rowHeight })
@@ -522,7 +524,7 @@ export default {
                   })
 
                 overflowHeight = (remainderHeight - 20 - 12) + nextHeight
-
+                answerArrHeight[orderFirst] = overflowHeight
               }else{
                 editorContent[segmented] = val
                 rowHeightArr[segmented] = tinyMceRowHeight
@@ -531,6 +533,7 @@ export default {
                 }else{
                   overflowHeight = height - castHeight + tinyHeight
                 }
+                answerArrHeight[orderFirst] = overflowHeight
               }
             }
           }
