@@ -66,6 +66,7 @@ const mutations = {
   //编辑题型标题
   pageData_edit_title: (state, data) => {
     if (data.index > -1) {
+      console.log(data)
       state.pageData.splice(data.index,1,data.question)
     }
   },

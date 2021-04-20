@@ -37,6 +37,7 @@ export default {
       this.pageData_edit({
         ...answerTitle,
         heightTitle:height,
+        layoutChange:false,
         content: {
           ...answerTitle.content,
           textVal: e.replace(/\n/g, '<br>'),

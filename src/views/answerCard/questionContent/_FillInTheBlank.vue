@@ -37,7 +37,6 @@
           @tinymce-change="tinymceChangeFunc"
           v-model="editorDetail"
           v-if="pageLayout.column == 3"
-          class="fillTinymce"
           :readonly="readonly"
           ref="tinymceBox"
         >
@@ -45,7 +44,6 @@
         <trigger-tinymce
           @tinymce-change="tinymceChangeFunc"
           v-model="editorDetail"
-          class="fillTinymce"
           :readonly="readonly"
           ref="tinymceBox"
           v-else
@@ -60,6 +58,7 @@
 import { mapState, mapMutations, mapGetters } from 'vuex'
 import { QUESTION_NUMBERS } from '@/models/base'
 import { PAGE_HEIGHT } from '@/models/base'
+import { useArrayCutHook } from '@/assets/js/_useArrayCutHook'
 
 import tinyVue from '@/components/tinymce'
 import triggerTinymce from '@/components/tinymce/triggerEditor'
@@ -108,7 +107,7 @@ export default {
       str:'&nbsp;',
       aWidth:1,
       page_height: PAGE_HEIGHT,
-      strP:'</p>'
+      strP:'</p>',
     }
   },
   computed: {
@@ -172,18 +171,23 @@ export default {
     },
 
     editorDetail(){
-      const {editorContent,segmented,id,operatTinymce,rowHeightArr} = this.questionData
+      const {
+        editorContent,segmented,id,operatTinymce,
+        rowHeightArr,
+      } = this.questionData
+
       // 判断是否进行过富文本编辑
-      if(operatTinymce[segmented] == undefined){
-        editorContent[segmented] = this.questionInfo.data
-        rowHeightArr[segmented] = this.questionInfo.Arr
-        this.pageData_editorStr({
-          id:id,
-          content:editorContent,
-          rowHeightArr:rowHeightArr,
-        })
+      if (operatTinymce[segmented] == undefined) {
+          editorContent[segmented] = this.questionInfo.data
+          rowHeightArr[segmented] = this.questionInfo.Arr
+
+          this.pageData_editorStr({
+            id:id,
+            content:editorContent,
+            rowHeightArr:rowHeightArr,
+          })
       }
-      return editorContent[segmented]
+			return editorContent[segmented]
     }
   },
   watch: {
@@ -211,6 +215,10 @@ export default {
           this.content = titleContent
         }
         this.tinymceHeight = first ? castHeight - heightTitle - 2 : castHeight - 2
+
+        if(this.$refs.tinymceBox != undefined){
+          this.$refs.tinymceBox.editorHtml()
+        }
       }
     },
 
@@ -303,74 +311,183 @@ export default {
       // 首个p向下top7px
       let tinyContentH = tinyHeight - 7
       // 参数
-      const {first,segmentedArr,rowHeight,id,segmented,editorContent,operatTinymce,rowHeightArr,MarginHeight,height,heightTitle,castHeight} = this.questionData
-      const index = this.pageData.findIndex(question => question.id == id)
+      const {segmented,operatTinymce} = this.questionData
 
       // 更改富文本编辑后行高数组--------------------------------------------------
       let tinymcePList = document.querySelectorAll(`#${tinyId} p`)
-      let nextSegmented = segmented + 1
+
       let tinyMceRowHeight = []
           tinymcePList.forEach((itme,index) => {
-              tinyMceRowHeight.push(index == 0 ? itme.offsetHeight - 7 : itme.offsetHeight)
+            tinyMceRowHeight.push(index == 0 ? itme.offsetHeight - 7 : itme.offsetHeight)
           })
-      rowHeightArr[segmented] = tinyMceRowHeight
-      //-------------------------------------------------------------------------
 
-      // 富文本编辑后内容赋值
-      editorContent[segmented] = val
       // 标记富文本进行过编辑
       operatTinymce[segmented] = 1
-      // 计算高度
-      let difference = 0
-
-      let tinyHeights = 0
-      let less = 0 // 用于判断内容低于内容框高度
-      if(operatTinymce[segmented]){
-        let maxLong = first ? segmentedArr[segmented]:Math.floor((this.page_height - 20 - MarginHeight) / rowHeight)
-        let accommodateHeight = maxLong * rowHeight
-
-        rowHeightArr[segmented].forEach(val => {
-              difference += val
-              tinyHeights = difference > accommodateHeight ? tinyHeights + val : tinyHeights + 0
-        })
-        if(difference < accommodateHeight){
-          //内容框高度 - 内容
-            let  impairment = accommodateHeight - difference
-              less = impairment
-              if(rowHeightArr[nextSegmented] != undefined && impairment > 0){
-                rowHeightArr[nextSegmented].forEach(val => {
-                    impairment -= val
-                    tinyHeights = impairment >= 0 ? tinyHeights - val : tinyHeights + 0
-                })
-              }
-        }
-      }
-
-      let heights = first ? tinyContentH + heightTitle + MarginHeight : tinyContentH + MarginHeight
 
       this.tinymceHeight =  tinyContentH  // 最大高度
 
-      let contentHeight = (height - castHeight) + heights
-
-
-      if (index > -1) {
-        let curObj = this.pageData[index]
-        let data = {
-          question: {
-            ...curObj,
-            editorContent: editorContent,
-            height: tinyHeights == 0 && less == 0 ? contentHeight : height + tinyHeights,
-            selectStr:segmented, // 判断当前编辑对象所在位置
-            operatTinymce:operatTinymce, // 是否操作
-            rowHeightArr: rowHeightArr,
-          },
-          index: index,
-        }
-
-        this.pageData_edit_title(data)
-      }
+      this.editConten(this.questionData,tinyHeight,val,tinyMceRowHeight)
     },
 
+    editConten(eidtObj,tinyHeight,val,tinyMceRowHeight){
+
+      const {
+        editorContent,segmented,first,id,MarginHeight,operatTinymce,rowHeight,
+        rowHeightArr,remainderHeight,heightTitle,height,castHeight
+      } = eidtObj
+      const index = this.pageData.findIndex(question => question.id == id)
+
+      let containerHeight, // 容器高度
+          difference = 0, // 差值
+          differenceLong = 0, // 差值长度
+          nextSegmented = segmented + 1,// 数组中-当前位置之后一位
+          setArrContent = [],
+          overflowArrs = [],
+          operatTinymceArr = [],
+          // 富文本字符串
+          overflowHeight = 0,
+          currentContentArr = []
+          currentContentArr = this.convertArray_p(val).filter(item => item.indexOf(this.strP) != -1)
+           //计算容器容纳高度
+          if(first && segmented == 0){
+            containerHeight = (remainderHeight - 20 - MarginHeight - heightTitle)
+          }else{
+            containerHeight = this.page_height - 20 - MarginHeight
+          }
+          // 计算当前容器内容高度
+          tinyMceRowHeight.forEach(num =>{
+            difference += num
+            if (num >= rowHeight && !(num % rowHeight == 0)) {
+              difference += 13
+            }
+            if(containerHeight < difference){
+              differenceLong += 1
+            }
+
+          })
+
+          // 下一级长度
+          let RemainingHeight =  this.page_height - 20 - MarginHeight
+
+          if(editorContent[segmented] != undefined){
+
+            let editorArr = editorContent.map( item => {
+              return this.convertArray_p(item).filter(ele => ele.indexOf(this.strP) != -1)
+            }).map((ele,index) =>{
+              return ele.map((item,i) => {
+                return {str:item,height: rowHeightArr[index][i]}
+              })
+            })
+
+            let currentEditorContent = currentContentArr.map((item,index) => {
+              return {str:item,height: tinyMceRowHeight[index]}
+            })
+
+            if(differenceLong > 0){
+              // 截取溢出的高度
+              let testH =  (remainderHeight - 20 - MarginHeight - heightTitle)
+              let textCo = useArrayCutHook(editorArr,{ height: testH, perpageHeight: RemainingHeight,rowHeight:rowHeight,marginTop:7 })
+              let setArrContent1 = textCo.setArr(segmented, currentEditorContent)
+
+              setArrContent = setArrContent1.map(item => {
+                let strContent = ''
+                  item.forEach(element => {
+                  strContent+= element.str
+                })
+                return strContent
+              })
+              overflowArrs = setArrContent1.map(item => {
+                return item.map(ele => ele.height)
+              })
+              operatTinymceArr = overflowArrs.map(() => {return 1})
+
+              let nextHeight = 0
+                  overflowArrs.forEach((ele,index) => {
+                    if(index != 0 && index < overflowArrs.length - 1){
+                      let nums = 0
+                      ele.forEach(num => {
+                        nums += num
+                        nextHeight += num
+                      })
+                      if(nums < RemainingHeight) {
+                        let numLong = Math.ceil((RemainingHeight - nums) / rowHeight)
+                        nextHeight += numLong * rowHeight
+                      }
+                    }else if(index == overflowArrs.length - 1){
+                      ele.forEach(num => {
+                        nextHeight += num
+                      })
+                    }
+                  })
+              overflowHeight = (remainderHeight - 20 - 12) + nextHeight
+            }else{
+              if(containerHeight > difference && editorContent[nextSegmented] != undefined){
+               //内容低于内容高度
+               //内容框高度 - 内容
+                containerHeight = (remainderHeight - 20 - MarginHeight - heightTitle)
+
+                let testH =  (remainderHeight - 20 - MarginHeight - heightTitle)
+                let textCo = useArrayCutHook(editorArr,{ height: testH, perpageHeight: RemainingHeight,rowHeight:rowHeight,marginTop:7 })
+                let setArrContent1 = textCo.setArr(segmented, currentEditorContent)
+
+                  setArrContent = setArrContent1.map(item => {
+                    let strContent = ''
+                    item.forEach(element => {
+                      strContent+= element.str
+                    })
+                    return strContent
+                  })
+                  overflowArrs = setArrContent1.map(item => {
+                    return item.map(ele => ele.height)
+                  })
+                  operatTinymceArr = overflowArrs.map(() => {return 1})
+                let nextHeight = 0
+                  overflowArrs.forEach((ele,index) => {
+                    if(index != 0 && index < overflowArrs.length - 1){
+                      let nums = 0
+                      ele.forEach(num => {
+                        nums += num
+                        nextHeight += num
+                      })
+                      if(nums < RemainingHeight) {
+                        let numLong = Math.ceil((RemainingHeight - nums) / rowHeight)
+                        nextHeight += numLong * rowHeight
+                      }
+                    }else if(index == overflowArrs.length - 1){
+                      ele.forEach(num => {
+                        nextHeight += num
+                      })
+                    }
+                  })
+
+                overflowHeight = (remainderHeight - 20 - 12) + nextHeight
+              }else{
+                editorContent[segmented] = val
+                rowHeightArr[segmented] = tinyMceRowHeight
+                if(first && segmented == 0){
+                  overflowHeight = tinyHeight + heightTitle + 4
+                }else{
+                  overflowHeight = height - castHeight + tinyHeight
+                }
+              }
+            }
+          }
+
+          if(index > -1){
+            let curObj = this.pageData[index]
+            let data = {
+              question:{
+                ...curObj,
+                editorContent: setArrContent.length ? setArrContent : editorContent,
+                operatTinymce:operatTinymceArr.length ? operatTinymceArr : operatTinymce, // 是否操作
+                rowHeightArr: overflowArrs.length ? overflowArrs : rowHeightArr,
+                height:overflowHeight
+              },
+              index:index,
+            }
+            this.pageData_edit_title(data)
+          }
+    },
   },
 }
 </script>

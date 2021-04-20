@@ -1,8 +1,10 @@
-export function convertArray(oldStr) {
+export function convertArray(oldStr, idF = false) {
   if(oldStr != undefined){
     let arr = oldStr.split(/[(\r\n)\r\n]+/) // 回车换行
-        arr = arr.map(item => item == '' || item == 'undefined' ? '' : item + '\n')
-                  .filter(item => item !='')
+    if (!idF) {
+      arr = arr.map(item => item == '' || item == 'undefined' ? '' : item + '\n')
+              .filter(item => item !='')
+    }
     return arr
   }
 }

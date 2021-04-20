@@ -234,7 +234,8 @@ export default {
               contentRows = contentRows > curRect.availableRow ? contentRows - curRect.availableRow : 0
             }
 
-            if(rect.questionType == 'answerQuestion'){
+            if(rect.questionType == 'answerQuestion' || rect.questionType == 'FillInTheBlank'
+              || rect.questionType == 'optionalQuestion'|| rect.questionType == 'compositionEnglish'){
               backup = {
                 ...backup,
                 remainderHeight:remainderHeight
@@ -310,7 +311,8 @@ export default {
               contentRows = contentRows > curRects.availableRow ? contentRows - curRects.availableRow : 0
             }
 
-            if(rect.questionType == 'answerQuestion'){
+            if(rect.questionType == 'answerQuestion' || rect.questionType == 'FillInTheBlank'
+              || rect.questionType == 'optionalQuestion'|| rect.questionType == 'compositionEnglish'){
               backup = {
                 ...backup,
                 remainderHeight:remainderHeight
@@ -376,7 +378,8 @@ export default {
             contentRows = contentRows > curRect.availableRow ? contentRows - curRect.availableRow : 0
           }
 
-          if(rect.questionType == 'answerQuestion'){
+          if(rect.questionType == 'answerQuestion' || rect.questionType == 'FillInTheBlank'
+              || rect.questionType == 'optionalQuestion'|| rect.questionType == 'compositionEnglish'){
             backup = {
               ...backup,
               remainderHeight:remainderHeight
@@ -418,7 +421,8 @@ export default {
             currentPage.height -= this.difference
           }
 
-          if(rect.questionType == 'answerQuestion'){
+          if(rect.questionType == 'answerQuestion' || rect.questionType == 'FillInTheBlank'
+              || rect.questionType == 'optionalQuestion'|| rect.questionType == 'compositionEnglish'){
             backup = {
               ...backup,
               remainderHeight:remainderHeight

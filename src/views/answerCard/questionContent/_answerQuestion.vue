@@ -181,7 +181,6 @@ export default {
       if (operatTinymce[segmented] == undefined) {
           editorContent[segmented] = this.questionInfo.data
           rowHeightArr[segmented] = this.questionInfo.Arr
-          console.log(segmented)
 
           this.pageData_editorStr({
             id:id,
