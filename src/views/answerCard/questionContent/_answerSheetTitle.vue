@@ -76,11 +76,11 @@
             <tr>
               <td v-for="(item, i) in titleRows" :key="i">
                 <div
-                  v-for="row in trDiv"
+                  v-for="(row,i) in trDiv"
                   :key="row"
                   :style="{ minWidth: divWidth + 'px' }"
                 >
-                  [<span>{{ row }} </span>]
+                  [<span>{{ i }} </span>]
                 </div>
               </td>
             </tr>
@@ -126,7 +126,7 @@ export default {
   },
   data() {
     return {
-      trDiv: 9,
+      trDiv: 10,
       studentInfoList: [],
       data:{},
       titleRows:this.questionData.content.titleRows,
@@ -250,13 +250,13 @@ export default {
   }
   .precautions_left {
     border: 1px solid @font-888;
-    height: 258px;
+    height: 278px;
   }
   .precautions_right {
     border: 1px solid @font-888;
     min-width: 223px;
     border-left: none;
-    height: 258px;
+    height: 278px;
   }
   .precautions_content {
     padding-left: 10px;
@@ -265,7 +265,7 @@ export default {
     font-size: 14px;
     &.active {
       div {
-        padding: 1px 0;
+        padding: 3px 0 4px 0;
       }
     }
   }
@@ -298,7 +298,7 @@ export default {
   cursor: pointer;
 }
 .precautions_content div {
-  padding: 7px 0;
+  padding: 9px 0;
   margin: 0 0;
 }
 .precautions_edit {
