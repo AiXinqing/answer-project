@@ -4,6 +4,8 @@
       :data="tableData"
       style="width: 100%">
       <!-- 标题栏- 合并 -->
+      <el-table-column v-if="isSelection" type="selection" align="center"></el-table-column>
+      <el-table-column v-if="isIndex" type="index" :label="indexlabel" align="center" width="50" :fixed="indexFixed"></el-table-column>
       <singleColumn
         v-for="(column,i) in tablecols"
         :key="i"
@@ -14,33 +16,16 @@
     <!-- 分页 -->
       <section class="ces-pagination" v-if='isPagination'>
         <el-pagination
-          class="page-left"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange"
-          layout="total,sizes ,slot"
-          :page-sizes="pageSizes"
-          :page-size="pagination.pageSize"
-          :current-page="pagination.pageNum"
-          :total="pagination.total"
-          popper-class="hj-page-select">
-            <button type="button" :disabled="firstDisabled" @click="jumpPage('first')" class="btn-prev">
-                <i class="el-icon el-icon-d-arrow-left"></i>
-            </button>
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        layout="total, sizes, prev, pager, next, jumper"
+        :page-sizes="pageSizes"
+        :page-size="pagination.pageSize"
+        :current-page="pagination.pageNum"
+        :total="pagination.total"
+        >
         </el-pagination>
-        <el-pagination
-          class="page-right"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange"
-          layout="prev, pager, next,slot,jumper"
-          :page-sizes="pageSizes"
-          :page-size="pagination.pageSize"
-          :current-page="pagination.pageNum"
-          :total="pagination.total"
-          popper-class="hj-page-select">
-            <button type="button" :disabled="lastDisabled" @click="jumpPage('last')" class="btn-next">
-                <i class="el-icon el-icon-d-arrow-right"></i>
-            </button>
-        </el-pagination>
+
       </section>
   </section>
 </template>
@@ -54,27 +39,30 @@
     props: {
       // 表格列配置
       tablecols: {type: Array, default: () => []},
-      isCombination:{
-        type:Boolean,
-        default:false
-      },
+      tableData: {type: Array, default: () => []},
       // 是否显示表格索引
       isIndex: {type: Boolean, default: true},
+      // 是否显示表格复选框
+      isSelection: {type: Boolean, default: false},
       indexlabel: {type: String, default: '序号'},
       indexFixed: {type: Boolean, default: false},
       // 是否显示分页
       isPagination: {type: Boolean, default: true},
       // 每页显示条数
-      pageSizes: {type: Array, default: () => [20, 50, 100]},
+      pageSizes: {type: Array, default: () => [10,20,30,50,100]},
+      currentPage:{type: Number, default: 4},
+      // pagination:{
+      //   type:Object,
+      //   default:() =>{}
+      // }
     },
     data() {
       return {
-        tableData: [],
         loading: false,
         firstDisabled: false,
         lastDisabled: false,
         // 分页数据
-        pagination: {pageSize: 50, pageNum: 1, total: 0},
+        pagination: {pageSize: 10, pageNum: 2, total: 100},
       }
     },
     methods: {
@@ -106,6 +94,74 @@
     }
     &:nth-child(odd){
       background-color: @white
+    }
+  }
+
+  .el-table .ascending .sort-caret.ascending{
+    border-bottom-color:@main
+  }
+  .el-table {
+    .descending {
+      .sort-caret{
+        &.descending{
+          border-top-color:@main
+        }
+      }
+    }
+    .caret-wrapper{
+      width: 17px;
+    }
+  }
+  .el-table--medium td,
+  .el-table--medium th{
+    padding: 0px 0;
+    padding-top: 6px;
+  }
+  .el-table--border td:first-child .cell, .el-table--border th:first-child .cell, .el-table .cell, .el-table th div{
+    padding-left: 5px;
+  }
+  .el-table .cell, .el-table th div{
+    padding-right: 5px;
+  }
+
+  // table分页
+  .el-pagination{
+    margin-top: 15px;
+  }
+  .el-pagination__sizes{
+    .el-input{
+      .el-input__inner{
+        &:hover{
+          border-color:@main
+        }
+      }
+    }
+  }
+  .el-select-dropdown__item{
+    &.selected{
+      color:@main
+    }
+  }
+  .el-pager{
+    li{
+      &:hover,
+      &.active{
+        color:@main;
+        background-color: @main;
+        color: @white;
+      }
+      background: @font-f4f5;
+      margin: 0 4px;
+      border-radius: 4px;
+      padding: 0 0;
+      color:@font-888;
+    }
+  }
+  .el-pagination__editor{
+    &.el-input{
+      .el-input__inner{
+        font-size: 14px;
+      }
     }
   }
 </style>

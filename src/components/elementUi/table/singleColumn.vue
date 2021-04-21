@@ -12,15 +12,19 @@
     :render-header="column.require?renderHeader:null"
     :filters="column.filters ? column.filters : null"
     :filter-method="column.filterMethod ? column.filterMethod : null"
-    :filter-placement="column.filterPlacement ? column.filterPlacement : null" />
+    :filter-placement="column.filterPlacement ? column.filterPlacement : null">
+      <!-- <template slot-scope="scope">
+        <span v-if="column.type==='Html'" v-html="item.html(scope.row)" :style="item.itemStyle ? item.itemStyle(scope.row): ''"></span>
+      </template> -->
+    </el-table-column>
   <el-table-column
     v-else
     :label="column.label"
+    :align="column.align"
   >
   <template
     v-for="(ele,index) in column.childen"
   >
-
     <el-table-column
     :key="`${i}_${index}`"
     :prop="ele.prop"
