@@ -9,10 +9,19 @@ export function getExamInfo({ prmTid }) {
   })
 }
 
-export function GetStuResults({ tid, subjectId, classIds, keyWords, pageIndex, pageSize }) {
+export function GetStuResults({ tid, tsid, classIds, keyWords, pageIndex, pageSize }) {
   return request({
     url: URL.GetStuResults,
     method: 'get',
-    params: { tid, subjectId, classIds, keyWords, pageIndex, pageSize }
+    params: { tid, tsid, classIds, keyWords, pageIndex, pageSize }
+  })
+}
+
+// 获取动态表头
+export function dynamicHeader({ tid, tsid }) {
+  return request({
+    url: URL.GetTableHeadeSubject,
+    method: 'get',
+    params: { tid, tsid }
   })
 }
