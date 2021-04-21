@@ -1,5 +1,6 @@
 <template>
   <el-table-column
+    v-if="!column.childen"
     :prop="column.prop"
     :label="column.label"
     :width="column.width"
@@ -11,7 +12,30 @@
     :render-header="column.require?renderHeader:null"
     :filters="column.filters ? column.filters : null"
     :filter-method="column.filterMethod ? column.filterMethod : null"
-    :filter-placement="column.filterPlacement ? column.filterPlacement : null">
+    :filter-placement="column.filterPlacement ? column.filterPlacement : null" />
+  <el-table-column
+    v-else
+    :label="column.label"
+  >
+  <template
+    v-for="(ele,index) in column.childen"
+  >
+
+    <el-table-column
+    :key="`${i}_${index}`"
+    :prop="ele.prop"
+    :label="ele.label"
+    :width="ele.width"
+    :min-width="ele.minWidth"
+    :align="ele.align"
+    :fixed="ele.fixed"
+    :sortable="ele.sortable"
+    show-overflow-tooltip
+    :render-header="ele.require?renderHeader:null"
+    :filters="ele.filters ? ele.filters : null"
+    :filter-method="ele.filterMethod ? ele.filterMethod : null"
+    :filter-placement="ele.filterPlacement ? ele.filterPlacement : null" />
+  </template>
   </el-table-column>
 </template>
 
