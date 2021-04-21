@@ -17,6 +17,9 @@
   import question from './question'
   import gradesStatistics from './gradesStatistics'
   import ranking from './ranking'
+
+  import { mapState, mapGetters } from 'vuex'
+
   export default {
     components: {
       gradebook,
@@ -26,6 +29,7 @@
       gradesStatistics,
       ranking
     },
+
     data() {
       return {
         activeName: 'gradebook',
@@ -54,19 +58,58 @@
             label:'名次和比例分析',
             name:'ranking'
           },
-        ]
+        ],
+        prmTid: '',
       }
     },
+
+    computed: {
+      ...mapState('getExam', ['subjectsArr','headerTable','TableList']),
+      ...mapGetters('getExam', ['examInfo'])
+    },
+
+    watch: {
+      $route: {
+        handler: function(route) {
+          const query = route.query
+          if (query.prmTid) {
+            this.prmTid = query.prmTid
+          }
+        },
+        immediate: true
+      },
+    },
+
     mounted () {
-      // this.$fetch(this.URL.setLogin, {input:''})
-      // .then((res) => {
-      //     console.log(res)
-      // })
+      if(this.prmTid != ''){
+        this.getExamFunc(this.prmTid)
+      }
     },
     methods: {
       handleClick(tab){
         this.activeName = tab.name
-      }
+      },
+
+      getExamFunc(prmTid) {
+        this.$store.dispatch('getExam/getExamInfo', {
+          prmTid: prmTid
+        }).then((res)=>{
+          if(res.ResponseCode =="Success"){
+            this.stretchBox = this.examInfo
+            this.subjectsArr.forEach((element,i) => {
+              if(i == 0){
+                this.tsid = element.tsid
+              }
+            })
+            console.log(this.subjectsArr)
+            this.$nextTick(()=>{
+              // 获取动态表头
+              // this.getDynamicHeader(prmTid,this.tsid)
+              // this.getTable(prmTid,this.tsid)
+            })
+          }
+        })
+      },
     },
   }
 </script>

@@ -14,139 +14,99 @@
         <div class="search_right">
           <exam-button type="primary">下载表格</exam-button>
           <exam-button type="primary">查询</exam-button>
-          <hj-input v-model="text" placeholder="请输入12345">
+          <hj-input v-model="keyWords" placeholder="请输入12345">
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </hj-input>
         </div>
       </div>
 
       <div class="el_table_wapper">
-        <exam-table :is-combination="true" :tablecols="tableColumn"></exam-table>
+        <exam-table
+          :tablecols="tableColumn"
+          :tableData="tableData"
+          :isIndex="false"
+          ></exam-table>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import { mapState } from 'vuex'
+  import { mapState, mapGetters } from 'vuex'
+
   export default {
     data() {
       return {
         stretch: false,
         stretchBox:[],
-        text:'',
-        tableColumn:[
+        fixedHeader:[
           {
-            prop:'date',
-            label:'姓名',
-            minWidth:'80',
+            prop:'cname',
+            label:'班级',
+            minWidth:'140',
+            align:'center',
             fixed:'left'
-          },{
-            prop:'name',
+          },
+          {
+            prop:'stuname',
+            label:'姓名',
+            minWidth:'100',
+            align:'center',
+          },
+          {
+            prop:'tnumber',
             label:'考号',
-            minWidth:'80',
+            minWidth:'100',
+            align:'center',
           },
           {
-            prop:'province',
+            prop:'snumber',
             label:'学号',
-            width:'1',
-            childen:[
-              {
-                prop:'city',
-                label:'班级',
-                width:'80',
-              },
-              {
-                prop:'address',
-                label:'总分',
-                minWidth:'140',
-              },
-              {
-                prop:'zip',
-                label:'客观题',
-                width:'120',
-              },
-              {
-                prop:'address',
-                label:'客观题',
-                minWidth:'180',
-              },
-            ]
+            minWidth:'120',
+            align:'center',
+          },
+        ],
+        columnMultiLine:[
+          {
+            prop:'tscore',
+            label:'分数',
+            width:'85',
+            align:'center',
           },
           {
-            label: "操作",
-            type: "Text",
-            align: "left",
-            fixed: "right",
-            minWidth: 55,
+            prop:'gradeRank',
+            label:'学校排名',
+            width:'90',
+            align:'center',
+          },
+          {
+            prop:'classRank',
+            label:'班级排名',
+            width:'90',
+            align:'center',
           },
         ],
-        tableData: [
-          // {
-          // date: '2016-05-03',
-          // name: '王小虎',
-          // province: '上海',
-          // city: '普陀区',
-          // address: '上海市普陀区金沙江路 1518 弄',
-          // zip: 200333
-          // },
-          // {
-          //   date: '2016-05-02',
-          //   name: '王小虎',
-          //   province: '上海',
-          //   city: '普陀区',
-          //   address: '上海市普陀区金沙江路 1518 弄',
-          //   zip: 200333
-          // },
-          // {
-          //   date: '2016-05-04',
-          //   name: '王小虎',
-          //   province: '上海',
-          //   city: '普陀区',
-          //   address: '上海市普陀区金沙江路 1518 弄',
-          //   zip: 200333
-          // },
-          // {
-          //   date: '2016-05-01',
-          //   name: '王小虎',
-          //   province: '上海',
-          //   city: '普陀区',
-          //   address: '上海市普陀区金沙江路 1518 弄',
-          //   zip: 200333
-          // }, {
-          //   date: '2016-05-08',
-          //   name: '王小虎',
-          //   province: '上海',
-          //   city: '普陀区',
-          //   address: '上海市普陀区金沙江路 1518 弄',
-          //   zip: 200333
-          // }, {
-          //   date: '2016-05-06',
-          //   name: '王小虎',
-          //   province: '上海',
-          //   city: '普陀区',
-          //   address: '上海市普陀区金沙江路 1518 弄',
-          //   zip: 200333
-          // }, {
-          //   date: '2016-05-07',
-          //   name: '王小虎',
-          //   province: '上海',
-          //   city: '普陀区',
-          //   address: '上海市普陀区金沙江路 1518 弄',
-          //   zip: 200333
-          // }
-        ],
-        prmTid: ''
+        tableColumn:[],
+        tableData: [],
+        prmTid: '',
+        tsid:'',
+        classIds:[],
+        keyWords:'',
+        pageTable: {
+          pageIndex:1,
+          pageSize:10,
+        }
       }
     },
 
     computed: {
-      ...mapState('getExam', ['examInfo']),
+      ...mapState('getExam', ['subjectsArr','headerTable','TableList']),
+      ...mapGetters('getExam', ['examInfo'])
     },
 
     mounted () {
       if(this.prmTid != ''){
-        this.getExamFunc(this.prmTid)
+        //this.getExamFunc(this.prmTid)
       }
     },
 
@@ -168,35 +128,87 @@
       },
 
       getExamFunc(prmTid) {
-
         this.$store.dispatch('getExam/getExamInfo', {
           prmTid: prmTid
         }).then((res)=>{
           if(res.ResponseCode =="Success"){
             this.stretchBox = this.examInfo
-            // let data = res.ResponseContent
-            // this.stretchBox = [
-            //   {
-            //     subject:'科目',
-            //     type:'single',
-            //     stretch:false,
-            //     subjectList:data.subjects.map(item => ({
-            //       ...item,
-            //       check: item.sid == 'totalScore' ? true : false,
-            //       name: item.sname
-            //     }))
-            //   },
-            //   {
-            //     subject:'班级',
-            //     type:'multiple',
-            //     stretch:false,
-            //     subjectList:data.classes.map(item => ({
-            //       ...item,
-            //       check: item.cid == 'all' ? true : false,
-            //       name: item.cname
-            //     }))
-            //   }
-            // ]
+            this.subjectsArr.forEach((element,i) => {
+              if(i == 0){
+                this.tsid = element.tsid
+              }
+            })
+            this.$nextTick(()=>{
+              // 获取动态表头
+              this.getDynamicHeader(prmTid,this.tsid)
+              this.getTable(prmTid,this.tsid)
+            })
+          }
+        })
+      },
+
+      getDynamicHeader(prmTid,tsid){
+        // 获取动态表头
+        this.$store.dispatch('getExam/dynamicHeader', {
+          tid: prmTid,tsid:tsid
+        }).then((res)=>{
+          if(res.ResponseCode =="Success"){
+            this.tableColumn = [
+              ...this.fixedHeader,
+              ...this.headerTable.map(ele => ({
+                ...ele,
+                label:ele.sname,
+                align:'center',
+                childen:this.columnMultiLine.map(item => {
+                  return {
+                    ...item,
+                    prop:`${item.prop}_${ele.sname}`,
+                    label:item.label,
+                    width:item.width,
+                    align:item.align,
+                    sortable:true
+                  }
+                }),
+              }))
+            ]
+            // console.log(this.tableColumn)
+          }
+        })
+      },
+
+      getTable(prmTid,tsid) {
+        // 获取table
+        this.$store.dispatch('getExam/GetStuResults', {
+          tid: prmTid,tsid:tsid,keyWords:this.keyWords,
+          classIds:this.classIds,...this.pageTable
+        }).then((res)=>{
+          if(res.ResponseCode =="Success"){
+            this.tableData = this.TableList.map(item =>{
+              let dynamic = {}
+              item.DynamicDetail.forEach(item => {
+                dynamic = {
+                  ...dynamic,
+                  [`classRank_${item.sname}`]: item.classRank,
+                  [`gradeRank_${item.sname}`]: item.gradeRank,
+                  ord: item.ord,
+                  sname: item.sname,
+                  [`tscore_${item.sname}`]: item.tscore,
+                  tsid: item.tsid
+                }
+              })
+
+              return {
+                cid: item.cid,
+                cname: item.cname,
+                snumber: item.snumber,
+                stuname: item.stuname,
+                tmid: item.tmid,
+                tnumber: item.tnumber,
+                totalscore: item.totalscore,
+                ...dynamic
+              }
+            })
+            // console.log(this.tableData)
           }
         })
       }
