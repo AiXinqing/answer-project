@@ -21,6 +21,7 @@
               :key="a"
               :title="item.name"
               v-model="item.check"
+              @change="handleCheckAllChange(item)"
             ></hj-checkbox>
           </template>
           <!-- 多选题 -->
@@ -50,7 +51,7 @@
     data() {
       return {
         data: {},
-        stretch:false
+        stretch:true
       }
     },
     watch: {
@@ -70,6 +71,14 @@
         this.data.subjectList = this.data.subjectList.map((item,i) => {
           return i == index ? {...item,check:!item.check} : {...item,check:false}
         })
+      },
+
+      handleCheckAllChange(item){
+        if(item.cid == 'all'){
+          this.data.subjectList = this.data.subjectList.map(ele => {
+            return {...ele,check:item.check}
+          })
+        }
       }
     },
   }
