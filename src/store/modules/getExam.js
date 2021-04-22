@@ -9,7 +9,8 @@
     tsid: 'totalScore',
     subjectsArr: [],
     classesArr: [],
-    TableList: []
+    TableList: [],
+    tableLoading: false
   }
 
   const mutations = {
@@ -24,7 +25,7 @@
       // 班级
       state.classesArr = data.classes.map(item => ({
         ...item,
-        check: item.cid == 'all' ? true : false,
+        check: true,
         name: item.cname
       }))
 
@@ -38,6 +39,10 @@
     SET_TABLE: (state, res) => {
       const { data } = res.ResponseContent
       state.TableList = data
+    },
+
+    GET_TABLELOADING: (state, isLoading) => {
+      state.tableLoading = isLoading
     }
   }
 
@@ -55,6 +60,7 @@
         GetStuResults({ tid, tsid, classIds, keyWords, pageIndex, pageSize }).then(res => {
           commit('SET_TABLE', res)
           resolve(res)
+          commit('GET_TABLELOADING', false)
           return res
         }).catch(error => {
           commit('GET_TABLELOADING', true)
@@ -79,13 +85,13 @@
         {
           subject:'科目',
           type:'single',
-          stretch:false,
+          stretch:true,
           subjectList:state.subjectsArr
         },
         {
           subject:'班级',
           type:'multiple',
-          stretch:false,
+          stretch:true,
           subjectList:state.classesArr
         }
       ]

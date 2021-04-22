@@ -66,6 +66,7 @@
     methods: {
       handleStretch() {
         this.stretch = !this.stretch
+        this.$emit('handle-stretch')
       },
       singleChange(index){
         this.data.subjectList = this.data.subjectList.map((item,i) => {
@@ -142,5 +143,9 @@
         margin-left: 5px;
       }
     }
+  }
+  .el-checkbox__input.is_focus
+  .el-checkbox__inner{
+    border-color: @main
   }
 </style>

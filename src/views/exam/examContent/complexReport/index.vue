@@ -5,7 +5,14 @@
       :tab-pane="tabPaneBox"
       @tab-click="handleClick"
     >
-      <component :is="activeName"></component>
+      <component
+        :is="activeName"
+        :stretch-box="stretchBox"
+        :active-name="activeName"
+        :pagination="pagination"
+        @handle-size-change="handleSizeChange"
+        @handle-current-change="handleCurrentChange"
+      ></component>
     </hj-tabs>
   </div>
 </template>
@@ -60,11 +67,26 @@
           },
         ],
         prmTid: '',
+        tsid:'',
+        stretchBox:[],
+        pagination: {
+          pageSize: 15,
+          pageNum: 1,
+          total: 0
+        },
+        pageData:{},
+        parameter:{
+          classIds:[],
+          keyWords:'',
+          tid: '',
+          tsid:'',
+        },
+        resetParameter:{}
       }
     },
 
     computed: {
-      ...mapState('getExam', ['subjectsArr','headerTable','TableList']),
+      ...mapState('getExam', ['subjectsArr']),
       ...mapGetters('getExam', ['examInfo'])
     },
 
@@ -83,6 +105,8 @@
     mounted () {
       if(this.prmTid != ''){
         this.getExamFunc(this.prmTid)
+        this.pageData = this.pagination
+        this.resetParameter = this.parameter
       }
     },
     methods: {
@@ -101,15 +125,55 @@
                 this.tsid = element.tsid
               }
             })
-            console.log(this.subjectsArr)
             this.$nextTick(()=>{
               // 获取动态表头
-              // this.getDynamicHeader(prmTid,this.tsid)
-              // this.getTable(prmTid,this.tsid)
+              this.getDynamicHeader(prmTid,this.tsid)
+              this.parameter = {
+                ...this.parameter,
+                tid:prmTid,
+                tsid:this.tsid
+              }
+              this.getTable()
             })
           }
         })
       },
+
+      getDynamicHeader(prmTid,tsid){
+        // 获取动态表头
+        this.$store.dispatch('getExam/dynamicHeader', {
+          tid: prmTid,tsid:tsid
+        })
+      },
+
+      getTable() {
+        // 获取table
+        const { pageSize , pageNum} = this.pagination
+        this.$store.dispatch('getExam/GetStuResults', {
+          ...this.parameter,
+          pageIndex: pageNum,
+          pageSize: pageSize,
+        }).then((res)=>{
+          if(res.ResponseCode =="Success"){
+            const {count,pageIndex,pageSize} = res.ResponseContent
+            this.pagination = {
+              pageSize: pageSize,
+              pageNum: pageIndex,
+              total: count
+            }
+          }
+        })
+      },
+
+      handleSizeChange(val){
+        this.pagination.pageSize = val
+        this.getTable()
+      },
+
+      handleCurrentChange(val){
+        this.pagination.pageNum = val
+        this.getTable()
+      }
     },
   }
 </script>

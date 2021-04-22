@@ -2,7 +2,12 @@
   <section>
     <el-table
       :data="tableData"
-      style="width: 100%">
+      style="width: 100%"
+      :height="height"
+      :row-height="rowHeight"
+      v-loading="loading"
+      :border="isBorder"
+    >
       <!-- 标题栏- 合并 -->
       <el-table-column v-if="isSelection" type="selection" align="center"></el-table-column>
       <el-table-column v-if="isIndex" type="index" :label="indexlabel" align="center" width="50" :fixed="indexFixed"></el-table-column>
@@ -37,6 +42,7 @@
       singleColumn,
     },
     props: {
+      theight: {type: Number, default: 500},
       // 表格列配置
       tablecols: {type: Array, default: () => []},
       tableData: {type: Array, default: () => []},
@@ -51,37 +57,51 @@
       // 每页显示条数
       pageSizes: {type: Array, default: () => [10,20,30,50,100]},
       currentPage:{type: Number, default: 4},
-      // pagination:{
-      //   type:Object,
-      //   default:() =>{}
-      // }
+      // 行高,为计算显示区域
+      rowHeight: {
+        type: Number,
+        default: 30
+      },
+      //是否显示表格竖向边框
+      isBorder: {type: Boolean, default: true},
+      loading:{
+        type:Boolean,
+        default: false
+      },
+      pagination: {type: Object, default: () => ({
+        pageSize: 15,
+        pageNum: 1,
+        total: 0
+      })},
     },
     data() {
       return {
-        loading: false,
         firstDisabled: false,
         lastDisabled: false,
         // 分页数据
-        pagination: {pageSize: 10, pageNum: 2, total: 100},
+        height:500,
       }
     },
+
+    watch: {
+      theight: {
+        immediate: true,
+        handler () {
+          this.height = this.theight
+        }
+      },
+    },
+
     methods: {
       // 显示第几页
       handleCurrentChange(val) {
-        this.pagination.pageNum = val;
-        this.getTableData(this.pagination.pageSize, val);
-        this.$nextTick(()=>{
-          this.$refs.cesTable.bodyWrapper.scrollTop = 0;
-          this.$refs.cesTable.bodyWrapper.scrollLeft = 0;
-        })
+        this.$emit('handle-current-change',val)
       },
       // 每页显示的条数
       handleSizeChange(val) {
-          this.pagination.pageSize = val;
-          // 在改变每页显示的条数时，要将页码显示到第一页
-          this.pagination.pageNum = 1;
-          this.getTableData(val, 1);
+        this.$emit('handle-size-change',val)
       },
+
     },
   }
 </script>
@@ -155,6 +175,11 @@
       border-radius: 4px;
       padding: 0 0;
       color:@font-888;
+      font-size: 13px;
+      min-width: 30.5px;
+      font-weight: 500;
+      height: 26px;
+      line-height: 26px;
     }
   }
   .el-pagination__editor{

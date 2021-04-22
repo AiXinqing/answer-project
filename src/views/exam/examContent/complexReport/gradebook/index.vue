@@ -1,10 +1,14 @@
 <template>
   <div class="complex_content">
-    <hj-stretch
-      v-for="(choose,i) in stretchBox"
-      :key="i"
-      :choose-list="choose">
-    </hj-stretch>
+    <div ref="stretch">
+      <hj-stretch
+        v-for="(choose,i) in stretchArr"
+        :key="i"
+        :choose-list="choose"
+        @handle-stretch="handleStretch"
+      >
+      </hj-stretch>
+    </div>
     <div class="table_wapper">
       <div class="table_search">
         <div class="search_left">
@@ -25,6 +29,11 @@
           :tablecols="tableColumn"
           :tableData="tableData"
           :isIndex="false"
+          :theight="theight"
+          :pagination="pagination"
+          :loading="tableLoading"
+          @handle-size-change="handleSizeChange"
+          @handle-current-change="handleCurrentChange"
           ></exam-table>
       </div>
     </div>
@@ -32,13 +41,28 @@
 </template>
 
 <script>
-  import { mapState, mapGetters } from 'vuex'
-
+  import { mapState} from 'vuex'
   export default {
+    props: {
+      stretchBox: {
+        type: Array,
+        default: () => []
+      },
+
+      pagination:{
+        type: Object,
+        default: () => {}
+      },
+
+      activeName:{
+        type: String,
+        default: ''
+      },
+    },
     data() {
       return {
-        stretch: false,
-        stretchBox:[],
+        stretch: true,
+        stretchArr:[],
         fixedHeader:[
           {
             prop:'cname',
@@ -86,28 +110,75 @@
             align:'center',
           },
         ],
-        tableColumn:[],
-        tableData: [],
         prmTid: '',
         tsid:'',
         classIds:[],
         keyWords:'',
-        pageTable: {
-          pageIndex:1,
-          pageSize:10,
-        }
+
+        headerArr:[],
+        tableArr:[],
+        theight: 500
       }
     },
 
     computed: {
-      ...mapState('getExam', ['subjectsArr','headerTable','TableList']),
-      ...mapGetters('getExam', ['examInfo'])
+      ...mapState('getExam', ['subjectsArr','headerTable','TableList','tableLoading']),
+
+      tableColumn(){
+        // 动态表头
+        return this.headerTable.length ? [
+          ...this.fixedHeader,
+          ...this.headerTable.map(ele => ({
+            ...ele,
+            label:ele.sname,
+            align:'center',
+            childen:this.columnMultiLine.map(item => {
+              return {
+                ...item,
+                prop:`${item.prop}_${ele.sname}`,
+                label:item.label,
+                width:item.width,
+                align:item.align,
+                sortable:true
+              }
+            }),
+          }))
+        ] : []
+      },
+
+      tableData(){
+        return this.TableList.length ? this.TableList.map(item =>{
+          let dynamic = {}
+          item.DynamicDetail.forEach(item => {
+            dynamic = {
+              ...dynamic,
+              [`classRank_${item.sname}`]: item.classRank,
+              [`gradeRank_${item.sname}`]: item.gradeRank,
+              ord: item.ord,
+              sname: item.sname,
+              [`tscore_${item.sname}`]: item.tscore,
+              tsid: item.tsid
+            }
+          })
+
+          return {
+            cid: item.cid,
+            cname: item.cname,
+            snumber: item.snumber,
+            stuname: item.stuname,
+            tmid: item.tmid,
+            tnumber: item.tnumber,
+            totalscore: item.totalscore,
+            ...dynamic
+          }
+        }) : []
+      }
     },
 
     mounted () {
-      if(this.prmTid != ''){
-        //this.getExamFunc(this.prmTid)
-      }
+      this.$nextTick(() => {
+        this.theight = document.body.clientHeight - 350
+      })
     },
 
     watch: {
@@ -120,97 +191,29 @@
         },
         immediate: true
       },
+
+      stretchBox: {
+        immediate: true,
+        handler () {
+          this.stretchArr = this.stretchBox
+        }
+      },
     },
 
     methods: {
-      handleStretch() {
-        this.stretch = !this.stretch
+      handleStretch(){
+        this.$nextTick(() =>{
+          let height = this.$refs.stretch.offsetHeight
+          this.theight = document.body.clientHeight - 258 - height // 258 = 页面高度 - height  除条件以外的高度
+        })
+
       },
 
-      getExamFunc(prmTid) {
-        this.$store.dispatch('getExam/getExamInfo', {
-          prmTid: prmTid
-        }).then((res)=>{
-          if(res.ResponseCode =="Success"){
-            this.stretchBox = this.examInfo
-            this.subjectsArr.forEach((element,i) => {
-              if(i == 0){
-                this.tsid = element.tsid
-              }
-            })
-            this.$nextTick(()=>{
-              // 获取动态表头
-              this.getDynamicHeader(prmTid,this.tsid)
-              this.getTable(prmTid,this.tsid)
-            })
-          }
-        })
+      handleSizeChange(val){
+        this.$emit('handle-size-change',val)
       },
-
-      getDynamicHeader(prmTid,tsid){
-        // 获取动态表头
-        this.$store.dispatch('getExam/dynamicHeader', {
-          tid: prmTid,tsid:tsid
-        }).then((res)=>{
-          if(res.ResponseCode =="Success"){
-            this.tableColumn = [
-              ...this.fixedHeader,
-              ...this.headerTable.map(ele => ({
-                ...ele,
-                label:ele.sname,
-                align:'center',
-                childen:this.columnMultiLine.map(item => {
-                  return {
-                    ...item,
-                    prop:`${item.prop}_${ele.sname}`,
-                    label:item.label,
-                    width:item.width,
-                    align:item.align,
-                    sortable:true
-                  }
-                }),
-              }))
-            ]
-            // console.log(this.tableColumn)
-          }
-        })
-      },
-
-      getTable(prmTid,tsid) {
-        // 获取table
-        this.$store.dispatch('getExam/GetStuResults', {
-          tid: prmTid,tsid:tsid,keyWords:this.keyWords,
-          classIds:this.classIds,...this.pageTable
-        }).then((res)=>{
-          if(res.ResponseCode =="Success"){
-            this.tableData = this.TableList.map(item =>{
-              let dynamic = {}
-              item.DynamicDetail.forEach(item => {
-                dynamic = {
-                  ...dynamic,
-                  [`classRank_${item.sname}`]: item.classRank,
-                  [`gradeRank_${item.sname}`]: item.gradeRank,
-                  ord: item.ord,
-                  sname: item.sname,
-                  [`tscore_${item.sname}`]: item.tscore,
-                  tsid: item.tsid
-                }
-              })
-
-              return {
-                cid: item.cid,
-                cname: item.cname,
-                snumber: item.snumber,
-                stuname: item.stuname,
-                tmid: item.tmid,
-                tnumber: item.tnumber,
-                totalscore: item.totalscore,
-                ...dynamic
-              }
-            })
-            // console.log(this.tableData)
-          }
-        })
+      handleCurrentChange(val){
+        this.$emit('handle-current-change',val)
       }
     },
   }
