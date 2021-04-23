@@ -69,9 +69,20 @@
         this.$emit('handle-stretch')
       },
       singleChange(index){
+
         this.data.subjectList = this.data.subjectList.map((item,i) => {
           return i == index ? {...item,check:!item.check} : {...item,check:false}
         })
+        let selected
+        this.data.subjectList.forEach((ele,i) => {
+          if(index == i){
+            selected = ele.tsid
+            return false
+          }
+        })
+
+        this.$emit('single-change',selected)
+
       },
 
       handleCheckAllChange(item){
@@ -80,6 +91,10 @@
             return {...ele,check:item.check}
           })
         }
+        let Arr = this.data.subjectList.filter(item => item.check)
+                    .map(ele => ele.cid)
+
+        this.$emit('handle-checkAll-change',Arr)
       }
     },
   }

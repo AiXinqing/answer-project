@@ -6,6 +6,8 @@
         :key="i"
         :choose-list="choose"
         @handle-stretch="handleStretch"
+        @handle-checkAll-change="handleCheckAllChange"
+        @single-change="singleChange"
       >
       </hj-stretch>
     </div>
@@ -17,7 +19,7 @@
         </div>
         <div class="search_right">
           <exam-button type="primary">下载表格</exam-button>
-          <exam-button type="primary">查询</exam-button>
+          <exam-button type="primary" @click="handleInquire">查询</exam-button>
           <hj-input v-model="keyWords" placeholder="请输入12345">
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </hj-input>
@@ -214,6 +216,21 @@
       },
       handleCurrentChange(val){
         this.$emit('handle-current-change',val)
+      },
+
+      handleCheckAllChange(Arr){
+        // 班级查询
+        this.$emit('handle-checkAll-change',Arr)
+      },
+
+      singleChange(tsid){
+        // 科目查询
+        this.$emit('single-change',tsid)
+      },
+
+      handleInquire(){
+        // 输入框查询
+        this.$emit('handle-inquire',this.keyWords)
       }
     },
   }

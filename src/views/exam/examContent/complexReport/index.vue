@@ -12,6 +12,9 @@
         :pagination="pagination"
         @handle-size-change="handleSizeChange"
         @handle-current-change="handleCurrentChange"
+        @handle-checkAll-change="handleCheckAllChange"
+        @single-change="singleChange"
+        @handle-inquire="handleInquire"
       ></component>
     </hj-tabs>
   </div>
@@ -24,6 +27,7 @@
   import question from './question'
   import gradesStatistics from './gradesStatistics'
   import ranking from './ranking'
+  // import Qs from 'qs'
 
   import { mapState, mapGetters } from 'vuex'
 
@@ -86,8 +90,13 @@
     },
 
     computed: {
-      ...mapState('getExam', ['subjectsArr']),
-      ...mapGetters('getExam', ['examInfo'])
+      ...mapState('getExam', ['subjectsArr','classesArr']),
+      ...mapGetters('getExam', ['examInfo']),
+
+      classIdsArr(){
+        return this.classesArr.length ? this.classesArr.filter(item => item.check)
+                  .map(ele => ele.cid) : []
+      }
     },
 
     watch: {
@@ -99,6 +108,15 @@
           }
         },
         immediate: true
+      },
+      classIdsArr: {
+        immediate: true,
+        handler () {
+            this.parameter = {
+              ...this.parameter,
+              classIds:this.classIdsArr,
+            }
+        },
       },
     },
 
@@ -149,6 +167,12 @@
       getTable() {
         // 获取table
         const { pageSize , pageNum} = this.pagination
+
+        // this.parameter = {
+        //   ...this.parameter,
+        //   classIds: JSON.stringify(JSON.stringify(this.classIdsArr))
+        // }
+        //Qs.stringify
         this.$store.dispatch('getExam/GetStuResults', {
           ...this.parameter,
           pageIndex: pageNum,
@@ -172,6 +196,34 @@
 
       handleCurrentChange(val){
         this.pagination.pageNum = val
+        this.getTable()
+      },
+
+      handleCheckAllChange(Arr){
+        // 选择班级
+        this.parameter={
+          ...this.parameter,
+          classIds:Arr
+        }
+        this.getTable()
+      },
+
+      singleChange(tsid){
+        // 选择科目
+        this.parameter={
+          ...this.parameter,
+          tsid:tsid
+        }
+        this.getDynamicHeader(this.prmTid,tsid)
+        this.getTable()
+      },
+
+      handleInquire(keyWords){
+        //输入框查询条件
+        this.parameter={
+          ...this.parameter,
+          keyWords:keyWords
+        }
         this.getTable()
       }
     },
