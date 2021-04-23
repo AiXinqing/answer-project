@@ -4,7 +4,7 @@
       :data="tableData"
       style="width: 100%"
       :height="height"
-      :row-height="rowHeight"
+
       v-loading="loading"
       :border="isBorder"
     >
@@ -55,7 +55,7 @@
       // 是否显示分页
       isPagination: {type: Boolean, default: true},
       // 每页显示条数
-      pageSizes: {type: Array, default: () => [10,20,30,50,100]},
+      pageSizes: {type: Array, default: () => [15,20,30,50,100]},
       currentPage:{type: Number, default: 4},
       // 行高,为计算显示区域
       rowHeight: {
@@ -108,6 +108,9 @@
 
 <style lang="less">
   @import '~@/assets/css/variables.less';
+  .el-table--enable-row-transition .el-table__body td{
+    height:35px;
+  }
   .el-table__row{
     &:nth-child(even){
       background-color: @bc_f5
@@ -130,6 +133,10 @@
     }
     .caret-wrapper{
       width: 17px;
+    }
+    .cell.el-tooltip{
+      height:100%;
+      line-height:35px;
     }
   }
   .el-table--medium td,
@@ -188,5 +195,12 @@
         font-size: 14px;
       }
     }
+  }
+  .el-table--medium td,
+  .el-table--medium th{
+    padding-top: 0
+  }
+  table tr td div:last-child{
+    margin-bottom:0
   }
 </style>

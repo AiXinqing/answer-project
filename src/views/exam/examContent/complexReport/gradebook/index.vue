@@ -18,7 +18,7 @@
           <i>(点击学科的分数，可查看学生的答题卡)</i>
         </div>
         <div class="search_right">
-          <exam-button type="primary">下载表格</exam-button>
+          <exam-button type="primary" @click="downTable">下载表格</exam-button>
           <exam-button type="primary" @click="handleInquire">查询</exam-button>
           <hj-input v-model="keyWords" placeholder="请输入12345">
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
@@ -71,25 +71,29 @@
             label:'班级',
             minWidth:'140',
             align:'center',
-            fixed:'left'
+            fixed:'left',
+            type:'Html'
           },
           {
             prop:'stuname',
             label:'姓名',
             minWidth:'100',
             align:'center',
+            type:'Html'
           },
           {
             prop:'tnumber',
             label:'考号',
             minWidth:'100',
             align:'center',
+            type:'Html'
           },
           {
             prop:'snumber',
             label:'学号',
             minWidth:'120',
             align:'center',
+            type:'Html'
           },
         ],
         columnMultiLine:[
@@ -135,13 +139,23 @@
             label:ele.sname,
             align:'center',
             childen:this.columnMultiLine.map(item => {
+              let obj = {
+                type:'Html'
+              }
+              if(item.label == '分数' && ele.sname !='总分'){
+                obj = {
+                  type:'Text',
+                  url:''
+                }
+              }
               return {
                 ...item,
                 prop:`${item.prop}_${ele.sname}`,
                 label:item.label,
                 width:item.width,
                 align:item.align,
-                sortable:true
+                sortable:true,
+                ...obj
               }
             }),
           }))
@@ -218,9 +232,9 @@
         this.$emit('handle-current-change',val)
       },
 
-      handleCheckAllChange(Arr){
+      handleCheckAllChange(cidStr){
         // 班级查询
-        this.$emit('handle-checkAll-change',Arr)
+        this.$emit('handle-checkAll-change',cidStr)
       },
 
       singleChange(tsid){
@@ -231,6 +245,11 @@
       handleInquire(){
         // 输入框查询
         this.$emit('handle-inquire',this.keyWords)
+      },
+
+      downTable(){
+        // 下载表格
+        this.$emit('handel-down-table')
       }
     },
   }

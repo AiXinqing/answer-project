@@ -9,11 +9,11 @@ export function getExamInfo({ prmTid }) {
   })
 }
 
-export function GetStuResults({ tid, tsid, classIds, keyWords, pageIndex, pageSize }) {
+export function GetStuResults({ tid, tsid, cids, keyWords, pageIndex, pageSize }) {
   return request({
     url: URL.GetStuResults,
     method: 'get',
-    params: { tid, tsid, classIds, keyWords, pageIndex, pageSize }
+    params: { tid, tsid, cids, keyWords, pageIndex, pageSize }
   })
 }
 

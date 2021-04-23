@@ -56,8 +56,8 @@
 
     GetStuResults({ commit }, padata) {
       return new Promise((resolve, reject) => {
-        const { tid, tsid, classIds, keyWords, pageIndex, pageSize } = padata
-        GetStuResults({ tid, tsid, classIds, keyWords, pageIndex, pageSize }).then(res => {
+        const { tid, tsid, cids, keyWords, pageIndex, pageSize } = padata
+        GetStuResults({ tid, tsid, cids, keyWords, pageIndex, pageSize }).then(res => {
           commit('SET_TABLE', res)
           resolve(res)
           commit('GET_TABLELOADING', false)

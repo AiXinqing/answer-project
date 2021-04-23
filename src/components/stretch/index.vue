@@ -91,10 +91,10 @@
             return {...ele,check:item.check}
           })
         }
-        let Arr = this.data.subjectList.filter(item => item.check)
-                    .map(ele => ele.cid)
+        let cidStr = this.data.subjectList.filter(item => item.check && item.cid != 'all')
+                    .map(ele =>  ele.cid).toString()
 
-        this.$emit('handle-checkAll-change',Arr)
+        this.$emit('handle-checkAll-change',cidStr)
       }
     },
   }

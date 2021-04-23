@@ -15,6 +15,7 @@
         @handle-checkAll-change="handleCheckAllChange"
         @single-change="singleChange"
         @handle-inquire="handleInquire"
+        @handel-down-table="handelDownTable"
       ></component>
     </hj-tabs>
   </div>
@@ -80,7 +81,7 @@
         },
         pageData:{},
         parameter:{
-          classIds:[],
+          cids:'',
           keyWords:'',
           tid: '',
           tsid:'',
@@ -94,8 +95,8 @@
       ...mapGetters('getExam', ['examInfo']),
 
       classIdsArr(){
-        return this.classesArr.length ? this.classesArr.filter(item => item.check)
-                  .map(ele => ele.cid) : []
+        return this.classesArr.length ? this.classesArr.filter(item => item.check && item.cid != 'all')
+                  .map(ele => ele.cid).toString() : ''
       }
     },
 
@@ -112,10 +113,10 @@
       classIdsArr: {
         immediate: true,
         handler () {
-            this.parameter = {
-              ...this.parameter,
-              classIds:this.classIdsArr,
-            }
+          this.parameter = {
+            ...this.parameter,
+            cids:this.classIdsArr,
+          }
         },
       },
     },
@@ -167,11 +168,6 @@
       getTable() {
         // 获取table
         const { pageSize , pageNum} = this.pagination
-
-        // this.parameter = {
-        //   ...this.parameter,
-        //   classIds: JSON.stringify(JSON.stringify(this.classIdsArr))
-        // }
         //Qs.stringify
         this.$store.dispatch('getExam/GetStuResults', {
           ...this.parameter,
@@ -199,11 +195,11 @@
         this.getTable()
       },
 
-      handleCheckAllChange(Arr){
+      handleCheckAllChange(cidStr){
         // 选择班级
         this.parameter={
           ...this.parameter,
-          classIds:Arr
+          cids:cidStr
         }
         this.getTable()
       },
@@ -225,6 +221,18 @@
           keyWords:keyWords
         }
         this.getTable()
+      },
+
+      handelDownTable(){
+        // 下载表格
+        this.$http.get(URL.ExportStuResults,this.parameter).then((res) => {
+          if(res.data.ResponseCode == 'Success'){
+            console.log(res)
+          }
+        })
+        .catch(() => { // 请求失败处理
+          this.saveBtnStuta = false
+        })
       }
     },
   }

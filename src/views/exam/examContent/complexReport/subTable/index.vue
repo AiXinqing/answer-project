@@ -29,65 +29,16 @@
 
 <script>
   export default {
+    props: {
+      stretchBox: {
+        type: Array,
+        default: () => []
+      },
+    },
     data() {
       return {
         stretch: false,
-        stretchBox:[
-          {
-            subject:'科目',
-            type:'single',
-            stretch:false,
-            subjectList:[
-              {
-                name:'总分',
-                id:1,
-                check:true,
-              },
-              {
-                name:'语文',
-                id:2,
-                check:false,
-              },
-              {
-                name:'数学',
-                id:3,
-                check:false,
-              },
-              {
-                name:'英语',
-                id:4,
-                check:false,
-              }
-            ]
-          },
-          {
-            subject:'班级',
-            type:'multiple',
-            stretch:false,
-            subjectList:[
-              {
-                name:'全部',
-                id:1,
-                check:true,
-              },
-              {
-                name:'高中2020级01班',
-                id:2,
-                check:false,
-              },
-              {
-                name:'高中2020级01班',
-                id:3,
-                check:false,
-              },
-              {
-                name:'高中2020级01班',
-                id:4,
-                check:false,
-              }
-            ]
-          }
-        ],
+        stretchArr:[],
         text:'',
         tableColumn:[
           {
@@ -138,6 +89,15 @@
         tableData: [
         ]
       }
+    },
+
+    watch: {
+      stretchBox: {
+        immediate: true,
+        handler () {
+          this.stretchArr = this.stretchBox
+        }
+      },
     },
     methods: {
       handleStretch() {
