@@ -20,23 +20,33 @@
         <div class="search_right">
           <exam-button type="primary" @click="downTable">下载表格</exam-button>
           <exam-button type="primary" @click="handleInquire">查询</exam-button>
-          <hj-input v-model="keyWords" placeholder="请输入12345">
-            <i slot="prefix" class="el-input__icon el-icon-search"></i>
-          </hj-input>
+          <div class="input_box">
+            <span class="clear_box">
+              <i class="el-icon-circle-close" @click="handleClear"></i>
+            </span>
+            <hj-input
+              v-model="keyWords"
+              class="search_input"
+              placeholder="输入姓名/考号/学号进行搜索"
+              :iSlot="iSlot"
+            />
+          </div>
         </div>
       </div>
 
       <div class="el_table_wapper">
         <exam-table
+          :style="{'max-height':theight+'px'}"
           :tablecols="tableColumn"
           :tableData="tableData"
           :isIndex="false"
-          :theight="theight"
           :pagination="pagination"
-          :loading="tableLoading"
+          :loading="loading"
+          :theight="theight"
           @handle-size-change="handleSizeChange"
           @handle-current-change="handleCurrentChange"
           ></exam-table>
+
       </div>
     </div>
   </div>
@@ -59,6 +69,11 @@
       activeName:{
         type: String,
         default: ''
+      },
+
+      loading:{
+        type: Boolean,
+        default: false
       },
     },
     data() {
@@ -123,12 +138,18 @@
 
         headerArr:[],
         tableArr:[],
-        theight: 500
+        theight: document.body.clientHeight - 350,
+        iSlot:[
+          {
+            type:'prefix',
+            icon:'el-icon-search'
+          }
+        ]
       }
     },
 
     computed: {
-      ...mapState('getExam', ['subjectsArr','headerTable','TableList','tableLoading']),
+      ...mapState('getExam', ['subjectsArr','headerTable','TableList',]),
 
       tableColumn(){
         // 动态表头
@@ -145,7 +166,7 @@
               if(item.label == '分数' && ele.sname !='总分'){
                 obj = {
                   type:'Text',
-                  url:''
+                  url:this.URL.BrowsescoreAnsw
                 }
               }
               return {
@@ -250,6 +271,10 @@
       downTable(){
         // 下载表格
         this.$emit('handel-down-table')
+      },
+
+      handleClear(){
+        this.keyWords= ''
       }
     },
   }
@@ -257,6 +282,20 @@
 
 <style lang="less">
   @import '~@/assets/css/variables.less';
+  .input_box{
+    position: relative;
+    .hj-input.el-input{
+      width: 225px;
+    }
+
+    .clear_box{
+      position: absolute;
+      right: 5px;
+      z-index: 1000;
+      top: 8px;
+      cursor: pointer;
+    }
+  }
   .complex_content{
     width: 100%;
     background-color: @white;
@@ -316,4 +355,30 @@
       margin-top: 30px;
     }
   }
+  .el_table_wapper{
+    height: calc(100% - 285px);
+    section{
+      height: 100%;
+      >div{
+        height: 100% ;//calc(100% - 47px);
+        .el-table__body-wrapper{
+          height: calc(100% - 60px);
+        }
+        .el-table__fixed{
+          height:100%  !important
+        }
+      }
+    }
+  }
+  .input_box{
+    .clear_box{
+      display: none
+    }
+    &:hover{
+      .clear_box{
+        display: block
+      }
+    }
+  }
+
 </style>

@@ -1,5 +1,20 @@
 <template>
-    <el-input v-bind="$attrs" v-on="$listeners" class="hj-input" v-bind:class="{'has-error':error}"><slot></slot></el-input>
+    <el-input
+      v-bind="$attrs"
+      v-on="$listeners"
+      class="hj-input"
+      v-bind:class="{'has-error':error}"
+    >
+      <template
+        v-for="(item,i) in iSlot"
+      >
+        <i
+          :key="i"
+          :slot="item.type"
+          :class="['el-input__icon',item.icon]"
+        />
+      </template>
+  </el-input>
 </template>
 
 <script>
@@ -7,10 +22,14 @@
     export default {
         name: "hjInput",
         props: {
-            error: {
-                type: Boolean,
-                default: false
-            }
+          error: {
+            type: Boolean,
+            default: false
+          },
+          iSlot:{
+            type:Array,
+            default:()=>[]
+          }
         },
         data () {
             return {
@@ -37,9 +56,10 @@
   }
   .hj-input.el-input input{
       width: 100%;
-      padding: 0 8px;
+      padding: 0 0;
       line-height: 26px;
       font-size: 14px;
+      text-indent: 1.8em;
   }
   .hj-input.el-input input:focus {
       border-color: @mainFont;
@@ -64,5 +84,22 @@
       input {
           border-color: @main;
       }
+  }
+
+  span.el-input__prefix{
+    .el-icon-search{
+      font-size: 14px;
+      text-align: left
+    }
+  }
+  .el-input--prefix{
+    .el-input__inner{
+      text-indent: 1.5em;
+    }
+  }
+  .hj-input.search_input{
+    input{
+      text-align: left
+    }
   }
 </style>

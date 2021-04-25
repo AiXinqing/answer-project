@@ -1,12 +1,14 @@
 <template>
   <section>
+
     <el-table
       :data="tableData"
-      style="width: 100%"
+      :style="['width: 100%',{'max-height':height+'px'}]"
+      :element-loading-text="loadingText"
       :height="height"
-
-      v-loading="loading"
       :border="isBorder"
+      element-loading-spinner="el-icon-loading"
+      v-loading="loading"
     >
       <!-- 标题栏- 合并 -->
       <el-table-column v-if="isSelection" type="selection" align="center"></el-table-column>
@@ -42,7 +44,7 @@
       singleColumn,
     },
     props: {
-      theight: {type: Number, default: 500},
+      theight: {type: Number, default: 0},
       // 表格列配置
       tablecols: {type: Array, default: () => []},
       tableData: {type: Array, default: () => []},
@@ -68,6 +70,10 @@
         type:Boolean,
         default: false
       },
+      loadingText:{
+        type:String,
+        default:'拼命加载中'
+      },
       pagination: {type: Object, default: () => ({
         pageSize: 15,
         pageNum: 1,
@@ -79,7 +85,7 @@
         firstDisabled: false,
         lastDisabled: false,
         // 分页数据
-        height:500,
+        height:0,
       }
     },
 
@@ -202,5 +208,13 @@
   }
   table tr td div:last-child{
     margin-bottom:0
+  }
+  .el-loading-spinner{
+    i{
+      color:@main
+    }
+    .el-loading-text{
+      color:@main
+    }
   }
 </style>

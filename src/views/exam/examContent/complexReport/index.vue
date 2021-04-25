@@ -10,6 +10,7 @@
         :stretch-box="stretchBox"
         :active-name="activeName"
         :pagination="pagination"
+        :loading="loading"
         @handle-size-change="handleSizeChange"
         @handle-current-change="handleCurrentChange"
         @handle-checkAll-change="handleCheckAllChange"
@@ -86,7 +87,8 @@
           tid: '',
           tsid:'',
         },
-        resetParameter:{}
+        resetParameter:{},
+        loading:false
       }
     },
 
@@ -167,6 +169,7 @@
 
       getTable() {
         // 获取table
+        this.loading = true
         const { pageSize , pageNum} = this.pagination
         //Qs.stringify
         this.$store.dispatch('getExam/GetStuResults', {
@@ -175,6 +178,7 @@
           pageSize: pageSize,
         }).then((res)=>{
           if(res.ResponseCode =="Success"){
+            this.loading = false
             const {count,pageIndex,pageSize} = res.ResponseContent
             this.pagination = {
               pageSize: pageSize,
@@ -225,14 +229,9 @@
 
       handelDownTable(){
         // 下载表格
-        this.$http.get(URL.ExportStuResults,this.parameter).then((res) => {
-          if(res.data.ResponseCode == 'Success'){
-            console.log(res)
-          }
-        })
-        .catch(() => { // 请求失败处理
-          this.saveBtnStuta = false
-        })
+        const {cids,keyWords,tid,tsid,} = this.parameter
+        const { pageSize , pageNum} = this.pagination
+        window.open(`${this.URL.ExportStuResults}?tid=${tid}&tsid=${tsid}&cids=${cids}&keyWords=&${keyWords}pageIndex=${pageNum}&pageSize=${pageSize}`)
       }
     },
   }

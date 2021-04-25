@@ -7,7 +7,7 @@ import Element from 'element-ui'
 import Components from './components/index'
 import httpRequest from './utils/request'
 import { post, fetch, patch, put, postForm } from './utils/http'
-import { URL} from './config/api'
+import { URL} from '@/config/api'
 import { convertArray, convertArray_p } from './config/convertArray'
 import lodash from 'lodash'
 

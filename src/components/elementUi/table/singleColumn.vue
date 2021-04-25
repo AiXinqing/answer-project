@@ -42,8 +42,14 @@
       :filter-placement="ele.filterPlacement ? ele.filterPlacement : null">
       <template slot-scope="scope">
         <span v-if="ele.type==='Html'" v-html="columnHtml(scope.row,ele.prop)">{{ele.prop}}</span>
-        <el-button v-if="ele.type==='Text'"  type="text" class="text_button" v-html="columnHtml(scope.row,ele.prop)">{{ele.prop}}</el-button>
+        <el-button
+          v-if="ele.type==='Text'"
+          type="text" class="text_button"
+          v-html="columnHtml(scope.row,ele.prop)"
+        >{{ele.prop}}</el-button>
+        <!-- @click="hanlde" -->
       </template>
+      </el-table-column>
     </template>
   </el-table-column>
 </template>
