@@ -194,7 +194,9 @@
               ord: item.ord,
               sname: item.sname,
               [`tscore_${item.sname}`]: item.tscore,
-              tsid: item.tsid
+              tsid: item.tsid,
+              tid: this.prmTid,
+              jump:1
             }
           })
 

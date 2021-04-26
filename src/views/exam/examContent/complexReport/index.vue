@@ -11,6 +11,7 @@
         :active-name="activeName"
         :pagination="pagination"
         :loading="loading"
+        :prmTid="prmTid"
         @handle-size-change="handleSizeChange"
         @handle-current-change="handleCurrentChange"
         @handle-checkAll-change="handleCheckAllChange"

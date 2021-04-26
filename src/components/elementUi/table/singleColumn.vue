@@ -42,11 +42,20 @@
       :filter-placement="ele.filterPlacement ? ele.filterPlacement : null">
       <template slot-scope="scope">
         <span v-if="ele.type==='Html'" v-html="columnHtml(scope.row,ele.prop)">{{ele.prop}}</span>
-        <el-button
-          v-if="ele.type==='Text'"
-          type="text" class="text_button"
-          v-html="columnHtml(scope.row,ele.prop)"
-        >{{ele.prop}}</el-button>
+        <template v-if="ele.type ==='Text' && ele.url != undefind">
+          <el-button
+            type="text" class="text_button"
+            v-html="columnHtml(scope.row,ele.prop)"
+            @click="hanldeJump(scope.row,ele.url)"
+          >{{ele.prop}}</el-button>
+        </template>
+        <template v-else-if="ele.type ==='Text'">
+          <el-button
+            type="text" class="text_button"
+            v-html="columnHtml(scope.row,ele.prop)"
+          >{{ele.prop}}1</el-button>
+        </template>
+
         <!-- @click="hanlde" -->
       </template>
       </el-table-column>
@@ -78,6 +87,11 @@
     methods: {
       handleClick(row) {
         console.log(row)
+      },
+      hanldeJump(row,url){
+        if(row.jump == 1){
+          window.open(`${url}?tid=${row.tid}&tsid=${row.tsid}&tnumber=${row.tnumber}`)
+        }
       }
     },
   }
@@ -97,9 +111,9 @@
   .el-button--text{
     color:@main
   }
-  .el-button.text_button:focus,
-  .el-button.text_button:hover{
-    // background-color:@bc_tr !important;
-    // border-color:@bc_tr !important;
-  }
+  // .el-button.text_button:focus,
+  // .el-button.text_button:hover{
+  //   background-color:@bc_tr !important;
+  //   border-color:@bc_tr !important;
+  // }
 </style>
