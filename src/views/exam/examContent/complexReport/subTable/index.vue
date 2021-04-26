@@ -1,7 +1,7 @@
 <template>
   <div class="complex_content">
     <hj-stretch
-      v-for="(choose,i) in stretchBox"
+      v-for="(choose,i) in subjectsArr"
       :key="i"
       :choose-list="choose">
     </hj-stretch>
@@ -88,6 +88,19 @@
         ],
         tableData: [
         ]
+      }
+    },
+
+    computed: {
+      subjectsArr() {
+        return this.stretchArr.map(item =>{
+          return item.subject == '科目' ? {
+            ...item,
+            subjectList:item.subjectList.filter(ele => ele.sid != 'totalScore').map((ele,index) => {
+              return index == 0 ? {...ele,check:!ele.check} : ele
+            })
+          } : item
+        })
       }
     },
 

@@ -134,6 +134,30 @@
     methods: {
       handleClick(tab){
         this.activeName = tab.name
+        this.subjectsArr.forEach((element,i) => {
+          if(i == 0){
+            this.tsid = element.tsid
+          }
+        })
+        switch (tab.name) {
+          case 'subTable': // 小分表
+          case 'question': // 试题汇总表
+            this.subjectsArr.forEach((element,i) => {
+              if(i == 1){
+                this.tsid = element.tsid
+              }
+            })
+            break;
+          default:
+            break
+        }
+        this.getDynamicHeader(this.prmTid,this.tsid)
+        this.parameter = {
+          ...this.parameter,
+          tid:this.prmTid,
+          tsid:this.tsid
+        }
+        this.getTable()
       },
 
       getExamFunc(prmTid) {
