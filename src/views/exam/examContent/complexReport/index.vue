@@ -87,9 +87,11 @@
           keyWords:'',
           tid: '',
           tsid:'',
+          url:this.URL.GetStuResults
         },
         resetParameter:{},
-        loading:false
+        loading:false,
+        headeUrl:this.URL.GetTableHeadeSubject,
       }
     },
 
@@ -141,6 +143,13 @@
         })
         switch (tab.name) {
           case 'subTable': // 小分表
+            this.parameter.url = this.URL.GetStuSmallScore
+            this.subjectsArr.forEach((element,i) => {
+              if(i == 1){
+                this.tsid = element.tsid
+              }
+            })
+            break;
           case 'question': // 试题汇总表
             this.subjectsArr.forEach((element,i) => {
               if(i == 1){
@@ -188,8 +197,8 @@
       getDynamicHeader(prmTid,tsid){
         // 获取动态表头
         this.$store.dispatch('getExam/dynamicHeader', {
-          tid: prmTid,tsid:tsid
-        })
+          tid: prmTid,tsid:tsid,url:this.headeUrl
+        },this.headeUrl)
       },
 
       getTable() {
@@ -201,7 +210,7 @@
           ...this.parameter,
           pageIndex: pageNum,
           pageSize: pageSize,
-        }).then((res)=>{
+        },this.tableUrl).then((res)=>{
           if(res.ResponseCode =="Success"){
             this.loading = false
             const {count,pageIndex,pageSize} = res.ResponseContent

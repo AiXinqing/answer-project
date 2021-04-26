@@ -9,18 +9,18 @@ export function getExamInfo({ prmTid }) {
   })
 }
 
-export function GetStuResults({ tid, tsid, cids, keyWords, pageIndex, pageSize }) {
+export function GetStuResults({ tid, tsid, cids, keyWords, pageIndex, pageSize,url }) {
   return request({
-    url: URL.GetStuResults,
+    url: url, //URL.GetStuResults,
     method: 'get',
     params: { tid, tsid, cids, keyWords, pageIndex, pageSize }
   })
 }
 
 // 获取动态表头
-export function dynamicHeader({ tid, tsid }) {
+export function dynamicHeader({ tid, tsid ,url}) {
   return request({
-    url: URL.GetTableHeadeSubject,
+    url: url, //URL.GetTableHeadeSubject,
     method: 'get',
     params: { tid, tsid }
   })
