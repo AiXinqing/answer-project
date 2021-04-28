@@ -8,16 +8,7 @@
       <component
         :is="activeName"
         :stretch-box="stretchBox"
-        :active-name="activeName"
-        :pagination="pagination"
-        :loading="loading"
         :prmTid="prmTid"
-        @handle-size-change="handleSizeChange"
-        @handle-current-change="handleCurrentChange"
-        @handle-checkAll-change="handleCheckAllChange"
-        @single-change="singleChange"
-        @handle-inquire="handleInquire"
-        @handel-down-table="handelDownTable"
         ref="tabName"
       ></component>
     </hj-tabs>
@@ -77,33 +68,12 @@
         prmTid: '',
         tsid:'',
         stretchBox:[],
-        pagination: {
-          pageSize: 15,
-          pageNum: 1,
-          total: 0
-        },
-        pageData:{},
-        parameter:{
-          cids:'',
-          keyWords:'',
-          tid: '',
-          tsid:'',
-          url:this.URL.GetStuResults
-        },
-        resetParameter:{},
-        loading:false,
-        headeUrl:this.URL.GetTableHeadeSubject,
       }
     },
 
     computed: {
-      ...mapState('getExam', ['subjectsArr','classesArr']),
+      ...mapState('getExam', ['subjectsArr']),
       ...mapGetters('getExam', ['examInfo']),
-
-      classIdsArr(){
-        return this.classesArr.length ? this.classesArr.filter(item => item.check && item.cid != 'all')
-                  .map(ele => ele.cid).toString() : ''
-      }
     },
 
     watch: {
@@ -116,23 +86,11 @@
         },
         immediate: true
       },
-      classIdsArr: {
-        immediate: true,
-        handler () {
-          this.parameter = {
-            ...this.parameter,
-            cids:this.classIdsArr,
-          }
-        },
-      },
-
     },
 
     mounted () {
       if(this.prmTid != ''){
         this.getExamFunc(this.prmTid)
-        this.pageData = this.pagination
-        this.resetParameter = this.parameter
       }
     },
     methods: {
@@ -157,7 +115,7 @@
             break
         }
         this.$nextTick(()=>{
-          this.$refs.tabName.initTable(this.prmTid,this.tsid,this.classIdsArr)
+          this.$refs.tabName.initTable(this.prmTid,this.tsid)
         })
 
       },
@@ -175,60 +133,12 @@
             })
             this.$nextTick(()=>{
               // 获取动态表头
-              this.$refs.tabName.initTable(this.prmTid,this.tsid,this.classIdsArr)
+              this.$refs.tabName.initTable(this.prmTid,this.tsid)
             })
           }
         })
       },
 
-
-      // handleSizeChange(val){
-      //   this.pagination.pageSize = val
-      //   this.getTable()
-      // },
-
-      // handleCurrentChange(val){
-      //   this.pagination.pageNum = val
-      //   this.getTable()
-      // },
-
-      // handleCheckAllChange(cidStr){
-      //   // 选择班级
-      //   this.parameter={
-      //     ...this.parameter,
-      //     cids:cidStr
-      //   }
-      //   this.getTable()
-      // },
-
-      // singleChange(tsid){
-      //   // 选择科目
-      //   this.parameter={
-      //     ...this.parameter,
-      //     tsid:tsid
-      //   }
-
-      //   this.$nextTick(()=>{
-      //     // 获取动态表头
-      //     this.$refs.tabName.initTable(this.prmTid,this.tsid,this.classIdsArr)
-      //   })
-      // },
-
-      // handleInquire(keyWords){
-      //   //输入框查询条件
-      //   this.parameter={
-      //     ...this.parameter,
-      //     keyWords:keyWords
-      //   }
-      //   this.getTable()
-      // },
-
-      // handelDownTable(){
-      //   // 下载表格
-      //   const {cids,keyWords,tid,tsid,} = this.parameter
-      //   const { pageSize , pageNum} = this.pagination
-      //   window.open(`${this.URL.ExportStuResults}?tid=${tid}&tsid=${tsid}&cids=${cids}&keyWords=&${keyWords}pageIndex=${pageNum}&pageSize=${pageSize}`)
-      // }
     },
   }
 </script>

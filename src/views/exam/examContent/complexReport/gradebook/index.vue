@@ -2,7 +2,7 @@
   <div class="complex_content">
     <div ref="stretch">
       <hj-stretch
-        v-for="(choose,i) in stretchArr"
+        v-for="(choose,i) in stretchBox"
         :key="i"
         :choose-list="choose"
         @handle-stretch="handleStretch"
@@ -40,8 +40,8 @@
           :tablecols="tableColumn"
           :tableData="tableData"
           :isIndex="false"
-          :pagination="pagination"
-          :loading="loading"
+          :pagination="page"
+          :loading="tableLoading"
           :theight="theight"
           @handle-size-change="handleSizeChange"
           @handle-current-change="handleCurrentChange"
@@ -59,11 +59,6 @@
       stretchBox: {
         type: Array,
         default: () => []
-      },
-
-      activeName:{
-        type: String,
-        default: ''
       },
     },
     data() {
@@ -121,9 +116,7 @@
             align:'center',
           },
         ],
-        prmTid: '',
-        tsid:'',
-        keyWords:'',
+
         theight: document.body.clientHeight - 350,
         iSlot:[
           {
@@ -131,6 +124,11 @@
             icon:'el-icon-search'
           }
         ],
+        // 参数
+        laoding:false,
+        prmTid: '',
+        tsid:'',
+        keyWords:'',
         parameter:{
           cids:'',
           keyWords:'',
@@ -138,19 +136,26 @@
           tsid:'',
           url:this.URL.GetStuResults
         },
-        pagination: {
+        page: {
           pageSize: 15,
           pageNum: 1,
           total: 0
         },
         cidStr:'',
-        loading:false,
         headeUrl:this.URL.GetTableHeadeSubject,
       }
     },
 
     computed: {
-      ...mapState('getExam', ['subjectsArr','headerTable','TableList']),
+      ...mapState('getExam', ['subjectsArr','headerTable',
+        'TableList','classesArr','pagination',
+        'tableLoading'
+      ]),
+
+      classIdsArr(){
+        return this.classesArr.length ? this.classesArr.filter(item => item.check && item.cid != 'all')
+                .map(ele => ele.cid).toString() : ''
+      },
 
       tableColumn(){
         // 动态表头
@@ -232,11 +237,17 @@
         immediate: true
       },
 
-      stretchBox: {
+      classIdsArr: {
         immediate: true,
         handler () {
-          this.stretchArr = this.stretchBox
-        }
+          this.cidStr = this.classIdsArr
+        },
+      },
+      pagination:{
+        immediate: true,
+        handler () {
+          this.page = this.pagination
+        },
       },
     },
 
@@ -249,46 +260,45 @@
 
       },
 
-      initTable(prmTid,tsid,classIdsArr) {
+      initTable(prmTid,tsid) {
         this.prmTid = prmTid
         this.tsid = tsid
-        this.cidStr = classIdsArr
-        this.parameter = {
-          ...this.parameter,
-          tid: prmTid,
-          tsid:this.tsid,
-          cids:classIdsArr
-        }
 
-        this.getDynamicHeader(prmTid,tsid)
-        this.getTable()
+        this.cidStr = this.classIdsArr
+
+        this.$nextTick(()=>{
+          this.getDynamicHeader(prmTid,tsid)
+          this.getTable()
+        })
       },
 
       handleSizeChange(val){
-        this.pagination.pageSize = val
-        this.getTable()
+        this.page.pageSize = val
+        this.$nextTick(()=>{
+          this.getTable()
+        })
 
       },
       handleCurrentChange(val){
-        this.pagination.pageNum = val
-        this.getTable()
+        this.page.pageNum = val
+        this.$nextTick(()=>{
+          this.getTable()
+        })
 
       },
 
       handleCheckAllChange(cidStr){
         // 班级查询
         this.cidStr = cidStr
-        this.parameter = {
-          ...this.parameter,
-          cids:cidStr
-        }
-        this.getTable()
+
+        this.$nextTick(()=>{
+          this.getTable()
+        })
       },
 
       singleChange(tsid){
         // 科目查询
-        // this.$emit('single-change',tsid)
-        console.log(this.cidStr)
+        this.tsid = tsid
         this.getDynamicHeader(this.prmTid,tsid)
         this.parameter = {
           ...this.parameter,
@@ -303,7 +313,9 @@
           ...this.parameter,
           keyWords:this.keyWords
         }
-        this.getTable()
+        this.$nextTick(()=>{
+          this.getTable()
+        })
       },
 
       downTable(){
@@ -326,24 +338,17 @@
 
       getTable() {
         // 获取table
-        this.loading = true
-        const { pageSize , pageNum} = this.pagination
-        //Qs.stringify
-        this.$store.dispatch('getExam/GetStuResults', {
-          ...this.parameter,
-          pageIndex: pageNum,
-          pageSize: pageSize,
-        }).then((res)=>{
-          if(res.ResponseCode =="Success"){
-            this.loading = false
-            const {count,pageIndex,pageSize} = res.ResponseContent
-            this.pagination = {
-              pageSize: pageSize,
-              pageNum: pageIndex,
-              total: count
-            }
+        const { pageSize , pageNum} = this.page
+        this.parameter = {
+            ...this.parameter,
+            cids:this.cidStr,
+            tid: this.prmTid,
+            tsid:this.tsid,
+            pageIndex: pageNum,
+            pageSize: pageSize,
           }
-        })
+
+        this.$store.dispatch('getExam/GetStuResults', this.parameter)
       },
     },
   }

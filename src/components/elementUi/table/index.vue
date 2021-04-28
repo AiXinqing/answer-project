@@ -2,10 +2,10 @@
   <section>
     <el-table
       :data="tableData"
-      :height="height"
       :style="['width: 100%',{'max-height':height+'px'}]"
       :element-loading-text="loadingText"
       :border="isBorder"
+      :height="height"
       element-loading-spinner="el-icon-loading"
       v-loading="loading"
     >
