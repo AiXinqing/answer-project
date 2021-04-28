@@ -61,19 +61,9 @@
         default: () => []
       },
 
-      pagination:{
-        type: Object,
-        default: () => {}
-      },
-
       activeName:{
         type: String,
         default: ''
-      },
-
-      loading:{
-        type: Boolean,
-        default: false
       },
     },
     data() {
@@ -133,23 +123,34 @@
         ],
         prmTid: '',
         tsid:'',
-        classIds:[],
         keyWords:'',
-
-        headerArr:[],
-        tableArr:[],
         theight: document.body.clientHeight - 350,
         iSlot:[
           {
             type:'prefix',
             icon:'el-icon-search'
           }
-        ]
+        ],
+        parameter:{
+          cids:'',
+          keyWords:'',
+          tid: '',
+          tsid:'',
+          url:this.URL.GetStuResults
+        },
+        pagination: {
+          pageSize: 15,
+          pageNum: 1,
+          total: 0
+        },
+        cidStr:'',
+        loading:false,
+        headeUrl:this.URL.GetTableHeadeSubject,
       }
     },
 
     computed: {
-      ...mapState('getExam', ['subjectsArr','headerTable','TableList',]),
+      ...mapState('getExam', ['subjectsArr','headerTable','TableList']),
 
       tableColumn(){
         // 动态表头
@@ -248,36 +249,102 @@
 
       },
 
+      initTable(prmTid,tsid,classIdsArr) {
+        this.prmTid = prmTid
+        this.tsid = tsid
+        this.cidStr = classIdsArr
+        this.parameter = {
+          ...this.parameter,
+          tid: prmTid,
+          tsid:this.tsid,
+          cids:classIdsArr
+        }
+
+        this.getDynamicHeader(prmTid,tsid)
+        this.getTable()
+      },
+
       handleSizeChange(val){
-        this.$emit('handle-size-change',val)
+        this.pagination.pageSize = val
+        this.getTable()
+
       },
       handleCurrentChange(val){
-        this.$emit('handle-current-change',val)
+        this.pagination.pageNum = val
+        this.getTable()
+
       },
 
       handleCheckAllChange(cidStr){
         // 班级查询
-        this.$emit('handle-checkAll-change',cidStr)
+        this.cidStr = cidStr
+        this.parameter = {
+          ...this.parameter,
+          cids:cidStr
+        }
+        this.getTable()
       },
 
       singleChange(tsid){
         // 科目查询
-        this.$emit('single-change',tsid)
+        // this.$emit('single-change',tsid)
+        console.log(this.cidStr)
+        this.getDynamicHeader(this.prmTid,tsid)
+        this.parameter = {
+          ...this.parameter,
+          tsid:tsid
+        }
+        this.getTable()
       },
 
       handleInquire(){
         // 输入框查询
-        this.$emit('handle-inquire',this.keyWords)
+        this.parameter={
+          ...this.parameter,
+          keyWords:this.keyWords
+        }
+        this.getTable()
       },
 
       downTable(){
         // 下载表格
-        this.$emit('handel-down-table')
+        const {cids,keyWords,tid,tsid} = this.parameter
+        const { pageSize , pageNum} = this.pagination
+        window.open(`${this.URL.ExportStuResults}?tid=${tid}&tsid=${tsid}&cids=${cids}&keyWords=&${keyWords}pageIndex=${pageNum}&pageSize=${pageSize}`)
       },
 
       handleClear(){
         this.keyWords= ''
-      }
+      },
+
+      getDynamicHeader(prmTid,tsid){
+        // 获取动态表头
+        this.$store.dispatch('getExam/dynamicHeader', {
+          tid: prmTid,tsid:tsid,url:this.headeUrl
+        })
+      },
+
+      getTable() {
+        // 获取table
+        this.loading = true
+        const { pageSize , pageNum} = this.pagination
+        //Qs.stringify
+        this.$store.dispatch('getExam/GetStuResults', {
+          ...this.parameter,
+          pageIndex: pageNum,
+          pageSize: pageSize,
+        }).then((res)=>{
+          if(res.ResponseCode =="Success"){
+            this.loading = false
+            const {count,pageIndex,pageSize} = res.ResponseContent
+            this.pagination = {
+              pageSize: pageSize,
+              pageNum: pageIndex,
+              total: count
+            }
+          }
+        })
+      },
     },
   }
 </script>

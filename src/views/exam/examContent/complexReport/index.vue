@@ -18,6 +18,7 @@
         @single-change="singleChange"
         @handle-inquire="handleInquire"
         @handel-down-table="handelDownTable"
+        ref="tabName"
       ></component>
     </hj-tabs>
   </div>
@@ -124,6 +125,7 @@
           }
         },
       },
+
     },
 
     mounted () {
@@ -134,6 +136,7 @@
       }
     },
     methods: {
+      // 切换tab
       handleClick(tab){
         this.activeName = tab.name
         this.subjectsArr.forEach((element,i) => {
@@ -141,15 +144,8 @@
             this.tsid = element.tsid
           }
         })
-        switch (tab.name) {
+        switch (this.activeName) {
           case 'subTable': // 小分表
-            this.parameter.url = this.URL.GetStuSmallScore
-            this.subjectsArr.forEach((element,i) => {
-              if(i == 1){
-                this.tsid = element.tsid
-              }
-            })
-            break;
           case 'question': // 试题汇总表
             this.subjectsArr.forEach((element,i) => {
               if(i == 1){
@@ -160,13 +156,10 @@
           default:
             break
         }
-        this.getDynamicHeader(this.prmTid,this.tsid)
-        this.parameter = {
-          ...this.parameter,
-          tid:this.prmTid,
-          tsid:this.tsid
-        }
-        this.getTable()
+        this.$nextTick(()=>{
+          this.$refs.tabName.initTable(this.prmTid,this.tsid,this.classIdsArr)
+        })
+
       },
 
       getExamFunc(prmTid) {
@@ -182,91 +175,60 @@
             })
             this.$nextTick(()=>{
               // 获取动态表头
-              this.getDynamicHeader(prmTid,this.tsid)
-              this.parameter = {
-                ...this.parameter,
-                tid:prmTid,
-                tsid:this.tsid
-              }
-              this.getTable()
+              this.$refs.tabName.initTable(this.prmTid,this.tsid,this.classIdsArr)
             })
           }
         })
       },
 
-      getDynamicHeader(prmTid,tsid){
-        // 获取动态表头
-        this.$store.dispatch('getExam/dynamicHeader', {
-          tid: prmTid,tsid:tsid,url:this.headeUrl
-        },this.headeUrl)
-      },
 
-      getTable() {
-        // 获取table
-        this.loading = true
-        const { pageSize , pageNum} = this.pagination
-        //Qs.stringify
-        this.$store.dispatch('getExam/GetStuResults', {
-          ...this.parameter,
-          pageIndex: pageNum,
-          pageSize: pageSize,
-        },this.tableUrl).then((res)=>{
-          if(res.ResponseCode =="Success"){
-            this.loading = false
-            const {count,pageIndex,pageSize} = res.ResponseContent
-            this.pagination = {
-              pageSize: pageSize,
-              pageNum: pageIndex,
-              total: count
-            }
-          }
-        })
-      },
+      // handleSizeChange(val){
+      //   this.pagination.pageSize = val
+      //   this.getTable()
+      // },
 
-      handleSizeChange(val){
-        this.pagination.pageSize = val
-        this.getTable()
-      },
+      // handleCurrentChange(val){
+      //   this.pagination.pageNum = val
+      //   this.getTable()
+      // },
 
-      handleCurrentChange(val){
-        this.pagination.pageNum = val
-        this.getTable()
-      },
+      // handleCheckAllChange(cidStr){
+      //   // 选择班级
+      //   this.parameter={
+      //     ...this.parameter,
+      //     cids:cidStr
+      //   }
+      //   this.getTable()
+      // },
 
-      handleCheckAllChange(cidStr){
-        // 选择班级
-        this.parameter={
-          ...this.parameter,
-          cids:cidStr
-        }
-        this.getTable()
-      },
+      // singleChange(tsid){
+      //   // 选择科目
+      //   this.parameter={
+      //     ...this.parameter,
+      //     tsid:tsid
+      //   }
 
-      singleChange(tsid){
-        // 选择科目
-        this.parameter={
-          ...this.parameter,
-          tsid:tsid
-        }
-        this.getDynamicHeader(this.prmTid,tsid)
-        this.getTable()
-      },
+      //   this.$nextTick(()=>{
+      //     // 获取动态表头
+      //     this.$refs.tabName.initTable(this.prmTid,this.tsid,this.classIdsArr)
+      //   })
+      // },
 
-      handleInquire(keyWords){
-        //输入框查询条件
-        this.parameter={
-          ...this.parameter,
-          keyWords:keyWords
-        }
-        this.getTable()
-      },
+      // handleInquire(keyWords){
+      //   //输入框查询条件
+      //   this.parameter={
+      //     ...this.parameter,
+      //     keyWords:keyWords
+      //   }
+      //   this.getTable()
+      // },
 
-      handelDownTable(){
-        // 下载表格
-        const {cids,keyWords,tid,tsid,} = this.parameter
-        const { pageSize , pageNum} = this.pagination
-        window.open(`${this.URL.ExportStuResults}?tid=${tid}&tsid=${tsid}&cids=${cids}&keyWords=&${keyWords}pageIndex=${pageNum}&pageSize=${pageSize}`)
-      }
+      // handelDownTable(){
+      //   // 下载表格
+      //   const {cids,keyWords,tid,tsid,} = this.parameter
+      //   const { pageSize , pageNum} = this.pagination
+      //   window.open(`${this.URL.ExportStuResults}?tid=${tid}&tsid=${tsid}&cids=${cids}&keyWords=&${keyWords}pageIndex=${pageNum}&pageSize=${pageSize}`)
+      // }
     },
   }
 </script>

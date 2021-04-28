@@ -1,11 +1,10 @@
 <template>
   <section>
-
     <el-table
       :data="tableData"
+      :height="height"
       :style="['width: 100%',{'max-height':height+'px'}]"
       :element-loading-text="loadingText"
-      :height="height"
       :border="isBorder"
       element-loading-spinner="el-icon-loading"
       v-loading="loading"
@@ -44,7 +43,7 @@
       singleColumn,
     },
     props: {
-      theight: {type: Number, default: 0},
+      theight: {type: Number, default: 500},
       // 表格列配置
       tablecols: {type: Array, default: () => []},
       tableData: {type: Array, default: () => []},
@@ -85,7 +84,7 @@
         firstDisabled: false,
         lastDisabled: false,
         // 分页数据
-        height:0,
+        height:500,
       }
     },
 
@@ -96,6 +95,7 @@
           this.height = this.theight
         }
       },
+
     },
 
     methods: {

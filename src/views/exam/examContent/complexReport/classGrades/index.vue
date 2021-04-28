@@ -141,7 +141,11 @@
     methods: {
       handleStretch() {
         this.stretch = !this.stretch
-      }
+      },
+
+      initTable() {
+        console.log(1)
+      },
     },
   }
 </script>
