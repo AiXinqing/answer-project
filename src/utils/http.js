@@ -2,7 +2,8 @@ import axios from 'axios';
 import Qs from 'qs'
 import {API_VERSION} from '../config/api'
 import Cookie from '../utils/cookie'
-import { URL } from '@/config/api'
+import store from '../store'
+
 
 // axios.defaults.timeout = 5000;
 axios.defaults.baseURL = '';
@@ -15,6 +16,8 @@ const service = axios.create({
 //http request 拦截器
 service.interceptors.request.use(
   config => {
+    // 请求loading
+    store.state.getExam.tableLoading = true
     if(config.method === 'get') {
         //如果是get请求，且params是数组类型如arr=[1,2]，则转换成arr=1&arr=2
         config.paramsSerializer = function (params) {
@@ -28,6 +31,7 @@ service.interceptors.request.use(
     // }
     config.headers['X-Requested-With'] = 'XMLHttpRequest'
     config.headers['Content-Type'] = 'application/json'
+
     return config;
   },
   error => {
@@ -56,6 +60,7 @@ service.interceptors.response.use(
         // } else {
         //   return response.data
         // }
+        store.state.getExam.tableLoading = false
         return res.data
     },
     error => {

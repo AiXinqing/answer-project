@@ -10,7 +10,12 @@
     subjectsArr: [],
     classesArr: [],
     TableList: [],
-    tableLoading: false
+    tableLoading: false,
+    pagination: {
+      pageSize: 15,
+      pageNum: 1,
+      total: 0
+    }
   }
 
   const mutations = {
@@ -41,8 +46,8 @@
       state.TableList = data
     },
 
-    GET_TABLELOADING: (state, isLoading) => {
-      state.tableLoading = isLoading
+    GET_PAGE: (state,page) => {
+      state.pagination = page
     }
   }
 
@@ -59,11 +64,14 @@
         const { tid, tsid, cids, keyWords, pageIndex, pageSize, url } = padata
         GetStuResults({ tid, tsid, cids, keyWords, pageIndex, pageSize,url}).then(res => {
           commit('SET_TABLE', res)
+          commit('GET_PAGE', {
+            pageSize: res.ResponseContent.pageSize,
+            pageNum: res.ResponseContent.pageIndex,
+            total: res.ResponseContent.count
+          })
           resolve(res)
-          commit('GET_TABLELOADING', false)
           return res
         }).catch(error => {
-          commit('GET_TABLELOADING', true)
           reject(error)
         })
       })
