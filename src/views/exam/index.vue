@@ -4,14 +4,14 @@
       <div class="dorm_head_nav">
         <div class="nav_logo"></div>
         <div class="nav_menu">
-          <router-link
+          <a
             v-for="(item, index) in linkData"
             :key="index"
-            :to="{name: item.toUrl}"
-            :class="item.calssname">
+            :class="['item.calssname',{'router-link-active':item.calssname == active}]"
+            @click="handelChange(item)">
             <i></i>
             <span>{{item.linkName}} <em/></span>
-          </router-link>
+          </a>
         </div>
         <div class="nav_login"></div>
       </div>
@@ -24,6 +24,7 @@
   export default {
     data() {
       return {
+        active:'examHome',
         linkData: [
           {
             'calssname':'examHome',
@@ -45,7 +46,26 @@
             'toUrl':'jointExam',
             'linkName':'联考分析报告'
           },
-        ]
+        ],
+        prmTid:''
+      }
+    },
+    watch: {
+      $route: {
+        handler: function(route) {
+          const query = route.query
+          if (query.prmTid) {
+            this.prmTid = query.prmTid
+          }
+        },
+        immediate: true
+      },
+    },
+
+    methods: {
+      handelChange(item) {
+        this.active = item.calssname
+        this.$router.push({name:item.toUrl,query:{prmTid:this.prmTid}})
       }
     },
   }
