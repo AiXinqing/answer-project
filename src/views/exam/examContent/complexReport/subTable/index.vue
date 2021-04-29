@@ -1,14 +1,16 @@
 <template>
   <div class="complex_content">
-    <hj-stretch
-      v-for="(choose,i) in subjectsArr"
-      :key="i"
-      :choose-list="choose"
-      @handle-stretch="handleStretch"
-      @handle-checkAll-change="handleCheckAllChange"
-      @single-change="singleChange"
-      >
-    </hj-stretch>
+    <div ref="stretch">
+      <hj-stretch
+        v-for="(choose,i) in examInfo"
+        :key="i"
+        :choose-list="choose"
+        @handle-stretch="handleStretch"
+        @handle-checkAll-change="handleCheckAllChange"
+        @single-change="singleChange"
+        >
+      </hj-stretch>
+    </div>
     <div class="table_wapper">
       <div class="table_search">
         <div class="search_left">
@@ -35,12 +37,12 @@
       <div class="el_table_wapper">
         <exam-table
           :style="{'max-height':theight+'px'}"
-          :tablecols="tableColumn"
-          :tableData="tableData"
+          :tablecols="subTableColumn"
+          :tableData="data"
           :isIndex="false"
-          :pagination="pagination"
-          :loading="loading"
-          :theight="500"
+          :pagination="page"
+          :theight="theight"
+          :loading="tableLoading"
           @handle-size-change="handleSizeChange"
           @handle-current-change="handleCurrentChange"
         ></exam-table>
@@ -50,20 +52,15 @@
 </template>
 
 <script>
-  import { mapState} from 'vuex'
+  import { mapState, mapGetters } from 'vuex'
   export default {
     props: {
-      stretchBox: {
-        type: Array,
-        default: () => []
-      },
-
-      activeName:{
+      prmTid: {
         type: String,
         default: ''
       },
-
     },
+
     data() {
       return {
         stretch: true,
@@ -157,11 +154,12 @@
             align:'center',
           },
         ],
-        prmTid: '',
+
+        // 参数
         tsid:'',
         keyWords:'',
-        theight: document.body.clientHeight - 350,
-        loading:false,
+        cidStr:'',
+        theight: document.body.clientHeight - 350 || 0,
         iSlot:[
           {
             type:'prefix',
@@ -175,7 +173,7 @@
           tsid:'',
           url:this.URL.GetStuSmallScore
         },
-        pagination: {
+        page: {
           pageSize: 15,
           pageNum: 1,
           total: 0
@@ -185,20 +183,16 @@
     },
 
     computed: {
-      ...mapState('getExam', ['subjectsArr','headerTable','TableList']),
+      ...mapState('getExam', ['tableLoading']),
+      ...mapState('subTable', ['subjectsArr','headerTable','TableList','classesArr','pagination',]),
+      ...mapGetters('subTable', ['examInfo']),
 
-      subjectsArr() {
-        return this.stretchArr.map(item =>{
-          return item.subject == '科目' ? {
-            ...item,
-            subjectList:item.subjectList.filter(ele => ele.sid != 'totalScore').map((ele,index) => {
-              return index == 0 ? {...ele,check:!ele.check} : ele
-            })
-          } : item
-        })
+      classIdsArr(){
+        return this.classesArr.length ? this.classesArr.filter(item => item.check && item.cid != 'all')
+                .map(ele => ele.cid).toString() : ''
       },
 
-      tableColumn(){
+      subTableColumn(){
         // 动态表头
         return this.headerTable.length ? [
           ...this.fixedHeader,
@@ -215,40 +209,62 @@
                 ...item,
                 label:`得分/共${ele.fullScore}分`,
                 ...obj,
-                type:'Text',
+                // type:'Text',
+                type:'Html',
                 prop:`${item.prop}_${ele.title}`,
+                fontSize:true,
+                fullScore:ele.fullScore,
+                typeIndex:ele.type
               }: {
                 ...item,
                 label:`作答/答案${ele.answer}`,
                 ...obj,
                 prop:`${item.prop}_${ele.title}`,
+                answer:ele.answer,
+                typeIndex:ele.type
               }
             }) : this.subjective.map(item =>{
               return {
                 ...item,
                 label:`得分/共${ele.fullScore}分`,
                 type:'Html',
-                prop:`${item.prop}_${ele.title}`
+                prop:`${item.prop}_${ele.title}`,
+                fontSize:true,
+                fullScore:ele.fullScore,
+                typeIndex:ele.type
               }
             })
           }))
         ] : []
       },
 
-      tableData(){
+      subTableData(){
         return this.TableList.length ? this.TableList.map(item =>{
           let dynamic = {}
-          item.DynamicDetail.forEach(item => {
-            dynamic = {
-              ...dynamic,
-              [`classRank_${item.sname}`]: item.classRank,
-              [`gradeRank_${item.sname}`]: item.gradeRank,
-              ord: item.ord,
-              sname: item.sname,
-              [`tscore_${item.sname}`]: item.tscore,
-              tsid: item.tsid,
-              tid: this.prmTid,
-              jump:1
+          item.DynamicDetail.forEach(element => {
+            switch (element.type) {
+              case '0':
+                  dynamic = {
+                    ...dynamic,
+                    [`answer_${element.title}`]:element.selected,
+                    [`fullScore_${element.title}`]:element.score,
+                    score: element.score,
+                    selected: element.selected,
+                    title: element.title,
+                    type: element.type,
+                  }
+                break;
+              default:
+                  dynamic = {
+                    ...dynamic,
+                    [`fullScore_${element.title}`]:element.score,
+                    score: element.score,
+                    selected: element.selected,
+                    title: element.title,
+                    type: element.type,
+                    answer: null,
+                  }
+                break;
             }
           })
 
@@ -260,6 +276,10 @@
             tmid: item.tmid,
             tnumber: item.tnumber,
             totalscore: item.totalscore,
+            ObjectiveScore: item.ObjectiveScore,
+            SubjectiveScore: item.SubjectiveScore,
+            classRank: item.classRank,
+            gradeRank: item.gradeRank,
             ...dynamic
           }
         }) : []
@@ -273,12 +293,20 @@
     },
 
     watch: {
-      stretchBox: {
+
+      classIdsArr: {
         immediate: true,
         handler () {
-          this.stretchArr = this.stretchBox
-        }
+          this.cidStr = this.classIdsArr
+        },
       },
+      pagination:{
+        immediate: true,
+        handler () {
+          this.page = this.pagination
+        },
+      },
+
     },
     methods: {
       handleStretch(){
@@ -286,85 +314,104 @@
           let height = this.$refs.stretch.offsetHeight
           this.theight = document.body.clientHeight - 258 - height // 258 = 页面高度 - height  除条件以外的高度
         })
+
       },
 
-      initTable(prmTid,tsid,classIdsArr){
-        this.prmTid = prmTid
-        this.tsid = tsid
-        this.parameter = {
-          ...this.parameter,
-          tid: prmTid,
-          tsid:this.tsid,
-          cids:classIdsArr
-        }
-
-        this.getDynamicHeader(prmTid,tsid)
-        this.getTable()
-      },
-
-      getDynamicHeader(prmTid,tsid){
-        // 获取动态表头
-        this.$store.dispatch('getExam/dynamicHeader', {
-          tid: prmTid,tsid:tsid,url:this.headeUrl
-        })
-      },
-
-      getTable() {
-        // 获取table
-        this.loading = true
-        const { pageSize , pageNum} = this.pagination
-        //Qs.stringify
-        this.$store.dispatch('getExam/GetStuResults', {
-          ...this.parameter,
-          pageIndex: pageNum,
-          pageSize: pageSize,
+      initTable(){
+        // 获取查询科目 班级参数
+        this.$store.dispatch('getExam/getExamInfo', {
+          prmTid: this.prmTid
         }).then((res)=>{
           if(res.ResponseCode =="Success"){
-            this.loading = false
-            const {count,pageIndex,pageSize} = res.ResponseContent
-            this.pagination = {
-              pageSize: pageSize,
-              pageNum: pageIndex,
-              total: count
-            }
+            this.subjectsArr.forEach((element,i) => {
+              if(i == 0){
+                this.tsid = element.tsid
+              }
+            })
+            this.$nextTick(()=>{
+              // 班级数组
+              this.cidStr = this.classIdsArr
+              // 获取动态表头
+              this.getDynamicHeader(this.tsid)
+              this.getTable()
+            })
           }
         })
       },
 
       handleSizeChange(val){
-        console.log(val)
-        // this.$emit('handle-size-change',val)
+        // 分页每页显示数量
+        this.page.pageSize = val
+        this.$nextTick(()=>{
+          this.getTable()
+        })
+
       },
       handleCurrentChange(val){
-        console.log(val)
-        // this.$emit('handle-current-change',val)
+        // 分页起始页
+        this.page.pageNum = val
+        this.$nextTick(()=>{
+          this.getTable()
+        })
       },
 
       handleCheckAllChange(cidStr){
         // 班级查询
-        console.log(cidStr)
-        this.$emit('handle-checkAll-change',cidStr)
+        this.cidStr = cidStr
+        this.$nextTick(()=>{
+          this.getTable()
+        })
       },
 
       singleChange(tsid){
         // 科目查询
-        console.log(tsid)
-        // this.$emit('single-change',tsid)
+        this.tsid = tsid
+        this.$nextTick(()=>{
+          this.getDynamicHeader(this.tsid)
+          this.getTable()
+        })
       },
 
       handleInquire(){
         // 输入框查询
-        // this.$emit('handle-inquire',this.keyWords)
+        this.$nextTick(()=>{
+          this.getTable()
+        })
       },
 
       downTable(){
         // 下载表格
-        // this.$emit('handel-down-table')
+        const {cids,keyWords,tid,tsid} = this.parameter
+        const { pageSize , pageNum} = this.pagination
+        window.open(`${this.URL.ExportStuResults}?tid=${tid}&tsid=${tsid}&cids=${cids}&keyWords=&${keyWords}pageIndex=${pageNum}&pageSize=${pageSize}`)
       },
 
       handleClear(){
         this.keyWords= ''
-      }
+      },
+
+      getDynamicHeader(tsid){
+        // 获取动态表头
+        this.$store.dispatch('subTable/dynamicHeader', {
+          tid: this.prmTid,tsid:tsid,url:this.headeUrl
+        })
+      },
+
+      getTable() {
+        // 获取table
+        const { pageSize , pageNum} = this.page
+        //Qs.stringify
+        this.parameter = {
+          ...this.parameter,
+          cids:this.cidStr,
+          tid: this.prmTid,
+          tsid:this.tsid,
+          keyWords:this.keyWords,
+          pageIndex: pageNum,
+          pageSize: pageSize,
+        }
+        this.$store.dispatch('subTable/GetStuResults', this.parameter)
+      },
     },
   }
 </script>
