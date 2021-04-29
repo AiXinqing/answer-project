@@ -4,13 +4,11 @@ import {API_VERSION} from '../config/api'
 import Cookie from '../utils/cookie'
 import store from '../store'
 
-
-// axios.defaults.timeout = 5000;
 axios.defaults.baseURL = '';
 
 const service = axios.create({
     baseURL: '',
-    timeout: 50000
+    timeout: 60000
 })
 
 //http request 拦截器
@@ -26,9 +24,7 @@ service.interceptors.request.use(
     }
     if (!config.data) config.data = {}
     if (!config.data.version) config.data.version = 'v1'
-    // if (store.getters.token) {
-    //   config.headers['Authorization'] = 'Bearer ' + getToken()
-    // }
+
     config.headers['X-Requested-With'] = 'XMLHttpRequest'
     config.headers['Content-Type'] = 'application/json'
 
@@ -44,22 +40,6 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     response => {
         const res = response
-        // if (res.status !== 0) {
-        //   if (res.status === 4001) {
-        //       // router.push({ name: 'login' })
-        //       location.href = URL.SERVICE_CONTEXT_PATH + 'Manage/login'
-        //   } else {
-        //     // this.$message({
-        //     //   message: '操作失败：' + response.data.ResponseCode,
-        //     //   type: 'error',
-        //     //   duration: 5 * 1000
-        //     // });
-        //     console.log(res.data.ResponseCode)
-        //   }
-        //   return Promise.reject(new Error(res.data.ResponseCode || 'Error'))
-        // } else {
-        //   return response.data
-        // }
         store.state.getExam.tableLoading = false
         return res.data
     },
@@ -89,12 +69,7 @@ export function post(url, data = {}, deep = false) {
       }).then(response => {
           if (response.status !== 0) {
               if (response.status === 4001) {
-                // let url = document.referrer;
-                //   if(url.indexOf("localhost") == -1){
-                //       window.location.href = url.replace('/AnswerCardWeb/#/exam', '/Manage/Login')
-                //   }else{
-                //       window.location.href = window.location.host + '/Manage/Login';
-                //   }
+//
               }else{
                 this.$message({
                   message: '操作失败：' + response.data.ResponseCode,

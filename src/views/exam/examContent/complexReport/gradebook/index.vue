@@ -2,7 +2,7 @@
   <div class="complex_content">
     <div ref="stretch">
       <hj-stretch
-        v-for="(choose,i) in examInfo"
+        v-for="(choose,i) in stretchBox"
         :key="i"
         :choose-list="choose"
         @handle-stretch="handleStretch"
@@ -53,13 +53,19 @@
 </template>
 
 <script>
-  import { mapState, mapGetters } from 'vuex'
+  import { mapState} from 'vuex'
   export default {
     props: {
+
       prmTid: {
         type: String,
         default: ''
       },
+
+      examInfo:{
+        type:Array,
+        default:() => []
+      }
     },
 
     data() {
@@ -150,11 +156,25 @@
         'TableList','classesArr','pagination',
         'tableLoading'
       ]),
-      ...mapGetters('getExam', ['examInfo']),
+
 
       classIdsArr(){
         return this.classesArr.length ? this.classesArr.filter(item => item.check && item.cid != 'all')
                 .map(ele => ele.cid).toString() : ''
+      },
+
+      stretchBox(){
+        return this.examInfo.length ? this.examInfo.map(element =>{
+          return element.subject == '科目' ? {
+            ...element,
+            subjectList:element.subjectList.map((item,index) => {
+              return index == 0 ? {...item,check:true} : {...item,check:false}
+            })
+          } : {
+            ...element,
+            subjectList:this.classesArr
+          }
+        }) :[]
       },
 
       tableColumn(){
@@ -252,24 +272,13 @@
       },
 
       initTable() {
-        // 获取查询科目 班级参数
-        this.$store.dispatch('getExam/getExamInfo', {
-          prmTid: this.prmTid
-        }).then((res)=>{
-          if(res.ResponseCode =="Success"){
-            this.subjectsArr.forEach((element,i) => {
-              if(i == 0){
-                this.tsid = element.tsid
-              }
-            })
-            this.$nextTick(()=>{
-              // 班级数组
-              this.cidStr = this.classIdsArr
-              // 获取动态表头
-              this.getDynamicHeader(this.tsid)
-              this.getTable()
-            })
-          }
+        this.$nextTick(()=>{
+          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+          // 班级数组
+          this.cidStr = this.classIdsArr
+          // 获取动态表头
+          this.getDynamicHeader(this.tsid)
+          this.getTable()
         })
       },
 
@@ -292,6 +301,9 @@
 
       handleCheckAllChange(cidStr){
         // 班级查询
+        if(this.tsid == ''){
+          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+        }
         this.cidStr = cidStr
         this.$nextTick(()=>{
           this.getTable()

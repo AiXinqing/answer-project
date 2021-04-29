@@ -7,6 +7,7 @@
     >
       <component
         :is="activeName"
+        :exam-info="examInfo"
         :prmTid="prmTid"
         ref="tabName"
       ></component>
@@ -22,6 +23,7 @@
   import gradesStatistics from './gradesStatistics'
   import ranking from './ranking'
   // import Qs from 'qs'
+  import { mapGetters } from 'vuex'
 
   export default {
     components: {
@@ -78,9 +80,14 @@
       },
     },
 
+    computed: {
+      ...mapGetters('getExam', ['examInfo']),
+    },
+
     mounted () {
       if(this.prmTid != ''){
-        this.$refs.tabName.initTable()
+        this.getExamFunc(this.prmTid)
+        // this.$refs.tabName.initTable()
       }
     },
     methods: {
@@ -98,15 +105,10 @@
           prmTid: prmTid
         }).then((res)=>{
           if(res.ResponseCode =="Success"){
-            this.stretchBox = this.examInfo
-            this.subjectsArr.forEach((element,i) => {
-              if(i == 0){
-                this.tsid = element.tsid
-              }
-            })
+            this.stretchBox = 
             this.$nextTick(()=>{
               // 获取动态表头
-              this.$refs.tabName.initTable(this.prmTid,this.tsid)
+              this.$refs.tabName.initTable()
             })
           }
         })
