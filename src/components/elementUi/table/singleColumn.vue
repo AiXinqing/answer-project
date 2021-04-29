@@ -94,9 +94,9 @@
         classFun: (row,prop) => {
           let classStr = ''
           if(prop.typeIndex == '1'){
-            classStr = prop.fullScore == row[prop.prop] ? 'correct' : 'error'
+            classStr = Number(prop.fullScore) <= Number(row[prop.prop]) ? 'correct' : 'error'
           }else if(prop.typeIndex == '0'){
-            classStr = prop.fullScore == row[prop.prop] ? 'correct' : 'error'
+            classStr = Number(prop.fullScore) <= Number(row[prop.prop]) ? 'correct' : 'error'
           }
           return classStr
         },
