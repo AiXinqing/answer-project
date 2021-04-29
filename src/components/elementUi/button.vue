@@ -96,14 +96,14 @@ export default {
 /*删除按钮 */
 .el-button--del {
   padding: 6px 13px;
-  border: 1px solid #f56262;
-  color: #f56262;
+  border: 1px solid @del;
+  color: @del;
   background-color: @white;
 }
 .el-button--del:focus,
 .el-button--del:hover {
-  color: #f56262;
-  border-color: #f56262;
+  color: @del;
+  border-color: @del;
   background-color: @white; //del
 }
 /* 取消按钮 */
@@ -135,7 +135,7 @@ export default {
 .el-button--return:focus,
 .el-button--return:hover {
   color: @mainFont;
-  border-color: @mainFont;
+  border-color: @mainHover;
   background-color: @mainHover;
 }
 /* 删除按钮 */
@@ -143,13 +143,20 @@ export default {
   padding: 6px 18px;
   border: 1px solid transparent;
   color:  @white;
-  background-color: #fc6969;
+  background-color: @del_fc;
 }
 .el-button--delete:focus,
 .el-button--delete:hover {
   color:  @white;
-  border-color: #d65555;
-  background-color: #d65555;
+  border-color: @del_6;
+  background-color: @del_6;
+}
+.el-button:focus,
+.el-button:hover{
+  opacity: .8;
+  color: @white !important;
+  border-color: @main !important;
+  background-color: @main !important;
 }
 .el-checkbox__inner:hover {
   border-color: @mainFont;

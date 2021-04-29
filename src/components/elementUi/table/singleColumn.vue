@@ -41,7 +41,17 @@
       :filter-method="ele.filterMethod ? ele.filterMethod : null"
       :filter-placement="ele.filterPlacement ? ele.filterPlacement : null">
       <template slot-scope="scope">
-        <span v-if="ele.type==='Html'" v-html="columnHtml(scope.row,ele.prop)">{{ele.prop}}</span>
+        <template v-if="ele.fontSize">
+          <span
+            v-if="ele.type==='Html'"
+            v-html="columnHtml(scope.row,ele.prop)"
+            :class="classFun(scope.row,ele)"
+          >{{ele.prop}}</span>
+
+        </template>
+        <template v-else>
+          <span v-if="ele.type==='Html'" v-html="columnHtml(scope.row,ele.prop)">{{ele.prop}}</span>
+        </template>
         <template v-if="ele.type ==='Text' && ele.url != undefind">
           <el-button
             type="text" class="text_button"
@@ -80,7 +90,16 @@
       return {
         columnHtml: (row,prop) => {
           return row[prop]
-        }
+        },
+        classFun: (row,prop) => {
+          let classStr = ''
+          if(prop.typeIndex == '1'){
+            classStr = prop.fullScore == row[prop.prop] ? 'correct' : 'error'
+          }else if(prop.typeIndex == '0'){
+            classStr = prop.fullScore == row[prop.prop] ? 'correct' : 'error'
+          }
+          return classStr
+        },
       }
     },
 
@@ -110,6 +129,12 @@
   }
   .el-button--text{
     color:@main
+  }
+  span.correct{
+    color:@main
+  }
+  span.error{
+    color:@error
   }
   // .el-button.text_button:focus,
   // .el-button.text_button:hover{
