@@ -7,7 +7,6 @@
     >
       <component
         :is="activeName"
-        :stretch-box="stretchBox"
         :prmTid="prmTid"
         ref="tabName"
       ></component>
@@ -23,8 +22,6 @@
   import gradesStatistics from './gradesStatistics'
   import ranking from './ranking'
   // import Qs from 'qs'
-
-  import { mapState, mapGetters } from 'vuex'
 
   export default {
     components: {
@@ -66,14 +63,7 @@
           },
         ],
         prmTid: '',
-        tsid:'',
-        stretchBox:[],
       }
-    },
-
-    computed: {
-      ...mapState('getExam', ['subjectsArr']),
-      ...mapGetters('getExam', ['examInfo']),
     },
 
     watch: {
@@ -90,32 +80,15 @@
 
     mounted () {
       if(this.prmTid != ''){
-        this.getExamFunc(this.prmTid)
+        this.$refs.tabName.initTable()
       }
     },
     methods: {
       // 切换tab
       handleClick(tab){
         this.activeName = tab.name
-        this.subjectsArr.forEach((element,i) => {
-          if(i == 0){
-            this.tsid = element.tsid
-          }
-        })
-        switch (this.activeName) {
-          case 'subTable': // 小分表
-          case 'question': // 试题汇总表
-            this.subjectsArr.forEach((element,i) => {
-              if(i == 1){
-                this.tsid = element.tsid
-              }
-            })
-            break;
-          default:
-            break
-        }
         this.$nextTick(()=>{
-          this.$refs.tabName.initTable(this.prmTid,this.tsid)
+          this.$refs.tabName.initTable()
         })
 
       },

@@ -2,7 +2,7 @@
   <div class="complex_content">
     <div ref="stretch">
       <hj-stretch
-        v-for="(choose,i) in stretchBox"
+        v-for="(choose,i) in examInfo"
         :key="i"
         :choose-list="choose"
         @handle-stretch="handleStretch"
@@ -53,14 +53,15 @@
 </template>
 
 <script>
-  import { mapState} from 'vuex'
+  import { mapState, mapGetters } from 'vuex'
   export default {
     props: {
-      stretchBox: {
-        type: Array,
-        default: () => []
+      prmTid: {
+        type: String,
+        default: ''
       },
     },
+
     data() {
       return {
         stretch: true,
@@ -117,18 +118,17 @@
           },
         ],
 
-        theight: document.body.clientHeight - 350,
+        // 参数
+        tsid:'',
+        keyWords:'',
+        cidStr:'',
+        theight: document.body.clientHeight - 350 || 0,
         iSlot:[
           {
             type:'prefix',
             icon:'el-icon-search'
           }
         ],
-        // 参数
-        laoding:false,
-        prmTid: '',
-        tsid:'',
-        keyWords:'',
         parameter:{
           cids:'',
           keyWords:'',
@@ -141,7 +141,6 @@
           pageNum: 1,
           total: 0
         },
-        cidStr:'',
         headeUrl:this.URL.GetTableHeadeSubject,
       }
     },
@@ -151,6 +150,7 @@
         'TableList','classesArr','pagination',
         'tableLoading'
       ]),
+      ...mapGetters('getExam', ['examInfo']),
 
       classIdsArr(){
         return this.classesArr.length ? this.classesArr.filter(item => item.check && item.cid != 'all')
@@ -227,16 +227,6 @@
     },
 
     watch: {
-      $route: {
-        handler: function(route) {
-          const query = route.query
-          if (query.prmTid) {
-            this.prmTid = query.prmTid
-          }
-        },
-        immediate: true
-      },
-
       classIdsArr: {
         immediate: true,
         handler () {
@@ -249,6 +239,7 @@
           this.page = this.pagination
         },
       },
+
     },
 
     methods: {
@@ -260,19 +251,30 @@
 
       },
 
-      initTable(prmTid,tsid) {
-        this.prmTid = prmTid
-        this.tsid = tsid
-
-        this.cidStr = this.classIdsArr
-
-        this.$nextTick(()=>{
-          this.getDynamicHeader(prmTid,tsid)
-          this.getTable()
+      initTable() {
+        // 获取查询科目 班级参数
+        this.$store.dispatch('getExam/getExamInfo', {
+          prmTid: this.prmTid
+        }).then((res)=>{
+          if(res.ResponseCode =="Success"){
+            this.subjectsArr.forEach((element,i) => {
+              if(i == 0){
+                this.tsid = element.tsid
+              }
+            })
+            this.$nextTick(()=>{
+              // 班级数组
+              this.cidStr = this.classIdsArr
+              // 获取动态表头
+              this.getDynamicHeader(this.tsid)
+              this.getTable()
+            })
+          }
         })
       },
 
       handleSizeChange(val){
+        // 分页每页显示数量
         this.page.pageSize = val
         this.$nextTick(()=>{
           this.getTable()
@@ -280,6 +282,7 @@
 
       },
       handleCurrentChange(val){
+        // 分页起始页
         this.page.pageNum = val
         this.$nextTick(()=>{
           this.getTable()
@@ -290,7 +293,6 @@
       handleCheckAllChange(cidStr){
         // 班级查询
         this.cidStr = cidStr
-
         this.$nextTick(()=>{
           this.getTable()
         })
@@ -299,20 +301,14 @@
       singleChange(tsid){
         // 科目查询
         this.tsid = tsid
-        this.getDynamicHeader(this.prmTid,tsid)
-        this.parameter = {
-          ...this.parameter,
-          tsid:tsid
-        }
-        this.getTable()
+        this.$nextTick(()=>{
+          this.getDynamicHeader(this.tsid)
+          this.getTable()
+        })
       },
 
       handleInquire(){
         // 输入框查询
-        this.parameter={
-          ...this.parameter,
-          keyWords:this.keyWords
-        }
         this.$nextTick(()=>{
           this.getTable()
         })
@@ -322,17 +318,18 @@
         // 下载表格
         const {cids,keyWords,tid,tsid} = this.parameter
         const { pageSize , pageNum} = this.pagination
-        window.open(`${this.URL.ExportStuResults}?tid=${tid}&tsid=${tsid}&cids=${cids}&keyWords=&${keyWords}pageIndex=${pageNum}&pageSize=${pageSize}`)
+        window.open(`${this.URL.ExportStuSmallScore}?tid=${tid}&tsid=${tsid}&cids=${cids}&keyWords=&${keyWords}pageIndex=${pageNum}&pageSize=${pageSize}`)
       },
 
       handleClear(){
         this.keyWords= ''
       },
 
-      getDynamicHeader(prmTid,tsid){
+
+      getDynamicHeader(tsid){
         // 获取动态表头
         this.$store.dispatch('getExam/dynamicHeader', {
-          tid: prmTid,tsid:tsid,url:this.headeUrl
+          tid: this.prmTid,tsid:tsid,url:this.headeUrl
         })
       },
 
@@ -344,6 +341,7 @@
             cids:this.cidStr,
             tid: this.prmTid,
             tsid:this.tsid,
+            keyWords:this.keyWords,
             pageIndex: pageNum,
             pageSize: pageSize,
           }
