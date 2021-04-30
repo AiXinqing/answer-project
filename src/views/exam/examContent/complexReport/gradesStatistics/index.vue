@@ -19,7 +19,7 @@
           <exam-button type="primary">确定</exam-button>
         </div>
         <div class="search_right">
-          <exam-button type="primary">下载表格</exam-button>
+          <exam-button type="primary" @click="downTable">下载表格</exam-button>
         </div>
       </div>
 
