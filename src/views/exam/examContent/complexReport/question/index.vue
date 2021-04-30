@@ -1,154 +1,249 @@
 <template>
   <div class="complex_content">
-    <hj-stretch
-      v-for="(choose,i) in stretchBox"
-      :key="i"
-      :choose-list="choose">
-    </hj-stretch>
+    <div ref="stretch">
+      <hj-stretch
+        v-for="(choose,i) in stretchBox"
+        :key="i"
+        :choose-list="choose"
+        @handle-stretch="handleStretch"
+      >
+      </hj-stretch>
+    </div>
     <div class="table_wapper">
       <div class="table_search">
-        <div class="search_left">
-          <span class="titile_18">分数详情</span>
-          <i>(点击学科的分数，可查看学生的答题卡)</i>
+        <div class="search_left" style="width: auto">
+          <span class="titile_18">试题得分汇总详情</span>
+          <i>(查看每题得分情况，点击对应的人数，可查看学生名单)</i>
         </div>
         <div class="search_right">
-          <exam-button type="primary">下载表格</exam-button>
-          <exam-button type="primary">查询</exam-button>
-          <hj-input v-model="text" placeholder="请输入12345">
-            <i slot="prefix" class="el-input__icon el-icon-search"></i>
-          </hj-input>
+          <exam-button type="primary" @click="downTable">下载表格</exam-button>
         </div>
       </div>
 
       <div class="el_table_wapper">
-        <!-- <hj-table
-          :tablecols='tableColumn'
-        ></hj-table> -->
-        <exam-table :is-combination="true" :tablecols="tableColumn"></exam-table>
+        <exam-table
+          :tablecols="questionTableColumn"
+          :tableData="questionTableData"
+          :isIndex="false"
+          :isPagination="false"
+          :theight="theight"
+          :loading="tableLoading"
+        ></exam-table>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import { mapState} from 'vuex'
   export default {
+    props: {
+      prmTid: {
+        type: String,
+        default: ''
+      },
+
+      examInfo:{
+        type:Array,
+        default:() => []
+      }
+    },
+
     data() {
       return {
         stretch: false,
-        stretchBox:[
+        fixedHeader:[
           {
-            subject:'科目',
-            type:'single',
-            stretch:false,
-            subjectList:[
-              {
-                name:'总分',
-                id:1,
-                check:true,
-              },
-              {
-                name:'语文',
-                id:2,
-                check:false,
-              },
-              {
-                name:'数学',
-                id:3,
-                check:false,
-              },
-              {
-                name:'英语',
-                id:4,
-                check:false,
-              }
-            ]
-          },
-          {
-            subject:'班级',
-            type:'multiple',
-            stretch:false,
-            subjectList:[
-              {
-                name:'全部',
-                id:1,
-                check:true,
-              },
-              {
-                name:'高中2020级01班',
-                id:2,
-                check:false,
-              },
-              {
-                name:'高中2020级01班',
-                id:3,
-                check:false,
-              },
-              {
-                name:'高中2020级01班',
-                id:4,
-                check:false,
-              }
-            ]
-          }
-        ],
-        text:'',
-        tableColumn:[
-          {
-            prop:'date',
-            label:'姓名',
-            minWidth:'80',
-            fixed:'left'
-          },{
             prop:'name',
-            label:'考号',
-            minWidth:'80',
+            label:'题号',
+            minWidth:'140',
+            align:'center',
+            fixed:'left',
+            type:'Html'
           },
           {
-            prop:'province',
-            label:'学号',
-            width:'1',
-            childen:[
-              {
-                prop:'city',
-                label:'班级',
-                width:'80',
-              },
-              {
-                prop:'address',
-                label:'总分',
-                minWidth:'140',
-              },
-              {
-                prop:'zip',
-                label:'客观题',
-                width:'120',
-              },
-              {
-                prop:'address',
-                label:'客观题',
-                minWidth:'180',
-              },
-            ]
+            prop:'type',
+            label:'题型',
+            minWidth:'100',
+            sortable:true,
+            align:'center',
+            type:'Html'
           },
           {
-            label: "操作",
-            type: "Text",
-            align: "left",
-            fixed: "right",
-            minWidth: 55,
+            prop:'fullScore',
+            label:'满分',
+            minWidth:'120',
+            align:'center',
+            type:'Html',
+            color:'font'
+          },
+          {
+            prop:'answer',
+            label:'正确答案',
+            minWidth:'100',
+            sortable:true,
+            align:'center',
+            type:'Html'
           },
         ],
-        tableData: [
-        ]
+        rankArr:[
+          {
+            prop:'avgScore',
+            label:'平均分',
+            width:'90',
+            align:'center',
+          },
+          {
+            prop:'fullScoreNum',
+            label:'满分人数',
+            width:'90',
+            align:'center',
+          },
+          {
+            prop:'fullScoreScale',
+            label:'满分率',
+            width:'90',
+            align:'center',
+          },
+          {
+            prop:'zeroScoreNum',
+            label:'零分人数',
+            width:'90',
+            align:'center',
+          },
+        ],
+
+        // 参数
+        tsid:'',
+        cidStr:'',
+        theight: document.body.clientHeight - 310 || 0,
+        parameter:{
+          cids:'',
+          tid: '',
+          tsid:'',
+          url:this.URL.GetQuestionSummary
+        },
       }
     },
+
+    computed: {
+      ...mapState('getExam', ['tableLoading','subjectsArr','classesArr']),
+      ...mapState('classQuestion', ['headerTable','TableList',]),
+
+      classIdsArr(){
+        return this.classesArr.length ? this.classesArr.filter(item => item.check && item.cid != 'all')
+                .map(ele => ele.cid).toString() : ''
+      },
+
+      stretchBox(){
+        return this.examInfo.length ? this.examInfo.map(element =>{
+          return element.subject == '科目' ? {
+            ...element,
+            subjectList:element.subjectList.filter(item => item.tsid != 'totalScore').map((item,index) => {
+              return index == 0 ? {...item,check:true} : {...item,check:false}
+            })
+          } : {
+            ...element,
+            subjectList:this.classesArr
+          }
+        }) :[]
+      },
+
+      questionTableColumn(){
+        // 动态表头
+        return this.headerTable.length ? [
+          ...this.fixedHeader,
+          ...this.headerTable.map(ele => ({
+            label:ele.cname,
+            align:'center',
+            // 0 客观题 objective 1 主观题 subjective
+            childen:this.rankArr.map((item,index) =>{
+              return {
+                ...ele,
+                ...item,
+                label:item.label,
+                type: index == 1 || index == 3  ? 'popBtn' : 'Html',
+                prop:`${item.prop}_${ele.cname}`,
+              }
+            })
+          }))
+        ] : []
+      },
+
+      questionTableData(){
+        return this.TableList.length ? this.TableList.map(item =>{
+          let dynamic = {}
+          item.DynamicDetail.forEach(element => {
+            dynamic = {
+              ...dynamic,
+              ...element,
+              [`avgScore_${element.cname}`]:element.avgScore,
+              [`fullScoreNum_${element.cname}`]:element.fullScoreNum,
+              [`fullScoreScale_${element.cname}`]:element.fullScoreScale,
+              [`zeroScoreNum_${element.cname}`]:element.zeroScoreNum,
+            }
+          })
+
+          return {
+            answer: item.answer,
+            fullScore: item.fullScore,
+            name: item.name,
+            tqid: item.tqid,
+            type: item.type,
+            ...dynamic
+          }
+        }) : []
+      }
+    },
+
+    mounted () {
+      this.$nextTick(() => {
+        this.theight = document.body.clientHeight - 310
+      })
+    },
+
+    watch: {
+      classIdsArr: {
+        immediate: true,
+        handler () {
+          this.cidStr = this.classIdsArr
+        },
+      },
+    },
+
     methods: {
-      handleStretch() {
-        this.stretch = !this.stretch
+      handleStretch(){
+        this.$nextTick(() =>{
+          let height = this.$refs.stretch.offsetHeight
+          this.theight = document.body.clientHeight - 258 - height // 258 = 页面高度 - height  除条件以外的高度
+        })
       },
 
       initTable() {
-        console.log(1)
+        this.$nextTick(()=>{
+          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
+          // 班级数组
+          this.cidStr = this.classIdsArr
+          // 获取动态表头
+          this.getTable()
+        })
+      },
+
+      getTable() {
+        // 获取table
+        this.parameter = {
+          ...this.parameter,
+          cids:this.cidStr,
+          tid: this.prmTid,
+          tsid:this.tsid,
+        }
+        this.$store.dispatch('classQuestion/GetStuResults', this.parameter)
+      },
+
+      downTable(){
+        // 下载表格
+        const {cids,tid,tsid} = this.parameter
+        window.open(`${this.URL.ExportQuestionSummary}?tid=${tid}&tsid=${tsid}&cids=${cids}`)
       },
     },
   }
