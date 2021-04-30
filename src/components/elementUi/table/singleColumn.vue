@@ -15,7 +15,7 @@
     :filter-placement="column.filterPlacement ? column.filterPlacement : null">
       <template slot-scope="scope">
         <span v-if="column.type==='Html'" v-html="columnHtml(scope.row,column.prop)">{{column.prop}}</span>
-        <el-button v-if="column.type==='Text'"  type="text" class="text_button" v-html="columnHtml(scope.row,column.prop)">{{column.prop}}</el-button>
+        <el-button v-if="column.type==='Text'"  type="text" :class="{'text_button':scope.row[prop] != undefined || scope.row[prop] != ''}" v-html="columnHtml(scope.row,column.prop)">{{column.prop}}</el-button>
       </template>
     </el-table-column>
   <el-table-column
@@ -63,7 +63,13 @@
           <el-button
             type="text" class="text_button"
             v-html="columnHtml(scope.row,ele.prop)"
-          >{{ele.prop}}1</el-button>
+          >{{ele.prop}}</el-button>
+        </template>
+        <template v-if="ele.type ==='popBtn'">
+          <el-button
+            type="text" class="text_button"
+            v-html="columnHtml(scope.row,ele.prop)"
+          >{{ele.prop}}</el-button>
         </template>
 
         <!-- @click="hanlde" -->
@@ -89,7 +95,7 @@
     data() {
       return {
         columnHtml: (row,prop) => {
-          return row[prop]
+          return row[prop]  == '' || row[prop]  == undefined ? '--' : row[prop]
         },
         classFun: (row,prop) => {
           let classStr = ''

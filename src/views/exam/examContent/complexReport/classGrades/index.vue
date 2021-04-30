@@ -1,10 +1,14 @@
 <template>
   <div class="complex_content">
-    <hj-stretch
-      v-for="(choose,i) in stretchBox"
-      :key="i"
-      :choose-list="choose">
-    </hj-stretch>
+    <div ref="stretch">
+      <hj-stretch
+        v-for="(choose,i) in stretchBox"
+        :key="i"
+        :choose-list="choose"
+        @handle-stretch="handleStretch"
+      >
+      </hj-stretch>
+    </div>
     <div class="table_wapper">
       <div class="table_search">
         <div class="search_left is_active">
@@ -17,9 +21,12 @@
 
       <div class="el_table_wapper">
         <exam-table
-          :is-combination="true"
-          :tablecols="tableColumn"
-          :is-pagination="false"
+          :tablecols="classTableColumn"
+          :tableData="classTableData"
+          :isIndex="false"
+          :isPagination="false"
+          :theight="theight"
+          :loading="tableLoading"
         ></exam-table>
       </div>
     </div>
@@ -27,124 +34,255 @@
 </template>
 
 <script>
+  import { mapState} from 'vuex'
   export default {
+    props: {
+      prmTid: {
+        type: String,
+        default: ''
+      },
+
+      examInfo:{
+        type:Array,
+        default:() => []
+      }
+    },
+
     data() {
       return {
         stretch: false,
-        stretchBox:[
+        fixedHeader:[
           {
-            subject:'科目',
-            type:'single',
-            stretch:false,
-            subjectList:[
-              {
-                name:'总分',
-                id:1,
-                check:true,
-              },
-              {
-                name:'语文',
-                id:2,
-                check:false,
-              },
-              {
-                name:'数学',
-                id:3,
-                check:false,
-              },
-              {
-                name:'英语',
-                id:4,
-                check:false,
-              }
-            ]
+            prop:'cname',
+            label:'班级',
+            minWidth:'140',
+            align:'center',
+            fixed:'left',
+            type:'Html'
           },
           {
-            subject:'班级',
-            type:'multiple',
-            stretch:false,
-            subjectList:[
+            prop:'referenceNumber',
+            label:'参考人数',
+            minWidth:'100',
+            sortable:true,
+            align:'center',
+            type:'Html'
+          },
+          {
+            prop:'teacher',
+            label:'班主任',
+            minWidth:'120',
+            align:'center',
+            type:'Text',
+            color:'font'
+          },
+          {
+            prop:'maxScore',
+            label:'最高分',
+            minWidth:'100',
+            sortable:true,
+            align:'center',
+            type:'Html'
+          },
+          {
+            prop:'minScore',
+            label:'最低分',
+            minWidth:'120',
+            sortable:true,
+            align:'center',
+            type:'Html'
+          },
+          {
+            label:'平均分',
+            align:'center',
+            childen:[
               {
-                name:'全部',
-                id:1,
-                check:true,
+                prop:'avgScore',
+                label:'平均分',
+                width:'90',
+                align:'center',
+                type:'Html'
               },
               {
-                name:'高中2020级01班',
-                id:2,
-                check:false,
+                prop:'avgScoreRate',
+                label:'平均得分率',
+                width:'90',
+                align:'center',
+                type:'Html'
               },
               {
-                name:'高中2020级01班',
-                id:3,
-                check:false,
-              },
-              {
-                name:'高中2020级01班',
-                id:4,
-                check:false,
+                prop:'rank',
+                label:'排名',
+                width:'90',
+                align:'center',
+                type:'Html'
               }
             ]
           }
         ],
-        text:'',
-        tableColumn:[
+
+        rankArr:[
           {
-            prop:'date',
-            label:'姓名',
-            minWidth:'80',
-            fixed:'left'
-          },{
-            prop:'name',
-            label:'考号',
-            minWidth:'80',
+            prop:'num',
+            label:'人数',
+            width:'90',
+            align:'center',
           },
           {
-            prop:'province',
-            label:'学号',
-            width:'1',
-            childen:[
-              {
-                prop:'city',
-                label:'班级',
-                width:'80',
-              },
-              {
-                prop:'address',
-                label:'总分',
-                minWidth:'140',
-              },
-              {
-                prop:'zip',
-                label:'客观题',
-                width:'120',
-              },
-              {
-                prop:'address',
-                label:'客观题',
-                minWidth:'180',
-              },
-            ]
+            prop:'scale',
+            label:'率',
+            width:'90',
+            align:'center',
           },
           {
-            label: "操作",
-            type: "Text",
-            align: "left",
-            fixed: "right",
-            minWidth: 55,
+            prop:'rank',
+            label:'排名',
+            width:'90',
+            align:'center',
           },
         ],
-        tableData: [
-        ]
+
+        // 参数
+        tsid:'',
+        cidStr:'',
+        theight: document.body.clientHeight - 310 || 0,
+        parameter:{
+          cids:'',
+          tid: '',
+          tsid:'',
+          url:this.URL.GetClassScoreContrast
+        },
+
       }
     },
+
+    computed: {
+      ...mapState('getExam', ['tableLoading','subjectsArr','classesArr']),
+      ...mapState('classGrades', ['headerTable','TableList',]),
+
+      classIdsArr(){
+        return this.classesArr.length ? this.classesArr.filter(item => item.check && item.cid != 'all')
+                .map(ele => ele.cid).toString() : ''
+      },
+
+      stretchBox(){
+        return this.examInfo.length ? this.examInfo.map(element =>{
+          return element.subject == '科目' ? {
+            ...element,
+            subjectList:element.subjectList.map((item,index) => {
+              return index == 0 ? {...item,check:true} : {...item,check:false}
+            })
+          } : {
+            ...element,
+            subjectList:this.classesArr
+          }
+        }) :[]
+      },
+
+      classTableColumn(){
+        // 动态表头
+        return this.headerTable.length ? [
+          ...this.fixedHeader,
+          ...this.headerTable.map(ele => ({
+            label:ele.subname,
+            align:'center',
+            // 0 客观题 objective 1 主观题 subjective
+            childen:this.rankArr.map((item,index) =>{
+              let obj = {
+                type:'Html'
+              }
+              return {
+                ...ele,
+                ...item,
+                label:index != this.rankArr.length ? `${ele.subname}${item.label}` : item.label,
+                ...obj,
+                type: item.prop == 'num' ? 'popBtn' : 'Html',
+                prop:`${item.prop}_${ele.subname}`,
+              }
+            })
+          }))
+        ] : []
+      },
+
+      classTableData(){
+        return this.TableList.length ? this.TableList.map(item =>{
+          let dynamic = {}
+          item.DynamicDetail.forEach(element => {
+            dynamic = {
+              ...dynamic,
+              [`num_${element.name}`]:element.num,
+              [`scale_${element.name}`]:element.scale,
+              [`rank_${element.name}`]:element.rank,
+              scoreRange: element.scoreRange
+            }
+          })
+
+          return {
+            avgScore: item.avgScore,
+            avgScoreRate: item.avgScoreRate,
+            cid: item.cid,
+            cname: item.cname,
+            maxScore: item.maxScore,
+            minScore: item.minScore,
+            rank: item.rank,
+            referenceNumber: item.referenceNumber,
+            teacher: item.teacher,
+            ...dynamic
+          }
+        }) : []
+      }
+    },
+
+    mounted () {
+      this.$nextTick(() => {
+        this.theight = document.body.clientHeight - 310
+      })
+    },
+
+    watch: {
+      classIdsArr: {
+        immediate: true,
+        handler () {
+          this.cidStr = this.classIdsArr
+        },
+      },
+      // classTableColumn:{
+      //   immediate: true,
+      //   handler () {
+      //     console.log(this.classTableColumn)
+      //     console.log(this.classTableData)
+      //   },
+      // }
+
+    },
+
     methods: {
-      handleStretch() {
-        this.stretch = !this.stretch
+      handleStretch(){
+        this.$nextTick(() =>{
+          let height = this.$refs.stretch.offsetHeight
+          this.theight = document.body.clientHeight - 258 - height // 258 = 页面高度 - height  除条件以外的高度
+        })
       },
 
       initTable() {
-        console.log(1)
+        this.$nextTick(()=>{
+          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+          // 班级数组
+          this.cidStr = this.classIdsArr
+          // 获取动态表头
+          this.getTable()
+        })
+      },
+
+      getTable() {
+        // 获取table
+        this.parameter = {
+          ...this.parameter,
+          cids:this.cidStr,
+          tid: this.prmTid,
+          tsid:this.tsid,
+        }
+        this.$store.dispatch('classGrades/GetStuResults', this.parameter)
       },
     },
   }

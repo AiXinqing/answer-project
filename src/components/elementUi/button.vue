@@ -161,4 +161,10 @@ export default {
 .el-checkbox__inner:hover {
   border-color: @mainFont;
 }
+
+button.el-button.text_button.el-button--text.el-button--medium:hover {
+    background-color: @bc_tr !important;
+    color: @main !important;
+    border-color: @bc_tr !important;
+}
 </style>
