@@ -188,14 +188,6 @@
         },
       },
 
-      gradersTableColumn: {
-        immediate: true,
-        handler () {
-          console.log(this.gradersTableColumn)
-          console.log(this.gradersTableData)
-        },
-      },
-
     },
 
     methods: {

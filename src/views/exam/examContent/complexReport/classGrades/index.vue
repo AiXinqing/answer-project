@@ -267,6 +267,26 @@
         })
       },
 
+      handleCheckAllChange(cidStr){
+        // 班级查询
+        if(this.tsid == ''){
+          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
+        }
+        this.cidStr = cidStr
+        this.$nextTick(()=>{
+          this.getTable()
+        })
+      },
+
+      singleChange(tsid){
+        // 科目查询
+        this.tsid = tsid
+        this.$nextTick(()=>{
+          this.getDynamicHeader(this.tsid)
+          this.getTable()
+        })
+      },
+
       getTable() {
         // 获取table
         this.parameter = {
