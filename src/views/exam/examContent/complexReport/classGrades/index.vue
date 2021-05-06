@@ -33,12 +33,20 @@
         ></exam-table>
       </div>
     </div>
+
+    <student-details
+      ref="studentDetails"
+    />
   </div>
 </template>
 
 <script>
   import { mapState} from 'vuex'
+  import studentDetails from './_classDetails'
   export default {
+    components: {
+      studentDetails,
+    },
     props: {
       prmTid: {
         type: String,
@@ -309,6 +317,7 @@
       },
 
       hanldePopFunc(row){
+        this.$refs.studentDetails.openDetails(row)
         console.log(row)
       }
     },
