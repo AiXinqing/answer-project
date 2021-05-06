@@ -14,8 +14,18 @@
     :filter-method="column.filterMethod ? column.filterMethod : null"
     :filter-placement="column.filterPlacement ? column.filterPlacement : null">
       <template slot-scope="scope">
-        <span v-if="column.type==='Html'" v-html="columnHtml(scope.row,column.prop)">{{column.prop}}</span>
-        <el-button v-if="column.type==='Text'"  type="text" :class="{'text_button':scope.row[prop] != undefined || scope.row[prop] != ''}" v-html="columnHtml(scope.row,column.prop)">{{column.prop}}</el-button>
+        <span
+          v-if="column.type==='Html'"
+          v-html="columnHtml(scope.row,column.prop)"
+          :class="font_colorT(scope.row,column.prop)"
+        >{{column.prop}}</span>
+        <el-button
+          v-if="column.type==='Text'"
+          type="text"
+          @click="hanldeJump(scope.row,column.url)"
+          :class="[{'text_button':scope.row[prop] != undefined || scope.row[prop] != '',},font_colorT(scope.row,column.prop)]"
+          v-html="columnHtml(scope.row,column.prop)"
+        >{{column.prop}}</el-button>
       </template>
     </el-table-column>
   <el-table-column
@@ -45,30 +55,37 @@
           <span
             v-if="ele.type==='Html'"
             v-html="columnHtml(scope.row,ele.prop)"
-            :class="classFun(scope.row,ele)"
+            :class="[classFun(scope.row,ele),font_colorT(scope.row,column.prop)]"
           >{{ele.prop}}</span>
 
         </template>
         <template v-else>
-          <span v-if="ele.type==='Html'" v-html="columnHtml(scope.row,ele.prop)">{{ele.prop}}</span>
+          <span
+            v-if="ele.type==='Html'"
+            v-html="columnHtml(scope.row,ele.prop)"
+            :class="font_colorT(scope.row,column.prop)"
+          >{{ele.prop}}</span>
         </template>
         <template v-if="ele.type ==='Text' && ele.url != undefind">
           <el-button
             type="text" class="text_button"
             v-html="columnHtml(scope.row,ele.prop)"
             @click="hanldeJump(scope.row,ele.url)"
+            :class="font_colorT(scope.row,column.prop)"
           >{{ele.prop}}</el-button>
         </template>
         <template v-else-if="ele.type ==='Text'">
           <el-button
             type="text" class="text_button"
             v-html="columnHtml(scope.row,ele.prop)"
+            :class="font_colorT(scope.row,column.prop)"
           >{{ele.prop}}</el-button>
         </template>
         <template v-if="ele.type ==='popBtn'">
           <el-button
             type="text" class="text_button"
             v-html="columnHtml(scope.row,ele.prop)"
+            :class="font_colorT(scope.row,column.prop)"
           >{{ele.prop}}</el-button>
         </template>
 
@@ -105,6 +122,9 @@
             classStr = Number(prop.fullScore) <= Number(row[prop.prop]) ? 'correct' : 'error'
           }
           return classStr
+        },
+        font_colorT: (row,prop) => {
+          return row[prop]  == '' || row[prop]  == undefined ? 'transparent' : ''
         },
       }
     },

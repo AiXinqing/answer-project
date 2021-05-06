@@ -105,7 +105,8 @@
             minWidth:'120',
             sortable:true,
             align:'center',
-            type:'Text'
+            type:'Text',
+            url:this.URL.BrowsescoreAnsw
           },
           {
             prop:'ObjectiveScore',
@@ -297,7 +298,10 @@
             SubjectiveScore: item.SubjectiveScore,
             classRank: item.classRank,
             gradeRank: item.gradeRank,
-            ...dynamic
+            ...dynamic,
+            jump:1,
+            tsid: this.tsid,
+            tid: this.prmTid,
           }
         }) : []
       }
