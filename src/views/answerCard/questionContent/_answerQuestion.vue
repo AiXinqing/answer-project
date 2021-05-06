@@ -111,7 +111,7 @@ export default {
       options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
       maxHeight:28,
       tinymceHeight:28,
-      str:'&nbsp;',
+      str:'&ensp;',
       pageLayout: this.contentData.pageLayout,
       page_height: PAGE_HEIGHT,
       strP:'</p>',
@@ -134,7 +134,7 @@ export default {
     },
 
     pageWidth () {
-      return this.previewWidth == 0 ? this.page_width - 23 : this.previewWidth - 63
+      return this.previewWidth == 0 ? this.page_width - 20 : this.previewWidth - 40
     },
 
     questionInfo() {
@@ -146,12 +146,12 @@ export default {
 
         let titleStr = `${topic}` + (content.ShowScore ? ` (${ score }分)` : '')
 
-        let span1 =  i == 0 && first  ? `&nbsp;${titleStr}&nbsp;` : ''
+        let span1 =  i == 0 && first  ? `&ensp;${titleStr}&ensp; ` : ''
 
         let titleStrLong = i == 0 && first  ? titleStr.length * 10 : 0
 
 
-        let spaceLong = Math.ceil((this.pageWidth - 23 - titleStrLong ) / 4.2)
+        let spaceLong = Math.ceil((this.pageWidth - 22 - titleStrLong ) / 7)
 
         let spaceSum = ''
         for(let x = 0; x < spaceLong;x++){

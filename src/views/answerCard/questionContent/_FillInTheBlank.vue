@@ -104,7 +104,7 @@ export default {
       richText: '',
       maxHeight: 28,
       tinymceHeight: 28,
-      str:'&nbsp;',
+      str:'&ensp;',
       aWidth:1,
       page_height: PAGE_HEIGHT,
       strP:'</p>',
@@ -116,7 +116,7 @@ export default {
     ...mapGetters('page', ['page_width']),
 
     airStr(){
-      return this.previewContent ? 3 : 4
+      return  this.previewContent ? 2 : 3
     },
 
     pageWidth () {
@@ -128,11 +128,14 @@ export default {
     },
 
     strBox(){
-      let num = Math.ceil(Math.ceil(this.pageWidth /this.data.rows) / 5)
+      console.log(this.pageWidth)
+      let num = Math.ceil(Math.ceil(this.pageWidth /this.data.rows) / 9)
+      console.log(num)
       let strBox = []
           for(let x = 0; x < num;x++){
             strBox.push(this.str)
           }
+
       return strBox
     },
 
@@ -156,12 +159,14 @@ export default {
             spanBox = `${li3}`
           }
           // + this.airStr
-          let numLong = (spanBox.length - sLeng) * 2 + this.airStr
+
+          let numLong = (spanBox.length - sLeng) / 2 + this.airStr
           let spaceStr = ''
           for(let x = 0; x < this.strBox.length - numLong ;x++){
             spaceStr +=  this.strBox[x]
           }
-          aList += `&nbsp;&nbsp;${spanBox}&nbsp;&nbsp;<a class="subtopic_a" style="flex:${subtopic.length >= 4 ? 1:0}">${spaceStr}</a>`
+
+          aList += `&ensp;${spanBox}&ensp; <a class="subtopic_a" style="flex:${subtopic.length >= 4 ? 1:0}">${spaceStr}</a>`
         })
       questionInfo +=  `<p class="content-row">${aList}</p>
       `// 需要空一行回车，这样才能筛选行数，不能删除

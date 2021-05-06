@@ -105,7 +105,7 @@ export default {
       options: QUESTION_NUMBERS.map((label,value)=>({label,value})),
       maxHeight:28,
       tinymceHeight:28,
-      str:'&nbsp;',
+      str:'&ensp;',
       pageLayout: this.contentData.pageLayout,
       page_height: PAGE_HEIGHT,
       strP:'</p>'
@@ -133,11 +133,11 @@ export default {
     },
 
     pageWidth () {
-      return this.previewWidth == 0 ? this.page_width - 23 : this.previewWidth - 63
+      return this.previewWidth == 0 ? this.page_width - 20 : this.previewWidth - 38
     },
 
     spaceStr () {
-      let sum = Math.ceil((this.pageWidth - 23) / 4.8)
+      let sum = Math.ceil((this.pageWidth - 23) / 8)
       let space = ''
 
       for(let x = 0; x < sum;x++){
@@ -158,7 +158,7 @@ export default {
         })
         boxP = `<p data-i="p" class="answer_question_box optional_box">
                   <span class="topic_number_box">
-                    <span class="black_icon">&nbsp;</span>${spans}<span class="black_icon">&nbsp;</span>
+                    <span class="black_icon">&ensp;</span>${spans}<span class="black_icon">&ensp;</span>
                   </span>
                   <span class="number-info">
                     <span>我选的题号（1分）</span>

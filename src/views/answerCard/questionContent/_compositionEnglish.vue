@@ -124,7 +124,7 @@ export default {
       const {rows,rowHeight,content,first} = this.questionData
       let Arr = []
       let questionInfo = ''
-      let str = ' '
+      let str = ' &ensp;'
 
       for (let i = 0; i <= rows - 1; i++) {
         if(i == 0 && first){
