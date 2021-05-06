@@ -153,7 +153,7 @@
                 icon: 'straight-line',
                 tooltip: '自动添加下划线',
                 onAction: () => {
-                  editor.insertContent('<a class="subtopic_a">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</a>');
+                  editor.insertContent('<a class="subtopic_a">&ensp;&ensp;&ensp;&ensp;</a>');
                 }
               });
 

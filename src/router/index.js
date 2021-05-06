@@ -17,7 +17,7 @@ const routes = [{
     name: 'Home',
     component: Home,
     meta: {
-        tilte:'阅卷系统-答题卡制作'
+        title:'智汇e校园-答题卡制作'
       }
   },
   {
@@ -25,7 +25,7 @@ const routes = [{
     name: 'preview',
     component: () => import('@/views/answerCard/previewContent.vue'),
     meta: {
-        tilte:'阅卷系统-答题卡预览'
+        title:'智汇e校园-答题卡预览'
       }
   },
   {
@@ -39,7 +39,7 @@ const routes = [{
         name: 'examHome',
         component: examHome,
         meta: {
-          tilte:'阅卷系统-分析'
+          title:'智汇e校园-分析'
         }
       },
       {
@@ -47,7 +47,7 @@ const routes = [{
         name: 'classAnalysis',
         component: classAnalysis,
         meta: {
-          tilte:'阅卷系统-分析'
+          title:'智汇e校园-分析'
         }
       },
       {
@@ -55,7 +55,7 @@ const routes = [{
         name: 'schoolAnalysis',
         component: schoolAnalysis,
         meta: {
-          tilte:'阅卷系统-分析'
+          title:'智汇e校园-分析'
         }
       },
       {
@@ -63,7 +63,7 @@ const routes = [{
         name: 'jointExam',
         component: jointExam,
         meta: {
-          tilte:'阅卷系统-分析'
+          title:'智汇e校园-分析'
         }
       },
     ]
@@ -77,8 +77,9 @@ const router = new VueRouter({
 
 // router.beforeEach((to, from, next) => {
 //   if (to.meta.tilte) {
-//     document.tilte = to.meta.tilte
+//     window.document.title = to.meta.title
 //   }
+//   //next()
 //   const url = URL.SERVICE_CONTEXT_PATH + 'Api/Common/UsloginBLL/JudgeLogin'
 //   axios.get(url).then((res) => {
 //     if (res.data.ResponseCode == 'Success') {
