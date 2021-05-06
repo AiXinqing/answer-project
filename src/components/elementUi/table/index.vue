@@ -16,6 +16,7 @@
         v-for="(column,i) in tablecols"
         :key="i"
         :column="column"
+        @hanlde-pop-func="hanldePopFunc"
       />
       <!-- 标题栏- 合并 -->
     </el-table>
@@ -107,6 +108,11 @@
       handleSizeChange(val) {
         this.$emit('handle-size-change',val)
       },
+
+      hanldePopFunc(row){
+        // 弹出框分数
+        this.$emit('hanlde-pop-func',row)
+      }
 
     },
   }

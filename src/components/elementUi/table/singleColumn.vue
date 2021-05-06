@@ -63,7 +63,7 @@
           <span
             v-if="ele.type==='Html'"
             v-html="columnHtml(scope.row,ele.prop)"
-            :class="font_colorT(scope.row,column.prop)"
+            :class="font_colorT(scope.row,ele.prop)"
           >{{ele.prop}}</span>
         </template>
         <template v-if="ele.type ==='Text' && ele.url != undefind">
@@ -71,21 +71,22 @@
             type="text" class="text_button"
             v-html="columnHtml(scope.row,ele.prop)"
             @click="hanldeJump(scope.row,ele.url)"
-            :class="font_colorT(scope.row,column.prop)"
+            :class="font_colorT(scope.row,ele.prop)"
           >{{ele.prop}}</el-button>
         </template>
         <template v-else-if="ele.type ==='Text'">
           <el-button
             type="text" class="text_button"
             v-html="columnHtml(scope.row,ele.prop)"
-            :class="font_colorT(scope.row,column.prop)"
+            :class="font_colorT(scope.row,ele.prop)"
           >{{ele.prop}}</el-button>
         </template>
         <template v-if="ele.type ==='popBtn'">
           <el-button
             type="text" class="text_button"
             v-html="columnHtml(scope.row,ele.prop)"
-            :class="font_colorT(scope.row,column.prop)"
+            :class="font_colorT(scope.row,ele.prop)"
+            @click="hanldePopFunc(scope.row,ele)"
           >{{ele.prop}}</el-button>
         </template>
 
@@ -137,6 +138,16 @@
         if(row.jump == 1){
           window.open(`${url}?tid=${row.tid}&tsid=${row.tsid}&tnumber=${row.tnumber}`)
         }
+      },
+
+      hanldePopFunc(row,ele){
+        // 弹出框分数
+        this.$emit('hanlde-pop-func',{
+          tid:ele.tid,
+          tsid:ele.tsid,
+          cid:row.cid,
+          asid:ele.asid
+        })
       }
     },
   }
@@ -162,9 +173,11 @@
   span.error{
     color:@error
   }
-  // .el-button.text_button:focus,
-  // .el-button.text_button:hover{
-  //   background-color:@bc_tr !important;
-  //   border-color:@bc_tr !important;
-  // }
+  .el-button--medium.text_button.transparent{
+    color: @font-909;
+    &:hover{
+      color: @font-909
+    }
+  }
+
 </style>

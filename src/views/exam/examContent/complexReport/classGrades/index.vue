@@ -6,6 +6,8 @@
         :key="i"
         :choose-list="choose"
         @handle-stretch="handleStretch"
+        @handle-checkAll-change="handleCheckAllChange"
+        @single-change="singleChange"
       >
       </hj-stretch>
     </div>
@@ -27,6 +29,7 @@
           :isPagination="false"
           :theight="theight"
           :loading="tableLoading"
+          @hanlde-pop-func="hanldePopFunc"
         ></exam-table>
       </div>
     </div>
@@ -181,6 +184,7 @@
 
       classTableColumn(){
         // 动态表头
+        let tsid_s = this.subjectsArr.find((element,i) => i == 0).tsid
         return this.headerTable.length ? [
           ...this.fixedHeader,
           ...this.headerTable.map(ele => ({
@@ -198,6 +202,7 @@
                 ...obj,
                 type: item.prop == 'num' ? 'popBtn' : 'Html',
                 prop:`${item.prop}_${ele.subname}`,
+                tsid:this.tsid == '' ? tsid_s : this.tsid,
               }
             })
           }))
@@ -270,7 +275,7 @@
       handleCheckAllChange(cidStr){
         // 班级查询
         if(this.tsid == ''){
-          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
+          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
         }
         this.cidStr = cidStr
         this.$nextTick(()=>{
@@ -282,7 +287,6 @@
         // 科目查询
         this.tsid = tsid
         this.$nextTick(()=>{
-          this.getDynamicHeader(this.tsid)
           this.getTable()
         })
       },
@@ -303,6 +307,10 @@
         const {cids,tid,tsid} = this.parameter
         window.open(`${this.URL.ExportQuestionSummary}?tid=${tid}&tsid=${tsid}&cids=${cids}`)
       },
+
+      hanldePopFunc(row){
+        console.log(row)
+      }
     },
   }
 </script>
