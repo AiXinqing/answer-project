@@ -318,7 +318,6 @@
 
       hanldePopFunc(row){
         this.$refs.studentDetails.openDetails(row)
-        console.log(row)
       }
     },
   }

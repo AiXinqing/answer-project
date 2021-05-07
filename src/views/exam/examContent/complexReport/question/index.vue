@@ -6,6 +6,8 @@
         :key="i"
         :choose-list="choose"
         @handle-stretch="handleStretch"
+        @handle-checkAll-change="handleCheckAllChange"
+        @single-change="singleChange"
       >
       </hj-stretch>
     </div>
@@ -28,15 +30,23 @@
           :isPagination="false"
           :theight="theight"
           :loading="tableLoading"
+          @hanlde-pop-func="hanldePopFunc"
         ></exam-table>
       </div>
     </div>
+    <student-details
+      ref="studentDetails"
+    />
   </div>
 </template>
 
 <script>
   import { mapState} from 'vuex'
+  import studentDetails from './_classDetails'
   export default {
+    components: {
+      studentDetails,
+    },
     props: {
       prmTid: {
         type: String,
@@ -151,6 +161,7 @@
 
       questionTableColumn(){
         // 动态表头
+        let tsid_s = this.subjectsArr.find((element,i) => i == 1).tsid
         return this.headerTable.length ? [
           ...this.fixedHeader,
           ...this.headerTable.map(ele => ({
@@ -163,7 +174,10 @@
                 ...item,
                 label:item.label,
                 type: index == 1 || index == 3  ? 'popBtn' : 'Html',
+                type_p:index == 1 ? 'manfen' : index == 3 ? 'zero' : 0,
                 prop:`${item.prop}_${ele.cname}`,
+                tsid:this.tsid == '' ? tsid_s : this.tsid,
+                tid:this.prmTid
               }
             })
           }))
@@ -229,6 +243,25 @@
         })
       },
 
+      handleCheckAllChange(cidStr){
+        // 班级查询
+        if(this.tsid == ''){
+          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
+        }
+        this.cidStr = cidStr
+        this.$nextTick(()=>{
+          this.getTable()
+        })
+      },
+
+      singleChange(tsid){
+        // 科目查询
+        this.tsid = tsid
+        this.$nextTick(()=>{
+          this.getTable()
+        })
+      },
+
       getTable() {
         // 获取table
         this.parameter = {
@@ -245,6 +278,10 @@
         const {cids,tid,tsid} = this.parameter
         window.open(`${this.URL.ExportQuestionSummary}?tid=${tid}&tsid=${tsid}&cids=${cids}`)
       },
+
+      hanldePopFunc(row){
+        this.$refs.studentDetails.openDetails(row)
+      }
     },
   }
 </script>
