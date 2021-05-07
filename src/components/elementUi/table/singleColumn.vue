@@ -142,11 +142,24 @@
 
       hanldePopFunc(row,ele){
         // 弹出框分数
+        let obj = {}
+        if(ele.asid){
+          obj = {
+            asid:ele.asid
+          }
+        }
+        if(row.tqid){
+          obj = {
+            tqid:row.tqid,
+            type:ele.type_p
+          }
+        }
+
         this.$emit('hanlde-pop-func',{
           tid:ele.tid,
           tsid:ele.tsid,
           cid:row.cid,
-          asid:ele.asid
+          ...obj
         })
       }
     },
