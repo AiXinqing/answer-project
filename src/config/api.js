@@ -23,7 +23,7 @@ export const URL = {
   //试题汇总报表
   GetQuestionSummary: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetQuestionSummary', //试题汇总报表
   ExportQuestionSummary:BASEURL + '/Report/AnlyReport/ExportQuestionSummary', //试题汇总报表下载
-  GetSummaryStuDetails:BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetQuestionSummaryStuDetails', //试题汇总报表下载
+  GetSummaryStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetQuestionSummaryStuDetails', // 试题汇总报表学生名单详情
   ExportSummaryStuDetails: BASEURL + '/Report/AnlyReport/ExportQuestionSummaryStuDetails', //试题汇总报表学生名单详情下载
   //成绩分段报表
   GetClassScoreSegment:BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreSegment', //成绩分段报表
