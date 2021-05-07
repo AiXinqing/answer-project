@@ -19,6 +19,8 @@
         :isIndex="false"
         :pagination="page"
         :loading="tableLoading"
+        :pageSizes="pageSizes"
+        :theight="0"
         @handle-size-change="handleSizeChange"
         @handle-current-change="handleCurrentChange"
       ></exam-table>
@@ -92,12 +94,13 @@
           url:this.URL.GetStuDetails
         },
         page: {
-          pageSize: 15,
+          pageSize: 10,
           pageNum: 1,
           total: 0
         },
         headeUrl:this.URL.GetTableHeadeSubject,
         prmTid:'',
+        pageSizes:[10,15,20,30,50,100]
       }
     },
 
@@ -239,13 +242,14 @@
       downTable(){
         // 下载表格
         const {cid,tid,tsid,asid} = this.parameter
-        window.open(`${this.URL.ExportStuDetails}?tid=${tid}&tsid=${tsid}&cids=${cid}&cids=${asid}`)
+        window.open(`${this.URL.ExportStuDetails}?tid=${tid}&tsid=${tsid}&cid=${cid}&asid=${asid}`)
       },
     },
   }
 </script>
 
 <style lang="less">
+  @import '~@/assets/css/variables.less';
   .el_table_wapper.mr_top{
     margin-top: 15px;
   }
@@ -257,6 +261,12 @@
       span{
         margin-right: 10px;
       }
+    }
+  }
+  .el-dialog__headerbtn:focus ,
+  .el-dialog__headerbtn:hover {
+    .el-dialog__close{
+      color: @main
     }
   }
 </style>
