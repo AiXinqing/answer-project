@@ -250,4 +250,9 @@
   thead.is-group tr {
     height: 30px;
   }
+
+  .el-table tbody tr:hover>td {
+    background-color:@mainHover !important
+  }
+
 </style>

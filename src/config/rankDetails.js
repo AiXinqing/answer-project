@@ -1,10 +1,10 @@
 import  request from '@/utils/http'
 
-export function GetStuResults({ tid, tsid, cid, rank, type, pageIndex, pageSize, url }) {
+export function GetStuResults({ tid, tsid, cid, rankName, type, pageIndex, pageSize, url }) {
   return request({
     url: url, //URL.GetStuResults,
     method: 'get',
-    params: { tid, tsid, cid, rank, type, pageIndex, pageSize}
+    params: { tid, tsid, cid, rankName, type, pageIndex, pageSize}
   })
 }
 

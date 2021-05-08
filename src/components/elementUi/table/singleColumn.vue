@@ -165,7 +165,7 @@
 
         if(ele.p_rank){
           obj = {
-            rank:ele.p_rank,
+            rankName:ele.p_rank,
             type:ele.p_type,
           }
         }

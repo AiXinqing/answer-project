@@ -90,9 +90,9 @@
           cid:'',
           tid: '',
           tsid:'',
-          rank:'',
+          rankName:'',
           type:'top',
-          url:this.URL.GetSegmentStuDetails
+          url:this.URL.GetClassSegmentStuDetails
         },
         page: {
           pageSize: 10,
@@ -237,13 +237,14 @@
           pageIndex: pageNum,
           pageSize: pageSize,
         }
+        console.log(this.parameter)
         this.$store.dispatch('rankDetails/GetStuResults', this.parameter)
       },
 
       downTable(){
         // 下载表格
-        const {cid,tid,tsid,segmentName,step,type} = this.parameter
-        window.open(`${this.URL.ExportStuDetails}?tid=${tid}&tsid=${tsid}&cid=${cid}&segmentName=${segmentName}&step=${step}&type=${type}`)
+        const {cid,tid,tsid,rankName,type} = this.parameter
+        window.open(`${this.URL.ExportStuDetails}?tid=${tid}&tsid=${tsid}&cid=${cid}&rankName=${rankName}&type=${type}`)
       },
     },
   }

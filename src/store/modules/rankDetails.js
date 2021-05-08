@@ -34,8 +34,8 @@
 
     GetStuResults({ commit }, padata) {
       return new Promise((resolve, reject) => {
-        const {tid, tsid, cid, rank, type, pageIndex, pageSize, url } = padata
-        GetStuResults({ tid, tsid, cid, rank, type, pageIndex, pageSize, url}).then(res => {
+        const {tid, tsid, cid, rankName, type, pageIndex, pageSize, url } = padata
+        GetStuResults({ tid, tsid, cid, rankName, type, pageIndex, pageSize, url}).then(res => {
           commit('SET_TABLE', res)
           commit('GET_PAGE', {
             pageSize: res.ResponseContent.pageSize,
