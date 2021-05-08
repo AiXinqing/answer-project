@@ -165,7 +165,7 @@
                 prop:`${item.prop}_${ele}`,
                 p_name:ele,
                 p_step:this.step,
-                P_type:this.type,
+                p_type:this.type,
                 tid:this.prmTid,
                 tsid:this.tsid == '' ? tsid_s : this.tsid,
               }

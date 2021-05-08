@@ -10,16 +10,21 @@
       </hj-stretch>
     </div>
     <div class="table_wapper">
-      <div class="table_search">
+      <div class="table_search ranking">
         <div class="search_left">
-          <span class="titile_14">您可以设置</span>
-          <hj-input class="indent_model" style="width:60px;" v-model="step" placeholder="50" />
-          <span class="titile_14">名，查看不同名次段的人数分布及详情。</span>
+          <div class="titile_14 ranking_title">您可以设置</div>
+          <hj-select
+            :items="options"
+            size="mini"
+            :value="type"
+          ></hj-select>
+          <hj-input class="indent_model" style="width:120px;" v-model="placing" placeholder="50" />
+          <div class="titile_14" style="margin-left:10px">名，查看不同名次段的人数分布及详情。</div>
 
-          <exam-button type="primary">确定</exam-button>
+          <exam-button type="primary" @click="handelSearch">确定</exam-button>
         </div>
         <div class="search_right">
-          <exam-button type="primary" @click="downTable">下载表格</exam-button>
+          <exam-button type="primary" style="margin-top:7px" @click="downTable">下载表格</exam-button>
         </div>
       </div>
 
@@ -31,15 +36,23 @@
           :isPagination="false"
           :theight="theight"
           :loading="tableLoading"
+          @hanlde-pop-func="hanldePopFunc"
         ></exam-table>
       </div>
     </div>
+    <student-details
+      ref="studentDetails"
+    />
   </div>
 </template>
 
 <script>
   import { mapState} from 'vuex'
+  import studentDetails from './_classDetails'
   export default {
+    components: {
+      studentDetails,
+    },
     props: {
       prmTid: {
         type: String,
@@ -92,20 +105,29 @@
         ],
 
         // 参数
-        step:50,
         tsid:'',
         cidStr:'',
+        type:'top',
         theight: document.body.clientHeight - 285 || 0,
         placing:'10,20,30,40,50',
         parameter:{
           cids:'',
           tid: '',
           tsid:'',
-          step:50,
-          type: '前', //统计类型：0:分段统计，1：累计统计
+          type: 'top', //名次类型：top:前，after：后
           placing:'10,20,30,40,50',
           url:this.URL.GetPlacingSegment
         },
+        options:[
+          {
+            value: 'top',
+            label: '前'
+          },
+          {
+            value: 'after',
+            label: '后'
+          }
+        ]
       }
     },
 
@@ -134,6 +156,7 @@
 
       gradersTableColumn(){
         // 动态表头
+        let tsid_s = this.subjectsArr.find((element,i) => i == 0).tsid
         return this.headerTable.length ? [
           ...this.fixedHeader,
           ...this.headerTable.map(ele => ({
@@ -144,8 +167,12 @@
               return {
                 ...item,
                 label:item.label,
-                type: index == 0 ? 'Text' : 'Html',
+                type: index == 0 ? 'popBtn' : 'Html',
                 prop:`${item.prop}_${ele}`,
+                p_rank:ele,
+                p_type:this.parameter.type,
+                tid:this.prmTid,
+                tsid:this.tsid == '' ? tsid_s : this.tsid,
               }
             })
           }))
@@ -208,6 +235,15 @@
         })
       },
 
+      handelSearch(){
+        // 设置搜索
+        this.parameter.placing = this.placing
+        this.parameter.type = this.type
+        this.$nextTick(()=>{
+          this.getTable()
+        })
+      },
+
       getTable() {
         // 获取table
         this.parameter = {
@@ -224,10 +260,44 @@
         const {cids,tid,tsid,step,type,placing} = this.parameter
         window.open(`${this.URL.ExportPlacingSegment}?tid=${tid}&tsid=${tsid}&cids=${cids}&step=${step}&type=${type}&placing=${placing}`)
       },
+
+      hanldePopFunc(row){
+        console.log(row)
+        this.$refs.studentDetails.openDetails(row)
+      }
     },
   }
 </script>
 
 <style lang="less">
   @import '~@/assets/css/variables.less';
+  .ranking{
+
+    .search_left{
+      display: flex;
+      width: 620px !important;
+
+      .indent_model{
+        margin-top: -2px;
+      }
+
+      .ranking_title{
+        width: 80px;
+        margin-left: -20px;
+      }
+
+      .hj-select {
+        width: 55px;
+        margin-left: 5px;
+
+        .el-input__inner{
+          padding-right: 20px;
+        }
+      }
+    }
+    .el-input--medium .el-input__inner{
+      text-align: left;
+      text-indent: 0.6em !important;
+    }
+  }
 </style>

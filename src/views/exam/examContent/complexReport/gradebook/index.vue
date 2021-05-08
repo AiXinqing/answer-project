@@ -418,7 +418,7 @@
         justify-content:flex-end;
 
         &>div{
-          margin-top: 10px;
+          margin-top: 5px;
           float: right;
           margin-left: 10px;
         }
@@ -430,7 +430,7 @@
         }
 
         .exam_box{
-          margin-top: 15px;
+          margin-top: 10px;
         }
       }
     }

@@ -159,7 +159,14 @@
           obj = {
             segmentName:ele.p_name,
             step:ele.p_step,
-            type:ele.P_type,
+            type:ele.p_type,
+          }
+        }
+
+        if(ele.p_rank){
+          obj = {
+            rank:ele.p_rank,
+            type:ele.p_type,
           }
         }
 
