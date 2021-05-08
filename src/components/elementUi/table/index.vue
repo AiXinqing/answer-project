@@ -7,6 +7,7 @@
         :element-loading-text="loadingText"
         :border="isBorder"
         element-loading-spinner="el-icon-loading"
+        :highlight-current-row="true"
         v-loading="loading"
       >
       <!-- 标题栏- 合并 -->
@@ -245,5 +246,8 @@
     .el-loading-text{
       color:@main
     }
+  }
+  thead.is-group tr {
+    height: 30px;
   }
 </style>

@@ -257,6 +257,7 @@
       },
 
       subTableData(){
+        let tsid_s = this.subjectsArr.find((element,i) => i == 1).tsid
         return this.TableList.length ? this.TableList.map(item =>{
           let dynamic = {}
           item.DynamicDetail.forEach(element => {
@@ -300,7 +301,7 @@
             gradeRank: item.gradeRank,
             ...dynamic,
             jump:1,
-            tsid: this.tsid,
+            tsid: this.tsid == '' ? tsid_s : this.tsid,
             tid: this.prmTid,
           }
         }) : []
