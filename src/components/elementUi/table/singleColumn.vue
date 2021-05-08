@@ -155,6 +155,14 @@
           }
         }
 
+        if(ele.p_name){
+          obj = {
+            segmentName:ele.p_name,
+            step:ele.p_step,
+            type:ele.P_type,
+          }
+        }
+
         this.$emit('hanlde-pop-func',{
           tid:ele.tid,
           tsid:ele.tsid,

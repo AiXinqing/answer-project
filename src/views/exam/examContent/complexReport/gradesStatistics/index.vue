@@ -6,17 +6,26 @@
         :key="i"
         :choose-list="choose"
         @handle-stretch="handleStretch"
+        @handle-checkAll-change="handleCheckAllChange"
+        @single-change="singleChange"
       >
       </hj-stretch>
     </div>
     <div class="table_wapper">
       <div class="table_search">
+        <div class="search_center">
+          <div class="search_name"> 统计方式：</div>
+          <el-radio-group v-model="type" @change="handleStatistical">
+            <el-radio-button label="0" >分段统计</el-radio-button>
+            <el-radio-button label="1">累计统计</el-radio-button>
+          </el-radio-group>
+        </div>
         <div class="search_left" style="width:auto">
           <span class="titile_14">分数区间：</span>
-          <hj-input class="indent_model" style="width:60px;" v-model="step" placeholder="50" />
+          <hj-input class="indent_model" style="width:60px;" type="number" v-model="step" placeholder="50" />
           <span class="titile_14"> 分/段</span>
 
-          <exam-button type="primary">确定</exam-button>
+          <exam-button type="primary" class="grades_btn" @click="handelScoreInterval">确定</exam-button>
         </div>
         <div class="search_right">
           <exam-button type="primary" @click="downTable">下载表格</exam-button>
@@ -31,15 +40,24 @@
           :isPagination="false"
           :theight="theight"
           :loading="tableLoading"
+          @hanlde-pop-func="hanldePopFunc"
         ></exam-table>
       </div>
     </div>
+
+    <student-details
+      ref="studentDetails"
+    />
   </div>
 </template>
 
 <script>
   import { mapState} from 'vuex'
+  import studentDetails from './_classDetails'
   export default {
+    components: {
+      studentDetails,
+    },
     props: {
       prmTid: {
         type: String,
@@ -101,9 +119,10 @@
           tid: '',
           tsid:'',
           step:50,
-          type: 1, //统计类型：0:分段统计，1：累计统计
+          type: 0, //统计类型：0:分段统计，1：累计统计
           url:this.URL.GetClassScoreSegment
         },
+        type: 0
       }
     },
     computed: {
@@ -131,6 +150,7 @@
 
       gradersTableColumn(){
         // 动态表头
+        let tsid_s = this.subjectsArr.find((element,i) => i == 0).tsid
         return this.headerTable.length ? [
           ...this.fixedHeader,
           ...this.headerTable.map(ele => ({
@@ -141,8 +161,13 @@
               return {
                 ...item,
                 label:item.label,
-                type: index == 0 ? 'Text' : 'Html',
+                type: index == 0 ? 'popBtn' : 'Html',
                 prop:`${item.prop}_${ele}`,
+                p_name:ele,
+                p_step:this.step,
+                P_type:this.type,
+                tid:this.prmTid,
+                tsid:this.tsid == '' ? tsid_s : this.tsid,
               }
             })
           }))
@@ -185,13 +210,13 @@
         },
       },
 
-      gradersTableColumn: {
-        immediate: true,
-        handler () {
-          console.log(this.gradersTableColumn)
-          console.log(this.gradersTableData)
-        },
-      },
+      // gradersTableColumn: {
+      //   immediate: true,
+      //   handler () {
+      //     console.log(this.gradersTableColumn)
+      //     console.log(this.gradersTableData)
+      //   },
+      // },
 
     },
 
@@ -213,6 +238,41 @@
         })
       },
 
+      handleCheckAllChange(cidStr){
+        // 班级查询
+        if(this.tsid == ''){
+          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+        }
+        this.cidStr = cidStr
+        this.$nextTick(()=>{
+          this.getTable()
+        })
+      },
+
+      singleChange(tsid){
+        // 科目查询
+        this.tsid = tsid
+        this.$nextTick(()=>{
+          this.getTable()
+        })
+      },
+
+      handelScoreInterval(){
+        //分数区间
+        this.parameter.step = Number(this.step)
+        this.$nextTick(()=>{
+          this.getTable()
+        })
+      },
+
+      handleStatistical(){
+        //统计方式
+        this.parameter.type = Number(this.type)
+        this.$nextTick(()=>{
+          this.getTable()
+        })
+      },
+
       getTable() {
         // 获取table
         this.parameter = {
@@ -229,6 +289,10 @@
         const {cids,tid,tsid,step,type} = this.parameter
         window.open(`${this.URL.ExportClassScoreSegment}?tid=${tid}&tsid=${tsid}&cids=${cids}&step=${step}&type=${type}`)
       },
+
+      hanldePopFunc(row){
+        this.$refs.studentDetails.openDetails(row)
+      }
     },
   }
 </script>
@@ -242,6 +306,50 @@
   .indent_model{
     input{
       text-indent:0 !important
+    }
+  }
+  .search_name{
+    width: 70px;
+    line-height: 28px;
+    font-size: 14px;
+    margin-top: 10px;
+    color: @font-888;
+  }
+  .search_left{
+    margin-left: 20px;
+  }
+  .search_center{
+    width: 280px;
+    display: flex;
+    .el-radio-group{
+      display: flex;
+      margin-top: 10px;
+
+      span.el-radio-button__inner{
+        padding: 0 8px !important;
+        height: 28px;
+        line-height: 28px;
+        color: @font-888;
+        &:hover{
+          color: @main;
+        }
+      }
+      .el-radio-button__orig-radio:checked+.el-radio-button__inner{
+        background-color: @main;
+        border-color: @main;
+        color: @white;
+      }
+    }
+  }
+  .grades_btn{
+    &.exam_box{
+      display: inline;
+      margin-left: 15px;
+      width: 80px;
+
+      .el-button--medium{
+        width: 80px
+      }
     }
   }
 </style>
