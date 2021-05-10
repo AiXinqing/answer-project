@@ -28,7 +28,7 @@
         :style="['width: 100%']"
         :element-loading-text="loadingText"
         :border="isBorder"
-        :height="height"
+
         element-loading-spinner="el-icon-loading"
         v-loading="loading"
       >

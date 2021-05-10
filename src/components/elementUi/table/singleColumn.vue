@@ -131,9 +131,7 @@
     },
 
     methods: {
-      handleClick(row) {
-        console.log(row)
-      },
+
       hanldeJump(row,url){
         if(row.jump == 1){
           window.open(`${url}?tid=${row.tid}&tsid=${row.tsid}&tnumber=${row.tnumber}`)

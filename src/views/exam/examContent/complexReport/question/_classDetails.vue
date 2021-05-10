@@ -194,10 +194,13 @@
           ...row
         }
         this.prmTid = row.tid
-        console.log(this.parameter)
+
         this.$nextTick(()=>{
           this.getDynamicHeader(row.tsid,row.tid)
-          this.getTable()
+          let _this = this
+          setTimeout(function(){
+            _this.getTable()
+          },400)
         })
       },
 
@@ -238,7 +241,7 @@
           pageIndex: pageNum,
           pageSize: pageSize,
         }
-        console.log(this.parameter)
+
         this.$store.dispatch('questionClassDetails/GetStuResults', this.parameter)
       },
 

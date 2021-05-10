@@ -239,7 +239,10 @@
           // 班级数组
           this.cidStr = this.classIdsArr
           // 获取动态表头
-          this.getTable()
+          let _this = this
+          setTimeout(function(){
+            _this.getTable()
+          },400)
         })
       },
 

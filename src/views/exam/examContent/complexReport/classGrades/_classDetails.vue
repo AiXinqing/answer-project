@@ -195,7 +195,10 @@
         this.prmTid = row.tid
         this.$nextTick(()=>{
           this.getDynamicHeader(row.tsid,row.tid)
-          this.getTable()
+          let _this = this
+          setTimeout(function(){
+            _this.getTable()
+          },500)
         })
       },
 
