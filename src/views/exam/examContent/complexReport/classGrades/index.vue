@@ -21,7 +21,7 @@
         </div>
       </div>
 
-      <div class="el_table_wapper">
+      <div class="el_table_wapper" :style="{'max-height':theight +'px'}">
         <exam-table
           :tablecols="classTableColumn"
           :tableData="classTableData"
@@ -163,7 +163,6 @@
           tsid:'',
           url:this.URL.GetClassScoreContrast
         },
-
       }
     },
 

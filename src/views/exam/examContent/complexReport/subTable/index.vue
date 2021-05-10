@@ -36,7 +36,7 @@
 
       <div class="el_table_wapper">
         <exam-table
-          :style="{'max-height':theight+'px'}"
+          :style="{'max-height':theight+ tableH +'px'}"
           :tablecols="subTableColumn"
           :tableData="subTableData"
           :isIndex="false"
@@ -184,6 +184,7 @@
           total: 0
         },
         headeUrl:this.URL.GetStuSmallScoreHeade,
+        tableH:51
       }
     },
 

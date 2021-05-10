@@ -36,7 +36,7 @@
 
       <div class="el_table_wapper">
         <exam-table
-          :style="{'max-height':theight+'px'}"
+          :style="{'max-height':theight+ tableH +'px'}"
           :tablecols="tableColumn"
           :tableData="tableData"
           :isIndex="false"
@@ -148,6 +148,7 @@
           total: 0
         },
         headeUrl:this.URL.GetTableHeadeSubject,
+        tableH:51
       }
     },
 
@@ -385,7 +386,8 @@
     background-color: @white;
     margin-top: 10px;
     padding: 5px 0;
-    height: 100%;
+    height: calc(100% - 20px);
+    // overflow: auto
   }
 
   .table_wapper {
@@ -440,7 +442,9 @@
     }
   }
   .el_table_wapper{
-    height: calc(100% - 285px);
+    height: 100%;
+    overflow: auto;
+    // height: calc(100% - 285px);
     section{
       height: 100%;
       >div{

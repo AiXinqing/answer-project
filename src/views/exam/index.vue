@@ -16,7 +16,9 @@
         <div class="nav_login"></div>
       </div>
     </div>
-    <router-view/>
+    <div class="content_router">
+      <router-view/>
+    </div>
   </div>
 </template>
 
@@ -74,7 +76,8 @@
 <style lang="less">
   @import '~@/assets/css/variables.less';
   .exam_content{
-    height: calc(100% - 65px);
+    // height: calc(100% - 65px);
+    height: 100%;
 
     .head_wapper{
       background-color: #fff;
@@ -134,9 +137,14 @@
   }
 
   .exam_wapper{
+    height: calc(100% - 10px);
+    // height: 100%;
     width: 1200px;
     position: relative;
     left: 50%;
     transform: translateX(-50%);
+  }
+  .content_router{
+    height: calc(100% - 65px);
   }
 </style>

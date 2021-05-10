@@ -87,7 +87,6 @@
     mounted () {
       if(this.prmTid != ''){
         this.getExamFunc(this.prmTid)
-        // this.$refs.tabName.initTable()
       }
     },
     methods: {
@@ -105,7 +104,7 @@
           prmTid: prmTid
         }).then((res)=>{
           if(res.ResponseCode =="Success"){
-            this.stretchBox = 
+
             this.$nextTick(()=>{
               // 获取动态表头
               this.$refs.tabName.initTable()
@@ -125,10 +124,9 @@
     left: 50%;
     margin: 5px;
     transform: translateX(-50%);
-    height: calc(100% - 40px);
 
     &>div{
-      height: 100%;
+      height: calc(100% - 35px);
     }
   }
   .el-tabs__content{
