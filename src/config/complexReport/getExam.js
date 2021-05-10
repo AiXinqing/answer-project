@@ -1,5 +1,5 @@
 import  request from '@/utils/http'
-import { URL } from './api'
+import { URL } from '../api'
 
 export function getExamInfo({ prmTid }) {
   return request({

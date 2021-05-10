@@ -1,7 +1,7 @@
   import {
     GetStuResults,
     dynamicHeader
-  } from '@/config/questionClassDetails'
+  } from '@/config/complexReport/questionClassDetails'
 
   const state = {
     headerTable: [],

@@ -1,6 +1,6 @@
   import {
     GetStuResults
-  } from '@/config/ranking'
+  } from '@/config/complexReport/ranking'
 
   const state = {
     headerTable: [],

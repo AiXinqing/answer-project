@@ -2,7 +2,7 @@
     getExamInfo,
     GetStuResults,
     dynamicHeader
-  } from '@/config/getExam'
+  } from '@/config/complexReport/getExam'
 
   const state = {
     headerTable: [],

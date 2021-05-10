@@ -1,6 +1,6 @@
   import {
     GetStuResults
-  } from '@/config/gradesStatistics'
+  } from '@/config/complexReport/gradesStatistics'
 
   const state = {
     headerTable: [],

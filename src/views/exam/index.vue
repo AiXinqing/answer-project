@@ -76,7 +76,7 @@
 <style lang="less">
   @import '~@/assets/css/variables.less';
   .exam_content{
-    // height: calc(100% - 65px);
+
     height: 100%;
 
     .head_wapper{
@@ -138,7 +138,6 @@
 
   .exam_wapper{
     height: calc(100% - 10px);
-    // height: 100%;
     width: 1200px;
     position: relative;
     left: 50%;

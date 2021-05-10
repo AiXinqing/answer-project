@@ -1,7 +1,7 @@
   import {
     GetStuResults,
     dynamicHeader
-  } from '@/config/rankDetails'
+  } from '@/config/complexReport/rankDetails'
 
   const state = {
     headerTable: [],
