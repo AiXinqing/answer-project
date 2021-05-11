@@ -15,8 +15,10 @@
       <!-- 动态锚点 -->
       <keep-alive>
       <!--  缓存路由的name属性等于tabView的组件 -->
-        <component v-bind:is="tabView" class="mar_T10"></component>
+        <!-- <component v-bind:is="tabView" class="mar_T10"></component> -->
       </keep-alive>
+      <Parking1 class="mar_T10" id="Parking1"></Parking1>
+      <Parking2 class="mar_T10" id="Parking2"></Parking2>
       <!-- 动态锚点 -->
     </div>
 
@@ -28,7 +30,7 @@
           v-for="(tab ,index) in tabsAnchor"
           :key="index"
           :class="{cur:iscur==index}"
-          @click="iscur=index,tabChange('Parking' + (index + 1))"
+          @click="iscur=index,goAnchor('Parking' + (index + 1))"
         >
           {{tab.name}}
         </p>
@@ -72,6 +74,11 @@
       }
     },
     methods: {
+
+      goAnchor(selector) {
+        var anchor = this.$el.querySelector(selector)
+        document.documentElement.scrollTop = anchor.offsetTop
+      },
 
       tabChange (tab) {
         this.tabView = tab

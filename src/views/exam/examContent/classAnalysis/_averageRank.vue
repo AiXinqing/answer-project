@@ -14,7 +14,8 @@
 <style lang="less">
   @import '~@/assets/css/variables.less';
   .average_content{
-    height: 450px;
-    background-color: @white
+    min-height: 450px;
+    background-color: @white;
+    border-radius: 4px;
   }
 </style>
