@@ -1,7 +1,7 @@
 <template>
   <div class="page-content preview-content" :class="downs ? 'down_style' : ''" ref="pageContent" >
     <div class="main-info">
-      <div v-for="(pages, i) in contentData" :key="i" class="page_card" :style="{width:pageNum == 1 ? '875px' : '1650px'}">
+      <div v-for="(pages, i) in contentData" :key="i" class="page_card" :style="{width:pageNum == 1 ? '825px' : '1650px'}">
         <div class="previewCanvas">
           <div class="left" style="flex-shrink:1">
             <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="30" height="30">
@@ -20,7 +20,7 @@
           :key="a"
           :style="{
             width: pageWidth + 'px',
-            marginLeft:a == 0 ? '50px' :'30px',
+            marginLeft:a == 0 ? 'none' :'30px',
           }"
           :class="[
             'page_info_itme',
