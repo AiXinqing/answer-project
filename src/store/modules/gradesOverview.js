@@ -10,9 +10,9 @@
   const mutations = {
 
     SET_TABLE: (state, res) => {
-      const { ClassScoreSegment, segments } = res.ResponseContent
-      state.headerTable = segments
-      state.TableList =  ClassScoreSegment
+      const { ClassScoreSurveyList, subjectInfos } = res.ResponseContent
+      state.headerTable = subjectInfos
+      state.TableList =  ClassScoreSurveyList
     },
 
   }
