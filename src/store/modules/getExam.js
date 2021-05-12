@@ -15,7 +15,8 @@
       pageSize: 15,
       pageNum: 1,
       total: 0
-    }
+    },
+    examData:{}
   }
 
   const mutations = {
@@ -33,6 +34,8 @@
         check: true,
         name: item.cname
       }))
+      //考试信息
+      state.examData = data
 
     },
 
