@@ -3,12 +3,22 @@
     <div class="classAnalysis_content">
       <!-- 标题 -->
       <div class="classAnalysis_title mar_T10">
-        <div class="title_h2">20年秋期九年级半期考试</div>
+        <div class="title_h2">{{examData.name}}</div>
         <div class="title_h5">班级对比分析报告</div>
       </div>
       <div class="title_info">
         <div class="title_p padding_10">老师您好：</div>
-        <div class="title_p">本次考试（考试时间：2020-11-09)， 全校 初三 共 24 个班级，1334 名学生参加考试。 考试学科： 语文、数学、英语、物理化学(物理、化学)、物理、化学、生物、道法历史(道法、历史)、历史、地理、道法 11 门学科。</div>
+        <div class="title_p">
+          <span>
+            本次考试（考试时间：{{examData.ttime}})，
+          </span>
+          <span>
+            全校 {{examData.gname}} 共 {{classesArrLength}} 个班级，{{examData.studentNum}} 名学生参加考试。
+          </span>
+          <span>
+            考试学科：<span class="color_style"> {{subjectsArrStr}} </span>  {{subjectsArrLength}} 门学科。
+          </span>
+        </div>
       </div>
       <!-- 标题 -->
 
@@ -19,7 +29,17 @@
       <!-- </keep-alive> -->
 
       <Parking1 class="mar_T10" id="Parking1"></Parking1>
-      <Parking2 class="mar_T10" id="Parking2"></Parking2>
+      <Parking2
+        class="mar_T10"
+        id="Parking2"
+        :prmTid="prmTid"
+      ></Parking2>
+      <Parking3
+        class="mar_T10"
+        id="Parking3"
+        :prmTid="prmTid"
+        :subjects-arr="subjectsArr"
+      ></Parking3>
       <!-- 动态锚点 -->
     </div>
 
@@ -45,12 +65,16 @@
 <script>
   import Parking1 from './_averageRank'
   import Parking2 from './_gradesOverview'
+  import Parking3 from './_gradePercentage'
 
+  import { mapState } from 'vuex'
   export default {
     components: {
       Parking1,
-      Parking2
+      Parking2,
+      Parking3
     },
+
     data() {
       return {
         tabView: 'Parking1',
@@ -71,9 +95,46 @@
             name:'学科试题得分率'
           },
         ],
-        iscur:0
+        iscur:0,
+        prmTid:''
       }
     },
+
+    computed: {
+      ...mapState('getExam', ['examData','classesArr','subjectsArr']),
+
+      classesArrLength(){
+        return this.classesArr.length ? this.classesArr.filter(item => item.cid != 'all').length : 0
+      },
+
+      subjectsArrLength(){
+        return this.subjectsArr.length ? this.subjectsArr.filter(item => item.sid != 'totalScore').length : 0
+      },
+
+      subjectsArrStr(){
+        return this.subjectsArr.filter(item => item.sid != 'totalScore')
+                                .map(item => item.sname).toString()
+      }
+    },
+
+    watch: {
+      $route: {
+        handler: function(route) {
+          const query = route.query
+          if (query.prmTid) {
+            this.prmTid = query.prmTid
+          }
+        },
+        immediate: true
+      },
+    },
+
+    mounted () {
+      if(this.prmTid != ''){
+        this.getExamFunc(this.prmTid)
+      }
+    },
+
     methods: {
 
       goAnchor(selector) {
@@ -81,9 +142,11 @@
         document.documentElement.scrollTop = anchor.offsetTop
       },
 
-      tabChange (tab) {
-        this.tabView = tab
-      }
+      getExamFunc(prmTid) {
+        this.$store.dispatch('getExam/getExamInfo', {
+          prmTid: prmTid
+        })
+      },
 
     }
   }
@@ -133,6 +196,7 @@
       padding: 0 34px;
       font-size: 14px;
       padding-top: 35px;
+      padding-bottom: 10px;
 
       .title_p{
         line-height: 24px;
@@ -178,5 +242,8 @@
         }
       }
     }
+  }
+  .color_style{
+    color: @main
   }
 </style>
