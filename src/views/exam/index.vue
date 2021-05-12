@@ -7,7 +7,7 @@
           <a
             v-for="(item, index) in linkData"
             :key="index"
-            :class="['item.calssname',{'router-link-active':item.calssname == active}]"
+            :class="['calssname',{'router-link-active':item.calssname == active}]"
             @click="handelChange(item)">
             <i></i>
             <span>{{item.linkName}} <em/></span>
@@ -145,5 +145,8 @@
   }
   .content_router{
     height: calc(100% - 65px);
+  }
+  .calssname{
+    cursor: pointer;
   }
 </style>
