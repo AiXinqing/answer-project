@@ -1,6 +1,6 @@
 <template>
   <!-- 班级成绩概况 -->
-  <div class="average_content">
+  <div class="class_content">
     <div class="card_contetn">
       <div class="card_item">
         <i></i>
@@ -75,6 +75,7 @@
           tid: '',
           url:this.URL.GetClassScoreSurvey
         },
+        theight:0
       }
     },
 
@@ -152,13 +153,18 @@
 
 <style lang="less">
   @import '~@/assets/css/variables.less';
-  .average_content{
+  .class_content{
     min-height: 450px;
     background-color: @white;
     padding-bottom: 10px;
 
     .el_table_wapper{
       margin: 15px 20px 20px 20px
+    }
+
+    .card_item,
+    .search_right{
+      margin-top:20px;
     }
   }
 </style>

@@ -50,7 +50,6 @@
     line-height: 35px;
     height: 35px;
     font-size: 18px;
-    // margin-top: 20px;
 
     i{
       width: 4px;
