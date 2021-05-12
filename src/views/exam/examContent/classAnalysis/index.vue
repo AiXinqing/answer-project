@@ -13,10 +13,11 @@
       <!-- 标题 -->
 
       <!-- 动态锚点 -->
-      <keep-alive>
+      <!-- <keep-alive> -->
       <!--  缓存路由的name属性等于tabView的组件 -->
         <!-- <component v-bind:is="tabView" class="mar_T10"></component> -->
-      </keep-alive>
+      <!-- </keep-alive> -->
+
       <Parking1 class="mar_T10" id="Parking1"></Parking1>
       <Parking2 class="mar_T10" id="Parking2"></Parking2>
       <!-- 动态锚点 -->
@@ -97,6 +98,7 @@
     position: relative;
     left: 50%;
     transform: translateX(-50%);
+    padding-bottom: 10px;
 
     .mar_T10{
       margin-top: 10px;
@@ -144,6 +146,8 @@
 
   }
   .Anchor_box{
+    display: none;
+
     width: 180px;
     position: fixed;
     left: 100px;
