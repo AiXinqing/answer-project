@@ -39,7 +39,9 @@ export default {
       checked: false,
       openedFrame: true,
       saveBtnStuta:false,
-      acid:''
+      acid:'',
+      returnIsNew:'',
+      returnAcid:'',
     }
   },
   computed: {
@@ -99,11 +101,17 @@ export default {
           let edit = {}
           if(this.acid){
             edit = {
-              'acid':this.acid
+              'acid':this.acid,
+              IsNew:false
+            }
+          }else{
+            edit = {
+              IsNew:true
             }
           }
+
           obj = {
-            'IsNew':this.IsNew,// 新增
+           // 'IsNew':this.returnIsNew == '' ? this.IsNew : this.returnIsNew,// 新增 false 编辑
             'name': content.textVal,
             'tscore': this.scoreTotal,
             'exnum': content.titleRows,
@@ -215,6 +223,10 @@ export default {
 
     saveBtn(){
       // 保存
+      let obj =  JSON.parse(JSON.stringify({
+        ...this.answerSheetData,
+        IsNew:this.returnIsNew == '' ? this.answerSheetData.IsNew : false
+      }))
 
       if(this.textVal !=''){
         const loading = this.$loading({
@@ -223,9 +235,13 @@ export default {
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         })
-        let params = {
-          prmQBAnswCard:JSON.stringify(this.answerSheetData)
+        if(this.returnIsNew != ''){
+          obj.IsNew = this.returnIsNew
         }
+        let params = {
+          prmQBAnswCard:JSON.stringify(obj)
+        }
+
         this.$http.post('/Api/Assembly/QBAnswCardBLL/SaveQBAnswCardNew',
           qs.stringify(params)
         ).then((res) => {
@@ -246,6 +262,10 @@ export default {
               window.open(routeTwo.href, '_blank')
               this.saveBtnStuta = false
             }
+
+            this.returnIsNew = res.data.ResponseContent.IsNew
+            this.returnAcid = res.data.ResponseContent.acid
+            this.acid = res.data.ResponseContent.acid
             loading.close()
           }
         })
