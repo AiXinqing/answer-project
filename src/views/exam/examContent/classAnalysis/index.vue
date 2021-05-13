@@ -50,6 +50,13 @@
         :subjects-arr="subjectsArr"
       ></Parking4>
 
+      <Parking5
+        class="mar_T10"
+        id="Parking5"
+        :prmTid="prmTid"
+        :subjects-arr="subjectsArr"
+      ></Parking5>
+
       <!-- 动态锚点 -->
     </div>
 
@@ -77,6 +84,7 @@
   import Parking2 from './_gradesOverview'
   import Parking3 from './_gradePercentage'
   import Parking4 from './_sectionNumPeople'
+  import Parking5 from './_scoringRate'
 
   import { mapState } from 'vuex'
   export default {
@@ -84,7 +92,8 @@
       Parking1,
       Parking2,
       Parking3,
-      Parking4
+      Parking4,
+      Parking5
     },
 
     data() {

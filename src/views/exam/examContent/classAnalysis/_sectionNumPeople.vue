@@ -30,6 +30,7 @@
             :items="options"
             size="mini"
             :value="tsid"
+            @change="handelChange"
           ></hj-select>
         </div>
         <exam-button type="primary" @click="handelSearch" style="margin-right: 10px;">确定</exam-button>
@@ -177,6 +178,14 @@
         // 设置搜索
         this.parameter.step = this.step
         this.parameter.showGrade = Boolean(this.showGrade)
+        this.$nextTick(()=>{
+          this.getTable()
+        })
+      },
+
+      handelChange(val){
+        this.parameter.tsid = val
+        this.tsid = val
         this.$nextTick(()=>{
           this.getTable()
         })

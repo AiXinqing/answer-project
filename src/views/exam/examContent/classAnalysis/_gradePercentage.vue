@@ -12,6 +12,7 @@
             :items="options"
             size="mini"
             :value="tsid"
+            @change="handelChange"
           ></hj-select>
         </div>
         <exam-button type="primary" @click="downTable">下载表格</exam-button>
@@ -96,6 +97,14 @@
     },
 
     methods: {
+
+      handelChange(val){
+        this.parameter.tsid = val
+        this.tsid = val
+        this.$nextTick(()=>{
+          this.getTable()
+        })
+      },
 
       getTable() {
         // 获取table

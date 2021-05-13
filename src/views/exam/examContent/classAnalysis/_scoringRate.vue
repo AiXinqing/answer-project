@@ -4,7 +4,7 @@
     <div class="card_contetn">
       <div class="card_item">
         <i></i>
-        <span>班级成绩概况</span>
+        <span>学科试题得分率对比</span>
       </div>
       <div class="search_right">
         <div class="search_select">
@@ -12,10 +12,21 @@
             :items="options"
             size="mini"
             :value="tsid"
+            @change="handelChange"
           ></hj-select>
         </div>
         <exam-button type="primary" @click="downTable">下载表格</exam-button>
       </div>
+    </div>
+    <div class="el_table_wapper">
+      <exam-table
+        :tablecols="tableColumn"
+        :tableData="tableData"
+        :isIndex="false"
+        :isPagination="false"
+        :theight="theight"
+        :loading="tableLoading"
+      ></exam-table>
     </div>
   </div>
 </template>
@@ -39,9 +50,9 @@
       return {
         fixedHeader:[
           {
-            prop:'cname',
-            label:'班级',
-            minWidth:'140',
+            prop:'type',
+            label:'题目',
+            minWidth:'120',
             align:'center',
             fixed:'left',
             type:'Html',
@@ -49,18 +60,27 @@
           }
         ],
 
+        rankArr:{
+          prop:'cname',
+          label:'最高分',
+          minWidth:'140',
+          align:'center',
+          sortable:true,
+          type:'Html',
+        },
+
         tsid:'5350',
         parameter:{
           tid: '',
           tsid:'',
-          url:this.URL.GetClassScoreScaleNum
+          url:this.URL.GetClassQuestionScoringRate
         },
       }
     },
 
     computed: {
       ...mapState('getExam', ['tableLoading']),
-      ...mapState('gradePercentage', ['headerTable','TableList']),
+      ...mapState('scoringRate', ['headerTable','TableList']),
 
       subjects(){
         return this.subjectsArr.length ? this.subjectsArr.filter(item => item.tsid != "totalScore" ) : []
@@ -71,6 +91,40 @@
           label:item.sname,
           value:item.tsid,
         })) : []
+      },
+
+      tableColumn(){
+        // 动态表头
+        return this.headerTable.length ? [
+          ...this.fixedHeader,
+          ...this.headerTable.map(ele => ({
+            ...this.rankArr,
+            prop:`${this.rankArr.prop}_${ele.cname}`,
+            label:ele.cname
+          }))
+        ] : []
+      },
+
+      tableData(){
+        return this.TableList.length ? this.TableList.map(item =>{
+          let dynamic = {}
+          item.DynamicDetail.forEach(element => {
+            dynamic = {
+              ...dynamic,
+              ...element,
+              [`cname_${element.cname}`]:element.avgScoreScale,
+            }
+          })
+
+          return {
+            answer: item.answer,
+            fullScore: item.fullScore,
+            name: item.name,
+            tqid: item.tqid,
+            type: item.type,
+            ...dynamic
+          }
+        }) : []
       }
     },
 
@@ -97,9 +151,17 @@
 
     methods: {
 
+      handelChange(val){
+        this.parameter.tsid = val
+        this.tsid = val
+        this.$nextTick(()=>{
+          this.getTable()
+        })
+      },
+
       getTable() {
         // 获取table
-        this.$store.dispatch('gradePercentage/GetStuResults', this.parameter)
+        this.$store.dispatch('scoringRate/GetStuResults', this.parameter)
       },
 
       downTable() {
