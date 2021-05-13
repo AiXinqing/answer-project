@@ -29,17 +29,27 @@
       <!-- </keep-alive> -->
 
       <Parking1 class="mar_T10" id="Parking1"></Parking1>
+
       <Parking2
         class="mar_T10"
         id="Parking2"
         :prmTid="prmTid"
       ></Parking2>
+
       <Parking3
         class="mar_T10"
         id="Parking3"
         :prmTid="prmTid"
         :subjects-arr="subjectsArr"
       ></Parking3>
+
+      <Parking4
+        class="mar_T10"
+        id="Parking4"
+        :prmTid="prmTid"
+        :subjects-arr="subjectsArr"
+      ></Parking4>
+
       <!-- 动态锚点 -->
     </div>
 
@@ -66,13 +76,15 @@
   import Parking1 from './_averageRank'
   import Parking2 from './_gradesOverview'
   import Parking3 from './_gradePercentage'
+  import Parking4 from './_sectionNumPeople'
 
   import { mapState } from 'vuex'
   export default {
     components: {
       Parking1,
       Parking2,
-      Parking3
+      Parking3,
+      Parking4
     },
 
     data() {

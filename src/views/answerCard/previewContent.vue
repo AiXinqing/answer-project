@@ -20,7 +20,7 @@
           :key="a"
           :style="{
             width: pageWidth + 'px',
-            marginLeft:a == 0 ? 'none' :'30px',
+            marginLeft:a == 0 ? pageSize == 'A3' ? '48px' : 'none' :'30px',
           }"
           :class="[
             'page_info_itme',
@@ -590,8 +590,8 @@ html {
   height: 1025px;
   border: 1px solid #888;
   border-radius: 3px;
-  margin-left: 38px;
-  // margin-top: 50px;
+  margin-left: 32.5px;
+
 }
 .card_footer {
   width: 100%;
