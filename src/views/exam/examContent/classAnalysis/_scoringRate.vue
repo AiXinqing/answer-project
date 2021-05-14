@@ -52,7 +52,7 @@
           {
             prop:'type',
             label:'题目',
-            minWidth:'120',
+            minWidth:'100',
             align:'center',
             fixed:'left',
             type:'Html',

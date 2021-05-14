@@ -22,12 +22,6 @@
       </div>
       <!-- 标题 -->
 
-      <!-- 动态锚点 -->
-      <!-- <keep-alive> -->
-      <!--  缓存路由的name属性等于tabView的组件 -->
-        <!-- <component v-bind:is="tabView" class="mar_T10"></component> -->
-      <!-- </keep-alive> -->
-
       <Parking1 class="mar_T10" id="Parking1"></Parking1>
 
       <Parking2
@@ -64,14 +58,15 @@
     <div class="Anchor_box">
       <div class="anchor_title">成绩分析</div>
       <div class="anchor_list">
-        <p
+        <a
           v-for="(tab ,index) in tabsAnchor"
           :key="index"
           :class="{cur:iscur==index}"
+          href="javascript:void(0)"
           @click="iscur=index,goAnchor('Parking' + (index + 1))"
         >
           {{tab.name}}
-        </p>
+        </a>
       </div>
     </div>
     <!-- 浮动锚点点击处 -->
@@ -159,7 +154,7 @@
     methods: {
 
       goAnchor(selector) {
-        var anchor = this.$el.querySelector(selector)
+        var anchor = document.getElementById(selector)
         document.documentElement.scrollTop = anchor.offsetTop
       },
 
@@ -231,7 +226,7 @@
 
   }
   .Anchor_box{
-    display: none;
+    // display: none;
 
     width: 180px;
     position: fixed;
@@ -253,10 +248,14 @@
       width: 100%;
       background-color: @white;
 
-      p{
+      a{
         width: 100%;
         text-align: center;
         cursor: pointer;
+        text-decoration:none;
+        display: inline-block;
+        color:@font-909;
+        line-height: 32px;
 
         &.cur{
           color: @main
