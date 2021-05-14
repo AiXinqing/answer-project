@@ -4,7 +4,7 @@
     <div class="card_contetn">
       <div class="card_item">
         <i></i>
-        <span>班级成绩概况</span>
+        <span>各等级人数占比比较</span>
       </div>
       <div class="search_right">
         <div class="search_select">
