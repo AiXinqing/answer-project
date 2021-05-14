@@ -1,27 +1,110 @@
 <template>
   <!-- 学科平均分排名 -->
   <div class="average_content">
-    <div class="card_item">
-      <i></i>
-      <span>学科平均分排名</span>
+    <div class="card_contetn">
+      <div class="card_item">
+        <i></i>
+        <span>学科平均分排名</span>
+      </div>
+      <div class="search_right">
+        <div class="search_select" style="margin-right:30px;">
+          <hj-select
+            :items="options"
+            size="mini"
+            :value="tsid"
+            @change="handelChange"
+          ></hj-select>
+        </div>
+      </div>
     </div>
 
     <singleLine
       :title-name="'学科平均分排名'"
       :is-label="true"
       :unit="''"
-      width="calc(33.33% - 15px)"
     />
   </div>
 </template>
 
 <script>
 
-  import singleLine from './_single'
+  import singleLine from './_singleLine'
+  import { mapState} from 'vuex'
   export default {
     components: {
       singleLine,
     },
+
+    props: {
+      prmTid: {
+        type: String,
+        default: ''
+      },
+
+      subjectsArr:{
+        type: Array,
+        default:()=>[]
+      }
+    },
+
+    data() {
+      return {
+        tsid:0,
+        parameter:{
+          tid: '',
+          tsid:'',
+          url:this.URL.GetClassScoreScaleNum
+        },
+      }
+    },
+
+    computed: {
+      ...mapState('getExam', ['tableLoading']),
+      ...mapState('gradePercentage', ['headerTable','TableList']),
+
+      subjects(){
+        return this.subjectsArr.length ? this.subjectsArr.filter(item => item.tsid != "totalScore" ) : []
+      },
+
+      options(){
+        return this.subjects.length ? this.subjects.map(item => ({
+          label:item.sname,
+          value:item.tsid,
+        })) : []
+      }
+    },
+
+    watch: {
+      subjectsArr: {
+        immediate: true,
+        handler () {
+          this.tsid = this.subjectsArr.length ? this.subjectsArr.find((element,i) => i == 1).tsid :0
+          if(this.tsid != 0){
+            this.$nextTick(() => {
+              this.parameter.tsid = this.tsid
+              this.getTable()
+            })
+          }
+        },
+      },
+    },
+
+    methods: {
+
+      handelChange(val){
+        this.parameter.tsid = val
+        this.tsid = val
+        this.$nextTick(()=>{
+          this.getTable()
+        })
+      },
+
+      getTable() {
+        // 获取table
+        this.$store.dispatch('gradePercentage/GetStuResults', this.parameter)
+      },
+    },
+
   }
 </script>
 

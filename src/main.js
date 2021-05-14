@@ -10,11 +10,9 @@ import { post, fetch, patch, put, postForm } from './utils/http'
 import { URL} from '@/config/api'
 import { convertArray, convertArray_p } from './config/complexReport/convertArray'
 import lodash from 'lodash'
+import vCharts from 'v-charts'
 
-import ECharts from 'vue-echarts'
-Vue.prototype.$echarts = ECharts
-import ecStat from 'echarts-stat'
-Vue.prototype.$ecStat = ecStat
+
 
 Vue.prototype.$http = httpRequest
 Vue.prototype.$lodash = lodash
@@ -28,17 +26,7 @@ Vue.prototype.URL = URL
 Vue.prototype.convertArray = convertArray
 Vue.prototype.convertArray_p = convertArray_p
 
-import 'echarts/lib/chart/line'
-import 'echarts/lib/chart/bar'
-import 'echarts/lib/chart/pie'
-import 'echarts/lib/chart/funnel'
-import 'echarts/lib/chart/scatter'
-import 'echarts/lib/chart/radar'
-// import 'echarts/lib/chart/image'
-import 'echarts/lib/component/legend'
-import 'echarts/lib/component/tooltip'
-Vue.component('chart', ECharts)
-
+Vue.use(vCharts)
 Vue.use(Components)
 Vue.use(httpRequest)
 Vue.use(Element, {

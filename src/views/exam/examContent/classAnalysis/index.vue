@@ -22,34 +22,39 @@
       </div>
       <!-- 标题 -->
 
-      <Parking1 class="mar_T10" id="Parking1"></Parking1>
+      <Parking1
+        class="mar_T10"
+        id="Parking1"
+        :prmTid="prmTid"
+        :subjects-arr="subjectsArr"
+      />
 
       <Parking2
         class="mar_T10"
         id="Parking2"
         :prmTid="prmTid"
-      ></Parking2>
+      />
 
       <Parking3
         class="mar_T10"
         id="Parking3"
         :prmTid="prmTid"
         :subjects-arr="subjectsArr"
-      ></Parking3>
+      />
 
       <Parking4
         class="mar_T10"
         id="Parking4"
         :prmTid="prmTid"
         :subjects-arr="subjectsArr"
-      ></Parking4>
+      />
 
       <Parking5
         class="mar_T10"
         id="Parking5"
         :prmTid="prmTid"
         :subjects-arr="subjectsArr"
-      ></Parking5>
+      />
 
       <!-- 动态锚点 -->
     </div>

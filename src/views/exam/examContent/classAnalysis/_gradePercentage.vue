@@ -50,7 +50,7 @@
           }
         ],
 
-        tsid:'5350',
+        tsid:0,
         parameter:{
           tid: '',
           tsid:'',
@@ -79,8 +79,8 @@
       subjectsArr: {
         immediate: true,
         handler () {
-          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
-          if(this.tsid != ''){
+          this.tsid = this.subjectsArr.length ? this.subjectsArr.find((element,i) => i == 1).tsid :0
+          if(this.tsid != 0){
             this.$nextTick(() => {
               this.parameter.tsid = this.tsid
               this.getTable()
