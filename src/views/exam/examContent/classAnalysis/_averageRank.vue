@@ -29,7 +29,7 @@
 <script>
 
   import singleLine from './_singleLine'
-  import { mapState} from 'vuex'
+  import { mapState , mapGetters} from 'vuex'
   export default {
     components: {
       singleLine,
@@ -53,14 +53,14 @@
         parameter:{
           tid: '',
           tsid:'',
-          url:this.URL.GetClassScoreScaleNum
+          url:this.URL.GetClassAvgScore
         },
       }
     },
 
     computed: {
       ...mapState('getExam', ['tableLoading']),
-      ...mapState('gradePercentage', ['headerTable','TableList']),
+      ...mapGetters('getClassAvgScore', ['echartsData']),
 
       subjects(){
         return this.subjectsArr.length ? this.subjectsArr.filter(item => item.tsid != "totalScore" ) : []
@@ -71,6 +71,10 @@
           label:item.sname,
           value:item.tsid,
         })) : []
+      },
+
+      chartData(){
+        return this.echartsData.length ? {} : {}
       }
     },
 
@@ -78,7 +82,7 @@
       subjectsArr: {
         immediate: true,
         handler () {
-          this.tsid = this.subjectsArr.length ? this.subjectsArr.find((element,i) => i == 1).tsid :0
+          this.tsid = this.subjectsArr.length ? this.subjectsArr.find((element,i) => i == 1).tsid : 0
           if(this.tsid != 0){
             this.$nextTick(() => {
               this.parameter.tsid = this.tsid
@@ -87,6 +91,12 @@
           }
         },
       },
+    },
+
+    mounted () {
+      if(this.prmTid != ''){
+        this.parameter.tid = this.prmTid
+      }
     },
 
     methods: {
@@ -101,7 +111,7 @@
 
       getTable() {
         // 获取table
-        this.$store.dispatch('gradePercentage/GetStuResults', this.parameter)
+        this.$store.dispatch('getClassAvgScore/GetStuResults', this.parameter)
       },
     },
 

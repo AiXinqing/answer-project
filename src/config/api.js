@@ -37,8 +37,13 @@ export const URL = {
   ExportClassSegmentStuDetails: BASEURL + '/Report/AnlyReport/ExportClassScorePlacingSegmentStuDetails', // 成绩名次学生名单详情下载
 
   //---------------------------------------班级分析报告
+  GetClassAvgScore: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassAvgScore', //学科平均分排名
   GetClassScoreSurvey: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreSurvey', //班级成绩概况
+  ExportClassScoreSurvey: BASEURL + '/Report/AnlyReport/ExportClassScoreSurvey', //班级成绩概况下载
   GetClassScoreScaleNum: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreScaleNum', //各等级人数占比比较
+  ExportClassScoreScaleNum: BASEURL + '/Report/AnlyReport/ExportClassScoreScaleNum', //各等级人数占比下载
   GetClassScoreSegmentNum: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreSegmentNum', //各分数段详细人数
+  ExportClassScoreSegmentNum: BASEURL + '/Report/AnlyReport/ExportClassScoreSegmentNum', //各分数段详细人数下载
   GetClassQuestionScoringRate: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassQuestionScoringRate', //学科试题得分率
+  ExportClassQuestionScoringRate: BASEURL + '/Report/AnlyReport/ExportClassQuestionScoringRate', //学科试题得分率下载
 }
