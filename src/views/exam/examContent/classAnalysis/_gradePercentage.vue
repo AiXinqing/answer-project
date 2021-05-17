@@ -18,6 +18,16 @@
         <exam-button type="primary" @click="downTable">下载表格</exam-button>
       </div>
     </div>
+    <div class="el_table_wapper">
+      <exam-table
+        :tablecols="tableColumn"
+        :tableData="tableData"
+        :isIndex="false"
+        :isPagination="false"
+        :theight="theight"
+        :loading="tableLoading"
+      ></exam-table>
+    </div>
   </div>
 </template>
 
@@ -72,6 +82,46 @@
           label:item.sname,
           value:item.tsid,
         })) : []
+      },
+
+      tableColumn(){
+        // 动态表头
+
+        return this.headerTable.length ? [
+          ...this.fixedHeader,
+          ...this.headerTable.map(ele => ({
+            label:ele.subname,
+            align:'center',
+            prop: `scale_${ele.subname}`,
+            type:'Html',
+            sortable:true,
+          }))
+        ] : []
+      },
+
+      tableData(){
+        return this.TableList.length ? this.TableList.map(item =>{
+          let dynamic = {}
+          item.DynamicDetail.forEach(element => {
+            dynamic = {
+              ...dynamic,
+              ...element,
+              [`scale_${element.name}`]:element.scale,
+            }
+          })
+
+          return {
+            avgScoreRate: item.avgScoreRate,
+            cid: item.cid,
+            cname: item.cname,
+            maxScore: item.maxScore,
+            minScore: item.minScore,
+            rank: item.rank,
+            referenceNumber: item.referenceNumber,
+            teacher: item.teacher,
+            ...dynamic
+          }
+        }) : []
       }
     },
 
