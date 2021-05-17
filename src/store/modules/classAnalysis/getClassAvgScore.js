@@ -10,7 +10,6 @@
 
     SET_TABLE: (state, res) => {
       state.TableList =  res.ResponseContent
-      // state.TableList =
     }
 
   }
