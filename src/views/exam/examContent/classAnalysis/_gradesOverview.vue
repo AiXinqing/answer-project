@@ -144,8 +144,8 @@
 
       downTable(){
         // 下载表格
-        // const {cids,tid,tsid} = this.parameter
-        // window.open(`${this.URL.ExportQuestionSummary}?tid=${tid}&tsid=${tsid}&cids=${cids}`)
+        const {tid} = this.parameter
+        window.open(`${this.URL.ExportClassScoreSurvey}?tid=${tid}`)
       },
 
       getTable() {

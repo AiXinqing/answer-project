@@ -166,7 +166,8 @@
       },
 
       downTable() {
-
+        const {tid,tsid} = this.parameter
+        window.open(`${this.URL.ExportClassQuestionScoringRate}?tid=${tid}&tsid=${tsid}`)
       }
     },
   }

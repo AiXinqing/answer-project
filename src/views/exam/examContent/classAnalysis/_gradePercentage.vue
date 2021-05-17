@@ -112,7 +112,9 @@
       },
 
       downTable() {
-
+        // 下载表格
+        const {tid,tsid} = this.parameter
+        window.open(`${this.URL.ExportClassScoreScaleNum}?tid=${tid}&tsid=${tsid}`)
       }
     },
   }
