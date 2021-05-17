@@ -7,13 +7,6 @@
         <span>分数段的人数分布</span>
       </div>
       <div class="search_right">
-        <div class="label_box">
-          <div class="label_font">是否显示全年级分段详情 :</div>
-          <div class="radio_model">
-            <el-radio v-model="showGrade" :label="1">是</el-radio>
-            <el-radio v-model="showGrade" :label="0">否</el-radio>
-          </div>
-        </div>
 
         <div class="input_box">
           <div class="label_font">分段分数 :</div>
@@ -197,8 +190,8 @@
 
       downTable(){
         // 下载表格
-        // const {cids,tid,tsid} = this.parameter
-        // window.open(`${this.URL.ExportQuestionSummary}?tid=${tid}&tsid=${tsid}&cids=${cids}`)
+        const {tid,tsid,step,showGrade} = this.parameter
+        window.open(`${this.URL.ExportClassScoreSegmentNum}?tid=${tid}&tsid=${tsid}&step=${step}&showGrade=${showGrade}`)
       },
 
     }
@@ -208,7 +201,7 @@
 <style lang="less" scoped>
   @import '~@/assets/css/variables.less';
   .card_item{
-    width:345px;
+    width:632px;
   }
   .search_right{
     display:flex;

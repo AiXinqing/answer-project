@@ -1,27 +1,33 @@
 <template>
-  <ve-histogram
-    class="myve"
-    :data="chartData"
-    :extend="option"
-  />
+  <section>
+    <ve-histogram
+      class="myve"
+      :data="chartData"
+      :extend="option"
+      v-if="chartData.columns != undefined"
+    />
+    <div
+      v-else
+      class="chart_style"
+      v-loading.fullscreen.lock="fullscreenLoading"
+    > 暂无数据 </div>
+  </section>
+
 </template>
 
 <script>
   export default {
+    props: {
+      chartData: {
+        type: Object,
+        default: () => {}
+      },
+    },
+
     data() {
       return {
 
-        chartData: {
-          columns: ['班级', '语文'],
-          rows: [
-            { '班级': '1班', '语文': 120 },
-            { '班级': '2班', '语文': 89 },
-            { '班级': '3班', '语文': 116 },
-            { '班级': '4班', '语文': 80 },
-            { '班级': '5班', '语文': 92 },
-            { '班级': '6班', '语文': 96 },
-          ]
-        },
+        fullscreenLoading:false,
 
         option:{
           grid: {
@@ -77,9 +83,25 @@
         }
       }
     },
+
+    watch: {
+      chartData: {
+        immediate: true,
+        handler () {
+          if(this.chartData.columns != undefined){
+            this.fullscreenLoading = false
+          }else{
+            this.fullscreenLoading = false
+          }
+        },
+      },
+    },
   }
 </script>
 
 <style lang="less" >
-
+  .chart_style {
+    text-align: center;
+    line-height: 22em;
+  }
 </style>

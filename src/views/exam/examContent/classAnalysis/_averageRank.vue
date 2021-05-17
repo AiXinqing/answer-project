@@ -22,6 +22,7 @@
       :title-name="'学科平均分排名'"
       :is-label="true"
       :unit="''"
+      :chart-data="chartData"
     />
   </div>
 </template>
@@ -50,6 +51,7 @@
     data() {
       return {
         tsid:0,
+        tsidName:'',
         parameter:{
           tid: '',
           tsid:'',
@@ -74,7 +76,15 @@
       },
 
       chartData(){
-        return this.echartsData.length ? {} : {}
+        let name = this.tsidName
+        return this.echartsData.length ? {
+          columns:['班级', this.tsidName],
+          rows:this.echartsData.filter(item => item.cid !="all")
+                    .map(element =>({
+                      '班级': element.cname,
+                      [name]: element.avgScore
+                    }))
+        } : {}
       }
     },
 
@@ -83,6 +93,7 @@
         immediate: true,
         handler () {
           this.tsid = this.subjectsArr.length ? this.subjectsArr.find((element,i) => i == 1).tsid : 0
+          this.tsidName = this.subjectsArr.length ? this.subjectsArr.find((element,i) => i == 1).sname : ''
           if(this.tsid != 0){
             this.$nextTick(() => {
               this.parameter.tsid = this.tsid
@@ -104,6 +115,7 @@
       handelChange(val){
         this.parameter.tsid = val
         this.tsid = val
+        this.tsidName = this.subjectsArr.find((element) => element.tsid == val).sname
         this.$nextTick(()=>{
           this.getTable()
         })
