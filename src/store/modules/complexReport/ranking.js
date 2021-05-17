@@ -24,11 +24,7 @@
         const { tid, tsid, cids,step,type,placing, url } = padata
         GetStuResults({ tid, tsid, cids,step,type,placing,url}).then(res => {
           commit('SET_TABLE', res)
-          commit('GET_PAGE', {
-            pageSize: res.ResponseContent.pageSize,
-            pageNum: res.ResponseContent.pageIndex,
-            total: res.ResponseContent.count
-          })
+
           resolve(res)
           return res
         }).catch(error => {
