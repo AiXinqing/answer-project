@@ -10,9 +10,9 @@
   const mutations = {
 
     SET_TABLE: (state, res) => {
-      const { ClassScoreSurveyList, subjectInfos } = res.ResponseContent
-      state.headerTable = subjectInfos
-      state.TableList =  ClassScoreSurveyList
+      const { ASAnalyseSettingInfo, ClassScoreInfo } = res.ResponseContent
+      state.headerTable = ASAnalyseSettingInfo
+      state.TableList =  ClassScoreInfo
     },
 
   }
