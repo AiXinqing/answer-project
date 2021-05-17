@@ -1,12 +1,14 @@
 <template>
   <!-- 总体情况汇总分析 -->
   <div class="class_content">
+
     <div class="card_contetn">
       <div class="card_item">
         <i></i>
         <span>总体情况汇总分析</span>
       </div>
     </div>
+
     <div class="total_score">
       <div class="title_box">
         <div class="title_left">总分基本情况成绩分析</div>
@@ -22,25 +24,27 @@
           :isPagination="false"
           :theight="theight"
           :loading="tableLoading"
-        ></exam-table>
+        />
       </div>
     </div>
-    <div class="title_box">
-      <div class="title_left">各学科基本数据对比情况</div>
-      <div class="title_right">
-        <exam-button type="primary" @click="basisDownTable">下载表格</exam-button>
-      </div>
-      </div>
-      <div class="el_table_wapper">
-        <exam-table
-          :tablecols="tableColumn"
-          :tableData="tableData"
-          :isIndex="false"
-          :isPagination="false"
-          :theight="theight"
-          :loading="tableLoading"
-        ></exam-table>
-      </div>
+
+    <div class="total_score">
+      <div class="title_box">
+        <div class="title_left">各学科基本数据对比情况</div>
+        <div class="title_right">
+          <exam-button type="primary" @click="basisDownTable">下载表格</exam-button>
+        </div>
+        </div>
+        <div class="el_table_wapper">
+          <exam-table
+            :tablecols="tableColumn"
+            :tableData="tableData"
+            :isIndex="false"
+            :isPagination="false"
+            :theight="theight"
+            :loading="tableLoading"
+          ></exam-table>
+        </div>
     </div>
   </div>
 </template>
