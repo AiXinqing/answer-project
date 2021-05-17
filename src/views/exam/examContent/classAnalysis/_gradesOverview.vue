@@ -39,7 +39,7 @@
           {
             prop:'cname',
             label:'班级',
-            minWidth:'140',
+            width:'120',
             align:'center',
             fixed:'left',
             type:'Html',
