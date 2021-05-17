@@ -1,7 +1,6 @@
   import {
-    GetStuResults,
-    getTotalScoreResults
-  } from '@/config/schoolAnalysis/analyzed'
+    GetStuResults
+  } from '@/config/schoolAnalysis/totalScoreDistributed'
 
   const state = {
     TableList: [],
@@ -13,10 +12,6 @@
     SET_TABLE: (state, res) => {
       state.TableList =  res.ResponseContent
     },
-
-    SET_TOTAL: (state, res) => {
-      state.TotalTable = [{...res.ResponseContent}]
-    }
   }
 
   const actions = {
@@ -34,18 +29,6 @@
       })
     },
 
-    getTotalScoreResults({ commit }, padata) {
-      return new Promise((resolve, reject) => {
-        const { tid, url } = padata
-        getTotalScoreResults({ tid, url}).then(res => {
-          commit('SET_TOTAL', res)
-          resolve(res)
-          return res
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
 
   }
 
