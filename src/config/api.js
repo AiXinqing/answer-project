@@ -38,12 +38,24 @@ export const URL = {
 
   //---------------------------------------班级分析报告
   GetClassAvgScore: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassAvgScore', //学科平均分排名
-  GetClassScoreSurvey: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreSurvey', //班级成绩概况
-  ExportClassScoreSurvey: BASEURL + '/Report/AnlyReport/ExportClassScoreSurvey', //班级成绩概况下载
-  GetClassScoreScaleNum: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreScaleNum', //各等级人数占比比较
-  ExportClassScoreScaleNum: BASEURL + '/Report/AnlyReport/ExportClassScoreScaleNum', //各等级人数占比下载
-  GetClassScoreSegmentNum: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreSegmentNum', //各分数段详细人数
-  ExportClassScoreSegmentNum: BASEURL + '/Report/AnlyReport/ExportClassScoreSegmentNum', //各分数段详细人数下载
+  GetClassScoreSurvey: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreSurvey', //班级成绩概况 -------------- // 班级 false  // 校级 true
+  ExportClassScoreSurvey: BASEURL + '/Report/AnlyReport/ExportClassScoreSurvey', //班级成绩概况下载 -------------- // 班级 false  // 校级 true
+  GetClassScoreScaleNum: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreScaleNum', //各等级人数占比比较 -------------- // 班级 false  // 校级 true
+  ExportClassScoreScaleNum: BASEURL + '/Report/AnlyReport/ExportClassScoreScaleNum', //各等级人数占比下载 -------------- // 班级 false  // 校级 true
+  GetClassScoreSegmentNum: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreSegmentNum', //各分数段详细人数 -------------- // 班级 false  // 校级 true
+  ExportClassScoreSegmentNum: BASEURL + '/Report/AnlyReport/ExportClassScoreSegmentNum', //各分数段详细人数下载   -------------- // 班级 false  // 校级 true
   GetClassQuestionScoringRate: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassQuestionScoringRate', //学科试题得分率
   ExportClassQuestionScoringRate: BASEURL + '/Report/AnlyReport/ExportClassQuestionScoringRate', //学科试题得分率下载
+
+  //---------------------------------------校级分析报告
+  GetTotalScoreSituation: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetTotalScoreSituation', //总分基本情况
+  GetSubjectScoreContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetSubjectScoreContrast', //各学科基本数据对比情况
+  ExportSubjectScoreContrast: BASEURL + '/Report/AnlyReport/ExportSubjectScoreContrast', //各学科基本数据对比情况下载
+  GetTotalScoreDistribution: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetTotalScoreDistribution', //总分分布
+  GetClassSubjectScoreCriticalityNum: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassSubjectScoreCriticalityNum', //临界生分析
+  ExportClassSubjectScoreCriticalityNum: BASEURL + '/Report/AnlyReport/ExportClassSubjectScoreCriticalityNum', //临界生分析下载
+  GetSubjectScoreLvlContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetSubjectScoreLvlContrast', //各科成绩等级人数占比比较
+  ExportSubjectScoreLvlContrast: BASEURL + '/Report/AnlyReport/ExportSubjectScoreLvlContrast', //各科成绩等级人数占比下载
+  GetClassScoreRankNum: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreRankNum', //优秀生/学困生分析
+  ExportClassScoreRankNum: BASEURL + '/Report/AnlyReport/ExportClassScoreRankNum', //优秀生/学困生分析下载
 }
