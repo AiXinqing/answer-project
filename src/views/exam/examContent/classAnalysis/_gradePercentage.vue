@@ -66,6 +66,7 @@
           tsid:'',
           url:this.URL.GetClassScoreScaleNum
         },
+        theight:0
       }
     },
 

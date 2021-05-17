@@ -66,8 +66,9 @@
         <a
           v-for="(tab ,index) in tabsAnchor"
           :key="index"
-          :class="{cur:iscur==index}"
+          :class="['cur_style',{cur:iscur==index}]"
           href="javascript:void(0)"
+          :id="`parkingA${index + 1}`"
           @click="iscur=index,goAnchor('Parking' + (index + 1))"
         >
           {{tab.name}}
@@ -154,6 +155,7 @@
       if(this.prmTid != ''){
         this.getExamFunc(this.prmTid)
       }
+      window.addEventListener('scroll', this.windowScroll)
     },
 
     methods: {
@@ -168,6 +170,36 @@
           prmTid: prmTid
         })
       },
+
+      windowScroll() {
+        // 滚动条距离页面顶部的距离
+        // 以下写法原生兼容
+        let parkingA1 = document.getElementById('Parking1').offsetTop
+        let parkingA2 = document.getElementById('Parking2').offsetTop
+        let parkingA3 = document.getElementById('Parking3').offsetTop
+        let parkingA4 = document.getElementById('Parking4').offsetTop
+        let parkingA5 = document.getElementById('Parking5').offsetTop
+
+        let curStyle = document.getElementsByClassName('cur_style')
+            for(let i = 0; i < 5;i++){
+              curStyle[i].classList.remove('cur')
+            }
+
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+
+            if(scrollTop <= parkingA1 ){
+              document.getElementById('parkingA1').classList.add("cur")
+            } else if(scrollTop <= parkingA2 ){
+              document.getElementById('parkingA2').classList.add("cur")
+            }else if(scrollTop <= parkingA3 ){
+              document.getElementById('parkingA3').classList.add("cur")
+            }else if(scrollTop <= parkingA4 ){
+              document.getElementById('parkingA4').classList.add("cur")
+            }else if(scrollTop <= parkingA5 ){
+              document.getElementById('parkingA5').classList.add("cur")
+            }
+
+      }
 
     }
   }
