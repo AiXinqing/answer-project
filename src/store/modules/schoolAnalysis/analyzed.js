@@ -4,22 +4,19 @@
   } from '@/config/schoolAnalysis/analyzed'
 
   const state = {
-    headerTable: [],
     TableList: [],
-    totalTable:[]
+    TotalTable:[]
   }
 
   const mutations = {
 
     SET_TABLE: (state, res) => {
-      const { QuestionAnalyseList, classInfos } = res.ResponseContent
-      state.headerTable = classInfos
-      state.TableList =  QuestionAnalyseList
+      state.TableList =  res.ResponseContent
     },
 
     SET_TOTAL: (state, res) => {
-      const { QuestionAnalyseList } = res.ResponseContent
-      state.totalTable = QuestionAnalyseList
+      console.log(res.ResponseContent)
+      state.TotalTable = [{...res.ResponseContent}]
     }
   }
 
@@ -27,8 +24,8 @@
 
     GetStuResults({ commit }, padata) {
       return new Promise((resolve, reject) => {
-        const { tid, tsid, url } = padata
-        GetStuResults({ tid, tsid, url}).then(res => {
+        const { tid, url } = padata
+        GetStuResults({ tid, url}).then(res => {
           commit('SET_TABLE', res)
           resolve(res)
           return res
@@ -40,8 +37,8 @@
 
     getTotalScoreResults({ commit }, padata) {
       return new Promise((resolve, reject) => {
-        const { tid, tsid, url } = padata
-        getTotalScoreResults({ tid, tsid, url}).then(res => {
+        const { tid, url } = padata
+        getTotalScoreResults({ tid, url}).then(res => {
           commit('SET_TOTAL', res)
           resolve(res)
           return res

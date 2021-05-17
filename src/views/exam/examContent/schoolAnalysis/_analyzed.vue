@@ -18,8 +18,8 @@
       </div>
       <div class="el_table_wapper">
         <exam-table
-          :tablecols="tableColumn"
-          :tableData="tableData"
+          :tablecols="totalHeader"
+          :tableData="TotalTable"
           :isIndex="false"
           :isPagination="false"
           :theight="theight"
@@ -37,8 +37,8 @@
         </div>
         <div class="el_table_wapper">
           <exam-table
-            :tablecols="tableColumn"
-            :tableData="tableData"
+            :tablecols="fixedHeader"
+            :tableData="TableList"
             :isIndex="false"
             :isPagination="false"
             :theight="theight"
@@ -57,22 +57,132 @@
         type: String,
         default: ''
       },
-
-      subjectsArr:{
-        type: Array,
-        default:()=>[]
-      }
     },
 
     data() {
       return {
-        fixedHeader:[
+        totalHeader:[
           {
-            prop:'cname',
-            label:'班级',
-            minWidth:'140',
+            prop:'referenceNumber',
+            label:'参考总人数',
+            minWidth:'120',
             align:'center',
             fixed:'left',
+            type:'Html',
+            sortable:true,
+          },
+          {
+            prop:'classNum',
+            label:'班级数',
+            minWidth:'120',
+            align:'center',
+            type:'Html',
+            sortable:true,
+          },
+          {
+            prop:'fullScore',
+            label:'满分',
+            minWidth:'120',
+            align:'center',
+            type:'Html',
+            sortable:true,
+          },
+          {
+            prop:'maxScore',
+            label:'最高分',
+            minWidth:'120',
+            align:'center',
+            type:'Html',
+            sortable:true,
+          },
+          {
+            prop:'minScore',
+            label:'最低分',
+            minWidth:'120',
+            align:'center',
+            type:'Html',
+            sortable:true,
+          },
+          {
+            prop:'avgScore',
+            label:'平均分',
+            minWidth:'120',
+            align:'center',
+            type:'Html',
+            sortable:true,
+          },
+          {
+            prop:'stdDeviation',
+            label:'标准差',
+            minWidth:'120',
+            align:'center',
+            type:'Html',
+            sortable:true,
+          }
+        ],
+
+        fixedHeader:[
+          {
+            prop:'sname',
+            label:'学科',
+            minWidth:'120',
+            align:'center',
+            fixed:'left',
+            type:'Html',
+          },
+          {
+            prop:'referenceNumber',
+            label:'参考总人数',
+            minWidth:'120',
+            align:'center',
+            type:'Html',
+            sortable:true,
+          },
+          {
+            prop:'fullScore',
+            label:'满分',
+            minWidth:'120',
+            align:'center',
+            type:'Html',
+            sortable:true,
+          },
+          {
+            prop:'maxScore',
+            label:'最高分',
+            minWidth:'120',
+            align:'center',
+            type:'Html',
+            sortable:true,
+          },
+          {
+            prop:'minScore',
+            label:'最低分',
+            minWidth:'120',
+            align:'center',
+            type:'Html',
+            sortable:true,
+          },
+          {
+            prop:'avgScore',
+            label:'平均分',
+            minWidth:'120',
+            align:'center',
+            type:'Html',
+            sortable:true,
+          },
+          {
+            prop:'stdDeviation',
+            label:'标准差',
+            minWidth:'120',
+            align:'center',
+            type:'Html',
+            sortable:true,
+          },
+          {
+            prop:'difficulty',
+            label:'难度',
+            minWidth:'120',
+            align:'center',
             type:'Html',
             sortable:true,
           }
@@ -81,8 +191,11 @@
         tsid:0,
         parameter:{
           tid: '',
-          tsid:'',
-          url:this.URL.GetClassScoreScaleNum
+          url:this.URL.GetSubjectScoreContrast
+        },
+        totalParameter:{
+          tid: '',
+          url:this.URL.GetTotalScoreSituation
         },
         theight:0
       }
@@ -90,106 +203,35 @@
 
     computed: {
       ...mapState('getExam', ['tableLoading']),
-      ...mapState('gradePercentage', ['headerTable','TableList']),
-
-      subjects(){
-        return this.subjectsArr.length ? this.subjectsArr.filter(item => item.tsid != "totalScore" ) : []
-      },
-
-      options(){
-        return this.subjects.length ? this.subjects.map(item => ({
-          label:item.sname,
-          value:item.tsid,
-        })) : []
-      },
-
-      tableColumn(){
-        // 动态表头
-
-        return this.headerTable.length ? [
-          ...this.fixedHeader,
-          ...this.headerTable.map(ele => ({
-            label:ele.subname,
-            align:'center',
-            prop: `scale_${ele.subname}`,
-            type:'Html',
-            sortable:true,
-          }))
-        ] : []
-      },
-
-      tableData(){
-        return this.TableList.length ? this.TableList.map(item =>{
-          let dynamic = {}
-          item.DynamicDetail.forEach(element => {
-            dynamic = {
-              ...dynamic,
-              ...element,
-              [`scale_${element.name}`]:element.scale,
-            }
-          })
-
-          return {
-            avgScoreRate: item.avgScoreRate,
-            cid: item.cid,
-            cname: item.cname,
-            maxScore: item.maxScore,
-            minScore: item.minScore,
-            rank: item.rank,
-            referenceNumber: item.referenceNumber,
-            teacher: item.teacher,
-            ...dynamic
-          }
-        }) : []
-      }
-    },
-
-    watch: {
-      subjectsArr: {
-        immediate: true,
-        handler () {
-          this.tsid = this.subjectsArr.length ? this.subjectsArr.find((element,i) => i == 1).tsid :0
-          if(this.tsid != 0){
-            this.$nextTick(() => {
-              this.parameter.tsid = this.tsid
-              this.getTable()
-            })
-          }
-        },
-      },
+      ...mapState('analyzed', ['TableList','TotalTable']),
     },
 
     mounted () {
       if(this.prmTid != ''){
         this.parameter.tid = this.prmTid
+        this.totalParameter.tid = this.prmTid
+        this.getTable()
       }
     },
 
     methods: {
 
-      handelChange(val){
-        this.parameter.tsid = val
-        this.tsid = val
-        this.$nextTick(()=>{
-          this.getTable()
-        })
-      },
-
       getTable() {
         // 获取table
-        this.$store.dispatch('gradePercentage/GetStuResults', this.parameter)
+        this.$store.dispatch('analyzed/GetStuResults', this.parameter)
+        this.$store.dispatch('analyzed/getTotalScoreResults', this.totalParameter)
       },
 
       totalScoreDownTable() {
         // 下载表格
-        const {tid,tsid} = this.parameter
-        window.open(`${this.URL.ExportClassScoreScaleNum}?tid=${tid}&tsid=${tsid}`)
+        const {tid} = this.parameter
+        window.open(`${this.URL.ExportClassScoreScaleNum}?tid=${tid}`)
       },
 
       basisDownTable(){
         // 下载表格
-        const {tid,tsid} = this.parameter
-        window.open(`${this.URL.ExportClassScoreScaleNum}?tid=${tid}&tsid=${tsid}`)
+        const {tid} = this.parameter
+        window.open(`${this.URL.ExportClassScoreScaleNum}?tid=${tid}`)
       }
     },
   }

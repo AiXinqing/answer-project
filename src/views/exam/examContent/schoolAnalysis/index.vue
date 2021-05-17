@@ -26,7 +26,6 @@
         class="mar_T10"
         id="parking1"
         :prmTid="prmTid"
-        :subjects-arr="subjectsArr"
       />
 
       <!-- <Parking2
