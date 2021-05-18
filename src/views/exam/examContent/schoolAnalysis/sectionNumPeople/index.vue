@@ -85,7 +85,7 @@
           tid: '',
           tsid:'',
           step:50,
-          showGrade:false,
+          showGrade:true,
           url:this.URL.GetClassScoreSegmentNum
         },
         theight:0,

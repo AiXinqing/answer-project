@@ -40,14 +40,14 @@
         :prmTid="prmTid"
       />
 
-      <!-- <Parking4
+      <parking4
         class="mar_T10"
-        id="Parking4"
+        id="parking4"
         :prmTid="prmTid"
         :subjects-arr="subjectsArr"
       />
 
-      <Parking5
+      <!-- <Parking5
         class="mar_T10"
         id="Parking5"
         :prmTid="prmTid"
@@ -82,7 +82,7 @@
   import parking1 from './analyzed/'
   import parking2 from './totalScoreDistributed/'
   import parking3 from './criticalBirth/'
-  // import Parking4 from './_sectionNumPeople'
+  import parking4 from './sectionNumPeople/'
   // import Parking5 from './_scoringRate'
 
   import { mapState } from 'vuex'
@@ -91,7 +91,7 @@
       parking1,
       parking2,
       parking3,
-      // Parking4,
+      parking4,
       // Parking5
     },
 
