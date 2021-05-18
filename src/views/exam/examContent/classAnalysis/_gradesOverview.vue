@@ -164,7 +164,7 @@
     padding-bottom: 10px;
 
     .el_table_wapper{
-      margin: 15px 20px 20px 20px
+      margin: 15px 30px 20px 30px
     }
 
     .card_item,
