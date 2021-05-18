@@ -13,9 +13,12 @@
     <div class="total_score">
       <div class="title_box">
         <div class="title_left" style="margin:5px 0">
-          <span>临界分: <span class="mr_10">630分</span> 浮动分: <span class="mr_10">630分</span> </span>
-          <exam-button type="primary" class="left_modify">修改</exam-button>
-          <span> 分数区间: <span class="mr_10">620-640分</span></span>
+          <span>临界分: <span class="mr_10">{{criticalScale}}%</span> 浮动分: <span class="mr_10">{{floatScale}}%</span> </span>
+          <exam-button
+            type="primary"
+            class="left_modify"
+            @click="handelModify"
+          >修改</exam-button>
         </div>
         <div class="title_right">
           <exam-button type="primary" @click="downTable">下载表格</exam-button>
@@ -32,12 +35,20 @@
           ></exam-table>
         </div>
     </div>
+    <set-critical
+      ref="setCritical"
+      @change-set-critical="changeSetCritical"
+    />
   </div>
 </template>
 
 <script>
   import { mapState} from 'vuex'
+  import setCritical from './_setCritical'
   export default {
+    components: {
+      setCritical,
+    },
     props: {
       prmTid: {
         type: String,
@@ -75,11 +86,12 @@
           }
         ],
 
-        tsid:0,
+        criticalScale:56,
+        floatScale:8,
         parameter:{
           tid: '',
-          criticalScale:630,
-          floatScale:10,
+          criticalScale:56,
+          floatScale:8,
           url:this.URL.GetClassSubjectScoreCriticalityNum
         },
 
@@ -143,6 +155,20 @@
 
     methods: {
 
+      changeSetCritical(obj){
+
+        this.criticalScale = obj.criticalScale
+        this.floatScale = obj.floatScale
+
+        this.parameter = {
+          ...this.parameter,
+          ...obj
+        }
+        this.$nextTick(()=>{
+          this.getTable()
+        })
+      },
+
       getTable() {
         // 获取table
         this.$store.dispatch('criticalBirth/GetStuResults', this.parameter)
@@ -152,7 +178,12 @@
         // 下载表格
         const {tid,criticalScale,floatScale} = this.parameter
         window.open(`${this.URL.ExportClassScoreScaleNum}?tid=${tid}&criticalScale=${criticalScale}&floatScale=${floatScale}`)
-      }
+      },
+
+      handelModify(){
+        this.$refs.setCritical.openFrame()
+      },
+
     },
   }
 </script>
