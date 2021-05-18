@@ -28,13 +28,13 @@
         :prmTid="prmTid"
       />
 
-      <!-- <Parking2
+      <parking2
         class="mar_T10"
-        id="Parking2"
+        id="parking2"
         :prmTid="prmTid"
       />
 
-      <Parking3
+      <!-- <Parking3
         class="mar_T10"
         id="Parking3"
         :prmTid="prmTid"
@@ -81,7 +81,7 @@
 
 <script>
   import parking1 from './_analyzed'
-  // import Parking2 from './_gradesOverview'
+  import parking2 from './_totalScoreDistributed'
   // import Parking3 from './_gradePercentage'
   // import Parking4 from './_sectionNumPeople'
   // import Parking5 from './_scoringRate'
@@ -90,7 +90,7 @@
   export default {
     components: {
       parking1,
-      // Parking2,
+      parking2,
       // Parking3,
       // Parking4,
       // Parking5

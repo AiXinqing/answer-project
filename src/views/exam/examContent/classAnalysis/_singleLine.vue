@@ -42,11 +42,15 @@
           },
           xAxis: {
             name:'班级',
+            nameGap:10,
             nameLocation: 'end',
             splitLine:{
               lineStyle:{
                 type:'dashed'
               }
+            },
+            axisLine:{
+              true:false
             }
           },
 
