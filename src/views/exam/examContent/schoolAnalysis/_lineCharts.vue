@@ -3,37 +3,30 @@
     <ve-line
       style="width:100%"
       :data="chartData"
-      :extend="option"></ve-line>
-    <!-- <ve-histogram
-      class="myve"
-      :data="chartData"
       :extend="option"
       v-if="chartData.columns != undefined"
-    />
+    ></ve-line>
     <div
       v-else
       class="chart_style"
       v-loading.fullscreen.lock="fullscreenLoading"
-    > 暂无数据 </div> -->
+    > 暂无数据 </div>
   </section>
 
 </template>
 
 <script>
   export default {
+  props: {
+    chartData: {
+      type: Object,
+      default: () => {}
+    },
+  },
+
   data () {
     return {
-      chartData: {
-        columns: ['日期', '全体'],
-        rows: [
-          { '日期': '57', '全体': 1393 },
-          { '日期': '114', '全体': 3530 },
-          { '日期': '171', '全体': 2923 },
-          { '日期': '228', '全体': 1723 },
-          { '日期': '285', '全体': 3792},
-          { '日期': '512', '全体': 4593 }
-        ]
-      },
+      fullscreenLoading:false,
       option:{
         grid: {
           show: true,
@@ -81,7 +74,20 @@
         },
       }
     }
-  }
+  },
+
+  watch: {
+    chartData: {
+      immediate: true,
+      handler () {
+        if(this.chartData.columns != undefined){
+          this.fullscreenLoading = false
+        }else{
+          this.fullscreenLoading = false
+        }
+      },
+    },
+  },
 }
 </script>
 

@@ -4,13 +4,13 @@
 
   const state = {
     TableList: [],
-    TotalTable:[]
   }
 
   const mutations = {
 
     SET_TABLE: (state, res) => {
-      state.TableList =  res.ResponseContent
+      state.TableList = res.ResponseContent
+      console.log(res)
     },
   }
 

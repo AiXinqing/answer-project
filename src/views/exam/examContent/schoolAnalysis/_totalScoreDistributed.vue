@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <div class="charts_box">
+    <!-- <div class="charts_box">
       <div class="charts_item">
         <p class="max_style p1">623.5</p>
         <p class="p2">总分最高成绩</p>
@@ -22,7 +22,7 @@
         <p class="average_style p1">449.57</p>
         <p class="p2">总分最高成绩</p>
       </div>
-    </div>
+    </div> -->
 
     <div class="charts_wapper">
       <div class="charts_left">
@@ -34,14 +34,13 @@
         />
       </div>
       <div class="charts_table">
-        <div class="table_list">
-          <div class="table_list_left">[0.57]分区间</div>
-          <div class="table_list_center">1</div>
-          <div class="table_list_right">人</div>
-        </div>
-        <div class="table_list">
-          <div class="table_list_left">[0.57]分区间</div>
-          <div class="table_list_center">1</div>
+        <div
+          class="table_list"
+          v-for="(item,i) in TableList"
+          :key="i"
+        >
+          <div class="table_list_left">{{item.name}}分区间</div>
+          <div class="table_list_center">{{item.peopleNum}}</div>
           <div class="table_list_right">人</div>
         </div>
       </div>
@@ -73,14 +72,23 @@
           tid: '',
           url:this.URL.GetTotalScoreDistribution
         },
-        chartData:[],
         theight:0
       }
     },
 
     computed: {
       ...mapState('getExam', ['tableLoading']),
-      ...mapState('_totalScoreDistributed', ['TableList','TotalTable']),
+      ...mapState('totalScoreDistributed', ['TableList']),
+
+      chartData(){
+        return this.TableList.length ? {
+          columns:['区间', '全体'],
+          rows:this.TableList.map(element =>({
+                      '区间': element.name,
+                      '全体': element.peopleNum
+                    }))
+        } : {}
+      }
     },
 
     mounted () {
@@ -94,7 +102,7 @@
 
       getTable() {
         // 获取table
-        this.$store.dispatch('_totalScoreDistributed/GetStuResults', this.parameter)
+        this.$store.dispatch('totalScoreDistributed/GetStuResults', this.parameter)
       },
 
     },
@@ -165,6 +173,8 @@
       margin-left: 30px;
       height: 360px;
       margin-top: 20px;
+      overflow: auto;
+      padding: 10px 0 15px 0;
     }
   }
   .table_list{
