@@ -79,9 +79,9 @@
 </template>
 
 <script>
-  import parking1 from './_analyzed'
-  import parking2 from './_totalScoreDistributed'
-  import parking3 from './_criticalBirth'
+  import parking1 from './analyzed/'
+  import parking2 from './totalScoreDistributed/'
+  import parking3 from './criticalBirth/'
   // import Parking4 from './_sectionNumPeople'
   // import Parking5 from './_scoringRate'
 

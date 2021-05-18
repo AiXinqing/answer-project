@@ -81,11 +81,11 @@
 </template>
 
 <script>
-  import Parking1 from './_averageRank'
-  import Parking2 from './_gradesOverview'
-  import Parking3 from './_gradePercentage'
-  import Parking4 from './_sectionNumPeople'
-  import Parking5 from './_scoringRate'
+  import Parking1 from './averageRank/'
+  import Parking2 from './gradesOverview/'
+  import Parking3 from './gradePercentage/'
+  import Parking4 from './sectionNumPeople/'
+  import Parking5 from './scoringRate/'
 
   import { mapState } from 'vuex'
   export default {
