@@ -67,7 +67,7 @@
           :class="['cur_style',{cur:iscur==index}]"
           href="javascript:void(0)"
           :id="`parkingA${index + 1}`"
-          @click="iscur=index,goAnchor('Parking' + (index + 1))"
+          @click="iscur=index,goAnchor('parking' + (index + 1))"
         >
           {{tab.name}}
         </a>
@@ -97,7 +97,7 @@
 
     data() {
       return {
-        tabView: 'Parking1',
+        tabView: 'parking1',
         tabsAnchor: [
           {
             name:'总体情况汇总'
@@ -181,11 +181,11 @@
       windowScroll() {
         // 滚动条距离页面顶部的距离
         // 以下写法原生兼容
-        let parkingA1 = document.getElementById('Parking1').offsetTop
-        let parkingA2 = document.getElementById('Parking2').offsetTop
-        let parkingA3 = document.getElementById('Parking3').offsetTop
-        let parkingA4 = document.getElementById('Parking4').offsetTop
-        let parkingA5 = document.getElementById('Parking5').offsetTop
+        let parkingA1 = document.getElementById('parking1').offsetTop
+        let parkingA2 = document.getElementById('parking2').offsetTop
+        let parkingA3 = document.getElementById('parking3').offsetTop
+        let parkingA4 = document.getElementById('parking4').offsetTop
+        let parkingA5 = document.getElementById('parking5').offsetTop
 
         let curStyle = document.getElementsByClassName('cur_style')
             for(let i = 0; i < 5;i++){

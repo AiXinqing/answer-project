@@ -63,8 +63,8 @@
       </div>
       <div class="el_table_wapper">
         <exam-table
-          :tablecols="totalScoreTableColumn"
-          :tableData="totalScoreTableData"
+          :tablecols="totalScoretableColumn"
+          :tableData="totalScoretableData"
           :isIndex="false"
           :isPagination="false"
           :theight="theight"
@@ -158,7 +158,7 @@
           tid: '',
           tsid:'',
           showGrade:true,
-          url:this.URL.ExportClassScoreScaleNum
+          url:this.URL.GetClassScoreScaleNum
         },
 
         theight:0,
@@ -284,14 +284,18 @@
           })
 
           return {
+            avgScore: item.avgScore,
             avgScoreRate: item.avgScoreRate,
             cid: item.cid,
             cname: item.cname,
+            fullScore: item.fullScore,
             maxScore: item.maxScore,
             minScore: item.minScore,
             rank: item.rank,
+            rankTopNum: item.rankTopNum,
             referenceNumber: item.referenceNumber,
             teacher: item.teacher,
+
             ...dynamic
           }
         }) : []
@@ -307,6 +311,7 @@
           if(this.tsid != 0){
             this.$nextTick(() => {
               this.totalScoreParameter.tid = this.prmTid
+              this.totalScoreParameter.tsid = this.tsid
               this.getTotalScoreTable()
             })
           }
@@ -318,6 +323,7 @@
       if(this.prmTid != ''){
         this.parameter.tid = this.prmTid
         this.subjectParameter.tid = this.prmTid
+        this.totalScoreParameter.tid = this.prmTid
         this.getTable()
       }
     },

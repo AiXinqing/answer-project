@@ -12,7 +12,7 @@
     SET_TABLE: (state, res) => {
       const { ASAnalyseSettingInfo, ClassScoreInfo } = res.ResponseContent
       state.totalScoreheader = ASAnalyseSettingInfo
-      state.totalScoreTable =  ClassScoreInfo
+      state.totalScoreTable = ClassScoreInfo
     },
 
   }
