@@ -54,6 +54,13 @@
         :subjects-arr="subjectsArr"
       />
 
+      <parking6
+        class="mar_T10"
+        id="parking6"
+        :prmTid="prmTid"
+        :subjects-arr="subjectsArr"
+      />
+
       <!-- 动态锚点 -->
     </div>
 
@@ -84,6 +91,7 @@
   import parking3 from './criticalBirth/'
   import parking4 from './sectionNumPeople/'
   import parking5 from './subjectExam/'
+  import parking6 from './excellentGrade/'
 
   import { mapState } from 'vuex'
   export default {
@@ -92,7 +100,8 @@
       parking2,
       parking3,
       parking4,
-      parking5
+      parking5,
+      parking6
     },
 
     data() {
