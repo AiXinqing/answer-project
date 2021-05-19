@@ -1,18 +1,18 @@
   import {
     GetStuResults
-  } from '@/config/classAnalysis/gradePercentage'
+  } from '@/config/schoolAnalysis/subjectExam'
 
   const state = {
-    headerTable: [],
-    TableList: [],
+    subjectHeader: [],
+    subjectTable: [],
   }
 
   const mutations = {
 
     SET_TABLE: (state, res) => {
-      const { ASAnalyseSettingInfo, ClassScoreInfo } = res.ResponseContent
-      state.headerTable = ASAnalyseSettingInfo
-      state.TableList = ClassScoreInfo
+      const {SubjectScoreInfo,ASAnalyseSettingInfo} =  res.ResponseContent
+      state.subjectTable =  SubjectScoreInfo
+      state.subjectHeader =  ASAnalyseSettingInfo
     },
 
   }
@@ -21,8 +21,8 @@
 
     GetStuResults({ commit }, padata) {
       return new Promise((resolve, reject) => {
-        const { tid, tsid, url } = padata
-        GetStuResults({ tid, tsid, url}).then(res => {
+        const { tid, url } = padata
+        GetStuResults({ tid, url}).then(res => {
           commit('SET_TABLE', res)
           resolve(res)
           return res
