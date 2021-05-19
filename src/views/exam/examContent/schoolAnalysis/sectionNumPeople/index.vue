@@ -4,7 +4,7 @@
     <div class="card_contetn">
       <div class="card_item">
         <i></i>
-        <span>分数段的人数分布</span>
+        <span>分段人数分布</span>
       </div>
       <div class="search_right">
 

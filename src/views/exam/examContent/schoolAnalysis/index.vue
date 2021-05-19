@@ -114,12 +114,12 @@
           {
             name:'总分分布'
           },
-          {
-            name:'总分上档线分析'
-          },
-          {
-            name:'学科上档线分析'
-          },
+          // {
+          //   name:'总分上档线分析'
+          // },
+          // {
+          //   name:'学科上档线分析'
+          // },
           {
             name:'临界生分布'
           },
@@ -171,7 +171,7 @@
       if(this.prmTid != ''){
         this.getExamFunc(this.prmTid)
       }
-     // window.addEventListener('scroll', this.windowScroll)
+      window.addEventListener('scroll', this.windowScroll)
     },
 
     methods: {
@@ -195,9 +195,10 @@
         let parkingA3 = document.getElementById('parking3').offsetTop
         let parkingA4 = document.getElementById('parking4').offsetTop
         let parkingA5 = document.getElementById('parking5').offsetTop
+        let parkingA6 = document.getElementById('parking6').offsetTop
 
         let curStyle = document.getElementsByClassName('cur_style')
-            for(let i = 0; i < 5;i++){
+            for(let i = 0; i < 6;i++){
               curStyle[i].classList.remove('cur')
             }
 
@@ -213,6 +214,8 @@
               document.getElementById('parkingA4').classList.add("cur")
             }else if(scrollTop <= parkingA5 ){
               document.getElementById('parkingA5').classList.add("cur")
+            }else if(scrollTop <= parkingA6 ){
+              document.getElementById('parkingA6').classList.add("cur")
             }
 
       }
@@ -223,7 +226,7 @@
 
 <style lang="less" scoped>
   @import '~@/assets/css/variables.less';
-  .Anchor_box{
-    display: none
-  }
+  // .Anchor_box{
+  //   display: none
+  // }
 </style>
