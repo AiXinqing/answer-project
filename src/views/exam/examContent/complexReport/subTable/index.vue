@@ -390,6 +390,9 @@
 
       handleInquire(){
         // 输入框查询
+        if(this.tsid == ''){
+          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
+        }
         this.$nextTick(()=>{
           this.getTable()
         })
