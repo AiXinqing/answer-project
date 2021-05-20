@@ -73,7 +73,7 @@
           {
             prop:'cname',
             label:'班级',
-            minWidth:'140',
+            width:'120',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -81,7 +81,7 @@
           {
             prop:'stuname',
             label:'姓名',
-            minWidth:'100',
+            minWidth:'80',
             align:'center',
             type:'Html'
           },

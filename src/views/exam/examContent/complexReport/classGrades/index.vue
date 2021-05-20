@@ -66,7 +66,7 @@
           {
             prop:'cname',
             label:'班级',
-            minWidth:'140',
+            width:'120',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -82,7 +82,7 @@
           {
             prop:'teacher',
             label:'班主任',
-            minWidth:'120',
+            minWidth:'80',
             align:'center',
             type:'Text',
             color:'font'
@@ -90,7 +90,7 @@
           {
             prop:'maxScore',
             label:'最高分',
-            minWidth:'100',
+            minWidth:'80',
             sortable:true,
             align:'center',
             type:'Html'
@@ -98,7 +98,7 @@
           {
             prop:'minScore',
             label:'最低分',
-            minWidth:'120',
+            minWidth:'80',
             sortable:true,
             align:'center',
             type:'Html'

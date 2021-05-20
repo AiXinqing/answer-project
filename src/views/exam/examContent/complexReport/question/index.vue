@@ -66,7 +66,7 @@
           {
             prop:'name',
             label:'题号',
-            minWidth:'140',
+            width:'80',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -74,15 +74,14 @@
           {
             prop:'type',
             label:'题型',
-            minWidth:'100',
-            sortable:true,
+            width:'72',
             align:'center',
             type:'Html'
           },
           {
             prop:'fullScore',
             label:'满分',
-            minWidth:'120',
+            width:'80',
             align:'center',
             type:'Html',
             color:'font'
@@ -90,8 +89,7 @@
           {
             prop:'answer',
             label:'正确答案',
-            minWidth:'100',
-            sortable:true,
+            minWidth:'80',
             align:'center',
             type:'Html'
           },

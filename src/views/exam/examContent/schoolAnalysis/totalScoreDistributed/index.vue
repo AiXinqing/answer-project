@@ -9,21 +9,6 @@
       </div>
     </div>
 
-    <!-- <div class="charts_box">
-      <div class="charts_item">
-        <p class="max_style p1">623.5</p>
-        <p class="p2">总分最高成绩</p>
-      </div>
-      <div class="charts_item">
-        <p class="min_style p1">0</p>
-        <p class="p2">总分最高成绩</p>
-      </div>
-      <div class="charts_item">
-        <p class="average_style p1">449.57</p>
-        <p class="p2">总分最高成绩</p>
-      </div>
-    </div> -->
-
     <div class="charts_wapper">
       <div class="charts_left">
         <lineCharts

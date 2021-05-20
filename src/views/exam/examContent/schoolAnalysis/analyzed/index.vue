@@ -69,7 +69,6 @@
             align:'center',
             fixed:'left',
             type:'Html',
-            sortable:true,
           },
           {
             prop:'classNum',
@@ -77,7 +76,6 @@
             minWidth:'120',
             align:'center',
             type:'Html',
-            sortable:true,
           },
           {
             prop:'fullScore',
@@ -85,7 +83,6 @@
             minWidth:'120',
             align:'center',
             type:'Html',
-            sortable:true,
           },
           {
             prop:'maxScore',
@@ -93,7 +90,6 @@
             minWidth:'120',
             align:'center',
             type:'Html',
-            sortable:true,
           },
           {
             prop:'minScore',
@@ -101,7 +97,6 @@
             minWidth:'120',
             align:'center',
             type:'Html',
-            sortable:true,
           },
           {
             prop:'avgScore',
@@ -109,7 +104,6 @@
             minWidth:'120',
             align:'center',
             type:'Html',
-            sortable:true,
           },
           {
             prop:'stdDeviation',
@@ -117,7 +111,6 @@
             minWidth:'120',
             align:'center',
             type:'Html',
-            sortable:true,
           }
         ],
 
@@ -125,7 +118,7 @@
           {
             prop:'sname',
             label:'学科',
-            minWidth:'120',
+            minWidth:'80',
             align:'center',
             fixed:'left',
             type:'Html',

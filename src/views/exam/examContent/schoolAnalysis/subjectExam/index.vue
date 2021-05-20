@@ -100,7 +100,6 @@
             align:'center',
             fixed:'left',
             type:'Html',
-            sortable:true,
           }
         ],
         rankArr:[

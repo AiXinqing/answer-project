@@ -72,7 +72,7 @@
           {
             prop:'cname',
             label:'班级',
-            minWidth:'140',
+            width:'120',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -80,7 +80,7 @@
           {
             prop:'referenceNumber',
             label:'参考人数',
-            minWidth:'100',
+            minWidth:'80',
             sortable:true,
             align:'center',
             type:'Html'
