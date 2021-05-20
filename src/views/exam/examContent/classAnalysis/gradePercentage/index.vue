@@ -7,7 +7,7 @@
         <span>各等级人数占比比较</span>
       </div>
       <div class="search_right">
-        <div class="search_select">
+        <div class="search_select search_style">
           <hj-select
             :items="options"
             size="mini"
@@ -172,7 +172,7 @@
 
 <style lang="less" scoped>
   .card_item{
-    width:78%;
+    width:82.5%;
   }
   .search_right{
     display:flex;
@@ -182,4 +182,15 @@
     }
   }
 </style>
+
+<style lang="less">
+  .search_style{
+    width:80px;
+
+    .hj-select{
+      width:80px;
+    }
+  }
+</style>
+
 

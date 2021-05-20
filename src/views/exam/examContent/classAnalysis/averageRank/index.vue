@@ -7,7 +7,7 @@
         <span>学科平均分排名</span>
       </div>
       <div class="search_right">
-        <div class="search_select" style="margin-right:30px;">
+        <div class="search_select search_style" style="margin-left:10px;">
           <hj-select
             :items="options"
             size="mini"

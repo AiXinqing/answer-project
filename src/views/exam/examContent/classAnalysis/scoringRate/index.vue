@@ -7,7 +7,7 @@
         <span>学科试题得分率对比</span>
       </div>
       <div class="search_right">
-        <div class="search_select">
+        <div class="search_select search_style">
           <hj-select
             :items="options"
             size="mini"
@@ -174,7 +174,7 @@
 
 <style lang="less" scoped>
   .card_item{
-    width:78%;
+    width:82.1%;
   }
   .search_right{
     display:flex;

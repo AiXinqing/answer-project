@@ -50,7 +50,7 @@
       <div class="title_box">
         <div class="title_left">总分等级结构表现</div>
         <div class="title_right">
-          <div class="search_select">
+          <div class="search_select search_style">
             <hj-select
               :items="options"
               size="mini"

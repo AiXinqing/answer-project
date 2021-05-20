@@ -11,7 +11,7 @@
     <div class="demo-input-suffix">
       <span>临界分：</span>
       <el-input
-        placeholder="请选择日期"
+        placeholder="请输入临界分"
         v-model="criticalScale">
       </el-input>
       <span class="unit">%</span>
@@ -19,7 +19,7 @@
     <div class="demo-input-suffix">
       <span>浮动分：</span>
       <el-input
-        placeholder="请选择日期"
+        placeholder="请输入浮动分"
         v-model="floatScale">
       </el-input>
       <span class="unit">%</span>

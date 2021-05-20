@@ -17,7 +17,7 @@
           />
         </div>
 
-        <div class="search_select">
+        <div class="search_select search_style">
           <hj-select
             :items="options"
             size="mini"
@@ -198,7 +198,7 @@
 <style lang="less" scoped>
   @import '~@/assets/css/variables.less';
   .card_item{
-    width:632px;
+    width:682px;
   }
   .search_right{
     display:flex;
