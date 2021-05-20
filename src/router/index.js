@@ -10,6 +10,11 @@ import classAnalysis from '@/views/exam/examContent/classAnalysis'
 import schoolAnalysis from '@/views/exam/examContent/schoolAnalysis'
 import jointExam from '@/views/exam/examContent/jointExamAnalysis'
 
+// 教师分析
+import teacherHome from '@/views/teacherAnalysis/analysisContent'
+import testAnalysis from '@/views/teacherAnalysis/analysisContent/testAnalysis'
+import subtopicScore from '@/views/teacherAnalysis/analysisContent/subtopicScore'
+
 Vue.use(VueRouter)
 
 const routes = [{
@@ -39,7 +44,7 @@ const routes = [{
         name: 'examHome',
         component: examHome,
         meta: {
-          title:'智汇e校园-分析'
+          title:'智汇e校园-阅卷分析'
         }
       },
       {
@@ -47,7 +52,7 @@ const routes = [{
         name: 'classAnalysis',
         component: classAnalysis,
         meta: {
-          title:'智汇e校园-分析'
+          title:'智汇e校园-阅卷分析'
         }
       },
       {
@@ -55,7 +60,7 @@ const routes = [{
         name: 'schoolAnalysis',
         component: schoolAnalysis,
         meta: {
-          title:'智汇e校园-分析'
+          title:'智汇e校园-阅卷分析'
         }
       },
       {
@@ -63,9 +68,41 @@ const routes = [{
         name: 'jointExam',
         component: jointExam,
         meta: {
-          title:'智汇e校园-分析'
+          title:'智汇e校园-阅卷分析'
         }
       },
+    ]
+  },
+  {
+    // 教师分析
+    path: '/teacherHome',
+    name: 'teacherHome',
+    component: () => import('@/views/teacherAnalysis'),
+    children: [
+      {
+        path: '/',
+        name: 'teacherHome',
+        component: teacherHome,
+        meta: {
+          title:'智汇e校园-教师分析'
+        }
+      },
+      {
+        path: '/testAnalysis',
+        name: 'testAnalysis',
+        component: testAnalysis,
+        meta: {
+          title:'智汇e校园-阅卷分析'
+        }
+      },
+      {
+        path: '/subtopicScore',
+        name: 'subtopicScore',
+        component: subtopicScore,
+        meta: {
+          title:'智汇e校园-阅卷分析'
+        }
+      }
     ]
   }
 ]
