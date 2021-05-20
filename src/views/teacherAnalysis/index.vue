@@ -26,7 +26,7 @@
   export default {
     data() {
       return {
-        active:'examHome',
+        active:'teacherHome',
         linkData: [
           {
             'calssname':'teacherHome',
