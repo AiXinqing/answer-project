@@ -58,4 +58,22 @@ export const URL = {
   ExportSubjectScoreLvlContrast: BASEURL + '/Report/AnlyReport/ExportSubjectScoreLvlContrast', //各科成绩等级人数占比下载
   GetClassScoreRankNum: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreRankNum', //优秀生/学困生分析
   ExportClassScoreRankNum: BASEURL + '/Report/AnlyReport/ExportClassScoreRankNum', //优秀生/学困生分析下载
+
+  //---------------------------------------教师分析
+  GetAsTestList: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetAsTestList', // 获取考次列表
+  GetAsTestClass: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetAsTestClass', // 获取本次考试的班级科目
+  GetGeneralSituation: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetGeneralSituation', // 获取整体概况信息
+  GetClassScoreLvlAnalysis: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreLvlAnalysis', // 获取学科等级分布
+  GetClassScoreContrastStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreContrastStuDetails', // 获取学科等级分布学生详情
+  GetStuResultsHeade: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetStuResultsHeade', // 获取学科等级分布学生详情动态表头
+  GetTeacherSubjectScoreContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetTeacherSubjectScoreContrast', // 学科对比
+  GetTeacherClassScoreContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetTeacherClassScoreContrast', // 学科对比
+  GetClassStuTotalScore: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassStuTotalScore', // 成绩单（全科）
+  ExportClassStuTotalScore: BASEURL + '/Report/AnlyReport/ExportClassStuTotalScore', // 成绩单（全科）下载
+  GetClassStuSubjectScore: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassStuSubjectScore', // 成绩单（单科）
+  ExportClassStuSubjectScore: BASEURL + '/Report/AnlyReport/ExportClassStuSubjectScore', // 成绩单（单科）下载
+  GetTeacherClassQuestion: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetTeacherClassQuestion', // 试题分析
+  ExportTeacherClassQuestion: BASEURL + '/Report/AnlyReport/ExportTeacherClassQuestion', // 试题分析下载
+  GetTeacherClassStuSmallScore: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetTeacherClassStuSmallScore', // 学生小题得分
+
 }
