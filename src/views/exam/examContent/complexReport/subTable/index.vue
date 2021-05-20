@@ -355,6 +355,9 @@
       handleSizeChange(val){
         // 分页每页显示数量
         this.page.pageSize = val
+        if(this.tsid == ''){
+          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+        }
         this.$nextTick(()=>{
           this.getTable()
         })
@@ -363,6 +366,9 @@
       handleCurrentChange(val){
         // 分页起始页
         this.page.pageNum = val
+        if(this.tsid == ''){
+          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+        }
         this.$nextTick(()=>{
           this.getTable()
         })
