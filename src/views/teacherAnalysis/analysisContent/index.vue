@@ -8,7 +8,7 @@
           <hj-select
             :items="examOptions"
             size="mini"
-            :value="exam"
+            :value="tid"
             @change="handelExamChange"
           ></hj-select>
         </div>
@@ -17,7 +17,7 @@
           <hj-select
             :items="classOptions"
             size="mini"
-            :value="classSelect"
+            :value="cid"
             @change="handelClassChange"
           ></hj-select>
         </div>
@@ -44,6 +44,8 @@
 
 <script>
   import overallOverview from "./teacherHome/overallOverview"
+  import { mapState} from 'vuex'
+
   export default {
 
     components: {
@@ -52,20 +54,8 @@
 
     data() {
       return {
-        examOptions: [
-          {
-            label:'2020年秋期八年级入学考试',
-            value:0,
-          }
-        ],
-        classOptions:[
-          {
-            label:'2班',
-            value:0,
-          }
-        ],
-        exam:0,
-        classSelect:0,
+        tid:0,
+        cid:0,
         subjectBox:[
           {
             name:'全部',
@@ -80,13 +70,59 @@
             id:2
           }
         ],
-        subjectSelect:0
+        subjectSelect:0,
+        parameter:{
+          tid: '',
+          url:this.URL.GetAsTestClass
+        },
       }
     },
 
-    methods: {
-      handelExamChange() {
+    computed: {
+      ...mapState('teacherHome', ['subject','classList']),
 
+      examOptions(){
+        return this.subject.length ? this.subject.map(item => ({label:item.name,value:item.tid})) : []
+      },
+
+      classOptions(){
+        return this.classList.length ? this.classList.map(item => ({label:item.cname,value:item.cid})) : []
+      }
+    },
+
+    watch: {
+      examOptions: {
+        immediate: true,
+        handler () {
+          this.tid =  this.examOptions.length ? this.examOptions.find((element,i) => i == 0).tid : 0
+          if(this.tid != 0){
+            // this.$nextTick(() => {
+            //   this.parameter.tid = this.tid
+            //   this.getClassList()
+            // })
+          }
+        },
+      },
+      classOptions: {
+        immediate: true,
+        handler () {
+          this.cid =  this.classOptions.length ? this.classOptions.find((element,i) => i == 0).cid : 0
+        },
+      },
+    },
+
+    mounted () {
+      this.subjectList()
+    },
+
+    methods: {
+      handelExamChange(val) {
+        console.log(val)
+        this.tid = val
+        this.$nextTick(() => {
+          this.parameter.tid = this.tid
+          this.getClassList()
+        })
       },
       handelClassChange() {
 
@@ -94,6 +130,14 @@
 
       subjectChange(item){
         this.subjectSelect = item.id
+      },
+      subjectList(){
+        // 获取考次列表
+        this.$store.dispatch('teacherHome/getSubject', {url:this.URL.GetAsTestList})
+      },
+
+      getClassList(){
+        this.$store.dispatch('teacherHome/getClassList', this.parameter)
       }
     },
   }
@@ -135,6 +179,11 @@
           width: 250px;
           .el-select{
             width: 250px;
+          }
+
+          .el-input--mini .el-input__inner{
+            text-align: left;
+            text-indent: 1em;
           }
         }
 
