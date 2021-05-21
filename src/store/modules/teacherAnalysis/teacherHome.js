@@ -1,17 +1,17 @@
   import {
-    getSubject,
+    getExamList,
     getClassList
   } from '@/config/teacherAnalysis/teacherHome'
 
   const state = {
-    subject: [],
+    examList: [],
     classList:[]
   }
 
   const mutations = {
 
     SET_SUBJECT: (state, res) => {
-      state.subject =  res.ResponseContent
+      state.examList =  res.ResponseContent
     },
 
     SET_CLASSLIST: (state, res) => {
@@ -21,10 +21,10 @@
 
   const actions = {
 
-    getSubject({ commit }, padata) {
+    getExamList({ commit }, padata) {
       return new Promise((resolve, reject) => {
         const { url } = padata
-        getSubject({ url }).then(res => {
+        getExamList({ url }).then(res => {
           commit('SET_SUBJECT', res)
           resolve(res)
           return res

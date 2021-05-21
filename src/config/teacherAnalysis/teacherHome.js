@@ -1,6 +1,6 @@
 import  request from '@/utils/http'
 
-export function getSubject({ url }) {
+export function getExamList({ url }) {
   return request({
     url: url, //URL.GetStuResults,
     method: 'get',
