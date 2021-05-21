@@ -26,25 +26,29 @@
       <div class="subject_box">
         <div class="subject_left">选择科目：</div>
         <div class="subject_right">
-
-          <div
-            :class="['subject_item',{'active':item.id == subjectSelect}]"
-            v-for="item in subjectBox"
-            :key="item.id"
-            @click="subjectChange(item)"
-          >{{item.name}}</div>
+          <template v-if="subjectBox.length">
+            <div
+              :class="['subject_item',{'active':item.tsid == tsid }]"
+              v-for="item in subjectBox"
+              :key="item.tisd"
+              @click="subjectChange(item)"
+            >{{item.name}}</div>
+          </template>
+          <template v-else><div class="no_data">暂无数据</div></template>
 
         </div>
       </div>
     </div>
 
-    <overall-overview class="mr_10" />
+    <overall-overview
+      ref="overallOverview"
+      class="mr_10" />
   </div>
 </template>
 
 <script>
   import overallOverview from "./teacherHome/overallOverview"
-  import { mapState} from 'vuex'
+  import { mapState } from 'vuex'
 
   export default {
 
@@ -56,21 +60,8 @@
       return {
         tid:0,
         cid:0,
-        subjectBox:[
-          {
-            name:'全部',
-            id:0
-          },
-          {
-            name:'语文',
-            id:1
-          },
-          {
-            name:'数学',
-            id:2
-          }
-        ],
-        subjectSelect:0,
+        tsid:0,
+        subjectBox:[],
         parameter:{
           tid: '',
           url:this.URL.GetAsTestClass
@@ -79,36 +70,49 @@
     },
 
     computed: {
-      ...mapState('teacherHome', ['subject','classList']),
+      ...mapState('teacherHome', ['examList','classList']),
 
       examOptions(){
-        return this.subject.length ? this.subject.map(item => ({label:item.name,value:item.tid})) : []
+        return this.examList.length ? this.examList.map(item => ({label:item.name,value:item.tid})) : []
       },
 
       classOptions(){
         return this.classList.length ? this.classList.map(item => ({label:item.cname,value:item.cid})) : []
-      }
+      },
+
+      cidVal () {
+        return this.classOptions.length ? this.classOptions[0].value : ''
+      },
+
     },
 
     watch: {
-      examOptions: {
+      cidVal: {
         immediate: true,
         handler () {
-          this.tid =  this.examOptions.length ? this.examOptions.find((element,i) => i == 0).tid : 0
-          if(this.tid != 0){
-            // this.$nextTick(() => {
-            //   this.parameter.tid = this.tid
-            //   this.getClassList()
-            // })
+          if(this.cidVal != '' && this.cid != 0){
+            this.cid = this.cidVal
+            this.subjectBox = this.classList.filter(item => item.cid == this.cid)[0].ASTestSubjectList.map(item => ({name:item.sname,tsid:item.tsid}))
           }
-        },
+        }
       },
-      classOptions: {
+      subjectBox: {
         immediate: true,
         handler () {
-          this.cid =  this.classOptions.length ? this.classOptions.find((element,i) => i == 0).cid : 0
-        },
-      },
+          if(this.subjectBox.length){
+            this.tsid = this.subjectBox.find((element,i) => i == 0).tsid
+            if(this.tsid != 0){
+              this.$nextTick(() => {
+                this.$refs.overallOverview.initTable({
+                  tid:this.tid,
+                  cid:this.cid,
+                  tsid:this.tsid,
+                })
+              })
+            }
+          }
+        }
+      }
     },
 
     mounted () {
@@ -117,26 +121,33 @@
 
     methods: {
       handelExamChange(val) {
-        console.log(val)
         this.tid = val
         this.$nextTick(() => {
           this.parameter.tid = this.tid
-          this.getClassList()
+          this.getClassSubjectList()
         })
       },
-      handelClassChange() {
-
+      handelClassChange(val) {
+        this.cid = val
+        this.subjectBox = this.classList.filter(item => item.cid == val)[0].ASTestSubjectList.map(item => ({name:item.sname,tsid:item.tsid}))
+        this.$nextTick(() => {
+          this.$refs.overallOverview.initTable({
+            tid:this.tid,
+            cid:this.cid,
+            tsid:this.tsid,
+          })
+        })
       },
 
       subjectChange(item){
-        this.subjectSelect = item.id
+        this.tsid = item.tsid
       },
       subjectList(){
         // 获取考次列表
-        this.$store.dispatch('teacherHome/getSubject', {url:this.URL.GetAsTestList})
+        this.$store.dispatch('teacherHome/getExamList', {url:this.URL.GetAsTestList})
       },
 
-      getClassList(){
+      getClassSubjectList(){
         this.$store.dispatch('teacherHome/getClassList', this.parameter)
       }
     },
@@ -226,4 +237,10 @@
     }
   }
 
+  .no_data {
+    line-height: 28px;
+    margin-top: 20px;
+    color: @font-999;
+    margin-left: 20px;
+  }
 </style>

@@ -16,3 +16,10 @@ export function getClassList({ tid, url }) {
   })
 }
 
+export function getProfileInfo({ tid,tsid,cid, url }) {
+  return request({
+    url: url, //URL.GetStuResults,
+    method: 'get',
+    params: { tid,tsid,cid }
+  })
+}
