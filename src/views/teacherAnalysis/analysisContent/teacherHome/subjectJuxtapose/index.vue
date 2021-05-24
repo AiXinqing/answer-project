@@ -14,12 +14,23 @@
         :loading="tableLoading"
       ></exam-table>
     </div>
+
+    <!-- 弹出框 -->
+    <subject-detail
+      ref="subjectDetail"
+    />
   </div>
 </template>
 
 <script>
   import { mapState } from 'vuex'
+  import subjectDetail from './_subjectDetail'
   export default {
+
+    components: {
+      subjectDetail,
+    },
+
     data() {
       return {
         parameter:{
@@ -79,7 +90,15 @@
               {
                 label:'查看班级详情',
                 handle: row => {
-                  close.log(row)
+                  const {tid,tsid,cid} = this.parameter
+                  let obj = {
+                    ...row,
+                    tid: tid,
+                    tsid: tsid,
+                    cid: cid,
+                  }
+
+                  this.hanldePopFunc(obj)
                 }
               }
             ]
@@ -120,6 +139,10 @@
         this.$nextTick(()=>{
           this.$store.dispatch('subjectJuxtapose/getSubjectJuxtapose', this.parameter)
         })
+      },
+
+      hanldePopFunc(row){
+        this.$refs.subjectDetail.openDetails(row)
       }
     },
   }
