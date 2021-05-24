@@ -23,3 +23,11 @@ export function getProfileInfo({ tid,tsid,cid, url }) {
     params: { tid,tsid,cid }
   })
 }
+
+export function getSubjectJuxtapose({ tid,tsid,cid, url }) {
+  return request({
+    url: url, //URL.GetStuResults,
+    method: 'get',
+    params: { tid,tsid,cid }
+  })
+}

@@ -43,17 +43,24 @@
     <overall-overview
       ref="overallOverview"
       class="mr_10" />
+
+    <subjectJuxtapose
+      ref="subjectJuxtapose"
+      class="mr_10"
+    />
   </div>
 </template>
 
 <script>
   import overallOverview from "./teacherHome/overallOverview"
+  import subjectJuxtapose from "./teacherHome/subjectJuxtapose"
   import { mapState } from 'vuex'
 
   export default {
 
     components: {
       overallOverview,
+      subjectJuxtapose
     },
 
     data() {
@@ -103,11 +110,13 @@
             this.tsid = this.subjectBox.find((element,i) => i == 0).tsid
             if(this.tsid != 0){
               this.$nextTick(() => {
-                this.$refs.overallOverview.initTable({
+                let formData = {
                   tid:this.tid,
                   cid:this.cid,
                   tsid:this.tsid,
-                })
+                }
+                this.$refs.overallOverview.initTable(formData)
+                this.$refs.subjectJuxtapose.initTable(formData)
               })
             }
           }
@@ -131,11 +140,14 @@
         this.cid = val
         this.subjectBox = this.classList.filter(item => item.cid == val)[0].ASTestSubjectList.map(item => ({name:item.sname,tsid:item.tsid}))
         this.$nextTick(() => {
-          this.$refs.overallOverview.initTable({
+          let formData = {
             tid:this.tid,
             cid:this.cid,
             tsid:this.tsid,
-          })
+          }
+
+          this.$refs.overallOverview.initTable(formData)
+          this.$refs.subjectJuxtapose.initTable(formData)
         })
       },
 
@@ -143,11 +155,14 @@
         // 切换科目
         this.tsid = item.tsid
         this.$nextTick(() => {
-          this.$refs.overallOverview.initTable({
+          let formData = {
             tid:this.tid,
             cid:this.cid,
             tsid:this.tsid,
-          })
+          }
+
+          this.$refs.overallOverview.initTable(formData)
+          this.$refs.subjectJuxtapose.initTable(formData)
         })
       },
       subjectList(){

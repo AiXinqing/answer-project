@@ -1,4 +1,5 @@
 <template>
+
   <el-table-column
     v-if="!column.childen"
     :prop="column.prop"
@@ -26,8 +27,27 @@
           :class="[{'text_button':scope.row[prop] != undefined || scope.row[prop] != '',},font_colorT(scope.row,column.prop)]"
           v-html="columnHtml(scope.row,column.prop)"
         >{{column.prop}}</el-button>
+
+        <!-- 操作区域 -->
+        <template
+          v-if="column.type==='operateBtn'"
+        >
+          <el-button
+            v-for="(btn,i) in  column.btnList"
+            :key="i"
+            :disabled="btn.isDisabled && btn.isDisabled(scope.row)"
+            :type="btn.type"
+            :size="btn.size || size"
+            :icon="btn.icon"
+            class="btn_column"
+            @click="btn.handle(scope.row,scope.$index)"
+          >{{btn.label}}</el-button>
+
+        </template>
       </template>
     </el-table-column>
+
+  <!-- 合并行 -->
   <el-table-column
     v-else
     :label="column.label"
@@ -206,4 +226,13 @@
     }
   }
 
+  button.el-button.btn_column.el-button--default.el-button--medium{
+    height: 28px;
+    line-height: 28px;
+    margin: 0;
+    border: none;
+    background: @bc_tr;
+    margin-bottom: 5px;
+    color: @main;
+  }
 </style>
