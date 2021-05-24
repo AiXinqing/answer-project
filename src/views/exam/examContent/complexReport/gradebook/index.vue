@@ -339,8 +339,7 @@
       downTable(){
         // 下载表格
         const {cids,keyWords,tid,tsid} = this.parameter
-        const { pageSize , pageNum} = this.pagination
-        window.open(`${this.URL.ExportStuSmallScore}?tid=${tid}&tsid=${tsid}&cids=${cids}&keyWords=&${keyWords}pageIndex=${pageNum}&pageSize=${pageSize}`)
+        window.open(`${this.URL.ExportStuResults}?tid=${tid}&tsid=${tsid}&cids=${cids}&keyWords=&${keyWords}`)
       },
 
       handleClear(){
