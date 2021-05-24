@@ -3,6 +3,17 @@
     <div class="title_name">
       <span>整体概况</span>
     </div>
+
+    <div class="el_table_wapper">
+      <exam-table
+        :tablecols="tableColumn"
+        :tableData="tableData"
+        :isIndex="false"
+        :isPagination="false"
+        :theight="theight"
+        :loading="tableLoading"
+      ></exam-table>
+    </div>
   </div>
 </template>
 
@@ -27,23 +38,15 @@
             type:'Html'
           },
           {
-            prop:'cname',
-            label:'应考人数',
+            prop:'referenceNumber',
+            label:'参考人数',
             width:'120',
             align:'center',
             fixed:'left',
             type:'Html'
           },
           {
-            prop:'cname',
-            label:'实考人数',
-            width:'120',
-            align:'center',
-            fixed:'left',
-            type:'Html'
-          },
-          {
-            prop:'cname',
+            prop:'avgScore',
             label:'平均分/满分',
             width:'120',
             align:'center',
@@ -51,7 +54,7 @@
             type:'Html'
           },
           {
-            prop:'cname',
+            prop:'maxScore',
             label:'最高/最低分',
             width:'120',
             align:'center',
@@ -63,8 +66,8 @@
     },
 
     computed: {
-      ...mapState('getExam', ['tableLoading']),
-      ...mapState('profileInfo', ['headerTable','TableList']),
+      ...mapState('getExam',['tableLoading']),
+      ...mapState('profileInfo',['headerTable','TableList']),
 
       tableColumn(){
         // 动态表头
@@ -76,6 +79,7 @@
             prop: `num_${ele.subname}`,
             type:'Html',
             sortable:true,
+            minWidth:'120',
           }))
         ] : []
       },
@@ -86,24 +90,24 @@
           item.DynamicDetail.forEach(item => {
             dynamic = {
               ...dynamic,
-              ...element,
-              [`num_${element.name}`]:element.num,
+              ...item,
+              [`num_${item.name}`]:item.num,
             }
           })
 
           return {
-            avgScore: item.avgScore,
+            avgScore: `${item.avgScore} / ${item.fullScore}`,
             avgScoreRate: item.avgScoreRate,
             cid: item.cid,
             cname: item.cname,
             fullScore: item.fullScore,
-            maxScore: item.maxScore,
+            maxScore: `${item.maxScore} / ${item.minScore}`,
             minScore: item.minScore,
             rank: item.rank,
             rankTopNum: item.rankTopNum,
-            referenceNumber: item.referenceNumber,
+            referenceNumber: `${item.referenceNumber}人`,
             teacher: item.teacher,
-            ...dynamic
+            ...dynamic,
           }
         }) : []
       }

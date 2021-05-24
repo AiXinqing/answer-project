@@ -140,7 +140,15 @@
       },
 
       subjectChange(item){
+        // 切换科目
         this.tsid = item.tsid
+        this.$nextTick(() => {
+          this.$refs.overallOverview.initTable({
+            tid:this.tid,
+            cid:this.cid,
+            tsid:this.tsid,
+          })
+        })
       },
       subjectList(){
         // 获取考次列表
