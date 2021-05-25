@@ -57,6 +57,12 @@
       class="mr_10"
     />
 
+    <!-- 成绩单 -->
+    <transcript
+      ref="transcript"
+      class="mr_10"
+    />
+
   </div>
 </template>
 
@@ -64,6 +70,7 @@
   import overallOverview from "./teacherHome/overallOverview"
   import subjectJuxtapose from "./teacherHome/subjectJuxtapose"
   import subjectContrast from "./teacherHome/subjectContrast"
+  import transcript from "./teacherHome/transcript"
   import { mapState } from 'vuex'
 
   export default {
@@ -71,7 +78,8 @@
     components: {
       overallOverview,
       subjectJuxtapose,
-      subjectContrast
+      subjectContrast,
+      transcript
     },
 
     data() {
@@ -129,6 +137,7 @@
                 this.$refs.overallOverview.initTable(formData)
                 this.$refs.subjectJuxtapose.initTable(formData)
                 this.$refs.subjectContrast.initTable(formData)
+                this.$refs.transcript.initTable(formData)
               })
             }
           }
@@ -161,6 +170,7 @@
           this.$refs.overallOverview.initTable(formData)
           this.$refs.subjectJuxtapose.initTable(formData)
           this.$refs.subjectContrast.initTable(formData)
+          this.$refs.transcript.initTable(formData)
         })
       },
 
@@ -177,6 +187,7 @@
           this.$refs.overallOverview.initTable(formData)
           this.$refs.subjectJuxtapose.initTable(formData)
           this.$refs.subjectContrast.initTable(formData)
+          this.$refs.transcript.initTable(formData)
         })
       },
       subjectList(){
@@ -199,6 +210,7 @@
     position: relative;
     left: 50%;
     transform: translateX(-50%);
+    padding-bottom: 20px;
   }
 
   .exam_subject{

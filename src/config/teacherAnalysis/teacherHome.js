@@ -58,3 +58,21 @@ export function singleSubjectContrast({ tid, tsid, topNum, url }) {
     params: { tid,tsid,topNum }
   })
 }
+
+//成绩单(全科)
+export function getTranscript({ tid, tsid,cid,keyWords, url }) {
+  return request({
+    url: url, //URL.GetStuResults,
+    method: 'get',
+    params: { tid, tsid,cid,keyWords }
+  })
+}
+
+//成绩单(单科)
+export function getSingleTranscript({ tid, tsid, cid, keyWords, url }) {
+  return request({
+    url: url, //URL.GetStuResults,
+    method: 'get',
+    params: { tid,tsid,cid,keyWords }
+  })
+}
