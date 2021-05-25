@@ -40,27 +40,38 @@
       </div>
     </div>
 
+    <!-- 整体概况 -->
     <overall-overview
       ref="overallOverview"
       class="mr_10" />
 
-    <subjectJuxtapose
+    <!-- 学科等级分布 -->
+    <subject-juxtapose
       ref="subjectJuxtapose"
       class="mr_10"
     />
+
+    <!-- 学科对比 -->
+    <subject-contrast
+      ref="subjectContrast"
+      class="mr_10"
+    />
+
   </div>
 </template>
 
 <script>
   import overallOverview from "./teacherHome/overallOverview"
   import subjectJuxtapose from "./teacherHome/subjectJuxtapose"
+  import subjectContrast from "./teacherHome/subjectContrast"
   import { mapState } from 'vuex'
 
   export default {
 
     components: {
       overallOverview,
-      subjectJuxtapose
+      subjectJuxtapose,
+      subjectContrast
     },
 
     data() {

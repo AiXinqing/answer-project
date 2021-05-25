@@ -40,3 +40,21 @@ export function getSubjectDetail({ tid,tsid,cid, asid, pageIndex, pageSize, url 
     params: { tid,tsid,cid, asid, pageIndex, pageSize }
   })
 }
+
+//学科对比全部
+export function subjectContrast({ tid,cid, url }) {
+  return request({
+    url: url, //URL.GetStuResults,
+    method: 'get',
+    params: { tid,cid }
+  })
+}
+
+//学科对比单科
+export function singleSubjectContrast({ tid, tsid, topNum, url }) {
+  return request({
+    url: url, //URL.GetStuResults,
+    method: 'get',
+    params: { tid,tsid,topNum }
+  })
+}
