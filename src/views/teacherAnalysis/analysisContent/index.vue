@@ -128,6 +128,7 @@
                 }
                 this.$refs.overallOverview.initTable(formData)
                 this.$refs.subjectJuxtapose.initTable(formData)
+                this.$refs.subjectContrast.initTable(formData)
               })
             }
           }
@@ -159,6 +160,7 @@
 
           this.$refs.overallOverview.initTable(formData)
           this.$refs.subjectJuxtapose.initTable(formData)
+          this.$refs.subjectContrast.initTable(formData)
         })
       },
 
@@ -174,6 +176,7 @@
 
           this.$refs.overallOverview.initTable(formData)
           this.$refs.subjectJuxtapose.initTable(formData)
+          this.$refs.subjectContrast.initTable(formData)
         })
       },
       subjectList(){

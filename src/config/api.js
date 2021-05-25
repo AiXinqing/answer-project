@@ -66,8 +66,8 @@ export const URL = {
   GetClassScoreLvlAnalysis: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreLvlAnalysis', // 获取学科等级分布
   GetClassScoreContrastStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreContrastStuDetails', // 获取学科等级分布学生详情
   GetStuResultsHeade: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetStuResultsHeade', // 获取学科等级分布学生详情动态表头
-  GetTeacherSubjectScoreContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetTeacherSubjectScoreContrast', // 学科对比
-  GetTeacherClassScoreContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetTeacherClassScoreContrast', // 学科对比
+  GetTeacherSubjectScoreContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetTeacherSubjectScoreContrast', // 学科对比（科目选择全部）
+  GetTeacherClassScoreContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetTeacherClassScoreContrast', // 学科对比（科目选择单科）
   GetClassStuTotalScore: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassStuTotalScore', // 成绩单（全科）
   ExportClassStuTotalScore: BASEURL + '/Report/AnlyReport/ExportClassStuTotalScore', // 成绩单（全科）下载
   GetClassStuSubjectScore: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassStuSubjectScore', // 成绩单（单科）
