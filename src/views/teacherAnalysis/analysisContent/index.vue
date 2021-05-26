@@ -58,10 +58,19 @@
     />
 
     <!-- 成绩单 -->
-    <transcript
-      ref="transcript"
-      class="mr_10"
-    />
+    <template v-if="tsid == 0">
+      <transcript
+        ref="transcript"
+        class="mr_10"
+      />
+    </template>
+    <template v-else>
+      <span>单科</span>
+      <singleTranscript
+        ref="transcript"
+        class="mr_10"
+      />
+    </template>
 
   </div>
 </template>
@@ -71,6 +80,7 @@
   import subjectJuxtapose from "./teacherHome/subjectJuxtapose"
   import subjectContrast from "./teacherHome/subjectContrast"
   import transcript from "./teacherHome/transcript"
+  import singleTranscript from "./teacherHome/transcript/singleTranscript"
   import { mapState } from 'vuex'
 
   export default {
@@ -79,7 +89,8 @@
       overallOverview,
       subjectJuxtapose,
       subjectContrast,
-      transcript
+      transcript,
+      singleTranscript
     },
 
     data() {

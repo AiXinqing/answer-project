@@ -59,6 +59,15 @@ export function singleSubjectContrast({ tid, tsid, topNum, url }) {
   })
 }
 
+//成绩单(全科) 动态表头
+export function GetStuResultsHeade({ tid, tsid, url }) {
+  return request({
+    url: url, //URL.GetStuResults,
+    method: 'get',
+    params: { tid, tsid }
+  })
+}
+
 //成绩单(全科)
 export function getTranscript({ tid, tsid,cid,keyWords, url }) {
   return request({

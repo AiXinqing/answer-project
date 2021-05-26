@@ -137,7 +137,7 @@
     width: 100%;
 
     &>div{
-      margin:0 10px 10px 10px;
+      margin:0 15px 10px 15px;
     }
   }
 </style>

@@ -1,22 +1,24 @@
-  import {
+import {
+    GetStuResultsHeade,
     getTranscript,
     getSingleTranscript
   } from '@/config/teacherAnalysis/teacherHome'
 
-  import {
-    dynamicHeader
-  } from '@/config/complexReport/classDetails'
-
   const state = {
     headerTable: [],
     TableList: [],
+    singleTableList: [],
   }
 
   const mutations = {
 
     SET_TABLE: (state, res) => {
-      // const { data } = res.ResponseContent
       state.TableList = res.ResponseContent
+    },
+
+    SET_SINGLETABLE: (state, res) => {
+      // 单科
+      state.singleTableList = res.ResponseContent
     },
 
     GET_PAGE: (state,page) => {
@@ -24,8 +26,7 @@
     },
 
     SET_HEADERTABLE: (state, res) => {
-      const data = res.ResponseContent
-      state.headerTable = data
+      state.headerTable = res.ResponseContent
     },
   }
 
@@ -48,7 +49,7 @@
       return new Promise((resolve, reject) => {
         const { tid, tsid,cid,keyWords, url } = padata
         getSingleTranscript({ tid, tsid,cid,keyWords, url}).then(res => {
-          commit('SET_TABLE', res)
+          commit('SET_SINGLETABLE', res)
           resolve(res)
           return res
         }).catch(error => {
@@ -58,8 +59,8 @@
     },
 
     // 获取动态表头
-    dynamicHeader ({ commit }, padata) {
-      return dynamicHeader(padata).then((res) => {
+    GetStuResultsHeade ({ commit }, padata) {
+      return GetStuResultsHeade(padata).then((res) => {
         commit('SET_HEADERTABLE', res)
         return res
       })

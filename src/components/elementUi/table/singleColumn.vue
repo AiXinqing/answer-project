@@ -28,6 +28,15 @@
           v-html="columnHtml(scope.row,column.prop)"
         >{{column.prop}}</el-button>
 
+        <!-- 排序操作区域 -->
+        <template v-if="column.type==='iconRank'">
+          <span
+            v-for="(icon,i) in  column.iconList"
+            :key="i"
+            v-html="columnIcon(scope.row,icon.beforeIcon,icon.afterIcon,icon.unit)"
+          >  </span>
+        </template>
+
         <!-- 操作区域 -->
         <template
           v-if="column.type==='operateBtn'"
@@ -147,6 +156,11 @@
         font_colorT: (row,prop) => {
           return row[prop]  == '' || row[prop]  == undefined ? 'transparent' : ''
         },
+
+        columnIcon:(row,beforeIcon,afterIcon,unit) => {
+          let classStr = row[beforeIcon] > row[afterIcon] ? 'el-icon-top' : 'el-icon-bottom'
+          return `<span class="icon_span left">${row[beforeIcon]}</span> <i class="columnIcon ${classStr}"></i> <span class="icon_span right">${row[afterIcon]}</span> ${unit}`
+        }
       }
     },
 
@@ -234,5 +248,24 @@
     background: @bc_tr;
     margin-bottom: 5px;
     color: @main;
+  }
+  i.columnIcon.el-icon-top{
+    color:@main;
+  }
+  i.columnIcon.el-icon-bottom{
+    color:@error;
+  }
+  span.icon_span {
+    display: inline-block;
+    min-width: 32px;
+    &.left{
+      text-align:right
+    }
+    &.right{
+      text-align:left
+    }
+  }
+  .el-table th, .el-table tr th {
+    height: 35px;
   }
 </style>

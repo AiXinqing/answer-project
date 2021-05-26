@@ -16,8 +16,9 @@
             :iSlot="iSlot"
           />
         </div>
-        <exam-button type="primary" @click="handleInquire" style="margin-right: 10px;">查询</exam-button>
-        <exam-button type="primary" @click="downloadTranscript" style="margin-right: 10px;">下载成绩单</exam-button>
+        <exam-button  type="primary" @click="handleInquire" style="margin-right: 10px;">查询</exam-button>
+        <exam-button  type="primary" @click="downloadTranscript" style="margin-right: 10px;">下载成绩单</exam-button>
+
       </div>
     </div>
 
@@ -42,6 +43,7 @@
         theight:0,
         keyWords:'',
         tsid:'',
+        tid:'',
         iSlot:[
           {
             type:'prefix',
@@ -57,13 +59,14 @@
           url:this.URL.GetClassStuTotalScore
         },
 
-        singleParameter:{ // 单科
+        HeadeParameter:{
           tid: '',
           tsid: '',
-          cid:'',
-          keyWords:'',
-          url:this.URL.GetClassStuSubjectScore
+          url:this.URL.GetStuResultsHeade
         },
+
+        data:[],
+
         fixedHeader:[
           {
             prop:'cname',
@@ -88,6 +91,28 @@
             type:'Html'
           },
         ],
+
+        columnMultiLine:[
+          {
+            prop:'tscore',
+            label:'分数',
+            width:'85',
+            align:'center',
+          },
+          {
+            prop:'gradeRank',
+            label:'学校排名',
+            width:'90',
+            align:'center',
+          },
+          {
+            prop:'classRank',
+            label:'班级排名',
+            width:'90',
+            align:'center',
+          },
+        ],
+
       }
     },
 
@@ -124,7 +149,7 @@
               }
             }),
           }))
-        ] : []
+        ] :  []
       },
 
       tableData(){
@@ -139,7 +164,7 @@
               sname: item.sname,
               [`tscore_${item.sname}`]: item.tscore,
               tsid: item.tsid,
-              tid: this.prmTid,
+              tid: this.tid,
               jump:1
             }
           })
@@ -154,7 +179,7 @@
             totalscore: item.totalscore,
             ...dynamic
           }
-        }) : []
+        }): []
       }
     },
 
@@ -164,46 +189,31 @@
           ...this.parameter,
           ...obj
         }
-        this.singleParameter = {
-          ...this.singleParameter,
+
+        this.HeadeParameter = {
+          ...this.HeadeParameter,
           ...obj
         }
 
-        if(obj.tsid == '0'){
-          this.tsid = ''
-          this.$nextTick(()=>{
-            this.generalTable()
-          })
-        }else{
-          this.tsid = obj.tsid
-          this.$nextTick(()=>{
-            this.singleTable()
-          })
-        }
+        this.tid = obj.tid
+
+        this.$nextTick(()=>{
+          this.generalTable()
+        })
+
       },
 
       generalTable(){
         // 全科
+        this.$store.dispatch('transcript/GetStuResultsHeade', this.HeadeParameter)
         this.$store.dispatch('transcript/getTranscript', this.parameter)
       },
 
-      singleTable(){
-        // 单科
-        this.$store.dispatch('transcript/getSingleTranscript', this.singleParameter)
-      },
 
       downloadTranscript(){
         // 下载表格
-        let formData = this.parameter
-        let url = this.URL.ExportClassStuTotalScore
-        if(this.tsid != ''){
-          formData = this.singleParameter
-          url = this.URL.ExportClassStuSubjectScore
-        }
-
-        const {cid,keyWords,tid,tsid} = formData
-
-        window.open(`${url}?tid=${tid}&tsid=${tsid}&cid=${cid}&keyWords=&${keyWords}`)
+        const {cid,keyWords,tid,tsid} = this.parameter
+        window.open(`${this.URL.ExportClassStuTotalScore}?tid=${tid}&tsid=${tsid}&cid=${cid}&keyWords=&${keyWords}`)
       },
 
       handleClear(){
@@ -211,14 +221,13 @@
       },
 
       handleInquire(){
-        // 输入框查询
-        if(this.tsid == ''){
-          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
-        }
+        this.parameter.keyWords = this.keyWords
+        console.log(this.parameter)
         this.$nextTick(()=>{
-          this.getTable()
+          this.generalTable()
         })
       },
+
     },
   }
 </script>
