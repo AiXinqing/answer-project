@@ -65,7 +65,6 @@
       />
     </template>
     <template v-else>
-      <span>单科</span>
       <singleTranscript
         ref="transcript"
         class="mr_10"
