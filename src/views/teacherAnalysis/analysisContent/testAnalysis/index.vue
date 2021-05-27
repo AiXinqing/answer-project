@@ -77,29 +77,42 @@
       ...mapState('teacherHome', ['examList','classList']),
 
       examOptions(){
-        return this.examList.length ? this.examList.map(item => ({label:item.name,value:item.tid})) : []
+        let objArray = this.examList.length ? this.examList.map(item => ({label:item.name,value:item.tid})) : []
+        return objArray
       },
 
       classOptions(){
-        return this.classList.length ? this.classList.map(item => ({label:item.cname,value:item.cid})) : []
-      },
-
-      cidVal () {
-        return this.classOptions.length ? this.classOptions[0].value : ''
+        let objArray = this.classList.length ? this.classList.filter(item => item.tsid != '0').map(item => ({label:item.cname,value:item.cid})) : []
+        return objArray
       },
 
     },
 
     watch: {
-      cidVal: {
+      examOptions: {
         immediate: true,
         handler () {
-          if(this.cidVal != '' && this.cid != 0){
-            this.cid = this.cidVal
-            this.subjectBox = this.classList.filter(item => item.cid == this.cid)[0].ASTestSubjectList.map(item => ({name:item.sname,tsid:item.tsid}))
+          if(this.examOptions.length){
+            this.tid = this.examOptions.find((element,i) => i == 0).value
+            this.$nextTick(() => {
+              this.parameter.tid = this.tid
+              this.getClassSubjectList()
+            })
           }
         }
       },
+
+      classOptions: {
+        immediate: true,
+        handler () {
+          if(this.classOptions.length){
+            this.cid = this.classOptions.find((element,i) => i == 0).value
+            this.subjectBox = this.classList.filter(item => item.cid == this.cid)[0].ASTestSubjectList.filter(item => item.tsid != '0').map(item => ({name:item.sname,tsid:item.tsid}))
+          }
+        }
+      },
+
+
       subjectBox: {
         immediate: true,
         handler () {
@@ -112,7 +125,6 @@
                   cid:this.cid,
                   tsid:this.tsid,
                 }
-
                 this.$refs.questionsAnalysis.initTable(formData)
               })
             }
@@ -135,7 +147,7 @@
       },
       handelClassChange(val) {
         this.cid = val
-        this.subjectBox = this.classList.filter(item => item.cid == val)[0].ASTestSubjectList.map(item => ({name:item.sname,tsid:item.tsid}))
+        this.subjectBox = this.classList.filter(item => item.cid == this.cid)[0].ASTestSubjectList.filter(item => item.tsid != '0').map(item => ({name:item.sname,tsid:item.tsid}))
         this.$nextTick(() => {
           let formData = {
             tid:this.tid,
@@ -166,7 +178,7 @@
       },
 
       getClassSubjectList(){
-        this.$store.dispatch('teacherHome/getClassList', this.parameter)
+        this.$store.dispatch('teacherHome/getClassList', this.parameter) // GetAsTestClass
       }
     },
   }
