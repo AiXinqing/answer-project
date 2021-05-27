@@ -75,5 +75,6 @@ export const URL = {
   GetTeacherClassQuestion: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetTeacherClassQuestion', // 试题分析
   ExportTeacherClassQuestion: BASEURL + '/Report/AnlyReport/ExportTeacherClassQuestion', // 试题分析下载
   GetTeacherClassStuSmallScore: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetTeacherClassStuSmallScore', // 学生小题得分
+  ExportTeacherClassStuSmallScore: BASEURL + '/Report/AnlyReport/ExportTeacherClassStuSmallScore', // 学生小题得分下载
 
 }
