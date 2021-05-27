@@ -3,16 +3,13 @@
   } from '@/config/teacherAnalysis/teacherHome'
 
   const state = {
-    headerTable: [],
     TableList: [],
   }
 
   const mutations = {
 
     SET_TABLE: (state, res) => {
-      const { ASAnalyseSettingInfo, ClassScoreInfo } = res.ResponseContent
-      state.headerTable = ASAnalyseSettingInfo
-      state.TableList = ClassScoreInfo
+      state.TableList = res.ResponseContent
     },
 
   }

@@ -38,49 +38,42 @@
           url:this.URL.GetTeacherClassQuestion
         },
 
-        fixedHeader:[
+        tableColumn:[
           {
-            prop:'cname',
-            label:'班级',
-            width:'120',
+            prop:'type',
+            label:'题号',
+            width:'100',
             align:'center',
             fixed:'left',
             type:'Html'
           },
           {
-            prop:'stuname',
-            label:'姓名',
+            prop:'fullScore',
+            label:'小题分值',
             minWidth:'80',
             align:'center',
             type:'Html'
           },
           {
-            prop:'tnumber',
-            label:'考号',
+            prop:'classScoreScale',
+            label:'班级得分率',
             minWidth:'100',
             align:'center',
             type:'Html'
           },
-        ],
-
-        columnMultiLine:[
           {
-            prop:'tscore',
-            label:'分数',
-            width:'85',
+            prop:'gradeScoreScale',
+            label:'年级得分率',
+            minWidth:'100',
             align:'center',
+            type:'Html'
           },
           {
-            prop:'gradeRank',
-            label:'学校排名',
-            width:'90',
+            prop:'scaleDifference',
+            label:'得分率差值',
+            minWidth:'100',
             align:'center',
-          },
-          {
-            prop:'classRank',
-            label:'班级排名',
-            width:'90',
-            align:'center',
+            type:'Html'
           },
         ],
 
@@ -89,68 +82,10 @@
 
     computed: {
       ...mapState('getExam',['tableLoading']),
-      ...mapState('questionAnalysis',['headerTable','TableList']),
-
-      tableColumn(){
-        // 动态表头
-        return this.headerTable.length ? [
-          ...this.fixedHeader,
-          ...this.headerTable.map(ele => ({
-            ...ele,
-            label:ele.sname,
-            align:'center',
-            childen:this.columnMultiLine.map(item => {
-              let obj = {
-                type:'Html'
-              }
-              if(item.label == '分数' && ele.sname !='总分'){
-                obj = {
-                  type:'Text',
-                  url:this.URL.BrowsescoreAnsw
-                }
-              }
-              return {
-                ...item,
-                prop:`${item.prop}_${ele.sname}`,
-                label:item.label,
-                width:item.width,
-                align:item.align,
-                sortable:true,
-                ...obj
-              }
-            }),
-          }))
-        ] :  []
-      },
+      ...mapState('questionAnalysis',['TableList']),
 
       tableData(){
-        return this.TableList.length ? this.TableList.map(item =>{
-          let dynamic = {}
-          item.DynamicDetail.forEach(item => {
-            dynamic = {
-              ...dynamic,
-              [`classRank_${item.sname}`]: item.classRank,
-              [`gradeRank_${item.sname}`]: item.gradeRank,
-              ord: item.ord,
-              sname: item.sname,
-              [`tscore_${item.sname}`]: item.tscore,
-              tsid: item.tsid,
-              tid: this.tid,
-              jump:1
-            }
-          })
-
-          return {
-            cid: item.cid,
-            cname: item.cname,
-            snumber: item.snumber,
-            stuname: item.stuname,
-            tmid: item.tmid,
-            tnumber: item.tnumber,
-            totalscore: item.totalscore,
-            ...dynamic
-          }
-        }): []
+        return this.TableList.length ? this.TableList: []
       }
     },
 

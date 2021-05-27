@@ -62,7 +62,7 @@
     methods: {
       handelChange(item) {
         this.active = item.calssname
-        this.$router.push({name:item.toUrl,query:{prmTid:this.prmTid}})
+        // this.$router.push({name:item.toUrl,query:{prmTid:this.prmTid}})
       }
     },
   }
