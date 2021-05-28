@@ -23,26 +23,28 @@
       </el-table>
     </template>
     <template v-else>
-      <el-table
-        :data="tableData"
-        :style="['width: 100%']"
-        :element-loading-text="loadingText"
-        :border="isBorder"
+      <div :style="{'max-height':height + 11 + 'px','overflow': 'auto'}">
+        <el-table
+          :data="tableData"
+          :style="['width: 100%']"
+          :element-loading-text="loadingText"
+          :border="isBorder"
 
-        element-loading-spinner="el-icon-loading"
-        v-loading="loading"
-      >
-        <!-- 标题栏- 合并 -->
-        <el-table-column v-if="isSelection" type="selection" align="center"></el-table-column>
-        <el-table-column v-if="isIndex" type="index" :label="indexlabel" align="center" width="50" :fixed="indexFixed"></el-table-column>
-        <singleColumn
-          v-for="(column,i) in tablecols"
-          :key="i"
-          :column="column"
-          @hanlde-pop-func="hanldePopFunc"
-        />
-        <!-- 标题栏- 合并 -->
-      </el-table>
+          element-loading-spinner="el-icon-loading"
+          v-loading="loading"
+        >
+          <!-- 标题栏- 合并 -->
+          <el-table-column v-if="isSelection" type="selection" align="center"></el-table-column>
+          <el-table-column v-if="isIndex" type="index" :label="indexlabel" align="center" width="50" :fixed="indexFixed"></el-table-column>
+          <singleColumn
+            v-for="(column,i) in tablecols"
+            :key="i"
+            :column="column"
+            @hanlde-pop-func="hanldePopFunc"
+          />
+          <!-- 标题栏- 合并 -->
+        </el-table>
+      </div>
     </template>
     <!-- 分页 -->
       <section class="ces-pagination" v-if='isPagination'>

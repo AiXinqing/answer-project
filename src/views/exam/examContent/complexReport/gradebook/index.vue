@@ -86,6 +86,7 @@
             label:'姓名',
             minWidth:'80',
             align:'center',
+            fixed:'left',
             type:'Html'
           },
           {
@@ -93,13 +94,7 @@
             label:'考号',
             minWidth:'100',
             align:'center',
-            type:'Html'
-          },
-          {
-            prop:'snumber',
-            label:'学号',
-            minWidth:'120',
-            align:'center',
+            fixed:'left',
             type:'Html'
           },
         ],
@@ -202,7 +197,6 @@
                 label:item.label,
                 width:item.width,
                 align:item.align,
-                sortable:true,
                 ...obj
               }
             }),
@@ -451,7 +445,7 @@
   }
   .el_table_wapper{
     height: 100%;
-    overflow: auto;
+    // overflow: auto;
     // height: calc(100% - 285px);
     section{
       height: 100%;
