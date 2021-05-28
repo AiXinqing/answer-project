@@ -183,14 +183,13 @@
 
     methods: {
       openDetails(row){
-        console.log(row)
         this.dialogVisible = true
         this.parameter = {
           ...this.parameter,
           ...row
         }
         this.prmTid = row.tid
-        console.log(this.parameter)
+
         this.$nextTick(()=>{
           this.getDynamicHeader(row.tsid,row.tid)
           let _this = this

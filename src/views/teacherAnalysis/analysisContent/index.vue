@@ -116,22 +116,34 @@
         return this.classList.length ? this.classList.map(item => ({label:item.cname,value:item.cid})) : []
       },
 
-      cidVal () {
-        return this.classOptions.length ? this.classOptions[0].value : ''
-      },
-
     },
 
     watch: {
-      cidVal: {
+      examOptions: {
         immediate: true,
         handler () {
-          if(this.cidVal != '' && this.cid != 0){
-            this.cid = this.cidVal
+          if(this.examOptions.length){
+            this.tid = this.examOptions.find((element,i) => i == 0).value
+            this.$nextTick(() => {
+              this.parameter.tid = this.tid
+              this.getClassSubjectList()
+            })
+          }
+        }
+      },
+
+      classOptions: {
+        immediate: true,
+        handler () {
+          if(this.classOptions.length){
+            this.cid = this.classOptions.find((element,i) => i == 0).value
+
             this.subjectBox = this.classList.filter(item => item.cid == this.cid)[0].ASTestSubjectList.map(item => ({name:item.sname,tsid:item.tsid}))
           }
         }
       },
+
+
       subjectBox: {
         immediate: true,
         handler () {
@@ -154,6 +166,7 @@
         }
       }
     },
+
 
     mounted () {
       this.subjectList()
