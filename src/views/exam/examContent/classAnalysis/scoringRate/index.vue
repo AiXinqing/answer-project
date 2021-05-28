@@ -64,7 +64,6 @@
           label:'最高分',
           minWidth:'140',
           align:'center',
-          sortable:true,
           type:'Html',
         },
 

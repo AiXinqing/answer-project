@@ -12,9 +12,9 @@
     <div class="total_score">
       <div class="title_box">
         <div class="title_left">总分基本情况成绩分析</div>
-        <div class="title_right">
+        <!-- <div class="title_right">
           <exam-button type="primary" @click="totalScoreDownTable">下载表格</exam-button>
-        </div>
+        </div> -->
       </div>
       <div class="el_table_wapper">
         <exam-table
@@ -215,16 +215,16 @@
         this.$store.dispatch('analyzed/getTotalScoreResults', this.totalParameter)
       },
 
-      totalScoreDownTable() {
-        // 下载表格
-        const {tid} = this.parameter
-        window.open(`${this.URL.ExportClassScoreScaleNum}?tid=${tid}`)
-      },
+      // totalScoreDownTable() {
+      //   // 下载表格
+      //   const {tid} = this.parameter
+      //   window.open(`${this.URL.ExportClassScoreScaleNum}?tid=${tid}`)
+      // },
 
       basisDownTable(){
         // 下载表格
         const {tid} = this.parameter
-        window.open(`${this.URL.ExportClassScoreScaleNum}?tid=${tid}`)
+        window.open(`${this.URL.ExportSubjectScoreContrast}?tid=${tid}`)
       }
     },
   }
