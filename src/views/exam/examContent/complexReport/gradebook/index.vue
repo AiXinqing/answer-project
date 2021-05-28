@@ -332,8 +332,10 @@
 
       downTable(){
         // 下载表格
-        const {cids,keyWords,tid,tsid} = this.parameter
-        window.open(`${this.URL.ExportStuResults}?tid=${tid}&tsid=${tsid}&cids=${cids}&keyWords=&${keyWords}`)
+        if(this.tsid == ''){
+          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+        }
+        window.open(`${this.URL.ExportStuResults}?tid=${this.prmTid}&tsid=${this.tsid}&cids=${this.cidStr}&keyWords=&${this.keyWords}`)
       },
 
       handleClear(){

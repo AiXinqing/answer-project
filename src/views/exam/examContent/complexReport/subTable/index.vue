@@ -400,9 +400,11 @@
 
       downTable(){
         // 小题分数报表下载
-        const {cids,keyWords,tid,tsid} = this.parameter
+        if(this.tsid == ''){
+          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+        }
 
-        window.open(`${this.URL.ExportStuSmallScore}?tid=${tid}&tsid=${tsid}&cids=${cids}&keyWords=&${keyWords}`)
+        window.open(`${this.URL.ExportStuSmallScore}?tid=${this.prmTid}&tsid=${this.tsid}&cids=${this.cidStr}&keyWords=&${this.keyWords}`)
       },
 
       handleClear(){

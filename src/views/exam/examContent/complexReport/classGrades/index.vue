@@ -75,8 +75,8 @@
             prop:'referenceNumber',
             label:'参考人数',
             minWidth:'100',
-            sortable:true,
             align:'center',
+            fixed:'left',
             type:'Html'
           },
           {
@@ -85,22 +85,23 @@
             minWidth:'80',
             align:'center',
             type:'Text',
+            fixed:'left',
             color:'font'
           },
           {
             prop:'maxScore',
             label:'最高分',
             minWidth:'80',
-            sortable:true,
             align:'center',
+            fixed:'left',
             type:'Html'
           },
           {
             prop:'minScore',
             label:'最低分',
             minWidth:'80',
-            sortable:true,
             align:'center',
+            fixed:'left',
             type:'Html'
           },
           {
@@ -314,8 +315,10 @@
 
       downTable(){
         // 下载表格
-        const {cids,tid,tsid} = this.parameter
-        window.open(`${this.URL.ExportQuestionSummary}?tid=${tid}&tsid=${tsid}&cids=${cids}`)
+        if(this.tsid == ''){
+          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+        }
+        window.open(`${this.URL.ExportClassScoreContrast}?tid=${this.prmTid}&tsid=${this.tsid}&cids=${this.cidStr}`)
       },
 
       hanldePopFunc(row){
