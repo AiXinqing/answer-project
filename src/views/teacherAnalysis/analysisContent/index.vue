@@ -96,7 +96,7 @@
       return {
         tid:0,
         cid:0,
-        tsid:0,
+        tsid:'',
         subjectBox:[],
         parameter:{
           tid: '',
@@ -149,7 +149,8 @@
         handler () {
           if(this.subjectBox.length){
             this.tsid = this.subjectBox.find((element,i) => i == 0).tsid
-            if(this.tsid != 0){
+
+            if(this.tsid != ''){
               this.$nextTick(() => {
                 let formData = {
                   tid:this.tid,
