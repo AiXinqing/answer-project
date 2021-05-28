@@ -48,6 +48,7 @@
             label:'姓名',
             minWidth:'100',
             align:'center',
+            fixed:'left',
             type:'Html'
           },
           {
@@ -55,6 +56,7 @@
             label:'考号',
             minWidth:'100',
             align:'center',
+            fixed:'left',
             type:'Html'
           },
           {
@@ -62,6 +64,7 @@
             label:'学号',
             minWidth:'120',
             align:'center',
+            fixed:'left',
             type:'Html'
           },
         ],
@@ -205,6 +208,11 @@
 
       handleClose() {
         this.dialogVisible = false
+        this.page = {
+          pageSize: 10,
+          pageNum: 1,
+          total: 0
+        }
       },
 
       handleSizeChange(val){

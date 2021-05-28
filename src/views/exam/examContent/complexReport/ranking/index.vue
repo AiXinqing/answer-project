@@ -17,6 +17,7 @@
             :items="options"
             size="mini"
             :value="type"
+            @change="handelRanking"
           ></hj-select>
           <hj-input class="indent_model" style="width:120px;" v-model="placing" placeholder="50" />
           <div class="titile_14" style="margin-left:10px">名，查看不同名次段的人数分布及详情。</div>
@@ -260,12 +261,22 @@
 
       downTable(){
         // 下载表格
-        const {cids,tid,tsid,step,type,placing} = this.parameter
-        window.open(`${this.URL.ExportPlacingSegment}?tid=${tid}&tsid=${tsid}&cids=${cids}&step=${step}&type=${type}&placing=${placing}`)
+        if(this.tsid == ''){
+          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
+        }
+        const {step,type,placing} = this.parameter
+        window.open(`${this.URL.ExportPlacingSegment}?tid=${this.prmTid}&tsid=${this.tsid}&cids=${this.cidStr}&step=${step}&type=${type}&placing=${placing}`)
       },
 
       hanldePopFunc(row){
         this.$refs.studentDetails.openDetails(row)
+      },
+
+      handelRanking(){
+        this.parameter.type = this.type
+        this.$nextTick(()=>{
+          this.getTable()
+        })
       }
     },
   }

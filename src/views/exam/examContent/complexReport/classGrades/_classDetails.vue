@@ -48,6 +48,7 @@
             label:'姓名',
             minWidth:'100',
             align:'center',
+            fixed:'left',
             type:'Html'
           },
           {
@@ -55,6 +56,7 @@
             label:'考号',
             minWidth:'100',
             align:'center',
+            fixed:'left',
             type:'Html'
           },
           {
@@ -62,6 +64,7 @@
             label:'学号',
             minWidth:'120',
             align:'center',
+            fixed:'left',
             type:'Html'
           },
         ],
