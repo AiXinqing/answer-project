@@ -139,8 +139,8 @@
           item.DynamicDetail.forEach(item => {
             dynamic = {
               ...dynamic,
-              [`num_${item.sname}`]: item.num,
-              [`avgScoreString_${item.sname}`]: item.avgScoreString,
+              [`num_${item.sname}`]: item.num == '' ? null : item.num,
+              [`avgScoreString_${item.sname}`]: item.avgScoreString == '' ? null : item.avgScoreString ,
               sname: item.sname,
             }
           })

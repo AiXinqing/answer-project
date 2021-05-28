@@ -177,7 +177,7 @@
       downTable(){
         // 下载表格
         const {tid,criticalScale,floatScale} = this.parameter
-        window.open(`${this.URL.ExportClassScoreScaleNum}?tid=${tid}&criticalScale=${criticalScale}&floatScale=${floatScale}`)
+        window.open(`${this.URL.ExportClassSubjectScoreCriticalityNum}?tid=${tid}&criticalScale=${criticalScale}&floatScale=${floatScale}`)
       },
 
       handelModify(){
