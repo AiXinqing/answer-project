@@ -76,6 +76,7 @@
             label:'题型',
             width:'72',
             align:'center',
+            fixed:'left',
             type:'Html'
           },
           {
@@ -84,6 +85,7 @@
             width:'80',
             align:'center',
             type:'Html',
+            fixed:'left',
             color:'font'
           },
           {
@@ -91,6 +93,7 @@
             label:'正确答案',
             minWidth:'80',
             align:'center',
+            fixed:'left',
             type:'Html'
           },
         ],
@@ -276,8 +279,10 @@
 
       downTable(){
         // 下载表格
-        const {cids,tid,tsid} = this.parameter
-        window.open(`${this.URL.ExportQuestionSummary}?tid=${tid}&tsid=${tsid}&cids=${cids}`)
+        if(this.tsid == ''){
+          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
+        }
+        window.open(`${this.URL.ExportQuestionSummary}?tid=${this.prmTid}&tsid=${this.tsid}&cids=${this.cidStr}`)
       },
 
       hanldePopFunc(row){

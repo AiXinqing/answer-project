@@ -206,6 +206,11 @@
 
       handleClose() {
         this.dialogVisible = false
+        this.page = {
+          pageSize: 10,
+          pageNum: 1,
+          total: 0
+        }
       },
 
       handleSizeChange(val){
