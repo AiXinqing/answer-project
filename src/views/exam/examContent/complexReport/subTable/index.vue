@@ -83,13 +83,7 @@
             label:'姓名',
             minWidth:'80',
             align:'center',
-            type:'Html'
-          },
-          {
-            prop:'snumber',
-            label:'学号',
-            minWidth:'120',
-            align:'center',
+            fixed:'left',
             type:'Html'
           },
           {
@@ -97,13 +91,13 @@
             label:'考号',
             minWidth:'100',
             align:'center',
+            fixed:'left',
             type:'Html'
           },
           {
             prop:'totalscore',
             label:'总分',
             minWidth:'120',
-            sortable:true,
             align:'center',
             type:'Text',
             url:this.URL.BrowsescoreAnsw
@@ -405,10 +399,10 @@
       },
 
       downTable(){
-        // 下载表格
+        // 小题分数报表下载
         const {cids,keyWords,tid,tsid} = this.parameter
-        const { pageSize , pageNum} = this.pagination
-        window.open(`${this.URL.ExportStuResults}?tid=${tid}&tsid=${tsid}&cids=${cids}&keyWords=&${keyWords}pageIndex=${pageNum}&pageSize=${pageSize}`)
+
+        window.open(`${this.URL.ExportStuSmallScore}?tid=${tid}&tsid=${tsid}&cids=${cids}&keyWords=&${keyWords}`)
       },
 
       handleClear(){
