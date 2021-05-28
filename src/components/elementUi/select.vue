@@ -2,7 +2,7 @@
 <template>
   <div class="hj-select" v-bind:class="{'has-error':error}">
     <el-select
-      v-model="selectVal"
+      v-model="value"
       v-bind="$attrs"
       v-on="$listeners"
       popper-class="hj-select-dropdown"
