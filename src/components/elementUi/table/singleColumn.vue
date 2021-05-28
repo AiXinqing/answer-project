@@ -142,7 +142,8 @@
     data() {
       return {
         columnHtml: (row,prop) => {
-          return row[prop]  == '' || row[prop]  == undefined ? '--' : row[prop]
+
+          return row[prop]  == null ? '--' : row[prop]
         },
         classFun: (row,prop) => {
           let classStr = ''
