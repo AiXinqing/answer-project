@@ -51,7 +51,7 @@
         fixedHeader:[
           {
             prop:'type',
-            label:'题目',
+            label:'题号',
             minWidth:'100',
             align:'center',
             fixed:'left',
