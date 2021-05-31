@@ -12,13 +12,19 @@
       state.TableList = res.ResponseContent
     },
 
+    EMPTY_TABLE: (state) => { // 清空数据
+      state.TableList = []
+    },
+
   }
 
   const actions = {
 
     getSubjectJuxtapose({ commit }, padata) {
       return new Promise((resolve, reject) => {
-        const { tid,tsid,cid, url } = padata
+        const { tid, tsid, cid, url } = padata
+        commit('EMPTY_TABLE')
+
         getSubjectJuxtapose({ tid,tsid,cid, url }).then(res => {
           commit('SET_TABLE', res)
           resolve(res)

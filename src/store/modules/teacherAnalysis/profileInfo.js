@@ -15,13 +15,20 @@
       state.TableList = ClassScoreInfo
     },
 
+    EMPTY_TABLE: (state) => { // 清空数据
+      state.headerTable = []
+      state.TableList = []
+    },
+
   }
 
   const actions = {
 
     getProfileInfo({ commit }, padata) {
       return new Promise((resolve, reject) => {
-        const { tid,tsid,cid, url } = padata
+        const { tid, tsid, cid, url } = padata
+        commit('EMPTY_TABLE')
+
         getProfileInfo({ tid,tsid,cid, url }).then(res => {
           commit('SET_TABLE', res)
           resolve(res)

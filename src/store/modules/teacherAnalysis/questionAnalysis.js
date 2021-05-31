@@ -12,13 +12,19 @@
       state.TableList = res.ResponseContent
     },
 
+    EMPTY_TABLE: (state) => { // 清空数据
+      state.TableList = []
+    },
+
   }
 
   const actions = {
 
     getQuestionAnalysis({ commit }, padata) {
       return new Promise((resolve, reject) => {
-        const { tid,tsid,cid, url } = padata
+        const { tid, tsid, cid, url } = padata
+        commit('EMPTY_TABLE')
+
         getQuestionAnalysis({ tid,tsid,cid, url }).then(res => {
           commit('SET_TABLE', res)
           resolve(res)

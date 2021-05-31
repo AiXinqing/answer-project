@@ -16,9 +16,17 @@ import {
       state.TableList = res.ResponseContent
     },
 
+    EMPTY_TABLE: (state) => {
+      state.TableList = []
+    },
+
     SET_SINGLETABLE: (state, res) => {
       // 单科
       state.singleTableList = res.ResponseContent
+    },
+
+    EMPTY_SINGLETABLE: (state) => {
+      state.singleTableList = []
     },
 
     GET_PAGE: (state,page) => {
@@ -34,7 +42,9 @@ import {
 
     getTranscript({ commit }, padata) { // 全科
       return new Promise((resolve, reject) => {
-        const { tid, tsid,cid,keyWords, url } = padata
+        const { tid, tsid, cid, keyWords, url } = padata
+        commit('EMPTY_TABLE')// 清空
+
         getTranscript({ tid, tsid,cid,keyWords, url}).then(res => {
           commit('SET_TABLE', res)
           resolve(res)
@@ -47,7 +57,9 @@ import {
 
     getSingleTranscript({ commit }, padata) { // 单科
       return new Promise((resolve, reject) => {
-        const { tid, tsid,cid,keyWords, url } = padata
+        const { tid, tsid, cid, keyWords, url } = padata
+        commit('EMPTY_SINGLETABLE')// 清空
+
         getSingleTranscript({ tid, tsid,cid,keyWords, url}).then(res => {
           commit('SET_SINGLETABLE', res)
           resolve(res)

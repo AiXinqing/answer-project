@@ -14,6 +14,10 @@ import {
       state.TableList = res.ResponseContent
     },
 
+    EMPTY_TABLE: (state) => { // 清空数据
+      state.TableList = []
+    },
+
     GET_PAGE: (state,page) => {
       state.pagination = page
     },
@@ -21,13 +25,19 @@ import {
     SET_HEADERTABLE: (state, res) => {
       state.headerTable = res.ResponseContent
     },
+
+    EMPTY_HEADERTABLE: (state) => { // 清空数据
+      state.headerTable = []
+    },
   }
 
   const actions = {
 
     getTranscript({ commit }, padata) { // 全科
       return new Promise((resolve, reject) => {
-        const { tid, tsid,cid,keyWords, url } = padata
+        const { tid, tsid, cid, keyWords, url } = padata
+        commit('EMPTY_TABLE')
+
         getTranscript({ tid, tsid,cid,keyWords, url}).then(res => {
           commit('SET_TABLE', res)
           resolve(res)
@@ -41,6 +51,8 @@ import {
 
     // 获取动态表头
     GetStuResultsHeade ({ commit }, padata) {
+      commit('EMPTY_HEADERTABLE')
+
       return GetStuResultsHeade(padata).then((res) => {
         commit('SET_HEADERTABLE', res)
         return res

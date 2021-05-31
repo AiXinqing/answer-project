@@ -14,8 +14,18 @@
       state.examList =  res.ResponseContent
     },
 
+    EMPTY_SUBJECT: (state) => {
+      // 清空
+      state.examList = []
+    },
+
     SET_CLASSLIST: (state, res) => {
       state.classList =  res.ResponseContent
+    },
+
+    EMPTY_CLASSLIST: (state) => {
+      // 清空
+      state.classList = []
     },
   }
 
@@ -24,6 +34,8 @@
     getExamList({ commit }, padata) {
       return new Promise((resolve, reject) => {
         const { url } = padata
+        commit('EMPTY_SUBJECT')
+
         getExamList({ url }).then(res => {
           commit('SET_SUBJECT', res)
           resolve(res)
@@ -37,6 +49,8 @@
     getClassList({ commit }, padata) {
       return new Promise((resolve, reject) => {
         const { tid, url } = padata
+        commit('EMPTY_CLASSLIST')
+
         getClassList({ tid, url}).then(res => {
           commit('SET_CLASSLIST', res)
           resolve(res)

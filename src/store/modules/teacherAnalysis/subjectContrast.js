@@ -22,13 +22,20 @@
 
     },
 
+    EMPTY_TABLE: (state) => { // 清空数据
+      state.headerTable = []
+      state.TableList = []
+    },
+
   }
 
   const actions = {
 
     subjectContrast({ commit }, padata) { // 全科
       return new Promise((resolve, reject) => {
-        const { tid,cid, url } = padata
+        const { tid, cid, url } = padata
+        commit('EMPTY_TABLE')
+
         subjectContrast({ tid,cid, url }).then(res => {
           commit('SET_TABLE', res)
           resolve(res)
@@ -42,6 +49,8 @@
     singleSubjectContrast({ commit }, padata) {
       return new Promise((resolve, reject) => {
         const { tid, tsid, topNum, url } = padata
+        commit('EMPTY_TABLE')
+
         singleSubjectContrast({ tid, tsid, topNum, url }).then(res => {
           commit('SET_TABLE', res)
           resolve(res)
