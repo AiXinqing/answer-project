@@ -118,7 +118,6 @@
                 label:item.label,
                 width:item.width,
                 align:item.align,
-                sortable:true,
               }
             }),
           }))

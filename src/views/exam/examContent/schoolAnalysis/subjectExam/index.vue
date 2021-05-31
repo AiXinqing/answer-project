@@ -108,14 +108,12 @@
             label:'平均分',
             width:'90',
             align:'center',
-            sortable:true,
           },
           {
             prop:'avgScoreScale',
             label:'平均得分率',
             width:'120',
             align:'center',
-            sortable:true,
           },
         ],
 
@@ -127,7 +125,6 @@
             align:'center',
             fixed:'left',
             type:'Html',
-            sortable:true,
           }
         ],
 
@@ -139,7 +136,6 @@
             align:'center',
             fixed:'left',
             type:'Html',
-            sortable:true,
           }
         ],
 

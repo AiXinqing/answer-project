@@ -75,7 +75,6 @@
           label:'最高分',
           minWidth:'120',
           align:'center',
-          sortable:true,
           type:'Html',
         },
         step:50,
@@ -84,7 +83,6 @@
           tid: '',
           tsid:'',
           step:50,
-          showGrade:true,
           url:this.URL.GetClassScoreSegmentNum
         },
         theight:0,

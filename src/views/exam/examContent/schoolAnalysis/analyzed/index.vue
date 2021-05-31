@@ -129,7 +129,6 @@
             minWidth:'120',
             align:'center',
             type:'Html',
-            sortable:true,
           },
           {
             prop:'fullScore',
@@ -137,7 +136,6 @@
             minWidth:'120',
             align:'center',
             type:'Html',
-            sortable:true,
           },
           {
             prop:'maxScore',
@@ -145,7 +143,6 @@
             minWidth:'120',
             align:'center',
             type:'Html',
-            sortable:true,
           },
           {
             prop:'minScore',
@@ -153,7 +150,6 @@
             minWidth:'120',
             align:'center',
             type:'Html',
-            sortable:true,
           },
           {
             prop:'avgScore',
@@ -161,7 +157,6 @@
             minWidth:'120',
             align:'center',
             type:'Html',
-            sortable:true,
           },
           {
             prop:'stdDeviation',
@@ -169,7 +164,6 @@
             minWidth:'120',
             align:'center',
             type:'Html',
-            sortable:true,
           },
           {
             prop:'difficulty',
@@ -177,7 +171,6 @@
             minWidth:'120',
             align:'center',
             type:'Html',
-            sortable:true,
           }
         ],
 
@@ -214,12 +207,6 @@
         this.$store.dispatch('analyzed/GetStuResults', this.parameter)
         this.$store.dispatch('analyzed/getTotalScoreResults', this.totalParameter)
       },
-
-      // totalScoreDownTable() {
-      //   // 下载表格
-      //   const {tid} = this.parameter
-      //   window.open(`${this.URL.ExportClassScoreScaleNum}?tid=${tid}`)
-      // },
 
       basisDownTable(){
         // 下载表格
