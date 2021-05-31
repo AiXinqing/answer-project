@@ -75,11 +75,11 @@
 </template>
 
 <script>
-  import overallOverview from "./teacherHome/overallOverview"
-  import subjectJuxtapose from "./teacherHome/subjectJuxtapose"
-  import subjectContrast from "./teacherHome/subjectContrast"
-  import transcript from "./teacherHome/transcript"
-  import singleTranscript from "./teacherHome/transcript/singleTranscript"
+  import overallOverview from "./overallOverview"
+  import subjectJuxtapose from "./subjectJuxtapose"
+  import subjectContrast from "./subjectContrast"
+  import transcript from "./transcript"
+  import singleTranscript from "./transcript/singleTranscript"
   import { mapState } from 'vuex'
 
   export default {

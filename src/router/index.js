@@ -11,7 +11,7 @@ import schoolAnalysis from '@/views/exam/examContent/schoolAnalysis'
 import jointExam from '@/views/exam/examContent/jointExamAnalysis'
 
 // 教师分析
-import teacherHome from '@/views/teacherAnalysis/analysisContent'
+import teacherHome from '@/views/teacherAnalysis/analysisContent/teacherHome'
 import testAnalysis from '@/views/teacherAnalysis/analysisContent/testAnalysis'
 import subtopicScore from '@/views/teacherAnalysis/analysisContent/subtopicScore'
 
