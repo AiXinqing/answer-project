@@ -94,7 +94,6 @@
             align:'center',
             prop: `scale_${ele.subname}`,
             type:'Html',
-            sortable:true,
           }))
         ] : []
       },

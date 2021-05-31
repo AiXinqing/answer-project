@@ -75,7 +75,6 @@
           label:'最高分',
           minWidth:'90',
           align:'center',
-          sortable:true,
           type:'Html',
         },
         step:50,

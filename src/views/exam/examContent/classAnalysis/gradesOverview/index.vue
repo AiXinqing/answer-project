@@ -51,28 +51,24 @@
             label:'最高分',
             width:'90',
             align:'center',
-            sortable:true,
           },
           {
             prop:'minScore',
             label:'最低分',
             width:'90',
             align:'center',
-            sortable:true,
           },
           {
             prop:'avgScore',
             label:'平均分',
             width:'90',
             align:'center',
-            sortable:true,
           },
           {
             prop:'referenceNumber',
             label:'考试人数',
             width:'90',
             align:'center',
-            sortable:true,
           },
         ],
         parameter:{

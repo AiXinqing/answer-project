@@ -197,6 +197,8 @@
               document.getElementById('parkingA4').classList.add("cur")
             }else if(scrollTop <= parkingA5 ){
               document.getElementById('parkingA5').classList.add("cur")
+            }else if(scrollTop > parkingA5 ){
+              document.getElementById('parkingA5').classList.add("cur")
             }
 
       }
