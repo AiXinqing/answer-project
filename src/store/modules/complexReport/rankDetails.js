@@ -6,6 +6,7 @@
   const state = {
     headerTable: [],
     TableList: [],
+    tableLoading: true,
     pagination: {
       pageSize: 10,
       pageNum: 1,
@@ -18,6 +19,7 @@
     SET_TABLE: (state, res) => {
       const { data } = res.ResponseContent
       state.TableList = data
+      state.tableLoading = false
     },
 
     GET_PAGE: (state,page) => {

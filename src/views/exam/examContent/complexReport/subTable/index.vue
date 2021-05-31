@@ -183,8 +183,8 @@
     },
 
     computed: {
-      ...mapState('getExam', ['tableLoading','subjectsArr','classesArr']),
-      ...mapState('subTable', ['headerTable','TableList','pagination',]),
+      ...mapState('getExam', ['subjectsArr','classesArr']),
+      ...mapState('subTable', ['tableLoading','headerTable','TableList','pagination']),
 
       classIdsArr(){
         return this.classesArr.length ? this.classesArr.filter(item => item.check && item.cid != 'all')

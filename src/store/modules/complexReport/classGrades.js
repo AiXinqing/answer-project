@@ -5,6 +5,7 @@
   const state = {
     headerTable: [],
     TableList: [],
+    tableLoading: true,
   }
 
   const mutations = {
@@ -13,6 +14,7 @@
       const { ASAnalyseSettingInfo,ClassScoreInfo } = res.ResponseContent
       state.headerTable = ASAnalyseSettingInfo
       state.TableList = ClassScoreInfo
+      state.tableLoading = false
     },
 
   }

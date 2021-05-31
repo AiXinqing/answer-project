@@ -110,8 +110,8 @@
     },
 
     computed: {
-      ...mapState('getExam', ['tableLoading','headerTable',]),
-      ...mapState('gradesDetails', ['TableList','pagination',]),
+      ...mapState('getExam', ['headerTable',]),
+      ...mapState('gradesDetails', ['tableLoading','TableList','pagination',]),
 
       title() {
         return '学生名单详情'

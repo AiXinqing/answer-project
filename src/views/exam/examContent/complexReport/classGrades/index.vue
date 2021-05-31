@@ -168,8 +168,8 @@
     },
 
     computed: {
-      ...mapState('getExam', ['tableLoading','subjectsArr','classesArr']),
-      ...mapState('classGrades', ['headerTable','TableList',]),
+      ...mapState('getExam', ['subjectsArr','classesArr']),
+      ...mapState('classGrades', ['tableLoading','headerTable','TableList']),
 
       classIdsArr(){
         return this.classesArr.length ? this.classesArr.filter(item => item.check && item.cid != 'all')

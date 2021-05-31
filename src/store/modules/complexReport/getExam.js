@@ -10,7 +10,7 @@
     subjectsArr: [],
     classesArr: [],
     TableList: [],
-    tableLoading: false,
+    tableLoading: true,
     pagination: {
       pageSize: 15,
       pageNum: 1,
@@ -72,7 +72,7 @@
         const { tid, tsid, cids, keyWords, pageIndex, pageSize, url } = padata
 
         GetStuResults({ tid, tsid, cids, keyWords, pageIndex, pageSize, url }).then(res => {
-          commit('SET_LOADING_TRUE')
+
           commit('SET_TABLE', res)
           commit('GET_PAGE', {
             pageSize: res.ResponseContent.pageSize,
