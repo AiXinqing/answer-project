@@ -163,7 +163,7 @@
 
     computed: {
       ...mapState('getExam',['tableLoading']),
-      ...mapState('transcript',['headerTable','TableList']),
+      ...mapState('subQuestion',['headerTable','TableList']),
 
       tableColumn(){
         // 动态表头
@@ -285,8 +285,8 @@
 
       generalTable(){
         // 全科
-        this.$store.dispatch('transcript/GetStuResultsHeade', this.HeadeParameter)
-        this.$store.dispatch('transcript/getTranscript', this.parameter)
+        this.$store.dispatch('subQuestion/GetStuResultsHeade', this.HeadeParameter)
+        this.$store.dispatch('subQuestion/getTranscript', this.parameter)
       },
 
 

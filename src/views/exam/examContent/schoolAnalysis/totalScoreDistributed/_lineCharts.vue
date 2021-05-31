@@ -1,11 +1,11 @@
 <template>
   <section style="width:100%">
-    <ve-line
+    <ve-histogram
       style="width:100%"
       :data="chartData"
       :extend="option"
       v-if="chartData.columns != undefined"
-    ></ve-line>
+    ></ve-histogram>
     <div
       v-else
       class="chart_style"
@@ -72,6 +72,10 @@
             }
           }
         },
+        series:{
+          barWidth : 20,
+          color: '#1ab394',
+        }
       }
     }
   },

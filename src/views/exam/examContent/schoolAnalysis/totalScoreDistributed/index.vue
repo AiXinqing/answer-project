@@ -66,10 +66,11 @@
       ...mapState('totalScoreDistributed', ['TableList']),
 
       chartData(){
+        console.log(this.TableList)
         return this.TableList.length ? {
           columns:['区间', '全体'],
           rows:this.TableList.map(element =>({
-                      '区间': element.name,
+                      '区间': element.endScore,
                       '全体': element.peopleNum
                     }))
         } : {}
