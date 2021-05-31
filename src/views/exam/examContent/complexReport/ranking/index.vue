@@ -81,7 +81,7 @@
           {
             prop:'referenceNumber',
             label:'参考人数',
-            minWidth:'80',
+            width:'80',
             fixed:'left',
             align:'center',
             type:'Html'
