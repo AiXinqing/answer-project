@@ -86,8 +86,8 @@
             prop:'referenceNumber',
             label:'参考人数',
             minWidth:'100',
-            sortable:true,
             align:'center',
+            fixed:'left',
             type:'Html'
           },
         ],
@@ -98,14 +98,12 @@
             label:'人数',
             width:'90',
             align:'center',
-            sortable:true,
           },
           {
             prop:'scale',
             label:'比例',
             width:'90',
             align:'center',
-            sortable:true,
           },
         ],
 
