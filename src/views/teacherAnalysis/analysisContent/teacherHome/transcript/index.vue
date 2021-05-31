@@ -81,6 +81,7 @@
             label:'姓名',
             minWidth:'80',
             align:'center',
+            fixed:'left',
             type:'Html'
           },
           {
@@ -88,6 +89,7 @@
             label:'考号',
             minWidth:'100',
             align:'center',
+            fixed:'left',
             type:'Html'
           },
         ],
@@ -144,7 +146,6 @@
                 label:item.label,
                 width:item.width,
                 align:item.align,
-                sortable:true,
                 ...obj
               }
             }),

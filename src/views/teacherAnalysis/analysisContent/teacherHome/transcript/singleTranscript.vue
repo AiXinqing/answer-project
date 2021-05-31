@@ -73,7 +73,6 @@
             label:'分数',
             minWidth:'80',
             align:'center',
-            fixed:'left',
             type:'Html'
           },
           {
@@ -81,7 +80,6 @@
             label:'年级排名',
             minWidth:'80',
             align:'center',
-            fixed:'left',
             type:'Html'
           },
           {
@@ -89,7 +87,6 @@
             label:'上次年级/升降名次',
             minWidth:'120',
             align:'center',
-            fixed:'left',
             type:'iconRank',
             iconList:[
               {
@@ -104,7 +101,6 @@
             label:'班级排名',
             minWidth:'120',
             align:'center',
-            fixed:'left',
             type:'Html'
           },
           {
@@ -112,7 +108,6 @@
             label:'上次班级/升降名次',
             minWidth:'120',
             align:'center',
-            fixed:'left',
             type:'iconRank',
             iconList:[
               {
@@ -126,7 +121,6 @@
             label:'操作',
             minWidth:'120',
             align:'center',
-            fixed:'left',
             type:'operateBtn',
             btnList:[
               {
