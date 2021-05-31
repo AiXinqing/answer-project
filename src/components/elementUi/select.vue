@@ -6,8 +6,9 @@
       v-bind="$attrs"
       v-on="$listeners"
       popper-class="hj-select-dropdown"
+      placeholder="请选择"
     >
-      <el-option v-for="item in items" :key="item.value" :label="item.label" :value="item.value"></el-option>
+      <el-option  v-for="item in items" :key="item.value" :label="item.label" :value="item.value"></el-option>
     </el-select>
   </div>
 </template>
