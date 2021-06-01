@@ -13,7 +13,8 @@
       pageSize: 10,
       pageNum: 1,
       total: 0
-    }
+    },
+    tableLoading: true
   }
 
   const mutations = {
@@ -21,6 +22,7 @@
     SET_TABLE: (state, res) => {
       const { data } = res.ResponseContent
       state.TableList = data
+      state.tableLoading = false
     },
 
     EMPTY_TABLE: (state) => { // 清空数据

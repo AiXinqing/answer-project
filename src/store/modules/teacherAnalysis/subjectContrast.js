@@ -6,6 +6,7 @@
   const state = {
     headerTable: [],
     TableList: [],
+    tableLoading: true,
   }
 
   const mutations = {
@@ -19,6 +20,7 @@
       } else {
         state.TableList = SubjectScoreContrastInfo
       }
+      state.tableLoading = false
 
     },
 

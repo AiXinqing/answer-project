@@ -6,12 +6,14 @@ import {
   const state = {
     headerTable: [],
     TableList: [],
+    tableLoading: true,
   }
 
   const mutations = {
 
     SET_TABLE: (state, res) => {
       state.TableList = res.ResponseContent
+      state.tableLoading = false
     },
 
     EMPTY_TABLE: (state) => { // 清空数据

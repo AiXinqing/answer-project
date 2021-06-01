@@ -101,8 +101,7 @@
     },
 
     computed: {
-      ...mapState('getExam', ['tableLoading']),
-      ...mapState('subjectDetail', ['TableList','headerTable','pagination']),
+      ...mapState('subjectDetail', ['tableLoading','TableList','headerTable','pagination']),
 
       title() {
         return '学科等级分布学生详情'

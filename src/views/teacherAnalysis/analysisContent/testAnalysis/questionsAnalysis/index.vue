@@ -81,8 +81,7 @@
     },
 
     computed: {
-      ...mapState('getExam',['tableLoading']),
-      ...mapState('questionAnalysis',['TableList']),
+      ...mapState('questionAnalysis',['tableLoading','TableList']),
 
       tableData(){
         return this.TableList.length ? this.TableList: []

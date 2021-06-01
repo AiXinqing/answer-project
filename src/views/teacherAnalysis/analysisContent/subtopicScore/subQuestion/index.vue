@@ -162,8 +162,7 @@
     },
 
     computed: {
-      ...mapState('getExam',['tableLoading']),
-      ...mapState('subQuestion',['headerTable','TableList']),
+      ...mapState('subQuestion',['tableLoading','headerTable','TableList']),
 
       tableColumn(){
         // 动态表头

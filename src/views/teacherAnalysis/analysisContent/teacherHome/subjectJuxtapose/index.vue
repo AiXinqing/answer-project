@@ -109,8 +109,7 @@
     },
 
     computed: {
-      ...mapState('getExam',['tableLoading']),
-      ...mapState('subjectJuxtapose',['TableList']),
+      ...mapState('subjectJuxtapose',['tableLoading','TableList']),
 
       tableData(){
         return this.TableList.length ? this.TableList.map(item =>{

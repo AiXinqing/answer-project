@@ -67,8 +67,7 @@
     },
 
     computed: {
-      ...mapState('getExam',['tableLoading']),
-      ...mapState('profileInfo',['headerTable','TableList']),
+      ...mapState('profileInfo',['tableLoading','headerTable','TableList']),
 
       tableColumn(){
         // 动态表头

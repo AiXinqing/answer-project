@@ -143,8 +143,7 @@
     },
 
     computed: {
-      ...mapState('getExam',['tableLoading']),
-      ...mapState('transcript',['singleTableList']),
+      ...mapState('transcript',['tableLoading','singleTableList']),
 
       tableData(){
         return this.singleTableList.length ? this.singleTableList : []

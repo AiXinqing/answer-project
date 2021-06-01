@@ -8,12 +8,14 @@ import {
     headerTable: [],
     TableList: [],
     singleTableList: [],
+    tableLoading: true,
   }
 
   const mutations = {
 
     SET_TABLE: (state, res) => {
       state.TableList = res.ResponseContent
+      state.tableLoading = false
     },
 
     EMPTY_TABLE: (state) => {
@@ -23,6 +25,7 @@ import {
     SET_SINGLETABLE: (state, res) => {
       // 单科
       state.singleTableList = res.ResponseContent
+      state.tableLoading = false
     },
 
     EMPTY_SINGLETABLE: (state) => {

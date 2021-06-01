@@ -5,13 +5,15 @@
 
   const state = {
     examList: [],
-    classList:[]
+    classList: [],
+    tableLoading: true,
   }
 
   const mutations = {
 
     SET_SUBJECT: (state, res) => {
-      state.examList =  res.ResponseContent
+      state.examList = res.ResponseContent
+      state.tableLoading = false
     },
 
     EMPTY_SUBJECT: (state) => {
@@ -20,7 +22,8 @@
     },
 
     SET_CLASSLIST: (state, res) => {
-      state.classList =  res.ResponseContent
+      state.classList = res.ResponseContent
+      state.tableLoading = false
     },
 
     EMPTY_CLASSLIST: (state) => {

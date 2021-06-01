@@ -113,8 +113,7 @@
     },
 
     computed: {
-      ...mapState('getExam',['tableLoading']),
-      ...mapState('subjectContrast',['headerTable','TableList']),
+      ...mapState('subjectContrast',['tableLoading','headerTable','TableList']),
 
       tableColumn(){
         // 动态表头
