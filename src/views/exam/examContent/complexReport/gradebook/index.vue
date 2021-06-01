@@ -457,7 +457,7 @@
           height: calc(100% - 60px);
         }
         .el-table__fixed{
-          height:100%  !important
+          height:100%
         }
       }
     }
