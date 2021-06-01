@@ -401,7 +401,7 @@
       downTable(){
         // 小题分数报表下载
         if(this.tsid == ''){
-          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
         }
 
         window.open(`${this.URL.ExportStuSmallScore}?tid=${this.prmTid}&tsid=${this.tsid}&cids=${this.cidStr}&keyWords=&${this.keyWords}`)
