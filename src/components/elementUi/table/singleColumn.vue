@@ -207,11 +207,16 @@
             type:ele.p_type,
           }
         }
+        let cid = row.cid
+
+        if(ele.classObj){
+          cid = row['cid_'+ ele.classObj]
+        }
 
         this.$emit('hanlde-pop-func',{
           tid:ele.tid,
           tsid:ele.tsid,
-          cid:row.cid,
+          cid:cid,
           ...obj
         })
       }

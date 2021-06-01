@@ -178,7 +178,8 @@
                 type_p:index == 1 ? 'manfen' : index == 3 ? 'zero' : 0,
                 prop:`${item.prop}_${ele.cname}`,
                 tsid:this.tsid == '' ? tsid_s : this.tsid,
-                tid:this.prmTid
+                tid:this.prmTid,
+                classObj:ele.cname
               }
             })
           }))
@@ -196,6 +197,7 @@
               [`fullScoreNum_${element.cname}`]:element.fullScoreNum,
               [`fullScoreScale_${element.cname}`]:element.fullScoreScale,
               [`zeroScoreNum_${element.cname}`]:element.zeroScoreNum,
+              [`cid_${element.cname}`]: element.cid,
             }
           })
 
