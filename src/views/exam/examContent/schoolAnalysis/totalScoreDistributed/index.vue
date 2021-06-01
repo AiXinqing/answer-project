@@ -65,7 +65,6 @@
       ...mapState('totalScoreDistributed', ['tableLoading','TableList']),
 
       chartData(){
-        console.log(this.TableList)
         return this.TableList.length ? {
           columns:['区间', '全体'],
           rows:this.TableList.map(element =>({

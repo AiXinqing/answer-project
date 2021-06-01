@@ -222,7 +222,6 @@
 
       handleInquire(){
         this.parameter.keyWords = this.keyWords
-        console.log(this.parameter)
         this.$nextTick(()=>{
           this.generalTable()
         })

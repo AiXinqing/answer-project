@@ -461,7 +461,6 @@ export default {
         let arr = oldStr.split('</p>') // 回车换行
             arr = arr.map(item => item == '' || item == 'undefined' ? '' : item + '</p>')
                   .filter(item => item !='')
-            console.log(arr)
         return arr
       }
       //转换富文本编辑的内容为数组
