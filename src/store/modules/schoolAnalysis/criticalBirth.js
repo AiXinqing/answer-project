@@ -5,7 +5,7 @@
   const state = {
     headerTable: [],
     TableList: [],
-    tableLoading: true,
+    tableLoading: false,
   }
 
   const mutations = {
@@ -17,11 +17,16 @@
       state.tableLoading =  false
     },
 
+    SET_LOADING: (state) => {
+      state.tableLoading = true
+    }
+
   }
 
   const actions = {
 
-    GetStuResults({ commit }, padata) {
+    GetStuResults ({ commit }, padata) {
+      commit('SET_LOADING')
       return new Promise((resolve, reject) => {
         const { tid,criticalScale,floatScale, url } = padata
         GetStuResults({ tid,criticalScale,floatScale, url}).then(res => {

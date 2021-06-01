@@ -6,7 +6,7 @@
   const state = {
     headerTable: [],
     TableList: [],
-    tableLoading: true,
+    tableLoading: false,
     pagination: {
       pageSize: 10,
       pageNum: 1,
@@ -30,11 +30,16 @@
       const data = res.ResponseContent
       state.headerTable = data
     },
+
+    SET_LOADING: (state) => {
+      state.tableLoading = true
+    }
   }
 
   const actions = {
 
-    GetStuResults({ commit }, padata) {
+    GetStuResults ({ commit }, padata) {
+      commit('SET_LOADING')
       return new Promise((resolve, reject) => {
         const {tid, tsid, cid, rankName, type, pageIndex, pageSize, url } = padata
         GetStuResults({ tid, tsid, cid, rankName, type, pageIndex, pageSize, url}).then(res => {

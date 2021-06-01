@@ -6,7 +6,7 @@
   const state = {
     TableList: [],
     TotalTable: [],
-    tableLoading: true,
+    tableLoading: false,
   }
 
   const mutations = {
@@ -19,12 +19,17 @@
     SET_TOTAL: (state, res) => {
       state.TotalTable = [{ ...res.ResponseContent }]
       state.tableLoading =  false
+    },
+
+    SET_LOADING: (state) => {
+      state.tableLoading = true
     }
   }
 
   const actions = {
 
-    GetStuResults({ commit }, padata) {
+    GetStuResults ({ commit }, padata) {
+      commit('SET_LOADING')
       return new Promise((resolve, reject) => {
         const { tid, url } = padata
         GetStuResults({ tid, url}).then(res => {
@@ -37,7 +42,8 @@
       })
     },
 
-    getTotalScoreResults({ commit }, padata) {
+    getTotalScoreResults ({ commit }, padata) {
+      commit('SET_LOADING')
       return new Promise((resolve, reject) => {
         const { tid, url } = padata
         getTotalScoreResults({ tid, url}).then(res => {

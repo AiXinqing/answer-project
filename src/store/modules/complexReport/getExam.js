@@ -10,7 +10,7 @@
     subjectsArr: [],
     classesArr: [],
     TableList: [],
-    tableLoading: true,
+    tableLoading: false,
     pagination: {
       pageSize: 15,
       pageNum: 1,
@@ -54,7 +54,7 @@
     },
 
     // 设置loading
-    SET_LOADING_TRUE: (state) => {
+    SET_LOADING: (state) => {
       state.tableLoading = true
     }
   }
@@ -67,7 +67,8 @@
       })
     },
 
-    GetStuResults({ commit }, padata) {
+    GetStuResults ({ commit }, padata) {
+      commit('SET_LOADING')
       return new Promise((resolve, reject) => {
         const { tid, tsid, cids, keyWords, pageIndex, pageSize, url } = padata
 
