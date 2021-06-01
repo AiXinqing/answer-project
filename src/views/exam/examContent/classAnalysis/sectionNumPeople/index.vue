@@ -91,8 +91,7 @@
     },
 
     computed: {
-      ...mapState('getExam', ['tableLoading']),
-      ...mapState('sectionNumPeople', ['headerTable','TableList',]),
+      ...mapState('sectionNumPeople', ['tableLoading','headerTable','TableList',]),
 
       subjects(){
         return this.subjectsArr.length ? this.subjectsArr.filter(item => item.tsid != "totalScore" ) : []

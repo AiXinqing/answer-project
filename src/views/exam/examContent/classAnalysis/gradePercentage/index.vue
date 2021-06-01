@@ -70,8 +70,7 @@
     },
 
     computed: {
-      ...mapState('getExam', ['tableLoading']),
-      ...mapState('gradePercentage', ['headerTable','TableList']),
+      ...mapState('gradePercentage', ['tableLoading','headerTable','TableList']),
 
       subjects(){
         return this.subjectsArr.length ? this.subjectsArr.filter(item => item.tsid != "totalScore" ) : []

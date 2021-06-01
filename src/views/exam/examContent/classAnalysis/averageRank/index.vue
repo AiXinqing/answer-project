@@ -23,6 +23,7 @@
       :is-label="true"
       :unit="''"
       :chart-data="chartData"
+      v-loading.lock="tableLoading"
     />
   </div>
 </template>
@@ -30,7 +31,7 @@
 <script>
 
   import singleLine from './_singleLine'
-  import { mapState , mapGetters} from 'vuex'
+  import {mapGetters} from 'vuex'
   export default {
     components: {
       singleLine,
@@ -61,8 +62,7 @@
     },
 
     computed: {
-      ...mapState('getExam', ['tableLoading']),
-      ...mapGetters('getClassAvgScore', ['echartsData']),
+      ...mapGetters('getClassAvgScore', ['tableLoading','echartsData']),
 
       subjects(){
         return this.subjectsArr.length ? this.subjectsArr.filter(item => item.tsid != "totalScore" ) : []

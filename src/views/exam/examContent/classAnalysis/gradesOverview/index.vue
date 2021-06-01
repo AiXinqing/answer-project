@@ -80,8 +80,7 @@
     },
 
     computed: {
-      ...mapState('getExam', ['tableLoading']),
-      ...mapState('gradesOverview', ['headerTable','TableList',]),
+      ...mapState('gradesOverview', ['tableLoading','headerTable','TableList',]),
 
       tableColumn(){
         // 动态表头

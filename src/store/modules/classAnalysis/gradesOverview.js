@@ -5,6 +5,7 @@
   const state = {
     headerTable: [],
     TableList: [],
+    tableLoading: true,
   }
 
   const mutations = {
@@ -12,7 +13,8 @@
     SET_TABLE: (state, res) => {
       const { ClassScoreSurveyList, subjectInfos } = res.ResponseContent
       state.headerTable = subjectInfos
-      state.TableList =  ClassScoreSurveyList
+      state.TableList = ClassScoreSurveyList
+      state.tableLoading =  false
     },
 
   }
