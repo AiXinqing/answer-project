@@ -188,7 +188,8 @@
               if(item.label == '分数' && ele.sname !='总分'){
                 obj = {
                   type:'Text',
-                  url:this.URL.BrowsescoreAnsw
+                  url:this.URL.BrowsescoreAnsw,
+                  subject:ele.sname
                 }
               }
               return {
@@ -212,6 +213,7 @@
               ...dynamic,
               [`classRank_${item.sname}`]: item.classRank,
               [`gradeRank_${item.sname}`]: item.gradeRank,
+              [`tsid_${item.sname}`]: item.tsid,
               ord: item.ord,
               sname: item.sname,
               [`tscore_${item.sname}`]: item.tscore,

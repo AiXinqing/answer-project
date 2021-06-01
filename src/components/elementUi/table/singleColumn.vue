@@ -23,7 +23,7 @@
         <el-button
           v-if="column.type==='Text'"
           type="text"
-          @click="hanldeJump(scope.row,column.url)"
+          @click="hanldeJump(scope.row,column)"
           :class="[{'text_button':scope.row[prop] != undefined || scope.row[prop] != '',},font_colorT(scope.row,column.prop)]"
           v-html="columnHtml(scope.row,column.prop)"
         >{{column.prop}}</el-button>
@@ -99,7 +99,7 @@
           <el-button
             type="text" class="text_button"
             v-html="columnHtml(scope.row,ele.prop)"
-            @click="hanldeJump(scope.row,ele.url)"
+            @click="hanldeJump(scope.row,ele)"
             :class="font_colorT(scope.row,ele.prop)"
           >{{ele.prop}}</el-button>
         </template>
@@ -167,9 +167,14 @@
 
     methods: {
 
-      hanldeJump(row,url){
+      hanldeJump(row,parameter){
+        let tsid = row.tsid
         if(row.jump == 1){
-          window.open(`${url}?tid=${row.tid}&tsid=${row.tsid}&tnumber=${row.tnumber}`)
+          if(parameter.subject){
+            tsid = row['tsid_'+ parameter.subject]
+          }
+
+          window.open(`${parameter.url}?tid=${row.tid}&tsid=${tsid}&tnumber=${row.tnumber}`)
         }
       },
 
