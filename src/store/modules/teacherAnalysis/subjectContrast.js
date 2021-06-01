@@ -6,7 +6,7 @@
   const state = {
     headerTable: [],
     TableList: [],
-    tableLoading: true,
+    tableLoading: false,
   }
 
   const mutations = {
@@ -29,11 +29,16 @@
       state.TableList = []
     },
 
+    SET_LOADING: (state) => {
+      state.tableLoading = true
+    }
+
   }
 
   const actions = {
 
-    subjectContrast({ commit }, padata) { // 全科
+    subjectContrast ({ commit }, padata) { // 全科
+      commit('SET_LOADING')
       return new Promise((resolve, reject) => {
         const { tid, cid, url } = padata
         commit('EMPTY_TABLE')

@@ -14,7 +14,7 @@
       pageNum: 1,
       total: 0
     },
-    tableLoading: true
+    tableLoading: false,
   }
 
   const mutations = {
@@ -41,11 +41,16 @@
     EMPTY_HEADERTABLE: (state) => { // 清空数据
       state.headerTable = []
     },
+
+    SET_LOADING: (state) => {
+      state.tableLoading = true
+    }
   }
 
   const actions = {
 
-    getSubjectDetail({ commit }, padata) {
+    getSubjectDetail ({ commit }, padata) {
+      commit('SET_LOADING')
       return new Promise((resolve, reject) => {
         const { tid, tsid, cid, asid, pageIndex, pageSize, url } = padata
         commit('EMPTY_TABLE')

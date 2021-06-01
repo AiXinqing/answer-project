@@ -8,7 +8,7 @@ import {
     headerTable: [],
     TableList: [],
     singleTableList: [],
-    tableLoading: true,
+    tableLoading: false,
   }
 
   const mutations = {
@@ -39,11 +39,16 @@ import {
     SET_HEADERTABLE: (state, res) => {
       state.headerTable = res.ResponseContent
     },
+
+    SET_LOADING: (state) => {
+      state.tableLoading = true
+    }
   }
 
   const actions = {
 
-    getTranscript({ commit }, padata) { // 全科
+    getTranscript ({ commit }, padata) { // 全科
+      commit('SET_LOADING')
       return new Promise((resolve, reject) => {
         const { tid, tsid, cid, keyWords, url } = padata
         commit('EMPTY_TABLE')// 清空
@@ -58,7 +63,8 @@ import {
       })
     },
 
-    getSingleTranscript({ commit }, padata) { // 单科
+    getSingleTranscript ({ commit }, padata) { // 单科
+      commit('SET_LOADING')
       return new Promise((resolve, reject) => {
         const { tid, tsid, cid, keyWords, url } = padata
         commit('EMPTY_SINGLETABLE')// 清空

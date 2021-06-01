@@ -4,7 +4,7 @@
 
   const state = {
     TableList: [],
-    tableLoading: true,
+    tableLoading: false,
   }
 
   const mutations = {
@@ -18,11 +18,15 @@
       state.TableList = []
     },
 
+    SET_LOADING: (state) => {
+      state.tableLoading = true
+    }
   }
 
   const actions = {
 
-    getQuestionAnalysis({ commit }, padata) {
+    getQuestionAnalysis ({ commit }, padata) {
+      commit('SET_LOADING')
       return new Promise((resolve, reject) => {
         const { tid, tsid, cid, url } = padata
         commit('EMPTY_TABLE')

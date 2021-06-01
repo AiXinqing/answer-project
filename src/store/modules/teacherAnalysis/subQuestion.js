@@ -6,7 +6,7 @@ import {
   const state = {
     headerTable: [],
     TableList: [],
-    tableLoading: true,
+    tableLoading: false,
   }
 
   const mutations = {
@@ -31,11 +31,16 @@ import {
     EMPTY_HEADERTABLE: (state) => { // 清空数据
       state.headerTable = []
     },
+
+    SET_LOADING: (state) => {
+      state.tableLoading = true
+    }
   }
 
   const actions = {
 
-    getTranscript({ commit }, padata) { // 全科
+    getTranscript ({ commit }, padata) { // 全科
+      commit('SET_LOADING')
       return new Promise((resolve, reject) => {
         const { tid, tsid, cid, keyWords, url } = padata
         commit('EMPTY_TABLE')

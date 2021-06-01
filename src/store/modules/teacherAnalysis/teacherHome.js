@@ -6,7 +6,7 @@
   const state = {
     examList: [],
     classList: [],
-    tableLoading: true,
+    tableLoading: false,
   }
 
   const mutations = {
@@ -30,11 +30,16 @@
       // 清空
       state.classList = []
     },
+
+    SET_LOADING: (state) => {
+      state.tableLoading = true
+    }
   }
 
   const actions = {
 
-    getExamList({ commit }, padata) {
+    getExamList ({ commit }, padata) {
+      commit('SET_LOADING')
       return new Promise((resolve, reject) => {
         const { url } = padata
         commit('EMPTY_SUBJECT')
