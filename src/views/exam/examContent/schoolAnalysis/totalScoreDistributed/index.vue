@@ -62,8 +62,7 @@
     },
 
     computed: {
-      ...mapState('getExam', ['tableLoading']),
-      ...mapState('totalScoreDistributed', ['TableList']),
+      ...mapState('totalScoreDistributed', ['tableLoading','TableList']),
 
       chartData(){
         console.log(this.TableList)

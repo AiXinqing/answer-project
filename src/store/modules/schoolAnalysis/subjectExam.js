@@ -5,6 +5,7 @@
   const state = {
     subjectHeader: [],
     subjectTable: [],
+    tableLoading: true,
   }
 
   const mutations = {
@@ -12,7 +13,8 @@
     SET_TABLE: (state, res) => {
       const {SubjectScoreInfo,ASAnalyseSettingInfo} =  res.ResponseContent
       state.subjectTable =  SubjectScoreInfo
-      state.subjectHeader =  ASAnalyseSettingInfo
+      state.subjectHeader = ASAnalyseSettingInfo
+      state.tableLoading =  false
     },
 
   }

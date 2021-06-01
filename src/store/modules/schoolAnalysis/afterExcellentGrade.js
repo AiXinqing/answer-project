@@ -5,6 +5,7 @@
   const state = {
     headerTable: [],
     TableList: [],
+    tableLoading: true,
   }
 
   const mutations = {
@@ -13,6 +14,7 @@
       const {subjectInfos,ClassScoreSurveyList} =  res.ResponseContent
       state.TableList =  ClassScoreSurveyList
       state.headerTable =  subjectInfos
+      state.tableLoading =  false
     },
 
   }

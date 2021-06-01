@@ -100,8 +100,7 @@
     },
 
     computed: {
-      ...mapState('getExam', ['tableLoading']),
-      ...mapState('criticalBirth', ['TableList','headerTable']),
+      ...mapState('criticalBirth', ['tableLoading','TableList','headerTable']),
 
       tableColumn(){
         // 动态表头

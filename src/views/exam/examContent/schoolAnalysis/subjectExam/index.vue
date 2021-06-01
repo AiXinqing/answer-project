@@ -161,10 +161,9 @@
     },
 
     computed: {
-      ...mapState('getExam', ['tableLoading']),
-      ...mapState('gradesOverview', ['headerTable','TableList']),
-      ...mapState('subjectExam', ['subjectHeader','subjectTable']),
-      ...mapState('totalGrade', ['totalScoreheader','totalScoreTable']),
+      ...mapState('gradesOverview', ['tableLoading','headerTable','TableList']),
+      ...mapState('subjectExam', ['tableLoading','subjectHeader','subjectTable']),
+      ...mapState('totalGrade', ['tableLoading','totalScoreheader','totalScoreTable']),
 
       subjects(){
         return this.subjectsArr.length ? this.subjectsArr.filter(item => item.tsid != "totalScore" ) : []

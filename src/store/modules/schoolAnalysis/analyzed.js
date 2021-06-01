@@ -5,17 +5,20 @@
 
   const state = {
     TableList: [],
-    TotalTable:[]
+    TotalTable: [],
+    tableLoading: true,
   }
 
   const mutations = {
 
     SET_TABLE: (state, res) => {
-      state.TableList =  res.ResponseContent
+      state.TableList = res.ResponseContent
+      state.tableLoading =  false
     },
 
     SET_TOTAL: (state, res) => {
-      state.TotalTable = [{...res.ResponseContent}]
+      state.TotalTable = [{ ...res.ResponseContent }]
+      state.tableLoading =  false
     }
   }
 

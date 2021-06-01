@@ -188,8 +188,7 @@
     },
 
     computed: {
-      ...mapState('getExam', ['tableLoading']),
-      ...mapState('analyzed', ['TableList','TotalTable']),
+      ...mapState('analyzed', ['tableLoading','TableList','TotalTable']),
     },
 
     mounted () {

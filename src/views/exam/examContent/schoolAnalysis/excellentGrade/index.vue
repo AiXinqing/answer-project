@@ -108,8 +108,7 @@
     },
 
     computed: {
-      ...mapState('getExam', ['tableLoading']),
-      ...mapState('excellentGrade', ['headerTable','TableList']),
+      ...mapState('excellentGrade', ['tableLoading','headerTable','TableList']),
 
       tableColumn(){
         // 动态表头

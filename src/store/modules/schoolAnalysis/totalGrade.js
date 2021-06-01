@@ -4,7 +4,8 @@
 
   const state = {
     totalScoreheader:[],
-    totalScoreTable:[],
+    totalScoreTable: [],
+    tableLoading: true,
   }
 
   const mutations = {
@@ -13,6 +14,7 @@
       const { ASAnalyseSettingInfo, ClassScoreInfo } = res.ResponseContent
       state.totalScoreheader = ASAnalyseSettingInfo
       state.totalScoreTable = ClassScoreInfo
+      state.tableLoading =  false
     },
 
   }

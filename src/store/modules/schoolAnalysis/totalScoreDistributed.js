@@ -4,12 +4,14 @@
 
   const state = {
     TableList: [],
+    tableLoading: true,
   }
 
   const mutations = {
 
     SET_TABLE: (state, res) => {
       state.TableList = res.ResponseContent
+      state.tableLoading =  false
     },
   }
 
