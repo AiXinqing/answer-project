@@ -23,7 +23,7 @@
       </el-table>
     </template>
     <template v-else>
-      <div :style="{'max-height':height + 11 + 'px','overflow': 'auto'}">
+      <div :style="{'max-height':height + differenceHeight + 'px','overflow': 'auto'}">
         <el-table
           :data="tableData"
           :style="['width: 100%']"
@@ -70,6 +70,7 @@
       singleColumn,
     },
     props: {
+      differenceHeight:{type: Number, default: 11},
       theight: {type: Number, default: 500},
       // 表格列配置
       tablecols: {type: Array, default: () => []},

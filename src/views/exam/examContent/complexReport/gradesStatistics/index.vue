@@ -39,6 +39,7 @@
           :isIndex="false"
           :isPagination="false"
           :theight="theight"
+          :difference-height="differenceHeight"
           :loading="tableLoading"
           @hanlde-pop-func="hanldePopFunc"
         ></exam-table>
@@ -73,6 +74,7 @@
     data() {
       return {
         stretch: false,
+        differenceHeight: -10,
         fixedHeader:[
           {
             prop:'cname',
@@ -96,13 +98,13 @@
           {
             prop:'num',
             label:'人数',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
           {
             prop:'scale',
             label:'比例',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
         ],
@@ -111,7 +113,7 @@
         step:50,
         tsid:'',
         cidStr:'',
-        theight: document.body.clientHeight - 270 || 0,
+        theight: document.body.clientHeight - 310 || 0,
         parameter:{
           cids:'',
           tid: '',
@@ -196,7 +198,7 @@
 
     mounted () {
       this.$nextTick(() => {
-        this.theight = document.body.clientHeight - 270
+        this.theight = document.body.clientHeight - 310
       })
     },
 
@@ -214,7 +216,7 @@
       handleStretch(){
         this.$nextTick(() =>{
           let height = this.$refs.stretch.offsetHeight
-          this.theight = document.body.clientHeight - 208 - height // 258 = 页面高度 - height  除条件以外的高度
+          this.theight = document.body.clientHeight - 248 - height // 258 = 页面高度 - height  除条件以外的高度
         })
       },
 
