@@ -23,6 +23,10 @@
 
     SET_LOADING: (state) => {
       state.tableLoading = true
+    },
+
+    SET_LOADING_FALSE: (state) => {
+      state.tableLoading = false
     }
   }
 
@@ -37,6 +41,7 @@
           resolve(res)
           return res
         }).catch(error => {
+          commit('SET_LOADING_FALSE')
           reject(error)
         })
       })
@@ -51,6 +56,7 @@
           resolve(res)
           return res
         }).catch(error => {
+          commit('SET_LOADING_FALSE')
           reject(error)
         })
       })
