@@ -158,6 +158,8 @@
           },
         ],
 
+        empty:false,
+
       }
     },
 
@@ -166,7 +168,7 @@
 
       tableColumn(){
         // 动态表头
-        return this.headerTable.length ? [
+        return this.headerTable.length && this.empty ? [
           ...this.fixedHeader,
           ...this.headerTable.map(ele => ({
             ...ele,
@@ -212,7 +214,7 @@
 
       tableData(){
 
-        return this.TableList.length ? this.TableList.map(item =>{
+        return this.TableList.length && this.empty ? this.TableList.map(item =>{
           let dynamic = {}
           item.DynamicDetail.forEach(element => {
             switch (element.type) {
@@ -264,6 +266,7 @@
 
     methods: {
       initTable(obj) {
+        this.empty = true
         this.parameter = {
           ...this.parameter,
           ...obj
@@ -280,6 +283,10 @@
           this.generalTable()
         })
 
+      },
+
+      emptyFunc(){
+        this.empty = false
       },
 
       generalTable(){
