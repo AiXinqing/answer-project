@@ -37,6 +37,7 @@
           :isPagination="false"
           :theight="theight"
           :loading="tableLoading"
+          :difference-height="differenceHeight"
           @hanlde-pop-func="hanldePopFunc"
         ></exam-table>
       </div>
@@ -69,6 +70,7 @@
     data() {
       return {
         stretch: false,
+        differenceHeight:-7,
         fixedHeader:[
           {
             prop:'cname',
@@ -92,13 +94,13 @@
           {
             prop:'num',
             label:'人数',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
           {
             prop:'scale',
             label:'比例',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
         ],
@@ -107,7 +109,7 @@
         tsid:'',
         cidStr:'',
         type:'top',
-        theight: document.body.clientHeight - 285 || 0,
+        theight: document.body.clientHeight - 315 || 0,
         placing:'10,20,30,40,50',
         parameter:{
           cids:'',
@@ -202,7 +204,7 @@
 
     mounted () {
       this.$nextTick(() => {
-        this.theight = document.body.clientHeight - 285
+        this.theight = document.body.clientHeight - 315
       })
     },
 
@@ -220,7 +222,7 @@
       handleStretch(){
         this.$nextTick(() =>{
           let height = this.$refs.stretch.offsetHeight
-          this.theight = document.body.clientHeight - 208 - height // 258 = 页面高度 - height  除条件以外的高度
+          this.theight = document.body.clientHeight - 238 - height // 258 = 页面高度 - height  除条件以外的高度
         })
       },
 
@@ -270,8 +272,9 @@
         this.$refs.studentDetails.openDetails(row)
       },
 
-      handelRanking(){
-        this.parameter.type = this.type
+      handelRanking(val){
+        this.type = val
+        this.parameter.type = val
         this.$nextTick(()=>{
           this.getTable()
         })
