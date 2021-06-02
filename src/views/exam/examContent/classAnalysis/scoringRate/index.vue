@@ -50,7 +50,7 @@
       return {
         fixedHeader:[
           {
-            prop:'type',
+            prop:'name',
             label:'题号',
             minWidth:'100',
             align:'center',
