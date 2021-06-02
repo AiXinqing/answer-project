@@ -62,14 +62,19 @@
         </div>
       </div>
       <div class="el_table_wapper">
-        <exam-table
-          :tablecols="totalScoretableColumn"
-          :tableData="totalScoretableData"
-          :isIndex="false"
-          :isPagination="false"
-          :theight="theight"
-          :loading="tableLoading"
-        />
+        <template v-if="totalScoretableData.length">
+          <exam-table
+            :tablecols="totalScoretableColumn"
+            :tableData="totalScoretableData"
+            :isIndex="false"
+            :isPagination="false"
+            :theight="theight"
+            :loading="tableLoading"
+          />
+        </template>
+        <template v-else>
+          <div class="no_data total_sytle">暂无数据</div>
+        </template>
       </div>
     </div>
 
@@ -166,7 +171,7 @@
       ...mapState('totalGrade', ['tableLoading','totalScoreheader','totalScoreTable']),
 
       subjects(){
-        return this.subjectsArr.length ? this.subjectsArr.filter(item => item.tsid != "totalScore" ) : []
+        return this.subjectsArr.length ? this.subjectsArr : []
       },
 
       options(){
@@ -301,7 +306,7 @@
       subjectsArr: {
         immediate: true,
         handler () {
-          this.tsid = this.subjectsArr.length ? this.subjectsArr.find((element,i) => i == 1).tsid :0
+          this.tsid = this.subjectsArr.length ? this.subjectsArr.find((element,i) => i == 0).tsid :0
           if(this.tsid != 0){
             this.$nextTick(() => {
               this.totalScoreParameter.tid = this.prmTid
@@ -378,6 +383,11 @@
 
     .search_select{
       margin-right: 20px;
+    }
+  }
+  .total_sytle{
+    &.no_data{
+      text-align: center
     }
   }
 </style>
