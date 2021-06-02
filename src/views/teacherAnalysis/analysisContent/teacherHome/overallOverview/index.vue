@@ -62,7 +62,8 @@
             fixed:'left',
             type:'Html'
           }
-        ]
+        ],
+        empty:false
       }
     },
 
@@ -115,6 +116,7 @@
 
     methods: {
       initTable(obj) {
+        this.empty = true
         this.parameter = {
           ...this.parameter,
           ...obj
@@ -123,7 +125,11 @@
         this.$nextTick(()=>{
           this.$store.dispatch('profileInfo/getProfileInfo', this.parameter)
         })
-      }
+      },
+
+      emptyFunc(){
+        this.empty = false
+      },
     },
   }
 </script>

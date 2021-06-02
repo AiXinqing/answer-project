@@ -44,25 +44,15 @@
             'linkName':'小题得分'
           }
         ],
-        prmTid:''
+        prmTid:'',
       }
-    },
-    watch: {
-      $route: {
-        handler: function(route) {
-          const query = route.query
-          if (query.prmTid) {
-            this.prmTid = query.prmTid
-          }
-        },
-        immediate: true
-      },
     },
 
     methods: {
       handelChange(item) {
         this.active = item.calssname
-        this.$router.push({name:item.toUrl})
+
+        this.$router.push({name:item.toUrl,params: { tabId: '123' }})
       }
     },
   }

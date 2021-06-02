@@ -108,7 +108,9 @@
             align:'center',
             type:'Html'
           },
-        ]
+        ],
+
+        empty:false
       }
     },
 
@@ -188,6 +190,7 @@
 
     methods: {
       initTable(obj) {
+        this.empty = true
         this.parameter = {
           ...this.parameter,
           tid: obj.tid,
@@ -213,6 +216,10 @@
           })
         }
 
+      },
+
+      emptyFunc(){
+        this.empty = false
       },
 
       generalTable(){

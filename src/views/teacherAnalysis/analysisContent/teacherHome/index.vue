@@ -102,6 +102,7 @@
           tid: '',
           url:this.URL.GetAsTestClass
         },
+        tabId:''
       }
     },
 
@@ -119,6 +120,16 @@
     },
 
     watch: {
+      $route: {
+        handler: function(route) {
+          const params = route.params
+          if (params.tabId) {
+            this.tabId = params.tabId
+          }
+        },
+        immediate: true
+      },
+
       examOptions: {
         immediate: true,
         handler () {
@@ -162,6 +173,11 @@
                 this.$refs.subjectContrast.initTable(formData)
                 this.$refs.transcript.initTable(formData)
               })
+            }else{
+              this.$refs.overallOverview.emptyFunc()
+              this.$refs.subjectJuxtapose.emptyFunc()
+              this.$refs.subjectContrast.emptyFunc()
+              this.$refs.transcript.emptyFunc()
             }
           }
         }
@@ -171,6 +187,9 @@
 
     mounted () {
       this.subjectList()
+      if(this.tabId != ''){
+        this.subjectList()
+      }
     },
 
     methods: {

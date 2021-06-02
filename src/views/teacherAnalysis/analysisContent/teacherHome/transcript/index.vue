@@ -115,6 +115,8 @@
           },
         ],
 
+        empty:false,
+
       }
     },
 
@@ -185,6 +187,7 @@
 
     methods: {
       initTable(obj) {
+        this.empty = true
         this.parameter = {
           ...this.parameter,
           ...obj
@@ -201,6 +204,10 @@
           this.generalTable()
         })
 
+      },
+
+      emptyFunc(){
+        this.empty = false
       },
 
       generalTable(){

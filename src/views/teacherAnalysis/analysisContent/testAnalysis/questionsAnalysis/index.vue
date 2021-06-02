@@ -77,6 +77,7 @@
           },
         ],
 
+        empty:false,
       }
     },
 
@@ -84,12 +85,13 @@
       ...mapState('questionAnalysis',['tableLoading','TableList']),
 
       tableData(){
-        return this.TableList.length ? this.TableList: []
+        return this.TableList.length && this.empty ? this.TableList: []
       }
     },
 
     methods: {
       initTable(obj) {
+        this.empty = true
         this.parameter = {
           ...this.parameter,
           ...obj
@@ -101,6 +103,10 @@
           this.getTable()
         })
 
+      },
+
+      emptyFunc(){
+        this.empty = false
       },
 
       getTable(){

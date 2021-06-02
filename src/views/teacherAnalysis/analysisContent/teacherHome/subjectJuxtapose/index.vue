@@ -104,7 +104,8 @@
               }
             ]
           }
-        ]
+        ],
+        empty:false,
       }
     },
 
@@ -131,6 +132,7 @@
 
     methods: {
       initTable(obj) {
+        this.empty = true
         this.parameter = {
           ...this.parameter,
           ...obj
@@ -139,6 +141,10 @@
         this.$nextTick(()=>{
           this.$store.dispatch('subjectJuxtapose/getSubjectJuxtapose', this.parameter)
         })
+      },
+
+      emptyFunc(){
+        this.empty = false
       },
 
       hanldePopFunc(row){

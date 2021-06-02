@@ -70,6 +70,7 @@
           tid: '',
           url:this.URL.GetAsTestClass
         },
+        tabId:''
       }
     },
 
@@ -89,6 +90,16 @@
     },
 
     watch: {
+      $route: {
+        handler: function(route) {
+          const params = route.params
+          if (params.tabId) {
+            this.tabId = params.tabId
+          }
+        },
+        immediate: true
+      },
+
       examOptions: {
         immediate: true,
         handler () {
@@ -128,6 +139,8 @@
                 }
                 this.$refs.questionsAnalysis.initTable(formData)
               })
+            }else{
+              this.$refs.questionsAnalysis.emptyFunc()
             }
           }
         }
@@ -135,7 +148,9 @@
     },
 
     mounted () {
-      this.subjectList()
+      if(this.tabId != ''){
+        this.subjectList()
+      }
     },
 
     methods: {
