@@ -11,9 +11,6 @@ import schoolAnalysis from '@/views/exam/examContent/schoolAnalysis'
 import jointExam from '@/views/exam/examContent/jointExamAnalysis'
 
 // 教师分析
-import teacherHome from '@/views/teacherAnalysis/analysisContent/teacherHome'
-import testAnalysis from '@/views/teacherAnalysis/analysisContent/testAnalysis'
-import subtopicScore from '@/views/teacherAnalysis/analysisContent/subtopicScore'
 
 Vue.use(VueRouter)
 
@@ -78,32 +75,6 @@ const routes = [{
     path: '/teacherHome',
     name: 'teacherHome',
     component: () => import('@/views/teacherAnalysis'),
-    children: [
-      {
-        path: '/',
-        name: 'teacherHome',
-        component: teacherHome,
-        meta: {
-          title:'智汇e校园-教师分析'
-        }
-      },
-      {
-        path: '/testAnalysis',
-        name: 'testAnalysis',
-        component: testAnalysis,
-        meta: {
-          title:'智汇e校园-阅卷分析'
-        }
-      },
-      {
-        path: '/subtopicScore',
-        name: 'subtopicScore',
-        component: subtopicScore,
-        meta: {
-          title:'智汇e校园-阅卷分析'
-        }
-      }
-    ]
   }
 ]
 
