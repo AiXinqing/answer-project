@@ -166,10 +166,6 @@
               })
             }else{
               this.subjectBox = []
-              this.$refs.overallOverview.emptyFunc()
-              this.$refs.subjectJuxtapose.emptyFunc()
-              this.$refs.subjectContrast.emptyFunc()
-              this.$refs.transcript.emptyFunc()
             }
           }
         }
@@ -178,8 +174,7 @@
 
 
     mounted () {
-      this.subjectList()
-      if(this.tabId != ''){
+      if(this.examOptions.length == 0){
         this.subjectList()
       }
     },

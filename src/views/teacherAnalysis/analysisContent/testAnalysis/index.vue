@@ -75,7 +75,7 @@
     },
 
     computed: {
-      ...mapState('teacherHome', ['examList','classList']),
+      ...mapState('questionAnalysis', ['examList','classList']),
 
       examOptions(){
         let objArray = this.examList.length ? this.examList.map(item => ({label:item.name,value:item.tid})) : []
@@ -133,7 +133,7 @@
                 this.$refs.questionsAnalysis.initTable(formData)
               })
             }else{
-              this.$refs.questionsAnalysis.emptyFunc()
+              this.subjectBox = []
             }
           }
         }
@@ -141,7 +141,7 @@
     },
 
     mounted () {
-      if(this.tabId != ''){
+      if(this.examOptions.length == 0){
         this.subjectList()
       }
     },
@@ -183,11 +183,11 @@
       },
       subjectList(){
         // 获取考次列表
-        this.$store.dispatch('teacherHome/getExamList', {url:this.URL.GetAsTestList})
+        this.$store.dispatch('questionAnalysis/getExamList', {url:this.URL.GetAsTestList})
       },
 
       getClassSubjectList(){
-        this.$store.dispatch('teacherHome/getClassList', this.parameter) // GetAsTestClass
+        this.$store.dispatch('questionAnalysis/getClassList', this.parameter) // GetAsTestClass
       }
     },
   }
