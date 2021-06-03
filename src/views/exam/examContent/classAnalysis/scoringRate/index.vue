@@ -52,7 +52,7 @@
           {
             prop:'name',
             label:'题号',
-            minWidth:'100',
+            width:'80',
             align:'center',
             fixed:'left',
             type:'Html',
