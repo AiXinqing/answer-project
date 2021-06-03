@@ -147,12 +147,15 @@
         },
         classFun: (row,prop) => {
           let classStr = ''
+          let noClick = ' '
           if(prop.typeIndex == '1'){
             classStr = Number(prop.fullScore) <= Number(row[prop.prop]) ? 'correct' : 'error'
           }else if(prop.typeIndex == '0'){
             classStr = Number(prop.fullScore) <= Number(row[prop.prop]) ? 'correct' : 'error'
           }
-          return classStr
+
+          noClick = row[prop]  == null ? ' noClick' : ''
+          return classStr + noClick
         },
         font_colorT: (row,prop) => {
           return row[prop]  == '' || row[prop]  == undefined ? 'transparent' : ''

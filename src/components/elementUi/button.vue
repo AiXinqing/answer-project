@@ -151,7 +151,7 @@ export default {
   border-color: @del_6;
   background-color: @del_6;
 }
-.el-button:focus,
+
 .el-button:hover{
   opacity: .8;
   color: @white !important;
@@ -166,5 +166,8 @@ button.el-button.text_button.el-button--text.el-button--medium:hover {
     background-color: @bc_tr !important;
     color: @main !important;
     border-color: @bc_tr !important;
+}
+.el-button--text:active{
+  color: @main
 }
 </style>

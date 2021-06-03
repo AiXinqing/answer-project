@@ -77,12 +77,12 @@
           align:'center',
           type:'Html',
         },
-        step:50,
+        step:20,
         tsid:0,
         parameter:{
           tid: '',
           tsid:'',
-          step:50,
+          step:20,
           showGrade:false,
           url:this.URL.GetClassScoreSegmentNum
         },
