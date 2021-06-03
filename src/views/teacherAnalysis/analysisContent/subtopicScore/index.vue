@@ -131,7 +131,6 @@
               })
             }else{
               this.subjectBox = []
-              this.$refs.subQuestion.emptyFunc()
             }
           }
         }

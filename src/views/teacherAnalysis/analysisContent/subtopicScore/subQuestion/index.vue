@@ -285,10 +285,6 @@
 
       },
 
-      emptyFunc(){
-        this.empty = false
-      },
-
       generalTable(){
         // 全科
         this.$store.dispatch('subQuestion/GetStuResultsHeade', this.HeadeParameter)
