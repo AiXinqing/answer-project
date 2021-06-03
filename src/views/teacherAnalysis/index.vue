@@ -16,14 +16,23 @@
         <div class="nav_login"></div>
       </div>
     </div>
+
     <div class="content_router">
-      <router-view/>
+      <component :is="active" />
     </div>
   </div>
 </template>
 
 <script>
+  import teacherHome from './analysisContent/teacherHome'
+  import testAnalysis from './analysisContent/testAnalysis'
+  import subtopicScore from './analysisContent/subtopicScore'
   export default {
+    components: {
+      teacherHome,
+      testAnalysis,
+      subtopicScore,
+    },
     data() {
       return {
         active:'teacherHome',
@@ -44,15 +53,12 @@
             'linkName':'小题得分'
           }
         ],
-        prmTid:'',
       }
     },
 
     methods: {
       handelChange(item) {
         this.active = item.calssname
-
-        this.$router.push({name:item.toUrl,params: { tabId: '123' }})
       }
     },
   }

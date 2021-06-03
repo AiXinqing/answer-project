@@ -90,15 +90,6 @@
     },
 
     watch: {
-      $route: {
-        handler: function(route) {
-          const params = route.params
-          if (params.tabId) {
-            this.tabId = params.tabId
-          }
-        },
-        immediate: true
-      },
 
       examOptions: {
         immediate: true,
