@@ -118,8 +118,10 @@
         handler () {
           if(this.classOptions.length){
             this.cid = this.classOptions.find((element,i) => i == 0).value
-
             this.subjectBox = this.classList.filter(item => item.cid == this.cid)[0].ASTestSubjectList.filter(item => item.tsid != '0').map(item => ({name:item.sname,tsid:item.tsid}))
+          }else{
+            this.cid = ''
+            this.subjectBox = []
           }
         }
       },
