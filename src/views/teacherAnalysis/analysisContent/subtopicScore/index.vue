@@ -70,15 +70,22 @@
           tid: '',
           url:this.URL.GetAsTestClass
         },
-        tabId:'',
       }
     },
 
     computed: {
-      ...mapState('teacherHome', ['examList','classList']),
+      ...mapState('subQuestion', ['examList','classList']),
 
       examOptions(){
         let objArray = this.examList.length ? this.examList.map(item => ({label:item.name,value:item.tid})) : []
+        if(objArray.length){
+          let tid = objArray.find((element,i) => i == 0).value
+            this.$nextTick(() => {
+              this.tid = tid
+              this.parameter.tid = tid
+              this.getClassSubjectList()
+            })
+          }
         return objArray
       },
 
@@ -90,28 +97,6 @@
     },
 
     watch: {
-      $route: {
-        handler: function(route) {
-          const params = route.params
-          if (params.tabId) {
-            this.tabId = params.tabId
-          }
-        },
-        immediate: true
-      },
-
-      examOptions: {
-        immediate: true,
-        handler () {
-          if(this.examOptions.length){
-            this.tid = this.examOptions.find((element,i) => i == 0).value
-            this.$nextTick(() => {
-              this.parameter.tid = this.tid
-              this.getClassSubjectList()
-            })
-          }
-        }
-      },
 
       classOptions: {
         immediate: true,
@@ -126,16 +111,19 @@
         }
       },
 
-
       subjectBox: {
         immediate: true,
         handler () {
           if(this.subjectBox.length){
             this.tsid = this.subjectBox.find((element,i) => i == 0).tsid
-            if(this.tsid != 0){
+            let tid = this.tid
+            if(tid == 0){
+              tid = this.examOptions.find((element,i) => i == 0).value
+            }
+            if(this.tsid != 0 && this.tid != 0 ){
               this.$nextTick(() => {
                 let formData = {
-                  tid:this.tid,
+                  tid:tid,
                   cid:this.cid,
                   tsid:this.tsid,
                 }
@@ -151,9 +139,7 @@
     },
 
     mounted () {
-      if(this.tabId != ''){
-        this.subjectList()
-      }
+      this.subjectList()
     },
 
     methods: {
@@ -193,11 +179,11 @@
       },
       subjectList(){
         // 获取考次列表
-        this.$store.dispatch('teacherHome/getExamList', {url:this.URL.GetAsTestList})
+        this.$store.dispatch('subQuestion/getExamList', {url:this.URL.GetAsTestList})
       },
 
       getClassSubjectList(){
-        this.$store.dispatch('teacherHome/getClassList', this.parameter) // GetAsTestClass
+        this.$store.dispatch('subQuestion/getClassList', this.parameter) // GetAsTestClass
       }
     },
   }
