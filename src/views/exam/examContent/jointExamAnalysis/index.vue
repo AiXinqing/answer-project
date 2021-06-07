@@ -20,12 +20,14 @@
   import subTable from './subTable'
   import question from './question'
   import schoolGradesCompared from './schoolGradesCompared'
+  import classGradesCompared from './classGradesCompared'
   export default {
     components: {
       jointExam,
       subTable,
       question,
-      schoolGradesCompared
+      schoolGradesCompared,
+      classGradesCompared
     },
 
     data() {
@@ -47,6 +49,10 @@
           {
             label:'学校成绩对比',
             name:'schoolGradesCompared'
+          },
+          {
+            label:'班级成绩对比',
+            name:'classGradesCompared'
           },
         ]
       }
