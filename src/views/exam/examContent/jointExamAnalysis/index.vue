@@ -17,9 +17,11 @@
 
 <script>
   import jointExam from './jointExam'
+  import subTable from './subTable'
   export default {
     components: {
       jointExam,
+      subTable
     },
 
     data() {
@@ -29,6 +31,10 @@
           {
             label:'联考成绩册',
             name:'jointExam'
+          },
+          {
+            label:'学生小分表',
+            name:'subTable'
           },
         ]
       }
