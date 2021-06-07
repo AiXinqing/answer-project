@@ -21,7 +21,7 @@
   import question from './question'
   import schoolGradesCompared from './schoolGradesCompared'
   import classGradesCompared from './classGradesCompared'
-  import schoolgradesStatistics from './schoolgradesStatistics'
+  import schoolGradesStatistics from './schoolGradesStatistics'
   export default {
     components: {
       jointExam,
@@ -29,7 +29,7 @@
       question,
       schoolGradesCompared,
       classGradesCompared,
-      schoolgradesStatistics
+      schoolGradesStatistics
     },
 
     data() {
@@ -58,7 +58,11 @@
           },
           {
             label:'学校成绩分段统计',
-            name:'schoolgradesStatistics'
+            name:'schoolGradesStatistics'
+          },
+          {
+            label:'班级成绩分段统计',
+            name:'classGradesStatistics'
           },
         ]
       }
