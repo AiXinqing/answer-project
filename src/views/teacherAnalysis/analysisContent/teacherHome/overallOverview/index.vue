@@ -115,6 +115,7 @@
     },
 
     methods: {
+
       initTable(obj) {
         this.empty = true
         this.parameter = {
@@ -125,11 +126,8 @@
         this.$nextTick(()=>{
           this.$store.dispatch('profileInfo/getProfileInfo', this.parameter)
         })
-      },
+      }
 
-      emptyFunc(){
-        this.empty = false
-      },
     },
   }
 </script>
