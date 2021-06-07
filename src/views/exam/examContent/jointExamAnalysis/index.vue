@@ -21,13 +21,15 @@
   import question from './question'
   import schoolGradesCompared from './schoolGradesCompared'
   import classGradesCompared from './classGradesCompared'
+  import schoolgradesStatistics from './schoolgradesStatistics'
   export default {
     components: {
       jointExam,
       subTable,
       question,
       schoolGradesCompared,
-      classGradesCompared
+      classGradesCompared,
+      schoolgradesStatistics
     },
 
     data() {
@@ -53,6 +55,10 @@
           {
             label:'班级成绩对比',
             name:'classGradesCompared'
+          },
+          {
+            label:'学校成绩分段统计',
+            name:'schoolgradesStatistics'
           },
         ]
       }
