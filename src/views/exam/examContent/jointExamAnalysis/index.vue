@@ -18,10 +18,12 @@
 <script>
   import jointExam from './jointExam'
   import subTable from './subTable'
+  import question from './question'
   export default {
     components: {
       jointExam,
-      subTable
+      subTable,
+      question
     },
 
     data() {
@@ -35,6 +37,10 @@
           {
             label:'学生小分表',
             name:'subTable'
+          },
+          {
+            label:'试题汇总表',
+            name:'question'
           },
         ]
       }
