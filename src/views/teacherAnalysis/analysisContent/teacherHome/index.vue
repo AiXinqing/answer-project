@@ -136,7 +136,9 @@
           if(this.classOptions.length){
             this.cid = this.classOptions.find((element,i) => i == 0).value
 
-            this.subjectBox = this.classList.filter(item => item.cid == this.cid)[0].ASTestSubjectList.map(item => ({name:item.sname,tsid:item.tsid}))
+            if(this.classList.length){
+              this.subjectBox = this.classList.filter(item => item.cid == this.cid)[0].ASTestSubjectList.map(item => ({name:item.sname,tsid:item.tsid}))
+            }
           }
         }
       },
@@ -164,8 +166,6 @@
                 this.$refs.subjectContrast.initTable(formData)
                 this.$refs.transcript.initTable(formData)
               })
-            }else{
-              this.subjectBox = []
             }
           }
         }

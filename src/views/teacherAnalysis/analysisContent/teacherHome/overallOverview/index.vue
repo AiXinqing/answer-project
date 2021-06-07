@@ -126,7 +126,7 @@
         this.$nextTick(()=>{
           this.$store.dispatch('profileInfo/getProfileInfo', this.parameter)
         })
-      }
+      },
 
     },
   }
