@@ -36,7 +36,6 @@
 
       <div class="el_table_wapper">
         <exam-table
-          :style="{'max-height':theight+ tableH +'px'}"
           :tablecols="tableColumn"
           :tableData="tableData"
           :isIndex="false"

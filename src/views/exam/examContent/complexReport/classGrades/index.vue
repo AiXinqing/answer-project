@@ -118,7 +118,7 @@
               {
                 prop:'avgScoreRate',
                 label:'平均得分率',
-                width:'90',
+                width:'100',
                 align:'center',
                 type:'Html'
               },

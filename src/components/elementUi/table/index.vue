@@ -9,6 +9,7 @@
         element-loading-spinner="el-icon-loading"
         :highlight-current-row="true"
         v-loading="loading"
+        :row-style="{'height':'35px'}"
       >
       <!-- 标题栏- 合并 -->
         <el-table-column v-if="isSelection" type="selection" align="center"></el-table-column>
@@ -23,28 +24,27 @@
       </el-table>
     </template>
     <template v-else>
-      <div :style="{'max-height':height + differenceHeight + 'px','overflow': 'auto'}">
-        <el-table
-          :data="tableData"
-          :style="['width: 100%']"
-          :element-loading-text="loadingText"
-          :border="isBorder"
-
-          element-loading-spinner="el-icon-loading"
-          v-loading="loading"
-        >
-          <!-- 标题栏- 合并 -->
-          <el-table-column v-if="isSelection" type="selection" align="center"></el-table-column>
-          <el-table-column v-if="isIndex" type="index" :label="indexlabel" align="center" width="50" :fixed="indexFixed"></el-table-column>
-          <singleColumn
-            v-for="(column,i) in tablecols"
-            :key="i"
-            :column="column"
-            @hanlde-pop-func="hanldePopFunc"
-          />
-          <!-- 标题栏- 合并 -->
-        </el-table>
-      </div>
+      <el-table
+        :data="tableData"
+        :style="['width: 100%']"
+        :element-loading-text="loadingText"
+        :border="isBorder"
+        :height="height + differenceHeight"
+        element-loading-spinner="el-icon-loading"
+        v-loading="loading"
+        :row-style="{'height':'35px'}"
+      >
+        <!-- 标题栏- 合并 -->
+        <el-table-column v-if="isSelection" type="selection" align="center"></el-table-column>
+        <el-table-column v-if="isIndex" type="index" :label="indexlabel" align="center" width="50" :fixed="indexFixed"></el-table-column>
+        <singleColumn
+          v-for="(column,i) in tablecols"
+          :key="i"
+          :column="column"
+          @hanlde-pop-func="hanldePopFunc"
+        />
+        <!-- 标题栏- 合并 -->
+      </el-table>
     </template>
     <!-- 分页 -->
       <section class="ces-pagination" v-if='isPagination'>
@@ -147,17 +147,6 @@
 
 <style lang="less">
   @import '~@/assets/css/variables.less';
-  .el-table--enable-row-transition .el-table__body td{
-    height:35px;
-  }
-  .el-table__row{
-    &:nth-child(even){
-      background-color: @bc_f5
-    }
-    &:nth-child(odd){
-      background-color: @white
-    }
-  }
 
   .el-table .ascending .sort-caret.ascending{
     border-bottom-color:@main
@@ -175,19 +164,7 @@
     }
     .cell.el-tooltip{
       height:100%;
-      line-height:35px;
     }
-  }
-  .el-table--medium td,
-  .el-table--medium th{
-    padding: 0px 0;
-    padding-top: 6px;
-  }
-  .el-table--border td:first-child .cell, .el-table--border th:first-child .cell, .el-table .cell, .el-table th div{
-    padding-left: 5px;
-  }
-  .el-table .cell, .el-table th div{
-    padding-right: 5px;
   }
 
   // table分页
@@ -224,8 +201,6 @@
       font-size: 13px;
       min-width: 30.5px;
       font-weight: 500;
-      height: 26px;
-      line-height: 26px;
     }
   }
   .el-pagination__editor{
@@ -235,13 +210,7 @@
       }
     }
   }
-  .el-table--medium td,
-  .el-table--medium th{
-    padding-top: 0
-  }
-  table tr td div:last-child{
-    margin-bottom:0
-  }
+
   .el-loading-spinner{
     i{
       color:@main
@@ -250,12 +219,56 @@
       color:@main
     }
   }
-  thead.is-group tr {
-    height: 30px;
-  }
 
   .el-table tbody tr:hover>td {
     background-color:@mainHover !important
   }
 
+  .el-table--medium td, .el-table--medium th{
+    padding: 0 0;
+  }
+
+
+  .el-table{
+    td,
+    th{
+      padding: 0 0;
+    }
+
+    .cell{
+      line-height: inherit;
+    }
+  }
+
+  table tr td div:last-child{
+    margin-bottom: 0;
+  }
+
+  .el-button--medium.text_button{
+    padding: 0 0;
+  }
+  /* 解决 el-table fixed 高度不对的问题 */
+.el-table td.is-hidden>* {
+  visibility: visible !important;
+}
+
+.box-card .el-table__fixed-left{
+  height: 100% !important;
+}
+.el-table__fixed-body-wrapper{
+  top: 70px !important;
+  overflow: auto;
+  // z-index: -1;
+}
+
+.el_table_wapper section>div .el-table__body-wrapper{
+  height: calc(100% - 70px) !important;
+}
+
+.el-pagination{
+  margin-top: 10px;
+}
+.el_table_wapper section>div .el-table__fixed{
+  background: #fff;
+}
 </style>
