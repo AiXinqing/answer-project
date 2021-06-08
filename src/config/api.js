@@ -12,7 +12,7 @@ export const URL = {
   ExportStuResults: BASEURL + '/Report/AnlyReport/ExportStuResults', // 成绩册分析报表下载
   BrowsescoreAnsw: BASEURL + '/Manage/Marking/BrowsescoreAnsw', // 跳转链接地址
   // 小题分数
-  GetStuSmallScoreHeade: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetStuSmallScoreHeade', // 小题分数报表动态表头
+  GetStuSmallScoreHeade: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetStuSmallScoreHeade', // 小题分数报表动态表头 -----------------(联考小题分数报表动态表头)
   GetStuSmallScore: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetStuSmallScore', //小题分数报表
   ExportStuSmallScore: BASEURL + '/Report/AnlyReport/ExportStuSmallScore', // 小题分数报表下载
   //班级成绩对比报表
@@ -65,7 +65,7 @@ export const URL = {
   GetGeneralSituation: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetGeneralSituation', // 获取整体概况信息
   GetClassScoreLvlAnalysis: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreLvlAnalysis', // 获取学科等级分布
   GetClassScoreContrastStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreContrastStuDetails', // 获取学科等级分布学生详情
-  GetStuResultsHeade: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetStuResultsHeade', // 获取学科等级分布学生详情动态表头
+  GetStuResultsHeade: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetStuResultsHeade', // 获取学科等级分布学生详情动态表头 ----------------- （ 联考成绩册 ）
   GetTeacherSubjectScoreContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetTeacherSubjectScoreContrast', // 学科对比（科目选择全部）
   GetTeacherClassScoreContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetTeacherClassScoreContrast', // 学科对比（科目选择单科）
   GetClassStuTotalScore: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassStuTotalScore', // 成绩单（全科）
@@ -76,5 +76,13 @@ export const URL = {
   ExportTeacherClassQuestion: BASEURL + '/Report/AnlyReport/ExportTeacherClassQuestion', // 试题分析下载
   GetTeacherClassStuSmallScore: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetTeacherClassStuSmallScore', // 学生小题得分
   ExportTeacherClassStuSmallScore: BASEURL + '/Report/AnlyReport/ExportTeacherClassStuSmallScore', // 学生小题得分下载
+
+  //---------------------------------------联考分析报告
+
+  GetJointExamSchool: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamSchool', // 获取联考学校
+  GetJointExamStuResults: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamStuResults', // 联考成绩册分析报表
+  ExportJointExamStuResults: BASEURL + '/Report/AnlyReport/ExportJointExamStuResults', // 联考成绩册分析报表下载
+  GetJointExamStuSmallScore: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamStuSmallScore', // 联考小题分数报表
+  ExportJointExamStuSmallScore: BASEURL + '/Report/AnlyReport/ExportJointExamStuSmallScore', // 联考小题分数报表
 
 }
