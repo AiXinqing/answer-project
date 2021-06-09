@@ -130,7 +130,7 @@
         // 参数
         tsid:'',
         keyWords:'',
-        scids:'',
+        scidsStr:'',
         theight: document.body.clientHeight - 350 || 0,
 
         parameter:{
