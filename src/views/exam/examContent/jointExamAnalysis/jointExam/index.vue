@@ -13,7 +13,7 @@
     </div>
     <div class="table_wapper">
       <div class="table_search">
-        <div class="search_left">
+        <div class="search_left mr_0">
           <span class="titile_18">分数详情</span>
           <i>(点击学科的分数，可查看学生的答题卡)</i>
         </div>
@@ -140,6 +140,12 @@
           tsid:'',
           url:this.URL.GetJointExamStuResults
         },
+        iSlot:[
+          {
+            type:'prefix',
+            icon:'el-icon-search'
+          }
+        ],
 
         page: {
           pageSize: 15,
@@ -296,7 +302,6 @@
         this.$nextTick(()=>{
           this.getTable()
         })
-
       },
       handleCurrentChange(val){
         // 分页起始页
@@ -384,5 +389,9 @@
 
 <style lang="less">
   @import '~@/assets/css/variables.less';
-
+  .search_left{
+    &.mr_0{
+      margin-left: 0
+    }
+  }
 </style>
