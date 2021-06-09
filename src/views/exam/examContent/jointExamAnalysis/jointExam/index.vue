@@ -13,11 +13,24 @@
     </div>
     <div class="table_wapper">
       <div class="table_search">
-        <div class="search_left is_active" style="margin-left:0">
-          <span>得分率说明：优秀：90% - 100% 良好：80% - 100% 及格：60% - 100% 低分：0% - 30%<a href="###" class="set_parameter">设置参数</a></span>
+        <div class="search_left">
+          <span class="titile_18">分数详情</span>
+          <i>(点击学科的分数，可查看学生的答题卡)</i>
         </div>
         <div class="search_right">
           <exam-button type="primary" @click="downTable">下载表格</exam-button>
+          <exam-button type="primary" @click="handleInquire">查询</exam-button>
+          <div class="input_box">
+            <span class="clear_box">
+              <i class="el-icon-circle-close" @click="handleClear"></i>
+            </span>
+            <hj-input
+              v-model="keyWords"
+              class="search_input"
+              placeholder="输入姓名/考号/学号进行搜索"
+              :iSlot="iSlot"
+            />
+          </div>
         </div>
       </div>
 
@@ -79,7 +92,7 @@
           {
             prop:'stuname',
             label:'姓名',
-            minWidth:'80',
+            width:'80',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -87,7 +100,7 @@
           {
             prop:'tnumber',
             label:'考号',
-            minWidth:'100',
+            width:'100',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -218,6 +231,8 @@
           return {
             cid: item.cid,
             cname: item.cname,
+            disTotalscore: item.disTotalscore,
+            scname: item.scname,
             snumber: item.snumber,
             stuname: item.stuname,
             tmid: item.tmid,
@@ -297,7 +312,10 @@
       },
 
       handleCheckAllChange(scidsStr){
-        // 学校查询
+        // 条件查询
+        if(this.tsid == ''){
+          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+        }
         if(this.scids == ''){
           this.scids = this.schoolArr.find((element,i) => i == 0).scids
         }
@@ -331,7 +349,7 @@
         if(this.tsid == ''){
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
         }
-        window.open(`${this.URL.ExportJointExamStuResults}?tid=${this.prmTid}&tsid=${this.tsid}&scids=${this.scids}&keyWords=&${this.keyWords}`)
+        window.open(`${this.URL.ExportJointExamStuResults}?tid=${this.prmTid}&tsid=${this.tsid}&scids=${this.scidsStr}&keyWords=${this.keyWords}`)
       },
 
       handleClear(){
