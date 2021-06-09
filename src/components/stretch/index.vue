@@ -86,13 +86,21 @@
       },
 
       handleCheckAllChange(item){
-        if(item.cid == 'all'){
+        if(item.cid == 'all' || item.scid == "all"){
           this.data.subjectList = this.data.subjectList.map(ele => {
             return {...ele,check:item.check}
           })
         }
-        let cidStr = this.data.subjectList.filter(item => item.check && item.cid != 'all')
-                    .map(ele =>  ele.cid).toString()
+        let cidStr = ''
+        if(item.cid){
+          cidStr = this.data.subjectList.filter(item => item.check && item.cid != 'all')
+                      .map(ele =>  ele.cid).toString()
+        }
+
+        if(item.scid){
+          cidStr = this.data.subjectList.filter(item => item.check && item.scid != 'all')
+                      .map(ele =>  ele.scid).toString()
+        }
 
         this.$emit('handle-checkAll-change',cidStr)
       }
