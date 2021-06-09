@@ -84,5 +84,15 @@ export const URL = {
   ExportJointExamStuResults: BASEURL + '/Report/AnlyReport/ExportJointExamStuResults', // 联考成绩册分析报表下载
   GetJointExamStuSmallScore: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamStuSmallScore', // 联考小题分数报表
   ExportJointExamStuSmallScore: BASEURL + '/Report/AnlyReport/ExportJointExamStuSmallScore', // 联考小题分数报表
+  GetJointExamQuestionSummary: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamQuestionSummary', // 联考试题汇总报表
+  ExportJointExamQuestionSummary: BASEURL + '/Report/AnlyReport/ExportJointExamQuestionSummary', // 联考试题汇总报表
+  GetJointExamSchoolScoreContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamSchoolScoreContrast', // 联考学校成绩对比报表
+  ExportJointExamSchoolScoreContrast: BASEURL + '/Report/AnlyReport/ExportJointExamSchoolScoreContrast', // 联考学校成绩对比报表下载
+  GetJointExamClassScoreContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamClassScoreContrast', // 联考班级成绩对比报表
+  ExportJointExamClassScoreContrast: BASEURL + '/Report/AnlyReport/ExportJointExamClassScoreContrast', // 联考班级成绩对比报表下载
+  GetJointExamSchoolScoreSegment: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamSchoolScoreSegment', // 联考学校成绩分段统计报表
+  ExportJointExamSchoolScoreSegment: BASEURL + '/Report/AnlyReport/ExportJointExamSchoolScoreSegment', // 联考学校成绩分段统计报表下载
+  GetJointExamClassScoreSegment: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamClassScoreSegment', // 联考班级成绩分段统计报表
+  ExportJointExamClassScoreSegment: BASEURL + '/Report/AnlyReport/ExportJointExamClassScoreSegment', // 联考班级成绩分段统计报表下载
 
 }
