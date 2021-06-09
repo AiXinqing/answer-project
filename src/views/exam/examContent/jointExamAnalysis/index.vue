@@ -98,8 +98,11 @@
     },
 
     methods: {
-      handleClick() {
-
+      handleClick(tab) {
+        this.activeName = tab.name
+        this.$nextTick(()=>{
+          this.$refs.tabName.initTable()
+        })
       },
 
       getExamFunc(prmTid) {
