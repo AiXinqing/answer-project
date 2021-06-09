@@ -27,9 +27,11 @@
           :tablecols="tableColumn"
           :tableData="tableData"
           :isIndex="false"
-          :isPagination="false"
+          :pagination="page"
           :loading="tableLoading"
           :theight="theight"
+          @handle-size-change="handleSizeChange"
+          @handle-current-change="handleCurrentChange"
           ></exam-table>
 
       </div>
@@ -58,6 +60,14 @@
         stretch: true,
         stretchArr:[],
         fixedHeader:[
+          {
+            prop:'scname',
+            label:'学校',
+            width:'120',
+            align:'center',
+            fixed:'left',
+            type:'Html'
+          },
           {
             prop:'cname',
             label:'班级',
@@ -107,36 +117,38 @@
         // 参数
         tsid:'',
         keyWords:'',
-        cidStr:'',
+        scids:'',
         theight: document.body.clientHeight - 350 || 0,
-        iSlot:[
-          {
-            type:'prefix',
-            icon:'el-icon-search'
-          }
-        ],
+
         parameter:{
-          cids:'',
+          scids:'',
           keyWords:'',
           tid: '',
           tsid:'',
-          url:this.URL.GetStuResults
+          url:this.URL.GetJointExamStuResults
         },
-        headeUrl:this.URL.GetTableHeadeSubject,
+
+        page: {
+          pageSize: 15,
+          pageNum: 1,
+          total: 0
+        },
+        headeUrl:this.URL.GetStuResultsHeade,
         tableH:51
       }
     },
 
     computed: {
-      ...mapState('getExam', ['subjectsArr','headerTable',
-        'TableList','classesArr','pagination',
+      ...mapState('getExam', ['subjectsArr']),
+      ...mapState('jointExams', ['headerTable',
+        'TableList','schoolArr','pagination',
         'tableLoading'
       ]),
 
 
-      classIdsArr(){
-        return this.classesArr.length ? this.classesArr.filter(item => item.check && item.cid != 'all')
-                .map(ele => ele.cid).toString() : ''
+      schoolIdsArr(){
+        return this.schoolArr.length ? this.schoolArr.filter(item => item.check && item.scid != 'all')
+                .map(ele => ele.scid).toString() : ''
       },
 
       stretchBox(){
@@ -148,7 +160,7 @@
             })
           } : {
             ...element,
-            subjectList:this.classesArr
+            subjectList:this.schoolArr
           }
         }) :[]
       },
@@ -224,10 +236,16 @@
     },
 
     watch: {
-      classIdsArr: {
+      schoolIdsArr: {
         immediate: true,
         handler () {
-          this.cidStr = this.classIdsArr
+          this.scidsStr = this.schoolIdsArr
+        },
+      },
+      pagination:{
+        immediate: true,
+        handler () {
+          this.page = this.pagination
         },
       },
 
@@ -246,19 +264,44 @@
         this.$nextTick(()=>{
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
           // 班级数组
-          this.cidStr = this.classIdsArr
+          this.scidsStr = this.schoolIdsArr
           // 获取动态表头
           this.getDynamicHeader(this.tsid)
           this.getTable()
         })
       },
 
-      handleCheckAllChange(cidStr){
-        // 班级查询
+      handleSizeChange(val){
+        // 分页每页显示数量
         if(this.tsid == ''){
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
         }
-        this.cidStr = cidStr
+
+        this.page.pageSize = val
+        this.$nextTick(()=>{
+          this.getTable()
+        })
+
+      },
+      handleCurrentChange(val){
+        // 分页起始页
+        if(this.tsid == ''){
+          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+        }
+
+        this.page.pageNum = val
+        this.$nextTick(()=>{
+          this.getTable()
+        })
+
+      },
+
+      handleCheckAllChange(scidsStr){
+        // 学校查询
+        if(this.scids == ''){
+          this.scids = this.schoolArr.find((element,i) => i == 0).scids
+        }
+        this.scidsStr = scidsStr
         this.$nextTick(()=>{
           this.getTable()
         })
@@ -288,7 +331,7 @@
         if(this.tsid == ''){
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
         }
-        window.open(`${this.URL.ExportStuResults}?tid=${this.prmTid}&tsid=${this.tsid}&cids=${this.cidStr}&keyWords=&${this.keyWords}`)
+        window.open(`${this.URL.ExportJointExamStuResults}?tid=${this.prmTid}&tsid=${this.tsid}&scids=${this.scids}&keyWords=&${this.keyWords}`)
       },
 
       handleClear(){
@@ -298,22 +341,24 @@
 
       getDynamicHeader(tsid){
         // 获取动态表头
-        this.$store.dispatch('getExam/dynamicHeader', {
+        this.$store.dispatch('jointExams/dynamicHeader', {
           tid: this.prmTid,tsid:tsid,url:this.headeUrl
         })
       },
 
       getTable() {
         // 获取table
+        const { pageSize , pageNum} = this.page
         this.parameter = {
-            ...this.parameter,
-            cids:this.cidStr,
-            tid: this.prmTid,
-            tsid:this.tsid,
-            keyWords:this.keyWords,
-          }
-
-        this.$store.dispatch('getExam/GetStuResults', this.parameter)
+          ...this.parameter,
+          scids:this.scidsStr,
+          tid: this.prmTid,
+          tsid:this.tsid,
+          keyWords:this.keyWords,
+          pageIndex: pageNum,
+          pageSize: pageSize,
+        }
+        this.$store.dispatch('jointExams/GetStuResults', this.parameter)
       },
     },
   }

@@ -7,7 +7,7 @@
     >
       <component
         :is="activeName"
-        :exam-info="examInfo"
+        :exam-info="examConditionInfo"
         :prmTid="prmTid"
         ref="tabName"
       ></component>
@@ -22,6 +22,7 @@
   import schoolGradesCompared from './schoolGradesCompared'
   import classGradesCompared from './classGradesCompared'
   import schoolGradesStatistics from './schoolGradesStatistics'
+  import { mapGetters } from 'vuex'
   export default {
     components: {
       jointExam,
@@ -64,14 +65,59 @@
             label:'班级成绩分段统计',
             name:'classGradesStatistics'
           },
-        ]
+        ],
+        prmTid:''
+      }
+    },
+
+    computed: {
+      ...mapGetters('getExam', ['examInfo']),
+      ...mapGetters('jointExams', ['schoolExamInfo']),
+
+      examConditionInfo() {
+        return this.examInfo.length && this.schoolExamInfo.length ?  this.examInfo.concat(this.schoolExamInfo).filter(item => item.subject != '班级') : []
+      }
+    },
+
+    watch: {
+      $route: {
+        handler: function(route) {
+          const query = route.query
+          if (query.prmTid) {
+            this.prmTid = query.prmTid
+          }
+        },
+        immediate: true
+      },
+    },
+
+    mounted () {
+      if(this.prmTid != ''){
+        this.getExamFunc(this.prmTid)
       }
     },
 
     methods: {
       handleClick() {
 
-      }
+      },
+
+      getExamFunc(prmTid) {
+        this.$store.dispatch('getExam/getExamInfo', {
+          prmTid: prmTid
+        })
+        this.$store.dispatch('jointExams/getExamInfo', {
+          tid: prmTid
+        }).then((res)=>{
+          if(res.ResponseCode =="Success"){
+            this.$nextTick(()=>{
+              // 获取动态表头
+              this.$refs.tabName.initTable()
+            })
+          }
+        })
+
+      },
     },
   }
 </script>
