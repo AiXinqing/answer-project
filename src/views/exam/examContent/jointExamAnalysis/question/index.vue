@@ -13,37 +13,42 @@
     </div>
     <div class="table_wapper">
       <div class="table_search">
-        <div class="search_left">
+        <div class="search_left" style="width: auto">
           <span class="titile_18">试题得分汇总详情</span>
           <i>(查看每题得分情况，点击对应的人数，可查看学生名单)</i>
         </div>
         <div class="search_right">
           <exam-button type="primary" @click="downTable">下载表格</exam-button>
-
         </div>
       </div>
 
-      <div class="el_table_wapper">
+      <div class="el_table_wapper" :style="{'max-height':theight +'px'}">
         <exam-table
-          :style="{'max-height':theight+ tableH +'px'}"
-          :tablecols="tableColumn"
-          :tableData="tableData"
+          :tablecols="questionTableColumn"
+          :tableData="questionTableData"
           :isIndex="false"
           :isPagination="false"
-          :loading="tableLoading"
           :theight="theight"
-          ></exam-table>
-
+          :loading="tableLoading"
+          @hanlde-pop-func="hanldePopFunc"
+        ></exam-table>
       </div>
+      <student-details
+        ref="studentDetails"
+      />
     </div>
+
   </div>
 </template>
 
 <script>
   import { mapState} from 'vuex'
+  import studentDetails from './_classDetails'
   export default {
+    components: {
+      studentDetails,
+    },
     props: {
-
       prmTid: {
         type: String,
         default: ''
@@ -57,50 +62,64 @@
 
     data() {
       return {
-        stretch: true,
-        stretchArr:[],
+        stretch: false,
         fixedHeader:[
           {
-            prop:'cname',
-            label:'班级',
-            width:'120',
+            prop:'name',
+            label:'题号',
+            width:'80',
             align:'center',
             fixed:'left',
             type:'Html'
           },
           {
-            prop:'stuname',
-            label:'姓名',
+            prop:'type',
+            label:'题型',
+            width:'72',
+            align:'center',
+            fixed:'left',
+            type:'Html'
+          },
+          {
+            prop:'fullScore',
+            label:'满分',
+            width:'80',
+            align:'center',
+            type:'Html',
+            fixed:'left',
+            color:'font'
+          },
+          {
+            prop:'answer',
+            label:'正确答案',
             minWidth:'80',
             align:'center',
             fixed:'left',
             type:'Html'
           },
-          {
-            prop:'tnumber',
-            label:'考号',
-            minWidth:'100',
-            align:'center',
-            fixed:'left',
-            type:'Html'
-          },
         ],
-        columnMultiLine:[
+        rankArr:[
           {
-            prop:'tscore',
-            label:'分数',
-            width:'85',
-            align:'center',
-          },
-          {
-            prop:'gradeRank',
-            label:'学校排名',
+            prop:'avgScore',
+            label:'平均分',
             width:'90',
             align:'center',
           },
           {
-            prop:'classRank',
-            label:'班级排名',
+            prop:'fullScoreNum',
+            label:'满分人数',
+            width:'90',
+            align:'center',
+          },
+          {
+            prop:'fullScoreScale',
+            label:'满分率',
+            width:'90',
+            align:'center',
+          },
+          {
+            prop:'zeroScoreNum',
+            label:'零分人数',
             width:'90',
             align:'center',
           },
@@ -108,111 +127,91 @@
 
         // 参数
         tsid:'',
-        keyWords:'',
-        cidStr:'',
-        theight: document.body.clientHeight - 350 || 0,
-        iSlot:[
-          {
-            type:'prefix',
-            icon:'el-icon-search'
-          }
-        ],
+        scidsStr:'',
+        theight: document.body.clientHeight - 310 || 0,
         parameter:{
-          cids:'',
-          keyWords:'',
+          scids:'',
           tid: '',
           tsid:'',
-          url:this.URL.GetStuResults
+          url:this.URL.GetJointExamQuestionSummary
         },
-        headeUrl:this.URL.GetTableHeadeSubject,
-        tableH:51
       }
     },
 
     computed: {
-      ...mapState('getExam', ['subjectsArr','headerTable',
-        'TableList','classesArr','pagination',
-        'tableLoading'
-      ]),
+      ...mapState('getExam', ['subjectsArr']),
+      ...mapState('jointExams', ['schoolArr']),
+      ...mapState('jointQuestion', ['tableLoading','headerTable','TableList']),
 
-
-      classIdsArr(){
-        return this.classesArr.length ? this.classesArr.filter(item => item.check && item.cid != 'all')
-                .map(ele => ele.cid).toString() : ''
+      schoolIdsArr(){
+        return this.schoolArr.length ? this.schoolArr.filter(item => item.check && item.scid != 'all')
+                .map(ele => ele.scid).toString() : ''
       },
 
       stretchBox(){
         return this.examInfo.length ? this.examInfo.map(element =>{
           return element.subject == '科目' ? {
             ...element,
-            subjectList:element.subjectList.map((item,index) => {
+            subjectList:element.subjectList.filter(item => item.tsid != 'totalScore').map((item,index) => {
               return index == 0 ? {...item,check:true} : {...item,check:false}
             })
           } : {
             ...element,
-            subjectList:this.classesArr
+            subjectList:this.schoolArr
           }
         }) :[]
       },
 
-      tableColumn(){
+      questionTableColumn(){
         // 动态表头
+        let tsid_s = this.subjectsArr.find((element,i) => i == 1).tsid
         return this.headerTable.length ? [
           ...this.fixedHeader,
           ...this.headerTable.map(ele => ({
-            ...ele,
-            label:ele.sname,
+            label:ele.cname,
             align:'center',
-            childen:this.columnMultiLine.map(item => {
-              let obj = {
-                type:'Html'
-              }
-              if(item.label == '分数' && ele.sname !='总分'){
-                obj = {
-                  type:'Text',
-                  url:this.URL.BrowsescoreAnsw,
-                  subject:ele.sname
-                }
-              }
+            // 0 客观题 objective 1 主观题 subjective
+            childen:this.rankArr.map((item,index) =>{
               return {
+                ...ele,
                 ...item,
-                prop:`${item.prop}_${ele.sname}`,
                 label:item.label,
-                width:item.width,
-                align:item.align,
-                ...obj
+                type: index == 1 || index == 3  ? 'popBtn' : 'Html',
+                type_p:index == 1 ? 'manfen' : index == 3 ? 'zero' : 0,
+                prop:`${item.prop}_${ele.cname}`,
+                tsid:this.tsid == '' ? tsid_s : this.tsid,
+                tid:this.prmTid,
+                classObj:ele.cname
               }
-            }),
+            })
           }))
         ] : []
       },
 
-      tableData(){
+      questionTableData(){
         return this.TableList.length ? this.TableList.map(item =>{
           let dynamic = {}
-          item.DynamicDetail.forEach(item => {
-            dynamic = {
-              ...dynamic,
-              [`classRank_${item.sname}`]: item.classRank,
-              [`gradeRank_${item.sname}`]: item.gradeRank,
-              [`tsid_${item.sname}`]: item.tsid,
-              ord: item.ord,
-              sname: item.sname,
-              [`tscore_${item.sname}`]: item.tscore,
-              tsid: item.tsid,
-              tid: this.prmTid,
-              jump:1
-            }
-          })
+          if(item.DynamicDetail[0].cname != undefined){
+
+            item.DynamicDetail.forEach(element => {
+              dynamic = {
+                ...dynamic,
+                ...element,
+                [`avgScore_${element.cname}`]:element.avgScore,
+                [`fullScoreNum_${element.cname}`]:element.fullScoreNum,
+                [`fullScoreScale_${element.cname}`]:element.fullScoreScale,
+                [`zeroScoreNum_${element.cname}`]:element.zeroScoreNum,
+                [`cid_${element.cname}`]: element.cid,
+              }
+            })
+          }
 
           return {
-            cid: item.cid,
-            cname: item.cname,
-            snumber: item.snumber,
-            stuname: item.stuname,
-            tmid: item.tmid,
-            tnumber: item.tnumber,
-            totalscore: item.totalscore,
+            answer: item.answer,
+            fullScore: item.fullScore,
+            name: item.name,
+            tqid: item.tqid,
+            type: item.type,
             ...dynamic
           }
         }) : []
@@ -221,15 +220,15 @@
 
     mounted () {
       this.$nextTick(() => {
-        this.theight = document.body.clientHeight - 350
+        this.theight = document.body.clientHeight - 310
       })
     },
 
     watch: {
-      classIdsArr: {
+      schoolIdsArr: {
         immediate: true,
         handler () {
-          this.cidStr = this.classIdsArr
+          this.scidsStr = this.schoolIdsArr
         },
       },
     },
@@ -240,26 +239,24 @@
           let height = this.$refs.stretch.offsetHeight
           this.theight = document.body.clientHeight - 258 - height // 258 = 页面高度 - height  除条件以外的高度
         })
-
       },
 
       initTable() {
         this.$nextTick(()=>{
-          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
           // 班级数组
-          this.cidStr = this.classIdsArr
+          this.scidsStr = this.schoolIdsArr
           // 获取动态表头
-          this.getDynamicHeader(this.tsid)
           this.getTable()
         })
       },
 
-      handleCheckAllChange(cidStr){
+      handleCheckAllChange(scidsStr){
         // 班级查询
         if(this.tsid == ''){
-          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
         }
-        this.cidStr = cidStr
+        this.scidsStr = scidsStr
         this.$nextTick(()=>{
           this.getTable()
         })
@@ -269,65 +266,36 @@
         // 科目查询
         this.tsid = tsid
         this.$nextTick(()=>{
-          this.getDynamicHeader(this.tsid)
           this.getTable()
-        })
-      },
-
-      handleInquire(){
-        // 输入框查询
-        if(this.tsid == ''){
-          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
-        }
-        this.$nextTick(()=>{
-          this.getTable()
-        })
-      },
-
-      downTable(){
-        // 下载表格
-        if(this.tsid == ''){
-          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
-        }
-        window.open(`${this.URL.ExportStuResults}?tid=${this.prmTid}&tsid=${this.tsid}&cids=${this.cidStr}&keyWords=&${this.keyWords}`)
-      },
-
-      handleClear(){
-        this.keyWords= ''
-      },
-
-
-      getDynamicHeader(tsid){
-        // 获取动态表头
-        this.$store.dispatch('getExam/dynamicHeader', {
-          tid: this.prmTid,tsid:tsid,url:this.headeUrl
         })
       },
 
       getTable() {
         // 获取table
         this.parameter = {
-            ...this.parameter,
-            cids:this.cidStr,
-            tid: this.prmTid,
-            tsid:this.tsid,
-            keyWords:this.keyWords,
-          }
-
-        this.$store.dispatch('getExam/GetStuResults', this.parameter)
+          ...this.parameter,
+          scids:this.scidsStr,
+          tid: this.prmTid,
+          tsid:this.tsid,
+        }
+        this.$store.dispatch('jointQuestion/GetStuResults', this.parameter)
       },
+
+      downTable(){
+        // 下载表格
+        if(this.tsid == ''){
+          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
+        }
+        window.open(`${this.URL.ExportJointExamQuestionSummary}?tid=${this.prmTid}&tsid=${this.tsid}&scids=${this.scidsStr}`)
+      },
+
+      hanldePopFunc(row){
+        this.$refs.studentDetails.openDetails(row)
+      }
     },
   }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
   @import '~@/assets/css/variables.less';
-  .table_wapper {
-    .table_search{
-      .search_left{
-        margin-left: 0;
-        width: 546px;
-      }
-    }
-  }
 </style>
