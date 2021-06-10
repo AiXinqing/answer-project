@@ -3,8 +3,17 @@ import  request from '@/utils/http'
 //联考学校成绩对比报表
 export function GetSchoolGradesComparedResults({ tid, tsid,url }) {
   return request({
-    url: url, //URL.GetStuResults,
+    url: url,
     method: 'get',
     params: { tid, tsid }
+  })
+}
+
+//联考班级成绩对比报表
+export function GetClassGradesComparedResults({ tid, tsid,scids,url }) {
+  return request({
+    url: url,
+    method: 'get',
+    params: { tid, tsid,scids }
   })
 }
