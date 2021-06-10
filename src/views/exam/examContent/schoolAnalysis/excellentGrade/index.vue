@@ -36,7 +36,7 @@
           :tableData="tableData"
           :isIndex="false"
           :isPagination="false"
-          :theight="theight"
+          :autoHeight="true"
           :loading="tableLoading"
         />
       </div>
@@ -95,7 +95,6 @@
         ],
 
         tsid:0,
-        theight:0,
         topRank:50,
         parameter:{ // 前
           tid: '',

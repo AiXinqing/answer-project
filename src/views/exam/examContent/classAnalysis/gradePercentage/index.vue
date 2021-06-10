@@ -24,7 +24,7 @@
         :tableData="tableData"
         :isIndex="false"
         :isPagination="false"
-        :theight="theight"
+        :autoHeight="true"
         :loading="tableLoading"
       ></exam-table>
     </div>
@@ -64,8 +64,7 @@
           tid: '',
           tsid:'',
           url:this.URL.GetClassScoreScaleNum
-        },
-        theight:0
+        }
       }
     },
 

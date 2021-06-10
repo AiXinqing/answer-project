@@ -68,7 +68,7 @@
             :tableData="totalScoretableData"
             :isIndex="false"
             :isPagination="false"
-            :theight="theight"
+            :autoHeight="true"
             :loading="tableLoading"
           />
         </template>
@@ -160,8 +160,6 @@
           showGrade:true,
           url:this.URL.GetClassScoreScaleNum
         },
-
-        theight:0,
       }
     },
 

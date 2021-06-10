@@ -16,7 +16,7 @@
         :tableData="tableData"
         :isIndex="false"
         :isPagination="false"
-        :theight="theight"
+        :autoHeight="true"
         :loading="tableLoading"
       ></exam-table>
     </div>
@@ -74,8 +74,7 @@
         parameter:{
           tid: '',
           url:this.URL.GetClassScoreSurvey
-        },
-        theight:0,
+        }
       }
     },
 

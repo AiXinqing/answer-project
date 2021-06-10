@@ -22,7 +22,7 @@
           :tableData="TotalTable"
           :isIndex="false"
           :isPagination="false"
-          :theight="theight"
+          :autoHeight="true"
           :loading="tableLoading"
         />
       </div>
@@ -182,8 +182,7 @@
         totalParameter:{
           tid: '',
           url:this.URL.GetTotalScoreSituation
-        },
-        theight:0
+        }
       }
     },
 

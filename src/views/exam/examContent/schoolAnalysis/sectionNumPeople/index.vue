@@ -36,7 +36,7 @@
         :tableData="tableData"
         :isIndex="false"
         :isPagination="false"
-        :theight="theight"
+        :autoHeight="true"
         :loading="tableLoading"
       ></exam-table>
     </div>
@@ -85,7 +85,6 @@
           step:20,
           url:this.URL.GetClassScoreSegmentNum
         },
-        theight:0,
       }
     },
 
