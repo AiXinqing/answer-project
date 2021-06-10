@@ -143,13 +143,13 @@
           {
             prop:'fullScore',
             label:'客观',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
           {
             prop:'answer',
             label:'客观',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
         ],
@@ -157,7 +157,7 @@
           {
             prop:'fullScore',
             label:'主',
-            width:'100',
+            minWidth:'100',
             align:'center',
           },
         ],
@@ -196,8 +196,8 @@
       ...mapState('jointSubTable', ['tableLoading','headerTable','TableList','pagination']),
 
       schoolIdsArr(){
-        return this.schoolArr.length ? this.schoolArr.filter(item => item.check && item.cid != 'all')
-                .map(ele => ele.cid).toString() : ''
+        return this.schoolArr.length ? this.schoolArr.filter(item => item.check && item.scid != 'all')
+                .map(ele => ele.scid).toString() : ''
       },
 
       stretchBox(){
@@ -438,6 +438,7 @@
           pageIndex: pageNum,
           pageSize: pageSize,
         }
+        console.log(this.parameter)
         this.$store.dispatch('jointSubTable/GetStuResults', this.parameter)
       },
     },
