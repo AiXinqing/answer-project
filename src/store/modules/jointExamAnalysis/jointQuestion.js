@@ -11,8 +11,9 @@
   const mutations = {
 
     SET_TABLE: (state, res) => {
-      const { data } = res.ResponseContent
-      state.TableList = data
+      const { QuestionAnalyseList,classInfos } = res.ResponseContent
+      state.TableList = QuestionAnalyseList
+      state.headerTable = classInfos
       state.tableLoading = false
     },
 
@@ -30,9 +31,9 @@
     GetStuResults ({ commit }, padata) {
       commit('SET_LOADING')
       return new Promise((resolve, reject) => {
-        const { tid, tsid, scids, keyWords, pageIndex, pageSize, url } = padata
+        const { tid, tsid, scids, url } = padata
 
-        GetStuResults({ tid, tsid, scids, keyWords, pageIndex, pageSize, url }).then(res => {
+        GetStuResults({ tid, tsid, scids, url }).then(res => {
 
           commit('SET_TABLE', res)
           resolve(res)
