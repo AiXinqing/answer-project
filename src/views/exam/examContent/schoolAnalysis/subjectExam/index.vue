@@ -21,7 +21,7 @@
           :tableData="tableData"
           :isIndex="false"
           :isPagination="false"
-          :theight="theight"
+          :autoHeight="true"
           :loading="tableLoading"
         />
       </div>
@@ -40,7 +40,7 @@
           :tableData="subjectTableData"
           :isIndex="false"
           :isPagination="false"
-          :theight="theight"
+          :autoHeight="true"
           :loading="tableLoading"
         />
       </div>

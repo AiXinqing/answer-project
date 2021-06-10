@@ -41,7 +41,7 @@
             :tableData="TableList"
             :isIndex="false"
             :isPagination="false"
-            :theight="theight"
+            :autoHeight="true"
             :loading="tableLoading"
           ></exam-table>
         </div>

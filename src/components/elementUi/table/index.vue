@@ -1,51 +1,27 @@
 <template>
   <section>
-    <template v-if="height == 0">
-      <el-table
-        :data="tableData"
-        :style="['width: 100%']"
-        :element-loading-text="loadingText"
-        :border="isBorder"
-        element-loading-spinner="el-icon-loading"
-        :highlight-current-row="true"
-        v-loading="loading"
-        :row-style="{'height':'35px'}"
-      >
+    <el-table
+      :data="tableData"
+      style="width: 100%"
+      :element-loading-text="loadingText"
+      :border="isBorder"
+      :height="autoHeight ? '' : theight"
+
+      element-loading-spinner="el-icon-loading"
+      v-loading="loading"
+      :row-style="{'height': rowStyle + 'px'}"
+    >
       <!-- 标题栏- 合并 -->
-        <el-table-column v-if="isSelection" type="selection" align="center"></el-table-column>
-        <el-table-column v-if="isIndex" type="index" :label="indexlabel" align="center" width="50" :fixed="indexFixed"></el-table-column>
-        <singleColumn
-          v-for="(column,i) in tablecols"
-          :key="i"
-          :column="column"
-          @hanlde-pop-func="hanldePopFunc"
-        />
-        <!-- 标题栏- 合并 -->
-      </el-table>
-    </template>
-    <template v-else>
-      <el-table
-        :data="tableData"
-        :style="['width: 100%']"
-        :element-loading-text="loadingText"
-        :border="isBorder"
-        :height="height + differenceHeight"
-        element-loading-spinner="el-icon-loading"
-        v-loading="loading"
-        :row-style="{'height':'35px'}"
-      >
-        <!-- 标题栏- 合并 -->
-        <el-table-column v-if="isSelection" type="selection" align="center"></el-table-column>
-        <el-table-column v-if="isIndex" type="index" :label="indexlabel" align="center" width="50" :fixed="indexFixed"></el-table-column>
-        <singleColumn
-          v-for="(column,i) in tablecols"
-          :key="i"
-          :column="column"
-          @hanlde-pop-func="hanldePopFunc"
-        />
-        <!-- 标题栏- 合并 -->
-      </el-table>
-    </template>
+      <el-table-column v-if="isSelection" type="selection" align="center"></el-table-column>
+      <el-table-column v-if="isIndex" type="index" :label="indexlabel" align="center" width="50" :fixed="indexFixed"></el-table-column>
+      <singleColumn
+        v-for="(column,i) in tablecols"
+        :key="i"
+        :column="column"
+        @hanlde-pop-func="hanldePopFunc"
+      />
+      <!-- 标题栏- 合并 -->
+    </el-table>
     <!-- 分页 -->
       <section class="ces-pagination" v-if='isPagination'>
         <el-pagination
@@ -71,6 +47,15 @@
     },
     props: {
       differenceHeight:{type: Number, default: 11},
+      autoHeight: {
+          type: Boolean,
+          default: false
+      },
+      rowStyle:{
+        Number,
+        default: 35
+      },
+
       theight: {type: Number, default: 500},
       // 表格列配置
       tablecols: {type: Array, default: () => []},
@@ -255,7 +240,7 @@
   height: 100% !important;
 }
 .el-table__fixed-body-wrapper{
-  top: 70px !important;
+  // top: 70px !important;
   overflow: auto;
   // height: calc(100% - 70px) !important;
   // z-index: -1;
