@@ -228,7 +228,6 @@
     padding: 0 0;
   }
 
-
   .el-table{
     td,
     th{
@@ -258,6 +257,7 @@
 .el-table__fixed-body-wrapper{
   top: 70px !important;
   overflow: auto;
+  height: calc(100% - 70px) !important;
   // z-index: -1;
 }
 
@@ -270,5 +270,6 @@
 }
 .el_table_wapper section>div .el-table__fixed{
   background: #fff;
+  height: 100% !important;
 }
 </style>

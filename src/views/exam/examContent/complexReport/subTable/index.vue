@@ -135,13 +135,13 @@
           {
             prop:'fullScore',
             label:'客观',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
           {
             prop:'answer',
             label:'客观',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
         ],
@@ -149,7 +149,7 @@
           {
             prop:'fullScore',
             label:'主',
-            width:'100',
+            minWidth:'100',
             align:'center',
           },
         ],
@@ -437,6 +437,9 @@
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   @import '~@/assets/css/variables.less';
+  .el-table__fixed-body-wrapper{
+    top: 74px!important;
+  }
 </style>
