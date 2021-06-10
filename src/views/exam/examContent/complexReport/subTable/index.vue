@@ -135,13 +135,13 @@
           {
             prop:'fullScore',
             label:'客观',
-            minWidth:'90',
+            minWidth:'110',
             align:'center',
           },
           {
             prop:'answer',
             label:'客观',
-            minWidth:'90',
+            minWidth:'110',
             align:'center',
           },
         ],
@@ -149,7 +149,7 @@
           {
             prop:'fullScore',
             label:'主',
-            minWidth:'100',
+            minWidth:'110',
             align:'center',
           },
         ],

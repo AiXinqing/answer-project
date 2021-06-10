@@ -257,12 +257,12 @@
 .el-table__fixed-body-wrapper{
   top: 70px !important;
   overflow: auto;
-  height: calc(100% - 70px) !important;
+  // height: calc(100% - 70px) !important;
   // z-index: -1;
 }
 
 .el_table_wapper section>div .el-table__body-wrapper{
-  height: calc(100% - 70px) !important;
+  // height: calc(100% - 70px) !important;
 }
 
 .el-pagination{
@@ -270,6 +270,6 @@
 }
 .el_table_wapper section>div .el-table__fixed{
   background: #fff;
-  height: 100% !important;
+  // height: 100% !important;
 }
 </style>
