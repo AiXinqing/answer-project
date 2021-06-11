@@ -1,8 +1,8 @@
 export const API_VERSION = 'v1'
 // 报表服务器地址
 let BASEURL = 'http://localhost:60044'
-if(process.env.NODE_ENV === 'development'){
-    BASEURL = 'http://192.168.0.54:8094'
+if (process.env.NODE_ENV === 'development') {
+  BASEURL = 'http://192.168.0.54:8094'
 }
 
 export const URL = {
@@ -16,19 +16,19 @@ export const URL = {
   GetStuSmallScore: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetStuSmallScore', //小题分数报表
   ExportStuSmallScore: BASEURL + '/Report/AnlyReport/ExportStuSmallScore', // 小题分数报表下载
   //班级成绩对比报表
-  GetClassScoreContrast:BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreContrast', // 班级成绩对比报表
-  ExportClassScoreContrast:BASEURL + '/Report/AnlyReport/ExportClassScoreContrast', // 班级成绩对比报表下载
-  GetStuDetails:BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreContrastStuDetails', // 班级成绩对比报表下载
+  GetClassScoreContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreContrast', // 班级成绩对比报表
+  ExportClassScoreContrast: BASEURL + '/Report/AnlyReport/ExportClassScoreContrast', // 班级成绩对比报表下载
+  GetStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreContrastStuDetails', // 班级成绩对比报表下载
   ExportStuDetails: BASEURL + '/Report/AnlyReport/ExportClassScoreContrastStuDetails', // 班级成绩对比报表学生名单详情下载
   //试题汇总报表
   GetQuestionSummary: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetQuestionSummary', //试题汇总报表
-  ExportQuestionSummary:BASEURL + '/Report/AnlyReport/ExportQuestionSummary', //试题汇总报表下载
+  ExportQuestionSummary: BASEURL + '/Report/AnlyReport/ExportQuestionSummary', //试题汇总报表下载
   GetSummaryStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetQuestionSummaryStuDetails', // 试题汇总报表学生名单详情
   ExportSummaryStuDetails: BASEURL + '/Report/AnlyReport/ExportQuestionSummaryStuDetails', //试题汇总报表学生名单详情下载
   //成绩分段报表
-  GetClassScoreSegment:BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreSegment', //成绩分段报表
-  ExportClassScoreSegment:BASEURL + '/Report/AnlyReport/ExportClassScoreSegment', //成绩分段报表下载
-  GetSegmentStuDetails:BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreSegmentStuDetails', //成绩分段报表学生名单详情
+  GetClassScoreSegment: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreSegment', //成绩分段报表
+  ExportClassScoreSegment: BASEURL + '/Report/AnlyReport/ExportClassScoreSegment', //成绩分段报表下载
+  GetSegmentStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreSegmentStuDetails', //成绩分段报表学生名单详情
   ExportSegmentStuDetails: BASEURL + '/Report/AnlyReport/ExportClassScoreSegmentStuDetails', //成绩分段报表学生名单详情下载
   //成绩名次和比例分析
   GetPlacingSegment: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScorePlacingSegment', //成绩名次和比例分析
@@ -87,10 +87,16 @@ export const URL = {
   GetJointExamQuestionSummary: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamQuestionSummary', // 联考试题汇总报表
   ExportJointExamQuestionSummary: BASEURL + '/Report/AnlyReport/ExportJointExamQuestionSummary', // 联考试题汇总报表下载
   GetJointExamSchoolScoreContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamSchoolScoreContrast', // 联考学校成绩对比报表
+  GetJointExamSchoolScoreContrastStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamSchoolScoreContrastStuDetails', // 联考学校成绩对比学生详情
+  ExportJointExamSchoolScoreContrastStuDetails: BASEURL + '/Report/AnlyReport/ExportJointExamSchoolScoreContrastStuDetails', // 联考学校成绩对比学生详情下载
+
   ExportJointExamSchoolScoreContrast: BASEURL + '/Report/AnlyReport/ExportJointExamSchoolScoreContrast', // 联考学校成绩对比报表下载
   GetJointExamClassScoreContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamClassScoreContrast', // 联考班级成绩对比报表
   ExportJointExamClassScoreContrast: BASEURL + '/Report/AnlyReport/ExportJointExamClassScoreContrast', // 联考班级成绩对比报表下载
   GetJointExamSchoolScoreSegment: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamSchoolScoreSegment', // 联考学校成绩分段统计报表
+  GetJointExamSchoolScoreSegmentStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamSchoolScoreSegmentStuDetails', // 联考学校成绩分段统计学生详情
+  ExportJointExamSchoolScoreSegmentStuDetails: BASEURL + '/Report/AnlyReport/ExportJointExamSchoolScoreSegmentStuDetails', // 联考学校成绩分段统计学生详情下载
+
   ExportJointExamSchoolScoreSegment: BASEURL + '/Report/AnlyReport/ExportJointExamSchoolScoreSegment', // 联考学校成绩分段统计报表下载
   GetJointExamClassScoreSegment: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamClassScoreSegment', // 联考班级成绩分段统计报表
   ExportJointExamClassScoreSegment: BASEURL + '/Report/AnlyReport/ExportJointExamClassScoreSegment', // 联考班级成绩分段统计报表下载
