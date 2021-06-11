@@ -5,7 +5,7 @@
       style="width: 100%"
       :element-loading-text="loadingText"
       :border="isBorder"
-      :height="autoHeight ? '' : theight"
+      :height="autoHeight ? '' : height_table"
 
       element-loading-spinner="el-icon-loading"
       v-loading="loading"
@@ -97,7 +97,7 @@
         firstDisabled: false,
         lastDisabled: false,
         // 分页数据
-        height:500,
+        height_table:500,
       }
     },
 
@@ -105,7 +105,8 @@
       theight: {
         immediate: true,
         handler () {
-          this.height = this.theight
+          console.log(this.theight)
+          this.height_table = this.theight
         }
       },
 

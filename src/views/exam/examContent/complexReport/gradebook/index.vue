@@ -122,7 +122,7 @@
         tsid:'',
         keyWords:'',
         cidStr:'',
-        theight: document.body.clientHeight - 350 || 0,
+        theight: 500,
         iSlot:[
           {
             type:'prefix',
@@ -236,11 +236,11 @@
       }
     },
 
-    mounted () {
-      this.$nextTick(() => {
-        this.theight = document.body.clientHeight - 350
-      })
-    },
+    // mounted () {
+    //   this.$nextTick(() => {
+    //     this.theight = document.body.clientHeight - 350
+    //   })
+    // },
 
     watch: {
       classIdsArr: {
@@ -258,7 +258,18 @@
 
     },
 
+    created () {
+      window.addEventListener('resize', this.getHeight)
+    },
+    destroyed () {
+      window.removeEventListener('resize', this.getHeight)
+    },
+
     methods: {
+      getHeight () {
+        this.theight = document.body.clientHeight - 350
+      },
+
       handleStretch(){
         this.$nextTick(() =>{
           let height = this.$refs.stretch.offsetHeight
@@ -268,6 +279,8 @@
       },
 
       initTable() {
+        this.theight = document.body.clientHeight - 350
+
         this.$nextTick(()=>{
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
           // 班级数组
@@ -365,6 +378,10 @@
           }
 
         this.$store.dispatch('getExam/GetStuResults', this.parameter)
+        this.$nextTick(()=>{
+          this.theight = document.body.clientHeight - 350
+        })
+
       },
     },
   }

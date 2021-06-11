@@ -340,24 +340,4 @@
 
 <style lang="less">
   @import '~@/assets/css/variables.less';
-  .table_wapper{
-    .search_left{
-      &.is_active{
-        width: calc(100% - 120px);
-        font-size: 14px;
-        color: @font-666;
-        span{
-          display: block;
-          width: 100%;
-        }
-      }
-    }
-    .el_table_wapper{
-      margin-top: 10px;
-    }
-    .set_parameter{
-      color: @main;
-      margin-left: 10px;
-    }
-  }
 </style>

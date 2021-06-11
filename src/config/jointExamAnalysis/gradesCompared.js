@@ -17,3 +17,13 @@ export function GetClassGradesComparedResults({ tid, tsid,scids,url }) {
     params: { tid, tsid,scids }
   })
 }
+
+
+//联考学校成绩分段统计报表
+export function GetSchoolGradesStatisticsResults({ tid, tsid, step, type,url }) {
+  return request({
+    url: url,
+    method: 'get',
+    params: { tid, tsid, step, type }
+  })
+}
