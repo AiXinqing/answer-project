@@ -321,9 +321,7 @@
         if(this.tsid == ''){
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
         }
-        if(this.scids == ''){
-          this.scids = this.schoolArr.find((element,i) => i == 0).scids
-        }
+
         this.scidsStr = scidsStr
         this.$nextTick(()=>{
           this.getTable()

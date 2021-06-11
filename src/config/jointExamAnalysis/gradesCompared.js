@@ -27,3 +27,12 @@ export function GetSchoolGradesStatisticsResults({ tid, tsid, step, type,url }) 
     params: { tid, tsid, step, type }
   })
 }
+
+//联考学校成绩分段统计报表
+export function GetClassGradesStatisticsResults({ tid, tsid, scids, step, type,url }) {
+  return request({
+    url: url,
+    method: 'get',
+    params: { tid, tsid, scids, step, type }
+  })
+}

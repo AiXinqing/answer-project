@@ -22,6 +22,7 @@
   import schoolGradesCompared from './schoolGradesCompared'
   import classGradesCompared from './classGradesCompared'
   import schoolGradesStatistics from './schoolGradesStatistics'
+  import classGradesStatistics from './classGradesStatistics'
   import { mapGetters } from 'vuex'
   export default {
     components: {
@@ -30,7 +31,8 @@
       question,
       schoolGradesCompared,
       classGradesCompared,
-      schoolGradesStatistics
+      schoolGradesStatistics,
+      classGradesStatistics
     },
 
     data() {

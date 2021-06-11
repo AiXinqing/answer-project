@@ -81,7 +81,7 @@
             label:'班级',
             width:'120',
             align:'center',
-            // fixed:'left',
+            fixed:'left',
             type:'Html'
           },
           {
@@ -89,7 +89,7 @@
             label:'参考人数',
             width:'80',
             align:'center',
-            // fixed:'left',
+            fixed:'left',
             type:'Html'
           },
         ],
