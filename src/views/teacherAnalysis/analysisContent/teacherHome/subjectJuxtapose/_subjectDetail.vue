@@ -15,7 +15,7 @@
         :pagination="page"
         :loading="tableLoading"
         :pageSizes="pageSizes"
-        :theight="0"
+        :autoHeight="true"
         @handle-size-change="handleSizeChange"
         @handle-current-change="handleCurrentChange"
       ></exam-table>

@@ -15,67 +15,67 @@ import jointExam from '@/views/exam/examContent/jointExamAnalysis'
 Vue.use(VueRouter)
 
 const routes = [{
-    path: '/',
-    name: 'Home',
-    component: Home,
-    meta: {
-        title:'智汇e校园-答题卡制作'
-      }
-  },
-  {
-    path: '/preview',
-    name: 'preview',
-    component: () => import('@/views/answerCard/previewContent.vue'),
-    meta: {
-        title:'智汇e校园-答题卡预览'
-      }
-  },
-  {
-    // 阅卷
-    path: '/exam',
-    name: 'exam',
-    component: () => import('@/views/exam'),
-    children: [
-      {
-        path: '/',
-        name: 'examHome',
-        component: examHome,
-        meta: {
-          title:'智汇e校园-阅卷分析'
-        }
-      },
-      {
-        path: '/classAnalysis',
-        name: 'classAnalysis',
-        component: classAnalysis,
-        meta: {
-          title:'智汇e校园-阅卷分析'
-        }
-      },
-      {
-        path: '/schoolAnalysis',
-        name: 'schoolAnalysis',
-        component: schoolAnalysis,
-        meta: {
-          title:'智汇e校园-阅卷分析'
-        }
-      },
-      {
-        path: '/jointExam',
-        name: 'jointExam',
-        component: jointExam,
-        meta: {
-          title:'智汇e校园-阅卷分析'
-        }
-      },
-    ]
-  },
-  {
-    // 教师分析
-    path: '/teacherHome',
-    name: 'teacherHome',
-    component: () => import('@/views/teacherAnalysis'),
+  path: '/',
+  name: 'Home',
+  component: Home,
+  meta: {
+    title: '智汇e校园-答题卡制作'
   }
+},
+{
+  path: '/preview',
+  name: 'preview',
+  component: () => import('@/views/answerCard/previewContent.vue'),
+  meta: {
+    title: '智汇e校园-答题卡预览'
+  }
+},
+{
+  // 阅卷
+  path: '/exam',
+  name: 'exam',
+  component: () => import('@/views/exam'),
+  children: [
+    {
+      path: '/',
+      name: 'examHome',
+      component: examHome,
+      meta: {
+        title: '智汇e校园-阅卷分析'
+      }
+    },
+    {
+      path: '/classAnalysis',
+      name: 'classAnalysis',
+      component: classAnalysis,
+      meta: {
+        title: '智汇e校园-阅卷分析'
+      }
+    },
+    {
+      path: '/schoolAnalysis',
+      name: 'schoolAnalysis',
+      component: schoolAnalysis,
+      meta: {
+        title: '智汇e校园-阅卷分析'
+      }
+    },
+    {
+      path: '/jointExam',
+      name: 'jointExam',
+      component: jointExam,
+      meta: {
+        title: '智汇e校园-阅卷分析'
+      }
+    },
+  ]
+},
+{
+  // 教师分析
+  path: '/teacherHome',
+  name: 'teacherHome',
+  component: () => import('@/views/teacherAnalysis/text'),
+}
 ]
 
 

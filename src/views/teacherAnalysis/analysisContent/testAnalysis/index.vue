@@ -35,7 +35,6 @@
             >{{item.name}}</div>
           </template>
           <template v-else><div class="no_data">暂无数据</div></template>
-
         </div>
       </div>
     </div>
