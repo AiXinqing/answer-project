@@ -62,7 +62,7 @@
         </div>
       </div>
       <div class="el_table_wapper">
-        <template v-if="totalScoretableData.length">
+        <template v-if="totalScoretableData.length || totalScoretableColumn.length">
           <exam-table
             :tablecols="totalScoretableColumn"
             :tableData="totalScoretableData"

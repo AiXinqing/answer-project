@@ -88,7 +88,6 @@
     .nav_logo{
       flex-shrink:0;
       width: 180px;
-      background-color:#f4f4f4;
     }
 
     .nav_menu{
