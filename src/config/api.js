@@ -87,7 +87,7 @@ export const URL = {
   GetJointExamQuestionSummary: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamQuestionSummary', // 联考试题汇总报表
   ExportJointExamQuestionSummary: BASEURL + '/Report/AnlyReport/ExportJointExamQuestionSummary', // 联考试题汇总报表下载
   GetJointExamSchoolScoreContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamSchoolScoreContrast', // 联考学校成绩对比报表
-  GetJointExamSchoolScoreContrastStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamSchoolScoreContrastStuDetails', // 联考学校成绩对比学生详情
+  GetJointExamSchoolScoreContrastStuDetails_s: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamSchoolScoreContrastStuDetails', // 联考学校成绩对比学生详情
   ExportJointExamSchoolScoreContrastStuDetails: BASEURL + '/Report/AnlyReport/ExportJointExamSchoolScoreContrastStuDetails', // 联考学校成绩对比学生详情下载
 
   ExportJointExamSchoolScoreContrast: BASEURL + '/Report/AnlyReport/ExportJointExamSchoolScoreContrast', // 联考学校成绩对比报表下载
