@@ -35,7 +35,6 @@
   export default {
     data() {
       return {
-        theight:0,
         topNum:50,
         titleTopNum:50,
         tsid:'',

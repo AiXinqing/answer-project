@@ -22,7 +22,6 @@
   export default {
     data() {
       return {
-        theight:0,
         parameter:{
           tid: '',
           tsid: '',

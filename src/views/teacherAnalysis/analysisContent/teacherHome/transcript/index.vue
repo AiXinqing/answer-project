@@ -40,7 +40,6 @@
   export default {
     data() {
       return {
-        theight:0,
         keyWords:'',
         tsid:'',
         tid:'',
