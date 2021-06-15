@@ -82,7 +82,7 @@
           {
             prop:'teacher',
             label:'班主任',
-            minWidth:'80',
+            minWidth:'90',
             align:'center',
             type:'Text',
             fixed:'left',
