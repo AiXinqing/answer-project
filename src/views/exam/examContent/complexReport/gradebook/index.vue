@@ -236,12 +236,6 @@
       }
     },
 
-    // mounted () {
-    //   this.$nextTick(() => {
-    //     this.theight = document.body.clientHeight - 350
-    //   })
-    // },
-
     watch: {
       classIdsArr: {
         immediate: true,

@@ -202,10 +202,11 @@
       }
     },
 
-    mounted () {
-      this.$nextTick(() => {
-        this.theight = document.body.clientHeight - 315
-      })
+    created () {
+      window.addEventListener('resize', this.getHeight)
+    },
+    destroyed () {
+      window.removeEventListener('resize', this.getHeight)
     },
 
     watch: {
@@ -219,6 +220,10 @@
     },
 
     methods: {
+      getHeight () {
+        this.theight = document.body.clientHeight - 350
+      },
+
       handleStretch(){
         this.$nextTick(() =>{
           let height = this.$refs.stretch.offsetHeight

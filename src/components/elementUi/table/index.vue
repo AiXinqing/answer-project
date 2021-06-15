@@ -105,7 +105,6 @@
       theight: {
         immediate: true,
         handler () {
-          console.log(this.theight)
           this.height_table = this.theight
         }
       },
