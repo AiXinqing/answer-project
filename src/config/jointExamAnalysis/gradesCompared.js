@@ -37,7 +37,16 @@ export function GetSchoolGradesStatisticsResults ({ tid, tsid, step, type, url }
   })
 }
 
-//联考学校成绩分段统计报表
+// 联考学校成绩分段统计学生详情
+export function schoolStatisticsDetails ({ tid, tsid, scid, segmentName, step, type, pageIndex, pageSize, url }) {
+  return request({
+    url: url,
+    method: 'get',
+    params: { tid, tsid, scid, segmentName, step, type, pageIndex, pageSize }
+  })
+}
+
+//联考班级成绩分段统计报表
 export function GetClassGradesStatisticsResults ({ tid, tsid, scids, step, type, url }) {
   return request({
     url: url,

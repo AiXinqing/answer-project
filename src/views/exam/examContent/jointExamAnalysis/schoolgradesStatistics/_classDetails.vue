@@ -20,7 +20,7 @@
         :pagination="page"
         :loading="tableLoading"
         :pageSizes="pageSizes"
-        :theight="0"
+        :autoHeight="true"
         @handle-size-change="handleSizeChange"
         @handle-current-change="handleCurrentChange"
       ></exam-table>
@@ -90,13 +90,13 @@
           },
         ],
         parameter:{
-          cid:'',
+          scid:'',
           tid: '',
           tsid:'',
           segmentName:'',
           step:50,
           type:0,
-          url:this.URL.GetSegmentStuDetails
+          url:this.URL.GetJointExamSchoolScoreSegmentStuDetails
         },
         page: {
           pageSize: 10,
@@ -111,7 +111,7 @@
 
     computed: {
       ...mapState('getExam', ['headerTable',]),
-      ...mapState('gradesDetails', ['tableLoading','TableList','pagination',]),
+      ...mapState('schoolStatisticsDetails', ['tableLoading','TableList','pagination',]),
 
       title() {
         return '学生名单详情'
@@ -197,6 +197,7 @@
           ...row
         }
         this.prmTid = row.tid
+
         this.$nextTick(()=>{
           this.getDynamicHeader(row.tsid,row.tid)
           let _this = this
@@ -248,13 +249,13 @@
           pageIndex: pageNum,
           pageSize: pageSize,
         }
-        this.$store.dispatch('gradesDetails/GetStuResults', this.parameter)
+        this.$store.dispatch('schoolStatisticsDetails/GetStuResults', this.parameter)
       },
 
       downTable(){
         // 下载表格
-        const {cid,tid,tsid,segmentName,step,type} = this.parameter
-        window.open(`${this.URL.ExportStuDetails}?tid=${tid}&tsid=${tsid}&cid=${cid}&segmentName=${segmentName}&step=${step}&type=${type}`)
+        const {scid,tid,tsid,segmentName,step,type} = this.parameter
+        window.open(`${this.URL.ExportJointExamSchoolScoreSegmentStuDetails}?tid=${tid}&tsid=${tsid}&scid=${scid}&segmentName=${segmentName}&step=${step}&type=${type}`)
       },
     },
   }

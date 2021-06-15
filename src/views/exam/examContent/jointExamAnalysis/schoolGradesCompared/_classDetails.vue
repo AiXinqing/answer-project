@@ -20,7 +20,7 @@
         :pagination="page"
         :loading="tableLoading"
         :pageSizes="pageSizes"
-        :theight="0"
+        :autoHeight="true"
         @handle-size-change="handleSizeChange"
         @handle-current-change="handleCurrentChange"
       ></exam-table>
@@ -248,10 +248,8 @@
           pageIndex: pageNum,
           pageSize: pageSize,
         }
-        console.log(12)
-        console.log(this.parameter)
 
-
+        this.$store.dispatch('JointExamSchoolDetails/GetStuResults', this.parameter)
       },
 
       downTable(){
