@@ -90,18 +90,18 @@
           },
         ],
         parameter:{
-          cid:'',
           tid: '',
           tsid:'',
+          scid:'',
           asid:'',
-          url:this.URL.GetStuDetails
+          url:this.URL.GetJointExamSchoolScoreContrastStuDetails
         },
         page: {
           pageSize: 10,
           pageNum: 1,
           total: 0
         },
-        headeUrl:this.URL.GetTableHeadeSubject,
+        headeUrl:this.URL.getTableDetailsHeadeSubject,
         prmTid:'',
         pageSizes:[10,15,20,30,50,100]
       }
@@ -109,7 +109,7 @@
 
     computed: {
       ...mapState('getExam', ['headerTable',]),
-      ...mapState('classDetails', ['tableLoading','TableList','pagination',]),
+      ...mapState('JointExamSchoolDetails', ['tableLoading','TableList','pagination']),
 
       title() {
         return '学生名单详情'
@@ -190,6 +190,7 @@
 
     methods: {
       openDetails(row){
+
         this.dialogVisible = true
         this.parameter = {
           ...this.parameter,
@@ -200,7 +201,7 @@
           this.getDynamicHeader(row.tsid,row.tid)
           let _this = this
           setTimeout(function(){
-            _this.getTable()
+            _this.getTableDetails()
           },500)
         })
       },
@@ -218,7 +219,7 @@
         // 分页每页显示数量
         this.page.pageSize = val
         this.$nextTick(()=>{
-          this.getTable()
+          this.getTableDetails()
         })
 
       },
@@ -226,7 +227,7 @@
         // 分页起始页
         this.page.pageNum = val
         this.$nextTick(()=>{
-          this.getTable()
+          this.getTableDetails()
         })
 
       },
@@ -238,7 +239,7 @@
         })
       },
 
-      getTable() {
+      getTableDetails() {
         // 获取table
         const { pageSize , pageNum} = this.page
         //Qs.stringify
@@ -247,13 +248,16 @@
           pageIndex: pageNum,
           pageSize: pageSize,
         }
-        this.$store.dispatch('classDetails/GetStuResults', this.parameter)
+        console.log(12)
+        console.log(this.parameter)
+
+
       },
 
       downTable(){
         // 下载表格
-        const {cid,tid,tsid,asid} = this.parameter
-        window.open(`${this.URL.ExportStuDetails}?tid=${tid}&tsid=${tsid}&cid=${cid}&asid=${asid}`)
+        const {scid,tid,tsid,asid} = this.parameter
+        window.open(`${this.URL.ExportJointExamSchoolScoreContrastStuDetails}?tid=${tid}&tsid=${tsid}&scid=${scid}&asid=${asid}`)
       },
     },
   }

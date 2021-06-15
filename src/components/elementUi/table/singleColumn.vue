@@ -110,12 +110,28 @@
             :class="font_colorT(scope.row,ele.prop)"
           >{{ele.prop}}</el-button>
         </template>
+
         <template v-if="ele.type ==='popBtn'">
           <el-button
             type="text" class="text_button"
             v-html="columnHtml(scope.row,ele.prop)"
             :class="font_colorT(scope.row,ele.prop)"
             @click="hanldePopFunc(scope.row,ele)"
+          >{{ele.prop}}</el-button>
+        </template>
+
+        <template v-if="ele.type ==='pop_Btn'">
+          <el-button
+            v-for="(btn,i) in  ele.btnList"
+            :key="i"
+            :disabled="btn.isDisabled && btn.isDisabled(scope.row)"
+            :type="btn.type"
+            :size="btn.size || size"
+            :icon="btn.icon"
+            v-html="columnHtml(scope.row,ele.prop)"
+            class="pop_Btn"
+            :class="font_colorT(scope.row,ele.prop)"
+            @click="btn.handle(scope.row,ele)"
           >{{ele.prop}}</el-button>
         </template>
 
@@ -216,6 +232,13 @@
           cid = row['cid_'+ ele.classObj]
         }
 
+        if(row.scid){ // 学校id
+          obj = {
+            scid:row.scid,
+            asid:ele.asid
+          }
+        }
+
         this.$emit('hanlde-pop-func',{
           tid:ele.tid,
           tsid:ele.tsid,
@@ -281,5 +304,15 @@
   }
   .el-table th, .el-table tr th {
     height: 35px;
+  }
+  button.el-button.el-button--default.el-button--medium.pop_Btn{
+    border: none;
+    margin: 0;
+    text-align: center;
+    width: auto;
+    padding: 0 10px;
+    height: 28px;
+    line-height: 28px;
+    color: @main;
   }
 </style>

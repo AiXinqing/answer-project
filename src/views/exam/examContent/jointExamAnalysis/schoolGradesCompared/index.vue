@@ -28,7 +28,6 @@
           :isPagination="false"
           :theight="theight"
           :loading="tableLoading"
-          @hanlde-pop-func="hanldePopFunc"
         ></exam-table>
       </div>
     </div>
@@ -183,12 +182,32 @@
               let obj = {
                 type:'Html'
               }
+              if(item.prop == 'num'){
+                obj = {
+                  ...obj,
+                  btnList:[
+                    {
+                      label:'',
+                      handle: (row,ele) => {
+                        let obj = {
+                          tid:ele.tid,
+                          tsid:ele.tsid,
+                          scid: row.scid,
+                          asid:ele.asid
+                        }
+
+                        this.hanldePopFunc(obj)
+                      }
+                    }
+                  ]
+                }
+              }
               return {
                 ...ele,
                 ...item,
                 label:index != this.rankArr.length ? `${ele.subname}${item.label}` : item.label,
                 ...obj,
-                type: item.prop == 'num' ? 'popBtn' : 'Html',
+                type: item.prop == 'num' ? 'pop_Btn' : 'Html',
                 prop:`${item.prop}_${ele.subname}`,
                 tsid:this.tsid == '' ? tsid_s : this.tsid,
               }
@@ -277,6 +296,7 @@
       },
 
       hanldePopFunc(row){
+        console.log(row)
         this.$refs.studentDetails.openDetails(row)
       }
     },

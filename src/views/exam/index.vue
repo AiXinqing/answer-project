@@ -97,7 +97,7 @@
     .nav_logo{
       flex-shrink:0;
       width: 180px;
-      background-color:#f4f4f4;
+      background: url('~@/assets/nav_logo.png') no-repeat center;
     }
 
     .nav_menu{
