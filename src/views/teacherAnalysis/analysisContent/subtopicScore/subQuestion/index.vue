@@ -28,7 +28,7 @@
         :tableData="tableData"
         :isIndex="false"
         :isPagination="false"
-        :theight="theight"
+        :autoHeight="true"
         :loading="tableLoading"
       ></exam-table>
     </div>
@@ -40,7 +40,6 @@
   export default {
     data() {
       return {
-        theight:0,
         keyWords:'',
         tsid:'',
         tid:'',

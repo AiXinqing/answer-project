@@ -74,7 +74,7 @@ const routes = [{
   // 教师分析
   path: '/teacherHome',
   name: 'teacherHome',
-  component: () => import('@/views/teacherAnalysis/text'),
+  component: () => import('@/views/teacherAnalysis'),
 }
 ]
 

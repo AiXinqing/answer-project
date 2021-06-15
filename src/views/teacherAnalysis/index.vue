@@ -18,7 +18,52 @@
     </div>
 
     <div class="content_router">
-      <component :is="active" />
+
+      <div class="teacher_wapper">
+        <div class="exam_subject mr_10">
+
+          <div class="select_box">
+            <div class="search_select">
+              <div class="select_label">切换考试：</div>
+              <hj-select
+                :items="examOptions"
+                size="mini"
+                :value="tid"
+                @change="handelExamChange"
+              ></hj-select>
+            </div>
+            <div class="search_select">
+              <div class="select_label">切换班级：</div>
+              <hj-select
+                :items="classOptions"
+                size="mini"
+                :value="cid"
+                @change="handelClassChange"
+              ></hj-select>
+            </div>
+          </div>
+
+          <div class="subject_box">
+            <div class="subject_left">选择科目：</div>
+            <div class="subject_right">
+              <template v-if="subjectBox.length">
+                <div
+                  :class="['subject_item',{'active':item.tsid == tsid }]"
+                  v-for="item in subjectBox"
+                  :key="item.tisd"
+                  @click="subjectChange(item)"
+                >{{item.name}}</div>
+              </template>
+              <template v-else><div class="no_data">暂无数据</div></template>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <component
+       :is="active"
+       ref="dynamicComponent"
+      />
     </div>
   </div>
 </template>
@@ -26,7 +71,8 @@
 <script>
   import teacherHome from './analysisContent/teacherHome'
   import testAnalysis from './analysisContent/testAnalysis'
-  import subtopicScore from './analysisContent/subtopicScore'
+  import subtopicScore from './analysisContent/subtopicScore/textIndex'
+  import { mapState } from 'vuex'
   export default {
     components: {
       teacherHome,
@@ -53,12 +99,144 @@
             'linkName':'小题得分'
           }
         ],
+        tid:0,
+        cid:0,
+        tsid:0,
+        subjectBox:[],
+        parameter:{
+          tid: '',
+          url:this.URL.GetAsTestClass
+        },
+        tabId:''
+      }
+    },
+
+    computed: {
+      ...mapState('questionAnalysis', ['examList','classList']),
+
+      examOptions(){
+        let objArray = this.examList.length ? this.examList.map(item => ({label:item.name,value:item.tid})) : []
+        return objArray
+      },
+
+      classOptions(){
+        let objArray = this.classList.length ? this.classList.filter(item => item.tsid != '0').map(item => ({label:item.cname,value:item.cid})) : []
+        return objArray
+      },
+
+    },
+
+    watch: {
+
+      examOptions: {
+        immediate: true,
+        handler () {
+          if(this.examOptions.length){
+            this.tid = this.examOptions.find((element,i) => i == 0).value
+            this.$nextTick(() => {
+              this.parameter.tid = this.tid
+              this.getClassSubjectList()
+            })
+          }
+        }
+      },
+
+      classOptions: {
+        immediate: true,
+        handler () {
+          if(this.classOptions.length){
+            this.cid = this.classOptions.find((element,i) => i == 0).value
+            this.subjectBox = this.classList.filter(item => item.cid == this.cid)[0].ASTestSubjectList.filter(item => item.tsid != '0').map(item => ({name:item.sname,tsid:item.tsid}))
+          }else{
+            this.cid = ''
+            this.subjectBox = []
+          }
+        }
+      },
+
+
+      subjectBox: {
+        immediate: true,
+        handler () {
+          if(this.subjectBox.length){
+            this.tsid = this.subjectBox.find((element,i) => i == 0).tsid
+            if(this.tsid != 0){
+              this.$nextTick(() => {
+                let formData = {
+                  tid:this.tid,
+                  cid:this.cid,
+                  tsid:this.tsid,
+                }
+                this.$refs.dynamicComponent.initChange(formData)
+              })
+            }else{
+              this.subjectBox = []
+            }
+          }
+        }
+      }
+    },
+
+    mounted () {
+      if(this.examOptions.length == 0){
+        this.subjectList()
       }
     },
 
     methods: {
       handelChange(item) {
         this.active = item.calssname
+        this.$nextTick(() => {
+          let formData = {
+            tid:this.tid,
+            cid:this.cid,
+            tsid:this.tsid,
+          }
+          this.$refs.dynamicComponent.initChange(formData)
+        })
+      },
+
+      handelExamChange(val) {
+        this.tid = val
+        this.$nextTick(() => {
+          this.parameter.tid = this.tid
+          this.getClassSubjectList()
+        })
+      },
+      handelClassChange(val) {
+        this.cid = val
+        this.subjectBox = this.classList.filter(item => item.cid == this.cid)[0].ASTestSubjectList.filter(item => item.tsid != '0').map(item => ({name:item.sname,tsid:item.tsid}))
+        this.$nextTick(() => {
+          let formData = {
+            tid:this.tid,
+            cid:this.cid,
+            tsid:this.tsid,
+          }
+
+          this.$refs.dynamicComponent.initChange(formData)
+        })
+      },
+
+      subjectChange(item){
+        // 切换科目
+        this.tsid = item.tsid
+        this.$nextTick(() => {
+          let formData = {
+            tid:this.tid,
+            cid:this.cid,
+            tsid:this.tsid,
+          }
+
+          this.$refs.dynamicComponent.initChange(formData)
+        })
+      },
+      subjectList(){
+        // 获取考次列表
+        this.$store.dispatch('questionAnalysis/getExamList', {url:this.URL.GetAsTestList})
+      },
+
+      getClassSubjectList(){
+        this.$store.dispatch('questionAnalysis/getClassList', this.parameter) // GetAsTestClass
       }
     },
   }
@@ -138,5 +316,11 @@
   }
   .calssname{
     cursor: pointer;
+  }
+</style>
+
+<style lang="less" scoped>
+  .teacher_wapper{
+    padding-bottom:0;
   }
 </style>
