@@ -81,7 +81,7 @@
           {
             prop:'stuname',
             label:'姓名',
-            minWidth:'80',
+            width:'80',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -89,7 +89,7 @@
           {
             prop:'tnumber',
             label:'考号',
-            minWidth:'100',
+            width:'100',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -97,7 +97,7 @@
           {
             prop:'totalscore',
             label:'总分',
-            minWidth:'120',
+            width:'120',
             align:'center',
             type:'Text',
             url:this.URL.BrowsescoreAnsw
@@ -105,28 +105,28 @@
           {
             prop:'ObjectiveScore',
             label:'客观题',
-            minWidth:'120',
+            width:'120',
             align:'center',
             type:'Html'
           },
           {
             prop:'SubjectiveScore',
             label:'主观题',
-            minWidth:'120',
+            width:'120',
             align:'center',
             type:'Html'
           },
           {
             prop:'gradeRank',
             label:'学校排名',
-            minWidth:'120',
+            width:'120',
             align:'center',
             type:'Html'
           },
           {
             prop:'classRank',
             label:'班级排名',
-            minWidth:'120',
+            width:'120',
             align:'center',
             type:'Html'
           },
@@ -315,6 +315,10 @@
         immediate: true,
         handler () {
           this.cidStr = this.classIdsArr
+          let _$this = this
+          this.$nextTick(()=>{
+            this.getHeight()
+          })
         },
       },
       pagination:{

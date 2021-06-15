@@ -16,7 +16,7 @@
       <el-table-column v-if="isIndex" type="index" :label="indexlabel" align="center" width="50" :fixed="indexFixed"></el-table-column>
       <singleColumn
         v-for="(column,i) in tablecols"
-        :key="i"
+        :key="i+Math.random()"
         :column="column"
         @hanlde-pop-func="hanldePopFunc"
       />
@@ -256,5 +256,8 @@
 .el_table_wapper section>div .el-table__fixed{
   background: #fff;
   // height: 100% !important;
+}
+.el-table th.gutter{
+  display: table-cell!important;
 }
 </style>
