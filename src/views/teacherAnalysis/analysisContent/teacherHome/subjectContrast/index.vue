@@ -4,9 +4,9 @@
       <div class="title_name">
         <span>学科对比</span>
       </div>
-      <div class="filter_btn" v-if="tsid !=''">
+      <div class="filter_btn Before_grade" v-if="tsid !=''">
         <div class="input_box">
-          <div class="label_font">分段分数 :</div>
+          <div class="label_font">年级前N名 :</div>
           <hj-input
             v-model="topNum"
             class="search_input"
@@ -270,5 +270,19 @@
         }
       }
     }
+  }
+</style>
+
+<style lang="less" scoped>
+  .condition_filter {
+    .Before_grade{
+      .input_box .hj-input.el-input{
+        width: 70px!important;
+      }
+    }
+  } 
+
+  .condition_filter .title_name {
+    width: 871px;
   }
 </style>

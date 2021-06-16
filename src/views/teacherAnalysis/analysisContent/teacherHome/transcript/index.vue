@@ -78,7 +78,7 @@
           {
             prop:'stuname',
             label:'姓名',
-            minWidth:'80',
+            width:'80',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -86,7 +86,7 @@
           {
             prop:'tnumber',
             label:'考号',
-            minWidth:'100',
+            width:'100',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -97,19 +97,19 @@
           {
             prop:'tscore',
             label:'分数',
-            width:'85',
+            minWidth:'85',
             align:'center',
           },
           {
             prop:'gradeRank',
             label:'学校排名',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
           {
             prop:'classRank',
             label:'班级排名',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
         ],
