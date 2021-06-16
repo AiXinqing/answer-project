@@ -23,7 +23,7 @@
   import gradesStatistics from './gradesStatistics'
   import ranking from './ranking'
   // import Qs from 'qs'
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapMutations } from 'vuex'
 
   export default {
     components: {
@@ -90,11 +90,13 @@
       }
     },
     methods: {
+      ...mapMutations('getExam', ['Reset_classesArr']),
       // 切换tab
       handleClick(tab){
         this.activeName = tab.name
         this.$nextTick(()=>{
           this.$refs.tabName.initTable()
+          this.Reset_classesArr()
         })
 
       },

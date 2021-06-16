@@ -23,7 +23,7 @@
   import classGradesCompared from './classGradesCompared'
   import schoolGradesStatistics from './schoolGradesStatistics'
   import classGradesStatistics from './classGradesStatistics'
-  import { mapGetters } from 'vuex'
+  import { mapGetters , mapMutations} from 'vuex'
   export default {
     components: {
       jointExam,
@@ -100,10 +100,13 @@
     },
 
     methods: {
+      ...mapMutations('jointExams', ['Reset_schoolArr']),
+  
       handleClick(tab) {
         this.activeName = tab.name
         this.$nextTick(()=>{
           this.$refs.tabName.initTable()
+          this.Reset_schoolArr()
         })
       },
 
