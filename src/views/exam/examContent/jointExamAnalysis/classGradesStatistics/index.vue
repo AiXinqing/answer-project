@@ -22,7 +22,7 @@
         </div>
         <div class="search_left" style="width:auto">
           <span class="titile_14">分数区间：</span>
-          <hj-input class="indent_model" style="width:60px;" type="number" v-model="step" placeholder="50" />
+          <hj-input class="indent_model" style="width:60px;" type="number" v-model="stepVal" @keyup.native="proving($event)" />
           <span class="titile_14"> 分/段</span>
 
           <exam-button type="primary" class="grades_btn" @click="handelScoreInterval">确定</exam-button>
@@ -118,7 +118,7 @@
         ],
 
         // 参数
-        step:30,
+        stepVal:100,
         tsid:'',
         scidsStr:'',
         theight: document.body.clientHeight - 310 || 0,
@@ -126,7 +126,7 @@
           scids:'',
           tid: '',
           tsid:'',
-          step:30,
+          step:100,
           type: 0, //统计类型：0:分段统计，1：累计统计
           url:this.URL.GetJointExamClassScoreSegment
         },
@@ -173,7 +173,7 @@
                 type: index == 0 ? 'popBtn' : 'Html',
                 prop:`${item.prop}_${ele}`,
                 p_name:ele,
-                p_step:this.step,
+                p_step:this.stepVal,
                 p_type:this.type,
                 tid:this.prmTid,
                 tsid:this.tsid == '' ? tsid_s : this.tsid,
@@ -197,7 +197,7 @@
 
           return {
             cid: item.cid,
-            scid: item.scid,
+            cname:item.cname,
             scname: item.scname,
             referenceNumber: item.referenceNumber,
             ...dynamic
@@ -232,6 +232,8 @@
       initTable() {
         this.$nextTick(()=>{
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+          this.stepVal = 100
+          this.parameter.step = Number(this.stepVal)
           // 班级数组
           this.scidsStr = this.schoolIdsArr
           // 获取动态表头
@@ -242,6 +244,12 @@
       singleChange(tsid){
         // 科目查询
         this.tsid = tsid
+        if(this.tsid !="totalScore"){
+          this.stepVal = 20
+        }else{
+          this.stepVal = 100
+        }
+        this.parameter.step = Number(this.stepVal)
         this.$nextTick(()=>{
           this.getTable()
         })
@@ -249,7 +257,7 @@
 
       handelScoreInterval(){
         //分数区间
-        this.parameter.step = Number(this.step)
+        this.parameter.step = Number(this.stepVal)
         this.$nextTick(()=>{
           this.getTable()
         })
@@ -267,7 +275,9 @@
         // 条件查询
         if(this.tsid == ''){
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+          this.stepVal = 100
         }
+        this.parameter.step = Number(this.stepVal)
         this.scidsStr = scidsStr
         this.$nextTick(()=>{
           this.getTable()
@@ -290,8 +300,9 @@
         // 下载表格
         if(this.tsid == ''){
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+          this.stepVal = 100
         }
-        window.open(`${this.URL.ExportJointExamClassScoreSegment}?tid=${this.prmTid}&tsid=${this.tsid}&scids=${this.scidsStr}&step=${this.step}&type=${this.type}`)
+        window.open(`${this.URL.ExportJointExamClassScoreSegment}?tid=${this.prmTid}&tsid=${this.tsid}&scids=${this.scidsStr}&step=${this.stepVal}&type=${this.type}`)
       },
 
       hanldePopFunc(row){

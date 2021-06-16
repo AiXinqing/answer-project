@@ -7,7 +7,8 @@ import Element from 'element-ui'
 import Components from './components/index'
 import httpRequest from './utils/request'
 import { post, fetch, patch, put, postForm } from './utils/http'
-import { URL} from '@/config/api'
+import { URL } from '@/config/api'
+import { proving } from '@/assets/js/_verifyProving'
 import { convertArray, convertArray_p } from './config/complexReport/convertArray'
 import lodash from 'lodash'
 import vCharts from 'v-charts'
@@ -23,6 +24,7 @@ Vue.prototype.$patch = patch
 Vue.prototype.$put = put
 Vue.prototype.$postForm = postForm
 Vue.prototype.URL = URL
+Vue.prototype.proving = proving
 Vue.prototype.convertArray = convertArray
 Vue.prototype.convertArray_p = convertArray_p
 
