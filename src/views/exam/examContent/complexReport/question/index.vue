@@ -272,6 +272,11 @@
       singleChange(tsid){
         // 科目查询
         this.tsid = tsid
+        this.page = {
+          pageSize: 15,
+          pageNum: 1,
+          total: 0
+        }
         this.$nextTick(()=>{
           this.getTable()
         })
