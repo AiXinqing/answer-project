@@ -39,7 +39,7 @@
 
         tableColumn:[
           {
-            prop:'type',
+            prop:'name',
             label:'题号',
             width:'100',
             align:'center',
