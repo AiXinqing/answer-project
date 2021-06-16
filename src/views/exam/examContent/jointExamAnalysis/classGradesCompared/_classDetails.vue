@@ -20,7 +20,7 @@
         :pagination="page"
         :loading="tableLoading"
         :pageSizes="pageSizes"
-        :theight="0"
+        :autoHeight="true"
         @handle-size-change="handleSizeChange"
         @handle-current-change="handleCurrentChange"
       ></exam-table>
@@ -38,7 +38,7 @@
           {
             prop:'cname',
             label:'班级',
-            minWidth:'140',
+            width:'140',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -46,7 +46,7 @@
           {
             prop:'stuname',
             label:'姓名',
-            minWidth:'100',
+            width:'100',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -54,7 +54,7 @@
           {
             prop:'tnumber',
             label:'考号',
-            minWidth:'100',
+            width:'100',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -62,7 +62,7 @@
           {
             prop:'snumber',
             label:'学号',
-            minWidth:'120',
+            width:'120',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -73,19 +73,19 @@
           {
             prop:'tscore',
             label:'分数',
-            width:'85',
+            minWidth:'85',
             align:'center',
           },
           {
             prop:'gradeRank',
             label:'学校排名',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
           {
             prop:'classRank',
             label:'班级排名',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
         ],
@@ -94,7 +94,7 @@
           tid: '',
           tsid:'',
           asid:'',
-          url:this.URL.GetStuDetails
+          url:this.URL.GetJointExamClassScoreContrastStuDetails
         },
         page: {
           pageSize: 10,
@@ -109,7 +109,7 @@
 
     computed: {
       ...mapState('getExam', ['headerTable',]),
-      ...mapState('classDetails', ['tableLoading','TableList','pagination',]),
+      ...mapState('JointExamClassDetails', ['tableLoading','TableList','pagination',]),
 
       title() {
         return '学生名单详情'
@@ -246,13 +246,13 @@
           pageIndex: pageNum,
           pageSize: pageSize,
         }
-        this.$store.dispatch('classDetails/GetStuResults', this.parameter)
+        this.$store.dispatch('JointExamClassDetails/GetStuResults', this.parameter)
       },
 
       downTable(){
         // 下载表格
         const {cid,tid,tsid,asid} = this.parameter
-        window.open(`${this.URL.ExportStuDetails}?tid=${tid}&tsid=${tsid}&cid=${cid}&asid=${asid}`)
+        window.open(`${this.URL.ExportJointExamClassScoreContrastStuDetails}?tid=${tid}&tsid=${tsid}&cid=${cid}&asid=${asid}`)
       },
     },
   }

@@ -29,7 +29,6 @@
           :isPagination="false"
           :theight="theight"
           :loading="tableLoading"
-          @hanlde-pop-func="hanldePopFunc"
         ></exam-table>
       </div>
     </div>
@@ -90,7 +89,7 @@
           {
             prop:'teacher',
             label:'班主任',
-            minWidth:'80',
+            minWidth:'90',
             align:'center',
             type:'Text',
             fixed:'left',
@@ -212,12 +211,31 @@
               let obj = {
                 type:'Html'
               }
+              if(item.prop == 'num'){
+                obj = {
+                  ...obj,
+                  btnList:[
+                    {
+                      label:'',
+                      handle: (row,ele) => {
+                        let obj = {
+                          tid:ele.tid,
+                          tsid:ele.tsid,
+                          cid:row.cid,
+                          asid:ele.asid,
+                        }
+                       this.hanldePopFunc(obj)
+                      }
+                    }
+                  ]
+                }
+              }
               return {
                 ...ele,
                 ...item,
                 label:index != this.rankArr.length ? `${ele.subname}${item.label}` : item.label,
                 ...obj,
-                type: item.prop == 'num' ? 'popBtn' : 'Html',
+                type: item.prop == 'num' ? 'pop_Btn' : 'Html',
                 prop:`${item.prop}_${ele.subname}`,
                 tsid:this.tsid == '' ? tsid_s : this.tsid,
               }

@@ -93,10 +93,14 @@ export const URL = {
   GetJointExamSchoolScoreContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamSchoolScoreContrast', // 联考学校成绩对比报表
   GetJointExamSchoolScoreContrastStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamSchoolScoreContrastStuDetails', // 联考学校成绩对比学生详情
   ExportJointExamSchoolScoreContrastStuDetails: BASEURL + '/Report/AnlyReport/ExportJointExamSchoolScoreContrastStuDetails', // 联考学校成绩对比学生详情下载
-
   ExportJointExamSchoolScoreContrast: BASEURL + '/Report/AnlyReport/ExportJointExamSchoolScoreContrast', // 联考学校成绩对比报表下载
+
   GetJointExamClassScoreContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamClassScoreContrast', // 联考班级成绩对比报表
   ExportJointExamClassScoreContrast: BASEURL + '/Report/AnlyReport/ExportJointExamClassScoreContrast', // 联考班级成绩对比报表下载
+  GetJointExamClassScoreContrastStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamClassScoreContrastStuDetails', // 联考班级成绩对比学生详情
+  ExportJointExamClassScoreContrastStuDetails: BASEURL + '/Report/AnlyReport/ExportJointExamClassScoreContrastStuDetails', // 联考班级成绩对比学生详情下载
+
+
   GetJointExamSchoolScoreSegment: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamSchoolScoreSegment', // 联考学校成绩分段统计报表
   GetJointExamSchoolScoreSegmentStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamSchoolScoreSegmentStuDetails', // 联考学校成绩分段统计学生详情
   ExportJointExamSchoolScoreSegmentStuDetails: BASEURL + '/Report/AnlyReport/ExportJointExamSchoolScoreSegmentStuDetails', // 联考学校成绩分段统计学生详情下载

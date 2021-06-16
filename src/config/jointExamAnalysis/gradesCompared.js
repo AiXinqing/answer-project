@@ -27,6 +27,15 @@ export function GetClassGradesComparedResults ({ tid, tsid, scids, url }) {
   })
 }
 
+//联考班级成绩对比学生详情
+export function JointExamClassDetails ({ tid, tsid, cid, asid, url }) {
+  return request({
+    url: url,
+    method: 'get',
+    params: { tid, tsid, cid, asid }
+  })
+}
+
 
 //联考学校成绩分段统计报表
 export function GetSchoolGradesStatisticsResults ({ tid, tsid, step, type, url }) {
