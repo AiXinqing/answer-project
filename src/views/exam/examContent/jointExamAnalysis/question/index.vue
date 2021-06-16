@@ -30,7 +30,6 @@
           :isPagination="false"
           :theight="theight"
           :loading="tableLoading"
-          @hanlde-pop-func="hanldePopFunc"
         ></exam-table>
       </div>
       <student-details
@@ -172,11 +171,35 @@
             align:'center',
             // 0 客观题 objective 1 主观题 subjective
             childen:this.rankArr.map((item,index) =>{
+              let obj = {
+                type:'Html'
+              }
+              if(item.prop == 'fullScoreNum' || item.prop == 'zeroScoreNum'){
+                obj = {
+                  ...obj,
+                  btnList:[
+                    {
+                      label:'',
+                      handle: (row,ele) => {
+                        let obj = {
+                          tid:ele.tid,
+                          tsid:ele.tsid,
+                          cid:row.cid,
+                          tqid:row.tqid,
+                          type: ele.type_p
+                        }
+                        this.hanldePopFunc(obj)
+                      }
+                    }
+                  ]
+                }
+              }
               return {
                 ...ele,
                 ...item,
                 label:item.label,
-                type: index == 1 || index == 3  ? 'popBtn' : 'Html',
+                ...obj,
+                type: index == 1 || index == 3  ? 'pop_Btn' : 'Html',
                 type_p:index == 1 ? 'manfen' : index == 3 ? 'zero' : 0,
                 prop:`${item.prop}_${ele.cname}`,
                 tsid:this.tsid == '' ? tsid_s : this.tsid,

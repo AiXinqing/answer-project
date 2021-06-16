@@ -86,6 +86,10 @@ export const URL = {
   ExportJointExamStuSmallScore: BASEURL + '/Report/AnlyReport/ExportJointExamStuSmallScore', // 联考小题分数报表
   GetJointExamQuestionSummary: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamQuestionSummary', // 联考试题汇总报表
   ExportJointExamQuestionSummary: BASEURL + '/Report/AnlyReport/ExportJointExamQuestionSummary', // 联考试题汇总报表下载
+  GetJointExamQuestionSummaryStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamQuestionSummaryStuDetails', // 联考试题汇总报表学生详情
+  ExportJointExamQuestionSummaryStuDetails: BASEURL + '/Report/AnlyReport/ExportJointExamQuestionSummaryStuDetails', // 联考试题汇总报表学生详情下载
+
+
   GetJointExamSchoolScoreContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamSchoolScoreContrast', // 联考学校成绩对比报表
   GetJointExamSchoolScoreContrastStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamSchoolScoreContrastStuDetails', // 联考学校成绩对比学生详情
   ExportJointExamSchoolScoreContrastStuDetails: BASEURL + '/Report/AnlyReport/ExportJointExamSchoolScoreContrastStuDetails', // 联考学校成绩对比学生详情下载

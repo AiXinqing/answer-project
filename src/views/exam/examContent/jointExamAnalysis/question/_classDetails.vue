@@ -20,7 +20,7 @@
         :pagination="page"
         :loading="tableLoading"
         :pageSizes="pageSizes"
-        :theight="0"
+        :autoHeight="true"
         @handle-size-change="handleSizeChange"
         @handle-current-change="handleCurrentChange"
       ></exam-table>
@@ -38,7 +38,7 @@
           {
             prop:'cname',
             label:'班级',
-            minWidth:'140',
+            width:'140',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -46,21 +46,21 @@
           {
             prop:'stuname',
             label:'姓名',
-            minWidth:'100',
+            width:'100',
             align:'center',
             type:'Html'
           },
           {
             prop:'tnumber',
             label:'考号',
-            minWidth:'100',
+            width:'100',
             align:'center',
             type:'Html'
           },
           {
             prop:'snumber',
             label:'学号',
-            minWidth:'120',
+            width:'120',
             align:'center',
             type:'Html'
           },
@@ -70,19 +70,19 @@
           {
             prop:'tscore',
             label:'分数',
-            width:'85',
+            minWidth:'85',
             align:'center',
           },
           {
             prop:'gradeRank',
             label:'学校排名',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
           {
             prop:'classRank',
             label:'班级排名',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
         ],
@@ -92,7 +92,7 @@
           tsid:'',
           tqid:'',
           type:'',
-          url:this.URL.GetSummaryStuDetails
+          url:this.URL.GetJointExamQuestionSummaryStuDetails
         },
         page: {
           pageSize: 10,
@@ -107,7 +107,7 @@
 
     computed: {
       ...mapState('getExam', ['headerTable',]),
-      ...mapState('questionClassDetails', ['tableLoading','TableList','pagination',]),
+      ...mapState('jointQuestionDetails', ['tableLoading','TableList','pagination',]),
 
       title() {
         return '学生名单详情'
@@ -246,13 +246,13 @@
           pageSize: pageSize,
         }
 
-        this.$store.dispatch('questionClassDetails/GetStuResults', this.parameter)
+        this.$store.dispatch('jointQuestionDetails/GetStuResults', this.parameter)
       },
 
       downTable(){
         // 下载表格
         const {cid,tid,tsid,tqid,type} = this.parameter
-        window.open(`${this.URL.ExportSummaryStuDetails}?tid=${tid}&tsid=${tsid}&cid=${cid}&tqid=${tqid}&type=${type}`)
+        window.open(`${this.URL.ExportJointExamQuestionSummaryStuDetails}?tid=${tid}&tsid=${tsid}&cid=${cid}&tqid=${tqid}&type=${type}`)
       },
     },
   }

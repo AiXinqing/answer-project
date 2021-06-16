@@ -71,7 +71,7 @@
 <script>
   import teacherHome from './analysisContent/teacherHome'
   import testAnalysis from './analysisContent/testAnalysis'
-  import subtopicScore from './analysisContent/subtopicScore/textIndex'
+  import subtopicScore from './analysisContent/subtopicScore'
   import { mapState } from 'vuex'
   export default {
     components: {
