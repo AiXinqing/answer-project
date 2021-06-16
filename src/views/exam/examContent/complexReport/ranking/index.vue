@@ -6,6 +6,8 @@
         :key="i"
         :choose-list="choose"
         @handle-stretch="handleStretch"
+        @handle-checkAll-change="handleCheckAllChange"
+        @single-change="singleChange"
       >
       </hj-stretch>
     </div>
@@ -252,6 +254,30 @@
         // 设置搜索
         this.parameter.placing = this.placing
         this.parameter.type = this.type
+        this.$nextTick(()=>{
+          this.getTable()
+        })
+      },
+
+      handleCheckAllChange(cidStr){
+        // 班级查询
+        if(this.tsid == ''){
+          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+        }
+        this.cidStr = cidStr
+        this.$nextTick(()=>{
+          this.getTable()
+        })
+      },
+
+      singleChange(tsid){
+        // 科目查询
+        this.tsid = tsid
+        this.page = {
+          pageSize: 15,
+          pageNum: 1,
+          total: 0
+        }
         this.$nextTick(()=>{
           this.getTable()
         })

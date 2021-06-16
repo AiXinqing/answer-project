@@ -22,7 +22,7 @@
         </div>
         <div class="search_left" style="width:auto">
           <span class="titile_14">分数区间：</span>
-          <hj-input class="indent_model" style="width:60px;" type="number" v-model="step" placeholder="50" />
+          <hj-input class="indent_model" style="width:60px;" type="number" v-model="stepVal" @keyup.native="proving($event)" />
           <span class="titile_14"> 分/段</span>
 
           <exam-button type="primary" class="grades_btn" @click="handelScoreInterval">确定</exam-button>
@@ -110,7 +110,7 @@
         ],
 
         // 参数
-        step:50,
+        stepVal:100,
         tsid:'',
         cidStr:'',
         theight: document.body.clientHeight - 310 || 0,
@@ -118,7 +118,7 @@
           cids:'',
           tid: '',
           tsid:'',
-          step:50,
+          step:100,
           type: 0, //统计类型：0:分段统计，1：累计统计
           url:this.URL.GetClassScoreSegment
         },
@@ -164,7 +164,7 @@
                 type: index == 0 ? 'popBtn' : 'Html',
                 prop:`${item.prop}_${ele}`,
                 p_name:ele,
-                p_step:this.step,
+                p_step:this.stepVal,
                 p_type:this.type,
                 tid:this.prmTid,
                 tsid:this.tsid == '' ? tsid_s : this.tsid,
@@ -232,6 +232,8 @@
       initTable() {
         this.$nextTick(()=>{
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+          this.stepVal = 100
+          this.parameter.step = Number(this.stepVal)
           // 班级数组
           this.cidStr = this.classIdsArr
           // 获取动态表头
@@ -246,7 +248,9 @@
         // 班级查询
         if(this.tsid == ''){
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+          this.stepVal = 100
         }
+        this.parameter.step = Number(this.stepVal)
         this.cidStr = cidStr
         this.$nextTick(()=>{
           this.getTable()
@@ -256,6 +260,12 @@
       singleChange(tsid){
         // 科目查询
         this.tsid = tsid
+        if(this.tsid !="totalScore"){
+          this.stepVal = 20
+        }else{
+          this.stepVal = 100
+        }
+        this.parameter.step = Number(this.stepVal)
         this.page = {
           pageSize: 15,
           pageNum: 1,
