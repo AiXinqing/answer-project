@@ -184,7 +184,7 @@
                         let obj = {
                           tid:ele.tid,
                           tsid:ele.tsid,
-                          cid:row.cid,
+                          cid:ele.cid,
                           tqid:row.tqid,
                           type: ele.type_p
                         }
