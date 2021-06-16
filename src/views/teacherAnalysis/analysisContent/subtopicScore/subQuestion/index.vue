@@ -2,7 +2,7 @@
   <div class="overall_overview">
     <div class="condition_filter">
       <div class="title_name">
-        <span>成绩单</span>
+        <span>学生小题得分情况</span>
       </div>
       <div class="filter_btn">
         <div class="input_box">
@@ -138,13 +138,13 @@
           {
             prop:'fullScore',
             label:'客观',
-            width:'90',
+            minWidth:'120',
             align:'center',
           },
           {
             prop:'answer',
             label:'客观',
-            width:'90',
+            minWidth:'120',
             align:'center',
           },
         ],
@@ -152,7 +152,7 @@
           {
             prop:'fullScore',
             label:'主',
-            width:'100',
+            minWidth:'120',
             align:'center',
           },
         ],
@@ -294,7 +294,7 @@
       downloadTranscript(){
         // 下载表格
         const {cid,keyWords,tid,tsid} = this.parameter
-        window.open(`${this.URL.ExportClassStuTotalScore}?tid=${tid}&tsid=${tsid}&cid=${cid}&keyWords=&${keyWords}`)
+        window.open(`${this.URL.ExportTeacherClassStuSmallScore}?tid=${tid}&tsid=${tsid}&cid=${cid}&keyWords=&${keyWords}`)
       },
 
       handleClear(){
