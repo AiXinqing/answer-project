@@ -111,13 +111,13 @@
           {
             prop:'avgScore',
             label:'平均分',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
           {
             prop:'avgScoreScale',
             label:'平均得分率',
-            width:'120',
+            minWidth:'120',
             align:'center',
           },
         ],

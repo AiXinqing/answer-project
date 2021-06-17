@@ -118,21 +118,21 @@
               {
                 prop:'avgScore',
                 label:'平均分',
-                width:'90',
+                minWidth:'90',
                 align:'center',
                 type:'Html'
               },
               {
                 prop:'avgScoreRate',
                 label:'平均得分率',
-                width:'100',
+                minWidth:'100',
                 align:'center',
                 type:'Html'
               },
               {
                 prop:'rank',
                 label:'排名',
-                width:'90',
+                minWidth:'90',
                 align:'center',
                 type:'Html'
               }

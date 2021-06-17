@@ -81,14 +81,14 @@
           {
             prop:'num',
             label:'人数',
-            width:'85',
+            minWidth:'85',
             align:'center',
             type:'Html'
           },
           {
             prop:'avgScoreString',
             label:'平均分',
-            width:'90',
+            minWidth:'90',
             align:'center',
             type:'Html'
           }
