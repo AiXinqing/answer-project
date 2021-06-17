@@ -22,36 +22,36 @@
       </div>
       <!-- 标题 -->
 
-      <Parking1
+      <parking1
         class="mar_T10"
-        id="Parking1"
+        id="parking0"
         :prmTid="prmTid"
         :subjects-arr="subjectsArr"
       />
 
-      <Parking2
+      <parking2
         class="mar_T10"
-        id="Parking2"
+        id="parking1"
         :prmTid="prmTid"
       />
 
-      <Parking3
+      <parking3
         class="mar_T10"
-        id="Parking3"
-        :prmTid="prmTid"
-        :subjects-arr="subjectsArr"
-      />
-
-      <Parking4
-        class="mar_T10"
-        id="Parking4"
+        id="parking2"
         :prmTid="prmTid"
         :subjects-arr="subjectsArr"
       />
 
-      <Parking5
+      <parking4
         class="mar_T10"
-        id="Parking5"
+        id="parking3"
+        :prmTid="prmTid"
+        :subjects-arr="subjectsArr"
+      />
+
+      <parking5
+        class="mar_T10"
+        id="parking4"
         :prmTid="prmTid"
         :subjects-arr="subjectsArr"
       />
@@ -66,10 +66,12 @@
         <a
           v-for="(tab ,index) in tabsAnchor"
           :key="index"
-          :class="['cur_style',{cur:iscur==index}]"
+          class="cur_style"
+          :class="{'cur':iscur == tab.name}"
           href="javascript:void(0)"
-          :id="`parkingA${index + 1}`"
-          @click="iscur=index,goAnchor('Parking' + (index + 1))"
+          :id="`parkingA${index}`"
+          @click="goAnchor('parking' + index)"
+          @click="changeName(tab.name)"
         >
           {{tab.name}}
         </a>
@@ -81,25 +83,25 @@
 </template>
 
 <script>
-  import Parking1 from './averageRank/'
-  import Parking2 from './gradesOverview/'
-  import Parking3 from './gradePercentage/'
-  import Parking4 from './sectionNumPeople/'
-  import Parking5 from './scoringRate/'
+  import parking1 from './averageRank/'
+  import parking2 from './gradesOverview/'
+  import parking3 from './gradePercentage/'
+  import parking4 from './sectionNumPeople/'
+  import parking5 from './scoringRate/'
 
   import { mapState } from 'vuex'
   export default {
     components: {
-      Parking1,
-      Parking2,
-      Parking3,
-      Parking4,
-      Parking5
+      parking1,
+      parking2,
+      parking3,
+      parking4,
+      parking5
     },
 
     data() {
       return {
-        tabView: 'Parking1',
+        tabView: 'parking0',
         tabsAnchor: [
           {
             name:'学科平均分排名'
@@ -117,7 +119,7 @@
             name:'学科试题得分率'
           },
         ],
-        iscur:0,
+        iscur:'学科平均分排名',
         prmTid:''
       }
     },
@@ -161,8 +163,14 @@
     methods: {
 
       goAnchor(selector) {
-        var anchor = document.getElementById(selector)
-        document.documentElement.scrollTop = anchor.offsetTop
+
+        document.querySelector('#'+selector).scrollIntoView({
+          behavior: 'smooth'
+        })
+      },
+
+      changeName(name){
+        this.iscur = name
       },
 
       getExamFunc(prmTid) {
@@ -174,11 +182,11 @@
       windowScroll() {
         // 滚动条距离页面顶部的距离
         // 以下写法原生兼容
-        let parkingA1 = document.getElementById('Parking1').offsetTop
-        let parkingA2 = document.getElementById('Parking2').offsetTop
-        let parkingA3 = document.getElementById('Parking3').offsetTop
-        let parkingA4 = document.getElementById('Parking4').offsetTop
-        let parkingA5 = document.getElementById('Parking5').offsetTop
+        let parkingA1 = document.getElementById('parking0').offsetTop
+        let parkingA2 = document.getElementById('parking1').offsetTop
+        let parkingA3 = document.getElementById('parking2').offsetTop
+        let parkingA4 = document.getElementById('parking3').offsetTop
+        let parkingA5 = document.getElementById('parking4').offsetTop
 
         let curStyle = document.getElementsByClassName('cur_style')
             for(let i = 0; i < 5;i++){
@@ -188,17 +196,17 @@
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
             if(scrollTop <= parkingA1 ){
-              document.getElementById('parkingA1').classList.add("cur")
+              document.getElementById('parkingA0').classList.add("cur")
             } else if(scrollTop <= parkingA2 ){
-              document.getElementById('parkingA2').classList.add("cur")
+              document.getElementById('parkingA1').classList.add("cur")
             }else if(scrollTop <= parkingA3 ){
-              document.getElementById('parkingA3').classList.add("cur")
+              document.getElementById('parkingA2').classList.add("cur")
             }else if(scrollTop <= parkingA4 ){
-              document.getElementById('parkingA4').classList.add("cur")
+              document.getElementById('parkingA3').classList.add("cur")
             }else if(scrollTop <= parkingA5 ){
-              document.getElementById('parkingA5').classList.add("cur")
+              document.getElementById('parkingA4').classList.add("cur")
             }else if(scrollTop > parkingA5 ){
-              document.getElementById('parkingA5').classList.add("cur")
+              document.getElementById('parkingA4').classList.add("cur")
             }
 
       }

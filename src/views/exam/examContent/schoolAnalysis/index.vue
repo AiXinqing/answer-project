@@ -171,8 +171,9 @@
     methods: {
 
       goAnchor(selector) {
-        var anchor = document.getElementById(selector)
-        document.documentElement.scrollTop = anchor.offsetTop
+        document.querySelector('#'+selector).scrollIntoView({
+          behavior: 'smooth'
+        })
       },
 
       getExamFunc(prmTid) {

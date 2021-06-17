@@ -2,7 +2,6 @@
   <section>
     <el-table
       :data="tableData"
-      style="width: 100%"
       :element-loading-text="loadingText"
       :border="isBorder"
       :height="autoHeight ? '' : height_table"
