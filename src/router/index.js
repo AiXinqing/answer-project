@@ -4,6 +4,13 @@ import Home from '@/views/answerCard/'
 import axios from 'axios';
 import { URL } from '../utils/config'
 
+
+const routerPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push (location) {
+  return routerPush.call(this, location) //.catch(error => error)
+}
+
+
 // 阅卷分析
 import examHome from '@/views/exam/examContent/complexReport'
 import classAnalysis from '@/views/exam/examContent/classAnalysis'

@@ -91,7 +91,7 @@
           {
             prop:'answer',
             label:'正确答案',
-            minWidth:'80',
+            width:'80',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -101,25 +101,25 @@
           {
             prop:'avgScore',
             label:'平均分',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
           {
             prop:'fullScoreNum',
             label:'满分人数',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
           {
             prop:'fullScoreScale',
             label:'满分率',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
           {
             prop:'zeroScoreNum',
             label:'零分人数',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
         ],

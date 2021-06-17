@@ -81,7 +81,7 @@
           {
             prop:'referenceNumber',
             label:'参考人数',
-            minWidth:'100',
+            width:'100',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -89,7 +89,7 @@
           {
             prop:'teacher',
             label:'班主任',
-            minWidth:'90',
+            width:'90',
             align:'center',
             type:'Text',
             fixed:'left',
@@ -98,7 +98,7 @@
           {
             prop:'maxScore',
             label:'最高分',
-            minWidth:'80',
+            width:'80',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -106,7 +106,7 @@
           {
             prop:'minScore',
             label:'最低分',
-            minWidth:'80',
+            width:'80',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -144,19 +144,19 @@
           {
             prop:'num',
             label:'人数',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
           {
             prop:'scale',
             label:'率',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
           {
             prop:'rank',
             label:'排名',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
         ],

@@ -56,8 +56,15 @@
       $route: {
         handler: function(route) {
           const query = route.query
+
           if (query.prmTid) {
             this.prmTid = query.prmTid
+            let obj = {
+              calssname:route.name,
+              toUrl:route.name
+            }
+            this.active = route.name
+            this.changeRouter(obj)
           }
         },
         immediate: true
@@ -66,7 +73,14 @@
 
     methods: {
       handelChange(item) {
-        this.active = item.calssname
+        if(this.active != item.calssname){
+          this.active = item.calssname
+          this.changeRouter(item)
+        }
+        
+      },
+
+      changeRouter(item){
         this.$router.push({name:item.toUrl,query:{prmTid:this.prmTid}})
       }
     },

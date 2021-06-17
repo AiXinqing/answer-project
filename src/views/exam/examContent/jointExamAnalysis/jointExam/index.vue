@@ -110,19 +110,19 @@
           {
             prop:'tscore',
             label:'分数',
-            width:'85',
+            minWidth:'85',
             align:'center',
           },
           {
             prop:'gradeRank',
             label:'学校排名',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
           {
             prop:'classRank',
             label:'班级排名',
-            width:'90',
+            minWidth:'90',
             align:'center',
           },
         ],
