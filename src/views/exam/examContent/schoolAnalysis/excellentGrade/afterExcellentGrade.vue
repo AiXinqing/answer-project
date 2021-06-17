@@ -73,11 +73,11 @@
         ],
 
         theight:0,
-        afterRank:50,
+        afterRank:10,
         afterParameter:{ // 前
           tid: '',
           type:'after',
-          rank:50,
+          rank:10,
           url:this.URL.GetClassScoreRankNum
         },
 

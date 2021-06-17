@@ -6,7 +6,7 @@
       <div class="card_item">
         <i></i>
         <span>临界生分析</span>
-        <span class="font_12">临界生分析，通过设置临界分数值来计算全校及各班级的总分以及各科分数在临界分数左右徘徊的人数分布。</span>
+        <span class="font_12">默认临界分为满分60%, 浮动分为满分5%, 即满分为100分, 则分数区间为55-65分</span>
       </div>
     </div>
 
@@ -86,12 +86,12 @@
           }
         ],
 
-        criticalScale:56,
-        floatScale:8,
+        criticalScale:60,
+        floatScale:10,
         parameter:{
           tid: '',
-          criticalScale:56,
-          floatScale:8,
+          criticalScale:60,
+          floatScale:10,
           url:this.URL.GetClassSubjectScoreCriticalityNum
         }
       }

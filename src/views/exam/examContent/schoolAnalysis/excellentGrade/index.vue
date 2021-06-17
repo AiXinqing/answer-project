@@ -95,11 +95,11 @@
         ],
 
         tsid:0,
-        topRank:50,
+        topRank:10,
         parameter:{ // 前
           tid: '',
           type:'top',
-          rank:50,
+          rank:10,
           url:this.URL.GetClassScoreRankNum
         },
 

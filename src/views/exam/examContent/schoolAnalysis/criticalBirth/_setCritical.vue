@@ -38,8 +38,8 @@
       return {
         openedFrame: false,
         isdisabledFn:false,
-        criticalScale:56,
-        floatScale:8,
+        criticalScale:60,
+        floatScale:10,
       }
     },
 
