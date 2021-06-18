@@ -26,7 +26,7 @@
         :tableData="afterTableData"
         :isIndex="false"
         :isPagination="false"
-        :theight="theight"
+        :autoHeight="true"
         :loading="tableLoading"
       />
     </div>
@@ -72,7 +72,6 @@
           }
         ],
 
-        theight:0,
         afterRank:10,
         afterParameter:{ // 前
           tid: '',

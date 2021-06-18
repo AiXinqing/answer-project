@@ -113,7 +113,7 @@
         stepVal:100,
         tsid:'',
         cidStr:'',
-        theight: document.body.clientHeight - 310 || 0,
+        theight: document.body.clientHeight - 300 || 0,
         parameter:{
           cids:'',
           tid: '',

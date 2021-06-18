@@ -4,7 +4,7 @@
       :data="tableData"
       :element-loading-text="loadingText"
       :border="isBorder"
-      :height="autoHeight ? '' : height_table"
+      :height="autoHeight ? null : height_table"
 
       element-loading-spinner="el-icon-loading"
       v-loading="loading"

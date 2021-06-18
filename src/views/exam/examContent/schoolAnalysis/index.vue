@@ -185,12 +185,18 @@
       windowScroll() {
         // 滚动条距离页面顶部的距离
         // 以下写法原生兼容
-        let parkingA1 = document.getElementById('parking1').offsetTop
-        let parkingA2 = document.getElementById('parking2').offsetTop
-        let parkingA3 = document.getElementById('parking3').offsetTop
-        let parkingA4 = document.getElementById('parking4').offsetTop
-        let parkingA5 = document.getElementById('parking5').offsetTop
-        let parkingA6 = document.getElementById('parking6').offsetTop
+        let parkingA1 = 0,
+            parkingA2 = 0,
+            parkingA3 = 0,
+            parkingA4 = 0,
+            parkingA5 = 0,
+            parkingA6 = 0
+            parkingA1 = document.getElementById('parking1').offsetTop
+            parkingA2 = document.getElementById('parking2').offsetTop
+            parkingA3 = document.getElementById('parking3').offsetTop
+            parkingA4 = document.getElementById('parking4').offsetTop
+            parkingA5 = document.getElementById('parking5').offsetTop
+            parkingA6 = document.getElementById('parking6').offsetTop
 
         let curStyle = document.getElementsByClassName('cur_style')
             for(let i = 0; i < 6;i++){
