@@ -67,7 +67,7 @@
         let params = JSON.stringify({
           prmASAnalyseScoreLine:this.data
         })
-        this.$http.post(this.URL.SaveASAnalyseSetting,params ).then(res => {
+        this.$http.post(this.URL.SaveASAnalyseSetting, params ).then(res => {
           console.log(res)
 
         }).catch(error => {

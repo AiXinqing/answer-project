@@ -36,6 +36,14 @@
         dialogVisible: false,
         fixedHeader:[
           {
+            prop:'scname',
+            label:'学校',
+            width:'140',
+            align:'center',
+            fixed:'left',
+            type:'Html'
+          },
+          {
             prop:'cname',
             label:'班级',
             width:'140',
@@ -166,6 +174,7 @@
           return {
             cid: item.cid,
             cname: item.cname,
+            scname: item.scname,
             snumber: item.snumber,
             stuname: item.stuname,
             tmid: item.tmid,
