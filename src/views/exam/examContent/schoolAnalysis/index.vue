@@ -44,7 +44,6 @@
         class="mar_T10"
         id="parking4"
         :prmTid="prmTid"
-        :subjects-arr="subjectsArr"
       />
 
       <parking5
@@ -57,6 +56,13 @@
       <parking6
         class="mar_T10"
         id="parking6"
+        :prmTid="prmTid"
+        :subjects-arr="subjectsArr"
+      />
+
+      <parking7
+        class="mar_T10"
+        id="parking7"
         :prmTid="prmTid"
         :subjects-arr="subjectsArr"
       />
@@ -88,10 +94,11 @@
 <script>
   import parking1 from './analyzed/'
   import parking2 from './totalScoreDistributed/'
-  import parking3 from './criticalBirth/'
-  import parking4 from './sectionNumPeople/'
-  import parking5 from './subjectExam/'
-  import parking6 from './excellentGrade/'
+  import parking3 from './upperGearLine/'
+  import parking4 from './criticalBirth/'
+  import parking5 from './sectionNumPeople/'
+  import parking6 from './subjectExam/'
+  import parking7 from './excellentGrade/'
 
   import { mapState } from 'vuex'
   export default {
@@ -101,7 +108,8 @@
       parking3,
       parking4,
       parking5,
-      parking6
+      parking6,
+      parking7
     },
 
     data() {
@@ -113,6 +121,9 @@
           },
           {
             name:'总分分布'
+          },
+          {
+            name:'总分上档线分析'
           },
           {
             name:'临界生分布'
@@ -190,16 +201,18 @@
             parkingA3 = 0,
             parkingA4 = 0,
             parkingA5 = 0,
-            parkingA6 = 0
+            parkingA6 = 0,
+            parkingA7 = 0
             parkingA1 = document.getElementById('parking1').offsetTop
             parkingA2 = document.getElementById('parking2').offsetTop
             parkingA3 = document.getElementById('parking3').offsetTop
             parkingA4 = document.getElementById('parking4').offsetTop
             parkingA5 = document.getElementById('parking5').offsetTop
             parkingA6 = document.getElementById('parking6').offsetTop
+            parkingA7 = document.getElementById('parking7').offsetTop
 
         let curStyle = document.getElementsByClassName('cur_style')
-            for(let i = 0; i < 6;i++){
+            for(let i = 0; i < 7;i++){
               curStyle[i].classList.remove('cur')
             }
 
@@ -217,8 +230,10 @@
               document.getElementById('parkingA5').classList.add("cur")
             }else if(scrollTop <= parkingA6 ){
               document.getElementById('parkingA6').classList.add("cur")
-            }else if(scrollTop > parkingA6 ){
-              document.getElementById('parkingA6').classList.add("cur")
+            }else if(scrollTop <= parkingA7 ){
+              document.getElementById('parkingA7').classList.add("cur")
+            }else if(scrollTop > parkingA7 ){
+              document.getElementById('parkingA7').classList.add("cur")
             }
 
       }

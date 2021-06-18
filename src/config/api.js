@@ -59,6 +59,15 @@ export const URL = {
   GetClassScoreRankNum: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreRankNum', //优秀生/学困生分析
   ExportClassScoreRankNum: BASEURL + '/Report/AnlyReport/ExportClassScoreRankNum', //优秀生/学困生分析下载
 
+  GetASAnalyseScoreLine: BASEURL + '/Api/Marking/ASAnalyseScoreLineBLL/GetASAnalyseScoreLine', //获取上档线设置表格数据
+  SaveASAnalyseSetting: BASEURL + '/Api/Marking/ASAnalyseScoreLineBLL/SaveASAnalyseSetting', //保存上档线设置
+
+  GetClassTotalScoreLine: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassTotalScoreLine', //总分上档线分析
+  ExportClassTotalScoreLine: BASEURL + '/Report/AnlyReport/ExportClassTotalScoreLine', //总分上档线分析下载
+
+  GetClassSubjectScoreLine: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassSubjectScoreLine', //单科上档线分析
+  ExportClassSubjectScoreLine: BASEURL + '/Report/AnlyReport/ExportClassSubjectScoreLine', //单科上档线分析下载
+
   //---------------------------------------教师分析
   GetAsTestList: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetAsTestList', // 获取考次列表
   GetAsTestClass: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetAsTestClass', // 获取本次考试的班级科目
