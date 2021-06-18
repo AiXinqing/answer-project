@@ -186,7 +186,8 @@
                           tsid:ele.tsid,
                           cid:ele.cid,
                           tqid:row.tqid,
-                          type: ele.type_p
+                          type: ele.type_p,
+                          scids:this.scidsStr
                         }
                         this.hanldePopFunc(obj)
                       }

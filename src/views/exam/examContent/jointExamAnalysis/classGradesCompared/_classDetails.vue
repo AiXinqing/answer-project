@@ -102,6 +102,7 @@
           tid: '',
           tsid:'',
           asid:'',
+          scids:'',
           url:this.URL.GetJointExamClassScoreContrastStuDetails
         },
         page: {
@@ -260,8 +261,8 @@
 
       downTable(){
         // 下载表格
-        const {cid,tid,tsid,asid} = this.parameter
-        window.open(`${this.URL.ExportJointExamClassScoreContrastStuDetails}?tid=${tid}&tsid=${tsid}&cid=${cid}&asid=${asid}`)
+        const {cid,tid,tsid,asid,scids} = this.parameter
+        window.open(`${this.URL.ExportJointExamClassScoreContrastStuDetails}?tid=${tid}&tsid=${tsid}&scids=${scids}&cid=${cid}&asid=${asid}`)
       },
     },
   }

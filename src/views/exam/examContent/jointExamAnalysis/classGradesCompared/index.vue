@@ -223,6 +223,7 @@
                           tsid:ele.tsid,
                           cid:row.cid,
                           asid:ele.asid,
+                          scids:this.scidsStr
                         }
                        this.hanldePopFunc(obj)
                       }

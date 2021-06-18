@@ -28,11 +28,11 @@ export function GetClassGradesComparedResults ({ tid, tsid, scids, url }) {
 }
 
 //联考班级成绩对比学生详情
-export function JointExamClassDetails ({ tid, tsid, cid, asid, url }) {
+export function JointExamClassDetails ({ tid, tsid, cid, asid, scids, url }) {
   return request({
     url: url,
     method: 'get',
-    params: { tid, tsid, cid, asid }
+    params: { tid, tsid, cid, scids, asid }
   })
 }
 

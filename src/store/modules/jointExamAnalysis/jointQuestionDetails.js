@@ -39,8 +39,8 @@ const actions = {
   GetStuResults ({ commit }, padata) {
     commit('SET_LOADING')
     return new Promise((resolve, reject) => {
-      const { tid, tsid, cid, tqid, type, pageIndex, pageSize, url } = padata
-      jointQuestionDetails({ tid, tsid, cid, tqid, type, pageIndex, pageSize, url }).then(res => {
+      const { tid, tsid, cid, scids, tqid, type, pageIndex, pageSize, url } = padata
+      jointQuestionDetails({ tid, tsid, cid, scids, tqid, type, pageIndex, pageSize, url }).then(res => {
         commit('SET_TABLE', res)
         commit('GET_PAGE', {
           pageSize: res.ResponseContent.pageSize,

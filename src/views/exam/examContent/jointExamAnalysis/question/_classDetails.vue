@@ -98,6 +98,7 @@
           cid:'',
           tid: '',
           tsid:'',
+          scids:'',
           tqid:'',
           type:'',
           url:this.URL.GetJointExamQuestionSummaryStuDetails
@@ -260,8 +261,8 @@
 
       downTable(){
         // 下载表格
-        const {cid,tid,tsid,tqid,type} = this.parameter
-        window.open(`${this.URL.ExportJointExamQuestionSummaryStuDetails}?tid=${tid}&tsid=${tsid}&cid=${cid}&tqid=${tqid}&type=${type}`)
+        const {cid,tid,tsid,tqid,type,scids} = this.parameter
+        window.open(`${this.URL.ExportJointExamQuestionSummaryStuDetails}?tid=${tid}&tsid=${tsid}&scids=${scids}&cid=${cid}&tqid=${tqid}&type=${type}`)
       },
     },
   }
