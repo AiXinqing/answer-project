@@ -64,6 +64,8 @@ export const URL = {
 
   GetClassTotalScoreLine: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassTotalScoreLine', //总分上档线分析
   ExportClassTotalScoreLine: BASEURL + '/Report/AnlyReport/ExportClassTotalScoreLine', //总分上档线分析下载
+  GetClassTotalScoreLineStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassTotalScoreLineStuDetails', //总分上档线分析学生详情
+  ExportClassTotalScoreLineStuDetails: BASEURL + '/Report/AnlyReport/ExportClassTotalScoreLineStuDetails', //总分上档线分析学生详情下载
 
   GetClassSubjectScoreLine: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassSubjectScoreLine', //单科上档线分析
   ExportClassSubjectScoreLine: BASEURL + '/Report/AnlyReport/ExportClassSubjectScoreLine', //单科上档线分析下载
