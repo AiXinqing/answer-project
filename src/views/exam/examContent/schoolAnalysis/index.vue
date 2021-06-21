@@ -50,7 +50,6 @@
         class="mar_T10"
         id="parking5"
         :prmTid="prmTid"
-        :subjects-arr="subjectsArr"
       />
 
       <parking6
@@ -63,6 +62,13 @@
       <parking7
         class="mar_T10"
         id="parking7"
+        :prmTid="prmTid"
+        :subjects-arr="subjectsArr"
+      />
+
+      <parking8
+        class="mar_T10"
+        id="parking8"
         :prmTid="prmTid"
         :subjects-arr="subjectsArr"
       />
@@ -95,10 +101,11 @@
   import parking1 from './analyzed/'
   import parking2 from './totalScoreDistributed/'
   import parking3 from './upperGearLine/'
-  import parking4 from './criticalBirth/'
-  import parking5 from './sectionNumPeople/'
-  import parking6 from './subjectExam/'
-  import parking7 from './excellentGrade/'
+  import parking4 from './subjectUpperGearLine/'
+  import parking5 from './criticalBirth/'
+  import parking6 from './sectionNumPeople/'
+  import parking7 from './subjectExam/'
+  import parking8 from './excellentGrade/'
 
   import { mapState } from 'vuex'
   export default {
@@ -109,7 +116,8 @@
       parking4,
       parking5,
       parking6,
-      parking7
+      parking7,
+      parking8
     },
 
     data() {
@@ -124,6 +132,9 @@
           },
           {
             name:'总分上档线分析'
+          },
+          {
+            name:'学科上档线分析'
           },
           {
             name:'临界生分布'
@@ -202,7 +213,8 @@
             parkingA4 = 0,
             parkingA5 = 0,
             parkingA6 = 0,
-            parkingA7 = 0
+            parkingA7 = 0,
+            parkingA8 = 0
             parkingA1 = document.getElementById('parking1').offsetTop
             parkingA2 = document.getElementById('parking2').offsetTop
             parkingA3 = document.getElementById('parking3').offsetTop
@@ -210,9 +222,10 @@
             parkingA5 = document.getElementById('parking5').offsetTop
             parkingA6 = document.getElementById('parking6').offsetTop
             parkingA7 = document.getElementById('parking7').offsetTop
+            parkingA8 = document.getElementById('parking8').offsetTop
 
         let curStyle = document.getElementsByClassName('cur_style')
-            for(let i = 0; i < 7;i++){
+            for(let i = 0; i < 8;i++){
               curStyle[i].classList.remove('cur')
             }
 
@@ -232,8 +245,10 @@
               document.getElementById('parkingA6').classList.add("cur")
             }else if(scrollTop <= parkingA7 ){
               document.getElementById('parkingA7').classList.add("cur")
-            }else if(scrollTop > parkingA7 ){
-              document.getElementById('parkingA7').classList.add("cur")
+            }else if(scrollTop > parkingA8 ){
+              document.getElementById('parkingA8').classList.add("cur")
+            }else if(scrollTop > parkingA8 ){
+              document.getElementById('parkingA8').classList.add("cur")
             }
 
       }
@@ -242,9 +257,7 @@
   }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
   @import '~@/assets/css/variables.less';
-  // .Anchor_box{
-  //   display: none
-  // }
+
 </style>
