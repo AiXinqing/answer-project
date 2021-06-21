@@ -48,15 +48,20 @@
       ref="binningBullet"
       @change-set-binning-bullet="changeSetBinningBullet"
     />
+    <student-details
+      ref="studentDetails"
+    />
   </div>
 </template>
 
 <script>
   import { mapState} from 'vuex'
   import binningBulletFrame from './_binningBulletFrame'
+    import studentDetails from './_upperGearLineDetails'
   export default {
     components: {
       binningBulletFrame,
+      studentDetails
     },
     props: {
       prmTid: {
@@ -127,9 +132,32 @@
             label:`${ele.name}(${ele.score})`,
             align:'center',
             childen:this.columnMultiLine.map(item => {
+              let obj = {}
+              if(item.prop == 'num' || item.prop == 'cumulativeNum'){
+                obj = {
+                  ...obj,
+                  btnList:[
+                    {
+                      label:'',
+                      handle: (row,element) => {
+                        let obj = {
+                          tid:this.prmTid,
+                          lineName:ele.name,
+                          cid:row.cid,
+                          type:item.prop == 'num' ? 0 : 1,
+                          tsid:ele.tsid
+                        }
+                        this.hanldePopFunc(obj)
+                      }
+                    }
+                  ]
+                }
+              }
               return {
                 ...item,
+                ...obj,
                 prop:`${item.prop}_${ele.name}`,
+                type: item.prop == 'num' || item.prop == 'cumulativeNum' ? 'pop_Btn' : 'Html',
                 label:item.label,
                 width:item.width,
                 align:item.align,
@@ -165,7 +193,9 @@
     mounted () {
       if(this.prmTid != ''){
         this.parameter.tid = this.prmTid
-        this.getTable()
+        this.getBinLineParameter.tid = this.prmTid
+        
+       this.getTable()
       }
     },
 
@@ -188,7 +218,13 @@
       },
 
       changeSetBinningBullet(){
+        this.parameter.tid = this.prmTid
+        this.getBinLineParameter.tid = this.prmTid
         this.getTable()
+      },
+
+      hanldePopFunc(row){
+        this.$refs.studentDetails.openDetails(row)
       }
     },
   }

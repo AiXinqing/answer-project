@@ -118,7 +118,7 @@
                           type:item.prop == 'num' ? 0 : 1,
                           tsid:ele.tsid
                         }
-                       this.hanldePopFunc(obj)
+                      // this.hanldePopFunc(obj)
                       }
                     }
                   ]

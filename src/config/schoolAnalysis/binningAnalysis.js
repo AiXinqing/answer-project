@@ -18,3 +18,12 @@ export function getUpperGearLine ({ tid, url }) {
   })
 }
 
+
+//总分上档线分析学生详情
+export function GetClassTotalScoreLineStuDetails ({ tid, cid, lineName, type, pageIndex, pageSize, url }) {
+  return request({
+    url: url,
+    method: 'get',
+    params: { tid, cid, lineName, type, pageIndex, pageSize }
+  })
+}

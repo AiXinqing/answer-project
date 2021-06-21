@@ -174,7 +174,7 @@
           return classStr + noClick
         },
         font_colorT: (row,prop) => {
-          return row[prop]  == '' || row[prop]  == undefined ? 'transparent' : ''
+          return row[prop]  == null ? 'transparent' : ''
         },
 
         columnIcon:(row,beforeIcon,afterIcon,unit) => {
