@@ -26,6 +26,7 @@
 
 <script>
   import { URL } from '@/utils/config' //'./config'
+  import request from '@/utils/http'
   export default {
     data() {
       return {
@@ -46,11 +47,15 @@
             'toUrl':'schoolAnalysis',
             'linkName':'校级分析报告'
           },
+          
+        ],
+        // 判断是否显示联考分析报告
+        isJointExam:[
           {
             'calssname':'jointExam',
             'toUrl':'jointExam',
             'linkName':'联考分析报告'
-          },
+          }
         ],
         prmTid:''
       }
@@ -68,6 +73,7 @@
             }
             this.active = route.name
             this.changeRouter(obj)
+            this.isJointExamFunc()
           }
         },
         immediate: true
@@ -88,8 +94,18 @@
       },
 
       markingTask(){
-         var url = this.URL.SERVICE_CONTEXT_PATH+"Manage/Home/AnalyzeReports/" + this.prmTid
+         var url = this.URL.SERVICE_UPLOAD_PICTURE+"/Manage/Home/AnalyzeReports/" + this.prmTid
         window.open(url)
+      },
+
+      isJointExamFunc(){
+        this.$store.dispatch('getExam/getIsShowJointExam', {
+          tid: this.prmTid,url:this.URL.IsShowJointExam
+        }).then(res => {
+          if(res.ResponseCode == 'Success'){
+            this.linkData = [...this.linkData,...this.isJointExam]
+          }
+        })
       }
     },
   }
@@ -177,6 +193,9 @@
       border-radius: 14px;
       background: @white !important;
       color: @mainFont;
+      &:hover{
+        color: @mainFont !important;
+      }
     }
   }
 

@@ -122,4 +122,7 @@ export const URL = {
   GetJointExamClassScoreSegment: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamClassScoreSegment', // 联考班级成绩分段统计报表
   ExportJointExamClassScoreSegment: BASEURL + '/Report/AnlyReport/ExportJointExamClassScoreSegment', // 联考班级成绩分段统计报表下载
 
+  // 判断是否显示联考成绩分析
+  IsShowJointExam: BASEURL + '/Api/Marking/ASAnalysisReportBLL/IsShowJointExam', // 判断是否显示联考成绩分析
+
 }
