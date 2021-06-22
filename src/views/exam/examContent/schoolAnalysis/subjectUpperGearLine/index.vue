@@ -8,34 +8,52 @@
         <span>学科分档上线情况</span>
         <span class="font_12">运用大数据算法将总分的分档分数精确的分解到各学科中, 得出各学科的分档分数线。 各学科分档上线人数分布, 可反映出全体学生在各学科的上线情况。</span>
       </div>
+      <div class="card_box">
+        <span>学科分档上线人数分布</span>
+        <div class="font_12">对每个档次而言, 学科提供的上线人数越多, 可以视为该学科对总分上线提供了更大的可能性， 促进作用大。反之，学科上线人数越少，该学科对总分
+        上线提供的促进作用较小。下面各表分别显示各个学科的上线人数：</div>
+      </div>
     </div>
 
     <div class="total_score">
-      <div class="title_box">
-        <div class="title_left">各班级的上线情况见下表</div>
-        <div class="title_right">
-          <exam-button type="primary" @click="basisDownTable">下载表格</exam-button>
+      <div class="tabs_box">
+        <div
+          v-for="(item, i) in binningData"
+          :key="i"
+          @click="changeActiveName(item.name)"
+          :class="{'active':activeName == item.name}"
+        >
+          {{item.name}}上线人数分布
         </div>
-        </div>
-        <div class="el_table_wapper">
-          <exam-table
-            :tablecols="tableColumn"
-            :tableData="tableData"
-            :isIndex="false"
-            :isPagination="false"
-            :autoHeight="true"
-            :loading="tableLoading"
-          ></exam-table>
-        </div>
-    </div>
+      </div>
+      <exam-button class="basisDown_style" type="primary" @click="downTable">下载表格</exam-button>
 
+      <div class="el_table_wapper">
+        <exam-table
+          :tablecols="tableColumn"
+          :tableData="tableData"
+          :isIndex="false"
+          :isPagination="false"
+          :autoHeight="true"
+          :loading="tableLoading"
+        ></exam-table>
+      </div>
+
+    </div>
+    <student-details
+      ref="studentDetails"
+    />
   </div>
 </template>
 
 <script>
   import { mapState} from 'vuex'
-
+  import studentDetails from './_details'
   export default {
+    components: {
+      studentDetails
+    },
+
     props: {
       prmTid: {
         type: String,
@@ -43,9 +61,8 @@
       },
     },
 
-    data() {
-      return {
-
+    data(){
+      return{
         fixedHeader:[
           {
             prop:'cname',
@@ -60,7 +77,7 @@
           {
             prop:'num',
             label:'人数',
-            minWidth:'85',
+            minWidth:'90',
             align:'center',
             type:'Html'
           },
@@ -74,7 +91,7 @@
           {
             prop:'cumulativeRate',
             label:'累计上线率',
-            minWidth:'90',
+            minWidth:'120',
             align:'center',
             type:'Html'
           }
@@ -82,43 +99,49 @@
 
         parameter:{ // 总分上档线分析
           tid: '',
-          url:this.URL.GetClassTotalScoreLine
+          lineName:'一档',
+          url:this.URL.GetClassSubjectScoreLine
         },
 
+        getBinLineParameter:{ //  获取上档线设置表格数据
+          tid: '',
+          url:this.URL.GetASAnalyseScoreLine
+        },
+
+        activeName:'一档'
       }
     },
-
-    computed: {
-      ...mapState('binningAnalysis', ['tableLoading','TableList',
-      'headerTable','binningData','parameterInfo']),
     
+    computed: {
+      ...mapState('binningAnalysis', ['binningData']),
+      ...mapState('subjectUpperGearLineState', ['tableLoading','TableList','headerTable']),
+
       tableColumn(){
         // 动态表头
         return this.headerTable.length ? [
           ...this.fixedHeader,
           ...this.headerTable.map(ele => ({
             ...ele,
-            label:`${ele.name}(${ele.score})`,
+            label:`${ele.sname}`,
             align:'center',
             childen:this.columnMultiLine.map(item => {
-              let obj = {
-                type:'Html'
-              }
+              let obj = {}
               if(item.prop == 'num' || item.prop == 'cumulativeNum'){
                 obj = {
                   ...obj,
                   btnList:[
                     {
                       label:'',
-                      handle: (row,ele) => {
+                      handle: (row,element) => {
                         let obj = {
-                          tid:ele.tid,
-                          lineName:ele.lineName,
+                          tid:this.prmTid,
+                          lineName:this.activeName,
                           cid:row.cid,
                           type:item.prop == 'num' ? 0 : 1,
-                          tsid:ele.tsid
+                          tsid:row['tsid_'+ ele.sname]
                         }
-                      // this.hanldePopFunc(obj)
+
+                        this.hanldePopFunc(obj)
                       }
                     }
                   ]
@@ -126,8 +149,9 @@
               }
               return {
                 ...item,
-                prop:`${item.prop}_${ele.name}`,
-                type: item.prop == 'num' ? 'pop_Btn' : 'Html',
+                ...obj,
+                prop:`${item.prop}_${ele.sname}`,
+                type: item.prop == 'num' || item.prop == 'cumulativeNum' ? 'pop_Btn' : 'Html',
                 label:item.label,
                 width:item.width,
                 align:item.align,
@@ -143,10 +167,11 @@
           item.DynamicDetail.forEach(item => {
             dynamic = {
               ...dynamic,
-              [`num_${item.name}`]: item.num == '' ? null : item.num,
-              [`cumulativeNum_${item.name}`]: item.cumulativeNum == '' ? null : item.cumulativeNum ,
-              [`cumulativeRate_${item.name}`]: item.cumulativeScale == '' ? null : item.cumulativeScale ,
+              [`num_${item.sname}`]: item.num == '' ? null : item.num,
+              [`cumulativeNum_${item.sname}`]: item.cumulativeNum == '' ? null : item.cumulativeNum ,
+              [`cumulativeRate_${item.sname}`]: item.cumulativeScale == '' ? null : item.cumulativeScale ,
               sname: item.sname,
+              [`tsid_${item.sname}`]:item.tsid
             }
           })
 
@@ -160,42 +185,45 @@
       }
     },
 
-    mounted () {
+    mounted (){
       if(this.prmTid != ''){
         this.parameter.tid = this.prmTid
+        this.getBinLineParameter.tid = this.prmTid
         this.getTable()
+        this.getBinLineParameterFunc()
       }
     },
-
-    methods: {
+    
+    methods:{
+      changeActiveName(name){
+        this.activeName = name
+        this.parameter.lineName = name
+        this.getTable()
+      },
 
       getTable() {
         // 获取table
-        this.$store.dispatch('binningAnalysis/GetStuResults', this.parameter)
+        this.$store.dispatch('subjectUpperGearLineState/GetStuResults', this.parameter)
       },
 
-      basisDownTable(){
-        // 下载表格
-        const {tid} = this.parameter
-        window.open(`${this.URL.ExportClassTotalScoreLine}?tid=${tid}`)
+      getBinLineParameterFunc(){
+        this.$store.dispatch('binningAnalysis/getUpperGearLine', this.getBinLineParameter)
       },
 
-      setBinParameter(){// 设置分档参数
-        this.$refs.binningBullet.openFrame(this.binningData)
-      },
-
-      changeSetBinningBullet(){
-        this.getTable()
+      downTable(){
+        const {tid,lineName} = this.parameter
+        window.open(`${this.URL.ExportClassSubjectScoreLine}?tid=${tid}&lineName=${lineName}`)
       },
 
       hanldePopFunc(row){
         this.$refs.studentDetails.openDetails(row)
       }
-    },
+    }
+    
   }
 </script>
 
-<style lang="less">
+<style lang="less" >
   @import '~@/assets/css/variables.less';
   .binning_box{
     background-color: @main;
@@ -229,6 +257,62 @@
       }
     }
   }
+
+  .card_box {
+    margin-left: 30px;
+    margin-top: 10px;
+
+    div.font_12 {
+      font-size: 14px;
+      margin-top: 10px;
+      color: @font-909;
+    }
+  }
+
+  .total_score {
+    position: relative;
+
+    .basisDown_style{
+      position: absolute;
+      right: 30px;
+      top: 7px;
+    }
+
+    margin-top: 10px;
+    .tabs_box {
+      display: flex;
+      color: #333;
+      margin-left: 30px;
+
+      >div {
+        padding: 0 10px;
+        font-size: 14px;
+        line-height: 35px;
+        border: 1px solid #999;
+        border-right: none;
+        cursor: pointer;
+      }
+
+      div.active {
+        color: @main;
+        border-bottom: none;
+      }
+
+      div:last-child{
+        border-right: 1px solid #999;
+        border-top-right-radius: 4px;
+      }
+
+      div:first-child{
+        border-top-left-radius: 4px;
+      }
+    }
+  }
+
 </style>
 
-
+<style lang="less" scoped>
+  .card_contetn{
+    display: initial;
+  }
+</style>

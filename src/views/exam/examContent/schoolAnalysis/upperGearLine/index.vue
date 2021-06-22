@@ -57,7 +57,7 @@
 <script>
   import { mapState} from 'vuex'
   import binningBulletFrame from './_binningBulletFrame'
-    import studentDetails from './_upperGearLineDetails'
+  import studentDetails from './_upperGearLineDetails'
   export default {
     components: {
       binningBulletFrame,
@@ -256,7 +256,12 @@
     .binning_setting{
       position:absolute;
       top:20px;
-      right:40px;
+      right:35px;
+
+      >button {
+          padding: 0 8px;
+          width: auto;
+      }
       
       .el-button--primary{
         background-color: @white !important;

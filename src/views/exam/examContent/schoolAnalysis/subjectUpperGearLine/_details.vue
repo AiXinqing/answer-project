@@ -92,15 +92,17 @@
         parameter:{
           cid:'',
           tid: '',
+          tsid:'',
           lineName:'',
           type:0, //0：人数，1：累计人数
-          url:this.URL.GetClassTotalScoreLineStuDetails
+          url:this.URL.GetClassSubjectScoreLineStuDetails
         },
         page: {
           pageSize: 10,
           pageNum: 1,
           total: 0
         },
+        tsid:'',
         headeUrl:this.URL.GetTableHeadeSubject,
         prmTid:'',
         pageSizes:[10,15,20,30,50,100]
@@ -109,7 +111,7 @@
 
     computed: {
       ...mapState('getExam', ['headerTable',]),
-      ...mapState('upperGearLineDetails', ['tableLoading','TableList','pagination',]),
+      ...mapState('subjectUpperGearLineDetails', ['tableLoading','TableList','pagination',]),
 
       title() {
         return '学生名单详情'
@@ -195,6 +197,7 @@
           ...row
         }
         this.prmTid = row.tid
+        this.tsid = row.tsid
         this.$nextTick(()=>{
           this.getDynamicHeader(row.tid)
           let _this = this
@@ -233,7 +236,7 @@
       getDynamicHeader(tid){
         // 获取动态表头
         this.$store.dispatch('getExam/dynamicHeader', {
-          tid: tid,tsid:'totalScore',url:this.headeUrl
+          tid: tid,tsid:this.tsid,url:this.headeUrl
         })
       },
 
@@ -246,13 +249,13 @@
           pageIndex: pageNum,
           pageSize: pageSize,
         }
-        this.$store.dispatch('upperGearLineDetails/GetStuResults', this.parameter)
+        this.$store.dispatch('subjectUpperGearLineDetails/GetStuResults', this.parameter)
       },
 
       downTable(){
         // 下载表格
-        const {cid,tid,lineName,type} = this.parameter
-        window.open(`${this.URL.ExportStuDetails}?tid=${tid}&lineName=${lineName}&cid=${cid}&type=${type}`)
+        const {cid,tid,lineName,type,tsid} = this.parameter
+        window.open(`${this.URL.ExportClassSubjectScoreLineStuDetails}?tid=${tid}&lineName=${lineName}&cid=${cid}&type=${type}&tsid=${tsid}`)
       },
     },
   }
@@ -260,23 +263,5 @@
 
 <style lang="less">
   @import '~@/assets/css/variables.less';
-  .el_table_wapper.mr_top{
-    margin-top: 15px;
-  }
-  .table-description{
-    display: flex;
 
-    .table_left{
-      width: 87%;
-      span{
-        margin-right: 10px;
-      }
-    }
-  }
-  .el-dialog__headerbtn:focus ,
-  .el-dialog__headerbtn:hover {
-    .el-dialog__close{
-      color: @main
-    }
-  }
 </style>

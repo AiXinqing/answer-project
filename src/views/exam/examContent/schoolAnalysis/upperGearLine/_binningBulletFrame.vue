@@ -64,9 +64,9 @@
       handelDetermine(){
         console.log(this.data)
         // this.fullscreenLoading = true
-        let params = JSON.stringify({
-          prmASAnalyseScoreLine:this.data
-        })
+        let params = {
+          prmASAnalyseScoreLine:JSON.stringify(this.data)
+        }
         this.$http.post(this.URL.SaveASAnalyseSetting, params ).then(res => {
           console.log(res)
 

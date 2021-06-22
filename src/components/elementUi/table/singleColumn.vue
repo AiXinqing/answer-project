@@ -180,7 +180,7 @@
         columnIcon:(row,beforeIcon,afterIcon,unit) => {
           let classStr = row[beforeIcon] > row[afterIcon] ? 'el-icon-top' : 'el-icon-bottom'
           return `<span class="icon_span left">${row[beforeIcon] == null ? '--' : row[beforeIcon] }</span> <i class="columnIcon ${classStr}"></i> <span class="icon_span right">${row[afterIcon] == null ? '--' : row[afterIcon]}</span> ${unit}`
-        }
+        },
       }
     },
 
@@ -314,5 +314,13 @@
     height: 28px;
     line-height: 28px;
     color: @main;
+  }
+  button.el-button.pop_Btn.el-button--default.el-button--medium.transparent {
+    cursor: text;
+    color: @font-888;
+    &:hover{
+      background-color: transparent !important;
+      color: @font-888 !important;
+    }
   }
 </style>

@@ -69,6 +69,8 @@ export const URL = {
 
   GetClassSubjectScoreLine: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassSubjectScoreLine', //单科上档线分析
   ExportClassSubjectScoreLine: BASEURL + '/Report/AnlyReport/ExportClassSubjectScoreLine', //单科上档线分析下载
+  GetClassSubjectScoreLineStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassSubjectScoreLineStuDetails', //单科上档线分析学生详情
+  ExportClassSubjectScoreLineStuDetails: BASEURL + '/Report/AnlyReport/ExportClassSubjectScoreLineStuDetails', //单科上档线分析学生详情下载
 
   //---------------------------------------教师分析
   GetAsTestList: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetAsTestList', // 获取考次列表
