@@ -41,7 +41,7 @@
 </template>
 
 <script>
-  import Qs from 'qs'
+  import qs from 'qs'
   export default {
     data() {
       return {
@@ -62,24 +62,21 @@
         this.openedFrame = false
       },
       handelDetermine(){
-        console.log(this.data)
-        // this.fullscreenLoading = true
+
         let params = {
           prmASAnalyseScoreLine:JSON.stringify(this.data)
         }
-        this.$http.post(this.URL.SaveASAnalyseSetting, params ).then(res => {
-          console.log(res)
+
+        this.$http.post(this.URL.SaveASAnalyseSetting, qs.stringify(params) ).then(res => {
+
+          if(res.data.ResponseCode == 'Success'){
+            this.openedFrame = false
+            this.$emit('change-set-binning-bullet')
+          }
 
         }).catch(error => {
           this.fullscreenLoading = false
         })
-
-        // this.openedFrame = false
-        // this.$emit('change-set-binning-bullet',{
-        //   firstGear:this.criticalScale,
-        //   secondGear:this.floatScale,
-        //   thirdGear:this.thirdGear
-        // })
       }
     },
   }
