@@ -13,7 +13,9 @@
             <span>{{item.linkName}} <em/></span>
           </a>
         </div>
-        <div class="nav_login"></div>
+        <div class="nav_login">
+          <exam-button class="marking_task" type="primary" @click="markingTask">阅卷任务</exam-button>
+        </div>
       </div>
     </div>
     <div class="content_router">
@@ -23,6 +25,7 @@
 </template>
 
 <script>
+  import { URL } from '@/utils/config' //'./config'
   export default {
     data() {
       return {
@@ -82,6 +85,11 @@
 
       changeRouter(item){
         this.$router.push({name:item.toUrl,query:{prmTid:this.prmTid}})
+      },
+
+      markingTask(){
+         var url = this.URL.SERVICE_CONTEXT_PATH+"Manage/Home/AnalyzeReports/" + this.prmTid
+        window.open(url)
       }
     },
   }
@@ -163,4 +171,13 @@
   .calssname{
     cursor: pointer;
   }
+  .marking_task{
+    button.el-button.el-button--primary.el-button--medium {
+      margin-left: 40px !important;
+      border-radius: 14px;
+      background: @white !important;
+      color: @mainFont;
+    }
+  }
+
 </style>

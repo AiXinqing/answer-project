@@ -37,7 +37,7 @@
           :tableData="gradersTableData"
           :isIndex="false"
           :isPagination="false"
-          :theight="theight"
+          :theight="gradersTableData.length < 10 ? gradersTableData.length * 35 + 90 : theight"
           :loading="tableLoading"
           :difference-height="differenceHeight"
           @hanlde-pop-func="hanldePopFunc"

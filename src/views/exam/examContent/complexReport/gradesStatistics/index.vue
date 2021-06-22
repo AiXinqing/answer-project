@@ -38,7 +38,7 @@
           :tableData="gradersTableData"
           :isIndex="false"
           :isPagination="false"
-          :theight="theight"
+          :theight="gradersTableData.length < 10 ? gradersTableData.length * 35 + 90 : theight"
           :difference-height="differenceHeight"
           :loading="tableLoading"
           @hanlde-pop-func="hanldePopFunc"
@@ -334,9 +334,7 @@
     margin-top: 10px;
     color: @font-888;
   }
-  .search_left{
-    margin-left: 20px;
-  }
+
   .search_center{
     width: 280px;
     display: flex;

@@ -41,7 +41,7 @@
           :tableData="subTableData"
           :isIndex="false"
           :pagination="page"
-          :theight="theight"
+          :theight="subTableData.length < 10 ? subTableData.length * 35 + 90 : theight"
           :loading="tableLoading"
           @handle-size-change="handleSizeChange"
           @handle-current-change="handleCurrentChange"

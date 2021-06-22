@@ -27,7 +27,7 @@
           :tableData="classTableData"
           :isIndex="false"
           :isPagination="false"
-          :theight="theight"
+          :theight="classTableData.length < 10 ? classTableData.length * 35 + 90 : theight"
           :loading="tableLoading"
         ></exam-table>
       </div>

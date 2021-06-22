@@ -71,7 +71,7 @@
       singleChange(index){
 
         this.data.subjectList = this.data.subjectList.map((item,i) => {
-          return i == index ? {...item,check:!item.check} : {...item,check:false}
+          return i == index ? {...item,check:true} : {...item,check:false}
         })
         let selected
         this.data.subjectList.forEach((ele,i) => {

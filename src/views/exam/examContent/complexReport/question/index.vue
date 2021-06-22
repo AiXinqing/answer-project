@@ -28,7 +28,7 @@
           :tableData="questionTableData"
           :isIndex="false"
           :isPagination="false"
-          :theight="theight"
+          :theight="questionTableData.length < 10 ? questionTableData.length * 35 + 90 : theight"
           :loading="tableLoading"
           @hanlde-pop-func="hanldePopFunc"
         ></exam-table>
