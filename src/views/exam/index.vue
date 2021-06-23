@@ -103,7 +103,9 @@
           tid: this.prmTid,url:this.URL.IsShowJointExam
         }).then(res => {
           if(res.ResponseCode == 'Success'){
-            this.linkData = [...this.linkData,...this.isJointExam]
+            if(this.linkData.length == 3){
+              this.linkData = [...this.linkData,...this.isJointExam]
+            }
           }
         })
       }

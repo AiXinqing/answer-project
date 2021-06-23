@@ -41,7 +41,7 @@
           :isIndex="false"
           :pagination="page"
           :loading="tableLoading"
-          :theight="tableData.length < 10 ? tableData.length * 35 + 90 : theight"
+          :theight="tableData.length < 10 ? tableData.length * 35 + 110 : theight"
           @handle-size-change="handleSizeChange"
           @handle-current-change="handleCurrentChange"
           ></exam-table>

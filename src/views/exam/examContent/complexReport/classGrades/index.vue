@@ -27,7 +27,7 @@
           :tableData="classTableData"
           :isIndex="false"
           :isPagination="false"
-          :theight="classTableData.length < 10 ? classTableData.length * 35 + 90 : theight"
+          :theight="classTableData.length < 10 ? classTableData.length * 35 + 110 : theight"
           :loading="tableLoading"
           @hanlde-pop-func="hanldePopFunc"
         ></exam-table>
