@@ -39,11 +39,12 @@
           :tablecols="tableColumn"
           :tableData="tableData"
           :isIndex="false"
+          :pagination="page"
+          :loading="tableLoading"
           :theight="tableData.length < 10 ? tableData.length * 35 + 110 : theight"
+          @hanlde-page-size="handlePageSize"
          />
         
-          
-
       </div>
     </div>
   </div>
@@ -263,7 +264,7 @@
 
     methods: {
       getHeight () {
-        this.theight = document.body.clientHeight - 350
+        this.theight = document.body.clientHeight - 310
       },
 
       handleStretch(){
@@ -275,7 +276,7 @@
       },
 
       initTable() {
-        this.theight = document.body.clientHeight - 350
+        this.theight = document.body.clientHeight - 310
 
         this.$nextTick(()=>{
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
@@ -287,27 +288,16 @@
         })
       },
 
-      handleSizeChange(val){
-        // 分页每页显示数量
-        if(this.tsid == ''){
-          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
-        }
-        this.page.pageSize = val
-        this.$nextTick(()=>{
-          this.getTable()
-        })
-
-      },
-      handleCurrentChange(val){
+      handlePageSize({page, size}){
         // 分页起始页
         if(this.tsid == ''){
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
         }
-        this.page.pageNum = val
+        this.page.pageNum = page
+        this.page.pageSize = size
         this.$nextTick(()=>{
           this.getTable()
         })
-
       },
 
       handleCheckAllChange(cidStr){
@@ -380,7 +370,7 @@
 
         this.$store.dispatch('getExam/GetStuResults', this.parameter)
         this.$nextTick(()=>{
-          this.theight = document.body.clientHeight - 350
+          this.theight = document.body.clientHeight - 310
         })
 
       },
@@ -423,7 +413,7 @@
       height: 40px;
 
       .search_left{
-        width: 300px;
+        width: 310px;
         flex-shrink:0;
         line-height: 40px;
 

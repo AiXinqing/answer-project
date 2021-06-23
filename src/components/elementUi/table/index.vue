@@ -33,7 +33,6 @@
         :total="pagination.total"
         >
         </el-pagination>
-
       </section>
   </section>
 </template>

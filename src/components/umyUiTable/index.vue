@@ -1,0 +1,196 @@
+<template>
+  <div>
+    <ux-grid
+      ref="plTable"
+      :data="tableData"
+      :max-height="height"
+      :height="autoHeight ? null : height_table"
+      use-virtual
+      data-changes-scroll-top
+      show-summary
+      stripe
+      @table-body-scroll="tableScroll"
+      :data-changes-scroll-top="radio === 1"
+      :row-height="35"
+      :border="isBorder"
+      v-loading="loading"
+      :element-loading-text="loadingText"
+      element-loading-spinner="el-icon-loading"
+      :pagination-show="isPagination"
+      :total="pagination.total"
+      :page-size="pagination.pageSize"
+      :current-page="pagination.pageNum"
+      :page-sizes="pageSizes"
+      @handlePageSize="handlePageSize">
+
+      <u-table-column v-if="isIndex" type="index" width="100" fixed/>
+
+      <singleColumn
+        v-for="(column,i) in tablecols"
+        :key="i+Math.random()"
+        :column="column"
+        @hanlde-pop-func="hanldePopFunc"
+      />
+        
+    </ux-grid>
+  </div>
+</template>
+
+<script>
+  import singleColumn from './_singleColumn'
+  export default {
+    components: {
+      singleColumn,
+    },
+    props:{
+      rowStyle:{
+        Number,
+        default: 35
+      },
+      autoHeight: {
+        type: Boolean,
+        default: false
+      },
+      theight: {type: Number, default: 500},
+       // 表格列配置
+      tablecols: {type: Array, default: () => []},
+      tableData: {type: Array, default: () => []},
+      // 是否显示表格索引
+      isIndex: {type: Boolean, default: true},
+      // 是否显示分页
+      isPagination: {type: Boolean, default: true},
+      // 每页显示条数
+      pageSizes: {type: Array, default: () => [15,20,30,50,100]},
+      currentPage:{type: Number, default: 4},
+      isBorder: {type: Boolean, default: true},
+      loading:{
+        type:Boolean,
+        default: false
+      },
+      loadingText:{
+        type:String,
+        default:'拼命加载中'
+      },
+      pagination: {type: Object, default: () => ({
+        pageSize: 15,
+        pageNum: 1,
+        total: 0
+      })},
+    },
+
+    data() {
+      return {
+        radio: 1,
+        height_table:500,
+        rowHeight: 50,
+        columns: Array.from({ length: 10 }, (_, idx) => ({
+            prop: 'address', id: idx, label: '地址' + idx, width: 200, showOverflow: true
+        })),
+      }
+    },
+
+    watch: {
+      theight: {
+        immediate: true,
+        handler () {
+          this.height_table = this.theight
+        }
+      },
+    },
+
+    methods: {
+      tableScroll ({scrollTop, scrollLeft, table, judgeFlse}) {
+        // {scrollTop， scrollLeft, table, judgeFlse: 这个参数返回一个boolean值，为true则代表表格滚动到了底部了，false没有滚动到底部，必须开起大数据渲染模式才能有值哦}, event
+        // console.log(scrollTop, scrollLeft, table, judgeFlse)
+      },
+
+      hanldePopFunc(row){
+        // 弹出框分数
+        this.$emit('hanlde-pop-func',row)
+      },
+
+      // 分页事件
+      handlePageSize ({page, size}) {
+        console.log(page, size)
+        this.$emit('hanlde-page-size',{page, size})
+      }
+    }
+  }
+</script>
+
+<style lang="less">
+  @import '~@/assets/css/variables.less';
+  .el-pagination{
+    text-align: left;
+    .btn-next,
+    .btn-prev{
+      background: @font-f4f5;
+      margin: 0 4px;
+      border-radius: 4px;
+      padding: 0 0;
+      color:@font-888;
+      font-size: 13px;
+      min-width: 30.5px;
+      font-weight: 500;
+    }
+    button{
+      &:hover{
+        color:@main
+      }
+    }
+  }
+  .plTableBox {
+    .myPagination{
+      padding-top: 15px;
+    }
+    .el-button--medium{
+      width:auto
+    }
+  }
+  .el-pager{
+    li{
+      &:hover,
+      &.active{
+        color:@main;
+        background-color: @main;
+        color: @white;
+      }
+      background: @font-f4f5;
+      margin: 0 4px;
+      border-radius: 4px;
+      padding: 0 0;
+      color:@font-888;
+      font-size: 14px;
+      min-width: 30.5px;
+      font-weight: 500;
+    }
+  }
+  
+  .el-select-dropdown__item{
+    &.selected{
+      color:@main
+    }
+  }
+
+  .el-pagination__sizes {
+    .el-input {
+      .el-input__inner{
+        &:hover{
+          border-color:@main
+        }
+      }
+    }
+  }
+  
+  .el-pagination__editor.el-input {
+    .el-input__inner{
+      font-size: 16px;
+    }
+  }
+  .el-button--text{
+    color:@main
+  }
+  table tr td div:last-child{
+    margin-bottom:0
+  }
+</style>
