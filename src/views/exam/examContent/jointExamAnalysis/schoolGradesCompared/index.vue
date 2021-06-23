@@ -13,7 +13,16 @@
     <div class="table_wapper">
       <div class="table_search">
         <div class="search_left is_active">
-          <span>得分率说明：优秀：90% - 100% 良好：80% - 100% 及格：60% - 100% 低分：0% - 30%<a href="###" class="set_parameter">设置参数</a></span>
+          <span class="scoring_rate">
+            <span>得分率说明：</span>
+            <span 
+              v-for="item in headerTable"
+              :key="item.tid"
+            >
+            {{item.subname}}: {{item.substart}} - {{item.subend}}
+            </span>
+            <a href="###" class="set_parameter" @click="setParameterFunc" >设置参数</a>
+          </span>
         </div>
         <div class="search_right">
           <exam-button type="primary" @click="downTable">下载表格</exam-button>
@@ -234,7 +243,7 @@
             avgScoreRate: item.avgScoreRate,
             fullScore: item.fullScore,
             maxScore: item.maxScore,
-            minScore: item.maxScore,
+            minScore: item.minScore,
             rank: item.rank,
             rankTopNum: item.rankTopNum,
             referenceNumber: item.referenceNumber,
@@ -298,6 +307,10 @@
       hanldePopFunc(row){
         console.log(row)
         this.$refs.studentDetails.openDetails(row)
+      },
+
+      setParameterFunc(){
+        window.open(`Manage/Marking/setASTestNew/${this.prmTid}`)
       }
     },
   }

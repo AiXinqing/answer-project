@@ -188,7 +188,7 @@
   @import '~@/assets/css/variables.less';
   .card_item{
     span.font_12{
-      font-size: 14px;
+      font-size: 12px;
       margin-left: 40px;
       color: @font-888
     }

@@ -161,7 +161,7 @@
                           tsid:ele.tsid,
                           scid: row.scid,
                           segmentName:ele.p_name,
-                          step:this.stepVal,
+                          step:this.parameter.step,
                           type:this.type
                         }
                         this.hanldePopFunc(obj)
@@ -177,7 +177,7 @@
                 type: index == 0 ? 'pop_Btn' : 'Html',
                 prop:`${item.prop}_${ele}`,
                 p_name:ele,
-                p_step:this.stepVal,
+                p_step:this.parameter.step,
                 p_type:this.type,
                 tid:this.prmTid,
                 tsid:this.tsid == '' ? tsid_s : this.tsid,
@@ -261,7 +261,7 @@
 
       handleStatistical(){
         //统计方式
-        this.parameter.type = Number(this.stepVal)
+        this.parameter.type = Number(this.type)
         this.$nextTick(()=>{
           this.getTable()
         })

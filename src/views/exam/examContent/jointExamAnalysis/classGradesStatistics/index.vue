@@ -173,7 +173,7 @@
                 type: index == 0 ? 'popBtn' : 'Html',
                 prop:`${item.prop}_${ele}`,
                 p_name:ele,
-                p_step:this.stepVal,
+                p_step:this.parameter.step,
                 p_type:this.type,
                 tid:this.prmTid,
                 tsid:this.tsid == '' ? tsid_s : this.tsid,

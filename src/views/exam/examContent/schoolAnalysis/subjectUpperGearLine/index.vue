@@ -263,7 +263,7 @@
     margin-top: 10px;
 
     div.font_12 {
-      font-size: 14px;
+      font-size: 12px;
       margin-top: 10px;
       color: @font-909;
     }
