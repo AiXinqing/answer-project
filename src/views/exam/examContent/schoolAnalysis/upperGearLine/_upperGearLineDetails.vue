@@ -252,7 +252,7 @@
       downTable(){
         // 下载表格
         const {cid,tid,lineName,type} = this.parameter
-        window.open(`${this.URL.ExportStuDetails}?tid=${tid}&lineName=${lineName}&cid=${cid}&type=${type}`)
+        window.open(`${this.URL.ExportClassTotalScoreLineStuDetails}?tid=${tid}&lineName=${lineName}&cid=${cid}&type=${type}`)
       },
     },
   }

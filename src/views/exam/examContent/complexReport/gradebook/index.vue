@@ -35,16 +35,14 @@
       </div>
 
       <div class="el_table_wapper">
-        <exam-table
+        <umy-table
           :tablecols="tableColumn"
           :tableData="tableData"
           :isIndex="false"
-          :pagination="page"
-          :loading="tableLoading"
           :theight="tableData.length < 10 ? tableData.length * 35 + 110 : theight"
-          @handle-size-change="handleSizeChange"
-          @handle-current-change="handleCurrentChange"
-          ></exam-table>
+         />
+        
+          
 
       </div>
     </div>

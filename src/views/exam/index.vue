@@ -14,7 +14,7 @@
           </a>
         </div>
         <div class="nav_login">
-          <exam-button class="marking_task" type="primary" @click="markingTask">阅卷任务</exam-button>
+          <exam-button class="marking_task" type="primary" @click="markingTask">回到旧版</exam-button>
         </div>
       </div>
     </div>

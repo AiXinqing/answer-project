@@ -3,7 +3,7 @@
   <div class="class_content">
 
     <div class="card_contetn">
-      <div class="card_item">
+      <div class="card_item" style="padding-top: 10px;">
         <i></i>
         <span>总分分档上线人数分布</span>
         <span class="font_12">总分分档上线学生人数分布, 可得到统考下各班级在学业综合水平上的分层表现</span>
@@ -268,6 +268,24 @@
         color:@font-888 !important;
       }
     }
+  }
+</style>
+
+<template>
+  <div>
+
+  </div>
+</template>
+
+<script>
+  export default {
+    
+  }
+</script>
+
+<style lang="less" scoped>
+  .class_content .card_item, .class_content .search_right{
+    margin-top: 10px;
   }
 </style>
 

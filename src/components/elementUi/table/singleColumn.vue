@@ -250,7 +250,7 @@
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   @import '~@/assets/css/variables.less';
   .el-button--medium.text_button{
     width:auto;

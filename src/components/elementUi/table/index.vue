@@ -93,8 +93,6 @@
     },
     data() {
       return {
-        firstDisabled: false,
-        lastDisabled: false,
         // 分页数据
         height_table:500,
       }
@@ -107,7 +105,6 @@
           this.height_table = this.theight
         }
       },
-
     },
 
     methods: {
@@ -129,7 +126,7 @@
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   @import '~@/assets/css/variables.less';
 
   .el-table .ascending .sort-caret.ascending{
