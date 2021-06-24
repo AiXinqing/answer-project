@@ -31,7 +31,7 @@
         </div>
       </div>
 
-      <div class="el_table_wapper" :style="{'max-height':theight +'px'}">
+      <div class="el_table_wapper">
         <umy-table
           :tablecols="gradersTableColumn"
           :tableData="gradersTableData"
@@ -111,7 +111,7 @@
         tsid:'',
         cidStr:'',
         type:'top',
-        theight: document.body.clientHeight - 260 || 0,
+        theight: document.body.clientHeight - 300 || 0,
         placing:'10,20,30,40,50',
         parameter:{
           cids:'',

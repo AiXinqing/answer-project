@@ -101,7 +101,6 @@
       ...mapMutations('getExam', ['Reset_classesArr']),
       // 切换tab
       handleClick(tab){
-        console.log(tab)
         this.activeName = tab.name
 
         this.$nextTick(()=>{

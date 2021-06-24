@@ -35,17 +35,16 @@
       </div>
 
       <div class="el_table_wapper">
-        <exam-table
-          :style="{'max-height':theight+ tableH +'px'}"
+        <umy-table
           :tablecols="tableColumn"
           :tableData="tableData"
           :isIndex="false"
           :pagination="page"
           :loading="tableLoading"
-          :theight="tableData.length < 10 ? tableData.length * 35 + 90 : theight"
+          :theight="theight"
           @handle-size-change="handleSizeChange"
           @handle-current-change="handleCurrentChange"
-          ></exam-table>
+          />
 
       </div>
     </div>
@@ -131,7 +130,7 @@
         tsid:'',
         keyWords:'',
         scidsStr:'',
-        theight: document.body.clientHeight - 350 || 0,
+        theight: document.body.clientHeight - 300 || 0,
 
         parameter:{
           scids:'',
@@ -252,7 +251,7 @@
 
     mounted () {
       this.$nextTick(() => {
-        this.theight = document.body.clientHeight - 350
+        this.theight = document.body.clientHeight - 300
       })
     },
 

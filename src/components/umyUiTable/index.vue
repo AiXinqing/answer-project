@@ -82,10 +82,6 @@
       return {
         radio: 1,
         height_table:500,
-        rowHeight: 50,
-        columns: Array.from({ length: 10 }, (_, idx) => ({
-            prop: 'address', id: idx, label: '地址' + idx, width: 200, showOverflow: true
-        })),
       }
     },
 
@@ -140,13 +136,15 @@
     }
   }
   .plTableBox {
+    padding-bottom: 20px;
     .myPagination{
-      padding-top: 10px;
+      padding-top: 0px;
     }
     .el-button--medium{
       width:auto
     }
   }
+
   .el-pager{
     li{
       &:hover,
@@ -213,5 +211,8 @@
   }
   .elx-table .elx-body--row.row--hover.row--current{
     background-color: @mainHover !important
+  }
+  .elx-table.border--full .elx-table--fixed-left-wrapper{
+    border-right:none
   }
 </style>

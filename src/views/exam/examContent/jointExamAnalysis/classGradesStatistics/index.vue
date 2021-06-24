@@ -32,17 +32,17 @@
         </div>
       </div>
 
-      <div class="el_table_wapper" :style="{'max-height':theight +'px'}">
+      <div class="el_table_wapper" >
         <exam-table
           :tablecols="gradersTableColumn"
           :tableData="gradersTableData"
           :isIndex="false"
           :isPagination="false"
-          :theight="gradersTableData.length < 10 ? gradersTableData.length * 35 + 90 : theight"
+          :theight="theight"
           :difference-height="differenceHeight"
           :loading="tableLoading"
           @hanlde-pop-func="hanldePopFunc"
-        ></exam-table>
+        />
       </div>
     </div>
 
@@ -121,7 +121,7 @@
         stepVal:100,
         tsid:'',
         scidsStr:'',
-        theight: document.body.clientHeight - 310 || 0,
+        theight: document.body.clientHeight - 340 || 0,
         parameter:{
           scids:'',
           tid: '',
@@ -208,7 +208,7 @@
 
     mounted () {
       this.$nextTick(() => {
-        this.theight = document.body.clientHeight - 310
+        this.theight = document.body.clientHeight - 340
       })
     },
 

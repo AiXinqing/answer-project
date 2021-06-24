@@ -22,7 +22,7 @@
         </div>
       </div>
 
-      <div class="el_table_wapper" :style="{'max-height':theight +'px'}">
+      <div class="el_table_wapper">
         <umy-table
           :tablecols="questionTableColumn"
           :tableData="questionTableData"
@@ -127,7 +127,7 @@
         // 参数
         tsid:'',
         cidStr:'',
-        theight: document.body.clientHeight - 260 || 0,
+        theight: document.body.clientHeight - 300 || 0,
         parameter:{
           cids:'',
           tid: '',

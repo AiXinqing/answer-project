@@ -35,17 +35,16 @@
       </div>
 
       <div class="el_table_wapper">
-        <exam-table
-          :style="{'max-height':theight+ tableH +'px'}"
+        <umy-table
           :tablecols="subTableColumn"
           :tableData="subTableData"
           :isIndex="false"
           :pagination="page"
-          :theight="subTableData.length < 10 ? subTableData.length * 35 + 90 : theight"
+          :theight="theight"
           :loading="tableLoading"
           @handle-size-change="handleSizeChange"
           @handle-current-change="handleCurrentChange"
-        ></exam-table>
+        />
       </div>
     </div>
   </div>
@@ -166,7 +165,7 @@
         tsid:'',
         keyWords:'',
         scidsStr:'',
-        theight: document.body.clientHeight - 350 || 0,
+        theight: document.body.clientHeight - 300 || 0,
         iSlot:[
           {
             type:'prefix',
@@ -315,7 +314,7 @@
 
     mounted () {
       this.$nextTick(() => {
-        this.theight = document.body.clientHeight - 350
+        this.theight = document.body.clientHeight - 300
       })
     },
 

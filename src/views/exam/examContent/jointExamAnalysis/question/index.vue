@@ -22,15 +22,15 @@
         </div>
       </div>
 
-      <div class="el_table_wapper" :style="{'max-height':theight +'px'}">
-        <exam-table
+      <div class="el_table_wapper">
+        <umy-table
           :tablecols="questionTableColumn"
           :tableData="questionTableData"
           :isIndex="false"
           :isPagination="false"
-          :theight="questionTableData.length < 10 ? questionTableData.length * 35 + 90 : theight"
+          :theight="theight"
           :loading="tableLoading"
-        ></exam-table>
+        />
       </div>
       <student-details
         ref="studentDetails"
@@ -127,7 +127,7 @@
         // 参数
         tsid:'',
         scidsStr:'',
-        theight: document.body.clientHeight - 310 || 0,
+        theight: document.body.clientHeight - 340 || 0,
         parameter:{
           scids:'',
           tid: '',
@@ -244,7 +244,7 @@
 
     mounted () {
       this.$nextTick(() => {
-        this.theight = document.body.clientHeight - 310
+        this.theight = document.body.clientHeight - 340
       })
     },
 
