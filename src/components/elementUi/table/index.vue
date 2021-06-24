@@ -125,7 +125,7 @@
   }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
   @import '~@/assets/css/variables.less';
 
   .el-table .ascending .sort-caret.ascending{

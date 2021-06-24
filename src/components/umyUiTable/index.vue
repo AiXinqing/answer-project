@@ -11,7 +11,7 @@
       stripe
       @table-body-scroll="tableScroll"
       :data-changes-scroll-top="radio === 1"
-      :row-height="35"
+      :row-style="{'height': rowStyle + 'px'}"
       :border="isBorder"
       v-loading="loading"
       :element-loading-text="loadingText"
@@ -141,7 +141,7 @@
   }
   .plTableBox {
     .myPagination{
-      padding-top: 15px;
+      padding-top: 10px;
     }
     .el-button--medium{
       width:auto
@@ -192,5 +192,20 @@
   }
   table tr td div:last-child{
     margin-bottom:0
+  }
+
+  .el-loading-spinner{
+    i{
+      color:@main
+    }
+    .el-loading-text{
+      color:@main
+    }
+  }
+  .elx-table .elx-body--column.col--ellipsis, .elx-table.elx-editable .elx-body--column, .elx-table .elx-footer--column.col--ellipsis, .elx-table .elx-header--column.col--ellipsis{
+    height:auto
+  }
+  .elx-table .elx-body--column:not(.col--ellipsis), .elx-table .elx-footer--column:not(.col--ellipsis), .elx-table .elx-header--column:not(.col--ellipsis){
+    padding:8px 0;
   }
 </style>

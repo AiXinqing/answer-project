@@ -264,7 +264,7 @@
 
     methods: {
       getHeight () {
-        this.theight = document.body.clientHeight - 310
+        this.theight = document.body.clientHeight - 300
       },
 
       handleStretch(){
@@ -276,7 +276,7 @@
       },
 
       initTable() {
-        this.theight = document.body.clientHeight - 310
+        this.theight = document.body.clientHeight - 300
 
         this.$nextTick(()=>{
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
@@ -370,7 +370,7 @@
 
         this.$store.dispatch('getExam/GetStuResults', this.parameter)
         this.$nextTick(()=>{
-          this.theight = document.body.clientHeight - 310
+          this.theight = document.body.clientHeight - 300
         })
 
       },
@@ -413,7 +413,7 @@
       height: 40px;
 
       .search_left{
-        width: 310px;
+        width: 300px;
         flex-shrink:0;
         line-height: 40px;
 

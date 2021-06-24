@@ -1,17 +1,26 @@
 <template>
   <div class="exam_wapper">
-    <hj-tabs
-      v-model="activeName"
-      :tab-pane="tabPaneBox"
-      @tab-click="handleClick"
-    >
-      <component
-        :is="activeName"
-        :exam-info="examConditionInfo"
-        :prmTid="prmTid"
-        ref="tabName"
-      ></component>
-    </hj-tabs>
+    <div class="el-tabs el-tabs--top">
+      <div class="el-tabs__header is-top">
+        <div
+          v-for="(item,i) in tabPaneBox"
+          :key="i"
+          :class="['el-tabs__item is-top',{'is-active':item.name == activeName}]"
+          @click="handleClick(item)"
+        >{{item.label}}</div>
+      </div>
+    </div>
+
+    <div class="el-tabs__content">
+      <div class="el-tab-pane">
+        <component
+          :is="activeName"
+          :exam-info="examConditionInfo"
+          :prmTid="prmTid"
+          ref="tabName"
+        ></component>
+      </div>
+    </div>
   </div>
 </template>
 
