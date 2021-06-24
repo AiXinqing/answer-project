@@ -32,16 +32,16 @@
       </div>
 
       <div class="el_table_wapper" :style="{'max-height':theight +'px'}">
-        <exam-table
+        <umy-table
           :tablecols="gradersTableColumn"
           :tableData="gradersTableData"
           :isIndex="false"
           :isPagination="false"
-          :theight="gradersTableData.length < 10 ? gradersTableData.length * 35 + 110 : theight"
+          :theight="theight"
           :loading="tableLoading"
           :difference-height="differenceHeight"
           @hanlde-pop-func="hanldePopFunc"
-        ></exam-table>
+        />
       </div>
     </div>
     <student-details
@@ -111,7 +111,7 @@
         tsid:'',
         cidStr:'',
         type:'top',
-        theight: document.body.clientHeight - 315 || 0,
+        theight: document.body.clientHeight - 260 || 0,
         placing:'10,20,30,40,50',
         parameter:{
           cids:'',
@@ -332,7 +332,6 @@
 
       .ranking_title{
         width: 80px;
-        margin-left: -20px;
       }
 
       .hj-select {

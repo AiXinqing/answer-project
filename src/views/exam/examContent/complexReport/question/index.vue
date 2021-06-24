@@ -23,15 +23,15 @@
       </div>
 
       <div class="el_table_wapper" :style="{'max-height':theight +'px'}">
-        <exam-table
+        <umy-table
           :tablecols="questionTableColumn"
           :tableData="questionTableData"
           :isIndex="false"
           :isPagination="false"
-          :theight="questionTableData.length < 10 ? questionTableData.length * 35 + 110 : theight"
+          :theight="theight"
           :loading="tableLoading"
           @hanlde-pop-func="hanldePopFunc"
-        ></exam-table>
+        />
       </div>
     </div>
     <student-details
@@ -127,7 +127,7 @@
         // 参数
         tsid:'',
         cidStr:'',
-        theight: document.body.clientHeight - 310 || 0,
+        theight: document.body.clientHeight - 260 || 0,
         parameter:{
           cids:'',
           tid: '',

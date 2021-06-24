@@ -8,7 +8,7 @@
       use-virtual
       data-changes-scroll-top
       show-summary
-      stripe
+      :stripe="false"
       @table-body-scroll="tableScroll"
       :data-changes-scroll-top="radio === 1"
       :row-style="{'height': rowStyle + 'px'}"
@@ -207,5 +207,11 @@
   }
   .elx-table .elx-body--column:not(.col--ellipsis), .elx-table .elx-footer--column:not(.col--ellipsis), .elx-table .elx-header--column:not(.col--ellipsis){
     padding:8px 0;
+  }
+  .elx-table .elx-body--row.row--checked, .elx-table .elx-body--row.row--current, .elx-table .elx-body--row.row--radio{
+    background-color: @mainHover !important
+  }
+  .elx-table .elx-body--row.row--hover.row--current{
+    background-color: @mainHover !important
   }
 </style>

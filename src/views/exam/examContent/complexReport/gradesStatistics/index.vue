@@ -33,16 +33,16 @@
       </div>
 
       <div class="el_table_wapper" :style="{'max-height':theight +'px'}">
-        <exam-table
+        <umy-table
           :tablecols="gradersTableColumn"
           :tableData="gradersTableData"
           :isIndex="false"
           :isPagination="false"
-          :theight="gradersTableData.length < 10 ? gradersTableData.length * 35 + 110 : theight"
+          :theight="theight"
           :difference-height="differenceHeight"
           :loading="tableLoading"
           @hanlde-pop-func="hanldePopFunc"
-        ></exam-table>
+        />
       </div>
     </div>
 
@@ -113,7 +113,7 @@
         stepVal:100,
         tsid:'',
         cidStr:'',
-        theight: document.body.clientHeight - 300 || 0,
+        theight: document.body.clientHeight - 260 || 0,
         parameter:{
           cids:'',
           tid: '',
