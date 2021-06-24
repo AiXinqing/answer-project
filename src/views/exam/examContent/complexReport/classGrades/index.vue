@@ -46,15 +46,20 @@
     <student-details
       ref="studentDetails"
     />
+    <parameter-settings
+      ref="parameterSettings"
+    />
   </div>
 </template>
 
 <script>
   import { mapState} from 'vuex'
   import studentDetails from './_classDetails'
+  import parameterSettings from './_parameterSettings'
   export default {
     components: {
       studentDetails,
+      parameterSettings
     },
     props: {
       prmTid: {
@@ -349,7 +354,20 @@
       },
 
       setParameterFunc(){
-        window.open(`Manage/Marking/setASTestNew/${this.prmTid}`)
+        let subject = ''
+        if(this.tsid == ''){
+          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+          subject = '总分'
+        }
+        
+        let obj = {
+          tid: this.prmTid,
+          tsid:this.tsid,
+          type:this.tsid == 'totalScore' ? 2 : 1,
+          subject:subject
+        }
+        this.$refs.parameterSettings.openFrame(obj)
+        //window.open(`Manage/Marking/setASTestNew/${this.prmTid}`)
       }
     },
   }

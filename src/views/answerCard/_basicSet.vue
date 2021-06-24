@@ -470,7 +470,7 @@ export default {
   background-color: @main !important;
   border-color: @main !important;
 }
-.el-button:focus,
+
 .el-button:hover {
   color: @main !important;
   border-color: @bc_hover !important;

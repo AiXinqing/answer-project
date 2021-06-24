@@ -271,22 +271,5 @@
   }
 </style>
 
-<template>
-  <div>
-
-  </div>
-</template>
-
-<script>
-  export default {
-    
-  }
-</script>
-
-<style lang="less" scoped>
-  .class_content .card_item, .class_content .search_right{
-    margin-top: 10px;
-  }
-</style>
 
 
