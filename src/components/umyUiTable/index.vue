@@ -215,4 +215,17 @@
   .elx-table.border--full .elx-table--fixed-left-wrapper{
     border-right:none
   }
+
+  button.el-button.el-button--default.el-button--medium.pop_Btn{
+    background-color: transparent !important;
+    font-size:14px;
+    &:hover{
+        color: @main !important;
+        border-color: transparent !important;
+        background-color: transparent !important;
+    }
+  }
+  .el-button--text:focus{
+    color: @main !important;
+  }
 </style>

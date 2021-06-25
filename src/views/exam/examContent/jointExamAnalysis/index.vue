@@ -103,8 +103,14 @@
     },
 
     mounted () {
-      if(this.prmTid != ''){
-        this.getExamFunc(this.prmTid)
+      if (window.performance.navigation.type == 1) {
+        if(this.prmTid != ''){
+          this.getExamFunc(this.prmTid)
+        }
+      }else{
+        if(this.prmTid != ''){
+          this.getExamFunc(this.prmTid)
+        }
       }
     },
 

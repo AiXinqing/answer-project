@@ -281,8 +281,8 @@
       },
 
       initTable() {
+        this.tsid = this.subjectsArr.length ? this.subjectsArr.find((element,i) => i == 0).tsid : 'totalScore'
         this.$nextTick(()=>{
-          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
           // 班级数组
           this.scidsStr = this.schoolIdsArr
           // 获取动态表头

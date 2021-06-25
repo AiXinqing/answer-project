@@ -318,16 +318,5 @@
   .color_style{
     color: @main
   }
-  .el-table__body{
-    .el-tooltip{
-      .el-button{
-        background:@bc_tr;
-        &:hover{
-        color: @white !important;
-        border-color: @main !important;
-        background-color: @main !important;
-      }
-      }
-    }
-  }
+
 </style>
