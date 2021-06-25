@@ -22,7 +22,7 @@
             >
             {{item.subname}}: {{item.substart}} - {{item.subend}}
             </span>
-            <a href="###" class="set_parameter" @click="setParameterFunc" >设置参数</a>
+            <span class="set_parameter" @click="setParameterFunc" >设置参数</span>
           </span>
         </div>
         <div class="search_right">
@@ -45,15 +45,21 @@
     <student-details
       ref="studentDetails"
     />
+    <parameter-settings
+      ref="parameterSet"
+      @change-set="changeSet"
+    />
   </div>
 </template>
 
 <script>
   import { mapState} from 'vuex'
   import studentDetails from './_classDetails'
+  import parameterSettings from './_parameterSettings'
   export default {
     components: {
       studentDetails,
+      parameterSettings
     },
     props: {
       prmTid: {
@@ -364,7 +370,31 @@
       },
 
       setParameterFunc(){
-        window.open(`Manage/Marking/setASTestNew/${this.prmTid}`)
+        
+        let subject = ''
+        if(this.tsid == ''){
+          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+          subject = '总分'
+        }else{
+          subject = this.subjectsArr.filter(element => element.tsid == this.tsid)[0].name
+        }
+        
+        let obj = {
+          parameter:{
+            tid: this.prmTid,
+            tsid:this.tsid,
+            type:this.tsid == 'totalScore' ? 2 : 1,
+            url:this.URL.GetASAnalyseSettingList
+          },
+          subject:subject
+        }
+        
+        this.$refs.parameterSet.openFrame(obj)
+      },
+
+      changeSet(){
+        // 保存得分率后更新数据
+        this.getTable()
       }
     },
   }

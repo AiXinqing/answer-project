@@ -178,4 +178,12 @@ button.el-button.el-button--confirm.el-button--medium.is-disabled{
   }
 }
 
+.cell.el-tooltip{
+  button.el-button.text_button.el-button--text.el-button--medium:hover {
+    background-color: @bc_tr !important;
+    color: @main !important;
+    border-color: @bc_tr !important;
+  }
+}
+
 </style>

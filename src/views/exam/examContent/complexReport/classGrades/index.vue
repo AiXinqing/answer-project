@@ -22,7 +22,7 @@
             >
             {{item.subname}}: {{item.substart}} - {{item.subend}}
             </span>
-            <a href="###" class="set_parameter" @click="setParameterFunc" >设置参数</a>
+            <span  class="set_parameter" @click="setParameterFunc" >设置参数</span>
           </span>
         </div>
         <div class="search_right">
@@ -355,6 +355,7 @@
       },
 
       setParameterFunc(){
+        
         let subject = ''
         if(this.tsid == ''){
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
@@ -405,6 +406,7 @@
     .set_parameter{
       color: @main;
       margin-left: 10px;
+      cursor: pointer;
     }
   }
 

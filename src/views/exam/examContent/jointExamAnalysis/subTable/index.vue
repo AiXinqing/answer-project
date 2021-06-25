@@ -437,13 +437,19 @@
           pageIndex: pageNum,
           pageSize: pageSize,
         }
-        console.log(this.parameter)
         this.$store.dispatch('jointSubTable/GetStuResults', this.parameter)
       },
     },
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   @import '~@/assets/css/variables.less';
+  .table_wapper {
+    .table_search {
+      .search_left{
+          width: 555px;
+      }
+    }
+  }
 </style>
