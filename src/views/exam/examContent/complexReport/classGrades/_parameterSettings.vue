@@ -19,12 +19,16 @@
         v-for="(item,i) in  data"
         :key="i"
         :group="item"
+        :item-index="i"
         @remove-outline="removeOutline"
         @plus-outline="plusOutline"
         @verify-change="verifyChange"
       />
     </div>
-    <div class="verify_style"></div>
+    <div 
+      v-if="isdisabledFn"
+      class="verify_style"
+    >得分率名称 最低分 最高分不能为空</div>
 
     <div class="dialog-footer">
       <hj-button type="cancel" @click="closeFrame">取 消</hj-button>
@@ -53,7 +57,7 @@
         data:[],
         fullscreenLoading:false,
         subject:'',
-
+        parameter:{}
       }
     },
 
@@ -72,6 +76,12 @@
 
     methods: {
       openFrame(obj){
+        const {tid,tsid,type} = obj.parameter
+        this.parameter = {
+          tid:tid,
+          tsid:tsid,
+          type:type
+        }
         this.$store.dispatch('parameterSet/GetStuResults', obj.parameter)
         this.subject = obj.subject
         this.openedFrame = true
@@ -85,17 +95,18 @@
         // 保存
         this.data = this.data.map(item => ({
           ...item,
-          subend:number(item.subend),
-          substart:number(item.substart)
+          subend:Number(item.subend),
+          substart:Number(item.substart)
         })) 
 
         let params = {
-          prmASAnalyseSettingList:JSON.stringify(this.data)
+          prmASAnalyseScoreLine:JSON.stringify(this.data)
         }
         this.$http.post(this.URL.SaveASAnalyseSetting, qs.stringify(params) ).then(res => {
 
           if(res.data.ResponseCode == 'Success'){
-            console.log(res)
+            this.openedFrame = false
+            this.$emit('change-set')
           }
 
         }).catch(error => {
@@ -104,24 +115,34 @@
       },
 
       removeOutline(item){
+        const {obj,index} = item
         // 删除
         let params = {
-          asid:item.asid
+          asid:obj.asid
         }
-        this.$http.post(this.URL.DeleteASAnalyseSetting, qs.stringify(params) ).then(res => {
-
-          if(res.data.ResponseCode == 'Success'){
-            this.data = this.data.filter(element => element.asid != item.asid)
-          }
-
-        }).catch(error => {
-          this.fullscreenLoading = false
-        })
+        if(obj.asid == undefined){
+          this.data = this.data.filter((element,i) => i != index)
+          this.isdisabledFn = false
+        }else{
+          this.$http.post(this.URL.DeleteASAnalyseSetting, qs.stringify(params) ).then(res => {
+            if(res.data.ResponseCode == 'Success'){
+              this.data = this.data.filter(element => element.asid != obj.asid)
+              this.isdisabledFn = false
+            }
+          }).catch(error => {
+            this.fullscreenLoading = false
+          })
+        }
+        
       },
 
       plusOutline(item){
         // 追加
-        this.data.push(item)
+        let vacant = this.data.filter((itme) => itme.subend == '' || itme.substart == '' || itme.subname == '')
+
+        if(vacant.length <= 1){
+          this.data.push({...item,...this.parameter})
+        }
         this.isdisabledFn = true
       },
 
@@ -133,7 +154,14 @@
 </script>
 
 <style lang="less">
+  @import '~@/assets/css/variables.less';
   .el-input__inner{
     padding: 0;
+  }
+  .verify_style{
+    color:@error;
+    font-size:14px;
+    padding-left: 14px;
+    margin-top: 10px;
   }
 </style>

@@ -48,6 +48,7 @@
     />
     <parameter-settings
       ref="parameterSet"
+      @change-set="changeSet"
     />
   </div>
 </template>
@@ -359,7 +360,7 @@
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
           subject = '总分'
         }else{
-          subject = this.subjectsArr.filter(element => element.tsid == this.tsid).sname
+          subject = this.subjectsArr.filter(element => element.tsid == this.tsid)[0].name
         }
         
         let obj = {
@@ -373,7 +374,11 @@
         }
         
         this.$refs.parameterSet.openFrame(obj)
+      },
 
+      changeSet(){
+        // 保存得分率后更新数据
+        this.getTable()
       }
 
     },

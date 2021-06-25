@@ -36,6 +36,10 @@
       group: {
         type: Object,
         default: () => { }
+      },
+      itemIndex:{
+        type:Number,
+        default: 0
       }
     },
 
@@ -67,7 +71,7 @@
 
     methods: {
       removeOutline(data){
-        this.$emit('remove-outline',data)
+        this.$emit('remove-outline',{obj:data,index:this.itemIndex})
       },
 
       plusOutline(data){
