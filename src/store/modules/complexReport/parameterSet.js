@@ -1,9 +1,8 @@
 import {
-  GetASAnalyseSettingList
+  GetStuResults
 } from '@/config/complexReport/parameterSet'
 
 const state = {
-  headerTable: [],
   TableList: [],
   tableLoading: false,
 }
@@ -11,9 +10,7 @@ const state = {
 const mutations = {
 
   SET_TABLE: (state, res) => {
-    const { ASAnalyseSettingInfo, ClassScoreInfo } = res.ResponseContent
-    state.headerTable = ASAnalyseSettingInfo
-    state.TableList = ClassScoreInfo
+    state.TableList = res.ResponseContent
     state.tableLoading = false
   },
 
@@ -32,7 +29,7 @@ const actions = {
     commit('SET_LOADING')
     return new Promise((resolve, reject) => {
       const { tid, tsid, type, url } = padata
-      GetASAnalyseSettingList({ tid, tsid, type, url }).then(res => {
+      GetStuResults({ tid, tsid, type, url }).then(res => {
         commit('SET_TABLE', res)
 
         resolve(res)

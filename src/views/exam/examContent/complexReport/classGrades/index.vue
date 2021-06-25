@@ -47,7 +47,7 @@
       ref="studentDetails"
     />
     <parameter-settings
-      ref="parameterSettings"
+      ref="parameterSet"
     />
   </div>
 </template>
@@ -358,17 +358,24 @@
         if(this.tsid == ''){
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
           subject = '总分'
+        }else{
+          subject = this.subjectsArr.filter(element => element.tsid == this.tsid).sname
         }
         
         let obj = {
-          tid: this.prmTid,
-          tsid:this.tsid,
-          type:this.tsid == 'totalScore' ? 2 : 1,
+          parameter:{
+            tid: this.prmTid,
+            tsid:this.tsid,
+            type:this.tsid == 'totalScore' ? 2 : 1,
+            url:this.URL.GetASAnalyseSettingList
+          },
           subject:subject
         }
-        this.$refs.parameterSettings.openFrame(obj)
-        //window.open(`Manage/Marking/setASTestNew/${this.prmTid}`)
+        
+        this.$refs.parameterSet.openFrame(obj)
+
       }
+
     },
   }
 </script>

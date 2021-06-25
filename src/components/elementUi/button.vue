@@ -170,4 +170,12 @@ button.el-button.text_button.el-button--text.el-button--medium:hover {
 .el-button--text:active{
   color: @main
 }
+button.el-button.el-button--confirm.el-button--medium.is-disabled{
+  &:hover{
+    color: @bc_c0c !important;
+    background-color: @white !important;
+    border-color: @font-ebe !important;
+  }
+}
+
 </style>

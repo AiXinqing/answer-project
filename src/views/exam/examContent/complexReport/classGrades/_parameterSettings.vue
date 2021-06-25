@@ -15,36 +15,16 @@
         <div>最高分</div>
         <div>操作</div>
       </div>
-      <div
-        class="binLine_td"
+      <setFrom
         v-for="(item,i) in  data"
         :key="i"
-      >
-        <div>
-          <el-input
-            placeholder="请输入得分率名称"
-            v-model="item.name">
-          </el-input>
-        </div>
-        <div>
-          <el-input
-            placeholder="请输入最低分"
-            v-model="item.score">
-          </el-input>
-        </div>
-        <div>
-          <el-input
-            placeholder="请输入最高分"
-            v-model="item.score">
-          </el-input>
-        </div>
-        <div>
-          <i class="el-icon-remove-outline"></i>
-          <i class="el-icon-circle-plus-outline"></i>
-        </div>
-      </div>
-      
+        :group="item"
+        @remove-outline="removeOutline"
+        @plus-outline="plusOutline"
+        @verify-change="verifyChange"
+      />
     </div>
+    <div class="verify_style"></div>
 
     <div class="dialog-footer">
       <hj-button type="cancel" @click="closeFrame">取 消</hj-button>
@@ -61,7 +41,11 @@
 <script>
   import qs from 'qs'
   import { mapState} from 'vuex'
+  import setFrom from './_setFrom'
   export default {
+    components: {
+      setFrom
+    },
     data() {
       return {
         openedFrame: false,
@@ -69,12 +53,7 @@
         data:[],
         fullscreenLoading:false,
         subject:'',
-        parameter:{
-          tid:'',
-          tsid:'',
-          type:'',
-          url:this.URL.GetASAnalyseSettingList
-        }
+
       }
     },
 
@@ -82,34 +61,41 @@
       ...mapState('parameterSet', ['tableLoading','TableList']),
     },
 
+    watch: {
+      TableList:{
+        immediate: true,
+        handler () {
+          this.data = this.TableList
+        },
+      },
+    },
+
     methods: {
       openFrame(obj){
-        // let binning = JSON.parse(JSON.stringify(binningData))
-        // this.data = binning
-
+        this.$store.dispatch('parameterSet/GetStuResults', obj.parameter)
         this.subject = obj.subject
-        this.parameter = {
-          ...obj
-        }
-        this.$nextTick(()=>{
-          this.getTable()
-        })
         this.openedFrame = true
       },
+
       closeFrame() {
         this.openedFrame = false
       },
+
       handelDetermine(){
+        // 保存
+        this.data = this.data.map(item => ({
+          ...item,
+          subend:number(item.subend),
+          substart:number(item.substart)
+        })) 
 
         let params = {
-          prmASAnalyseScoreLine:JSON.stringify(this.data)
+          prmASAnalyseSettingList:JSON.stringify(this.data)
         }
-
         this.$http.post(this.URL.SaveASAnalyseSetting, qs.stringify(params) ).then(res => {
 
           if(res.data.ResponseCode == 'Success'){
-            this.openedFrame = false
-            this.$emit('change-set-binning-bullet')
+            console.log(res)
           }
 
         }).catch(error => {
@@ -117,51 +103,37 @@
         })
       },
 
-       getTable() {
-        this.$store.dispatch('parameterSet/GetStuResults', this.parameter)
+      removeOutline(item){
+        // 删除
+        let params = {
+          asid:item.asid
+        }
+        this.$http.post(this.URL.DeleteASAnalyseSetting, qs.stringify(params) ).then(res => {
+
+          if(res.data.ResponseCode == 'Success'){
+            this.data = this.data.filter(element => element.asid != item.asid)
+          }
+
+        }).catch(error => {
+          this.fullscreenLoading = false
+        })
       },
+
+      plusOutline(item){
+        // 追加
+        this.data.push(item)
+        this.isdisabledFn = true
+      },
+
+      verifyChange(verify){
+        this.isdisabledFn = verify
+      }
     },
   }
 </script>
 
 <style lang="less">
-@import '~@/assets/css/variables.less';
-.Bin_line_box{
-  width:calc(100% - 30px);
-  margin-left:15px;
-  .binLine_th,
-  .binLine_td {
-    display: flex;
-    justify-content:space-between;
-    align-items:center;
-    width: 100%;
-    text-align: center;
-    border: 1px solid @font-dcd;
-    height: 50px;
-    line-height: 50px;
-    >div{
-      width:100%;
-      border-right:1px solid @font-dcd;
-      &:last-child{
-        border-right:none;
-      }
-    }
-    
+  .el-input__inner{
+    padding: 0;
   }
-
-  .binLine_td{
-    border-top:none;
-    >div{
-      .el-input--medium{
-        width: 70px;
-        margin-top:-3px;
-        .el-input__inner{
-          font-size:14px;
-        }
-      }
-    }
-  }
-
-}
-  
 </style>
