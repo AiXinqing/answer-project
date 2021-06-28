@@ -308,8 +308,11 @@
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
         }
 
-        this.page.pageNum = 1
-        this.page.pageSize = 15
+        this.page = {
+          pageSize: 15,
+          pageNum: 1,
+          total: 0
+        }
 
         this.scidsStr = scidsStr
         this.$nextTick(()=>{
@@ -319,6 +322,11 @@
 
       singleChange(tsid){
         // 科目查询
+        this.page = {
+          pageSize: 15,
+          pageNum: 1,
+          total: 0
+        }
         this.tsid = tsid
         this.$nextTick(()=>{
           this.getDynamicHeader(this.tsid)

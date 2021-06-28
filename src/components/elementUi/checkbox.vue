@@ -31,4 +31,7 @@
   .hj-checkbox .is-checked+.el-checkbox__label{
       color: @font-333;
   }
+  .el-checkbox__input.is-focus .el-checkbox__inner{
+    color: @main
+  }
 </style>

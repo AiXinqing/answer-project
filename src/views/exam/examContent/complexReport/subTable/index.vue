@@ -353,13 +353,28 @@
         })
       },
 
+      handlePageSize({page, size}){
+        // 分页起始页
+        if(this.tsid == ''){
+          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+        }
+        this.page.pageNum = page
+        this.page.pageSize = size
+        this.$nextTick(()=>{
+          this.getTable()
+        })
+      },
+
       handleCheckAllChange(cidStr){
         // 班级查询
         if(this.tsid == ''){
           this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
         }
-        this.page.pageNum = 1
-        this.page.pageSize = 15
+        this.page = {
+          pageSize: 15,
+          pageNum: 1,
+          total: 0
+        }
         this.cidStr = cidStr
         this.$nextTick(()=>{
           this.getTable()
