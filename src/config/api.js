@@ -38,7 +38,7 @@ export const URL = {
   //分析参数设置
   GetASAnalyseSettingList: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetASAnalyseSettingList', // 获取分析参数得分率
   DeleteASAnalyseSetting: BASEURL + '/Api/Marking/ASAnalysisReportBLL/DeleteASAnalyseSetting', // 删除分析参数得分率
-  SaveASAnalyseSetting: BASEURL + '/Api/Marking/ASAnalysisReportBLL/SaveASAnalyseSetting', // 保存分析参数得分率
+  SaveComparedASAnalyseSetting: BASEURL + '/Api/Marking/ASAnalysisReportBLL/SaveASAnalyseSetting', // 保存分析参数得分率
 
   //---------------------------------------班级分析报告
   GetClassAvgScore: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassAvgScore', //学科平均分排名

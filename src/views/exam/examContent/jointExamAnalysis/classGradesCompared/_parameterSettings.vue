@@ -57,7 +57,8 @@
         data:[],
         fullscreenLoading:false,
         subject:'',
-        parameter:{}
+        parameter:{},
+        tid:''
       }
     },
 
@@ -82,6 +83,7 @@
           tsid:tsid,
           type:type
         }
+        this.tid = tid
         this.$store.dispatch('parameterSet/GetStuResults', obj.parameter)
         this.subject = obj.subject
         this.openedFrame = true
@@ -100,9 +102,9 @@
         })) 
 
         let params = {
-          prmASAnalyseScoreLine:JSON.stringify(this.data)
+          prmASAnalyseSettingList:JSON.stringify(this.data)
         }
-        this.$http.post(this.URL.SaveASAnalyseSetting, qs.stringify(params) ).then(res => {
+        this.$http.post(this.URL.SaveComparedASAnalyseSetting, qs.stringify(params) ).then(res => {
 
           if(res.data.ResponseCode == 'Success'){
             this.openedFrame = false
