@@ -3,7 +3,7 @@
   <div class="class_content">
 
     <div class="card_contetn">
-      <div class="card_item">
+      <div class="card_item" style="padding-top: 20px;margin-top: 0;">
         <i></i>
         <span>学科分档上线情况</span>
         <span class="font_12">运用大数据算法将总分的分档分数精确的分解到各学科中, 得出各学科的分档分数线。 各学科分档上线人数分布, 可反映出全体学生在各学科的上线情况。</span>

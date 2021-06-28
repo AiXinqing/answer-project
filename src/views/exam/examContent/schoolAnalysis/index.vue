@@ -23,52 +23,60 @@
       <!-- 标题 -->
 
       <parking1
-        class="mar_T10"
-        id="parking1"
+        class="mar_T10 d_jump"
+        id="parking0"
+        index="parking0"
         :prmTid="prmTid"
       />
 
       <parking2
-        class="mar_T10"
-        id="parking2"
+        class="mar_T10 d_jump"
+        id="parking1"
+        index="parking1"
         :prmTid="prmTid"
       />
 
       <parking3
-        class="mar_T10"
-        id="parking3"
+        class="mar_T10 d_jump"
+        id="parking2"
+        index="parking2"
         :prmTid="prmTid"
       />
 
       <parking4
-        class="mar_T10"
-        id="parking4"
+        class="mar_T10 d_jump"
+        id="parking3"
+        index="parking3"
         :prmTid="prmTid"
       />
 
       <parking5
-        class="mar_T10"
-        id="parking5"
+        class="mar_T10 d_jump"
+        id="parking4"
+        index="parking4"
         :prmTid="prmTid"
       />
 
       <parking6
-        class="mar_T10"
-        id="parking6"
+        class="mar_T10 d_jump"
+        id="parking5"
+        index="parking5"
         :prmTid="prmTid"
         :subjects-arr="subjectsArr"
       />
 
       <parking7
-        class="mar_T10"
-        id="parking7"
+        class="mar_T10 d_jump"
+        id="parking6"
+        index="parking6"
         :prmTid="prmTid"
         :subjects-arr="subjectsArr"
       />
 
       <parking8
-        class="mar_T10"
-        id="parking8"
+        class="mar_T10 d_jump"
+        id="parking7"
+        index="parking7"
         :prmTid="prmTid"
         :subjects-arr="subjectsArr"
       />
@@ -80,16 +88,16 @@
     <div class="Anchor_box">
       <div class="anchor_title">成绩分析</div>
       <div class="anchor_list">
-        <a
+        <div
           v-for="(tab ,index) in tabsAnchor"
           :key="index"
-          :class="['cur_style',{cur:iscur==index}]"
-          href="javascript:void(0)"
-          :id="`parkingA${index + 1}`"
-          @click="iscur=index,goAnchor('parking' + (index + 1))"
+          class="cur_style"
+          :class="{'cur':tabView == index}"
+          :id="`parkingA${index}`"
+          @click="goAnchor(index)"
         >
           {{tab.name}}
-        </a>
+        </div>
       </div>
     </div>
     <!-- 浮动锚点点击处 -->
@@ -122,7 +130,7 @@
 
     data() {
       return {
-        tabView: 'parking1',
+        tabView: '0',
         tabsAnchor: [
           {
             name:'总体情况汇总'
@@ -149,7 +157,6 @@
             name:'优秀生学困生'
           },
         ],
-        iscur:0,
         prmTid:''
       }
     },
@@ -192,10 +199,42 @@
 
     methods: {
 
-      goAnchor(selector) {
-        document.querySelector('#'+selector).scrollIntoView({
-          behavior: 'smooth'
-        })
+      goAnchor(index) {
+        this.tabView = index
+        let jump = document.querySelectorAll('.d_jump')
+        let total = jump[index].offsetTop
+        let distance = document.documentElement.scrollTop || document.body.scrollTop
+        // 平滑滚动，时长500ms，每10ms一跳，共50跳
+        let step = total / 50
+        if (total > distance) {
+          smoothDown()
+        } else {
+          let newTotal = distance - total
+          step = newTotal / 50
+          smoothUp()
+        }
+        function smoothDown () {
+          if (distance < total) {
+            distance += step
+　　　　　　　document.body.scrollTop = distance
+            document.documentElement.scrollTop = distance
+            setTimeout(smoothDown, 10)
+          } else {
+            document.body.scrollTop = total
+            document.documentElement.scrollTop = total
+          }
+        }
+        function smoothUp () {
+          if (distance > total) {
+            distance -= step
+　　　　　　　document.body.scrollTop = distance
+            document.documentElement.scrollTop = distance
+            setTimeout(smoothUp, 10)
+          } else {
+            document.body.scrollTop = total
+            document.documentElement.scrollTop = total
+          }
+        }
       },
 
       getExamFunc(prmTid) {
@@ -215,43 +254,38 @@
             parkingA6 = 0,
             parkingA7 = 0,
             parkingA8 = 0
-            parkingA1 = document.getElementById('parking1').offsetTop
-            parkingA2 = document.getElementById('parking2').offsetTop
-            parkingA3 = document.getElementById('parking3').offsetTop
-            parkingA4 = document.getElementById('parking4').offsetTop
-            parkingA5 = document.getElementById('parking5').offsetTop
-            parkingA6 = document.getElementById('parking6').offsetTop
-            parkingA7 = document.getElementById('parking7').offsetTop
-            parkingA8 = document.getElementById('parking8').offsetTop
+            parkingA1 = document.getElementById('parking0').offsetTop
+            parkingA2 = document.getElementById('parking1').offsetTop
+            parkingA3 = document.getElementById('parking2').offsetTop
+            parkingA4 = document.getElementById('parking3').offsetTop
+            parkingA5 = document.getElementById('parking4').offsetTop
+            parkingA6 = document.getElementById('parking5').offsetTop
+            parkingA7 = document.getElementById('parking6').offsetTop
+            parkingA8 = document.getElementById('parking7').offsetTop
 
-        let curStyle = document.getElementsByClassName('cur_style')
-            for(let i = 0; i < 8;i++){
-              curStyle[i].classList.remove('cur')
-            }
 
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
             if(scrollTop <= parkingA1 ){
-              document.getElementById('parkingA1').classList.add("cur")
+              this.tabView = 0
             } else if(scrollTop <= parkingA2 ){
-              document.getElementById('parkingA2').classList.add("cur")
+              this.tabView = 1
             }else if(scrollTop <= parkingA3 ){
-              document.getElementById('parkingA3').classList.add("cur")
+              this.tabView = 2
             }else if(scrollTop <= parkingA4 ){
-              document.getElementById('parkingA4').classList.add("cur")
+              this.tabView = 3
             }else if(scrollTop <= parkingA5 ){
-              document.getElementById('parkingA5').classList.add("cur")
+              this.tabView = 4
             }else if(scrollTop <= parkingA6 ){
-              document.getElementById('parkingA6').classList.add("cur")
+              this.tabView = 5
             }else if(scrollTop <= parkingA7 ){
-              document.getElementById('parkingA7').classList.add("cur")
+              this.tabView = 6
             }else if(scrollTop > parkingA8 ){
-              document.getElementById('parkingA8').classList.add("cur")
+              this.tabView = 7
             }else if(scrollTop > parkingA8 ){
-              document.getElementById('parkingA8').classList.add("cur")
+              this.tabView = 7
             }
-
-      }
+      },
 
     }
   }

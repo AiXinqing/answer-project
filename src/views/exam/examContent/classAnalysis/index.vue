@@ -23,34 +23,39 @@
       <!-- 标题 -->
 
       <parking1
-        class="mar_T10"
+        class="mar_T10 d_jump"
+        index="parking0"
         id="parking0"
         :prmTid="prmTid"
         :subjects-arr="subjectsArr"
       />
 
       <parking2
-        class="mar_T10"
+        class="mar_T10 d_jump"
+        index="parking1"
         id="parking1"
         :prmTid="prmTid"
       />
 
       <parking3
-        class="mar_T10"
+        class="mar_T10 d_jump"
+        index="parking2"
         id="parking2"
         :prmTid="prmTid"
         :subjects-arr="subjectsArr"
       />
 
       <parking4
-        class="mar_T10"
+        class="mar_T10 d_jump"
+        index="parking3"
         id="parking3"
         :prmTid="prmTid"
         :subjects-arr="subjectsArr"
       />
 
       <parking5
-        class="mar_T10"
+        class="mar_T10 d_jump"
+        index="parking4"
         id="parking4"
         :prmTid="prmTid"
         :subjects-arr="subjectsArr"
@@ -63,18 +68,16 @@
     <div class="Anchor_box">
       <div class="anchor_title">成绩分析</div>
       <div class="anchor_list">
-        <a
+        <div
           v-for="(tab ,index) in tabsAnchor"
           :key="index"
           class="cur_style"
-          :class="{'cur':iscur == tab.name}"
-          href="javascript:void(0)"
+          :class="{'cur':tabView == index}"
           :id="`parkingA${index}`"
-          @click="goAnchor('parking' + index)"
-          @click="changeName(tab.name)"
+          @click="goAnchor(index)"
         >
           {{tab.name}}
-        </a>
+        </div>
       </div>
     </div>
     <!-- 浮动锚点点击处 -->
@@ -101,7 +104,7 @@
 
     data() {
       return {
-        tabView: 'parking0',
+        tabView: '0',
         tabsAnchor: [
           {
             name:'学科平均分排名'
@@ -119,7 +122,6 @@
             name:'学科试题得分率'
           },
         ],
-        iscur:'学科平均分排名',
         prmTid:''
       }
     },
@@ -157,16 +159,51 @@
       if(this.prmTid != ''){
         this.getExamFunc(this.prmTid)
       }
+
       window.addEventListener('scroll', this.windowScroll)
     },
 
     methods: {
 
-      goAnchor(selector) {
+      goAnchor(index) {
 
-        document.querySelector('#'+selector).scrollIntoView({
-          behavior: 'smooth'
-        })
+        this.tabView = index
+        let jump = document.querySelectorAll('.d_jump')
+        let total = jump[index].offsetTop
+        let distance = document.documentElement.scrollTop || document.body.scrollTop
+        // 平滑滚动，时长500ms，每10ms一跳，共50跳
+        let step = total / 50
+        if (total > distance) {
+          smoothDown()
+        } else {
+          let newTotal = distance - total
+          step = newTotal / 50
+          smoothUp()
+        }
+
+        function smoothDown () {
+          if (distance < total) {
+            distance += step
+　　　　　　　document.body.scrollTop = distance
+            document.documentElement.scrollTop = distance
+            setTimeout(smoothDown, 10)
+          } else {
+            document.body.scrollTop = total
+            document.documentElement.scrollTop = total
+          }
+        }
+
+        function smoothUp () {
+          if (distance > total) {
+            distance -= step
+　　　　　　　document.body.scrollTop = distance
+            document.documentElement.scrollTop = distance
+            setTimeout(smoothUp, 10)
+          } else {
+            document.body.scrollTop = total
+            document.documentElement.scrollTop = total
+          }
+        }
       },
 
       changeName(name){
@@ -193,28 +230,29 @@
             parkingA4 = document.getElementById('parking3').offsetTop
             parkingA5 = document.getElementById('parking4').offsetTop
 
-        let curStyle = document.getElementsByClassName('cur_style')
-            for(let i = 0; i < 5;i++){
-              curStyle[i].classList.remove('cur')
-            }
-
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
             if(scrollTop <= parkingA1 ){
-              document.getElementById('parkingA0').classList.add("cur")
+              // document.getElementById('parkingA0').classList.add("cur")
+              this.tabView = 0
             } else if(scrollTop <= parkingA2 ){
-              document.getElementById('parkingA1').classList.add("cur")
+              // document.getElementById('parkingA1').classList.add("cur")
+              this.tabView = 1
             }else if(scrollTop <= parkingA3 ){
-              document.getElementById('parkingA2').classList.add("cur")
+              // document.getElementById('parkingA2').classList.add("cur")
+              this.tabView = 2
             }else if(scrollTop <= parkingA4 ){
-              document.getElementById('parkingA3').classList.add("cur")
+              // document.getElementById('parkingA3').classList.add("cur")
+              this.tabView = 3
             }else if(scrollTop <= parkingA5 ){
-              document.getElementById('parkingA4').classList.add("cur")
+              // document.getElementById('parkingA4').classList.add("cur")
+              this.tabView = 4
             }else if(scrollTop > parkingA5 ){
-              document.getElementById('parkingA4').classList.add("cur")
+              // document.getElementById('parkingA4').classList.add("cur")
+              this.tabView = 4
             }
 
-      }
+      },
 
     }
   }
@@ -300,7 +338,7 @@
       width: 100%;
       background-color: @white;
 
-      a{
+      div{
         width: 100%;
         text-align: center;
         cursor: pointer;
