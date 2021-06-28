@@ -94,7 +94,7 @@
       },
 
       markingTask(){
-         var url = this.URL.SERVICE_UPLOAD_PICTURE+"/Manage/Home/AnalyzeReports/" + this.prmTid
+        var url = window.location.origin + "/Manage/Home/AnalyzeReports/" + this.prmTid
         window.open(url)
       },
 

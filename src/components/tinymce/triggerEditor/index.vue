@@ -161,7 +161,7 @@
               editor.ui.registry.addButton('tiny_mce_wiris', {
                 tooltip: '公式插件',
                 onAction: function () {
-                  console.log()
+
                 }
               });
 

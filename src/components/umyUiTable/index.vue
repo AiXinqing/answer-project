@@ -107,7 +107,6 @@
 
       // 分页事件
       handlePageSize ({page, size}) {
-        console.log(page, size)
         this.$emit('hanlde-page-size',{page, size})
       }
     }
