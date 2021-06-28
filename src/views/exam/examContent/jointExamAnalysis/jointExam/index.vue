@@ -42,9 +42,8 @@
           :pagination="page"
           :loading="tableLoading"
           :theight="theight"
-          @handle-size-change="handleSizeChange"
-          @handle-current-change="handleCurrentChange"
-          />
+          @hanlde-page-size="handlePageSize"
+        />
 
       </div>
     </div>
@@ -291,28 +290,16 @@
         })
       },
 
-      handleSizeChange(val){
-        // 分页每页显示数量
-        if(this.tsid == ''){
-          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
-        }
-
-        this.page.pageSize = val
-        this.$nextTick(()=>{
-          this.getTable()
-        })
-      },
-      handleCurrentChange(val){
+      handlePageSize({page, size}){
         // 分页起始页
         if(this.tsid == ''){
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
         }
-
-        this.page.pageNum = val
+        this.page.pageNum = page
+        this.page.pageSize = size
         this.$nextTick(()=>{
           this.getTable()
         })
-
       },
 
       handleCheckAllChange(scidsStr){
@@ -320,6 +307,9 @@
         if(this.tsid == ''){
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
         }
+
+        this.page.pageNum = 1
+        this.page.pageSize = 15
 
         this.scidsStr = scidsStr
         this.$nextTick(()=>{

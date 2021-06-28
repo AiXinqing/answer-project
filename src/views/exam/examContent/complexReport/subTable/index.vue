@@ -42,8 +42,7 @@
           :pagination="page"
           :theight="theight"
           :loading="tableLoading"
-          @handle-size-change="handleSizeChange"
-          @handle-current-change="handleCurrentChange"
+          @hanlde-page-size="handlePageSize"
         />
       </div>
     </div>
@@ -354,33 +353,13 @@
         })
       },
 
-      handleSizeChange(val){
-        // 分页每页显示数量
-        this.page.pageSize = val
-        if(this.tsid == ''){
-          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
-        }
-        this.$nextTick(()=>{
-          this.getTable()
-        })
-
-      },
-      handleCurrentChange(val){
-        // 分页起始页
-        this.page.pageNum = val
-        if(this.tsid == ''){
-          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
-        }
-        this.$nextTick(()=>{
-          this.getTable()
-        })
-      },
-
       handleCheckAllChange(cidStr){
         // 班级查询
         if(this.tsid == ''){
           this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
         }
+        this.page.pageNum = 1
+        this.page.pageSize = 15
         this.cidStr = cidStr
         this.$nextTick(()=>{
           this.getTable()

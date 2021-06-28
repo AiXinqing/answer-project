@@ -305,6 +305,8 @@
         if(this.tsid == ''){
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
         }
+        this.page.pageNum = 1
+        this.page.pageSize = 15
         this.cidStr = cidStr
         this.$nextTick(()=>{
           this.getTable()
