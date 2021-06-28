@@ -23,14 +23,14 @@
     </div>
 
     <div class="el_table_wapper">
-      <exam-table
+      <umy-table
         :tablecols="tableColumn"
         :tableData="tableData"
         :isIndex="false"
         :isPagination="false"
         :autoHeight="true"
         :loading="tableLoading"
-      ></exam-table>
+      />
     </div>
   </div>
 </template>
