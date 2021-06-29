@@ -28,11 +28,11 @@ export function GetClassGradesComparedResults ({ tid, tsid, scids, url }) {
 }
 
 //联考班级成绩对比学生详情
-export function JointExamClassDetails ({ tid, tsid, cid, asid, scids, url }) {
+export function JointExamClassDetails ({ tid, tsid, cid, asid, scids, pageIndex, pageSize, url }) {
   return request({
     url: url,
     method: 'get',
-    params: { tid, tsid, cid, scids, asid }
+    params: { tid, tsid, cid, scids, asid, pageIndex, pageSize }
   })
 }
 
@@ -61,5 +61,14 @@ export function GetClassGradesStatisticsResults ({ tid, tsid, scids, step, type,
     url: url,
     method: 'get',
     params: { tid, tsid, scids, step, type }
+  })
+}
+
+//联考班级成绩分段统计学生详情
+export function GetClassGradesStatisticsDetails ({ tid, tsid, scids, step, type, cid, segmentName, pageIndex, pageSize, url }) {
+  return request({
+    url: url,
+    method: 'get',
+    params: { tid, tsid, scids, step, type, cid, segmentName, pageIndex, pageSize }
   })
 }

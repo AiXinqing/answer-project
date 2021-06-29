@@ -1,12 +1,12 @@
 import {
-  JointExamClassDetails
+  GetClassGradesStatisticsDetails
 } from '@/config/jointExamAnalysis/gradesCompared'
 
 const state = {
   TableList: [],
   tableLoading: false,
   pagination: {
-    pageSize: 10,
+    pageSize: 15,
     pageNum: 1,
     total: 0
   }
@@ -39,8 +39,8 @@ const actions = {
   GetStuResults ({ commit }, padata) {
     commit('SET_LOADING')
     return new Promise((resolve, reject) => {
-      const { tid, tsid, cid, asid, scids, pageIndex, pageSize, url } = padata
-      JointExamClassDetails({ tid, tsid, cid, scids, asid, pageIndex, pageSize, url }).then(res => {
+      const { tid, tsid, scids, step, type, cid, segmentName, pageIndex, pageSize, url } = padata
+      GetClassGradesStatisticsDetails({ tid, tsid, scids, step, type, cid, segmentName, pageIndex, pageSize, url }).then(res => {
         commit('SET_TABLE', res)
         commit('GET_PAGE', {
           pageSize: res.ResponseContent.pageSize,

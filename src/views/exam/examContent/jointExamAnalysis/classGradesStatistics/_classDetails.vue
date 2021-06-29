@@ -20,7 +20,7 @@
         :pagination="page"
         :loading="tableLoading"
         :pageSizes="pageSizes"
-        :autoHeight="true"
+        :theight="theight"
         @handle-size-change="handleSizeChange"
         @handle-current-change="handleCurrentChange"
       ></exam-table>
@@ -101,25 +101,27 @@
           cid:'',
           tid: '',
           tsid:'',
+          scids:'',
           segmentName:'',
           step:50,
           type:0,
-          url:this.URL.GetSegmentStuDetails
+          url:this.URL.GetJointExamClassScoreSegmentStuDetails
         },
         page: {
-          pageSize: 10,
+          pageSize: 15,
           pageNum: 1,
           total: 0
         },
         headeUrl:this.URL.GetTableHeadeSubject,
         prmTid:'',
-        pageSizes:[10,15,20,30,50,100]
+        pageSizes:[10,15,20,30,50,100],
+        theight: document.body.clientHeight - 400 || 0
       }
     },
 
     computed: {
       ...mapState('getExam', ['headerTable',]),
-      ...mapState('gradesDetails', ['tableLoading','TableList','pagination',]),
+      ...mapState('classStatisticsDetails', ['tableLoading','TableList','pagination',]),
 
       title() {
         return '学生名单详情'
@@ -194,6 +196,7 @@
         immediate: true,
         handler () {
           this.page = this.pagination
+          this.theight = document.body.clientHeight - 400
         },
       },
     },
@@ -257,13 +260,13 @@
           pageIndex: pageNum,
           pageSize: pageSize,
         }
-        this.$store.dispatch('gradesDetails/GetStuResults', this.parameter)
+        this.$store.dispatch('classStatisticsDetails/GetStuResults', this.parameter)
       },
 
       downTable(){
         // 下载表格
-        const {cid,tid,tsid,segmentName,step,type} = this.parameter
-        window.open(`${this.URL.ExportStuDetails}?tid=${tid}&tsid=${tsid}&cid=${cid}&segmentName=${segmentName}&step=${step}&type=${type}`)
+        const {cid,tid,tsid,segmentName,step,type,scids} = this.parameter
+        window.open(`${this.URL.ExportJointExamClassScoreSegmentStuDetails}?tid=${tid}&tsid=${tsid}&cid=${cid}&segmentName=${segmentName}&step=${step}&type=${type}&scids=${scids}`)
       },
     },
   }

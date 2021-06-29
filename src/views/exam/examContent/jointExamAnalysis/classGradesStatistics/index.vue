@@ -41,7 +41,6 @@
           :theight="theight"
           :difference-height="differenceHeight"
           :loading="tableLoading"
-          @hanlde-pop-func="hanldePopFunc"
         />
       </div>
     </div>
@@ -167,10 +166,40 @@
             align:'center',
             // 0 客观题 objective 1 主观题 subjective
             childen:this.rankArr.map((item,index) =>{
+              let obj = {
+                type:'Html'
+              }
+              if(item.prop == 'num'){
+                obj = {
+                  ...obj,
+                  btnList:[
+                    {
+                      label:'',
+                      handle: (row,ele) => {
+                        const {scids} = this.parameter
+                        let obj = {
+                          cid:row.cid,
+                          tid:ele.tid,
+                          tsid:ele.tsid,
+                          scids: scids,
+                          segmentName:ele.p_name,
+                          step:this.parameter.step,
+                          type:this.type
+                        }
+                        console.log(row)
+                        console.log(ele)
+                        console.log(obj)
+                        this.hanldePopFunc(obj)
+                      }
+                    }
+                  ]
+                }
+              }
               return {
                 ...item,
                 label:item.label,
-                type: index == 0 ? 'popBtn' : 'Html',
+                ...obj,
+                type: index == 0 ? 'pop_Btn' : 'Html',
                 prop:`${item.prop}_${ele}`,
                 p_name:ele,
                 p_step:this.parameter.step,

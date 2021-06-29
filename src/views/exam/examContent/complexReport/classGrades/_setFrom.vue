@@ -51,12 +51,28 @@
 
     computed: {
       verify(){
+        
         const {subname,subend,substart} = this.data
+        let isV = false
+        if(subname == '' || subname == undefined){
+          isV = true
+        }else{
+          isV = false
+        }
 
-        return subname != '' ?
-           subend != '' ? substart != '' ? false : true
-              : true
-          : true
+        if(subend == '' || subend == undefined){
+          isV = true
+        }else{
+          isV = false
+        }
+
+        if(substart == '' || substart == undefined){
+          isV = true
+        }else{
+          isV = false
+        }
+
+        return isV
       },
     },
 
@@ -82,6 +98,7 @@
         })
       },
       preQuestiongroup(){
+        console.log(this.verify)
         this.$emit('verify-change',this.verify)
       }
     }
