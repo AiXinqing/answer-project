@@ -285,4 +285,9 @@
   .condition_filter .title_name {
     width: 871px;
   }
+
+  button.el-button.btn_column.el-button--default.el-button--medium{
+    position: relative;
+    top: 3px;
+  }
 </style>

@@ -165,3 +165,9 @@
     }
   }
 </style>
+<style lang="less" scoped>
+  button.el-button.btn_column.el-button--default.el-button--medium{
+    position: relative;
+    top: 3px;
+  }
+</style>
