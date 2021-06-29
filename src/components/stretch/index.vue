@@ -171,4 +171,7 @@
   .el-checkbox__inner{
     border-color: @main
   }
+  .el-checkbox__input.is-focus .el-checkbox__inner{
+    border-color: @main !important
+  }
 </style>
