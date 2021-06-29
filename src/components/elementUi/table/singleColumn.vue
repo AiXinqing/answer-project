@@ -143,7 +143,7 @@
             :type="btn.type"
             :size="btn.size || size"
             :icon="btn.icon"
-            class="text_button"
+            class="pop_Btn"
             v-html="columnHtml(scope.row,ele.prop)"
             :class="font_colorT(scope.row,ele.prop)"
             @click="btn.handle(scope.row,ele)"

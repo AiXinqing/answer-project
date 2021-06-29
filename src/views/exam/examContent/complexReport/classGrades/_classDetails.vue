@@ -130,8 +130,15 @@
               }
               if(item.label == '分数' && ele.sname !='总分'){
                 obj = {
-                  type:'Text',
-                  url:this.URL.BrowsescoreAnsw
+                  type:'Jump',
+                  btnList:[
+                    {
+                      label:'',
+                      handle: (row,element) => {
+                        window.open(`${this.URL.BrowsescoreAnsw}?tid=${row.tid}&tsid=${ele.tsid}&tnumber=${row.tnumber}`)
+                      }
+                    }
+                  ]
                 }
               }
               return {
@@ -158,6 +165,7 @@
               ord: item.ord,
               sname: item.sname,
               [`tscore_${item.sname}`]: item.tscore,
+              [`tsid_${item.sname}`]:item.tsid,
               tsid: item.tsid,
               tid: this.prmTid,
               jump:1
