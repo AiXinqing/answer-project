@@ -32,6 +32,6 @@
       color: @font-333;
   }
   .el-checkbox__input.is-focus .el-checkbox__inner{
-    color: @main !important
+    border-color: @main !important
   }
 </style>
