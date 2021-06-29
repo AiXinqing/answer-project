@@ -100,7 +100,6 @@
             prop:'totalscore',
             label:'总分',
             minWidth:'120',
-            sortable:true,
             align:'center',
             type:'Text',
             url:this.URL.BrowsescoreAnsw

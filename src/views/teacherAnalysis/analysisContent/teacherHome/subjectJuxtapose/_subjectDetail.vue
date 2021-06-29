@@ -89,7 +89,7 @@
           url:this.URL.GetClassScoreContrastStuDetails
         },
         page: {
-          pageSize: 10,
+          pageSize: 15,
           pageNum: 1,
           total: 0
         },
@@ -120,8 +120,15 @@
               }
               if(item.label == '分数' && ele.sname !='总分'){
                 obj = {
-                  type:'Text',
-                  url:this.URL.BrowsescoreAnsw
+                  type:'Jump',
+                  btnList:[
+                    {
+                      label:'',
+                      handle: (row,element) => {
+                        window.open(`${this.URL.BrowsescoreAnsw}?tid=${row.tid}&tsid=${ele.tsid}&tnumber=${row.tnumber}`)
+                      }
+                    }
+                  ]
                 }
               }
               return {

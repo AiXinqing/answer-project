@@ -78,7 +78,6 @@
             align:'center',
             prop: `num_${ele.subname}`,
             type:'Html',
-            sortable:true,
             minWidth:'120',
           }))
         ] : []
