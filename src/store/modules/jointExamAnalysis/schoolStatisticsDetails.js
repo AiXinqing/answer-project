@@ -6,7 +6,7 @@ const state = {
   TableList: [],
   tableLoading: false,
   pagination: {
-    pageSize: 10,
+    pageSize: 15,
     pageNum: 1,
     total: 0
   }
