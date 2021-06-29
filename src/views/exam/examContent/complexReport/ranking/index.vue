@@ -38,6 +38,7 @@
           :isIndex="false"
           :isPagination="false"
           :theight="theight"
+          :single-height="50"
           :loading="tableLoading"
           :difference-height="differenceHeight"
           @hanlde-pop-func="hanldePopFunc"

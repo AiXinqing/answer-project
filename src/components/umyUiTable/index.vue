@@ -4,7 +4,7 @@
       ref="plTable"
       :data="tableData"
       :max-height="height"
-      :height="autoHeight ? null : height_table"
+      :height="autoHeight ? null : height_table + singleHeight"
       use-virtual
       data-changes-scroll-top
       show-summary
@@ -76,6 +76,10 @@
         pageNum: 1,
         total: 0
       })},
+      singleHeight:{
+        Number,
+        default: 0
+      }
     },
 
     data() {
