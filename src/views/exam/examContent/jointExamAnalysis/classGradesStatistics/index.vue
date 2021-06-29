@@ -186,9 +186,6 @@
                           step:this.parameter.step,
                           type:this.type
                         }
-                        console.log(row)
-                        console.log(ele)
-                        console.log(obj)
                         this.hanldePopFunc(obj)
                       }
                     }
