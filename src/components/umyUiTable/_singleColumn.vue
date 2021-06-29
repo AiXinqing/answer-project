@@ -49,10 +49,25 @@
             :size="btn.size || size"
             :icon="btn.icon"
             class="btn_column"
-            @click="btn.handle(scope.row,scope.$index)"
+            @click="btn.handle(scope.row,scope)"
           >{{btn.label}}</el-button>
-
         </template>
+
+        <template v-if="column.type ==='Jump'">
+          <el-button
+            v-for="(btn,i) in  column.btnList"
+            :key="i"
+            :disabled="btn.isDisabled && btn.isDisabled(scope.row)"
+            :type="btn.type"
+            :size="btn.size || size"
+            :icon="btn.icon"
+            class="pop_Btn"
+            v-html="columnHtml(scope.row,column.prop)"
+            :class="font_colorT(scope.row,column.prop)"
+            @click="btn.handle(scope.row,column)"
+          >{{btn.prop}}</el-button>
+        </template>
+
       </template>
     </ux-table-column>
 
@@ -130,6 +145,21 @@
             :icon="btn.icon"
             v-html="columnHtml(scope.row,ele.prop)"
             class="pop_Btn"
+            :class="font_colorT(scope.row,ele.prop)"
+            @click="btn.handle(scope.row,ele)"
+          >{{ele.prop}}</el-button>
+        </template>
+
+        <template v-if="ele.type ==='Jump'">
+          <el-button
+            v-for="(btn,i) in  ele.btnList"
+            :key="i"
+            :disabled="btn.isDisabled && btn.isDisabled(scope.row)"
+            :type="btn.type"
+            :size="btn.size || size"
+            :icon="btn.icon"
+            class="text_button"
+            v-html="columnHtml(scope.row,ele.prop)"
             :class="font_colorT(scope.row,ele.prop)"
             @click="btn.handle(scope.row,ele)"
           >{{ele.prop}}</el-button>

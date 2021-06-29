@@ -135,6 +135,21 @@
           >{{ele.prop}}</el-button>
         </template>
 
+        <template v-if="ele.type ==='Jump'">
+          <el-button
+            v-for="(btn,i) in  ele.btnList"
+            :key="i"
+            :disabled="btn.isDisabled && btn.isDisabled(scope.row)"
+            :type="btn.type"
+            :size="btn.size || size"
+            :icon="btn.icon"
+            class="text_button"
+            v-html="columnHtml(scope.row,ele.prop)"
+            :class="font_colorT(scope.row,ele.prop)"
+            @click="btn.handle(scope.row,ele)"
+          >{{ele.prop}}</el-button>
+        </template>
+
         <!-- @click="hanlde" -->
       </template>
       </el-table-column>
