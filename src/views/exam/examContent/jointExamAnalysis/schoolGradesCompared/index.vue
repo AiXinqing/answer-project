@@ -36,6 +36,7 @@
           :isIndex="false"
           :isPagination="false"
           :theight="theight"
+          :single-height="50"
           :loading="tableLoading"
         />
       </div>

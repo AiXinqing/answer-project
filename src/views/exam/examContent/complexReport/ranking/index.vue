@@ -234,7 +234,7 @@
       handleStretch(){
         this.$nextTick(() =>{
           let height = this.$refs.stretch.offsetHeight
-          this.theight = document.body.clientHeight - 238 - height // 258 = 页面高度 - height  除条件以外的高度
+          this.theight = document.body.clientHeight - 258 - height // 258 = 页面高度 - height  除条件以外的高度
         })
       },
 

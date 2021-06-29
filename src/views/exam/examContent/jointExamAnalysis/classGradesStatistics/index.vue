@@ -39,7 +39,7 @@
           :isIndex="false"
           :isPagination="false"
           :theight="theight"
-          :difference-height="differenceHeight"
+          :single-height="20"
           :loading="tableLoading"
         />
       </div>

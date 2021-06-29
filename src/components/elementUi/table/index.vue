@@ -4,7 +4,7 @@
       :data="tableData"
       :element-loading-text="loadingText"
       :border="isBorder"
-      :height="autoHeight ? null : height_table"
+      :height="autoHeight ? null : height_table + singleHeight"
 
       element-loading-spinner="el-icon-loading"
       v-loading="loading"
@@ -89,6 +89,10 @@
         pageNum: 1,
         total: 0
       })},
+      singleHeight:{
+        Number,
+        default: 0
+      }
     },
     data() {
       return {
