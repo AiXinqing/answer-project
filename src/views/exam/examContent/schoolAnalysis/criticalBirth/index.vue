@@ -87,11 +87,11 @@
         ],
 
         criticalScale:60,
-        floatScale:10,
+        floatScale:5,
         parameter:{
           tid: '',
           criticalScale:60,
-          floatScale:10,
+          floatScale:5,
           url:this.URL.GetClassSubjectScoreCriticalityNum
         }
       }

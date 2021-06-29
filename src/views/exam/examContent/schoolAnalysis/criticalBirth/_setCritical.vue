@@ -39,7 +39,7 @@
         openedFrame: false,
         isdisabledFn:false,
         criticalScale:60,
-        floatScale:10,
+        floatScale:5,
       }
     },
 
