@@ -20,7 +20,7 @@
         :pagination="page"
         :loading="tableLoading"
         :pageSizes="pageSizes"
-        :autoHeight="true"
+        :theight="theight"
         @handle-size-change="handleSizeChange"
         @handle-current-change="handleCurrentChange"
       ></exam-table>
@@ -106,13 +106,14 @@
           url:this.URL.GetJointExamClassScoreContrastStuDetails
         },
         page: {
-          pageSize: 10,
+          pageSize: 15,
           pageNum: 1,
           total: 0
         },
         headeUrl:this.URL.GetTableHeadeSubject,
         prmTid:'',
-        pageSizes:[10,15,20,30,50,100]
+        pageSizes:[10,15,20,30,50,100],
+        theight: document.body.clientHeight - 400 || 0
       }
     },
 
@@ -193,6 +194,7 @@
         immediate: true,
         handler () {
           this.page = this.pagination
+          this.theight = document.body.clientHeight - 400
         },
       },
     },
