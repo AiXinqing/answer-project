@@ -68,8 +68,11 @@ export const URL = {
 
   GetSubjectScoreLvlContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetSubjectScoreLvlContrast', //各科成绩等级人数占比比较
   ExportSubjectScoreLvlContrast: BASEURL + '/Report/AnlyReport/ExportSubjectScoreLvlContrast', //各科成绩等级人数占比下载
+
   GetClassScoreRankNum: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreRankNum', //优秀生/学困生分析
   ExportClassScoreRankNum: BASEURL + '/Report/AnlyReport/ExportClassScoreRankNum', //优秀生/学困生分析下载
+  GetClassScoreRankNumStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreRankNumStuDetails', //优秀生/学困生学生详情
+  ExportClassScoreRankNumStuDetails: BASEURL + '/Report/AnlyReport/ExportClassScoreRankNumStuDetails', //优秀生/学困生学生详情下载
 
   GetASAnalyseScoreLine: BASEURL + '/Api/Marking/ASAnalyseScoreLineBLL/GetASAnalyseScoreLine', //获取上档线设置表格数据
   SaveASAnalyseSetting: BASEURL + '/Api/Marking/ASAnalyseScoreLineBLL/SaveASAnalyseSetting', //保存上档线设置

@@ -17,3 +17,12 @@ export function sectionNumPeopleDetail ({ tid, tsid, cid, segmentName, step, pag
     params: { tid, tsid, cid, segmentName, step, pageIndex, pageSize }
   })
 }
+
+//优秀生/学困生学生详情
+export function excellentGradeDetail ({ tid, tsid, cid, type, rank, pageIndex, pageSize, url }) {
+  return request({
+    url: url,
+    method: 'get',
+    params: { tid, tsid, cid, type, rank, pageIndex, pageSize }
+  })
+}

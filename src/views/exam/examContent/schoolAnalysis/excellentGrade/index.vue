@@ -46,16 +46,22 @@
       :prmTid="prmTid"
     />
 
+    <student-details
+      ref="studentDetails"
+    />
+
   </div>
 </template>
 
 <script>
   import { mapState} from 'vuex'
   import afterExcellentGrade from './afterExcellentGrade'
+  import studentDetails from './_details'
   export default {
 
     components: {
       afterExcellentGrade,
+      studentDetails
     },
 
     props: {
@@ -118,9 +124,36 @@
             label:ele.sname,
             align:'center',
             childen:this.columnMultiLine.map(item => {
+              let obj = {}
+              if(item.prop == 'num'){
+                obj = {
+                  ...obj,
+                  btnList:[
+                    {
+                      label:'',
+                      handle: (row,element) => {
+                        let obj = {
+                          tid:this.prmTid,
+                          cid:row.cid,
+                          tsid:ele.tsid,
+                          type:'top',
+                          rank:this.parameter.rank
+                        }
+                        // 详情数值为0时不弹出详情框
+                        if(row[element.prop] != 0){
+                          this.hanldePopFunc(obj)
+                        }
+
+                      }
+                    }
+                  ]
+                }
+              }
               return {
                 ...item,
+                ...obj,
                 prop:`${item.prop}_${ele.sname}`,
+                type: item.prop == 'num' ? 'pop_Btn' : 'Html',
                 label:item.label,
                 width:item.width,
                 align:item.align,
@@ -178,6 +211,10 @@
         this.$nextTick(()=>{
           this.getTable()
         })
+      },
+
+      hanldePopFunc(row){
+        this.$refs.studentDetails.openDetails(row)
       }
 
     },
