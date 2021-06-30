@@ -181,16 +181,20 @@
                   btnList:[
                     {
                       label:'',
-                      handle: (row,ele) => {
+                      handle: (row,element) => {
                         let obj = {
-                          tid:ele.tid,
-                          tsid:ele.tsid,
-                          cid:ele.cid,
+                          tid:element.tid,
+                          tsid:element.tsid,
+                          cid:element.cid,
                           tqid:row.tqid,
-                          type: ele.type_p,
+                          type: element.type_p,
                           scids:this.scidsStr
                         }
-                        this.hanldePopFunc(obj)
+                        // 详情数值为0时不弹出详情框
+                        if(row[element.prop] != 0){
+                          this.hanldePopFunc(obj)
+                        }
+
                       }
                     }
                   ]

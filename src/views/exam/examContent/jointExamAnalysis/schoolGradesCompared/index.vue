@@ -204,15 +204,17 @@
                   btnList:[
                     {
                       label:'',
-                      handle: (row,ele) => {
+                      handle: (row,element) => {
                         let obj = {
-                          tid:ele.tid,
-                          tsid:ele.tsid,
+                          tid:element.tid,
+                          tsid:element.tsid,
                           scid: row.scid,
-                          asid:ele.asid
+                          asid:element.asid
                         }
-
-                        this.hanldePopFunc(obj)
+                        // 详情数值为0时不弹出详情框
+                        if(row[element.prop] != 0){
+                          this.hanldePopFunc(obj)
+                        }
                       }
                     }
                   ]

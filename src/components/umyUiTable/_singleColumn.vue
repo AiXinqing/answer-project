@@ -285,6 +285,7 @@
 
 <style lang="less">
   @import '~@/assets/css/variables.less';
+  button.el-button.pop_Btn.el-button--default.el-button--medium.zero_style,
   button.el-button.text_button.el-button--text.el-button--medium.zero_style{
     cursor: text;
     color: @font-888;

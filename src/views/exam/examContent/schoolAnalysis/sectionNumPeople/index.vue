@@ -83,6 +83,7 @@
           tid: '',
           tsid:'',
           step:20,
+          showGrade:true,
           url:this.URL.GetClassScoreSegmentNum
         },
       }
