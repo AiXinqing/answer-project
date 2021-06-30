@@ -1,10 +1,10 @@
-import  request from '@/utils/http'
+import request from '@/utils/http'
 
-export function GetStuResults({ tid,criticalScale,floatScale, url }) {
+export function GetStuResults ({ tid, criticalScale, floatScale, url }) {
   return request({
-    url: url, //URL.GetStuResults,
+    url: url,
     method: 'get',
-    params: { tid,criticalScale,floatScale }
+    params: { tid, criticalScale, floatScale }
   })
 }
 

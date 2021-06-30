@@ -1,9 +1,9 @@
-import  request from '@/utils/http'
+import request from '@/utils/http'
 
-export function GetStuResults({ tid, tsid, cids,url }) {
+export function GetStuResults ({ tid, tsid, cids, url }) {
   return request({
-    url: url, //URL.GetStuResults,
+    url: url,
     method: 'get',
-    params: { tid, tsid, cids}
+    params: { tid, tsid, cids }
   })
 }

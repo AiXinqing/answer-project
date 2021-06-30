@@ -1,7 +1,7 @@
-import  request from '@/utils/http'
+import request from '@/utils/http'
 import { URL } from '../api'
 
-export function getExamInfo({ prmTid }) {
+export function getExamInfo ({ prmTid }) {
   return request({
     url: URL.GetExamInfo,
     method: 'get',
@@ -9,16 +9,16 @@ export function getExamInfo({ prmTid }) {
   })
 }
 
-export function GetStuResults({ tid, tsid, scids, keyWords, pageIndex, pageSize,url }) {
+export function GetStuResults ({ tid, tsid, scids, keyWords, pageIndex, pageSize, url }) {
   return request({
-    url: url, //URL.GetStuResults,
+    url: url,
     method: 'get',
     params: { tid, tsid, scids, keyWords, pageIndex, pageSize }
   })
 }
 
 // 获取动态表头
-export function dynamicHeader({ tid, tsid ,url}) {
+export function dynamicHeader ({ tid, tsid, url }) {
   return request({
     url: url, //URL.GetTableHeadeSubject,
     method: 'get',
