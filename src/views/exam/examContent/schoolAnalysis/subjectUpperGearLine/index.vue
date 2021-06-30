@@ -141,7 +141,11 @@
                           tsid:row['tsid_'+ ele.sname]
                         }
 
-                        this.hanldePopFunc(obj)
+                        // 详情数值为0时不弹出详情框
+                        if(row[element.prop] != 0){
+                          this.hanldePopFunc(obj)
+                        }
+
                       }
                     }
                   ]

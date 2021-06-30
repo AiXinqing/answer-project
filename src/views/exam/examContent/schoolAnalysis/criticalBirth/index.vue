@@ -39,15 +39,20 @@
       ref="setCritical"
       @change-set-critical="changeSetCritical"
     />
+    <student-details
+      ref="studentDetails"
+    />
   </div>
 </template>
 
 <script>
   import { mapState} from 'vuex'
   import setCritical from './_setCritical'
+  import studentDetails from './_details'
   export default {
     components: {
       setCritical,
+      studentDetails
     },
     props: {
       prmTid: {
@@ -109,9 +114,37 @@
             label:ele.sname,
             align:'center',
             childen:this.columnMultiLine.map(item => {
+              let obj = {}
+              if(item.prop == 'num'){
+                obj = {
+                  ...obj,
+                  btnList:[
+                    {
+                      label:'',
+                      handle: (row,element) => {
+                        let obj = {
+                          tid:this.prmTid,
+                          cid:row.cid,
+                          minScore:row[`minScore_${ele.sname}`],
+                          maxScore:row[`maxScore_${ele.sname}`],
+                          tsid:ele.tsid
+                        }
+
+                        // 详情数值为0时不弹出详情框
+                        if(row[element.prop] != 0){
+                          this.hanldePopFunc(obj)
+                        }
+
+                      }
+                    }
+                  ]
+                }
+              }
               return {
                 ...item,
+                ...obj,
                 prop:`${item.prop}_${ele.sname}`,
+                type: item.prop == 'num' ? 'pop_Btn' : 'Html',
                 label:item.label,
                 width:item.width,
                 align:item.align,
@@ -129,6 +162,8 @@
               ...dynamic,
               [`num_${item.sname}`]: item.num,
               [`percentage_${item.sname}`]: item.scale,
+              [`maxScore_${item.sname}`]:item.maxScore,
+              [`minScore_${item.sname}`]:item.minScore,
               sname: item.sname,
             }
           })
@@ -179,6 +214,10 @@
       handelModify(){
         this.$refs.setCritical.openFrame()
       },
+
+      hanldePopFunc(row){
+        this.$refs.studentDetails.openDetails(row)
+      }
 
     },
   }

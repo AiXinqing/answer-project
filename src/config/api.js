@@ -46,8 +46,12 @@ export const URL = {
   ExportClassScoreSurvey: BASEURL + '/Report/AnlyReport/ExportClassScoreSurvey', //班级成绩概况下载 -------------- // 班级 false  // 校级 true
   GetClassScoreScaleNum: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreScaleNum', //各等级人数占比比较 -------------- // 班级 false  // 校级 true
   ExportClassScoreScaleNum: BASEURL + '/Report/AnlyReport/ExportClassScoreScaleNum', //各等级人数占比下载 -------------- // 班级 false  // 校级 true
+
   GetClassScoreSegmentNum: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreSegmentNum', //各分数段详细人数 -------------- // 班级 false  // 校级 true
   ExportClassScoreSegmentNum: BASEURL + '/Report/AnlyReport/ExportClassScoreSegmentNum', //各分数段详细人数下载   -------------- // 班级 false  // 校级 true
+  GetClassScoreSegmentNumStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreSegmentNumStuDetails', //各分数段详细人数学生详情
+  ExportClassScoreSegmentNumStuDetails: BASEURL + '/Report/AnlyReport/ExportClassScoreSegmentNumStuDetails', //各分数段详细人数学生详情下载
+
   GetClassQuestionScoringRate: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassQuestionScoringRate', //学科试题得分率
   ExportClassQuestionScoringRate: BASEURL + '/Report/AnlyReport/ExportClassQuestionScoringRate', //学科试题得分率下载
 
@@ -56,8 +60,12 @@ export const URL = {
   GetSubjectScoreContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetSubjectScoreContrast', //各学科基本数据对比情况
   ExportSubjectScoreContrast: BASEURL + '/Report/AnlyReport/ExportSubjectScoreContrast', //各学科基本数据对比情况下载
   GetTotalScoreDistribution: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetTotalScoreDistribution', //总分分布
+
   GetClassSubjectScoreCriticalityNum: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassSubjectScoreCriticalityNum', //临界生分析
   ExportClassSubjectScoreCriticalityNum: BASEURL + '/Report/AnlyReport/ExportClassSubjectScoreCriticalityNum', //临界生分析下载
+  GetClassSubjectScoreCriticalityStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassSubjectScoreCriticalityStuDetails', //临界生分析学生详情
+  ExportClassSubjectScoreCriticalityStuDetails: BASEURL + '/Report/AnlyReport/ExportClassSubjectScoreCriticalityStuDetails', //临界生分析学生详情下载
+
   GetSubjectScoreLvlContrast: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetSubjectScoreLvlContrast', //各科成绩等级人数占比比较
   ExportSubjectScoreLvlContrast: BASEURL + '/Report/AnlyReport/ExportSubjectScoreLvlContrast', //各科成绩等级人数占比下载
   GetClassScoreRankNum: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreRankNum', //优秀生/学困生分析

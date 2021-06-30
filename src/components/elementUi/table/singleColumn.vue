@@ -189,7 +189,7 @@
           return classStr + noClick
         },
         font_colorT: (row,prop) => {
-          return row[prop]  == null ? 'transparent' : ''
+          return row[prop]  == null ? 'transparent' : row[prop] == 0 ? 'zero_style' : ''
         },
 
         columnIcon:(row,beforeIcon,afterIcon,unit) => {
