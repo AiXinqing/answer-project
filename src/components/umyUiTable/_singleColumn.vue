@@ -204,7 +204,7 @@
           return classStr + noClick
         },
         font_colorT: (row,prop) => {
-          return row[prop]  == null ? 'transparent' : ''
+          return row[prop]  == null ? 'transparent' : row[prop] == 0 ? 'zero_style' : ''
         },
 
         columnIcon:(row,beforeIcon,afterIcon,unit) => {
@@ -269,18 +269,27 @@
           }
         }
 
-        this.$emit('hanlde-pop-func',{
-          tid:ele.tid,
-          tsid:ele.tsid,
-          cid:cid,
-          ...obj
-        })
+        if(row[ele.prop] != 0){
+          this.$emit('hanlde-pop-func',{
+            tid:ele.tid,
+            tsid:ele.tsid,
+            cid:cid,
+            ...obj
+          })
+        }
+
       }
     },
   }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
   @import '~@/assets/css/variables.less';
-  
+  button.el-button.text_button.el-button--text.el-button--medium.zero_style{
+    cursor: text;
+    color: @font-888;
+    &:hover{
+      color: @font-888 !important;
+    }
+  }
 </style>
