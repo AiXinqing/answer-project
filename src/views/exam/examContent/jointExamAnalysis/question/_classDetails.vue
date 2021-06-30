@@ -104,7 +104,7 @@
           url:this.URL.GetJointExamQuestionSummaryStuDetails
         },
         page: {
-          pageSize: 10,
+           pageSize: 15,
           pageNum: 1,
           total: 0
         },
@@ -218,7 +218,7 @@
       handleClose() {
         this.dialogVisible = false
         this.page = {
-          pageSize: 10,
+          pageSize: 15,
           pageNum: 1,
           total: 0
         }

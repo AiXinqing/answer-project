@@ -51,8 +51,23 @@
             class="btn_column"
             @click="btn.handle(scope.row,scope.$index)"
           >{{btn.label}}</el-button>
-
         </template>
+
+        <template v-if="column.type ==='pop_Btn'">
+          <el-button
+            v-for="(btn,i) in  column.btnList"
+            :key="i"
+            :disabled="btn.isDisabled && btn.isDisabled(scope.row)"
+            :type="btn.type"
+            :size="btn.size || size"
+            :icon="btn.icon"
+            v-html="columnHtml(scope.row,column.prop)"
+            class="pop_Btn"
+            :class="font_colorT(scope.row,column.prop)"
+            @click="btn.handle(scope.row,column)"
+          >{{column.prop}}</el-button>
+        </template>
+
       </template>
     </el-table-column>
 

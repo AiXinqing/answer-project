@@ -40,12 +40,20 @@
         :loading="tableLoading"
       ></exam-table>
     </div>
+
+    <student-details
+      ref="studentDetails"
+    />
   </div>
 </template>
 
 <script>
   import { mapState} from 'vuex'
+  import studentDetails from './_details'
   export default {
+    components: {
+      studentDetails
+    },
     props: {
       prmTid: {
         type: String,
@@ -110,7 +118,27 @@
           ...this.headerTable.map(ele => ({
             ...this.rankArr,
             prop:`${this.rankArr.prop}_${ele}`,
-            label:ele
+            label:ele,
+            type: 'pop_Btn',
+            btnList:[
+              {
+                label:'',
+                handle: (row,element) => {
+                  let obj = {
+                    tid:this.prmTid,
+                    cid:row.cid,
+                    tsid:this.parameter.tsid,
+                    segmentName:ele,
+                    step:this.step,
+                  }
+                  // 详情数值为0时不弹出详情框
+                  if(row[`minute_${ele}`] != 0){
+                    this.hanldePopFunc(obj)
+                  }
+
+                }
+              }
+            ]
           }))
         ] : []
       },
@@ -187,6 +215,10 @@
         const {tid,tsid,step,showGrade} = this.parameter
         window.open(`${this.URL.ExportClassScoreSegmentNum}?tid=${tid}&tsid=${tsid}&step=${step}&showGrade=${showGrade}`)
       },
+
+      hanldePopFunc(row){
+        this.$refs.studentDetails.openDetails(row)
+      }
 
     }
   }

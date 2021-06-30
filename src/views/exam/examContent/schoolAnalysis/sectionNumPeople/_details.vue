@@ -93,15 +93,16 @@
           cid:'',
           tid: '',
           tsid:'',
-          rankName:'',
-          type:'top',
-          url:this.URL.GetClassSegmentStuDetails
+          segmentName:'',
+          step:'',
+          url:this.URL.GetClassScoreSegmentNumStuDetails
         },
         page: {
-           pageSize: 15,
+          pageSize: 15,
           pageNum: 1,
           total: 0
         },
+        tsid:'',
         headeUrl:this.URL.GetTableHeadeSubject,
         prmTid:'',
         pageSizes:[10,15,20,30,50,100],
@@ -111,7 +112,7 @@
 
     computed: {
       ...mapState('getExam', ['headerTable',]),
-      ...mapState('rankDetails', ['tableLoading','TableList','pagination',]),
+      ...mapState('sectionNumPeopleDetail', ['tableLoading','TableList','pagination']),
 
       title() {
         return '学生名单详情'
@@ -205,19 +206,20 @@
           ...row
         }
         this.prmTid = row.tid
+        this.tsid = row.tsid
         this.$nextTick(()=>{
-          this.getDynamicHeader(row.tsid,row.tid)
+          this.getDynamicHeader(row.tid)
           let _this = this
           setTimeout(function(){
             _this.getTable()
-          },400)
+          },500)
         })
       },
 
       handleClose() {
         this.dialogVisible = false
         this.page = {
-           pageSize: 15,
+          pageSize: 15,
           pageNum: 1,
           total: 0
         }
@@ -240,10 +242,10 @@
 
       },
 
-      getDynamicHeader(tsid,tid){
+      getDynamicHeader(tid){
         // 获取动态表头
         this.$store.dispatch('getExam/dynamicHeader', {
-          tid: tid,tsid:tsid,url:this.headeUrl
+          tid: tid,tsid:this.tsid,url:this.headeUrl
         })
       },
 
@@ -256,14 +258,13 @@
           pageIndex: pageNum,
           pageSize: pageSize,
         }
-
-        this.$store.dispatch('rankDetails/GetStuResults', this.parameter)
+        this.$store.dispatch('sectionNumPeopleDetail/GetStuResults', this.parameter)
       },
 
       downTable(){
         // 下载表格
-        const {cid,tid,tsid,rankName,type} = this.parameter
-        window.open(`${this.URL.ExportStuDetails}?tid=${tid}&tsid=${tsid}&cid=${cid}&rankName=${rankName}&type=${type}`)
+        const {cid,tid,segmentName,step,tsid} = this.parameter
+        window.open(`${this.URL.ExportClassScoreSegmentNumStuDetails}?tid=${tid}&segmentName=${segmentName}&cid=${cid}&step=${step}&tsid=${tsid}`)
       },
     },
   }
@@ -271,23 +272,5 @@
 
 <style lang="less">
   @import '~@/assets/css/variables.less';
-  .el_table_wapper.mr_top{
-    margin-top: 15px;
-  }
-  .table-description{
-    display: flex;
 
-    .table_left{
-      width: 87%;
-      span{
-        margin-right: 10px;
-      }
-    }
-  }
-  .el-dialog__headerbtn:focus ,
-  .el-dialog__headerbtn:hover {
-    .el-dialog__close{
-      color: @main
-    }
-  }
 </style>

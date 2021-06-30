@@ -217,7 +217,7 @@
       handleClose() {
         this.dialogVisible = false
         this.page = {
-          pageSize: 10,
+           pageSize: 15,
           pageNum: 1,
           total: 0
         }
