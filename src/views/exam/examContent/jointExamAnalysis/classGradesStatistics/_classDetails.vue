@@ -66,15 +66,7 @@
             align:'center',
             fixed:'left',
             type:'Html'
-          },
-          {
-            prop:'snumber',
-            label:'学号',
-            minWidth:'120',
-            align:'center',
-            fixed:'left',
-            type:'Html'
-          },
+          }
         ],
 
         columnMultiLine:[
