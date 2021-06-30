@@ -123,6 +123,12 @@
             minWidth:'90',
             align:'center',
           },
+          {
+            prop:'zeroScoreScale',
+            label:'零分率',
+            minWidth:'90',
+            align:'center',
+          },
         ],
 
         // 参数
