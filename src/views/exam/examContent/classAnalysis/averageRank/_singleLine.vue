@@ -107,5 +107,6 @@
   .chart_style {
     text-align: center;
     line-height: 22em;
+    color:#888
   }
 </style>

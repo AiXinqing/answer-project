@@ -96,8 +96,10 @@
           this.tsidName = this.subjectsArr.length ? this.subjectsArr.find((element,i) => i == 1).sname : ''
           if(this.tsid != 0){
             this.$nextTick(() => {
-              this.parameter.tsid = this.tsid
-              this.getTable()
+              if(this.parameter.tsid != this.tsid){
+                this.parameter.tsid = this.tsid
+                this.getTable()
+              }
             })
           }
         },

@@ -191,6 +191,7 @@
     },
 
     mounted () {
+      
       if(this.prmTid != ''){
         this.getExamFunc(this.prmTid)
       }
