@@ -89,7 +89,7 @@
             btnList:[
               {
                 label:'查看班级详情',
-                handle: row => {
+                handle: (row,element) => {
                   const {tid,tsid,cid} = this.parameter
                   let obj = {
                     ...row,
@@ -98,7 +98,9 @@
                     cid: cid,
                   }
 
-                  this.hanldePopFunc(obj)
+                  if(row.scale != '0%' && row.scale != null){
+                    this.hanldePopFunc(obj)
+                  }
                 }
               }
             ]
@@ -164,9 +166,7 @@
       margin:0 10px 10px 10px;
     }
   }
-</style>
-<style lang="less" scoped>
-  button.el-button.btn_column.el-button--default.el-button--medium{
+  button.el-button.btn_column.el-button--default.el-button--medium {
     position: relative;
     top: 3px;
   }

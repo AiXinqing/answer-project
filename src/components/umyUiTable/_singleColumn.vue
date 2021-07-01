@@ -269,7 +269,7 @@
           }
         }
 
-        if(row[ele.prop] != 0){
+        if(row[ele.prop] != 0 && row[ele.prop] != null){
           this.$emit('hanlde-pop-func',{
             tid:ele.tid,
             tsid:ele.tsid,

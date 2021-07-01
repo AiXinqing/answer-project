@@ -50,7 +50,9 @@
             :icon="btn.icon"
             class="btn_column"
             @click="btn.handle(scope.row,scope.$index)"
-          >{{btn.label}}</el-button>
+          >
+            <template v-if="btn.label != '0%' || btn.label != null">1{{btn.label}}</template>
+          </el-button>
         </template>
 
         <template v-if="column.type ==='pop_Btn'">

@@ -133,7 +133,7 @@
                     step:this.step,
                   }
                   // 详情数值为0时不弹出详情框
-                  if(row[`minute_${ele}`] != 0){
+                  if(row[`minute_${ele}`] != 0 && row[`minute_${ele}`] != null){
                     this.hanldePopFunc(obj)
                   }
 

@@ -142,7 +142,7 @@
                         }
 
                         // 详情数值为0时不弹出详情框
-                        if(row[element.prop] != 0){
+                        if(row[element.prop] != 0 && row[element.prop] != null){
                           this.hanldePopFunc(obj)
                         }
 

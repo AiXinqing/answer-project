@@ -12,6 +12,7 @@
           <div class="label_font">分段分数 :</div>
           <hj-input
             v-model="step"
+            type="number"
             class="search_input"
             placeholder="50"
           />
