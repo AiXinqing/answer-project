@@ -192,10 +192,11 @@
 
     mounted () {
       if(this.prmTid != ''){
-        this.parameter.tid = this.prmTid
-        this.getBinLineParameter.tid = this.prmTid
-        
-       this.getTable()
+        if(this.parameter.tid != this.prmTid){
+          this.parameter.tid = this.prmTid
+          this.getBinLineParameter.tid = this.prmTid
+          this.getTable()
+        }
       }
     },
 

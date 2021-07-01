@@ -307,9 +307,12 @@
           this.tsid = this.subjectsArr.length ? this.subjectsArr.find((element,i) => i == 0).tsid :0
           if(this.tsid != 0){
             this.$nextTick(() => {
-              this.totalScoreParameter.tid = this.prmTid
-              this.totalScoreParameter.tsid = this.tsid
-              this.getTotalScoreTable()
+              if(this.totalScoreParameter.tsid != this.tsid){
+                this.totalScoreParameter.tid = this.prmTid
+                this.totalScoreParameter.tsid = this.tsid
+                this.getTotalScoreTable()
+              }
+              
             })
           }
         },

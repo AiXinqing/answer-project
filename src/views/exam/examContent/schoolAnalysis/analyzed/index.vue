@@ -12,9 +12,6 @@
     <div class="total_score">
       <div class="title_box">
         <div class="title_left">总分基本情况成绩分析</div>
-        <!-- <div class="title_right">
-          <exam-button type="primary" @click="totalScoreDownTable">下载表格</exam-button>
-        </div> -->
       </div>
       <div class="el_table_wapper">
         <exam-table
