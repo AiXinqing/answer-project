@@ -92,8 +92,7 @@
     },
 
     computed: {
-      ...mapState('getExam', ['tableLoading']),
-      ...mapState('afterExcellentGrade', ['headerTable','TableList']),
+      ...mapState('afterExcellentGrade', ['headerTable','TableList','tableLoading']),
 
       afterTableColumn(){
         // 动态表头
@@ -117,7 +116,7 @@
                           cid:row.cid,
                           tsid:ele.tsid,
                           type:'after',
-                          rank:this.parameter.rank
+                          rank:this.afterParameter.rank
                         }
                         // 详情数值为0时不弹出详情框
                         if(row[element.prop] != 0){
