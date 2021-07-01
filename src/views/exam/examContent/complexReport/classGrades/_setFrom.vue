@@ -98,7 +98,6 @@
         })
       },
       preQuestiongroup(){
-        console.log(this.verify)
         this.$emit('verify-change',this.verify)
       }
     }

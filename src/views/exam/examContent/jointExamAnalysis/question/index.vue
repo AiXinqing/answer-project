@@ -226,20 +226,17 @@
       questionTableData(){
         return this.TableList.length ? this.TableList.map(item =>{
           let dynamic = {}
-          if(item.DynamicDetail[0].cname != undefined){
-
-            item.DynamicDetail.forEach(element => {
-              dynamic = {
-                ...dynamic,
-                ...element,
-                [`avgScore_${element.cname}`]:element.avgScore,
-                [`fullScoreNum_${element.cname}`]:element.fullScoreNum,
-                [`fullScoreScale_${element.cname}`]:element.fullScoreScale,
-                [`zeroScoreNum_${element.cname}`]:element.zeroScoreNum,
-                [`cid_${element.cname}`]: element.cid,
-              }
-            })
-          }
+          item.DynamicDetail.forEach(element => {
+            dynamic = {
+              ...dynamic,
+              ...element,
+              [`avgScore_${element.cname}`]:element.avgScore,
+              [`fullScoreNum_${element.cname}`]:element.fullScoreNum,
+              [`fullScoreScale_${element.cname}`]:element.fullScoreScale,
+              [`zeroScoreNum_${element.cname}`]:element.zeroScoreNum,
+              [`cid_${element.cname}`]: element.cid,
+            }
+          })
 
           return {
             answer: item.answer,
