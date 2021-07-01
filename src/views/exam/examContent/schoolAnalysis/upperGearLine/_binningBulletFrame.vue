@@ -21,6 +21,7 @@
           :key="i"
         >
           <el-input
+            type="number"
             placeholder="请输入分档分值"
             v-model="item.score">
           </el-input>

@@ -5,6 +5,7 @@
         <span>待提高学生人数分布: </span>
         <span class="top_b">年级后</span>
         <el-input
+          type="number"
           v-model="afterRank"
           placeholder="30"
           class="rank_style"

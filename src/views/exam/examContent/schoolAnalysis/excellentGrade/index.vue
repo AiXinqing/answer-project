@@ -15,6 +15,7 @@
           <span>优秀学生人数分布: </span>
           <span class="top_b">年级前</span>
           <el-input
+            type="number"
             v-model="topRank"
             placeholder="30"
             class="rank_style"

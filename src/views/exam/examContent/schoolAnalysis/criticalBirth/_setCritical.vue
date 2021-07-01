@@ -11,6 +11,7 @@
     <div class="demo-input-suffix">
       <span>临界分：</span>
       <el-input
+        type="number"
         placeholder="请输入临界分"
         v-model="criticalScale">
       </el-input>
@@ -19,6 +20,7 @@
     <div class="demo-input-suffix">
       <span>浮动分：</span>
       <el-input
+        type="number"
         placeholder="请输入浮动分"
         v-model="floatScale">
       </el-input>
@@ -77,7 +79,7 @@
     span.unit {
       position: relative;
       right: 32px;
-      top: 10px;
+      top: 4px;
     }
 
     .el-input.el-input--medium{
