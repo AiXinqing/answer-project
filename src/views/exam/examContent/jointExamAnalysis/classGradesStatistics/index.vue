@@ -286,10 +286,17 @@
 
       handelScoreInterval(){
         //分数区间
-        this.parameter.step = Number(this.stepVal)
-        this.$nextTick(()=>{
-          this.getTable()
-        })
+        if(this.stepVal == '' ){
+          this.$message({
+            message: '分数区间不能为空!',
+            type: 'warning'
+          })
+        }else{
+          this.parameter.step = Number(this.stepVal)
+          this.$nextTick(()=>{
+            this.getTable()
+          })
+        }
       },
 
       handleStatistical(){

@@ -232,11 +232,18 @@
       },
 
       handelSearch(){
-        this.singleParameter.topNum = this.topNum
-        this.$nextTick(()=>{
-          this.singleTable()
-          this.titleTopNum = this.topNum
-        })
+        if(this.topNum == '' ){
+          this.$message({
+            message: '年级前N名不能为空!',
+            type: 'warning'
+          })
+        }else{
+          this.singleParameter.topNum = this.topNum
+          this.$nextTick(()=>{
+            this.singleTable()
+            this.titleTopNum = this.topNum
+          })
+        }
       }
     },
   }
@@ -283,7 +290,7 @@
   } 
 
   .condition_filter .title_name {
-    width: 871px;
+    width: 886px !important;
   }
 
   button.el-button.btn_column.el-button--default.el-button--medium{

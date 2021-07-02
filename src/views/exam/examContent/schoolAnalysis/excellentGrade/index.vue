@@ -251,7 +251,7 @@
     margin: 0 10px;
     .el-input__inner {
       height: 28px;
-      text-indent: 0.3em;
+      text-indent: 0.5em;
     }
   }
   .el-table__body-wrapper.is-scrolling-left+div.el-table__fixed{

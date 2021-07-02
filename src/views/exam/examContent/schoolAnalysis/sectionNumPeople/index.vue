@@ -196,10 +196,17 @@
 
       handelSearch(){
         // 设置搜索
-        this.parameter.step = this.step
-        this.$nextTick(()=>{
-          this.getTable()
-        })
+        if(this.step == '' ){
+          this.$message({
+            message: '分段分数不能为空!',
+            type: 'warning'
+          })
+        }else{
+          this.parameter.step = this.step
+          this.$nextTick(()=>{
+            this.getTable()
+          })
+        }
       },
 
       handelChange(val){
@@ -232,7 +239,7 @@
 <style lang="less" scoped>
   @import '~@/assets/css/variables.less';
   .card_item{
-    width:682px;
+    width:725px;
   }
   .search_right{
     display:flex;

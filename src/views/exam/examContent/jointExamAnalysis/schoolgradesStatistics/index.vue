@@ -257,10 +257,19 @@
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
           this.stepVal = 100
         }
-        this.parameter.step = Number(this.stepVal)
-        this.$nextTick(()=>{
-          this.getTable()
-        })
+
+        if(this.step == '' ){
+          this.$message({
+            message: '分数区间不能为空!',
+            type: 'warning'
+          })
+        }else{
+          this.parameter.step = Number(this.stepVal)
+          this.$nextTick(()=>{
+            this.getTable()
+          })
+        }
+
       },
 
       handleStatistical(){
