@@ -18,6 +18,7 @@
         :isPagination="false"
         :autoHeight="true"
         :loading="tableLoading"
+        :maxHeight="maxHeight"
       ></exam-table>
     </div>
   </div>
@@ -74,7 +75,8 @@
         parameter:{
           tid: '',
           url:this.URL.GetClassScoreSurvey
-        }
+        },
+        maxHeight: document.body.clientHeight - 200
       }
     },
 

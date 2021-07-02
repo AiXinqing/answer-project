@@ -233,22 +233,16 @@
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
             if(scrollTop <= parkingA1 ){
-              // document.getElementById('parkingA0').classList.add("cur")
               this.tabView = 0
             } else if(scrollTop <= parkingA2 ){
-              // document.getElementById('parkingA1').classList.add("cur")
               this.tabView = 1
             }else if(scrollTop <= parkingA3 ){
-              // document.getElementById('parkingA2').classList.add("cur")
               this.tabView = 2
             }else if(scrollTop <= parkingA4 ){
-              // document.getElementById('parkingA3').classList.add("cur")
               this.tabView = 3
             }else if(scrollTop <= parkingA5 ){
-              // document.getElementById('parkingA4').classList.add("cur")
               this.tabView = 4
             }else if(scrollTop > parkingA5 ){
-              // document.getElementById('parkingA4').classList.add("cur")
               this.tabView = 4
             }
 

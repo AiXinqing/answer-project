@@ -5,6 +5,7 @@
       :element-loading-text="loadingText"
       :border="isBorder"
       :height="autoHeight ? null : height_table + singleHeight"
+      :max-height="maxHeight ? maxHeight : null"
 
       element-loading-spinner="el-icon-loading"
       v-loading="loading"
@@ -55,6 +56,7 @@
       },
 
       theight: {type: Number, default: 500},
+      maxHeight:{type: Number, default: 0},
       // 表格列配置
       tablecols: {type: Array, default: () => []},
       tableData: {type: Array, default: () => []},

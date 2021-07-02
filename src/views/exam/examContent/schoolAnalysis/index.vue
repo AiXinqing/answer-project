@@ -260,9 +260,11 @@
             parkingA3 = document.getElementById('parking2').offsetTop
             parkingA4 = document.getElementById('parking3').offsetTop
             parkingA5 = document.getElementById('parking4').offsetTop
-            parkingA6 = document.getElementById('parking5').offsetTop
-            parkingA7 = document.getElementById('parking6').offsetTop
-            parkingA8 = document.getElementById('parking7').offsetTop
+            if(document.getElementById('parking5')){
+              parkingA6 = document.getElementById('parking5').offsetTop
+              parkingA7 = document.getElementById('parking6').offsetTop
+              parkingA8 = document.getElementById('parking7').offsetTop
+            }
 
 
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
