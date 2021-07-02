@@ -52,7 +52,7 @@
             :class="font_operateBtn(scope.row,column)"
             @click="btn.handle(scope.row,scope)"
           >{{scope.row.scale}}
-            <template v-if="scope.row.scale == '0%'"> </template>
+            <template v-if="scope.row.scale == '0%' || scope.row.tscore == '缺考'"> -- </template>
             <template v-else>{{btn.label}}</template>
           </el-button>
         </template>
@@ -208,11 +208,11 @@
           return classStr + noClick
         },
         font_colorT: (row,prop) => {
-          return row[prop]  == null ? 'transparent' : row[prop] == 0 ? 'zero_style' : ''
+          return row[prop]  == null ? 'transparent' : row[prop] == 0 ? 'zero_style' : row.totalscore == '缺考' ? 'missed_exam' : ''
         },
 
         font_operateBtn:(row,ele)=>{
-          return row.scale == '0%' ? 'font_operateBtn' : ''
+          return row.scale == '0%' || row.tscore == '缺考' ? 'font_operateBtn' : ''
         },
 
         columnIcon:(row,beforeIcon,afterIcon,unit) => {
@@ -231,7 +231,9 @@
             tsid = row['tsid_'+ parameter.subject]
           }
 
-          window.open(`${parameter.url}?tid=${row.tid}&tsid=${tsid}&tnumber=${row.tnumber}`)
+          if(row.totalscore != '缺考'){
+            window.open(`${parameter.url}?tid=${row.tid}&tsid=${tsid}&tnumber=${row.tnumber}`)
+          }
         }
       },
 
@@ -303,8 +305,10 @@
   }
   button.el-button.btn_column.el-button--default.el-button--medium.font_operateBtn {
     cursor: text;
+    color: @font-888 !important;
     &:hover{
-      background: transparent !important
+      background: transparent !important;
+      color: @font-888 !important;
     }
   }
 </style>
