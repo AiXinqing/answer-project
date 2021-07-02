@@ -5,9 +5,9 @@
       :data="tableData"
       :max-height="height"
       :height="autoHeight ? null : height_table + singleHeight"
+      :max-height="maxHeight ? maxHeight : null"
       use-virtual
       data-changes-scroll-top
-      show-summary
       :stripe="false"
       @table-body-scroll="tableScroll"
       :data-changes-scroll-top="radio === 1"
@@ -16,6 +16,9 @@
       v-loading="loading"
       :element-loading-text="loadingText"
       element-loading-spinner="el-icon-loading"
+      show-overflow
+      show-summary
+      show-header-overflow="ellipsis"
       :pagination-show="isPagination"
       :total="pagination.total"
       :page-size="pagination.pageSize"
@@ -52,6 +55,7 @@
         default: false
       },
       theight: {type: Number, default: 500},
+      maxHeight:{type: Number, default: 0},
        // 表格列配置
       tablecols: {type: Array, default: () => []},
       tableData: {type: Array, default: () => []},
@@ -230,5 +234,8 @@
   }
   .el-button--text:focus{
     color: @main !important;
+  }
+  tr.elx-header--row th div{
+    min-height: 35px;
   }
 </style>

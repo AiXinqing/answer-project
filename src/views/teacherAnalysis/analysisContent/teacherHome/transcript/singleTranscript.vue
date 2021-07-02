@@ -30,6 +30,7 @@
         :isPagination="false"
         :autoHeight="true"
         :loading="tableLoading"
+        :maxHeight="maxHeight"
       ></exam-table>
     </div>
   </div>
@@ -49,6 +50,8 @@
             icon:'el-icon-search'
           }
         ],
+
+        maxHeight: document.body.clientHeight - 200,
 
         singleParameter:{ // 单科
           tid: '',

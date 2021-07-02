@@ -30,6 +30,7 @@
         :isPagination="false"
         :autoHeight="true"
         :loading="tableLoading"
+        :maxHeight="maxHeight"
       />
     </div>
   </div>
@@ -155,6 +156,8 @@
             align:'center',
           },
         ],
+
+        maxHeight: document.body.clientHeight - 200,
 
         empty:false,
 

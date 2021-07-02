@@ -64,20 +64,15 @@
         </div>
       </div>
       <div class="el_table_wapper">
-        <template v-if="totalScoretableData.length || totalScoretableColumn.length">
-          <exam-table
-            :tablecols="totalScoretableColumn"
-            :tableData="totalScoretableData"
-            :isIndex="false"
-            :isPagination="false"
-            :autoHeight="true"
-            :loading="tableLoading"
-            :maxHeight="maxHeight"
-          />
-        </template>
-        <template v-else>
-          <div class="no_data total_sytle">暂无数据</div>
-        </template>
+        <exam-table
+          :tablecols="totalScoretableColumn"
+          :tableData="totalScoretableData"
+          :isIndex="false"
+          :isPagination="false"
+          :autoHeight="true"
+          :loading="tableLoading"
+          :maxHeight="maxHeight"
+        />
       </div>
     </div>
 

@@ -9,7 +9,6 @@
     :align="column.align"
     :fixed="column.fixed"
     :sortable="column.sortable"
-    show-overflow-tooltip
     :render-header="column.require?renderHeader:null"
     :filters="column.filters ? column.filters : null"
     :filter-method="column.filterMethod ? column.filterMethod : null"
@@ -93,7 +92,6 @@
       :align="ele.align"
       :fixed="ele.fixed"
       :sortable="ele.sortable"
-      show-overflow-tooltip
       :render-header="ele.require?renderHeader:null"
       :filters="ele.filters ? ele.filters : null"
       :filter-method="ele.filterMethod ? ele.filterMethod : null"
