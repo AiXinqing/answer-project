@@ -39,6 +39,7 @@
           :isPagination="false"
           :autoHeight="true"
           :loading="tableLoading"
+          :maxHeight="maxHeight"
         />
       </div>
     </div>
@@ -109,6 +110,7 @@
           rank:10,
           url:this.URL.GetClassScoreRankNum
         },
+        maxHeight: document.body.clientHeight - 200
 
       }
     },
@@ -248,6 +250,9 @@
     font-size: 14px !important;
     text-indent:0;
     margin: 0 10px;
+  }
+  .el-table__body-wrapper.is-scrolling-left+div.el-table__fixed{
+    height: calc(100% - 15px) !important;
   }
 </style>
 

@@ -32,6 +32,7 @@
             :isPagination="false"
             :autoHeight="true"
             :loading="tableLoading"
+            :maxHeight="maxHeight"
           ></exam-table>
         </div>
     </div>
@@ -98,7 +99,8 @@
           criticalScale:60,
           floatScale:5,
           url:this.URL.GetClassSubjectScoreCriticalityNum
-        }
+        },
+        maxHeight: document.body.clientHeight - 200
       }
     },
 

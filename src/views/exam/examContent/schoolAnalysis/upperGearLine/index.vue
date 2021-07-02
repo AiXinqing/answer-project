@@ -41,6 +41,7 @@
             :isPagination="false"
             :autoHeight="true"
             :loading="tableLoading"
+            :maxHeight="maxHeight"
           ></exam-table>
         </div>
     </div>
@@ -115,7 +116,9 @@
         getBinLineParameter:{ //  获取上档线设置表格数据
           tid: '',
           url:this.URL.GetASAnalyseScoreLine
-        }
+        },
+
+        maxHeight: document.body.clientHeight - 200
       }
     },
 

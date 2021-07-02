@@ -23,6 +23,7 @@
           :isPagination="false"
           :autoHeight="true"
           :loading="tableLoading"
+          :maxHeight="maxHeight"
         />
       </div>
     </div>
@@ -42,6 +43,7 @@
           :isPagination="false"
           :autoHeight="true"
           :loading="tableLoading"
+          :maxHeight="maxHeight"
         />
       </div>
     </div>
@@ -70,6 +72,7 @@
             :isPagination="false"
             :autoHeight="true"
             :loading="tableLoading"
+            :maxHeight="maxHeight"
           />
         </template>
         <template v-else>
@@ -160,6 +163,7 @@
           showGrade:true,
           url:this.URL.GetClassScoreScaleNum
         },
+        maxHeight: document.body.clientHeight - 200
       }
     },
 

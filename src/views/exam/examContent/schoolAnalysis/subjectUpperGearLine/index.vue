@@ -36,6 +36,7 @@
           :isPagination="false"
           :autoHeight="true"
           :loading="tableLoading"
+          :maxHeight="maxHeight"
         ></exam-table>
       </div>
 
@@ -108,7 +109,8 @@
           url:this.URL.GetASAnalyseScoreLine
         },
 
-        activeName:'一档'
+        activeName:'一档',
+        maxHeight: document.body.clientHeight - 200
       }
     },
     

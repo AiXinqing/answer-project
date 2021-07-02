@@ -122,7 +122,8 @@
             name:'学科试题得分率'
           },
         ],
-        prmTid:''
+        prmTid:'',
+        routeName:''
       }
     },
 
@@ -150,6 +151,7 @@
           if (query.prmTid) {
             this.prmTid = query.prmTid
           }
+          this.routeName = route.name
         },
         immediate: true
       },
@@ -224,11 +226,13 @@
             parkingA3 = 0,
             parkingA4 = 0,
             parkingA5 = 0
-            parkingA1 = document.getElementById('parking0').offsetTop
-            parkingA2 = document.getElementById('parking1').offsetTop
-            parkingA3 = document.getElementById('parking2').offsetTop
-            parkingA4 = document.getElementById('parking3').offsetTop
-            parkingA5 = document.getElementById('parking4').offsetTop
+            if(this.routeName == 'classAnalysis'){
+              parkingA1 = document.getElementById('parking0').offsetTop
+              parkingA2 = document.getElementById('parking1').offsetTop
+              parkingA3 = document.getElementById('parking2').offsetTop
+              parkingA4 = document.getElementById('parking3').offsetTop
+              parkingA5 = document.getElementById('parking4').offsetTop
+            }
 
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 

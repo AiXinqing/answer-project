@@ -157,7 +157,8 @@
             name:'优秀生学困生'
           },
         ],
-        prmTid:''
+        prmTid:'',
+        routeName:''
       }
     },
 
@@ -185,6 +186,7 @@
           if (query.prmTid) {
             this.prmTid = query.prmTid
           }
+          this.routeName = route.name
         },
         immediate: true
       },
@@ -255,16 +257,17 @@
             parkingA6 = 0,
             parkingA7 = 0,
             parkingA8 = 0
-            parkingA1 = document.getElementById('parking0').offsetTop
-            parkingA2 = document.getElementById('parking1').offsetTop
-            parkingA3 = document.getElementById('parking2').offsetTop
-            parkingA4 = document.getElementById('parking3').offsetTop
-            parkingA5 = document.getElementById('parking4').offsetTop
-            if(document.getElementById('parking5')){
+            if(this.routeName == 'schoolAnalysis'){
+              parkingA1 = document.getElementById('parking0').offsetTop
+              parkingA2 = document.getElementById('parking1').offsetTop
+              parkingA3 = document.getElementById('parking2').offsetTop
+              parkingA4 = document.getElementById('parking3').offsetTop
+              parkingA5 = document.getElementById('parking4').offsetTop
               parkingA6 = document.getElementById('parking5').offsetTop
               parkingA7 = document.getElementById('parking6').offsetTop
               parkingA8 = document.getElementById('parking7').offsetTop
             }
+            
 
 
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;

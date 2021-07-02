@@ -39,6 +39,7 @@
         :isPagination="false"
         :autoHeight="true"
         :loading="tableLoading"
+        :maxHeight="maxHeight"
       ></exam-table>
     </div>
 
@@ -95,6 +96,7 @@
           showGrade:true,
           url:this.URL.GetClassScoreSegmentNum
         },
+        maxHeight: document.body.clientHeight - 200
       }
     },
 
