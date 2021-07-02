@@ -49,9 +49,11 @@
             :size="btn.size || size"
             :icon="btn.icon"
             class="btn_column"
+            :class="font_operateBtn(scope.row,column)"
             @click="btn.handle(scope.row,scope.$index)"
           >
-            <template v-if="btn.label != '0%' || btn.label != null">1{{btn.label}}</template>
+            <template v-if="scope.row.scale == '0%'"> </template>
+            <template v-else>{{btn.label}}</template>
           </el-button>
         </template>
 
@@ -207,6 +209,10 @@
         },
         font_colorT: (row,prop) => {
           return row[prop]  == null ? 'transparent' : row[prop] == 0 ? 'zero_style' : ''
+        },
+
+        font_operateBtn:(row,ele)=>{
+          return row.scale == '0%' ? 'font_operateBtn' : ''
         },
 
         columnIcon:(row,beforeIcon,afterIcon,unit) => {

@@ -231,7 +231,6 @@
             align:'center',
             prop: `scale_${ele.subname}`,
             type:'Html',
-            sortable:true,
           }))
         ] : []
       },
@@ -264,7 +263,6 @@
             align:'center',
             prop: `scale_${ele.subname}`,
             type:'Html',
-            sortable:true,
           }))
         ] : []
       },

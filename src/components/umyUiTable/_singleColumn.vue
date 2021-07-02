@@ -49,8 +49,12 @@
             :size="btn.size || size"
             :icon="btn.icon"
             class="btn_column"
+            :class="font_operateBtn(scope.row,column)"
             @click="btn.handle(scope.row,scope)"
-          >{{btn.label}}</el-button>
+          >{{scope.row.scale}}
+            <template v-if="scope.row.scale == '0%'"> </template>
+            <template v-else>{{btn.label}}</template>
+          </el-button>
         </template>
 
         <template v-if="column.type ==='Jump'">
@@ -207,6 +211,10 @@
           return row[prop]  == null ? 'transparent' : row[prop] == 0 ? 'zero_style' : ''
         },
 
+        font_operateBtn:(row,ele)=>{
+          return row.scale == '0%' ? 'font_operateBtn' : ''
+        },
+
         columnIcon:(row,beforeIcon,afterIcon,unit) => {
           let classStr = row[beforeIcon] > row[afterIcon] ? 'el-icon-top' : 'el-icon-bottom'
           return `<span class="icon_span left">${row[beforeIcon] == null ? '--' : row[beforeIcon] }</span> <i class="columnIcon ${classStr}"></i> <span class="icon_span right">${row[afterIcon] == null ? '--' : row[afterIcon]}</span> ${unit}`
@@ -291,6 +299,12 @@
     color: @font-888;
     &:hover{
       color: @font-888 !important;
+    }
+  }
+  button.el-button.btn_column.el-button--default.el-button--medium.font_operateBtn {
+    cursor: text;
+    &:hover{
+      background: transparent !important
     }
   }
 </style>
