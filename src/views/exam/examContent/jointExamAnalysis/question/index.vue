@@ -234,6 +234,7 @@
               [`fullScoreNum_${element.cname}`]:element.fullScoreNum,
               [`fullScoreScale_${element.cname}`]:element.fullScoreScale,
               [`zeroScoreNum_${element.cname}`]:element.zeroScoreNum,
+              [`zeroScoreScale_${element.cname}`]:element.zeroScoreScale,
               [`cid_${element.cname}`]: element.cid,
             }
           })

@@ -14,7 +14,7 @@
             v-model="step"
             type="number"
             class="search_input"
-            placeholder="50"
+            class="rank_style"
           />
         </div>
 

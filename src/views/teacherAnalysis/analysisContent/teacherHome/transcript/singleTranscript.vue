@@ -135,7 +135,9 @@
                     tid: tid,
                     tsid: tsid,
                   }
-                  this.lookAnswerSheet(obj)
+                  if(row.totalscore != '缺考'){
+                    this.lookAnswerSheet(obj)
+                  }
                 }
               }
             ]

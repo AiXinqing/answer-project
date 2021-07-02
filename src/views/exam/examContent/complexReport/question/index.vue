@@ -123,6 +123,12 @@
             minWidth:'90',
             align:'center',
           },
+          {
+            prop:'zeroScoreScale',
+            label:'零分率',
+            minWidth:'90',
+            align:'center',
+          },
         ],
 
         // 参数
@@ -198,6 +204,7 @@
               [`fullScoreNum_${element.cname}`]:element.fullScoreNum,
               [`fullScoreScale_${element.cname}`]:element.fullScoreScale,
               [`zeroScoreNum_${element.cname}`]:element.zeroScoreNum,
+              [`zeroScoreScale_${element.cname}`]:element.zeroScoreScale,
               [`cid_${element.cname}`]: element.cid,
             }
           })

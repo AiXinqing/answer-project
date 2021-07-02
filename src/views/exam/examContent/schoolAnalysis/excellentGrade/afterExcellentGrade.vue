@@ -7,7 +7,6 @@
         <el-input
           type="number"
           v-model="afterRank"
-          placeholder="30"
           class="rank_style"
         />
         <span>名</span>

@@ -17,7 +17,6 @@
           <el-input
             type="number"
             v-model="topRank"
-            placeholder="30"
             class="rank_style"
           />
           <span>名</span>
@@ -250,6 +249,10 @@
     font-size: 14px !important;
     text-indent:0;
     margin: 0 10px;
+    .el-input__inner {
+      height: 28px;
+      text-indent: 0.3em;
+    }
   }
   .el-table__body-wrapper.is-scrolling-left+div.el-table__fixed{
     height: calc(100% - 15px) !important;
