@@ -13,7 +13,7 @@
         <el-input
           type="number"
           v-model="AdmissionTicket"
-          placeholder="8"
+          placeholder="请输入考号,如:8"
           :max="maxAdmission"
           :min="minAdmission"
           @input="changeValueFunc"

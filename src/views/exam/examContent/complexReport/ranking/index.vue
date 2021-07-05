@@ -21,7 +21,7 @@
             :value="type"
             @change="handelRanking"
           ></hj-select>
-          <hj-input class="indent_model" style="width:120px;" v-model="placing" placeholder="50" />
+          <hj-input class="indent_model" style="width:120px;" v-model="placing" />
           <div class="titile_14" style="margin-left:10px">名，查看不同名次段的人数分布及详情。</div>
 
           <exam-button type="primary" @click="handelSearch">确定</exam-button>

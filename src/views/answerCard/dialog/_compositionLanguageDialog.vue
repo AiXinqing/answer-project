@@ -24,7 +24,6 @@
             <el-input
               v-model="data.topicName"
               size="mini"
-              placeholder=""
             ></el-input>
           </el-col>
           <el-col :span="4" class="select-item composition_item_5">
@@ -40,7 +39,6 @@
               v-model.number="data.topic"
               size="mini"
               @blur="hanldeVerification"
-              placeholder=""
             />
             <span>题</span>
           </el-col>
@@ -53,7 +51,6 @@
               @input="hanldeRowsFunc"
               @blur="hanldeVerification"
               size="mini"
-              placeholder=""
             />
             <span>分</span>
           </el-col>
@@ -66,7 +63,6 @@
               @input="hanldeRowsFunc"
               @blur="hanldeVerification"
               size="mini"
-              placeholder=""
             />
             <span>字</span>
           </el-col>
@@ -89,7 +85,6 @@
               @input="hanldeRowsFunc"
               @blur="hanldeVerification"
               size="mini"
-              placeholder=""
             />
             <span>字</span>
           </el-col>
