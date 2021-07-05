@@ -252,6 +252,7 @@
     .el-input__inner {
       height: 28px;
       text-indent: 0.5em;
+      line-height: 28px !important
     }
   }
   .el-table__body-wrapper.is-scrolling-left+div.el-table__fixed{

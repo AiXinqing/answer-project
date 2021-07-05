@@ -8,6 +8,7 @@
         <div class="input_box">
           <div class="label_font">年级前N名 :</div>
           <hj-input
+            type="number"
             v-model="topNum"
             class="search_input"
             class="rank_style"
@@ -136,7 +137,6 @@
             align:'center',
             prop: `ratio_${ele.subname}`,
             type:'Html',
-            sortable:this.tsid == '' ? false : true,
             minWidth:'120',
           }))
         ] : []

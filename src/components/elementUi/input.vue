@@ -57,7 +57,7 @@
   .hj-input.el-input input{
       width: 100%;
       padding: 0 0;
-      line-height: 26px;
+      line-height: auto;
       font-size: 14px;
       text-indent: 1.8em;
   }

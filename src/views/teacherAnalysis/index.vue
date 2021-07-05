@@ -244,6 +244,13 @@
 
 <style lang="less">
   @import '~@/assets/css/variables.less';
+  button.el-button.btn_column.el-button--default.el-button--medium{
+    &:hover{
+      border-color: @bc_tr !important;
+      background-color: @bc_tr !important;
+      color: @main !important;
+    }
+  }
   .exam_content{
 
     height: 100%;

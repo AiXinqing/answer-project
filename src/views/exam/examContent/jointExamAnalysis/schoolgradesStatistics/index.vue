@@ -22,7 +22,7 @@
         <div class="search_left" style="width:auto">
           <span class="titile_14">分数区间：</span>
           <hj-input class="indent_model" style="width:60px;" type="number" v-model="stepVal" @keyup.native="proving($event)" />
-          <span class="titile_14"> 分/段</span>
+          <span class="titile_14" style="margin-left:5px"> 分/段</span>
 
           <exam-button type="primary" class="grades_btn" @click="handelScoreInterval">确定</exam-button>
         </div>
@@ -305,5 +305,9 @@
 
 <style lang="less">
   @import '~@/assets/css/variables.less';
-
+  .hj-input.indent_model.el-input.el-input--medium.indent_model{
+    input{
+      text-indent:0.5em !important;
+    }
+  }
 </style>

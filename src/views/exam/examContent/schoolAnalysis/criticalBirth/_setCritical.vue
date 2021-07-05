@@ -8,7 +8,7 @@
     :show-close="false"
     :append-to-body="true"
   >
-    <div class="demo-input-suffix">
+    <div class="demo-input-suffix critical_score">
       <span>临界分：</span>
       <el-input
         type="number"
@@ -17,7 +17,7 @@
       </el-input>
       <span class="unit">%</span>
     </div>
-    <div class="demo-input-suffix">
+    <div class="demo-input-suffix critical_score">
       <span>浮动分：</span>
       <el-input
         type="number"
@@ -63,8 +63,8 @@
   }
 </script>
 
-<style lang="less" scoped>
-  .demo-input-suffix{
+<style lang="less" >
+  .demo-input-suffix.critical_score{
     margin-bottom: 20px;
     position: relative;
 
@@ -86,6 +86,7 @@
       width: 210px;
       input{
         width: 100%;
+        text-indent:0.5em !important
       }
     }
   }

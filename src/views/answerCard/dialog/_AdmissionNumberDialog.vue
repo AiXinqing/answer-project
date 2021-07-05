@@ -8,7 +8,7 @@
     :show-close="false"
   >
     <div class="item-style">
-      <div class="demo-input-suffix">
+      <div class="demo-input-suffix critical_score">
         <label for>考号位数</label>
         <el-input
           type="number"

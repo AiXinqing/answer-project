@@ -116,6 +116,7 @@
         margin-top:-3px;
         .el-input__inner{
           font-size:14px;
+          text-indent: 0.5em;
         }
       }
     }
