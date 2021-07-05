@@ -72,12 +72,14 @@
   import teacherHome from './analysisContent/teacherHome'
   import testAnalysis from './analysisContent/testAnalysis'
   import subtopicScore from './analysisContent/subtopicScore'
+  import examComment from './analysisContent/examComment'
   import { mapState } from 'vuex'
   export default {
     components: {
       teacherHome,
       testAnalysis,
       subtopicScore,
+      examComment
     },
     data() {
       return {
@@ -97,6 +99,11 @@
             'calssname':'subtopicScore',
             'toUrl':'subtopicScore',
             'linkName':'小题得分'
+          },
+          {
+            'calssname':'examComment',
+            'toUrl':'examComment',
+            'linkName':'试卷讲评'
           }
         ],
         tid:0,
