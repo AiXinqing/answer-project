@@ -15,7 +15,7 @@
         :pagination="page"
         :loading="tableLoading"
         :pageSizes="pageSizes"
-        :autoHeight="true"
+        :theight="theight"
         @handle-size-change="handleSizeChange"
         @handle-current-change="handleCurrentChange"
       ></exam-table>
@@ -87,7 +87,7 @@
           total: 0
         },
         headeUrl:this.URL.GetTableHeadeSubject,
-
+        theight: document.body.clientHeight - 400 || 0,
         pageSizes:[10,15,20,30,50,100]
       }
     },
@@ -117,7 +117,7 @@
                   btnList:[
                     {
                       label:'',
-                      handle: (row,element) => {
+                      handle: (row) => {
                         window.open(`${this.URL.BrowsescoreAnsw}?tid=${row.tid}&tsid=${ele.tsid}&tnumber=${row.tnumber}`)
                       }
                     }
@@ -174,6 +174,7 @@
         immediate: true,
         handler () {
           this.page = this.pagination
+          this.theight = document.body.clientHeight - 400
         },
       },
     },
