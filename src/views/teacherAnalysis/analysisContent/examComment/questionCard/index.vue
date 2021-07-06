@@ -13,9 +13,9 @@
       <span>【答题详情】：</span>
       <span style="margin-left: 0px;">下方柱状图可查看学生名单及作答情况</span>
     </div>
-    
+
     <histogram />
-    
+
 
     <div class="card-grade-score">
       <span>班级/年级得分率：<dd class="color_main"> 76.50%</dd>/73.20% 得分率差值：<dd class="color_main">3.30%</dd> </span>
@@ -90,7 +90,7 @@
       }
     }
     padding-left: 8px;
-    margin-top: 20px;
+    // margin-top: 20px;
     font-size: 14px;
     color: @font-333;
   }

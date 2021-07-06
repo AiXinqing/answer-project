@@ -13,6 +13,19 @@
             <span class="rate-low"></span>
             <span class="rate-card">低于0.45</span>
           </p>
+          <p class="depict-item rate-mid">
+            <span class="rate-low"></span>
+            <span class="rate-card">介于0.45~0.75</span>
+          </p>
+          <p class="depict-item rate-min">
+            <span class="rate-low"></span>
+            <span class="rate-card">大于0.75</span>
+          </p>
+        </div>
+        <div class="card-body">
+          <div class="card-row-item main active">1-3</div>
+          <div class="card-row-item low">1-3</div>
+          <div class="card-row-item high">1-3</div>
         </div>
       </div>
     </div>
@@ -55,6 +68,7 @@
       border:1px solid @bc_e7e7;
       padding-bottom:20px;
       margin-left: 10px;
+      max-height: calc(100vh - 280px);
       p{
         .depict-item{
           padding: 0 0;
@@ -77,16 +91,77 @@
       line-height: 2;
     }
     .depict-item{
+      margin: 0;
+      &.rate-mid{
+        .rate-low{
+          background-color: @ffb;
+        }
+      }
+      &.rate-min{
+        .rate-low{
+          background-color: @main;
+        }
+      }
       .rate-low{
         display: inline-block;
         width: 16px;
         height: 16px;
         margin-right: 3px;
         vertical-align: middle;
-        background-color: #f4664b;
+        background-color: @f46;
       }
       .rate-card{
         margin-left: 5px;
+      }
+    }
+  }
+  .card-body{
+    display: flex;
+    flex-wrap:wrap;
+    flex-direction:row;
+
+    margin-top: 10px;
+    .card-row-item{
+      margin: 5px 10px;
+      min-width:64px;
+      height: 27px;
+      overflow: hidden;
+      font-size: 13px;
+      line-height: 27px;
+      text-align: center;
+      text-decoration: none;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
+      border-radius: 2px;
+      &.main{
+        color: @main;
+        background-color: @main-d;
+        &:hover,
+        &.active{
+          color: @white;
+          background-color: @main;
+        }
+      }
+
+      &.low{
+        color: @ffb;
+        background-color: @fdf-d;
+        &:hover,
+        &.active{
+          color: @white;
+          background-color: @ffb;
+        }
+      }
+
+      &.high{
+        color: @f46;
+        background-color: @f46-d;
+        &:hover,
+        &.active{
+          color: @white;
+          background-color: @f46;
+        }
       }
     }
   }
