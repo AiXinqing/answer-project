@@ -83,7 +83,7 @@
     },
     data() {
       return {
-        active:'teacherHome',
+        active:'examComment',
         linkData: [
           {
             'calssname':'teacherHome',

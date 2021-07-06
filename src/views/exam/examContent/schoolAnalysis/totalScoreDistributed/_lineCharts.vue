@@ -50,6 +50,7 @@
         yAxis: {
           // show:true
           name:'人数',
+          position: 'left',
           nameTextStyle:{
             color:'#666'
           },

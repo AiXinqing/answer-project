@@ -1,78 +1,95 @@
 <template>
   <div class="echarts">
-    <chart
-      id="chartLine"
-      ref="regionChart"
-      :options="option"
-      style="width:100%;height: 400px;"
+    <ve-histogram
+      :extend="extend"
+      :axis-visible="false"
+      :height="'200px'"
+      :events="chartEvents"
     />
   </div>
 </template>
 
 <script>
-export default {
-  data () {
-    return {
-      option: {
-        title: {
-          text: '世界人口总量',
-          subtext: '数据来自网络'
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
-          }
-        },
-        legend: {
-          data: ['2011年', '2012年']
-        },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: {
-          type: 'value',
-          boundaryGap: [0, 0.01]
-        },
-        yAxis: {
-          type: 'category',
-          data: ['巴西', '印尼', '美国', '印度', '中国', '世界人口(万)']
-        },
-        series: [
-          {
-            name: '2011年',
-            type: 'bar',
-            data: [18203, 23489, 29034, 104970, 131744, 630230]
+  export default {
+    data() {
+      return {
+        extend:{
+          tooltip: {
+            show:false,
           },
-          {
-            name: '2012年',
-            type: 'bar',
-            data: [19325, 23438, 31000, 121594, 134141, 681807]
+          grid: {
+            left: 50,
+            right: 180,
+            bottom: 0,
+            top:10,
+            containLabel: true
+          },
+
+          xAxis: {
+            type: 'value',
+            show: false,
+            boundaryGap: true,
+          },
+          yAxis: {
+            type: 'category',
+            show: true,
+            data: ['A', 'B', 'C', 'D'],
+            boundaryGap: true,
+            position: 'left',
+            axisLabel :{
+              interval:0
+            },
+          },
+          series: [
+            {
+              type: 'bar',
+              barWidth: 20,
+              barMinHeight: 20,
+              stack: 'total',
+              label: {
+                show: true,
+                position: 'right',
+                formatter: function (data) {
+                  return '' + data.value + '人,占比:'  + data.name + '%';
+                },
+                labelLine: { show: false },
+                color:'#333'
+              },
+              itemStyle: {
+                normal: {
+                  color: function () {
+                    let colorList = [
+                      '#22bd97', '#cbe9ce', '#f7e083', '#f5be92', '#7ddde9',
+                      '#fb997f', '#a0ca6d', '#f4da7f', '#c3f2c8', '#60C0DD',
+                      '#e8a79c', '#C6E579', '#F4E001', '#F0805A', '#26C0C0'
+                    ]
+                    let num = Math.floor(Math.random() * 15)
+                    return colorList[num]
+                  }
+                },
+              },
+              data: [
+                {name:'t1',value:320,text:'R1'},
+                {name:'t2',value:302,text:'R2'},
+                {name:'t3',value:301,text:'R3'},
+                {name:'t4',value:334,text:'R4'},
+              ]
+            },
+          ]
+        },
+
+        chartEvents: {
+          click: (item) => {
+            console.log(item)
+
           }
-        ]
+        }
       }
-    }
-  },
+    },
 
-  mounted () {
-    window.addEventListener('resize', this.resizeTheChart)
-  },
-  beforeDestroy () {
-    window.removeEventListener('resize', this.resizeTheChart)
-  },
-
-  methods: {
-    resizeTheChart () {
-      if (this.$refs.regionChart) {
-        this.$refs.regionChart.resize()
-      }
-    }
-  },
-}
+  }
 </script>
 
 <style lang="less">
+
 </style>

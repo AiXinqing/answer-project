@@ -20,6 +20,7 @@
     "less-loader": "^6.2.0",
     "umy-ui": "^1.1.6",
     "v-charts": "^1.19.0",
+    "v-charts-v2": "^2.0.9",
     "vue": "^2.6.11",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.0.7",
@@ -39,7 +40,6 @@
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "vue-cli-plugin-element-up": "^1.2.0",
-    "vue-echarts": "^6.0.0-rc.5",
     "vue-template-compiler": "^2.6.11"
   }
 }

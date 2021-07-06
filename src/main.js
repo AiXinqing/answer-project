@@ -12,7 +12,15 @@ import { proving } from '@/assets/js/_verifyProving'
 import { convertArray, convertArray_p } from './config/complexReport/convertArray'
 import lodash from 'lodash'
 import vCharts from 'v-charts'
-import echarts from 'echarts'
+
+import 'echarts/lib/component/markLine'
+import 'echarts/lib/component/markPoint'
+import 'echarts/lib/component/markArea'
+import 'echarts/lib/component/legend'
+import 'echarts/lib/component/grid'
+import 'echarts/lib/component/toolbox'
+import 'v-charts/lib/style.css'
+// import ECharts from 'vue-echarts'
 
 
 import {
@@ -40,11 +48,11 @@ Vue.prototype.URL = URL
 Vue.prototype.proving = proving
 Vue.prototype.convertArray = convertArray
 Vue.prototype.convertArray_p = convertArray_p
-Vue.prototype.$echarts = echarts
-import 'echarts/lib/chart/bar'
+// Vue.prototype.$echarts = echarts
+// import 'echarts/lib/chart/bar'
 
 
-Vue.component('chart', echarts)
+// Vue.component('chart', ECharts)
 Vue.use(vCharts)
 Vue.use(Components)
 Vue.use(httpRequest)

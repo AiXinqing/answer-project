@@ -57,6 +57,7 @@
           yAxis: {
             // show:true
             name:'分',
+            position: 'left',
             axisLine:{
               show:true,
               lineStyle:{
