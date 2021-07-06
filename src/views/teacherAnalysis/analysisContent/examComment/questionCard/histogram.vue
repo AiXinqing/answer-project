@@ -50,7 +50,7 @@
                 show: true,
                 position: 'right',
                 formatter: function (data) {
-                  return '' + data.value + '人,占比:'  + data.name + '%';
+                  return '' + data.value + '人,占比 : '  + data.name + '%';
                 },
                 labelLine: { show: false },
                 color:'#333'

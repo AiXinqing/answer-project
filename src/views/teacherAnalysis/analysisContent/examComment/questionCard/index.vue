@@ -7,7 +7,7 @@
     <div class="card-img"></div>
     <div class="card-prompt">
       <span>【优秀答案】:</span>
-      <a href="#">查看优秀答案</a>
+      <span class="look_style"  @click="lookExcellentAnswers">查看优秀答案</span>
     </div>
     <div class="card-prompt">
       <span>【答题详情】：</span>
@@ -18,17 +18,27 @@
 
 
     <div class="card-grade-score">
-      <span>班级/年级得分率：<dd class="color_main"> 76.50%</dd>/73.20% 得分率差值：<dd class="color_main">3.30%</dd> </span>
+      <span>班级/年级得分率：<dd class="color_main"> 76.50%</dd> / 73.20% 得分率差值：<dd class="color_main">3.30%</dd> </span>
     </div>
+    <excellent-answer
+      ref="lookExcellentAnswers"
+    />
   </div>
 </template>
 
 <script>
   // import Histogram from "./Histogram"
   import histogram from './histogram'
+  import excellentAnswer from './excellentAnswer'
   export default {
     components: {
-      histogram
+      histogram,
+      excellentAnswer
+    },
+    methods: {
+      lookExcellentAnswers() {
+        this.$refs.lookExcellentAnswers.openFrame()
+      }
     },
   }
 </script>
@@ -48,9 +58,10 @@
 
     .card-prompt {
       font-size: 14px;
-      a{
+      .look_style{
         margin-left:10px;
-        color:@main
+        color:@main;
+        cursor: pointer;
       }
     }
 

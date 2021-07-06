@@ -99,7 +99,7 @@
           ...item,
           subend:Number(item.subend),
           substart:Number(item.substart)
-        })) 
+        }))
 
         let params = {
           prmASAnalyseSettingList:JSON.stringify(this.data)

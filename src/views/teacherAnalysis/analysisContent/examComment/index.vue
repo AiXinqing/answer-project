@@ -7,25 +7,34 @@
 
       </div>
       <div class="examComment_right">
-        <div class="card-header">答题情况（按得分率）</div>
-        <div class="rate-depict">
-          <p class="depict-item">
-            <span class="rate-low"></span>
-            <span class="rate-card">低于0.45</span>
-          </p>
-          <p class="depict-item rate-mid">
-            <span class="rate-low"></span>
-            <span class="rate-card">介于0.45~0.75</span>
-          </p>
-          <p class="depict-item rate-min">
-            <span class="rate-low"></span>
-            <span class="rate-card">大于0.75</span>
-          </p>
-        </div>
-        <div class="card-body">
-          <div class="card-row-item main active">1-3</div>
-          <div class="card-row-item low">1-3</div>
-          <div class="card-row-item high">1-3</div>
+        <div
+          class="col_box"
+          :class="{'active':scrollActive}"
+        >
+          <div class="card-header">答题情况（按得分率）</div>
+          <div class="rate-depict">
+            <p class="depict-item">
+              <span class="rate-low"></span>
+              <span class="rate-card">低于0.45</span>
+            </p>
+            <p class="depict-item rate-mid">
+              <span class="rate-low"></span>
+              <span class="rate-card">介于0.45~0.75</span>
+            </p>
+            <p class="depict-item rate-min">
+              <span class="rate-low"></span>
+              <span class="rate-card">大于0.75</span>
+            </p>
+          </div>
+          <div class="card-body">
+            <div
+              v-for="(item,i) in cardRow"
+              :key="i"
+              class="card-row-item main"
+              :class="{'active':cardRowActive == i}"
+              @click="changeCardRow(i)"
+            >{{item}}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -39,11 +48,35 @@
       questionCard
     },
 
+    data() {
+      return {
+        cardRow: ['1-3','4-6','7-9'],
+        cardRowActive:null,
+        scrollActive:false,
+      }
+    },
+
+    mounted () {
+      window.addEventListener('scroll', this.windowScroll)
+    },
+
     methods: {
       initChange(formData){
         console.log(formData)
         // this.$refs.subQuestion.initTable(formData)
       },
+      changeCardRow(index){
+        this.cardRowActive = index
+      },
+      windowScroll(){
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+        // 固定答题情况
+        if(scrollTop >= 208){
+          this.scrollActive = true
+        }else{
+          this.scrollActive = false
+        }
+      }
     },
   }
 </script>
@@ -64,17 +97,28 @@
     }
 
     .examComment_right{
-      width:168px;
-      border:1px solid @bc_e7e7;
-      padding-bottom:20px;
+      position: relative;
       margin-left: 10px;
-      max-height: calc(100vh - 280px);
-      p{
-        .depict-item{
-          padding: 0 0;
-          margin: 5px 0;
+      .col_box{
+        width:168px;
+        padding-bottom:20px;
+        border:1px solid @bc_e7e7;
+        max-height: calc(100vh - 280px);
+        background: @white;
+
+        &.active{
+          position: fixed;
+          top: 0;
+        }
+
+        p{
+          .depict-item{
+            padding: 0 0;
+            margin: 5px 0;
+          }
         }
       }
+
     }
 
     .card-header{
@@ -89,6 +133,7 @@
       padding: 6px;
       font-size: 13px;
       line-height: 2;
+      margin-top: 5px;
     }
     .depict-item{
       margin: 0;
@@ -134,6 +179,10 @@
       white-space: nowrap;
       cursor: pointer;
       border-radius: 2px;
+      &.active{
+        box-shadow: 0px 4px 6px #cbcccc;
+      }
+
       &.main{
         color: @main;
         background-color: @main-d;
