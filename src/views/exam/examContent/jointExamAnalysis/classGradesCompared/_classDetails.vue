@@ -135,7 +135,7 @@
                   btnList:[
                     {
                       label:'',
-                      handle: (row,element) => {
+                      handle: (row) => {
                         window.open(`${this.URL.BrowsescoreAnsw}?tid=${row.tid}&tsid=${ele.tsid}&tnumber=${row.tnumber}`)
                       }
                     }
