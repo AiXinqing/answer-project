@@ -5,6 +5,7 @@
       :axis-visible="false"
       :height="'200px'"
       :events="chartEvents"
+      :id="'histogram'"
     />
     <individual-results
       ref="IndividualResults"

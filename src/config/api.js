@@ -105,6 +105,10 @@ export const URL = {
   GetTeacherClassStuSmallScore: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetTeacherClassStuSmallScore', // 学生小题得分
   ExportTeacherClassStuSmallScore: BASEURL + '/Report/AnlyReport/ExportTeacherClassStuSmallScore', // 学生小题得分下载
 
+  GetExaminationPaperComment: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetExaminationPaperComment', // 试卷讲评
+  ExportExaminationPaperComment: BASEURL + '/Report/AnlyReport/ExportExaminationPaperComment', // 试卷讲评下载
+  GetExaminationPaperCommentStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetExaminationPaperCommentStuDetails', // 试卷讲评单项学生名单
+
   //---------------------------------------联考分析报告
 
   GetJointExamSchool: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetJointExamSchool', // 获取联考学校

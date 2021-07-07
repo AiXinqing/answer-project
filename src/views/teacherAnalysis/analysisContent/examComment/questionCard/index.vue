@@ -27,7 +27,7 @@
 </template>
 
 <script>
-  // import Histogram from "./Histogram"
+
   import histogram from './histogram'
   import excellentAnswer from './excellentAnswer'
   export default {
