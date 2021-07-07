@@ -6,11 +6,18 @@
       :height="'200px'"
       :events="chartEvents"
     />
+    <individual-results
+      ref="IndividualResults"
+    />
   </div>
 </template>
 
 <script>
+  import IndividualResults from './IndividualResults'
   export default {
+    components: {
+      IndividualResults
+    },
     data() {
       return {
         extend:{
@@ -81,12 +88,16 @@
         chartEvents: {
           click: (item) => {
             console.log(item)
-
+            this.lookDetails()
           }
         }
       }
     },
-
+    methods: {
+      lookDetails() {
+        this.$refs.IndividualResults.openFrame()
+      }
+    },
   }
 </script>
 

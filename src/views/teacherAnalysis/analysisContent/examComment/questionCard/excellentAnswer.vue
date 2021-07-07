@@ -3,10 +3,10 @@
     class="newAdd-content"
     :title="'查看优秀答案'"
     :visible.sync="openedFrame"
-    :width="'820px'"
     :before-close="closeFrame"
     :show-close="true"
     :append-to-body="true"
+    width="60%"
   >
     <div class="card-xb">
       <span class="low">1-3</span>
@@ -90,6 +90,8 @@
     }
   }
   .card_img{
+    width: 100%;
+
     img{
       width: 100%;
     }
