@@ -1,44 +1,56 @@
 <template>
   <div class="card_item">
     <div class="card-header">
-      <span class="question-num">123</span>
-      <span>班级/年级平均分: <dd class="color_main">7.65</dd>/ 7.32 （全对3人/全错0人）<dd class="color_main">班级得分率76.50%</dd></span>
+      <span class="question-num">第{{questionItem.name}}题</span>
+      <span>班级/年级平均分: <dd class="color_main">{{questionItem.classAvgScore}}</dd>/ {{questionItem.gradeAvgScore}} （全对{{questionItem.fullScoreNum}}人/全错{{questionItem.zeroScoreNum}}人）<dd class="color_main">班级得分率{{questionItem.classScoreRate}}</dd></span>
     </div>
     <div class="card-img"></div>
     <div class="card-prompt">
-      <span>【优秀答案】:</span>
-      <span class="look_style"  @click="lookExcellentAnswers">查看优秀答案</span>
+      <span>【试题详情】:</span>
+      <span class="look_style" > 第{{questionItem.name}}题 分值:{{questionItem.fullScore}}分</span>
+    </div>
+    <div class="card-prompt" v-if="questionItem.type !='主观题'">
+      <span>【正确答案】:</span>
+      <span class="look_style" >{{questionItem.answer}}</span>
     </div>
     <div class="card-prompt">
       <span>【答题详情】：</span>
       <span style="margin-left: 0px;">下方柱状图可查看学生名单及作答情况</span>
     </div>
 
-    <histogram />
+    <histogram
+      :question-options="questionItem.QuestionOptions"
+      :id-tqid="questionItem.tqid"
+    />
 
 
     <div class="card-grade-score">
-      <span>班级/年级得分率：<dd class="color_main"> 76.50%</dd> / 73.20% 得分率差值：<dd class="color_main">3.30%</dd> </span>
+      <span>班级/年级得分率：<dd class="color_main"> {{questionItem.classScoreRate}} </dd> / {{questionItem.gradeScoreRate}} 得分率差值：<dd class="color_main">{{questionItem.rateDifference}}</dd> </span>
     </div>
-    <excellent-answer
-      ref="lookExcellentAnswers"
-    />
+
   </div>
 </template>
 
 <script>
 
   import histogram from './histogram'
-  import excellentAnswer from './excellentAnswer'
+
   export default {
     components: {
-      histogram,
-      excellentAnswer
+      histogram
     },
+
+    props: {
+      questionItem: {
+        type: Array,
+        default:()=>[]
+      },
+    },
+
     methods: {
-      lookExcellentAnswers() {
-        this.$refs.lookExcellentAnswers.openFrame()
-      }
+      // lookExcellentAnswers() {
+      //   this.$refs.lookExcellentAnswers.openFrame()
+      // }
     },
   }
 </script>

@@ -2,10 +2,10 @@
   <div class="echarts">
     <ve-histogram
       :extend="extend"
-      :axis-visible="false"
-      :height="'200px'"
+      :height="questionOptions.length ? questionOptions.length * 40 + 'px' : '100px'"
       :events="chartEvents"
-      :id="'histogram'"
+      :id="'histogram_'+idTqid"
+      :init-options="{'dom':'histogram'+idTqid}"
     />
     <individual-results
       ref="IndividualResults"
@@ -19,11 +19,42 @@
     components: {
       IndividualResults
     },
+
+    props: {
+
+      questionOptions: {
+        type: Array,
+        default:()=>[]
+      },
+
+      idTqid:{
+        type:String,
+        default:''
+      }
+    },
+
     data() {
       return {
-        extend:{
+        chartEvents: {
+          click: (item) => {
+            this.lookDetails(item)
+          }
+        }
+      }
+    },
+
+    computed: {
+
+      extend() {
+        return this.questionOptions.length ? {
           tooltip: {
-            show:false,
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
+            },
+            formatter: function (res){
+              return `${res[0].name}<br /> 该选项人数: ${res[0].value}`
+            }
           },
           grid: {
             left: 50,
@@ -41,7 +72,7 @@
           yAxis: {
             type: 'category',
             show: true,
-            data: ['A', 'B', 'C', 'D'],
+            data: this.questionOptions.map(item => item.optionsName),
             boundaryGap: true,
             position: 'left',
             axisLabel :{
@@ -57,8 +88,8 @@
               label: {
                 show: true,
                 position: 'right',
-                formatter: function (data) {
-                  return '' + data.value + '人,占比 : '  + data.name + '%';
+                formatter: function (res) {
+                  return '' + res.data.num + '人,占比 : '  + res.data.numScale;
                 },
                 labelLine: { show: false },
                 color:'#333'
@@ -76,24 +107,13 @@
                   }
                 },
               },
-              data: [
-                {name:'t1',value:320,text:'R1'},
-                {name:'t2',value:302,text:'R2'},
-                {name:'t3',value:301,text:'R3'},
-                {name:'t4',value:334,text:'R4'},
-              ]
+              data: this.questionOptions.map(item => ({...item,value:item.num}))
             },
           ]
-        },
-
-        chartEvents: {
-          click: (item) => {
-            console.log(item)
-            this.lookDetails()
-          }
-        }
+        } : {}
       }
     },
+
     methods: {
       lookDetails() {
         this.$refs.IndividualResults.openFrame()

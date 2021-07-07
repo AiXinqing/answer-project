@@ -3,7 +3,11 @@
     <div class="examComment_box">
       <div class="examComment_left">
 
-        <questionCard />
+        <questionCard
+          v-for="item in TableList"
+          :key="item.tqid"
+          :question-item="item"
+        />
 
       </div>
       <div class="examComment_right">
@@ -43,6 +47,7 @@
 
 <script>
   import questionCard from "./questionCard"
+  import { mapState } from 'vuex'
   export default {
     components: {
       questionCard
@@ -53,7 +58,18 @@
         cardRow: ['1-3','4-6','7-9'],
         cardRowActive:null,
         scrollActive:false,
+        parameter:{
+          tid: '',
+          tsid: '',
+          cid:'',
+          url:this.URL.GetExaminationPaperComment
+        }
       }
+    },
+
+    computed: {
+      ...mapState('examComment',['tableLoading','TableList']),
+
     },
 
     mounted () {
@@ -62,9 +78,22 @@
 
     methods: {
       initChange(formData){
-        console.log(formData)
-        // this.$refs.subQuestion.initTable(formData)
+
+        this.parameter = {
+          ...this.parameter,
+          ...formData
+        }
+
+        this.$nextTick(()=>{
+          this.getExamComment()
+        })
+
       },
+
+      getExamComment(){
+        this.$store.dispatch('examComment/getExamComment', this.parameter)
+      },
+
       changeCardRow(index){
         this.cardRowActive = index
       },

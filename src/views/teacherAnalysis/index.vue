@@ -59,10 +59,10 @@
           </div>
         </div>
       </div>
-    
+
       <component
-       :is="active"
-       ref="dynamicComponent"
+        :is="active"
+        ref="dynamicComponent"
       />
     </div>
   </div>
@@ -83,7 +83,7 @@
     },
     data() {
       return {
-        active:'examComment',
+        active:'teacherHome',
         linkData: [
           {
             'calssname':'teacherHome',

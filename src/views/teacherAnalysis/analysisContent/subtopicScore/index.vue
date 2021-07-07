@@ -12,7 +12,6 @@
 <script>
 
   import subQuestion from "./subQuestion"
-  import { mapState } from 'vuex'
 
   export default {
 

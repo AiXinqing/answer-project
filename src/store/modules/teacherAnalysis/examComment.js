@@ -3,7 +3,6 @@
   } from '@/config/teacherAnalysis/examComment'
 
   const state = {
-    headerTable: [],
     TableList: [],
     tableLoading: false,
   }
@@ -11,14 +10,11 @@
   const mutations = {
 
     SET_TABLE: (state, res) => {
-      const { ASAnalyseSettingInfo, ClassScoreInfo } = res.ResponseContent
-      state.headerTable = ASAnalyseSettingInfo
-      state.TableList = ClassScoreInfo
+      state.TableList = res.ResponseContent
       state.tableLoading = false
     },
 
     EMPTY_TABLE: (state) => { // 清空数据
-      state.headerTable = []
       state.TableList = []
     },
 

@@ -41,7 +41,6 @@
   import subjectContrast from "./subjectContrast"
   import transcript from "./transcript"
   import singleTranscript from "./transcript/singleTranscript"
-  import { mapState } from 'vuex'
 
   export default {
 
