@@ -37,34 +37,60 @@
       return {
         openedFrame: false,
         isdisabledFn:false,
-        data:[],
+        data:{},
         fullscreenLoading:false,
         subject:'',
-        parameter:{},
-        tid:''
+        parameter:{
+          tid:'',
+          tsid:'',
+          cid:'',
+          tqid:'',
+          scoreOrOptions:'',
+          url:this.URL.GetExaminationPaperCommentStuDetails
+        },
       }
     },
 
     computed: {
-      ...mapState('parameterSet', ['tableLoading','TableList']),
+      ...mapState('examCommentDetail', ['tableLoading','examCommentData']),
     },
 
-    watch: {
-      TableList:{
-        immediate: true,
-        handler () {
-          this.data = this.TableList
-        },
-      },
-    },
+    // watch: {
+    //   TableList:{
+    //     immediate: true,
+    //     handler () {
+    //       this.data = this.TableList
+    //     },
+    //   },
+    // },
 
     methods: {
-      openFrame(){
+      openFrame(obj){
+        this.data = obj
+        const {tid,tsid,cid,tqid,scoreOrOptions} = obj
+        this.parameter = {
+          ...this.parameter,
+          tid:tid,
+          tsid:tsid,
+          cid:cid,
+          tqid:tqid,
+          scoreOrOptions:scoreOrOptions,
+          url:this.URL.GetExaminationPaperCommentStuDetails
+        },
+        console.log(this.parameter)
         this.openedFrame = true
+
+        this.$nextTick(()=>{
+          this.getDetailFunc()
+        })
       },
 
       closeFrame() {
         this.openedFrame = false
+      },
+
+      getDetailFunc(){
+        this.$store.dispatch('examCommentDetail/getExamCommentDetail', this.parameter)
       },
 
       handelDetermine(){

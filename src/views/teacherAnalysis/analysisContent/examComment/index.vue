@@ -7,6 +7,7 @@
           v-for="item in TableList"
           :key="item.tqid"
           :question-item="item"
+          :parameter="parameter"
         />
 
       </div>
@@ -32,12 +33,12 @@
           </div>
           <div class="card-body">
             <div
-              v-for="(item,i) in cardRow"
+              v-for="(item,i) in TableList"
               :key="i"
               class="card-row-item main"
               :class="{'active':cardRowActive == i}"
               @click="changeCardRow(i)"
-            >{{item}}</div>
+            >{{item.name}}</div>
           </div>
         </div>
       </div>

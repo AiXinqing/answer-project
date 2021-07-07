@@ -36,8 +36,8 @@
     data() {
       return {
         chartEvents: {
-          click: (item) => {
-            this.lookDetails(item)
+          click: (obj) => {
+            this.lookDetails(obj)
           }
         }
       }
@@ -115,8 +115,8 @@
     },
 
     methods: {
-      lookDetails() {
-        this.$refs.IndividualResults.openFrame()
+      lookDetails(obj) {
+        this.$refs.IndividualResults.openFrame(obj)
       }
     },
   }

@@ -19,7 +19,7 @@
     </div>
 
     <histogram
-      :question-options="questionItem.QuestionOptions"
+      :question-options="histogramData"
       :id-tqid="questionItem.tqid"
     />
 
@@ -42,9 +42,40 @@
 
     props: {
       questionItem: {
-        type: Array,
-        default:()=>[]
+        type: Object,
+        default:()=> {}
       },
+      parameter: {
+        type: Object,
+        default:()=> {}
+      }
+    },
+
+    computed: {
+      histogramData() {
+        const {
+        answer,classAvgScore,classScoreRate,cname,fullScore,
+        fullScoreNum,gradeAvgScore,gradeScoreRate,name,rateDifference,
+        tqid,type,zeroScoreNum
+        } = this.questionItem
+        return this.questionItem.QuestionOptions.length ? this.questionItem.QuestionOptions.map(item => ({
+          ...item,
+          answer: answer,
+          classAvgScore: classAvgScore,
+          classScoreRate: classScoreRate,
+          cname: cname,
+          fullScore: fullScore,
+          fullScoreNum: fullScoreNum,
+          gradeAvgScore: gradeAvgScore,
+          gradeScoreRate: gradeScoreRate,
+          name: name,
+          rateDifference: rateDifference,
+          tqid: tqid,
+          type: type,
+          zeroScoreNum: zeroScoreNum,
+          ...this.parameter
+        })) : []
+      }
     },
 
     methods: {
