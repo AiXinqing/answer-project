@@ -13,9 +13,18 @@
     </div>
     <div class="table_wapper">
       <div class="table_search">
-        <div class="search_left" style="width: auto">
-          <span class="titile_18">试题得分汇总详情</span>
-          <i>(查看每题得分情况，点击对应的人数，可查看学生名单)</i>
+        <div class="search_left style_contents" style="width: auto">
+          <span>试题类型:</span>
+          <span
+            class="question_style style_left"
+            :class="{'active':type == 0}"
+            @click="changeQustionType(0)"
+          >客观题</span>
+          <span
+            class="question_style style_right"
+            :class="{'active':type == 1}"
+            @click="changeQustionType(1)"
+          >主观题</span>
         </div>
         <div class="search_right">
           <exam-button type="primary" @click="downTable">下载表格</exam-button>
@@ -35,19 +44,15 @@
         />
       </div>
     </div>
-    <student-details
-      ref="studentDetails"
-    />
+
   </div>
 </template>
 
 <script>
   import { mapState} from 'vuex'
-  import studentDetails from './_classDetails'
+
   export default {
-    components: {
-      studentDetails,
-    },
+
     props: {
       prmTid: {
         type: String,
@@ -82,12 +87,36 @@
           },
           {
             prop:'fullScore',
-            label:'满分',
+            label:'分值',
             width:'80',
             align:'center',
             type:'Html',
             fixed:'left',
             color:'font'
+          },
+          {
+            prop:'respondentNum',
+            label:'答题人数',
+            width:'80',
+            align:'center',
+            fixed:'left',
+            type:'Html'
+          },
+          {
+            prop:'avgScore',
+            label:'平均分',
+            width:'80',
+            align:'center',
+            fixed:'left',
+            type:'Html'
+          },
+          {
+            prop:'scoreRate',
+            label:'得分率',
+            width:'80',
+            align:'center',
+            fixed:'left',
+            type:'Html'
           },
           {
             prop:'answer',
@@ -96,36 +125,18 @@
             align:'center',
             fixed:'left',
             type:'Html'
-          },
+          }
         ],
         rankArr:[
           {
-            prop:'avgScore',
-            label:'平均分',
+            prop:'num',
+            label:'人数',
             minWidth:'90',
             align:'center',
           },
           {
-            prop:'fullScoreNum',
-            label:'满分人数',
-            minWidth:'90',
-            align:'center',
-          },
-          {
-            prop:'fullScoreScale',
-            label:'满分率',
-            minWidth:'90',
-            align:'center',
-          },
-          {
-            prop:'zeroScoreNum',
-            label:'零分人数',
-            minWidth:'90',
-            align:'center',
-          },
-          {
-            prop:'zeroScoreScale',
-            label:'零分率',
+            prop:'scale',
+            label:'占比',
             minWidth:'90',
             align:'center',
           },
@@ -139,14 +150,16 @@
           cids:'',
           tid: '',
           tsid:'',
-          url:this.URL.GetQuestionSummary
+          type: 0, // 0：客观题，1：主观题
+          url:this.URL.GetAnswerStaticAnalysis
         },
+        type:0
       }
     },
 
     computed: {
       ...mapState('getExam', ['subjectsArr','classesArr']),
-      ...mapState('classQuestion', ['tableLoading','headerTable','TableList']),
+      ...mapState('answerTheTest', ['tableLoading','headerTable','TableList']),
 
       classIdsArr(){
         return this.classesArr.length ? this.classesArr.filter(item => item.check && item.cid != 'all')
@@ -173,20 +186,46 @@
         return this.headerTable.length ? [
           ...this.fixedHeader,
           ...this.headerTable.map(ele => ({
-            label:ele.cname,
+            label:ele,
             align:'center',
             // 0 客观题 objective 1 主观题 subjective
-            childen:this.rankArr.map((item,index) =>{
+            childen:this.rankArr.map(item =>{
+              let obj = {
+                type:'Html'
+              }
+              if(item.prop == 'num'){
+                obj = {
+                  ...obj,
+                  btnList:[
+                    {
+                      label:'',
+                      handle: (row,element) => {
+                        console.log(row)
+                        console.log(element)
+                        // let obj = {
+                        //   tid:element.tid,
+                        //   tsid:element.tsid,
+                        //   scid: row.scid,
+                        //   asid:element.asid
+                        // }
+                        // // 详情数值为0时不弹出详情框
+                        // if(row[element.prop] != 0 && row[element.prop] != null){
+                        //   this.hanldePopFunc(obj)
+                        // }
+                      }
+                    }
+                  ]
+                }
+              }
               return {
-                ...ele,
                 ...item,
+                ...obj,
                 label:item.label,
-                type: index == 1 || index == 3  ? 'popBtn' : 'Html',
-                type_p:index == 1 ? 'manfen' : index == 3 ? 'zero' : 0,
-                prop:`${item.prop}_${ele.cname}`,
+                prop:`${item.prop}_${ele}`,
+                type: item.prop == 'num' ? 'pop_Btn' : 'Html',
                 tsid:this.tsid == '' ? tsid_s : this.tsid,
                 tid:this.prmTid,
-                classObj:ele.cname
+
               }
             })
           }))
@@ -200,19 +239,18 @@
             dynamic = {
               ...dynamic,
               ...element,
-              [`avgScore_${element.cname}`]:element.avgScore,
-              [`fullScoreNum_${element.cname}`]:element.fullScoreNum,
-              [`fullScoreScale_${element.cname}`]:element.fullScoreScale,
-              [`zeroScoreNum_${element.cname}`]:element.zeroScoreNum,
-              [`zeroScoreScale_${element.cname}`]:element.zeroScoreScale,
-              [`cid_${element.cname}`]: element.cid,
+              [`num_${element.name}`]:element.num,
+              [`scale_${element.name}`]:element.scale,
             }
           })
 
           return {
             answer: item.answer,
+            avgScore: item.avgScore,
             fullScore: item.fullScore,
             name: item.name,
+            respondentNum: item.respondentNum,
+            scoreRate: item.scoreRate,
             tqid: item.tqid,
             type: item.type,
             ...dynamic
@@ -252,6 +290,15 @@
         })
       },
 
+      changeQustionType(type){
+        // 切换试题类型
+        this.type = type
+        this.parameter.type = type
+        this.$nextTick(()=>{
+          this.getTable()
+        })
+      },
+
       initTable() {
         this.$nextTick(()=>{
           this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
@@ -279,11 +326,6 @@
       singleChange(tsid){
         // 科目查询
         this.tsid = tsid
-        this.page = {
-          pageSize: 15,
-          pageNum: 1,
-          total: 0
-        }
         this.$nextTick(()=>{
           this.getTable()
         })
@@ -297,7 +339,7 @@
           tid: this.prmTid,
           tsid:this.tsid,
         }
-        this.$store.dispatch('classQuestion/GetStuResults', this.parameter)
+        this.$store.dispatch('answerTheTest/GetStuResults', this.parameter)
       },
 
       downTable(){
@@ -305,7 +347,7 @@
         if(this.tsid == ''){
           this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
         }
-        window.open(`${this.URL.ExportQuestionSummary}?tid=${this.prmTid}&tsid=${this.tsid}&cids=${this.cidStr}`)
+        window.open(`${this.URL.ExportAnswerStaticAnalysis}?tid=${this.prmTid}&tsid=${this.tsid}&cids=${this.cidStr}&type=${this.type}`)
       },
 
       hanldePopFunc(row){
@@ -317,4 +359,33 @@
 
 <style lang="less">
   @import '~@/assets/css/variables.less';
+  .style_contents{
+    font-size: 14px;
+    .style_left{
+      border-radius: 4px;
+      border-right: 0;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      margin-left: 10px;
+    }
+    .style_right{
+      border-radius: 4px;
+      border-left: 0;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+  .question_style{
+    display: inline-block;
+    padding: 0 15px;
+    height: 28px;
+    line-height: 28px;
+    border: 1px solid @eeefef;
+    cursor: pointer;
+    &.active{
+      color: @white;
+      background: @main;
+      cursor: pointer;
+    }
+  }
 </style>

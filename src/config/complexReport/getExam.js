@@ -34,3 +34,21 @@ export function getIsShowJointExam ({ tid, url }) {
     params: { tid }
   })
 }
+
+// 作答统计分析
+export function GetAnswerStaticAnalysis ({ tid,tsid,cids,type, url }) {
+  return request({
+    url: url,
+    method: 'get',
+    params: { tid,tsid,cids,type }
+  })
+}
+
+// 作答统计分析学生详情
+export function staticAnalysisDetail ({ tid,tsid,cids,type,tqid,scoreOrOptions,pageIndex,pageSize, url }) {
+  return request({
+    url: url,
+    method: 'get',
+    params: { tid,tsid,cids,type,tqid,scoreOrOptions,pageIndex,pageSize}
+  })
+}

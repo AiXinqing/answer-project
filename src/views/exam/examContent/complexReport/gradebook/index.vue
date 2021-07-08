@@ -43,8 +43,8 @@
           :loading="tableLoading"
           :theight="theight"
           @hanlde-page-size="handlePageSize"
-         />
-        
+        />
+
       </div>
     </div>
   </div>
@@ -240,7 +240,6 @@
         immediate: true,
         handler () {
           this.cidStr = this.classIdsArr
-          let _$this = this
           this.$nextTick(()=>{
             this.getHeight()
           })

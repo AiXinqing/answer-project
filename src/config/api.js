@@ -40,6 +40,11 @@ export const URL = {
   DeleteASAnalyseSetting: BASEURL + '/Api/Marking/ASAnalysisReportBLL/DeleteASAnalyseSetting', // 删除分析参数得分率
   SaveComparedASAnalyseSetting: BASEURL + '/Api/Marking/ASAnalysisReportBLL/SaveASAnalyseSetting', // 保存分析参数得分率
 
+  GetAnswerStaticAnalysis: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetAnswerStaticAnalysis', // 作答统计分析
+  ExportAnswerStaticAnalysis: BASEURL + '/Report/AnlyReport/ExportAnswerStaticAnalysis', // 作答统计分析下载
+  GetAnswerStaticAnalysisStuDetails: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetAnswerStaticAnalysisStuDetails', // 作答统计分析学生详情
+  ExportAnswerStaticAnalysisStuDetails: BASEURL + '/Report/AnlyReport/ExportAnswerStaticAnalysisStuDetails', // 作答统计分析学生详情下载
+
   //---------------------------------------班级分析报告
   GetClassAvgScore: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassAvgScore', //学科平均分排名
   GetClassScoreSurvey: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetClassScoreSurvey', //班级成绩概况 -------------- // 班级 false  // 校级 true

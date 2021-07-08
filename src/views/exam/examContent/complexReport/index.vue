@@ -28,6 +28,7 @@
   import subTable from './subTable'
   import classGrades from './classGrades'
   import question from './question'
+  import answerTheTest from './answerTheTest'
   import gradesStatistics from './gradesStatistics'
   import ranking from './ranking'
   // import Qs from 'qs'
@@ -39,6 +40,7 @@
       subTable,
       classGrades,
       question,
+      answerTheTest,
       gradesStatistics,
       ranking
     },
@@ -62,6 +64,10 @@
           {
             label:'试题汇总表',
             name:'question'
+          },
+          {
+            label:'试题作答分析',
+            name:'answerTheTest'
           },
           {
             label:'成绩分段统计',
