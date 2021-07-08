@@ -274,7 +274,6 @@
         immediate: true,
         handler () {
           this.cidStr = this.classIdsArr
-          let _$this = this
           this.$nextTick(()=>{
             this.getHeight()
           })

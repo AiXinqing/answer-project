@@ -44,15 +44,19 @@
         />
       </div>
     </div>
-
+    <student-details
+      ref="studentDetails"
+    />
   </div>
 </template>
 
 <script>
   import { mapState} from 'vuex'
-
+  import studentDetails from './_classDetails'
   export default {
-
+    components: {
+      studentDetails
+    },
     props: {
       prmTid: {
         type: String,
@@ -200,18 +204,19 @@
                     {
                       label:'',
                       handle: (row,element) => {
-                        console.log(row)
-                        console.log(element)
-                        // let obj = {
-                        //   tid:element.tid,
-                        //   tsid:element.tsid,
-                        //   scid: row.scid,
-                        //   asid:element.asid
-                        // }
-                        // // 详情数值为0时不弹出详情框
-                        // if(row[element.prop] != 0 && row[element.prop] != null){
-                        //   this.hanldePopFunc(obj)
-                        // }
+                        let obj = {
+                          tid:element.tid,
+                          tsid:element.tsid,
+                          cids: this.cidStr,
+                          type:this.type,
+                          tqid:row.tqid,
+                          scoreOrOptions:ele,
+                          name:row.name
+                        }
+                        // 详情数值为0时不弹出详情框
+                        if(row[element.prop] != 0 && row[element.prop] != null){
+                          this.hanldePopFunc(obj)
+                        }
                       }
                     }
                   ]
@@ -326,6 +331,8 @@
       singleChange(tsid){
         // 科目查询
         this.tsid = tsid
+        this.parameter.type = 0
+        this.type = 0
         this.$nextTick(()=>{
           this.getTable()
         })
