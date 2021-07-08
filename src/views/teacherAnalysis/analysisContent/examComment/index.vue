@@ -7,10 +7,11 @@
       >
 
         <questionCard
-          v-for="item in TableList"
+          v-for="(item,i) in TableList"
           :key="item.tqid"
           :question-item="item"
           :parameter="parameter"
+          :id="`questionCard`+i"
         />
 
       </div>
@@ -107,6 +108,42 @@
 
       changeCardRow(index){
         this.cardRowActive = index
+        let jump = document.querySelectorAll('.d_jump')
+        let total = jump[index].offsetTop
+        let distance = document.documentElement.scrollTop || document.body.scrollTop
+        // 平滑滚动，时长500ms，每10ms一跳，共50跳
+        let step = total / 50
+        if (total > distance) {
+          smoothDown()
+        } else {
+          let newTotal = distance - total
+          step = newTotal / 50
+          smoothUp()
+        }
+
+        function smoothDown () {
+          if (distance < total) {
+            distance += step
+　　　　　　 document.body.scrollTop = distance
+            document.documentElement.scrollTop = distance
+            setTimeout(smoothDown, 10)
+          } else {
+            document.body.scrollTop = total
+            document.documentElement.scrollTop = total
+          }
+        }
+
+        function smoothUp () {
+          if (distance > total) {
+            distance -= step
+　　　　　　　document.body.scrollTop = distance
+            document.documentElement.scrollTop = distance
+            setTimeout(smoothUp, 10)
+          } else {
+            document.body.scrollTop = total
+            document.documentElement.scrollTop = total
+          }
+        }
       },
       windowScroll(){
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
