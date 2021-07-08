@@ -19,7 +19,10 @@
       <span class="score_style"> {{data.numScale}}</span>
     </div>
 
-    <div class="score-detail-list">
+    <div
+      class="score-detail-list"
+      v-loading="tableLoading"
+    >
       <template v-if="data.type == '客观题'">
         <div
           v-for="item in examCommentData"
@@ -142,6 +145,7 @@
   .score-detail-list{
     padding: 10px 0;
     margin: 5px -20px 5px 0;
+    min-height: 40px;
 
     .list-item{
       display: inline-block;
@@ -166,5 +170,13 @@
         background: @bf-f7;
       }
     }
+  }
+  .card_img{
+    img{
+      width: 100%;
+    }
+  }
+  .el-loading-spinner .path{
+    stroke: @main !important
   }
 </style>

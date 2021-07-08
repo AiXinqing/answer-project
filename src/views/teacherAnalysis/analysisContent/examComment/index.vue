@@ -1,7 +1,10 @@
 <template>
   <div class="teacher_wapper">
     <div class="examComment_box">
-      <div class="examComment_left">
+      <div
+        class="examComment_left"
+        v-loading="tableLoading"
+      >
 
         <questionCard
           v-for="item in TableList"
