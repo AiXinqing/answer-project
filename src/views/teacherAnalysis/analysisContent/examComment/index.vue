@@ -136,7 +136,7 @@
         function smoothUp () {
           if (distance > total) {
             distance -= step
-　　　　　　　document.body.scrollTop = distance
+　　　　　　 document.body.scrollTop = distance
             document.documentElement.scrollTop = distance
             setTimeout(smoothUp, 10)
           } else {
@@ -153,6 +153,14 @@
         }else{
           this.scrollActive = false
         }
+
+        let Arr =  this.TableList.map((item,i) => {
+              return document.getElementById('questionCard'+i).offsetTop
+            })
+
+        let index = Arr.findIndex(item => scrollTop <= item)
+        this.cardRowActive = index
+
       },
       downTable(){
         const {tid,tsid,cid } = this.parameter
