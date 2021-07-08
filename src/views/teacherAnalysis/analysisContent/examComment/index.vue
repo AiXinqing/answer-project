@@ -12,6 +12,9 @@
 
       </div>
       <div class="examComment_right">
+        <div class="dow_examConten">
+          <exam-button type="primary" @click="downTable">试卷讲评下载</exam-button>
+        </div>
         <div
           class="col_box"
           :class="{'active':scrollActive}"
@@ -20,23 +23,23 @@
           <div class="rate-depict">
             <p class="depict-item">
               <span class="rate-low"></span>
-              <span class="rate-card">低于0.45</span>
+              <span class="rate-card">低于45</span>
             </p>
             <p class="depict-item rate-mid">
               <span class="rate-low"></span>
-              <span class="rate-card">介于0.45~0.75</span>
+              <span class="rate-card">介于45~75</span>
             </p>
             <p class="depict-item rate-min">
               <span class="rate-low"></span>
-              <span class="rate-card">大于0.75</span>
+              <span class="rate-card">大于75</span>
             </p>
           </div>
           <div class="card-body">
             <div
               v-for="(item,i) in TableList"
               :key="i"
-              class="card-row-item main"
-              :class="{'active':cardRowActive == i}"
+              class="card-row-item"
+              :class="[{'active':cardRowActive == i},colorStyle(item)]"
               @click="changeCardRow(i)"
             >{{item.name}}</div>
           </div>
@@ -64,6 +67,10 @@
           tsid: '',
           cid:'',
           url:this.URL.GetExaminationPaperComment
+        },
+        colorStyle:(item)=>{
+          let num = Number(item.classScoreRate)
+          return num > 75 ? 'main' : num > 45 && num <= 75 ? 'low' : 'high'
         }
       }
     },
@@ -106,6 +113,10 @@
         }else{
           this.scrollActive = false
         }
+      },
+      downTable(){
+        const {tid,tsid,cid } = this.parameter
+        window.open(`${this.URL.ExportExaminationPaperComment}?tid=${tid}&tsid=${tsid}&cid=${cid}`)
       }
     },
   }
@@ -113,6 +124,15 @@
 
 <style lang="less">
   @import '~@/assets/css/variables.less';
+  .dow_examConten{
+    margin-bottom: 10px;
+    text-align: center;
+    background: @pageBg;
+    height: 39px;
+    line-height: 38px;
+    border: 1px solid @bc_e7e7;
+  }
+
   .examComment_box{
     display:flex;
     background:@white;

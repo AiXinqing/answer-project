@@ -116,7 +116,7 @@
 
     methods: {
       lookDetails(obj) {
-        this.$refs.IndividualResults.openFrame(obj)
+        this.$refs.IndividualResults.openFrame(obj.data)
       }
     },
   }

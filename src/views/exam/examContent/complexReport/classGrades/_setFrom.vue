@@ -51,7 +51,7 @@
 
     computed: {
       verify(){
-        
+
         const {subname,subend,substart} = this.data
         let isV = false
         if(subname == '' || subname == undefined){
@@ -90,7 +90,7 @@
         this.$emit('remove-outline',{obj:data,index:this.itemIndex})
       },
 
-      plusOutline(data){
+      plusOutline(){
         this.$emit('plus-outline',{
           subend:'',
           substart:'',

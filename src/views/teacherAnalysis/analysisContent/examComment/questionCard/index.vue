@@ -2,7 +2,7 @@
   <div class="card_item">
     <div class="card-header">
       <span class="question-num">第{{questionItem.name}}题</span>
-      <span>班级/年级平均分: <dd class="color_main">{{questionItem.classAvgScore}}</dd>/ {{questionItem.gradeAvgScore}} （全对{{questionItem.fullScoreNum}}人/全错{{questionItem.zeroScoreNum}}人）<dd class="color_main">班级得分率{{questionItem.classScoreRate}}</dd></span>
+      <span>班级/年级平均分: <dd class="color_main">{{questionItem.classAvgScore}}</dd>/ {{questionItem.gradeAvgScore}} （全对{{questionItem.fullScoreNum}}人/全错{{questionItem.zeroScoreNum}}人）<dd class="color_main">班级得分率{{questionItem.classScoreRate}}%</dd></span>
     </div>
     <div class="card-img"></div>
     <div class="card-prompt">
@@ -25,7 +25,7 @@
 
 
     <div class="card-grade-score">
-      <span>班级/年级得分率：<dd class="color_main"> {{questionItem.classScoreRate}} </dd> / {{questionItem.gradeScoreRate}} 得分率差值：<dd class="color_main">{{questionItem.rateDifference}}</dd> </span>
+      <span>班级/年级得分率：<dd class="color_main"> {{questionItem.classScoreRate}} </dd> / {{questionItem.gradeScoreRate}} 得分率差值：<dd class="color_main">{{questionItem.rateDifference}}%</dd> </span>
     </div>
 
   </div>

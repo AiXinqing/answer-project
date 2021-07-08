@@ -211,13 +211,13 @@
           return row[prop]  == null ? 'transparent' : row[prop] == 0 ? 'zero_style' : row.totalscore == '缺考' ? 'missed_exam' : ''
         },
 
-        font_operateBtn:(row,ele)=>{
+        font_operateBtn:(row)=>{
           return row.scale == '0%' || row.tscore == '缺考' ? 'font_operateBtn' : ''
         },
 
         columnIcon:(row,beforeIcon,afterIcon,unit) => {
           let classStr = row[beforeIcon] > row[afterIcon] ? 'el-icon-top' : 'el-icon-bottom'
-          return row[beforeIcon]  == null && row[afterIcon] == null ? `--` : 
+          return row[beforeIcon]  == null && row[afterIcon] == null ? `--` :
                   `<span class="icon_span left">${row[beforeIcon] == null ? '--' : row[beforeIcon] }</span> <i class="columnIcon ${classStr}"></i> <span class="icon_span right">${row[afterIcon] == null ? '--' : row[afterIcon]}</span> ${unit}`
         },
       }
@@ -231,7 +231,7 @@
           if(parameter.subject){
             tsid = row['tsid_'+ parameter.subject]
           }
-          
+
           if(row.totalscore != '缺考'){
             window.open(`${parameter.url}?tid=${row.tid}&tsid=${tsid}&tnumber=${row.tnumber}`)
           }

@@ -16,7 +16,7 @@
         <div class="search_left is_active">
           <span class="scoring_rate">
             <span>得分率说明：</span>
-            <span 
+            <span
               v-for="item in headerTable"
               :key="item.tid"
             >
@@ -355,7 +355,7 @@
       },
 
       setParameterFunc(){
-        
+
         let subject = ''
         if(this.tsid == ''){
           this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
@@ -363,7 +363,7 @@
         }else{
           subject = this.subjectsArr.filter(element => element.tsid == this.tsid)[0].name
         }
-        
+
         let obj = {
           parameter:{
             tid: this.prmTid,
@@ -373,7 +373,7 @@
           },
           subject:subject
         }
-        
+
         this.$refs.parameterSet.openFrame(obj)
       },
 
