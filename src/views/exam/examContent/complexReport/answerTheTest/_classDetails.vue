@@ -7,7 +7,13 @@
   :append-to-body="true"
   :before-close="handleClose">
     <div class="table-description">
-      <div class="table_left" />
+      <div class="table_left">
+        <span class="mr_0">第<span class="color_style">{{question.questionName}}</span>题 </span>
+        <span class="mr_0">分值<span class="color_style">{{question.fullScore}}</span></span>
+        <span class="mr_0">平均分<span class="color_style">{{question.avgScore}}</span></span>
+        <span class="mr_0">得分率<span class="color_style">{{question.scale}}</span></span>
+        <span class="mr_0" v-if="question.type == 0">正确答案<span class="color_style">{{question.answer}}</span>
+      </div>
       <div class="table_right">
         <exam-button type="primary" @click="downTable">下载表格</exam-button>
       </div>
@@ -88,7 +94,8 @@
         },
         prmTid:'',
         pageSizes:[10,15,20,30,50,100],
-        theight: document.body.clientHeight - 400 || 0
+        theight: document.body.clientHeight - 400 || 0,
+        question:{}
       }
     },
 
@@ -118,10 +125,18 @@
     methods: {
       openDetails(row){
         this.dialogVisible = true
+        const { tid,tsid,cids,type,tqid,scoreOrOptions,name} = row
         this.parameter = {
           ...this.parameter,
-          ...row
+          tid:tid,
+          tsid:tsid,
+          cids:cids,
+          type:type,
+          tqid:tqid,
+          scoreOrOptions:scoreOrOptions,
+          name:name
         }
+        this.question = row
         this.prmTid = row.tid
         this.$nextTick(()=>{
           let _this = this
@@ -190,6 +205,13 @@
       width: 87%;
       span{
         margin-right: 10px;
+      }
+      span.mr_0{
+        margin-right: 0px;
+      }
+      .color_style{
+        color: @main;
+        margin: 0 5px;
       }
     }
   }

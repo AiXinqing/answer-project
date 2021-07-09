@@ -50,7 +50,7 @@
           tooltip: {
             trigger: 'axis',
             axisPointer: {
-              type: 'shadow'
+              type: 'none'
             },
             formatter: function (res){
               return `${res[0].name}<br /> 该选项人数: ${res[0].value}`
@@ -72,7 +72,7 @@
           yAxis: {
             type: 'category',
             show: true,
-            data: this.questionOptions.map(item => item.optionsName),
+            data: this.questionOptions.map(item => item.optionsName), //.reverse()
             boundaryGap: true,
             position: 'left',
             axisLabel :{
@@ -96,14 +96,8 @@
               },
               itemStyle: {
                 normal: {
-                  color: function () {
-                    let colorList = [
-                      '#22bd97', '#cbe9ce', '#f7e083', '#f5be92', '#7ddde9',
-                      '#fb997f', '#a0ca6d', '#f4da7f', '#c3f2c8', '#60C0DD',
-                      '#e8a79c', '#C6E579', '#F4E001', '#F0805A', '#26C0C0'
-                    ]
-                    let num = Math.floor(Math.random() * 15)
-                    return colorList[num]
+                  color: function (res) {
+                    return  res.data.rightFlg ? '#22bd97' : '#F0805A'
                   }
                 },
               },

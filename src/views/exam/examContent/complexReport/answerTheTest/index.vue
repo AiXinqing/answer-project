@@ -74,7 +74,7 @@
         stretch: false,
         fixedHeader:[
           {
-            prop:'name',
+            prop:'qustionName',
             label:'题号',
             width:'80',
             align:'center',
@@ -122,6 +122,8 @@
             fixed:'left',
             type:'Html'
           },
+        ],
+        questionTypeH:[
           {
             prop:'answer',
             label:'正确答案',
@@ -187,8 +189,15 @@
       questionTableColumn(){
         // 动态表头
         let tsid_s = this.subjectsArr.find((element,i) => i == 1).tsid
+        let header = this.fixedHeader
+        if(this.type == 0){
+          header = [
+            ...header,
+            ...this.questionTypeH
+          ]
+        }
         return this.headerTable.length ? [
-          ...this.fixedHeader,
+          ...header,
           ...this.headerTable.map(ele => ({
             label:ele,
             align:'center',
@@ -211,7 +220,12 @@
                           type:this.type,
                           tqid:row.tqid,
                           scoreOrOptions:ele,
-                          name:row.name
+                          name:row.name,
+                          questionName:row.qustionName,
+                          answer:row.answer,
+                          avgScore:row.avgScore,
+                          scale:row.scale,
+                          fullScore:row.fullScore
                         }
                         // 详情数值为0时不弹出详情框
                         if(row[element.prop] != 0 && row[element.prop] != null){
@@ -253,7 +267,7 @@
             answer: item.answer,
             avgScore: item.avgScore,
             fullScore: item.fullScore,
-            name: item.name,
+            qustionName: item.name,
             respondentNum: item.respondentNum,
             scoreRate: item.scoreRate,
             tqid: item.tqid,

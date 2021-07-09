@@ -27,15 +27,15 @@
           <div class="rate-depict">
             <p class="depict-item">
               <span class="rate-low"></span>
-              <span class="rate-card">低于45</span>
+              <span class="rate-card">低于45%</span>
             </p>
             <p class="depict-item rate-mid">
               <span class="rate-low"></span>
-              <span class="rate-card">介于45~75</span>
+              <span class="rate-card">介于45%~75%</span>
             </p>
             <p class="depict-item rate-min">
               <span class="rate-low"></span>
-              <span class="rate-card">大于75</span>
+              <span class="rate-card">大于75%</span>
             </p>
           </div>
           <div class="card-body">
@@ -172,9 +172,6 @@
 
           if(t2 == t1){
             index = Arr.findIndex(item => scrollTop <= item)
-            if(index > 1){
-              index -= 1
-            }
             thisT.cardRowActive = index
           }
         }
@@ -208,7 +205,7 @@
     padding: 10px 0;
 
     .examComment_left {
-      width: calc(100% - 200px);
+      width: calc(100% - 218px);
       margin-left: 10px;
     }
 
@@ -216,11 +213,12 @@
       position: relative;
       margin-left: 10px;
       .col_box{
-        width:168px;
+        width:186px;
         padding-bottom:20px;
         border:1px solid @bc_e7e7;
         max-height: calc(100vh - 280px);
         background: @white;
+        overflow: auto;
 
         &.active{
           position: fixed;
@@ -253,6 +251,7 @@
     }
     .depict-item{
       margin: 0;
+      margin-left: 5px;
       &.rate-mid{
         .rate-low{
           background-color: @ffb;
