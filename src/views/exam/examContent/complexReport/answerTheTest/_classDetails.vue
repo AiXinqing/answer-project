@@ -38,7 +38,7 @@
           {
             prop:'cname',
             label:'班级',
-            minWidth:'140',
+            width:'140',
             align:'center',
             type:'Html'
           },

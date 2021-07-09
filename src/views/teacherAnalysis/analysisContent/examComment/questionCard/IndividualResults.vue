@@ -6,7 +6,7 @@
     :before-close="closeFrame"
     :show-close="true"
     :append-to-body="true"
-    width="60%"
+    width="742"
   >
     <div class="card-title">
       <span>第</span>
@@ -38,12 +38,13 @@
           @click="changeImgFunc(item,i)"
         >{{item.stuname}}({{item.score}})</div>
       </template>
+
+      <template v-if="data.type == '主观题'">
+        <div class="card_img">
+          <img alt="题目图片" :src="cardImg"/>
+        </div>
+      </template>
     </div>
-    <template v-if="data.type == '主观题'">
-      <div class="card_img">
-        <img alt="题目图片" :src="cardImg"/>
-      </div>
-    </template>
 
   </hj-dialog>
 </template>
@@ -104,6 +105,7 @@
         },
 
         this.openedFrame = true
+        this.itemActive = 0
 
         this.$nextTick(()=>{
           this.getDetailFunc()
@@ -144,14 +146,15 @@
   }
   .score-detail-list{
     padding: 10px 0;
-    margin: 5px -20px 5px 0;
     min-height: 40px;
+    display: flex;
+    flex-wrap: wrap;
 
     .list-item{
       display: inline-block;
-      width: 18%;
       height: 28px;
-      margin-right: 13px;
+      min-width: 72px;
+      margin-left: 6px;
       margin-bottom: 5px;
       overflow: hidden;
       font-size: 12px;
@@ -172,6 +175,8 @@
     }
   }
   .card_img{
+    width: 100%;
+    margin-top: 10px;
     img{
       width: 100%;
     }

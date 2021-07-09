@@ -146,6 +146,15 @@
         }
       },
       windowScroll(){
+        let t1 = 0
+        let t2 = 0
+        let timer = null // 定时器
+        let index = null
+        let thisT = this
+        clearTimeout(timer)
+        timer = setTimeout(isScrollEnd, 1000)
+        t1 = document.documentElement.scrollTop || document.body.scrollTop
+
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
         // 固定答题情况
         if(scrollTop >= 208){
@@ -155,11 +164,20 @@
         }
 
         let Arr =  this.TableList.map((item,i) => {
-              return document.getElementById('questionCard'+i).offsetTop
-            })
+          return document.getElementById('questionCard'+i).offsetTop
+        })
 
-        let index = Arr.findIndex(item => scrollTop <= item)
-        this.cardRowActive = index
+        function isScrollEnd() {
+          t2 = document.documentElement.scrollTop || document.body.scrollTop
+
+          if(t2 == t1){
+            index = Arr.findIndex(item => scrollTop <= item)
+            if(index > 1){
+              index -= 1
+            }
+            thisT.cardRowActive = index
+          }
+        }
 
       },
       downTable(){
