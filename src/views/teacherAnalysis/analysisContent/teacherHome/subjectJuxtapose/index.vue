@@ -89,7 +89,7 @@
             btnList:[
               {
                 label:'查看班级详情',
-                handle: (row,element) => {
+                handle: (row) => {
                   const {tid,tsid,cid} = this.parameter
                   let obj = {
                     ...row,

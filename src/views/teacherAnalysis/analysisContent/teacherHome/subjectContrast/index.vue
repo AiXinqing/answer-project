@@ -10,8 +10,7 @@
           <hj-input
             type="number"
             v-model="topNum"
-            class="search_input"
-            class="rank_style"
+            class="search_input rank_style"
           />
         </div>
         <exam-button type="primary" @click="handelSearch" style="margin-right: 10px;">确定</exam-button>

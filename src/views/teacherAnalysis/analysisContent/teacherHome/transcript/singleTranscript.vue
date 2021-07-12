@@ -114,7 +114,7 @@
             iconList:[
               {
                 beforeIcon:'lastClassRank',
-                afterIcon:'gradeRankChange',
+                afterIcon:'classRankChange',
                 unit:'名'
               }
             ]
