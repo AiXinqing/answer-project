@@ -34,7 +34,7 @@
         :column="column"
         @hanlde-pop-func="hanldePopFunc"
       />
-        
+
     </ux-grid>
   </div>
 </template>

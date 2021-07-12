@@ -82,7 +82,7 @@
           {
             prop:'cname',
             label:'班级',
-            width:'120',
+            width:'130',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -127,21 +127,21 @@
               {
                 prop:'avgScore',
                 label:'平均分',
-                width:'90',
+                minWidth:'90',
                 align:'center',
                 type:'Html'
               },
               {
                 prop:'avgScoreRate',
                 label:'平均得分率',
-                width:'100',
+                minWidth:'100',
                 align:'center',
                 type:'Html'
               },
               {
                 prop:'rank',
                 label:'排名',
-                width:'90',
+                minWidth:'90',
                 align:'center',
                 type:'Html'
               }
@@ -210,7 +210,12 @@
         // 动态表头
         let tsid_s = this.subjectsArr.find((element,i) => i == 0).tsid
         return this.headerTable.length ? [
-          ...this.fixedHeader,
+          ...this.fixedHeader.map(item => {
+            return item.prop == 'teacher' ? {
+              ...item,
+              label:this.tsid == 'totalScore' || this.tsid == '' ? item.label : '科任老师'
+              } : item
+          }),
           ...this.headerTable.map(ele => ({
             label:ele.subname,
             align:'center',
