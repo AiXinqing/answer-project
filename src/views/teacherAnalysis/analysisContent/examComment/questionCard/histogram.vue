@@ -2,7 +2,7 @@
   <div class="echarts">
     <ve-histogram
       :extend="extend"
-      :height="questionOptions.length ? questionOptions.length * 40 + 'px' : '100px'"
+      :height="questionOptions.length ? questionOptions.length == 1 ? '70px' : questionOptions.length * 40 + 'px' : '100px'"
       :events="chartEvents"
       :id="'histogram_'+idTqid"
       :init-options="{'dom':'histogram'+idTqid}"
