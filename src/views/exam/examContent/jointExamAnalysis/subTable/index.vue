@@ -71,7 +71,7 @@
           {
             prop:'scname',
             label:'学校',
-            width:'120',
+            width:'140',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -79,7 +79,7 @@
           {
             prop:'cname',
             label:'班级',
-            width:'120',
+            width:'130',
             align:'center',
             fixed:'left',
             type:'Html'

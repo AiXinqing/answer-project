@@ -13,7 +13,6 @@
 <script>
 
   import questionsAnalysis from "./questionsAnalysis"
-  import { mapState } from 'vuex'
 
   export default {
 

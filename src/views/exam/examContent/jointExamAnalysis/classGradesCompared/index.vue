@@ -16,7 +16,7 @@
         <div class="search_left is_active">
           <span class="scoring_rate">
             <span>得分率说明：</span>
-            <span 
+            <span
               v-for="item in headerTable"
               :key="item.tid"
             >
@@ -89,7 +89,7 @@
           {
             prop:'cname',
             label:'班级',
-            width:'120',
+            width:'130',
             align:'center',
             fixed:'left',
             type:'Html'

@@ -111,7 +111,7 @@
             this.$emit('change-set')
           }
 
-        }).catch(error => {
+        }).catch(() => {
           this.fullscreenLoading = false
         })
       },
@@ -131,11 +131,11 @@
               this.data = this.data.filter(element => element.asid != obj.asid)
               this.isdisabledFn = false
             }
-          }).catch(error => {
+          }).catch(() => {
             this.fullscreenLoading = false
           })
         }
-        
+
       },
 
       plusOutline(item){

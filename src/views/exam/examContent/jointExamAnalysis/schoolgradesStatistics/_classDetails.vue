@@ -46,7 +46,7 @@
           {
             prop:'cname',
             label:'班级',
-            width:'140',
+            width:'130',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -136,7 +136,7 @@
                   btnList:[
                     {
                       label:'',
-                      handle: (row,element) => {
+                      handle: (row) => {
                         window.open(`${this.URL.BrowsescoreAnsw}?tid=${row.tid}&tsid=${ele.tsid}&tnumber=${row.tnumber}`)
                       }
                     }

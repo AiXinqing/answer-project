@@ -75,7 +75,7 @@
             this.$emit('change-set-binning-bullet')
           }
 
-        }).catch(error => {
+        }).catch(() => {
           this.fullscreenLoading = false
         })
       }
@@ -105,7 +105,6 @@
         border-right:none;
       }
     }
-    
   }
 
   .binLine_td{
@@ -123,5 +122,5 @@
   }
 
 }
-  
+
 </style>

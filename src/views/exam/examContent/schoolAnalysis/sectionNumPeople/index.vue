@@ -13,8 +13,7 @@
           <hj-input
             v-model="step"
             type="number"
-            class="search_input"
-            class="rank_style"
+            class="search_input rank_style"
           />
         </div>
 
@@ -74,7 +73,7 @@
           {
             prop:'cname',
             label:'班级',
-            width:'120',
+            width:'130',
             align:'center',
             fixed:'left',
             type:'Html',
@@ -126,7 +125,7 @@
             btnList:[
               {
                 label:'',
-                handle: (row,element) => {
+                handle: (row) => {
                   let obj = {
                     tid:this.prmTid,
                     cid:row.cid,

@@ -46,7 +46,7 @@
           {
             prop:'cname',
             label:'班级',
-            minWidth:'140',
+            width:'130',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -54,7 +54,7 @@
           {
             prop:'stuname',
             label:'姓名',
-            minWidth:'100',
+            width:'100',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -62,7 +62,7 @@
           {
             prop:'tnumber',
             label:'考号',
-            minWidth:'100',
+            width:'100',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -137,7 +137,7 @@
                   btnList:[
                     {
                       label:'',
-                      handle: (row,element) => {
+                      handle: (row) => {
                         window.open(`${this.URL.BrowsescoreAnsw}?tid=${row.tid}&tsid=${ele.tsid}&tnumber=${row.tnumber}`)
                       }
                     }

@@ -54,7 +54,7 @@
         const {subname,subend,substart} = this.data
 
         return subname != '' ?
-           subend != '' ? substart != '' ? false : true
+            subend != '' ? substart != '' ? false : true
               : true
           : true
       },
@@ -74,7 +74,7 @@
         this.$emit('remove-outline',{obj:data,index:this.itemIndex})
       },
 
-      plusOutline(data){
+      plusOutline(){
         this.$emit('plus-outline',{
           subend:'',
           substart:'',

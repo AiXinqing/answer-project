@@ -78,7 +78,7 @@
           {
             prop:'cname',
             label:'班级',
-            width:'120',
+            width:'130',
             align:'center',
             fixed:'left',
             type:'Html'

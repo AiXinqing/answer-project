@@ -78,7 +78,7 @@
           {
             prop:'cname',
             label:'班级',
-            width:'120',
+            width:'130',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -125,7 +125,7 @@
     computed: {
       ...mapState('binningAnalysis', ['tableLoading','TableList',
       'headerTable','binningData','parameterInfo']),
-    
+
       tableColumn(){
         // 动态表头
         return this.headerTable.length ? [
@@ -154,7 +154,7 @@
                         if(row[element.prop] != 0 && row[element.prop] != null){
                           this.hanldePopFunc(obj)
                         }
-                        
+
                       }
                     }
                   ]
@@ -258,7 +258,6 @@
           font-size: 14px;
         }
       }
-    
     }
 
     .binning_setting{
@@ -270,7 +269,6 @@
           padding: 0 8px;
           width: auto;
       }
-      
       .el-button--primary{
         background-color: @white !important;
         color:@font-888 !important;

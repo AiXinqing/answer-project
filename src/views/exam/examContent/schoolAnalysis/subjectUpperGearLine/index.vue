@@ -68,7 +68,7 @@
           {
             prop:'cname',
             label:'班级',
-            width:'120',
+            width:'130',
             align:'center',
             fixed:'left',
             type:'Html'
@@ -113,7 +113,7 @@
         maxHeight: document.body.clientHeight - 200
       }
     },
-    
+
     computed: {
       ...mapState('binningAnalysis', ['binningData']),
       ...mapState('subjectUpperGearLineState', ['tableLoading','TableList','headerTable']),
@@ -199,7 +199,7 @@
         this.getBinLineParameterFunc()
       }
     },
-    
+
     methods:{
       changeActiveName(name){
         this.activeName = name
@@ -225,7 +225,7 @@
         this.$refs.studentDetails.openDetails(row)
       }
     }
-    
+
   }
 </script>
 
@@ -249,14 +249,14 @@
           font-size: 14px;
         }
       }
-    
+
     }
 
     .binning_setting{
       position:absolute;
       top:20px;
       right:40px;
-      
+
       .el-button--primary{
         background-color: @white !important;
         color:@font-888 !important;

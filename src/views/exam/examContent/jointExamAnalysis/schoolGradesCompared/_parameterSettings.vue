@@ -25,7 +25,7 @@
         @verify-change="verifyChange"
       />
     </div>
-    <div 
+    <div
       v-if="isdisabledFn"
       class="verify_style"
     >得分率名称 最低分 最高分不能为空</div>
@@ -99,7 +99,7 @@
           ...item,
           subend:Number(item.subend),
           substart:Number(item.substart)
-        })) 
+        }))
 
         let params = {
           prmASAnalyseSettingList:JSON.stringify(this.data)
@@ -111,7 +111,7 @@
             this.$emit('change-set')
           }
 
-        }).catch(error => {
+        }).catch(() => {
           this.fullscreenLoading = false
         })
       },
@@ -131,11 +131,11 @@
               this.data = this.data.filter(element => element.asid != obj.asid)
               this.isdisabledFn = false
             }
-          }).catch(error => {
+          }).catch(() => {
             this.fullscreenLoading = false
           })
         }
-        
+
       },
 
       plusOutline(item){
