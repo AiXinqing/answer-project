@@ -276,7 +276,7 @@
 
       initTable() {
         this.$nextTick(()=>{
-          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
+          this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
           // 班级数组
           this.scidsStr = this.schoolIdsArr
           // 获取动态表头
@@ -287,7 +287,7 @@
       handleCheckAllChange(scidsStr){
         // 班级查询
         if(this.tsid == ''){
-          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
+          this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
         }
         this.scidsStr = scidsStr
         this.$nextTick(()=>{
@@ -317,7 +317,7 @@
       downTable(){
         // 下载表格
         if(this.tsid == ''){
-          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
+          this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
         }
         window.open(`${this.URL.ExportJointExamQuestionSummary}?tid=${this.prmTid}&tsid=${this.tsid}&scids=${this.scidsStr}`)
       },

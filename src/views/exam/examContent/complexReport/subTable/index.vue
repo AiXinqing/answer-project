@@ -421,7 +421,6 @@
 
       getDynamicHeader(tsid){
         // 获取动态表头
-        console.log(tsid)
         this.$store.dispatch('subTable/dynamicHeader', {
           tid: this.prmTid,tsid:tsid,url:this.headeUrl
         })
@@ -433,7 +432,6 @@
         if(this.tsid == ''){
           this.tsid = this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
         }
-        console.log(12)
         //Qs.stringify
         this.parameter = {
           ...this.parameter,

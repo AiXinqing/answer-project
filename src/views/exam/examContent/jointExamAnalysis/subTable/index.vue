@@ -259,7 +259,7 @@
       },
 
       subTableData(){
-        let tsid_s = this.subjectsArr.find((element,i) => i == 1).tsid
+        let tsid_s = this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
         return this.TableList.length ? this.TableList.map(item =>{
           let dynamic = {}
           item.DynamicDetail.forEach(element => {
@@ -342,7 +342,7 @@
 
       initTable(){
         this.$nextTick(()=>{
-          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
+          this.tsid = this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
           // 班级数组
           this.scidsStr = this.schoolIdsArr
           // 获取动态表头
@@ -354,7 +354,7 @@
       handlePageSize({page, size}){
         // 分页起始页
         if(this.tsid == ''){
-          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+          this.tsid = this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
         }
         this.page.pageNum = page
         this.page.pageSize = size
@@ -366,7 +366,7 @@
       handleCheckAllChange(scidsStr){
         // 班级查询
         if(this.tsid == ''){
-          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
+          this.tsid = this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
         }
 
         this.page = {
@@ -398,7 +398,7 @@
       handleInquire(){
         // 输入框查询
         if(this.tsid == ''){
-          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
+          this.tsid = this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
         }
         this.$nextTick(()=>{
           this.getTable()
@@ -408,7 +408,7 @@
       downTable(){
         // 小题分数报表下载
         if(this.tsid == ''){
-          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
+          this.tsid = this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
         }
 
         window.open(`${this.URL.ExportJointExamStuSmallScore}?tid=${this.prmTid}&tsid=${this.tsid}&scids=${this.scidsStr}&keyWords=${this.keyWords}`)
