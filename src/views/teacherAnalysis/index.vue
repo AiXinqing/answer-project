@@ -134,12 +134,23 @@
     },
 
     watch: {
+      $route: {
+        handler: function(route) {
+          const query = route.query
+          if (query.tid) {
+            this.tid = query.tid
+          }
+        },
+        immediate: true
+      },
 
       examOptions: {
         immediate: true,
         handler () {
           if(this.examOptions.length){
-            this.tid = this.examOptions.find((element,i) => i == 0).value
+            if(this.tid == 0){
+              this.tid =  this.examOptions.find((element,i) => i == 0).value
+            }
             this.$nextTick(() => {
               this.parameter.tid = this.tid
               this.getClassSubjectList()
@@ -166,7 +177,9 @@
         immediate: true,
         handler () {
           if(this.subjectBox.length){
-            this.tsid = this.subjectBox.find((element,i) => i == 0).tsid
+            if(this.tsid == 0){
+              this.tsid = this.subjectBox.find((element,i) => i == 0).tsid
+            }
             if(this.tsid != 0){
               this.$nextTick(() => {
                 let formData = {
@@ -185,7 +198,7 @@
     },
 
     mounted () {
-      if(this.examOptions.length == 0){
+      if(this.tid != 0){
         this.subjectList()
       }
     },

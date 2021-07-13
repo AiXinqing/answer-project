@@ -112,9 +112,10 @@
 
     computed: {
       ...mapState('subjectJuxtapose',['tableLoading','TableList']),
+      ...mapState('questionAnalysis', ['classList']),
 
       tableData(){
-        return this.TableList.length ? this.TableList.map(item =>{
+        return this.TableList.length && this.classList.length ? this.TableList.map(item =>{
 
           return {
           asid: item.asid,

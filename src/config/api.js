@@ -150,6 +150,6 @@ export const URL = {
   ExportJointExamClassScoreSegmentStuDetails: BASEURL + '/Report/AnlyReport/ExportJointExamClassScoreSegmentStuDetails', // 联考班级成绩分段统计学生详情下载
 
   // 判断是否显示联考成绩分析
-  IsShowJointExam: BASEURL + '/Api/Marking/ASAnalysisReportBLL/IsShowJointExam', // 判断是否显示联考成绩分析
+  IsShowJointExam: BASEURL + '/Api/Marking/ASAnalysisReportBLL/IsShowMenu', // 判断是否显示联考成绩分析
 
 }

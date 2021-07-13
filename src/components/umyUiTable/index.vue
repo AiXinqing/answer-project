@@ -6,9 +6,7 @@
       :height="autoHeight ? null : height_table + singleHeight"
       :max-height="maxHeight ? maxHeight : null"
       use-virtual
-      data-changes-scroll-top
       :stripe="false"
-      @table-body-scroll="tableScroll"
       :row-style="{'height': rowStyle + 'px'}"
       :border="isBorder"
       v-loading="loading"
@@ -23,6 +21,8 @@
       :page-size="pagination.pageSize"
       :current-page="pagination.pageNum"
       :page-sizes="pageSizes"
+      :data-changes-scroll-top="radio"
+      @table-body-scroll="tableScroll"
       @handlePageSize="handlePageSize">
 
       <u-table-column v-if="isIndex" type="index" width="100" fixed/>
@@ -87,7 +87,7 @@
 
     data() {
       return {
-        radio: 1,
+        radio: true,
         height_table:500,
       }
     },
@@ -102,10 +102,10 @@
     },
 
     methods: {
-      tableScroll () {
-        //{scrollTop, scrollLeft, table, judgeFlse}
+      tableScroll ({scrollTop, scrollLeft, table, judgeFlse}) {
+        //
         // {scrollTop， scrollLeft, table, judgeFlse: 这个参数返回一个boolean值，为true则代表表格滚动到了底部了，false没有滚动到底部，必须开起大数据渲染模式才能有值哦}, event
-        // console.log(scrollTop, scrollLeft, table, judgeFlse)
+        console.log(scrollTop, scrollLeft, table, judgeFlse)
       },
 
       hanldePopFunc(row){

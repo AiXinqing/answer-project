@@ -3,15 +3,19 @@ import Qs from 'qs'
 import { API_VERSION } from '../config/api'
 import Cookie from '../utils/cookie'
 import store from '../store'
-
+import {
+  Message
+} from 'element-ui'
 
 
 axios.defaults.baseURL = '';
+
 
 const service = axios.create({
   baseURL: '',
   timeout: 60000
 })
+
 
 //http request 拦截器
 service.interceptors.request.use(
@@ -33,34 +37,33 @@ service.interceptors.request.use(
     return config;
   },
   error => {
-    console.log(error)
+
     return Promise.reject(error);
   }
 );
 
 
 //http response 拦截器
-service.interceptors.response.use(
-  response => {
-    const res = response
+service.interceptors.response.use((res) => {
     // console.log(res)
     if (res.data.ResponseCode == 'Success') {
       store.state.getExam.tableLoading = false
       return res.data
     } else {
-
-      this.$message({
+      Message({
         message: res.data.ResponseContent || 'Error',
-        type: 'warning',
+        type: 'error',
+        duration: 5 * 1000
       })
     }
 
   },
   error => {
     console.log('err' + error)
-    this.$message({
-      message: error.message,
-      type: 'warning'
+    Message({
+      message: 'err' + error,
+      type: 'error',
+      duration: 5 * 1000
     })
     return Promise.reject(error)
   }
@@ -73,6 +76,7 @@ service.interceptors.response.use(
  * @param data
  * @returns {Promise}
  */
+
 
 export function post (url, data = {}, deep = false) {
   return new Promise((resolve, reject) => {

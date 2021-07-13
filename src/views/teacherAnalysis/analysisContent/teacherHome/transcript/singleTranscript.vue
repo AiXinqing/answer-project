@@ -148,9 +148,10 @@
 
     computed: {
       ...mapState('transcript',['tableLoading','singleTableList']),
+      ...mapState('questionAnalysis', ['classList']),
 
       tableData(){
-        return this.singleTableList.length ? this.singleTableList : []
+        return this.singleTableList.length && this.classList.length ? this.singleTableList : []
       }
     },
 

@@ -7,7 +7,7 @@
       >
 
         <questionCard
-          v-for="(item,i) in TableList"
+          v-for="(item,i) in tableListData"
           :key="item.tqid"
           :question-item="item"
           :parameter="parameter"
@@ -40,7 +40,7 @@
           </div>
           <div class="card-body">
             <div
-              v-for="(item,i) in TableList"
+              v-for="(item,i) in tableListData"
               :key="i"
               class="card-row-item"
               :class="[{'active':cardRowActive == i},colorStyle(item)]"
@@ -81,6 +81,11 @@
 
     computed: {
       ...mapState('examComment',['tableLoading','TableList']),
+      ...mapState('questionAnalysis', ['classList']),
+
+      tableListData(){
+        return this.classList.length ? this.TableList : []
+      }
 
     },
 
@@ -163,7 +168,7 @@
           this.scrollActive = false
         }
 
-        let Arr =  this.TableList.map((item,i) => {
+        let Arr =  this.tableListData.map((item,i) => {
           return document.getElementById('questionCard'+i).offsetTop
         })
 

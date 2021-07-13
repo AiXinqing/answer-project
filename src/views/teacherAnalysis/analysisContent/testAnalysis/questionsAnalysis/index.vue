@@ -85,9 +85,10 @@
 
     computed: {
       ...mapState('questionAnalysis',['tableLoading','TableList']),
+      ...mapState('questionAnalysis', ['classList']),
 
       tableData(){
-        return this.TableList.length && this.empty ? this.TableList: []
+        return this.TableList.length && this.empty && this.classList.length ? this.TableList: []
       }
     },
 

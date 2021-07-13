@@ -25,8 +25,8 @@
 </template>
 
 <script>
-  import { URL } from '@/utils/config' //'./config'
-  import request from '@/utils/http'
+  // import { URL } from '@/utils/config' //'./config'
+  // import request from '@/utils/http'
   export default {
     data() {
       return {
@@ -37,6 +37,9 @@
             'toUrl':'examHome',
             'linkName':'常用综合报表'
           },
+        ],
+
+        isClassReport:[
           {
             'calssname':'classAnalysis',
             'toUrl':'classAnalysis',
@@ -47,7 +50,6 @@
             'toUrl':'schoolAnalysis',
             'linkName':'校级分析报告'
           },
-          
         ],
         // 判断是否显示联考分析报告
         isJointExam:[
@@ -102,11 +104,19 @@
         this.$store.dispatch('getExam/getIsShowJointExam', {
           tid: this.prmTid,url:this.URL.IsShowJointExam
         }).then(res => {
-          if(res.ResponseContent){
-            if(this.linkData.length == 3){
+          if(res.ResponseContent.IsShowClassReport){
+            const index = this.linkData.findIndex((itme) => itme.calssname === 'classAnalysis')
+            if(index <= -1){
+              this.linkData = [...this.linkData,...this.isClassReport]
+            }
+          }
+          if(res.ResponseContent.IsShowJointExam){
+            const index = this.linkData.findIndex((itme) => itme.calssname === 'jointExam')
+            if(index <= -1){
               this.linkData = [...this.linkData,...this.isJointExam]
             }
           }
+
         })
       }
     },

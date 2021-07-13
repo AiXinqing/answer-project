@@ -68,10 +68,11 @@
 
     computed: {
       ...mapState('profileInfo',['tableLoading','headerTable','TableList']),
+      ...mapState('questionAnalysis', ['classList']),
 
       tableColumn(){
         // 动态表头
-        return this.headerTable.length ? [
+        return this.headerTable.length && this.classList.length ? [
           ...this.fixedHeader,
           ...this.headerTable.map(ele => ({
             label:ele.subname,
@@ -84,7 +85,7 @@
       },
 
       tableData(){
-        return this.TableList.length ? this.TableList.map(item =>{
+        return this.TableList.length && this.classList.length ? this.TableList.map(item =>{
           let dynamic = {}
           item.DynamicDetail.forEach(item => {
             dynamic = {

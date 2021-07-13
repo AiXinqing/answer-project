@@ -166,10 +166,11 @@
 
     computed: {
       ...mapState('subQuestion',['tableLoading','headerTable','TableList']),
+      ...mapState('questionAnalysis', ['classList']),
 
       tableColumn(){
         // 动态表头
-        return this.headerTable.length && this.empty ? [
+        return this.headerTable.length && this.empty && this.classList.length ? [
           ...this.fixedHeader,
           ...this.headerTable.map(ele => ({
             ...ele,
@@ -215,7 +216,7 @@
 
       tableData(){
 
-        return this.TableList.length && this.empty ? this.TableList.map(item =>{
+        return this.TableList.length && this.empty && this.classList.length ? this.TableList.map(item =>{
           let dynamic = {}
           item.DynamicDetail.forEach(element => {
             switch (element.type) {
