@@ -86,7 +86,7 @@
           this.active = item.calssname
           this.changeRouter(item)
         }
-        
+
       },
 
       changeRouter(item){
@@ -102,7 +102,7 @@
         this.$store.dispatch('getExam/getIsShowJointExam', {
           tid: this.prmTid,url:this.URL.IsShowJointExam
         }).then(res => {
-          if(res.ResponseCode == 'Success'){
+          if(res.ResponseContent){
             if(this.linkData.length == 3){
               this.linkData = [...this.linkData,...this.isJointExam]
             }

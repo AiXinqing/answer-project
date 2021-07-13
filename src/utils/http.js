@@ -4,6 +4,8 @@ import { API_VERSION } from '../config/api'
 import Cookie from '../utils/cookie'
 import store from '../store'
 
+
+
 axios.defaults.baseURL = '';
 
 const service = axios.create({
@@ -31,6 +33,7 @@ service.interceptors.request.use(
     return config;
   },
   error => {
+    console.log(error)
     return Promise.reject(error);
   }
 );
@@ -40,10 +43,25 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     const res = response
-    store.state.getExam.tableLoading = false
-    return res.data
+    // console.log(res)
+    if (res.data.ResponseCode == 'Success') {
+      store.state.getExam.tableLoading = false
+      return res.data
+    } else {
+
+      this.$message({
+        message: res.data.ResponseContent || 'Error',
+        type: 'warning',
+      })
+    }
+
   },
   error => {
+    console.log('err' + error)
+    this.$message({
+      message: error.message,
+      type: 'warning'
+    })
     return Promise.reject(error)
   }
 )

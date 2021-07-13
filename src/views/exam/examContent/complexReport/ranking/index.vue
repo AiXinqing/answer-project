@@ -160,7 +160,6 @@
 
       gradersTableColumn(){
         // 动态表头
-        let tsid_s = this.subjectsArr.find((element,i) => i == 0).tsid
         return this.headerTable.length ? [
           ...this.fixedHeader,
           ...this.headerTable.map(ele => ({
@@ -176,7 +175,7 @@
                 p_rank:ele,
                 p_type:this.parameter.type,
                 tid:this.prmTid,
-                tsid:this.tsid == '' ? tsid_s : this.tsid,
+                tsid:this.tsid == '' ? this.subjectsArr.find((element,i) => i == 0).tsid : this.tsid,
               }
             })
           }))
@@ -217,7 +216,6 @@
         immediate: true,
         handler () {
           this.cidStr = this.classIdsArr
-          let _$this = this
           this.$nextTick(()=>{
             this.getHeight()
           })

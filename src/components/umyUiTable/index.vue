@@ -3,17 +3,16 @@
     <ux-grid
       ref="plTable"
       :data="tableData"
-      :max-height="height"
       :height="autoHeight ? null : height_table + singleHeight"
       :max-height="maxHeight ? maxHeight : null"
       use-virtual
       data-changes-scroll-top
       :stripe="false"
       @table-body-scroll="tableScroll"
-      :data-changes-scroll-top="radio === 1"
       :row-style="{'height': rowStyle + 'px'}"
       :border="isBorder"
       v-loading="loading"
+      :header-drag-style="false"
       :element-loading-text="loadingText"
       element-loading-spinner="el-icon-loading"
       show-overflow
@@ -103,7 +102,8 @@
     },
 
     methods: {
-      tableScroll ({scrollTop, scrollLeft, table, judgeFlse}) {
+      tableScroll () {
+        //{scrollTop, scrollLeft, table, judgeFlse}
         // {scrollTop， scrollLeft, table, judgeFlse: 这个参数返回一个boolean值，为true则代表表格滚动到了底部了，false没有滚动到底部，必须开起大数据渲染模式才能有值哦}, event
         // console.log(scrollTop, scrollLeft, table, judgeFlse)
       },

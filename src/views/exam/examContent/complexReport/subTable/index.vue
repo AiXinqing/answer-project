@@ -153,7 +153,6 @@
         ],
 
         // 参数
-        tsid:'',
         keyWords:'',
         cidStr:'',
         theight: document.body.clientHeight - 300 || 0,
@@ -176,7 +175,8 @@
           total: 0
         },
         headeUrl:this.URL.GetStuSmallScoreHeade,
-        tableH:51
+        tableH:51,
+        tsid:'',
       }
     },
 
@@ -250,7 +250,6 @@
       },
 
       subTableData(){
-        let tsid_s = this.subjectsArr.find((element,i) => i == 1).tsid
         return this.TableList.length ? this.TableList.map(item =>{
           let dynamic = {}
           item.DynamicDetail.forEach(element => {
@@ -294,7 +293,7 @@
             gradeRank: item.gradeRank,
             ...dynamic,
             jump:1,
-            tsid: this.tsid == '' ? tsid_s : this.tsid,
+            tsid: this.tsid == '' ? this.subjectsArr.find((element,i) => i == 1).tsid : this.tsid,
             tid: this.prmTid,
           }
         }) : []
@@ -313,7 +312,6 @@
         immediate: true,
         handler () {
           this.cidStr = this.classIdsArr
-          let _$this = this
           this.$nextTick(()=>{
             this.getHeight()
           })
@@ -340,8 +338,11 @@
       },
 
       initTable(){
+
+        if(this.tsid == ''){
+          this.tsid = this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
+        }
         this.$nextTick(()=>{
-          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
           // 班级数组
           this.cidStr = this.classIdsArr
           // 获取动态表头
@@ -356,7 +357,7 @@
       handlePageSize({page, size}){
         // 分页起始页
         if(this.tsid == ''){
-          this.tsid = this.subjectsArr.find((element,i) => i == 0).tsid
+          this.tsid = this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
         }
         this.page.pageNum = page
         this.page.pageSize = size
@@ -368,7 +369,7 @@
       handleCheckAllChange(cidStr){
         // 班级查询
         if(this.tsid == ''){
-          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
+          this.tsid = this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
         }
         this.page = {
           pageSize: 15,
@@ -398,7 +399,7 @@
       handleInquire(){
         // 输入框查询
         if(this.tsid == ''){
-          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
+          this.tsid = this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
         }
         this.$nextTick(()=>{
           this.getTable()
@@ -420,6 +421,7 @@
 
       getDynamicHeader(tsid){
         // 获取动态表头
+        console.log(tsid)
         this.$store.dispatch('subTable/dynamicHeader', {
           tid: this.prmTid,tsid:tsid,url:this.headeUrl
         })
@@ -428,6 +430,10 @@
       getTable() {
         // 获取table
         const { pageSize , pageNum} = this.page
+        if(this.tsid == ''){
+          this.tsid = this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
+        }
+        console.log(12)
         //Qs.stringify
         this.parameter = {
           ...this.parameter,

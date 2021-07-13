@@ -188,7 +188,7 @@
 
       questionTableColumn(){
         // 动态表头
-        let tsid_s = this.subjectsArr.find((element,i) => i == 1).tsid
+
         let header = this.fixedHeader
         if(this.type == 0){
           header = [
@@ -242,7 +242,7 @@
                 label:item.label,
                 prop:`${item.prop}_${ele}`,
                 type: item.prop == 'num' ? 'pop_Btn' : 'Html',
-                tsid:this.tsid == '' ? tsid_s : this.tsid,
+                tsid:this.tsid == '' ? this.subjectsArr.find((element,i) => i == 1).tsid : this.tsid,
                 tid:this.prmTid,
 
               }
@@ -320,7 +320,7 @@
 
       initTable() {
         this.$nextTick(()=>{
-          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
+          this.tsid = this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
           // 班级数组
           this.cidStr = this.classIdsArr
           // 获取动态表头
@@ -334,7 +334,7 @@
       handleCheckAllChange(cidStr){
         // 班级查询
         if(this.tsid == ''){
-          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
+          this.tsid = this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
         }
         this.cidStr = cidStr
         this.$nextTick(()=>{
@@ -366,7 +366,7 @@
       downTable(){
         // 下载表格
         if(this.tsid == ''){
-          this.tsid = this.subjectsArr.find((element,i) => i == 1).tsid
+          this.tsid = this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
         }
         window.open(`${this.URL.ExportAnswerStaticAnalysis}?tid=${this.prmTid}&tsid=${this.tsid}&cids=${this.cidStr}&type=${this.type}`)
       },

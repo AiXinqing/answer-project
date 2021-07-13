@@ -208,7 +208,6 @@
 
       classTableColumn(){
         // 动态表头
-        let tsid_s = this.subjectsArr.find((element,i) => i == 0).tsid
         return this.headerTable.length ? [
           ...this.fixedHeader.map(item => {
             return item.prop == 'teacher' ? {
@@ -231,7 +230,7 @@
                 ...obj,
                 type: item.prop == 'num' ? 'popBtn' : 'Html',
                 prop:`${item.prop}_${ele.subname}`,
-                tsid:this.tsid == '' ? tsid_s : this.tsid,
+                tsid:this.tsid == '' ? this.subjectsArr.find((element,i) => i == 0).tsid : this.tsid,
               }
             })
           }))

@@ -177,7 +177,7 @@
             this.getTable()
           })
         }
-        
+
       },
 
       handelChange(val){
