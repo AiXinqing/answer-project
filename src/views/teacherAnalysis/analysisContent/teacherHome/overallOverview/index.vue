@@ -123,7 +123,9 @@
         }
 
         this.$nextTick(()=>{
-          this.$store.dispatch('profileInfo/getProfileInfo', this.parameter)
+          if(this.classList.length){
+            this.$store.dispatch('profileInfo/getProfileInfo', this.parameter)
+          }
         })
       },
 

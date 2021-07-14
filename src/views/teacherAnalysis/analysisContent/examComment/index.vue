@@ -102,7 +102,9 @@
         }
 
         this.$nextTick(()=>{
-          this.getExamComment()
+          if(this.classList.length){
+            this.getExamComment()
+          }
         })
 
       },

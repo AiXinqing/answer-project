@@ -206,12 +206,16 @@
         if(obj.tsid == '0'){
           this.tsid = ''
           this.$nextTick(()=>{
-            this.generalTable()
+            if(this.classList.length){
+              this.generalTable()
+            }
           })
         }else{
           this.tsid = obj.tsid
           this.$nextTick(()=>{
-            this.singleTable()
+            if(this.classList.length){
+              this.singleTable()
+            }
           })
         }
 

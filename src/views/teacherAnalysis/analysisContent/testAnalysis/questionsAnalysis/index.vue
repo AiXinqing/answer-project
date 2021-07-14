@@ -103,7 +103,9 @@
         this.tid = obj.tid
 
         this.$nextTick(()=>{
-          this.getTable()
+          if(this.classList.length){
+            this.getTable()
+          }
         })
 
       },

@@ -282,7 +282,9 @@
         this.tid = obj.tid
 
         this.$nextTick(()=>{
-          this.generalTable()
+          if(this.classList.length){
+            this.generalTable()
+          }
         })
 
       },

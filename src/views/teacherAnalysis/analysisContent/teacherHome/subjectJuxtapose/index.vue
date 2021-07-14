@@ -141,7 +141,9 @@
         }
 
         this.$nextTick(()=>{
-          this.$store.dispatch('subjectJuxtapose/getSubjectJuxtapose', this.parameter)
+          if(this.classList.length){
+              this.$store.dispatch('subjectJuxtapose/getSubjectJuxtapose', this.parameter)
+          }
         })
       },
 
