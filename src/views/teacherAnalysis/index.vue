@@ -177,9 +177,8 @@
         immediate: true,
         handler () {
           if(this.subjectBox.length){
-            if(this.tsid == 0){
-              this.tsid = this.subjectBox.find((element,i) => i == 0).tsid
-            }
+            this.tsid = this.subjectBox.find((element,i) => i == 0).tsid
+
             if(this.tsid != 0){
               this.$nextTick(() => {
                 let formData = {
