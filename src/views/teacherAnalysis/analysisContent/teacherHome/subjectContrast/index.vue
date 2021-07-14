@@ -277,7 +277,7 @@
 
         .hj-input.el-input{
           width: 120px;
-          margin-top: -5px;
+          // margin-top: -5px;
         }
       }
     }
@@ -291,7 +291,7 @@
         width: 70px!important;
       }
     }
-  } 
+  }
 
   .condition_filter .title_name {
     width: 886px !important;

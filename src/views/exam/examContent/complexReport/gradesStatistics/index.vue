@@ -28,7 +28,7 @@
           <exam-button type="primary" class="grades_btn" @click="handelScoreInterval">确定</exam-button>
         </div>
         <div class="search_right">
-          <exam-button type="primary" @click="downTable">下载表格</exam-button>
+          <exam-button type="primary" @click="downTable" style="margin-top:10px">下载表格</exam-button>
         </div>
       </div>
 

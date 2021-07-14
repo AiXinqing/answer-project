@@ -17,8 +17,8 @@
           />
         </div>
 
-        <exam-button  type="primary" @click="handleSingleInquire" style="margin-right: 10px;">查询</exam-button>
-        <exam-button  type="primary" @click="downloadSingleTranscript" style="margin-right: 10px;">下载成绩单</exam-button>
+        <exam-button  type="primary" @click="handleSingleInquire" style="margin-right: 10px;margin-top: 7px;">查询</exam-button>
+        <exam-button  type="primary" @click="downloadSingleTranscript" style="margin-right: 10px;margin-top: 7px;">下载成绩单</exam-button>
       </div>
     </div>
 

@@ -170,7 +170,7 @@
 
       questionTableColumn(){
         // 动态表头
-        let tsid_s = this.subjectsArr.find((element,i) => i == 1).tsid
+
         return this.headerTable.length ? [
           ...this.fixedHeader,
           ...this.headerTable.map(ele => ({
@@ -214,7 +214,7 @@
                 type: index == 1 || index == 3  ? 'pop_Btn' : 'Html',
                 type_p:index == 1 ? 'manfen' : index == 3 ? 'zero' : 0,
                 prop:`${item.prop}_${ele.cname}`,
-                tsid:this.tsid == '' ? tsid_s : this.tsid,
+                tsid:this.tsid == '' ? this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid : this.tsid,
                 tid:this.prmTid,
                 classObj:ele.cname
               }
@@ -276,7 +276,7 @@
 
       initTable() {
         this.$nextTick(()=>{
-          this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
+          this.tsid = this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
           // 班级数组
           this.scidsStr = this.schoolIdsArr
           // 获取动态表头
@@ -287,7 +287,7 @@
       handleCheckAllChange(scidsStr){
         // 班级查询
         if(this.tsid == ''){
-          this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
+          this.tsid = this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
         }
         this.scidsStr = scidsStr
         this.$nextTick(()=>{
@@ -317,7 +317,7 @@
       downTable(){
         // 下载表格
         if(this.tsid == ''){
-          this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
+          this.tsid = this.subjectsArr.filter(item => item.tsid != 'totalScore').find((element,i) => i == 0).tsid
         }
         window.open(`${this.URL.ExportJointExamQuestionSummary}?tid=${this.prmTid}&tsid=${this.tsid}&scids=${this.scidsStr}`)
       },

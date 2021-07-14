@@ -449,7 +449,7 @@
         }
 
         .exam_box{
-          margin-top: 10px;
+          margin-top: 11px;
         }
       }
     }

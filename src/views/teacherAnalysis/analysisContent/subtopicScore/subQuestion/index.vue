@@ -16,8 +16,8 @@
             :iSlot="iSlot"
           />
         </div>
-        <exam-button  type="primary" @click="handleInquire" style="margin-right: 10px;">查询</exam-button>
-        <exam-button  type="primary" @click="downloadTranscript" style="margin-right: 10px;">下载成绩单</exam-button>
+        <exam-button  type="primary" @click="handleInquire" style="margin-right: 10px;margin-top: 5px;">查询</exam-button>
+        <exam-button  type="primary" @click="downloadTranscript" style="margin-right: 10px;margin-top: 5px;">下载成绩单</exam-button>
 
       </div>
     </div>
