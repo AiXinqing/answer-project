@@ -67,8 +67,8 @@
         handler: function(route) {
           const query = route.query
 
-          if (query.prmTid) {
-            this.prmTid = query.prmTid
+          if (query.tid) {
+            this.prmTid = query.tid
             let obj = {
               calssname:route.name,
               toUrl:route.name
@@ -92,7 +92,7 @@
       },
 
       changeRouter(item){
-        this.$router.push({name:item.toUrl,query:{prmTid:this.prmTid}})
+        this.$router.push({name:item.toUrl,query:{tid:this.prmTid}})
       },
 
       markingTask(){

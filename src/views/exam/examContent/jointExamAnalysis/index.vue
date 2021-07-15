@@ -94,8 +94,8 @@
       $route: {
         handler: function(route) {
           const query = route.query
-          if (query.prmTid) {
-            this.prmTid = query.prmTid
+          if (query.tid) {
+            this.prmTid = query.tid
           }
         },
         immediate: true
@@ -116,7 +116,7 @@
 
     methods: {
       ...mapMutations('jointExams', ['Reset_schoolArr']),
-  
+
       handleClick(tab) {
         this.activeName = tab.name
         this.$nextTick(()=>{
@@ -127,7 +127,7 @@
 
       getExamFunc(prmTid) {
         this.$store.dispatch('getExam/getExamInfo', {
-          prmTid: prmTid
+          tid: prmTid
         })
         this.$store.dispatch('jointExams/getExamInfo', {
           tid: prmTid

@@ -1,11 +1,11 @@
 import request from '@/utils/http'
 import { URL } from '../api'
 
-export function getExamInfo ({ prmTid }) {
+export function getExamInfo ({ tid }) {
   return request({
     url: URL.GetExamInfo,
     method: 'get',
-    params: { prmTid }
+    params: { tid }
   })
 }
 

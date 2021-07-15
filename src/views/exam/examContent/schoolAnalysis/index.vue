@@ -183,8 +183,8 @@
       $route: {
         handler: function(route) {
           const query = route.query
-          if (query.prmTid) {
-            this.prmTid = query.prmTid
+          if (query.tid) {
+            this.prmTid = query.tid
           }
           this.routeName = route.name
         },
@@ -242,7 +242,7 @@
 
       getExamFunc(prmTid) {
         this.$store.dispatch('getExam/getExamInfo', {
-          prmTid: prmTid
+          tid: prmTid
         })
       },
 
@@ -267,7 +267,6 @@
               parkingA7 = document.getElementById('parking6').offsetTop
               parkingA8 = document.getElementById('parking7').offsetTop
             }
-            
 
 
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
