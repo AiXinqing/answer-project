@@ -273,7 +273,7 @@
 
     .classAnalysis_title{
       width: 100%;
-      padding-top: 60px;
+      padding: 30px 0;
       background-color: @main;
       color: @white;
 
@@ -326,9 +326,10 @@
     .anchor_title{
       height: 52px;
       line-height: 52px;
-      background-color: @main_t;
+      background-color: @main;
       font-weight: 700;
       text-align: center;
+      color: @white
     }
 
     .anchor_list{

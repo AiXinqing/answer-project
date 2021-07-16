@@ -56,7 +56,7 @@
           {
             'calssname':'jointExam',
             'toUrl':'jointExam',
-            'linkName':'联考分析报告'
+            'linkName':'联考分析报表'
           }
         ],
         prmTid:''
@@ -97,7 +97,7 @@
 
       markingTask(){
         var url = window.location.origin + "/Manage/Home/AnalyzeReports/" + this.prmTid
-        window.open(url)
+        window.location.href = url
       },
 
       isJointExamFunc(){
