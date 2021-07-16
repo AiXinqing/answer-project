@@ -19,9 +19,16 @@
       subQuestion
     },
 
+    data() {
+      return {
+        linkName: ''
+      }
+    },
+
     methods: {
       initChange(formData){
         this.$refs.subQuestion.initTable(formData)
+        this.linkName = formData.linkName
       },
     },
   }

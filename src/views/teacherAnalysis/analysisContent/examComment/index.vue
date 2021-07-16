@@ -75,7 +75,8 @@
         colorStyle:(item)=>{
           let num = Number(item.classScoreRate)
           return num > 75 ? 'main' : num > 45 && num <= 75 ? 'low' : 'high'
-        }
+        },
+        linkName:'examComment'
       }
     },
 
@@ -100,7 +101,7 @@
           ...this.parameter,
           ...formData
         }
-
+        this.linkName = formData.linkName
         this.$nextTick(()=>{
           if(this.classList.length){
             this.getExamComment()
@@ -170,9 +171,9 @@
           this.scrollActive = false
         }
 
-        let Arr =  this.tableListData.map((item,i) => {
+        let Arr =  this.tableListData.length && this.linkName == 'examComment' ? this.tableListData.map((item,i) => {
           return document.getElementById('questionCard'+i).offsetTop
-        })
+        }):[]
 
         function isScrollEnd() {
           t2 = document.documentElement.scrollTop || document.body.scrollTop

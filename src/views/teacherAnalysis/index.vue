@@ -210,6 +210,7 @@
             tid:this.tid,
             cid:this.cid,
             tsid:this.tsid,
+            linkName:item.calssname
           }
           this.$refs.dynamicComponent.initChange(formData)
         })
