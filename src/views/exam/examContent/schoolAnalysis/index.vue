@@ -85,8 +85,14 @@
     </div>
 
     <!-- 浮动锚点点击处 -->
-    <div class="Anchor_box">
-      <div class="anchor_title">成绩分析</div>
+    <div :class="['Anchor_box',{'shutDown':shutDown}]">
+      <div class="anchor_title">成绩分析
+        <i
+          class="el-icon-close"
+          title="点击后收起导航栏"
+          @click="closeMissionBoard"
+        />
+      </div>
       <div class="anchor_list">
         <div
           v-for="(tab ,index) in tabsAnchor"
@@ -99,6 +105,7 @@
           {{tab.name}}
         </div>
       </div>
+      <div class="close_show" @click="showMissionBoard">悬浮导航栏<i class="el-icon-d-arrow-right" /></div>
     </div>
     <!-- 浮动锚点点击处 -->
 
@@ -131,6 +138,7 @@
     data() {
       return {
         tabView: '0',
+        shutDown:false,
         tabsAnchor: [
           {
             name:'总体情况汇总'
@@ -193,7 +201,7 @@
     },
 
     mounted () {
-      
+
       if(this.prmTid != ''){
         this.getExamFunc(this.prmTid)
       }
@@ -292,6 +300,14 @@
             }
       },
 
+      closeMissionBoard(){
+        // 关闭任务栏
+        this.shutDown = true
+      },
+      showMissionBoard(){
+        // 展开任务栏
+        this.shutDown = false
+      }
     }
   }
 </script>

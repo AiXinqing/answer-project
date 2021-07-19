@@ -65,8 +65,14 @@
     </div>
 
     <!-- 浮动锚点点击处 -->
-    <div class="Anchor_box">
-      <div class="anchor_title">成绩分析</div>
+    <div :class="['Anchor_box',{'shutDown':shutDown}]">
+      <div class="anchor_title">成绩分析
+        <i
+          class="el-icon-close"
+          title="点击后收起导航栏"
+          @click="closeMissionBoard"
+        />
+      </div>
       <div class="anchor_list">
         <div
           v-for="(tab ,index) in tabsAnchor"
@@ -79,6 +85,7 @@
           {{tab.name}}
         </div>
       </div>
+      <div class="close_show" @click="showMissionBoard">悬浮导航栏<i class="el-icon-d-arrow-right" /></div>
     </div>
     <!-- 浮动锚点点击处 -->
 
@@ -105,6 +112,7 @@
     data() {
       return {
         tabView: '0',
+        shutDown:false,
         tabsAnchor: [
           {
             name:'学科平均分排名'
@@ -252,6 +260,15 @@
 
       },
 
+      closeMissionBoard(){
+        // 关闭任务栏
+        this.shutDown = true
+      },
+      showMissionBoard(){
+        // 展开任务栏
+        this.shutDown = false
+      }
+
     }
   }
 </script>
@@ -322,14 +339,55 @@
     top: 35%;
     z-index: 999;
     background-color: @white;
+    -webkit-transition: left .5s;
+      transition:left .5s;
+
+    .close_show {
+      width: 30px;
+      background: #eee;
+      position: absolute;
+      right: -30px;
+      top: 0;
+      text-align: center;
+      color: #888;
+      cursor: pointer;
+      padding: 20px 0;
+      display: none;
+
+      i.el-icon-d-arrow-right{
+        position: absolute;
+        right: -20px;
+        top: 50%;
+      }
+    }
+
+    &.shutDown{
+      left: -180px;
+      -webkit-transition: left .5s;
+      transition:left .5s;
+
+      .close_show{
+        display: block;
+      }
+    }
 
     .anchor_title{
-      height: 52px;
-      line-height: 52px;
+      height: 40px;
+      line-height: 40px;
       background-color: @main;
       font-weight: 700;
       text-align: center;
-      color: @white
+      color: @white;
+
+      i.el-icon-close{
+        position: absolute;
+        right: 0;
+        top: 9px;
+        cursor: pointer;
+        font-size: 20px;
+        z-index: 999;
+        border-radius: 0;
+      }
     }
 
     .anchor_list{
