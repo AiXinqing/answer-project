@@ -96,7 +96,8 @@
       },
 
       markingTask(){
-        var url = window.location.origin + "/Manage/Home/AnalyzeReports/" + this.prmTid
+        //window.location.origin +
+        var url =  "http://lzxxt.cn:60033/Manage/Home/AnalyzeReports/" + this.prmTid
         window.location.href = url
       },
 
