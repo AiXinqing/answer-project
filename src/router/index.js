@@ -11,7 +11,7 @@ VueRouter.prototype.push = function push (location) {
 }
 
 
-// 阅卷分析
+// 成绩分析
 import examHome from '@/views/exam/examContent/complexReport'
 import classAnalysis from '@/views/exam/examContent/classAnalysis'
 import schoolAnalysis from '@/views/exam/examContent/schoolAnalysis'
@@ -48,7 +48,7 @@ const routes = [{
       name: 'examHome',
       component: examHome,
       meta: {
-        title: '智汇e校园-阅卷分析'
+        title: '智汇e校园-成绩分析'
       }
     },
     {
@@ -56,7 +56,7 @@ const routes = [{
       name: 'classAnalysis',
       component: classAnalysis,
       meta: {
-        title: '智汇e校园-阅卷分析'
+        title: '智汇e校园-成绩分析'
       }
     },
     {
@@ -64,7 +64,7 @@ const routes = [{
       name: 'schoolAnalysis',
       component: schoolAnalysis,
       meta: {
-        title: '智汇e校园-阅卷分析'
+        title: '智汇e校园-成绩分析'
       }
     },
     {
@@ -72,7 +72,7 @@ const routes = [{
       name: 'jointExam',
       component: jointExam,
       meta: {
-        title: '智汇e校园-阅卷分析'
+        title: '智汇e校园-成绩分析'
       }
     },
   ]
@@ -82,6 +82,9 @@ const routes = [{
   path: '/teacherHome',
   name: 'teacherHome',
   component: () => import('@/views/teacherAnalysis'),
+  meta: {
+    title: '智汇e校园-教师分析'
+  }
 }
 ]
 
@@ -90,22 +93,23 @@ const router = new VueRouter({
   routes
 })
 
-// router.beforeEach((to, from, next) => {
-//   if (to.meta.tilte) {
-//     window.document.title = to.meta.title
-//   }
-//   //next()
-//   const url = URL.SERVICE_CONTEXT_PATH + 'Api/Common/UsloginBLL/JudgeLogin'
-//   axios.get(url).then((res) => {
-//     if (res.data.ResponseCode == 'Success') {
-//       next()
-//     } else {
-//       location.href = URL.SERVICE_CONTEXT_PATH + 'Manage/login'
-//       next()
-//     }
-//   }).catch(function () {
-//     location.href = URL.SERVICE_CONTEXT_PATH + 'Manage/login'
-//     next()
-//   })
-// })
+router.beforeEach((to, from, next) => {
+
+  if (to.meta.title != undefined) {
+    window.document.title = to.meta.title
+  }
+  //next()
+  const url = URL.SERVICE_CONTEXT_PATH + 'Api/Common/UsloginBLL/JudgeLogin'
+  axios.get(url).then((res) => {
+    if (res.data.ResponseCode == 'Success') {
+      next()
+    } else {
+      location.href = URL.SERVICE_CONTEXT_PATH + 'Manage/login'
+      next()
+    }
+  }).catch(function () {
+    location.href = URL.SERVICE_CONTEXT_PATH + 'Manage/login'
+    next()
+  })
+})
 export default router

@@ -1,6 +1,6 @@
 export const API_VERSION = 'v1'
 // 报表服务器地址
-let BASEURL = 'http://localhost:60044'
+let BASEURL = window.location.origin //'http://localhost:60044'
 if (process.env.NODE_ENV === 'development') {
   BASEURL = 'http://192.168.0.54:8094'
 }
