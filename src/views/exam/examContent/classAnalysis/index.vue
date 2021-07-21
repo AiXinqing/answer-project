@@ -312,7 +312,7 @@
     }
 
     .title_info{
-      width: calc(100% - 70px);
+      width: calc(100% - 68px);
       background-color: @white;
       padding: 0 34px;
       font-size: 14px;

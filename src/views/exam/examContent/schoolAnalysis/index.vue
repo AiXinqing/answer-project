@@ -4,7 +4,7 @@
       <!-- 标题 -->
       <div class="classAnalysis_title mar_T10">
         <div class="title_h2">{{examData.name}}</div>
-        <div class="title_h5">校级级对比分析报告</div>
+        <div class="title_h5">校级分析报告</div>
       </div>
       <div class="title_info">
         <div class="title_p padding_10">老师您好：</div>
