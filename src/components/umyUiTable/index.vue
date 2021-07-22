@@ -238,4 +238,8 @@
   tr.elx-header--row th div{
     min-height: 35px;
   }
+
+  .elx-table--body-wrapper, .elx-table--fixed-left-body-wrapper, .elx-table--fixed-right-body-wrapper{
+    background-blend-mode:overlay
+  }
 </style>
