@@ -157,7 +157,7 @@
           },
         ],
 
-        maxHeight: document.body.clientHeight - 200,
+        maxHeight: document.body.clientHeight - 310,
 
         empty:false,
 
@@ -341,3 +341,4 @@
     }
   }
 </style>
+

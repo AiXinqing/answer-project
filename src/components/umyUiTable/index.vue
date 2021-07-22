@@ -99,6 +99,13 @@
           this.height_table = this.theight
         }
       },
+
+      tableData: {
+        immediate: true,
+        handler () {
+          this.pagingScrollTopLeft()
+        }
+      },
     },
 
     methods: {
@@ -116,7 +123,18 @@
       // 分页事件
       handlePageSize ({page, size}) {
         this.$emit('hanlde-page-size',{page, size})
-      }
+      },
+
+      pagingScrollTopLeft () {
+        if(this.$refs.plTable){
+          this.$nextTick(()=>{
+            let _this = this
+            setTimeout(function(){
+              _this.$refs.plTable.pagingScrollTopLeft(0, 0)
+          },500)
+          })
+        }
+      },
     }
   }
 </script>
