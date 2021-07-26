@@ -161,7 +161,7 @@
     }
   }
   .plTableBox {
-    padding-bottom: 20px;
+    padding-bottom: 3px;
     .myPagination{
       padding-top: 0px;
     }

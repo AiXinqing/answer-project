@@ -10,7 +10,7 @@
 
     <div class="total_score">
       <div class="title_box">
-        <div class="title_left">各班级平均水平 <span class="span_tg">从平均水平看, 学校和各班级的各学科平均得分率如下表所示, 红色为总分低于全体平均分水平。</span></div>
+        <div class="title_left">各班级平均水平 <span class="span_tg">从平均水平看, 学校和各班级的各学科平均得分率如下表所示。</span></div>
         <div class="title_right">
           <exam-button type="primary" @click="downTable">下载表格</exam-button>
         </div>

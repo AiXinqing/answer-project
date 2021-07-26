@@ -12,7 +12,7 @@
       <span>第</span>
       <span class="low">{{data.name}}</span>
       <span>题 共有</span>
-      <span class="score_style"> {{data.fullScoreNum}}</span>
+      <span class="score_style"> {{data.num}}</span>
       <span>人选择答案</span>
       <span class="score_style"> {{data.optionsName}}</span>
       <span>,占比:</span>
