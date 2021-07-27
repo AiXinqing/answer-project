@@ -13,6 +13,9 @@
             <span>{{item.linkName}} <em/></span>
           </a>
         </div>
+        <div class="nav_login">
+          <exam-button class="marking_task" type="primary" @click="markingTask">回到旧版</exam-button>
+        </div>
         <div class="nav_login"></div>
       </div>
     </div>
@@ -127,7 +130,9 @@
       },
 
       classOptions(){
-        let objArray = this.classList.length ? this.classList.filter(item => item.tsid != '0').map(item => ({label:item.cname,value:item.cid})) : []
+        let objArray = this.classList.length ?
+          this.active == 'teacherHome' ? this.classList.map(item => ({label:item.cname,value:item.cid})) :
+            this.classList.filter(item => item.tsid != '0').map(item => ({label:item.cname,value:item.cid})) : []
         return objArray
       },
 
@@ -164,7 +169,8 @@
         handler () {
           if(this.classOptions.length){
             this.cid = this.classOptions.find((element,i) => i == 0).value
-            this.subjectBox = this.classList.filter(item => item.cid == this.cid)[0].ASTestSubjectList.filter(item => item.tsid != '0').map(item => ({name:item.sname,tsid:item.tsid}))
+            this.subjectBox = this.active != 'teacherHome' ? this.classList.filter(item => item.cid == this.cid)[0].ASTestSubjectList.filter(item => item.tsid != '0').map(item => ({name:item.sname,tsid:item.tsid})):
+              this.classList.filter(item => item.cid == this.cid)[0].ASTestSubjectList.map(item => ({name:item.sname,tsid:item.tsid}))
           }else{
             this.cid = ''
             this.subjectBox = []
@@ -179,7 +185,7 @@
           if(this.subjectBox.length){
             this.tsid = this.subjectBox.find((element,i) => i == 0).tsid
 
-            if(this.tsid != 0){
+            if(this.tsid){
               this.$nextTick(() => {
                 let formData = {
                   tid:this.tid,
@@ -225,7 +231,8 @@
       },
       handelClassChange(val) {
         this.cid = val
-        this.subjectBox = this.classList.filter(item => item.cid == this.cid)[0].ASTestSubjectList.filter(item => item.tsid != '0').map(item => ({name:item.sname,tsid:item.tsid}))
+        this.subjectBox = this.active != 'teacherHome' ? this.classList.filter(item => item.cid == this.cid)[0].ASTestSubjectList.filter(item => item.tsid != '0').map(item => ({name:item.sname,tsid:item.tsid})) :
+          this.classList.filter(item => item.cid == this.cid)[0].ASTestSubjectList.map(item => ({name:item.sname,tsid:item.tsid}))
         this.$nextTick(() => {
           let formData = {
             tid:this.tid,
@@ -257,7 +264,13 @@
 
       getClassSubjectList(){
         this.$store.dispatch('questionAnalysis/getClassList', this.parameter) // GetAsTestClass
-      }
+      },
+
+      markingTask(){
+        //window.location.origin +
+        var url =  "http://lzxxt.cn:60033/Manage/Home/AnalyzeReports/" + this.tid
+        window.location.href = url
+      },
     },
   }
 </script>
@@ -297,7 +310,7 @@
     }
 
     .nav_menu{
-      width: 100%;
+      width: 78%;
       flex-shrink:1;
       display: flex;
 
@@ -328,7 +341,9 @@
 
     .nav_login{
       width: 160px;
-      flex-shrink:0;
+      position: absolute;
+      flex-shrink: 0;
+      right: -11px;
     }
   }
 
@@ -344,6 +359,17 @@
   }
   .calssname{
     cursor: pointer;
+  }
+  .marking_task{
+    button.el-button.el-button--primary.el-button--medium {
+      margin-left: 40px !important;
+      border-radius: 14px;
+      background: @white !important;
+      color: @mainFont;
+      &:hover{
+        color: @mainFont !important;
+      }
+    }
   }
 </style>
 
