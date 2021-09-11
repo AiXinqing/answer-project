@@ -8,8 +8,15 @@ if (process.env.NODE_ENV === 'development') {
 export const URL = {
   GetExamInfo: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetExamInfo', // 获取考试班级和科目信息
   GetStuResults: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetStuResults', // 成绩册分析报表
+  GetStuLvlResults: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetStuLvlResults', // 等级成绩册报表
   GetTableHeadeSubject: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetStuResultsHeade', //成绩册报表动态科目
   ExportStuResults: BASEURL + '/Report/AnlyReport/ExportStuResults', // 成绩册分析报表下载
+  ExportStuLvlResults: BASEURL + '/Report/AnlyReport/ExportStuLvlResults', // 等级成绩册分析报表下载
+
+  GetASAnalyseLvlList: BASEURL + '/Api/Marking/ASAnalyseLvlBLL/GetASAnalyseLvlList', // 获取等级
+  SaveASAnalyseLvl: BASEURL + '/Api/Marking/ASAnalyseLvlBLL/SaveASAnalyseLvl', // 保存等级
+
+  
   BrowsescoreAnsw: BASEURL + '/Manage/Marking/BrowsescoreAnsw', // 跳转链接地址
   // 小题分数
   GetStuSmallScoreHeade: BASEURL + '/Api/Marking/ASAnalysisReportBLL/GetStuSmallScoreHeade', // 小题分数报表动态表头 -----------------(联考小题分数报表动态表头)
