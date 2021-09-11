@@ -30,7 +30,7 @@
   import question from './question'
   import schoolGradesCompared from './schoolGradesCompared'
   import classGradesCompared from './classGradesCompared'
-  import schoolGradesStatistics from './schoolGradesStatistics'
+  import schoolGradesStatistics from './schoolgradesStatistics'
   import classGradesStatistics from './classGradesStatistics'
   import { mapGetters , mapMutations} from 'vuex'
   export default {
