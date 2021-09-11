@@ -27,6 +27,15 @@ export function GetStuLvlResults ({ tid, tsid, cids, keyWords, pageIndex, pageSi
   })
 }
 
+// 获取等级
+export function GetASAnalyseLvlList ({ tid, tsid, type,  url }) {
+  return request({
+    url: url,
+    method: 'get',
+    params: { tid, tsid, type }
+  })
+}
+
 // 获取动态表头
 export function dynamicHeader ({ tid, tsid, url }) {
   return request({

@@ -13,9 +13,17 @@
     </div>
     <div class="table_wapper">
       <div class="table_search">
-        <div class="search_left" style="min-width:494px">
+        <div class="search_left" style="min-width:79%">
           <span class="titile_18">等级详情</span>
-          <i>(点击学科的分数，可查看学生 等级说明：A: 90%-100% B: 80%-90% )</i>
+          <span class="font_sizeLvle" style="margin:0 10px">等级说明</span>
+          <span
+              v-for="item in LvlList"
+              :key="item.tid"
+              class="font_sizeLvle"
+            >
+            {{item.lvlRangeStr}}
+          </span>
+          <span  class="set_parameter" @click="setParameterFunc" >设置参数</span>
         </div>
         <div class="search_right">
           <exam-button type="primary" @click="downTable">下载表格</exam-button>
@@ -47,12 +55,22 @@
 
       </div>
     </div>
+    <parameter-settings
+      ref="parameterSet"
+      :lvle-list="LvlList"
+      :lvle-type="lvleType"
+      @change-set="changeSet"
+    />
   </div>
 </template>
 
 <script>
   import { mapState} from 'vuex'
+  import parameterSettings from './_parameterSettings'
   export default {
+    components: {
+      parameterSettings
+    },
     props: {
 
       prmTid: {
@@ -114,13 +132,24 @@
           tsid:'',
           url:this.URL.GetStuLvlResults
         },
+        LvlParameter:{
+          type:2, // 1:单科，2：总分
+          tid: '',
+          tsid:'',
+          url:this.URL.GetASAnalyseLvlList
+        },
         page: {
           pageSize: 15,
           pageNum: 1,
           total: 0
         },
         headeUrl:this.URL.GetTableHeadeSubject,
-        tableH:51
+        tableH:51,
+        lvleType:{
+          tid: '',
+          type: 2,
+          tsid:''
+        }
       }
     },
 
@@ -129,6 +158,7 @@
         'TableList','classesArr','pagination',
         'tableLoading'
       ]),
+      ...mapState('setLvlList', ['LvlList']),
 
 
       classIdsArr(){
@@ -237,6 +267,7 @@
           // 获取动态表头
           this.getDynamicHeader(this.tsid)
           this.getTable()
+          this.getLvleList()
         })
       },
 
@@ -276,9 +307,11 @@
           pageNum: 1,
           total: 0
         }
+        
         this.$nextTick(()=>{
           this.getDynamicHeader(this.tsid)
           this.getTable()
+          this.getLvleList()
         })
       },
 
@@ -329,14 +362,48 @@
         this.$nextTick(()=>{
           this.theight = document.body.clientHeight - 300
         })
-
       },
+
+      // 获取等级详情
+      getLvleList(){
+        this.LvlParameter = {
+          ...this.LvlParameter,
+          type:this.tsid === 'totalScore' ? 2: 1,
+          tid: this.prmTid,
+          tsid:this.tsid,
+        }
+        this.lvleType = {
+          type:this.tsid === 'totalScore' ? 2: 1,
+          tid: this.prmTid,
+          tsid: this.tsid,
+        }
+        this.$store.dispatch('setLvlList/GetASAnalyseLvlList', this.LvlParameter)
+      },
+
+      setParameterFunc(){
+        this.$refs.parameterSet.openFrame()
+      },
+
+      changeSet(){
+        // 保存得分率后更新数据
+        this.getTable()
+        this.getLvleList()
+      }
     },
   }
 </script>
 
 <style lang="less">
   @import '~@/assets/css/variables.less';
-  
+  .font_sizeLvle{
+    font-size: 14px;
+    color: @font-666;
+  }
+  .set_parameter{
+    color: @main;
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 14px;
+  }
 
 </style>
