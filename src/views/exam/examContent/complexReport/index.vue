@@ -25,6 +25,7 @@
 
 <script>
   import gradebook from './gradebook'
+  import levelGradebook from './levelGradebook'
   import subTable from './subTable'
   import classGrades from './classGrades'
   import question from './question'
@@ -37,6 +38,7 @@
   export default {
     components: {
       gradebook,
+      levelGradebook,
       subTable,
       classGrades,
       question,
@@ -52,6 +54,10 @@
           {
             label:'成绩册',
             name:'gradebook'
+          },
+          {
+            label:'等级成绩册',
+            name:'levelGradebook'
           },
           {
             label:'小分表',

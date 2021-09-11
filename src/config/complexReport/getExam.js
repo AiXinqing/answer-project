@@ -9,7 +9,17 @@ export function getExamInfo ({ tid }) {
   })
 }
 
+// 成绩册报表
 export function GetStuResults ({ tid, tsid, cids, keyWords, pageIndex, pageSize, url }) {
+  return request({
+    url: url,
+    method: 'get',
+    params: { tid, tsid, cids, keyWords, pageIndex, pageSize }
+  })
+}
+
+// 等级成绩册报表
+export function GetStuLvlResults ({ tid, tsid, cids, keyWords, pageIndex, pageSize, url }) {
   return request({
     url: url,
     method: 'get',
